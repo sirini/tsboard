@@ -1,15 +1,4 @@
-# Elysia with Bun runtime
+# TSBOARD
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
-
-## Development
-To start the development server run:
-```bash
-bun run dev
-```
-
-Open http://localhost:3000/ with your browser to see the result.
+TypeScript로 서버/클라이언트 모두 구성한 게시판 입니다.
+문서 부분은 조금씩 업데이트 해나가도록 하겠습니다.
