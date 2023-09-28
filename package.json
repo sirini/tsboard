@@ -12,12 +12,13 @@
   "dependencies": {
     "@mdi/font": "7.0.96",
     "core-js": "^3.29.0",
+    "elysia": "latest",
+    "mysql2": "^3.6.1",
     "pinia": "^2.0.0",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.0.0",
-    "elysia": "latest"
+    "vuetify": "^3.0.0"
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",

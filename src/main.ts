@@ -1,20 +1,13 @@
 /**
  * main.ts
  *
- * Bootstraps Vuetify and other plugins then mounts the App`
+ * registerPlugins 에서 Vuetify, Pinia, Vue Router 플러그인 가져옴
  */
 
-// Components
-import App from './App.vue'
+import App from "./App.vue";
+import { createApp } from "vue";
+import { registerPlugins } from "./plugins";
 
-// Composables
-import { createApp } from 'vue'
-
-// Plugins
-import { registerPlugins } from '@/plugins'
-
-const app = createApp(App)
-
-registerPlugins(app)
-
-app.mount('#app')
+const app = createApp(App);
+registerPlugins(app);
+app.mount("#app");
