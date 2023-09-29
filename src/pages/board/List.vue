@@ -36,8 +36,8 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useBoardStore } from "../../store/board"
-import BoardHeader from "./BoardHeader.vue"
-import BoardUserNametag from "./BoardUserNametag.vue"
+import BoardHeader from "../../components/board/BoardHeader.vue"
+import BoardUserNametag from "../../components/board/BoardUserNametag.vue"
 
 const route = useRoute()
 const id = ref<string>(route.params?.id.toString())

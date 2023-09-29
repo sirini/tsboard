@@ -24,5 +24,14 @@ export const useBoardStore = defineStore("board", () => {
     router.push({ name: "write", params: { id } })
   }
 
-  return { goListPage, goViewPage, goWritePage }
+  // 글작성 시 이미지 업로드하고 본문에 추가하기
+  function uploadImages(editor: any): void {
+    const url = `https://images.unsplash.com/photo-1695653422909-20d8cc35ca2e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=317&q=80`
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run()
+    }
+  }
+
+  return { goListPage, goViewPage, goWritePage, uploadImages }
 })
