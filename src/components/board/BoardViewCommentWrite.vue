@@ -1,10 +1,15 @@
 <template>
-  <v-textarea rounded="0" :label="label" autogrow hide-details class="mt-2"></v-textarea>
-  <v-btn block append-icon="mdi-chevron-right" variant="tonal" color="primary" rounded="0"
-    >댓글 작성하기</v-btn
-  >
+  <v-card elevation="0" rounded="0" class="mt-2">
+    <board-write-editor v-model="comment"></board-write-editor>
+    <v-btn block append-icon="mdi-chevron-right" variant="tonal" color="primary" rounded="0"
+      >댓글 작성하기</v-btn
+    >
+  </v-card>
 </template>
 
 <script setup lang="ts">
-const label = "댓글은 로그인 후 작성 하실 수 있습니다."
+import { ref } from "vue"
+import BoardWriteEditor from "./BoardWriteEditor.vue"
+
+const comment = ref<string>("")
 </script>

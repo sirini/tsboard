@@ -1,9 +1,7 @@
 <template>
   <v-card-title class="list_title"
-    >정보와 자료
-    <span class="info ml-3 pl-3"
-      >새소식, 유용한 사이트, 자료실의 게시글 모음입니다.</span
-    >
+    >테스트 게시판
+    <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
   </v-card-title>
 </template>
 

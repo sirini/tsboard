@@ -77,6 +77,8 @@ const board = useBoardStore()
   line-height: 1.8em;
 }
 .view_menu {
-  border: 1px #dddddd solid;
+  border-left: 1px #dddddd solid;
+  border-right: 1px #dddddd solid;
+  border-bottom: 1px #dddddd solid;
 }
 </style>

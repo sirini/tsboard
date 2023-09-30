@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@tiptap/extension-color": "^2.1.11",
     "@tiptap/extension-highlight": "^2.1.11",
     "@tiptap/extension-image": "^2.1.11",
+    "@tiptap/extension-text-style": "^2.1.11",
     "@tiptap/pm": "^2.1.11",
     "@tiptap/starter-kit": "^2.1.11",
     "@tiptap/vue-3": "^2.1.11",
