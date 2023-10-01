@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",
-    "@types/node": "^18.15.0",
+    "@types/node": "^20.8.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "bun-types": "latest",
@@ -38,7 +38,7 @@
     "eslint-plugin-vue": "^9.3.0",
     "prettier": "^3.0.3",
     "sass": "^1.60.0",
-    "typescript": "^5.0.0",
+    "typescript": "^5.2.2",
     "unplugin-fonts": "^1.0.3",
     "vite": "^4.2.0",
     "vite-plugin-vuetify": "^1.0.0",

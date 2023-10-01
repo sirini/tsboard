@@ -40,7 +40,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-btn icon @click="board.uploadImages(editor)"><v-icon>mdi-image-plus</v-icon> </v-btn>
+    <v-btn icon @click="board.uploadImageDialog = true"><v-icon>mdi-image-plus</v-icon> </v-btn>
     <v-divider vertical></v-divider>
     <v-btn icon @click="editor?.chain().focus().toggleCode().run()"
       ><v-icon>mdi-code-braces</v-icon>
@@ -93,6 +93,7 @@
     </v-btn>
   </v-toolbar>
   <editor-content :editor="editor"></editor-content>
+  <board-write-editor-upload-image-dialog></board-write-editor-upload-image-dialog>
 </template>
 
 <script setup lang="ts">
@@ -104,6 +105,7 @@ import Image from "@tiptap/extension-image"
 import { Color } from "@tiptap/extension-color"
 import TextStyle from "@tiptap/extension-text-style"
 import { useBoardStore } from "../../store/board"
+import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
 import "../../assets/board/editor.scss"
 
 const board = useBoardStore()

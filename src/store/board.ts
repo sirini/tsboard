@@ -3,10 +3,12 @@
  *
  * 게시판 동작과 관련한 상태 및 유틸리티 함수들
  */
+import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
 
 export const useBoardStore = defineStore("board", () => {
+  const uploadImageDialog = ref<boolean>(false)
   const router = useRouter()
 
   // 게시글 보러가기
@@ -33,5 +35,5 @@ export const useBoardStore = defineStore("board", () => {
     }
   }
 
-  return { goListPage, goViewPage, goWritePage, uploadImages }
+  return { uploadImageDialog, goListPage, goViewPage, goWritePage, uploadImages }
 })
