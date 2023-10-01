@@ -27,6 +27,21 @@ const routes = [
     name: "write",
     component: () => import("@/pages/board/Write.vue"),
   },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/pages/auth/Login.vue"),
+  },
+  {
+    path: "/resetpassword",
+    name: "resetpassword",
+    component: () => import("@/pages/auth/ResetPassword.vue"),
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: () => import("@/pages/auth/SignUp.vue"),
+  },
 ]
 
 const router = createRouter({

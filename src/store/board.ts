@@ -11,7 +11,7 @@ export const useBoardStore = defineStore("board", () => {
   const uploadImageDialog = ref<boolean>(false)
   const router = useRouter()
 
-  // 게시글 보러가기
+  // 게시글 목록 보러가기
   function goListPage(id: string): void {
     router.push({ name: "list", params: { id } })
   }

@@ -13,7 +13,7 @@
         </v-list>
       </v-form>
       <v-card-actions>
-        <v-btn><v-icon>mdi-close</v-icon>글 작성 취소</v-btn>
+        <v-btn @click="board.goListPage(boardId)"><v-icon>mdi-close</v-icon>글 작성 취소</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary">작성 완료하고 보러 가기 <v-icon>mdi-chevron-right</v-icon></v-btn>
       </v-card-actions>
@@ -23,9 +23,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import BoardHeader from "../../components/board/BoardHeader.vue"
 import BoardWriteEditor from "../../components/board/BoardWriteEditor.vue"
+import { useBoardStore } from "../../store/board"
 
+const route = useRoute()
+const boardId = ref<string>(route.params?.id.toString())
+const board = useBoardStore()
 const content = ref<string>("")
 const subjectRule = [
   (value: any) => {
