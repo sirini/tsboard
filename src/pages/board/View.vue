@@ -9,15 +9,25 @@
         <v-list-item class="view_info">
           <template v-slot:prepend>
             <span class="mr-4"
+              ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon> news</span
+            >
+            <v-divider vertical></v-divider>
+            <span class="ml-4 mr-4"
               ><v-icon size="small" class="mr-2">mdi-calendar</v-icon> 2023.09.29 12:23:34</span
             >
           </template>
           <template v-slot:append>
-            <span class="mr-4"><v-icon size="small" class="mr-2">mdi-eye</v-icon> 5678</span>
+            <span class="mr-4"
+              ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon> 5678</span
+            >
             <v-divider vertical></v-divider>
-            <span class="ml-4 mr-4"><v-icon size="small" class="mr-2">mdi-heart</v-icon> 5</span>
+            <span class="ml-4 mr-4"
+              ><v-icon size="small" class="mr-2">mdi-heart-outline</v-icon> 5</span
+            >
             <v-divider vertical></v-divider>
-            <span class="ml-4"><v-icon size="small" class="mr-2">mdi-comment</v-icon> 16</span>
+            <span class="ml-4"
+              ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon> 16</span
+            >
           </template>
         </v-list-item>
         <v-list-item class="view_content pa-5">

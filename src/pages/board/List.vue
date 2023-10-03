@@ -11,10 +11,17 @@
             <span class="col ml-4 mr-4">news</span>
             <v-divider vertical></v-divider>
           </template>
-          <v-list-item-title class="ml-3">제목입니다. </v-list-item-title>
+          <v-list-item-title class="ml-3"
+            >제목입니다.
+            <v-icon size="small" color="grey">mdi-image-outline</v-icon></v-list-item-title
+          >
           <template v-slot:append>
             <board-user-nametag></board-user-nametag>
-            <span class="col ml-4 mr-4">1024</span>
+            <span class="col ml-4 mr-4"><v-icon size="small">mdi-eye-outline</v-icon> 1024</span>
+            <v-divider vertical></v-divider>
+            <span class="col ml-4 mr-4"><v-icon size="small">mdi-heart-outline</v-icon> 8</span>
+            <v-divider vertical></v-divider>
+            <span class="col ml-4 mr-4"><v-icon size="small">mdi-comment-outline</v-icon> 21</span>
             <v-divider vertical></v-divider>
             <span class="col ml-4">23.09.29</span>
           </template>

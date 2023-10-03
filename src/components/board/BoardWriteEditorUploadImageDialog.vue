@@ -1,7 +1,7 @@
 <template>
-  <v-dialog width="500" v-model="board.uploadImageDialog">
+  <v-dialog width="500" v-model="board.uploadImageDialog" persistent>
     <v-card>
-      <v-card-title>이미지 업로드 </v-card-title>
+      <v-card-title>이미지 업로드</v-card-title>
       <v-divider></v-divider>
       <v-alert
         v-model="showAlert"

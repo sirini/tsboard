@@ -9,6 +9,11 @@ import { defineStore } from "pinia"
 
 export const useBoardStore = defineStore("board", () => {
   const uploadImageDialog = ref<boolean>(false)
+  const confirmCancelDialog = ref<boolean>(false)
+  const confirmRemoveCommentDialog = ref<boolean>(false)
+  const snackbar = ref<boolean>(false)
+  const snackbarTimeout = ref<number>(3000)
+  const snackbarText = ref<string>("")
   const router = useRouter()
 
   // 게시글 목록 보러가기
@@ -35,5 +40,9 @@ export const useBoardStore = defineStore("board", () => {
     }
   }
 
-  return { uploadImageDialog, goListPage, goViewPage, goWritePage, uploadImages }
+  return {
+    uploadImageDialog, confirmCancelDialog, confirmRemoveCommentDialog,
+    snackbar, snackbarTimeout, snackbarText,
+    goListPage, goViewPage, goWritePage, uploadImages
+  }
 })
