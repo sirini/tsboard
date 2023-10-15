@@ -18,12 +18,12 @@
         </v-list>
       </v-form>
       <v-card-actions>
-        <v-btn @click="board.confirmCancelDialog = true"
-          ><v-icon>mdi-close</v-icon>글 작성 취소</v-btn
+        <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close"
+          >글 작성 취소</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="write"
-          >작성 완료하고 보러 가기 <v-icon>mdi-chevron-right</v-icon></v-btn
+        <v-btn color="primary" @click="write" append-icon="mdi-chevron-right"
+          >작성 완료하고 보러 가기</v-btn
         >
       </v-card-actions>
     </v-card>

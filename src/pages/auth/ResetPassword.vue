@@ -20,18 +20,18 @@
         </v-list-item>
       </v-list>
 
-      <v-card class="mb-3" color="surface-variant" variant="tonal">
+      <v-card class="mb-6" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-caption">
           최초 가입 시점에 입력하신 이메일 주소로 초기화된 비밀번호를 발송해 드립니다. 사이트
           내에서는 상대방의 아이디(이메일 주소)를 볼 수 없도록 되어 있지만, 혹시 노출된 경우 다른
           사용자가 임의로 초기화 할 수 있사오니 주의를 부탁드립니다.
         </v-card-text>
       </v-card>
-
+      <v-divider></v-divider>
       <v-card-actions>
         <v-btn prepend-icon="mdi-login-variant" @click="auth.goLoginPage">로그인 하러가기</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary">비밀번호 초기화 하기 <v-icon>mdi-chevron-right</v-icon></v-btn>
+        <v-btn color="primary" append-icon="mdi-chevron-right">비밀번호 초기화 하기</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>

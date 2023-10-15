@@ -1,7 +1,10 @@
 <template>
-  <h1>Hi there!</h1>
+  <h1>TSBOARD.dev</h1>
 </template>
 
-<script lang="ts" setup>
-// do something
+<script setup lang="ts">
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+router.push("/board/test")
 </script>

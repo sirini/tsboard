@@ -12,45 +12,161 @@
       ><v-icon>mdi-format-strikethrough-variant</v-icon>
       <v-tooltip activator="parent" location="top">취소선 그리기</v-tooltip>
     </v-btn>
-    <v-menu open-on-hover>
-      <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props"
-          ><v-icon>mdi-palette</v-icon>
-          <v-tooltip activator="parent" location="top">글자 색상 지정</v-tooltip>
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item @click="editor?.chain().focus().setColor('#958DF1').run()">
-          <v-list-item-title><span style="color: #958df1">◼︎ 보라색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#F98181').run()">
-          <v-list-item-title><span style="color: #f98181">◼︎ 붉은색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#FBBC88').run()">
-          <v-list-item-title><span style="color: #fbbc88">◼︎ 주황색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#FAF594').run()">
-          <v-list-item-title><span style="color: #faf594">◼︎ 노란색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#70CFF8').run()">
-          <v-list-item-title><span style="color: #70cff8">◼︎ 파란색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#94FADB').run()">
-          <v-list-item-title><span style="color: #94fadb">◼︎ 틸 색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().setColor('#B9F18D').run()">
-          <v-list-item-title><span style="color: #b9f18d">◼︎ 초록색</span></v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="editor?.chain().focus().unsetColor().run()">
-          <v-list-item-title><span style="color: #000000">◻︎ 색상 지우기</span></v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <v-btn icon @click="board.uploadImageDialog = true"
-      ><v-icon>mdi-image-plus</v-icon>
-      <v-tooltip activator="parent" location="top">본문에 이미지 추가(업로드)</v-tooltip>
+    <v-btn icon
+      ><v-icon>mdi-format-header-1</v-icon>
+      <v-tooltip activator="parent" location="top">글 제목 레벨 지정</v-tooltip>
+      <v-menu open-on-hover activator="parent">
+        <v-list>
+          <v-list-item
+            @click="editor?.chain().focus().toggleHeading({ level }).run()"
+            v-for="(level, index) in headingLevels"
+            :key="index"
+          >
+            <template v-slot:prepend>
+              <v-icon>mdi-format-header-{{ level }}</v-icon>
+            </template>
+            <v-list-item-title>글 제목 {{ level }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-btn>
+    <v-btn icon v-bind="props"
+      ><v-icon>mdi-palette</v-icon>
+      <v-tooltip activator="parent" location="top">글자 색상 지정</v-tooltip>
+      <v-menu open-on-hover activator="parent">
+        <v-list density="compact">
+          <v-list-item @click="editor?.chain().focus().setColor('#958DF1').run()">
+            <v-list-item-title><span style="color: #958df1">◼︎ 보라색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#F98181').run()">
+            <v-list-item-title><span style="color: #f98181">◼︎ 붉은색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FBBC88').run()">
+            <v-list-item-title><span style="color: #fbbc88">◼︎ 주황색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FAF594').run()">
+            <v-list-item-title><span style="color: #faf594">◼︎ 노란색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#70CFF8').run()">
+            <v-list-item-title><span style="color: #70cff8">◼︎ 파란색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#94FADB').run()">
+            <v-list-item-title><span style="color: #94fadb">◼︎ 틸 색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#B9F18D').run()">
+            <v-list-item-title><span style="color: #b9f18d">◼︎ 초록색</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().unsetColor().run()">
+            <v-list-item-title
+              ><span style="color: #000000">◻︎ 색상 지우기</span></v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+
     <v-divider vertical></v-divider>
+
+    <v-btn icon>
+      <v-icon>mdi-image</v-icon>
+      <v-tooltip activator="parent" location="top"
+        >이미지 추가 (직접 업로드 혹은 외부 링크)</v-tooltip
+      >
+      <v-menu open-on-hover activator="parent">
+        <v-list density="compact">
+          <v-list-item prepend-icon="mdi-image-plus" @click="board.uploadImageDialog = true">
+            이미지 파일 직접 업로드
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-image-search-outline"
+            @click="board.addImageFromDBDialog = true"
+          >
+            기존 이미지 추가
+          </v-list-item>
+          <v-list-item prepend-icon="mdi-link-variant-plus" @click="board.addImageURLDialog = true">
+            외부 이미지 URL 추가
+          </v-list-item>
+          <v-list-item prepend-icon="mdi-youtube" @click="board.addVideoURLDialog = true">
+            YouTube URL 추가
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+
+    <v-btn icon>
+      <v-icon>mdi-table</v-icon>
+      <v-tooltip activator="parent" location="top">표 (Table) 작업</v-tooltip>
+      <v-menu open-on-hover activator="parent">
+        <v-list density="compact">
+          <v-list-item prepend-icon="mdi-table-plus" @click="board.addTableDialog = true"
+            >표 추가하기</v-list-item
+          >
+          <v-list-item
+            prepend-icon="mdi-table-column-plus-before"
+            @click="editor?.chain().focus().addColumnBefore().run()"
+            >앞에 열(column) 추가하기</v-list-item
+          >
+          <v-list-item
+            prepend-icon="mdi-table-column-plus-after"
+            @click="editor?.chain().focus().addColumnAfter().run()"
+            >뒤에 열(column) 추가하기</v-list-item
+          >
+          <v-list-item
+            prepend-icon="mdi-table-column-remove"
+            @click="editor?.chain().focus().deleteColumn().run()"
+          >
+            열(column) 삭제하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-row-plus-before"
+            @click="editor?.chain().focus().addRowBefore().run()"
+          >
+            위에 행(row) 추가하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-row-plus-after"
+            @click="editor?.chain().focus().addRowAfter().run()"
+          >
+            아래에 행(row) 추가하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-row-remove"
+            @click="editor?.chain().focus().deleteRow().run()"
+          >
+            행(row) 삭제하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-remove"
+            @click="editor?.chain().focus().deleteTable().run()"
+          >
+            표 삭제하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-merge-cells"
+            @click="editor?.chain().focus().mergeCells().run()"
+          >
+            셀 병합하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-split-cell"
+            @click="editor?.chain().focus().splitCell().run()"
+          >
+            셀 분리하기
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-table-edit"
+            @click="editor?.chain().focus().toggleHeaderCell().run()"
+          >
+            헤더로 변환 혹은 취소
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+
+    <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()"
+      ><v-icon>mdi-format-color-highlight</v-icon>
+      <v-tooltip activator="parent" location="top">글자 강조(하이라이트)</v-tooltip>
+    </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleCode().run()"
       ><v-icon>mdi-code-braces</v-icon>
       <v-tooltip activator="parent" location="top">코드 표현하기</v-tooltip>
@@ -59,31 +175,9 @@
       ><v-icon>mdi-code-braces-box</v-icon>
       <v-tooltip activator="parent" location="top">코드 블럭 지정</v-tooltip>
     </v-btn>
-    <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()"
-      ><v-icon>mdi-format-color-highlight</v-icon>
-      <v-tooltip activator="parent" location="top">글자 강조(하이라이트)</v-tooltip>
-    </v-btn>
-    <v-menu open-on-hover>
-      <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props"
-          ><v-icon>mdi-format-header-1</v-icon>
-          <v-tooltip activator="parent" location="top">글 제목 레벨 지정</v-tooltip>
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          @click="editor?.chain().focus().toggleHeading({ level }).run()"
-          v-for="(level, index) in headingLevels"
-          :key="index"
-        >
-          <template v-slot:prepend>
-            <v-icon>mdi-format-header-{{ level }}</v-icon>
-          </template>
-          <v-list-item-title>글 제목 {{ level }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+
     <v-divider vertical></v-divider>
+
     <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()"
       ><v-icon>mdi-format-list-bulleted-type</v-icon>
       <v-tooltip activator="parent" location="top">순서 없는 목록</v-tooltip>
@@ -100,7 +194,9 @@
       ><v-icon>mdi-minus</v-icon>
       <v-tooltip activator="parent" location="top">가로 구분선</v-tooltip>
     </v-btn>
+
     <v-divider vertical></v-divider>
+
     <v-btn icon @click="editor?.chain().focus().undo().run()"
       ><v-icon>mdi-arrow-u-left-top</v-icon>
       <v-tooltip activator="parent" location="top">방금 작업 취소하기</v-tooltip>
@@ -114,8 +210,22 @@
       <v-tooltip activator="parent" location="top">효과 취소</v-tooltip>
     </v-btn>
   </v-toolbar>
+
   <editor-content :editor="editor"></editor-content>
-  <board-write-editor-upload-image-dialog></board-write-editor-upload-image-dialog>
+
+  <board-write-editor-add-image-from-d-b-dialog
+    @addImageURL="addImageURL"
+  ></board-write-editor-add-image-from-d-b-dialog>
+  <board-write-editor-upload-image-dialog
+    @addImageURL="addImageURL"
+  ></board-write-editor-upload-image-dialog>
+  <board-write-editor-add-image-dialog
+    @addImageURL="addImageURL"
+  ></board-write-editor-add-image-dialog>
+  <board-write-editor-add-video-dialog
+    @addVideoURL="addVideoURL"
+  ></board-write-editor-add-video-dialog>
+  <board-write-editor-add-table-dialog @addTable="addTable"></board-write-editor-add-table-dialog>
 </template>
 
 <script setup lang="ts">
@@ -124,10 +234,30 @@ import { useEditor, EditorContent } from "@tiptap/vue-3"
 import StarterKit from "@tiptap/starter-kit"
 import Highlight from "@tiptap/extension-highlight"
 import Image from "@tiptap/extension-image"
+import Youtube from "@tiptap/extension-youtube"
 import { Color } from "@tiptap/extension-color"
 import TextStyle from "@tiptap/extension-text-style"
+import Table from "@tiptap/extension-table"
+import TableCell from "@tiptap/extension-table-cell"
+import TableHeader from "@tiptap/extension-table-header"
+import TableRow from "@tiptap/extension-table-row"
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight"
+import css from "highlight.js/lib/languages/css"
+import js from "highlight.js/lib/languages/javascript"
+import ts from "highlight.js/lib/languages/typescript"
+import py from "highlight.js/lib/languages/python"
+import kt from "highlight.js/lib/languages/kotlin"
+import java from "highlight.js/lib/languages/java"
+import cpp from "highlight.js/lib/languages/cpp"
+import php from "highlight.js/lib/languages/php"
+import rs from "highlight.js/lib/languages/rust"
+import { all, createLowlight } from "lowlight"
 import { useBoardStore } from "../../store/board"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
+import BoardWriteEditorAddImageFromDBDialog from "./BoardWriteEditorAddImageFromDBDialog.vue"
+import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue"
+import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue"
+import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../assets/board/editor.scss"
 
 const board = useBoardStore()
@@ -135,9 +265,39 @@ const props = defineProps<{
   modelValue: string
 }>()
 const emits = defineEmits(["update:modelValue"])
+const lowlight = createLowlight(all)
+lowlight.register("css", css)
+lowlight.register("js", js)
+lowlight.register("ts", ts)
+lowlight.register("py", py)
+lowlight.register("kt", kt)
+lowlight.register("java", java)
+lowlight.register("cpp", cpp)
+lowlight.register("php", php)
+lowlight.register("rs", rs)
+
 const editor = useEditor({
   content: props.modelValue,
-  extensions: [StarterKit, Highlight, Image, Color, TextStyle],
+  extensions: [
+    StarterKit.configure({
+      codeBlock: false /* CodeBlockLowLight 충돌 방지 */,
+    }),
+    Highlight,
+    Image,
+    Youtube,
+    Color,
+    TextStyle,
+    Table.configure({
+      resizable: true,
+    }),
+    TableCell,
+    TableHeader,
+    TableRow,
+    CodeBlockLowlight.configure({
+      lowlight,
+      defaultLanguage: "python",
+    }),
+  ],
   onUpdate: () => {
     emits("update:modelValue", editor.value?.getHTML())
   },
@@ -154,6 +314,47 @@ watch(
     editor.value?.commands.setContent(value, false)
   },
 )
+
+// 외부 이미지 추가하기
+function addImageURL(src: string): void {
+  editor.value?.commands.setImage({ src })
+  editor.value?.commands.enter()
+  editor.value?.commands.focus("end")
+}
+
+// YouTube 삽입 데이터
+interface VideoURL {
+  src: string
+  width: number
+  height: number
+}
+
+// YouTube 동영상 추가하기
+function addVideoURL(link: VideoURL): void {
+  const { src, width, height } = link
+  editor.value?.commands.setYoutubeVideo({
+    src,
+    width,
+    height,
+  })
+  editor.value?.commands.enter()
+  editor.value?.commands.focus("end")
+}
+
+// 표 삽입 데이터
+interface TableOption {
+  rows: number
+  cols: number
+  withHeaderRow: boolean
+}
+
+// 표 추가하기
+function addTable(option: TableOption): void {
+  const { rows, cols, withHeaderRow } = option
+  editor.value?.chain().focus().insertTable({ rows, cols, withHeaderRow }).run()
+  editor.value?.commands.enter()
+  editor.value?.commands.focus("end")
+}
 
 onBeforeUnmount(() => {
   editor.value?.destroy()
