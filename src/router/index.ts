@@ -28,6 +28,21 @@ const routes = [
     component: () => import("@/pages/board/Write.vue"),
   },
   {
+    path: "/gallery/:id",
+    name: "grid",
+    component: () => import("@/pages/gallery/Grid.vue"),
+  },
+  {
+    path: "/gallery/:id/:no(\\d+)",
+    name: "open",
+    component: () => import("@/pages/gallery/Open.vue"),
+  },
+  {
+    path: "/gallery/:id/upload",
+    name: "upload",
+    component: () => import("@/pages/gallery/Upload.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     component: () => import("@/pages/auth/Login.vue"),

@@ -20,6 +20,7 @@ const SERVER_PORT = 3100 // .env 와 동일하게 유지
 const DEV_API_PATH = `http://localhost:${SERVER_PORT}/tsapi`
 const PROD_API_PATH = `https://tsboard.dev/tsapi`
 const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH
+const PREFIX = ""
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -48,6 +49,7 @@ export default defineConfig({
   define: {
     "process.env": {
       API,
+      PREFIX,
   } },
   resolve: {
     alias: {
