@@ -12,6 +12,9 @@ export const useGalleryStore = defineStore("gallery", () => {
   const router = useRouter()
   const postUid = ref<number>(0)
   const viewerDialog = ref<boolean>(false)
+  const images = ref<string[]>([])
+  const videos = ref<string[]>([])
+  const position = ref<number>(0)
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(id: string, no: number): void {
@@ -23,6 +26,9 @@ export const useGalleryStore = defineStore("gallery", () => {
   return {
     postUid,
     viewerDialog,
+    images,
+    videos,
+    position,
     open,
   }
 })

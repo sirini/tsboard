@@ -30,7 +30,7 @@ import { useGalleryStore } from "../../store/gallery"
 const route = useRoute()
 const gallery = useGalleryStore()
 const PREFIX = process.env.PREFIX || ""
-const id = route.params?.id
+const id = route.params?.id.toString()
 const props = defineProps<{
   uid: number
   src: string
