@@ -41,7 +41,6 @@
     "@types/node": "^20.8.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
-    "bun-types": "latest",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-vue": "^9.3.0",

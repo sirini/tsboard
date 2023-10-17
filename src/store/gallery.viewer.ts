@@ -1,6 +1,6 @@
 /**
  * store/gallery.viewer.ts
- * 
+ *
  * 뷰어 다이얼로그에서 이미지 대상으로 하는 상호작용 처리
  */
 import { defineStore } from "pinia"
@@ -27,7 +27,7 @@ export const useViewerStore = defineStore("viewer", () => {
     startPos.value.x = event.clientX - transPos.value.x
     startPos.value.y = event.clientY - transPos.value.y
 
-    target.ondragstart = function() {
+    target.ondragstart = function () {
       return false // 브라우저 기본 드래깅 방지
     }
   }
@@ -46,7 +46,7 @@ export const useViewerStore = defineStore("viewer", () => {
     isDragging.value = false
   }
 
-  function mouseWheel(event: MouseEvent): void {
+  function mouseWheel(event: WheelEvent): void {
     event.preventDefault()
     const target = document.querySelector(targetDom) as HTMLElement
     if (event.deltaY > 0) {
