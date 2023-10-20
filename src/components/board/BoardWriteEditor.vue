@@ -81,7 +81,7 @@
             prepend-icon="mdi-image-search-outline"
             @click="board.addImageFromDBDialog = true"
           >
-            기존 이미지 추가
+            기존 이미지 추가/관리
           </v-list-item>
           <v-list-item prepend-icon="mdi-link-variant-plus" @click="board.addImageURLDialog = true">
             외부 이미지 URL 추가
@@ -215,6 +215,7 @@
 
   <board-write-editor-add-image-from-d-b-dialog
     @addImageURL="addImageURL"
+    @removeImage="removeImage"
   ></board-write-editor-add-image-from-d-b-dialog>
   <board-write-editor-upload-image-dialog
     @addImageURL="addImageURL"
@@ -259,6 +260,7 @@ import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue
 import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue"
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../assets/board/editor.scss"
+import { encode } from "punycode"
 
 const board = useBoardStore()
 const props = defineProps<{
@@ -315,11 +317,35 @@ watch(
   },
 )
 
-// 외부 이미지 추가하기
+// 기존 or 외부 이미지 추가하기
 function addImageURL(src: string): void {
   editor.value?.commands.setImage({ src })
   editor.value?.commands.enter()
   editor.value?.commands.focus("end")
+}
+
+// URI 특수문자만 인코딩하기
+function encodeSpecialChars(target: string): string {
+  let result = target
+  const filters = [
+    { from: "&", to: "&amp;" },
+    { from: "<", to: "&lt;" },
+    { from: ">", to: "&gt;" },
+  ]
+  for (const filter of filters) {
+    result = result.replaceAll(filter.from, filter.to)
+  }
+  return result
+}
+
+// 기존 이미지 삭제하기
+function removeImage(src: string): void {
+  const originalContent = editor.value?.getHTML() || ""
+  const encodedSrc = encodeSpecialChars(src)
+  const newContent = originalContent.replaceAll(encodedSrc, "/image-not-found.png")
+
+  editor.value?.commands.clearContent()
+  editor.value?.commands.insertContent(newContent || "")
 }
 
 // YouTube 삽입 데이터
