@@ -22,17 +22,17 @@ export const useBoardStore = defineStore("board", () => {
 
   // 게시글 목록 보러가기
   function goListPage(id: string): void {
-    router.push({ name: "list", params: { id } })
+    router.push({ name: "board", params: { id } })
   }
 
   // 게시글 보러가기
   function goViewPage(id: string, no: number): void {
-    router.push({ name: "view", params: { id, no } })
+    router.push({ name: "boardView", params: { id, no } })
   }
 
   // 글작성 페이지로 가기
   function goWritePage(id: string): void {
-    router.push({ name: "write", params: { id } })
+    router.push({ name: "boardWrite", params: { id } })
   }
 
   return {

@@ -25,7 +25,7 @@
         </v-card>
         <v-row>
           <v-col v-for="(image, index) in uploadedImages" :key="index" cols="3">
-            <v-img cover height="100" aspect-ratio="1/1" :src="image.src">
+            <v-img cover height="100" aspect-ratio="1/1" :src="PREFIX + image.src">
               <div class="action">
                 <v-btn
                   @click="add(image.src)"
@@ -77,6 +77,7 @@ import { useBoardStore } from "../../store/board"
 
 const emits = defineEmits(["addImageURL", "removeImage"])
 const board = useBoardStore()
+const PREFIX = process.env.PREFIX || ""
 const showRemoveImageInfo = ref<boolean>(false)
 const removeImageUid = ref<number>(0)
 const removeImageSrc = ref<string>("")
@@ -101,14 +102,14 @@ const uploadedImages = [
 
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
-  emits("addImageURL", src)
+  emits("addImageURL", PREFIX + src)
 }
 
 // 이미지 삭제하기 전에 확인하기
 function check(uid: number, src: string): void {
   showRemoveImageInfo.value = true
   removeImageUid.value = uid
-  removeImageSrc.value = src
+  removeImageSrc.value = PREFIX + src
 }
 
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)

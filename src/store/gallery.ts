@@ -18,7 +18,7 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(id: string, no: number): void {
-    router.push(`${process.env.PREFIX}/gallery/${id}/${no}`)
+    router.push({name: "galleryOpen", params: {id, no,}})
     postUid.value = no
     viewerDialog.value = true
   }

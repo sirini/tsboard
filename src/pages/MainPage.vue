@@ -6,5 +6,5 @@
 import { useRouter } from "vue-router"
 
 const router = useRouter()
-router.push("/board/test")
+router.push({ name: "board", params: { id: "test" } })
 </script>

@@ -1,24 +1,21 @@
 <template>
   <v-hover v-slot="{ isHovering, props }">
     <v-card v-bind="props" class="mx-auto my-1" :width="gridSize" :elevation="isHovering ? 3 : 0">
-      <v-img cover 
-        :height="gridSize" 
-        :src="src" 
-        class="align-end pointer" 
+      <v-img
+        cover
+        :height="gridSize"
+        :src="PREFIX + src"
+        class="align-end pointer"
         :class="{ onHover: isHovering }"
-        @click="gallery.open(id, uid)"></v-img>
+        @click="gallery.open(id, uid)"
+      ></v-img>
 
-      <v-card
-        elevation="0"
-        color="transparent"
-        v-show="isHovering"
-        class="status"
-      >
+      <v-card elevation="0" color="transparent" v-show="isHovering" class="status">
         <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ totalImage }}</span>
         <span class="icon"><v-icon>mdi-heart</v-icon> {{ totalLike }}</span>
         <span class="icon"><v-icon>mdi-comment-multiple-outline</v-icon> {{ totalComment }}</span>
       </v-card>
-    </v-card>  
+    </v-card>
   </v-hover>
 </template>
 
