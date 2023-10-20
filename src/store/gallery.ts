@@ -8,13 +8,19 @@ import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
 
 export const useGalleryStore = defineStore("gallery", () => {
-  const PREFIX = process.env.PREFIX || ""
   const router = useRouter()
-  const postUid = ref<number>(0)
   const viewerDialog = ref<boolean>(false)
   const images = ref<string[]>([])
   const videos = ref<string[]>([])
+  const postUid = ref<number>(0)
   const position = ref<number>(0)
+  const width = ref<number>(1200)
+  const cols = ref<number>(3)
+  const gridGap = ref<number>(15)
+  const gridSize = ref<number>((width.value / (12 / cols.value)) - gridGap.value)
+  const snackbar = ref<boolean>(false)
+  const snackbarTimeout = ref<number>(3000)
+  const snackbarText = ref<string>("")
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(id: string, no: number): void {
@@ -29,6 +35,12 @@ export const useGalleryStore = defineStore("gallery", () => {
     images,
     videos,
     position,
+    width,
+    cols,
+    gridSize,
+    snackbar,
+    snackbarTimeout,
+    snackbarText,
     open,
   }
 })

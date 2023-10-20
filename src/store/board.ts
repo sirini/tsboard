@@ -8,6 +8,7 @@ import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
 
 export const useBoardStore = defineStore("board", () => {
+  const router = useRouter()
   const uploadImageDialog = ref<boolean>(false)
   const addImageFromDBDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
@@ -18,7 +19,7 @@ export const useBoardStore = defineStore("board", () => {
   const snackbar = ref<boolean>(false)
   const snackbarTimeout = ref<number>(3000)
   const snackbarText = ref<string>("")
-  const router = useRouter()
+  const width = ref<number>(1200)  
 
   // 게시글 목록 보러가기
   function goListPage(id: string): void {
@@ -46,6 +47,7 @@ export const useBoardStore = defineStore("board", () => {
     snackbar,
     snackbarTimeout,
     snackbarText,
+    width,
     goListPage,
     goViewPage,
     goWritePage,

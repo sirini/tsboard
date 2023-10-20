@@ -1,9 +1,14 @@
 <template>
   <v-hover v-slot="{ isHovering, props }">
-    <v-card v-bind="props" class="mx-auto my-1" :width="gridSize" :elevation="isHovering ? 3 : 0">
+    <v-card
+      v-bind="props"
+      class="mx-auto my-1"
+      :width="gallery.gridSize"
+      :elevation="isHovering ? 3 : 0"
+    >
       <v-img
         cover
-        :height="gridSize"
+        :height="gallery.gridSize"
         :src="PREFIX + src"
         class="align-end pointer"
         :class="{ onHover: isHovering }"
@@ -35,8 +40,6 @@ const props = defineProps<{
   totalLike: number
   totalComment: number
 }>()
-
-const gridSize = ref<number>(300)
 </script>
 
 <style type="scss" scoped>
@@ -49,7 +52,7 @@ const gridSize = ref<number>(300)
 }
 .status {
   position: absolute;
-  top: 130px;
+  top: 120px;
   left: 50px;
 
   .icon {

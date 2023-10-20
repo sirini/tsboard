@@ -3,9 +3,7 @@
     <v-card elevation="0" rounded="0" class="mx-auto" width="500">
       <v-card-title class="login_title"
         >로그인
-        <span class="info ml-3 pl-3"
-          >가입하실 때 등록하신 아이디(이메일) 및 비밀번호를 입력해 주세요</span
-        >
+        <span class="info ml-3 pl-3">아이디(이메일) 및 비밀번호를 입력해 주세요</span>
       </v-card-title>
 
       <v-list>

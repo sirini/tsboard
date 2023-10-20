@@ -1,34 +1,30 @@
 <template>
-  <v-container>
-    <v-card elevation="0" rounded="0">
-      <v-form fast-fail @submit.prevent>
-        <board-header></board-header>
-        <v-alert v-if="showAlertBox" :type="alertType" :text="alertText" class="mt-3"></v-alert>
-        <v-list class="pa-0">
-          <v-list-item class="pa-0 mt-3">
-            <v-text-field
-              :rules="subjectRule"
-              v-model="subject"
-              label="글 제목을 입력해 주세요"
-            ></v-text-field>
-          </v-list-item>
-          <v-list-item class="pa-0 mt-3">
-            <board-write-editor v-model="content"></board-write-editor>
-          </v-list-item>
-        </v-list>
-      </v-form>
-      <v-card-actions>
-        <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close"
-          >글 작성 취소</v-btn
-        >
-        <v-spacer></v-spacer>
-        <v-btn color="primary" @click="write" append-icon="mdi-chevron-right"
-          >작성 완료하고 보러 가기</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-    <board-write-cancel-dialog @cancel="cancel"></board-write-cancel-dialog>
-  </v-container>
+  <v-card :width="board.width" elevation="0" rounded="0" class="mx-auto">
+    <v-form fast-fail @submit.prevent>
+      <board-header></board-header>
+      <v-alert v-if="showAlertBox" :type="alertType" :text="alertText" class="mt-3"></v-alert>
+      <v-list class="pa-0">
+        <v-list-item class="pa-0 mt-3">
+          <v-text-field
+            :rules="subjectRule"
+            v-model="subject"
+            label="글 제목을 입력해 주세요"
+          ></v-text-field>
+        </v-list-item>
+        <v-list-item class="pa-0 mt-3">
+          <board-write-editor v-model="content"></board-write-editor>
+        </v-list-item>
+      </v-list>
+    </v-form>
+    <v-card-actions>
+      <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close">글 작성 취소</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" @click="write" append-icon="mdi-chevron-right"
+        >작성 완료하고 보러 가기</v-btn
+      >
+    </v-card-actions>
+  </v-card>
+  <board-write-cancel-dialog @cancel="cancel"></board-write-cancel-dialog>
 </template>
 
 <script setup lang="ts">

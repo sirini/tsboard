@@ -8,12 +8,12 @@ export const galleryRoutes = [
   {
     path: "/gallery/:id",
     name: "gallery",
-    component: () => import("@/pages/gallery/Grid.vue"),
+    component: () => import("@/pages/gallery/List.vue"),
   },
   {
     path: "/gallery/:id/:no(\\d+)",
     name: "galleryOpen",
-    component: () => import("@/pages/gallery/Open.vue"),
+    component: () => import("@/pages/gallery/List.vue"),
   },
   {
     path: "/gallery/:id/upload",
