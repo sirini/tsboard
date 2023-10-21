@@ -72,7 +72,7 @@ function write(): void {
 
 // 글 작성 취소하기 시 한 번 더 확인하기
 function cancel(): void {
-  board.goListPage(boardId.value)
+  board.list(boardId.value)
 }
 </script>
 

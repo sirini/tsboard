@@ -10,7 +10,7 @@
           <span class="col cat text-center">news</span>
           <v-divider vertical></v-divider>
         </template>
-        <v-list-item-title class="pointer ml-3" @click="board.goViewPage(id, 1)"
+        <v-list-item-title class="pointer ml-3" @click="board.view(route.params?.id.toString(), 1)"
           >제목입니다.
           <v-icon size="small" color="grey">mdi-image-outline</v-icon>
           <v-chip class="ml-2" size="small" color="blue">21</v-chip>
@@ -40,14 +40,19 @@
       <v-spacer></v-spacer>
       <v-pagination :length="5"></v-pagination>
       <v-spacer></v-spacer>
-      <v-btn prepend-icon="mdi-cog-outline" @click="">관리</v-btn>
+      <v-btn
+        prepend-icon="mdi-pencil"
+        variant="text"
+        @click="board.write(route.params?.id.toString())"
+        >새글쓰기</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
@@ -57,7 +62,6 @@ import BoardListSearch from "../../components/board/list/BoardListSearch.vue"
 const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
-const id = ref<string>(route.params?.id.toString())
 </script>
 
 <style type="scss" scoped>

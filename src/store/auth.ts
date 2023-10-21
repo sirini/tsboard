@@ -10,17 +10,17 @@ export const useAuthStore = defineStore("auth", () => {
   const router = useRouter()
 
   // 로그인 페이지로 이동하기
-  function goLoginPage(): void {
+  function login(): void {
     router.push({ name: "login" })
   }
 
   // 비밀번호 찾기 페이지로 이동하기
-  function goResetPasswordPage(): void {
+  function resetPassword(): void {
     router.push({ name: "resetpassword" })
   }
 
   // 회원가입하기 페이지로 이동하기
-  function goSignUpPage(): void {
+  function signup(): void {
     router.push({ name: "signup" })
   }
 
@@ -48,5 +48,5 @@ export const useAuthStore = defineStore("auth", () => {
     },
   ]
 
-  return { emailRule, passwordRule, nicknameRule, goLoginPage, goResetPasswordPage, goSignUpPage }
+  return { emailRule, passwordRule, nicknameRule, login, resetPassword, signup }
 })

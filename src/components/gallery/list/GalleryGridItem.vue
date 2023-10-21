@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { useGalleryStore } from "../../store/gallery"
+import { useGalleryStore } from "../../../store/gallery"
 
 const route = useRoute()
 const gallery = useGalleryStore()

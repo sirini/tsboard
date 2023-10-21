@@ -37,10 +37,10 @@
         </v-card>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn prepend-icon="mdi-lock-question" @click="auth.goResetPasswordPage"
+          <v-btn prepend-icon="mdi-lock-question" @click="auth.resetPassword"
             >비밀번호 초기화</v-btn
           >
-          <v-btn prepend-icon="mdi-account-plus" @click="auth.goSignUpPage">회원가입 하기</v-btn>
+          <v-btn prepend-icon="mdi-account-plus" @click="auth.signup">회원가입 하기</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" append-icon="mdi-chevron-right">로그인 하기</v-btn>
         </v-card-actions>

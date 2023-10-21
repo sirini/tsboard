@@ -3,7 +3,7 @@
     <v-card>
       <v-layout>
         <v-main>
-          <v-img 
+          <v-img
             class="text-center"
             :src="PREFIX + gallery.images.at(gallery.position)"
             @mousedown="viewer.mouseDown"
@@ -13,10 +13,10 @@
             @mouseleave="viewer.mouseLeave"
             id="tsboardViewerPreview"
           >
-          <v-btn icon size="large" v-show="isVideo" @click="" id="tsboardPlayButton">
-            <v-icon>mdi-play</v-icon>
-          </v-btn>
-        </v-img>
+            <v-btn icon size="large" v-show="isVideo" @click="" id="tsboardPlayButton">
+              <v-icon>mdi-play</v-icon>
+            </v-btn>
+          </v-img>
         </v-main>
 
         <v-navigation-drawer permanent nav :width="drawerWidth" :location="drawerPosition">
@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useGalleryStore } from "../../store/gallery"
-import { useViewerStore } from "../../store/gallery.viewer"
+import { useGalleryStore } from "../../../store/gallery"
+import { useViewerStore } from "../../../store/gallery.viewer"
 
 const PREFIX = process.env.PREFIX || ""
 const gallery = useGalleryStore()

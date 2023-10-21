@@ -24,18 +24,23 @@ export const useBoardStore = defineStore("board", () => {
   const searchValue = ref<string>("")
 
   // 게시글 목록 보러가기
-  function goListPage(id: string): void {
+  function list(id: string): void {
     router.push({ name: "board", params: { id } })
   }
 
   // 게시글 보러가기
-  function goViewPage(id: string, no: number): void {
+  function view(id: string, no: number): void {
     router.push({ name: "boardView", params: { id, no } })
   }
 
   // 글작성 페이지로 가기
-  function goWritePage(id: string): void {
+  function write(id: string): void {
     router.push({ name: "boardWrite", params: { id } })
+  }
+
+  // 게시판 관리 페이지로 가기
+  function admin(id: string): void {
+    router.push({name: "adminBoardManager", params: { id }})
   }
 
   return {
@@ -52,8 +57,9 @@ export const useBoardStore = defineStore("board", () => {
     width,
     searchOption,
     searchValue,
-    goListPage,
-    goViewPage,
-    goWritePage,
+    list,
+    view,
+    write,
+    admin,
   }
 })

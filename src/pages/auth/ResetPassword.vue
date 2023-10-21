@@ -29,7 +29,7 @@
       </v-card>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-login-variant" @click="auth.goLoginPage">로그인 하러가기</v-btn>
+        <v-btn prepend-icon="mdi-login-variant" @click="auth.login">로그인 하러가기</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary" append-icon="mdi-chevron-right">비밀번호 초기화 하기</v-btn>
       </v-card-actions>

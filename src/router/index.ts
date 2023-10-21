@@ -9,9 +9,11 @@ import { boardRoutes } from "./board"
 import { galleryRoutes } from "./gallery"
 import { authRoutes } from "./auth"
 import { pageRoutes } from "./page"
+import { adminRoutes } from "./admin"
 
 const routes = [
   ...pageRoutes,
+  ...adminRoutes,
   ...authRoutes,
   ...boardRoutes,
   ...galleryRoutes,

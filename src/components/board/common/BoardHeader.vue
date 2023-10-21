@@ -3,11 +3,12 @@
     >테스트 게시판
     <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
     <div class="login">
-      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.goLoginPage"
-        >로그인
-      </v-btn>
-      <v-btn prepend-icon="mdi-pencil" variant="text" @click="board.goWritePage(id)"
-        >새글쓰기</v-btn
+      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
+      <v-btn
+        prepend-icon="mdi-cog-outline"
+        variant="text"
+        @click="board.admin(route.params?.id.toString())"
+        >관리</v-btn
       >
     </div>
   </v-card-title>

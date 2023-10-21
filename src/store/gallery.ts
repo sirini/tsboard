@@ -21,12 +21,19 @@ export const useGalleryStore = defineStore("gallery", () => {
   const snackbar = ref<boolean>(false)
   const snackbarTimeout = ref<number>(3000)
   const snackbarText = ref<string>("")
+  const searchOption = ref<string>("title")
+  const searchValue = ref<string>("")
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(id: string, no: number): void {
     router.push({name: "galleryOpen", params: {id, no,}})
     postUid.value = no
     viewerDialog.value = true
+  }
+
+  // 갤러리 관리 페이지로 이동하기
+  function admin(id: string): void {
+    router.push({name: "adminGalleryManager", params: { id }})
   }
 
   return {
@@ -41,6 +48,9 @@ export const useGalleryStore = defineStore("gallery", () => {
     snackbar,
     snackbarTimeout,
     snackbarText,
+    searchOption,
+    searchValue,
     open,
+    admin,
   }
 })

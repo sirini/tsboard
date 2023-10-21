@@ -18,13 +18,18 @@
       </v-col>
       <v-col class="pt-1 pl-2 pr-2 pb-4 mb-2 text-center" cols="12" v-if="images.length > 0">
         <v-card-actions class="pa-0">
-          <v-btn class="mr-3" prepend-icon="mdi-text-search-variant" @click="">검색</v-btn>
+          <v-btn class="mr-3" prepend-icon="mdi-text-search-variant" @click=""
+            >검색
+            <v-menu activator="parent" :close-on-content-click="false">
+              <gallery-list-search></gallery-list-search>
+            </v-menu>
+          </v-btn>
           <v-divider></v-divider>
           <v-btn @click="load" class="ml-3 mr-3" variant="text" prepend-icon="mdi-refresh">
             이전 사진들 불러오기
           </v-btn>
           <v-divider></v-divider>
-          <v-btn class="ml-3" prepend-icon="mdi-cog-outline" @click="">관리</v-btn>
+          <v-btn prepend-icon="mdi-pencil" variant="text" @click="">업로드</v-btn>
         </v-card-actions>
       </v-col>
     </v-row>
@@ -33,12 +38,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useGalleryStore } from "../../store/gallery"
-import GalleryHeader from "../../components/gallery/GalleryHeader.vue"
-import GalleryGridItem from "../../components/gallery/GalleryGridItem.vue"
+import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
+import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
+import GalleryListSearch from "../../components/gallery/list/GalleryListSearch.vue"
 
 const route = useRoute()
+const router = useRouter()
 const gallery = useGalleryStore()
 const PREFIX = process.env.PREFIX || ""
 const images = ref<any>([

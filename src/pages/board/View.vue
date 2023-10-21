@@ -33,13 +33,34 @@
         <p>이 글은 게시판 테스트 글입니다.</p>
       </v-list-item>
       <v-toolbar density="compact" class="view_menu">
-        <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
-        <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
-        <v-btn icon><v-icon>mdi-share</v-icon></v-btn>
+        <v-btn icon
+          ><v-icon>mdi-heart</v-icon>
+          <v-tooltip activator="parent" location="top">이 글에 좋아요 누르기</v-tooltip></v-btn
+        >
+        <v-btn icon
+          ><v-icon>mdi-bookmark</v-icon>
+          <v-tooltip activator="parent" location="top"
+            >이 글을 내 북마크에 저장하기</v-tooltip
+          ></v-btn
+        >
+        <v-btn icon
+          ><v-icon>mdi-share</v-icon>
+          <v-tooltip activator="parent" location="top">이 글을 공유하기</v-tooltip></v-btn
+        >
         <v-spacer></v-spacer>
         <board-user-nametag></board-user-nametag>
-        <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
-        <v-btn icon><v-icon>mdi-trash-can</v-icon></v-btn>
+        <v-btn icon
+          ><v-icon>mdi-pencil</v-icon>
+          <v-tooltip activator="parent" location="top"
+            >이 글을 수정하기 (작성자/관리자만 가능)</v-tooltip
+          ></v-btn
+        >
+        <v-btn icon
+          ><v-icon>mdi-trash-can</v-icon
+          ><v-tooltip activator="parent" location="top"
+            >이 글을 삭제하기 (작성자/관리자만 가능)</v-tooltip
+          ></v-btn
+        >
       </v-toolbar>
     </v-list>
     <board-view-comment-write></board-view-comment-write>
@@ -47,8 +68,14 @@
 
     <v-divider class="mt-3"></v-divider>
     <v-card-actions>
-      <v-btn prepend-icon="mdi-view-list" @click="board.goListPage(id)">목록 보기</v-btn>
+      <v-btn prepend-icon="mdi-view-list" @click="board.list(id)">목록 보기</v-btn>
       <v-spacer></v-spacer>
+      <v-btn
+        prepend-icon="mdi-pencil"
+        variant="text"
+        @click="board.write(route.params?.id.toString())"
+        >새글쓰기</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>

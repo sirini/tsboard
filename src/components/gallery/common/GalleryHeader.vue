@@ -3,10 +3,14 @@
     >테스트 갤러리
     <span class="info ml-3 pl-3">인스타그램 느낌이 1g 정도 담긴 사진 갤러리 구성중입니다.</span>
     <div class="login">
-      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.goLoginPage"
-        >로그인
-      </v-btn>
-      <v-btn prepend-icon="mdi-pencil" variant="text" @click="">업로드</v-btn>
+      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
+      <v-btn
+        class="ml-3"
+        prepend-icon="mdi-cog-outline"
+        variant="text"
+        @click="gallery.admin(route.params?.id.toString())"
+        >관리</v-btn
+      >
     </div>
   </v-card-title>
 
@@ -19,9 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../store/auth"
-import { useGalleryStore } from "../../store/gallery"
+import { useRoute } from "vue-router"
+import { useAuthStore } from "../../../store/auth"
+import { useGalleryStore } from "../../../store/gallery"
 
+const route = useRoute()
 const auth = useAuthStore()
 const gallery = useGalleryStore()
 </script>
