@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import BoardWriteEditor from "./BoardWriteEditor.vue"
+import BoardWriteEditor from "../write/BoardWriteEditor.vue"
 
 const comment = ref<string>("")
 </script>

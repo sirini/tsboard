@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardStore } from "../../store/board"
+import { useBoardStore } from "../../../store/board"
 
 const board = useBoardStore()
 const emit = defineEmits(["cancel"])

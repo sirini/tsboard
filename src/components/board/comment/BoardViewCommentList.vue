@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardStore } from "../../store/board"
-import BoardUserNametag from "./BoardUserNametag.vue"
+import { useBoardStore } from "../../../store/board"
+import BoardUserNametag from "../common/BoardUserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const board = useBoardStore()

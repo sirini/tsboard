@@ -31,7 +31,12 @@
     </v-list>
 
     <v-card-actions>
-      <v-btn prepend-icon="mdi-text-search-variant" @click="">검색</v-btn>
+      <v-btn prepend-icon="mdi-text-search-variant" @click="">
+        검색
+        <v-menu activator="parent" :close-on-content-click="false">
+          <board-list-search></board-list-search>
+        </v-menu>
+      </v-btn>
       <v-spacer></v-spacer>
       <v-pagination :length="5"></v-pagination>
       <v-spacer></v-spacer>
@@ -45,8 +50,9 @@ import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
-import BoardHeader from "../../components/board/BoardHeader.vue"
-import BoardUserNametag from "../../components/board/BoardUserNametag.vue"
+import BoardHeader from "../../components/board/common/BoardHeader.vue"
+import BoardUserNametag from "../../components/board/common/BoardUserNametag.vue"
+import BoardListSearch from "../../components/board/list/BoardListSearch.vue"
 
 const route = useRoute()
 const auth = useAuthStore()

@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardStore } from "../../store/board"
+import { useBoardStore } from "../../../store/board"
 
 const emits = defineEmits(["addImageURL"])
 const board = useBoardStore()

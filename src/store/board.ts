@@ -19,7 +19,9 @@ export const useBoardStore = defineStore("board", () => {
   const snackbar = ref<boolean>(false)
   const snackbarTimeout = ref<number>(3000)
   const snackbarText = ref<string>("")
-  const width = ref<number>(1200)  
+  const width = ref<number>(1200) 
+  const searchOption = ref<string>("subject")
+  const searchValue = ref<string>("")
 
   // 게시글 목록 보러가기
   function goListPage(id: string): void {
@@ -48,6 +50,8 @@ export const useBoardStore = defineStore("board", () => {
     snackbarTimeout,
     snackbarText,
     width,
+    searchOption,
+    searchValue,
     goListPage,
     goViewPage,
     goWritePage,

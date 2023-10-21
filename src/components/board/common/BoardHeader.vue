@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router"
-import { useAuthStore } from "../../store/auth"
-import { useBoardStore } from "../../store/board"
+import { useAuthStore } from "../../../store/auth"
+import { useBoardStore } from "../../../store/board"
 
 const route = useRoute()
 const auth = useAuthStore()

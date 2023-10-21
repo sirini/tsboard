@@ -57,10 +57,10 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useBoardStore } from "../../store/board"
-import BoardHeader from "../../components/board/BoardHeader.vue"
-import BoardViewCommentWrite from "../../components/board/BoardViewCommentWrite.vue"
-import BoardViewCommentList from "../../components/board/BoardViewCommentList.vue"
-import BoardUserNametag from "../../components/board/BoardUserNametag.vue"
+import BoardHeader from "../../components/board/common/BoardHeader.vue"
+import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
+import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
+import BoardUserNametag from "../../components/board/common/BoardUserNametag.vue"
 
 const route = useRoute()
 const board = useBoardStore()

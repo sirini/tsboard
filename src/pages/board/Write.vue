@@ -31,9 +31,9 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useBoardStore } from "../../store/board"
-import BoardHeader from "../../components/board/BoardHeader.vue"
-import BoardWriteEditor from "../../components/board/BoardWriteEditor.vue"
-import BoardWriteCancelDialog from "../../components/board/BoardWriteCancelDialog.vue"
+import BoardHeader from "../../components/board/common/BoardHeader.vue"
+import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
+import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
 
 const route = useRoute()
 const board = useBoardStore()
