@@ -3,7 +3,7 @@
     >테스트 게시판
     <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
     <div class="login">
-      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
+      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인</v-btn>
       <v-btn
         prepend-icon="mdi-cog-outline"
         variant="text"
@@ -13,10 +13,10 @@
     </div>
   </v-card-title>
 
-  <v-snackbar v-model="board.snackbar" :timeout="board.snackbarTimeout">
-    {{ board.snackbarText }}
+  <v-snackbar v-model="util.snackbar" :timeout="util.snackbarTimeout">
+    {{ util.snackbarText }}
     <template v-slot:actions>
-      <v-btn color="blue" variant="text" @click="board.snackbar = false"> Close </v-btn>
+      <v-btn color="blue" variant="text" @click="util.snackbar = false"> Close </v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -25,11 +25,12 @@
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../../store/auth"
 import { useBoardStore } from "../../../store/board"
+import { useUtilStore } from "../../../store/util"
 
 const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
-const id = route.params?.id.toString()
+const util = useUtilStore()
 </script>
 
 <style scoped>

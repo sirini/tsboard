@@ -16,12 +16,7 @@ export const useBoardStore = defineStore("board", () => {
   const addTableDialog = ref<boolean>(false)
   const confirmCancelDialog = ref<boolean>(false)
   const confirmRemoveCommentDialog = ref<boolean>(false)
-  const snackbar = ref<boolean>(false)
-  const snackbarTimeout = ref<number>(3000)
-  const snackbarText = ref<string>("")
   const width = ref<number>(1200) 
-  const searchOption = ref<string>("subject")
-  const searchValue = ref<string>("")
 
   // 게시글 목록 보러가기
   function list(id: string): void {
@@ -51,12 +46,7 @@ export const useBoardStore = defineStore("board", () => {
     addTableDialog,
     confirmCancelDialog,
     confirmRemoveCommentDialog,
-    snackbar,
-    snackbarTimeout,
-    snackbarText,
     width,
-    searchOption,
-    searchValue,
     list,
     view,
     write,

@@ -35,30 +35,75 @@
       <v-tooltip activator="parent" location="top">글자 색상 지정</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
-          <v-list-item @click="editor?.chain().focus().setColor('#958DF1').run()">
-            <v-list-item-title><span style="color: #958df1">◼︎ 보라색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#F44336').run()">
+            <v-list-item-title><span style="color: #f44336">◼︎ Red</span></v-list-item-title>
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#F98181').run()">
-            <v-list-item-title><span style="color: #f98181">◼︎ 붉은색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#E91E63').run()">
+            <v-list-item-title><span style="color: #e91e63">◼︎ Pink</span></v-list-item-title>
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#FBBC88').run()">
-            <v-list-item-title><span style="color: #fbbc88">◼︎ 주황색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#9C27B0').run()">
+            <v-list-item-title><span style="color: #9c27b0">◼︎ Purple</span></v-list-item-title>
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#FAF594').run()">
-            <v-list-item-title><span style="color: #faf594">◼︎ 노란색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#673AB7').run()">
+            <v-list-item-title
+              ><span style="color: #673ab7">◼︎ Deep purple</span></v-list-item-title
+            >
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#70CFF8').run()">
-            <v-list-item-title><span style="color: #70cff8">◼︎ 파란색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#3F51B5').run()">
+            <v-list-item-title><span style="color: #3f51b5">◼︎ Indigo</span></v-list-item-title>
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#94FADB').run()">
-            <v-list-item-title><span style="color: #94fadb">◼︎ 틸 색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#2196F3').run()">
+            <v-list-item-title><span style="color: #2196f3">◼︎ Blue</span></v-list-item-title>
           </v-list-item>
-          <v-list-item @click="editor?.chain().focus().setColor('#B9F18D').run()">
-            <v-list-item-title><span style="color: #b9f18d">◼︎ 초록색</span></v-list-item-title>
+          <v-list-item @click="editor?.chain().focus().setColor('#03A9F4').run()">
+            <v-list-item-title
+              ><span style="color: #03a9f4">◼︎ Light blue</span></v-list-item-title
+            >
           </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#00BCD4').run()">
+            <v-list-item-title><span style="color: #00bcd4">◼︎ Cyan</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#009688').run()">
+            <v-list-item-title><span style="color: #009688">◼︎ Teal</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#4CAF50').run()">
+            <v-list-item-title><span style="color: #4caf50">◼︎ Green</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#8BC34A').run()">
+            <v-list-item-title
+              ><span style="color: #8bc34a">◼︎ Light green</span></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#CDDC39').run()">
+            <v-list-item-title><span style="color: #cddc39">◼︎ Lime</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FFEB3B').run()">
+            <v-list-item-title><span style="color: #ffeb3b">◼︎ Yellow</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FFC107').run()">
+            <v-list-item-title><span style="color: #ffc107">◼︎ Amber</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FF9800').run()">
+            <v-list-item-title><span style="color: #ff9800">◼︎ Orange</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#FF5722').run()">
+            <v-list-item-title
+              ><span style="color: #ff5722">◼︎ Deep orange</span></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#795548').run()">
+            <v-list-item-title><span style="color: #795548">◼︎ Brown</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#607D8B').run()">
+            <v-list-item-title><span style="color: #607d8b">◼︎ Blue grey</span></v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="editor?.chain().focus().setColor('#9E9E9E').run()">
+            <v-list-item-title><span style="color: #9e9e9e">◼︎ Grey</span></v-list-item-title>
+          </v-list-item>
+          <v-divider></v-divider>
           <v-list-item @click="editor?.chain().focus().unsetColor().run()">
             <v-list-item-title
-              ><span style="color: #000000">◻︎ 색상 지우기</span></v-list-item-title
+              ><span style="color: #000000">◼︎ 기본 (Black)</span></v-list-item-title
             >
           </v-list-item>
         </v-list>
@@ -260,7 +305,6 @@ import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue
 import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue"
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../../assets/board/editor.scss"
-import { encode } from "punycode"
 
 const board = useBoardStore()
 const props = defineProps<{

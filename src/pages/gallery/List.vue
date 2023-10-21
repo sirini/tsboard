@@ -29,7 +29,12 @@
             이전 사진들 불러오기
           </v-btn>
           <v-divider></v-divider>
-          <v-btn prepend-icon="mdi-pencil" variant="text" @click="">업로드</v-btn>
+          <v-btn
+            prepend-icon="mdi-pencil"
+            variant="text"
+            @click="gallery.upload(route.params?.id.toString())"
+            >업로드</v-btn
+          >
         </v-card-actions>
       </v-col>
     </v-row>

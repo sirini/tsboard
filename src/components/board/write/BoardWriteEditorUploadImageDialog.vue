@@ -1,7 +1,7 @@
 <template>
-  <v-dialog width="500" v-model="board.uploadImageDialog" persistent>
+  <v-dialog width="500" v-model="board.uploadImageDialog" persistent scrollable>
     <v-card>
-      <v-card-title>이미지 업로드</v-card-title>
+      <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
       <v-divider></v-divider>
       <v-alert
         v-model="showAlert"
@@ -11,17 +11,24 @@
         class="ma-3"
       ></v-alert>
       <v-card-text>
+        <v-card variant="tonal" class="mt-2 mb-5">
+          <v-card-text class="pa-3">
+            본문에 이미지를 추가하기 위한 업로드는 가로폭이 {{ board.width }}px 보다 클 경우
+            자동으로 줄여서 저장됩니다. 원본 크기로 첨부가 필요할 경우 파일 첨부 기능을
+            이용하세요!</v-card-text
+          >
+        </v-card>
         <v-file-input
-          @change="readImageFiles"
+          @change="util.read"
           class="mb-3"
           show-size
           counter
-          :rules="uploadRule"
+          :rules="util.uploadRule"
           accept="image/png, image/jpeg, image/gif, image/bmp, image/heif, image/heic"
           prepend-icon="mdi-image-search-outline"
           multiple
           variant="solo"
-          label="여기를 클릭하여 이미지 파일들을 선택해 주세요"
+          label="본문에 추가할 이미지 파일들을 선택해 주세요"
         >
           <template v-slot:selection="{ fileNames }">
             <template v-for="fileName in fileNames" :key="fileName">
@@ -40,7 +47,9 @@
 
         <v-row class="mb-1">
           <v-col v-for="(image, index) in uploadImages" :key="index" cols="3">
-            <v-img cover height="100" aspect-ratio="1/1" :src="image"></v-img>
+            <v-card>
+              <v-img cover height="100" aspect-ratio="1/1" :src="image"></v-img>
+            </v-card>
           </v-col>
         </v-row>
       </v-card-text>
@@ -50,7 +59,7 @@
         <v-btn prepend-icon="mdi-close" @click="board.uploadImageDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn @click="add" color="primary"
-          >업로드 하고 본문에 넣기 <v-icon>mdi-chevron-right</v-icon></v-btn
+          >위 사진들을 업로드 하고 본문에 추가하기 <v-icon>mdi-chevron-right</v-icon></v-btn
         >
       </v-card-actions>
     </v-card>
@@ -58,45 +67,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { useUtilStore } from "../../../store/util"
 
 const emits = defineEmits(["addImageURL"])
 const board = useBoardStore()
-const uploadRule = [
-  (value: any) => {
-    return (
-      !value ||
-      !value.length ||
-      value[0].size < 10000000 ||
-      "이미지 파일 크기는 10MB 이하여야 합니다."
-    )
-  },
-]
+const util = useUtilStore()
 const uploadImages = ref<string[]>([])
 
-// 업로드한 이미지 파일 예시
-const uploadedImages = [
-  `https://images.unsplash.com/photo-1688494930045-328d0f95efe9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80`,
-  `https://images.unsplash.com/photo-1690402687447-87600bae0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3132&q=80`,
-  `https://images.unsplash.com/photo-1692871480784-4fd78f25459f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2160&q=80`,
-  `https://images.unsplash.com/photo-1685516882750-807fa81a949f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3280&q=80`,
-]
-
 // 선택한 이미지 파일들을 읽어오기
-function readImageFiles(event: Event): void {
-  uploadImages.value = []
-  const targets = (event?.target as any).files
-  for (const target of targets) {
-    const src = URL.createObjectURL(target as File)
-    uploadImages.value.push(src)
-  }
-}
+watch(
+  () => util.files,
+  (value: File[]) => {
+    for (const v of value) {
+      const src = URL.createObjectURL(v)
+      uploadImages.value.push(src)
+    }
+  },
+)
 
 // 업로드한 이미지들 본문에 추가하기
 function add(): void {
   // axios.post(`/upload`, fd, {header: {Authorization: `Bearer ...`} })
-  for (const src of uploadedImages) {
+  for (const src of uploadImages.value) {
     emits("addImageURL", src)
   }
 }

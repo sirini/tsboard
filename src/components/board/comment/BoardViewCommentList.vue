@@ -29,15 +29,17 @@
 
 <script setup lang="ts">
 import { useBoardStore } from "../../../store/board"
+import { useUtilStore } from "../../../store/util"
 import BoardUserNametag from "../common/BoardUserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const board = useBoardStore()
+const util = useUtilStore()
 
 // 댓글 삭제하기 처리
 function remove(): void {
-  board.snackbarText = "댓글이 정상적으로 삭제(비공개) 되었습니다."
-  board.snackbar = true
+  util.snackbarText = "댓글이 정상적으로 삭제(비공개) 되었습니다."
+  util.snackbar = true
 }
 </script>
 

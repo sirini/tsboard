@@ -14,10 +14,10 @@
     </div>
   </v-card-title>
 
-  <v-snackbar v-model="gallery.snackbar" :timeout="gallery.snackbarTimeout">
-    {{ gallery.snackbarText }}
+  <v-snackbar v-model="util.snackbar" :timeout="util.snackbarTimeout">
+    {{ util.snackbarText }}
     <template v-slot:actions>
-      <v-btn color="blue" variant="text" @click="gallery.snackbar = false"> Close </v-btn>
+      <v-btn color="blue" variant="text" @click="util.snackbar = false"> Close </v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -26,10 +26,12 @@
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../../store/auth"
 import { useGalleryStore } from "../../../store/gallery"
+import { useUtilStore } from "../../../store/util"
 
 const route = useRoute()
 const auth = useAuthStore()
 const gallery = useGalleryStore()
+const util = useUtilStore()
 </script>
 
 <style scoped>
