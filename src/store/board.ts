@@ -38,6 +38,13 @@ export const useBoardStore = defineStore("board", () => {
     router.push({name: "adminBoardManager", params: { id }})
   }
 
+  // 작성된 글 저장하기
+  async function save(subject: string, content: string, files: File[]): Promise<boolean> {
+    const result = false
+    // do something
+    return result
+  }
+
   return {
     uploadImageDialog,
     addImageFromDBDialog,
@@ -51,5 +58,6 @@ export const useBoardStore = defineStore("board", () => {
     view,
     write,
     admin,
+    save,
   }
 })

@@ -5,7 +5,6 @@
     <div class="login">
       <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
       <v-btn
-        class="ml-3"
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="gallery.admin(route.params?.id.toString())"

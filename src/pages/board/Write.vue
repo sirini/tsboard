@@ -1,56 +1,66 @@
 <template>
-  <v-card :width="board.width" elevation="0" rounded="0" class="mx-auto">
-    <v-form fast-fail @submit.prevent>
-      <board-header></board-header>
-      <v-alert v-if="showAlertBox" :type="alertType" :text="alertText" class="mt-3"></v-alert>
-      <v-list class="pa-0">
-        <v-list-item class="pa-0 mt-3">
-          <v-text-field
-            v-model="subject"
-            :rules="util.textRule"
-            class="mt-2"
-            prepend-icon="mdi-pencil-outline"
-            label="글 제목을 입력해 주세요"
-          ></v-text-field>
-        </v-list-item>
-        <v-list-item class="pa-0 mt-3">
-          <v-file-input
-            @change="util.read"
-            show-size
-            counter
-            accept="*/*"
-            multiple
-            label="첨부할 파일들을 선택해 주세요"
-          >
-            <template v-slot:selection="{ fileNames }">
-              <template v-for="fileName in fileNames" :key="fileName">
-                <v-chip
-                  size="small"
-                  label
-                  color="primary"
-                  prepend-icon="mdi-image"
-                  class="mt-1 mr-1 mb-1"
+  <v-app>
+    <home-header></home-header>
+    <v-layout>
+      <v-main>
+        <v-card :width="board.width" elevation="0" rounded="0" class="mx-auto board">
+          <v-form fast-fail @submit.prevent>
+            <board-header></board-header>
+            <v-alert v-if="showAlertBox" :type="alertType" :text="alertText" class="mt-3"></v-alert>
+            <v-list class="pa-0">
+              <v-list-item class="pa-0 mt-3">
+                <v-text-field
+                  v-model="subject"
+                  :rules="util.textRule"
+                  class="mt-2"
+                  prepend-icon="mdi-pencil-outline"
+                  label="글 제목을 입력해 주세요"
+                ></v-text-field>
+              </v-list-item>
+              <v-list-item class="pa-0 mt-3">
+                <v-file-input
+                  @change="util.read"
+                  show-size
+                  counter
+                  accept="*/*"
+                  multiple
+                  label="첨부할 파일들을 선택해 주세요"
                 >
-                  {{ fileName }}
-                </v-chip>
-              </template>
-            </template>
-          </v-file-input>
-        </v-list-item>
-        <v-list-item class="pa-0 mt-3">
-          <board-write-editor v-model="content"></board-write-editor>
-        </v-list-item>
-      </v-list>
-    </v-form>
-    <v-card-actions>
-      <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close">글 작성 취소</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" @click="submit" append-icon="mdi-chevron-right"
-        >작성 완료하고 보러 가기</v-btn
-      >
-    </v-card-actions>
-  </v-card>
-  <board-write-cancel-dialog @cancel="cancel"></board-write-cancel-dialog>
+                  <template v-slot:selection="{ fileNames }">
+                    <template v-for="fileName in fileNames" :key="fileName">
+                      <v-chip
+                        size="small"
+                        label
+                        color="primary"
+                        prepend-icon="mdi-image"
+                        class="mt-1 mr-1 mb-1"
+                      >
+                        {{ fileName }}
+                      </v-chip>
+                    </template>
+                  </template>
+                </v-file-input>
+              </v-list-item>
+              <v-list-item class="pa-0 mt-3">
+                <board-write-editor v-model="content"></board-write-editor>
+              </v-list-item>
+            </v-list>
+          </v-form>
+          <v-card-actions>
+            <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close"
+              >글 작성 취소</v-btn
+            >
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="submit" append-icon="mdi-chevron-right"
+              >작성 완료하고 보러 가기</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+        <home-footer></home-footer>
+      </v-main>
+    </v-layout>
+    <board-write-cancel-dialog @cancel="cancel"></board-write-cancel-dialog>
+  </v-app>
 </template>
 
 <script setup lang="ts">
@@ -61,6 +71,8 @@ import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
+import HomeHeader from "../home/HomeHeader.vue"
+import HomeFooter from "../home/HomeFooter.vue"
 
 const route = useRoute()
 const board = useBoardStore()
@@ -79,7 +91,7 @@ function showAlert(text: string, type: "success" | "error" = "error"): void {
 }
 
 // 게시글 작성하기
-function submit(): void {
+async function submit(): Promise<void> {
   if (subject.value.length < 2) {
     showAlert("제목은 2글자 이상 입력해 주세요.")
     return
@@ -89,6 +101,10 @@ function submit(): void {
     return
   }
   showAlertBox.value = false
+  const result = await board.save(subject.value, content.value, util.files)
+  if (!result) {
+    showAlert("글을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.")
+  }
 }
 
 // 글 작성 취소하기
@@ -97,4 +113,8 @@ function cancel(): void {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.board {
+  margin-top: 80px;
+}
+</style>

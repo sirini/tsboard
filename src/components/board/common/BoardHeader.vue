@@ -1,5 +1,5 @@
 <template>
-  <v-card-title class="list_title pt-3 pb-3"
+  <v-card-title class="list_title"
     >테스트 게시판
     <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
     <div class="login">

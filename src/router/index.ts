@@ -8,11 +8,11 @@ import { createRouter, createWebHistory } from "vue-router"
 import { boardRoutes } from "./board"
 import { galleryRoutes } from "./gallery"
 import { authRoutes } from "./auth"
-import { pageRoutes } from "./page"
+import { homeRoutes } from "./home"
 import { adminRoutes } from "./admin"
 
 const routes = [
-  ...pageRoutes,
+  ...homeRoutes,
   ...adminRoutes,
   ...authRoutes,
   ...boardRoutes,
