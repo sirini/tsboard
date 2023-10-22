@@ -45,22 +45,25 @@
         <home-footer></home-footer>
       </v-main>
     </v-layout>
+    <gallery-viewer-dialog></gallery-viewer-dialog>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { ref, watch } from "vue"
+import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/gallery"
+import { useViewerStore } from "../../store/gallery.viewer"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListSearch from "../../components/gallery/list/GalleryListSearch.vue"
+import GalleryViewerDialog from "../../components/gallery/view/GalleryViewerDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
 const route = useRoute()
-const router = useRouter()
 const gallery = useGalleryStore()
+const viewer = useViewerStore()
 const PREFIX = process.env.PREFIX || ""
 const images = ref<any>([
   {
@@ -95,6 +98,17 @@ const images = ref<any>([
   },
 ])
 const lastUid = ref<number>(6)
+
+// 뷰어가 필요할 때 열어주기
+watch(
+  () => route.params?.no?.toString(),
+  (value: string) => {
+    const no = parseInt(value)
+    if (no > 0) {
+      viewer.dialog = true
+    }
+  },
+)
 
 // 이전 게시글 가져오기
 function load(): void {

@@ -3,11 +3,30 @@
  *
  * 로그인 등 사용자 관련 상태 및 유틸리티 함수들
  */
+
+import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
 
+export interface User {
+  uid: number
+  name: string
+  point: number
+  level: number
+  profile: string
+  admin: boolean
+}
+
 export const useAuthStore = defineStore("auth", () => {
   const router = useRouter()
+  const user = ref<User>({
+    uid: 0,
+    name: "",
+    point: 0,
+    level: 0,
+    profile: "",
+    admin: false
+  })
 
   // 로그인 페이지로 이동하기
   function login(): void {
@@ -48,5 +67,5 @@ export const useAuthStore = defineStore("auth", () => {
     },
   ]
 
-  return { emailRule, passwordRule, nicknameRule, login, resetPassword, signup }
+  return { user, emailRule, passwordRule, nicknameRule, login, resetPassword, signup }
 })

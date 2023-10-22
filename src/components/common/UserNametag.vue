@@ -1,9 +1,9 @@
 <template>
-  <v-chip pill class="pointer">
+  <v-chip class="pointer" :size="size || 'small'">
     <v-avatar start>
       <v-img :src="profile"></v-img>
     </v-avatar>
-    writer
+    {{ name }}
 
     <v-menu activator="parent">
       <v-list density="compact">
@@ -18,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-const profile = "https://cdn.vuetifyjs.com/images/john.png"
+const props = defineProps<{
+  uid: number
+  profile: string
+  name: string
+  size?: string
+}>()
 </script>
 
 <style scoped>

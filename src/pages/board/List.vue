@@ -8,31 +8,37 @@
 
           <v-card-text class="pa-0">
             <v-list class="pa-0">
-              <v-list-item class="list_item pa-0">
+              <v-list-item class="list_item pa-0" v-for="(post, index) in posts" :key="index">
                 <template v-slot:prepend>
-                  <span class="col no text-center">123</span>
+                  <span class="col no text-center">{{ post.uid }}</span>
                   <v-divider vertical></v-divider>
-                  <span class="col cat text-center">news</span>
+                  <span class="col cat text-center">{{ post.category.name }}</span>
                   <v-divider vertical></v-divider>
                 </template>
                 <v-list-item-title
                   class="pointer ml-3"
-                  @click="board.view(route.params?.id.toString(), 1)"
-                  >제목입니다.
+                  @click="board.view(route.params?.id.toString(), post.uid)"
+                  >{{ post.subject }}
                   <v-icon size="small" color="grey">mdi-image-outline</v-icon>
-                  <v-chip class="ml-2" size="small" color="blue">21</v-chip>
+                  <v-chip class="ml-2" size="small" color="blue">{{ post.reply }}</v-chip>
                 </v-list-item-title>
                 <template v-slot:append>
-                  <board-user-nametag></board-user-nametag>
+                  <user-nametag
+                    :uid="post.writer.uid"
+                    :name="post.writer.name"
+                    :profile="post.writer.profile"
+                    :size="'default'"
+                  ></user-nametag>
                   <span class="col view text-center"
-                    ><v-icon size="small">mdi-eye-outline</v-icon> 1024</span
+                    ><v-icon size="small">mdi-eye-outline</v-icon> {{ post.view }}</span
                   >
                   <v-divider vertical></v-divider>
                   <span class="col heart text-center"
-                    ><v-icon size="small" color="red">mdi-heart-outline</v-icon> 8</span
+                    ><v-icon size="small" color="red">mdi-heart-outline</v-icon>
+                    {{ post.like }}</span
                   >
                   <v-divider vertical></v-divider>
-                  <span class="col date text-center">23.09.29</span>
+                  <span class="col date text-center">{{ post.date }}</span>
                 </template>
               </v-list-item>
             </v-list>
@@ -63,12 +69,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
+import { Post } from "../../interface/board"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
-import BoardUserNametag from "../../components/board/common/BoardUserNametag.vue"
 import BoardListSearch from "../../components/board/list/BoardListSearch.vue"
+import UserNametag from "../../components/common/UserNametag.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
@@ -76,6 +84,45 @@ const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
 const PREFIX = process.env.PREFIX || ""
+const posts = ref<Post[]>([
+  {
+    uid: 1,
+    category: {
+      uid: 6,
+      name: "news",
+    },
+    writer: {
+      uid: 11,
+      name: "홍길동",
+      profile: "/no-profile.png",
+    },
+    subject: "글 제목이 나타납니다",
+    content: "",
+    like: 3,
+    reply: 2,
+    view: 152,
+    date: "2023-10-22",
+  },
+  {
+    uid: 2,
+    category: {
+      uid: 5,
+      name: "free",
+    },
+    writer: {
+      uid: 14,
+      name: "일지매",
+      profile: "/no-profile.png",
+    },
+    subject:
+      "글 제목을 좀 더 길게 적어보도록 하겠습니다. 만약 엄청나게 긴 제목일 경우 잘라서 보여줘야 합니다. 자르는 문제는 추후 생각해 보겠습니다.",
+    content: "",
+    like: 3,
+    reply: 2,
+    view: 152,
+    date: "2023-10-22",
+  },
+])
 </script>
 
 <style type="scss" scoped>

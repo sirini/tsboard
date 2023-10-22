@@ -91,8 +91,9 @@ const galleries = ref<Menu[]>([
   top: 16px;
   left: 75px;
   font-family: "Oswald", sans-serif;
-  font-size: 1.4em;
+  font-size: 1.3em;
   cursor: pointer;
+  font-weight: bold;
 
   .ts {
     position: absolute;

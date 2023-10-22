@@ -45,6 +45,13 @@ export const useUtilStore = defineStore("util", () => {
     }
   }
 
+  // 스낵 메시지 보여주기
+  function snack(message: string, timeout: number = 3000): void {
+    snackbarText.value = message
+    snackbarTimeout.value = timeout
+    snackbar.value = true
+  }
+
   return {
     files,
     limit,
@@ -56,5 +63,6 @@ export const useUtilStore = defineStore("util", () => {
     uploadRule,
     textRule,
     read,
+    snack,
   }
 })

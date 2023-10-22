@@ -6,15 +6,15 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
+import { GalleryImage } from "../interface/gallery"
+import { useViewerStore } from "./gallery.viewer"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const router = useRouter()
-  const viewerDialog = ref<boolean>(false)
+  const viewer = useViewerStore()
   const confirmCancelDialog = ref<boolean>(false)
-  const images = ref<string[]>([])
-  const videos = ref<string[]>([])
+  const images = ref<GalleryImage[]>([])
   const postUid = ref<number>(0)
-  const position = ref<number>(0)
   const width = ref<number>(1200)
   const cols = ref<number>(3)
   const gridGap = ref<number>(15)
@@ -29,7 +29,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   function open(id: string, no: number): void {
     router.push({name: "galleryOpen", params: {id, no,}})
     postUid.value = no
-    viewerDialog.value = true
+    viewer.dialog = true
   }
 
   // 사진 업로드 페이지로 이동하기
@@ -51,11 +51,8 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   return {
     postUid,
-    viewerDialog,
     confirmCancelDialog,
     images,
-    videos,
-    position,
     width,
     cols,
     gridSize,

@@ -22,5 +22,45 @@ export const homeRoutes = [
       location.href='https://github.com/sirini/tsboard/issues'
     },
     component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
+    path: "/learn/typescript",
+    name: "typescript",
+    beforeEnter: () => {
+      location.href='https://www.typescriptlang.org/ko/'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
+    path: "/learn/vue",
+    name: "vue",
+    beforeEnter: () => {
+      location.href='https://ko.vuejs.org/'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
+    path: "/learn/vuetify",
+    name: "vuetify",
+    beforeEnter: () => {
+      location.href='https://vuetifyjs.com/en/introduction/why-vuetify/#what-is-vuetify3f'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
+    path: "/learn/bun",
+    name: "bun",
+    beforeEnter: () => {
+      location.href='https://bun.sh/'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
+    path: "/learn/elysia",
+    name: "elysia",
+    beforeEnter: () => {
+      location.href='https://elysiajs.com/'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
   }
 ]
