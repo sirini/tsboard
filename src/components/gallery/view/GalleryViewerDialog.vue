@@ -5,7 +5,7 @@
         <v-main>
           <v-img
             class="text-center"
-            :src="PREFIX + viewer.images.at(viewer.position)?.src"
+            :src="PREFIX + viewer.images.at(viewer.position)?.files.at(0)"
             @mousedown="viewer.mouseDown"
             @mousemove="viewer.mouseMove"
             @mouseup="viewer.mouseUp"

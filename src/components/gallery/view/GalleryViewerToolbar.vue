@@ -1,10 +1,10 @@
 <template>
   <v-toolbar density="compact">
-    <v-btn icon @click="viewer.prev"
+    <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0"
       ><v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top"> 이전 사진을 봅니다 </v-tooltip>
     </v-btn>
-    <v-btn icon @click="viewer.next"
+    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.images.length"
       ><v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top"> 다음 사진을 봅니다 </v-tooltip>
     </v-btn>

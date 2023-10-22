@@ -7,7 +7,7 @@ import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "./util"
-import { Position, GalleryImage } from "../interface/gallery"
+import { Position, GridItem } from "../interface/gallery"
 
 export const useViewerStore = defineStore("viewer", () => {
   const auth = useAuthStore()
@@ -23,7 +23,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const zoomSpeed = 0.25
   const zoomMax = 20.0
   const zoomMin = 0.5
-  const images = ref<GalleryImage[]>([])
+  const images = ref<GridItem[]>([])
   const position = ref<number>(0)
   const textRule = [
     (value: any) => {
@@ -117,11 +117,11 @@ export const useViewerStore = defineStore("viewer", () => {
   // 사진들 불러오기
   function load(): void {
     images.value = [
-      { uid: 1, src: `https://cdn.vuetifyjs.com/images/cards/docks.jpg` },
-      { uid: 2, src: `https://cdn.vuetifyjs.com/images/cards/hotel.jpg` },
-      { uid: 3, src: `https://cdn.vuetifyjs.com/images/cards/sunshine.jpg` },
-      { uid: 4, src: `https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg` },
-      { uid: 5, src: `https://cdn.vuetifyjs.com/images/carousel/sky.jpg` },
+      { uid: 1, writer: { uid: 11, name: "일지매", profile: "/no-profile.png" }, files: [`https://cdn.vuetifyjs.com/images/cards/docks.jpg`], like: 4, reply: 6 },
+      { uid: 2, writer: { uid: 11, name: "일지매", profile: "/no-profile.png" }, files: [`https://cdn.vuetifyjs.com/images/cards/hotel.jpg`], like: 3, reply: 1 },
+      { uid: 3, writer: { uid: 11, name: "일지매", profile: "/no-profile.png" }, files: [`https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`], like: 4, reply: 3 },
+      { uid: 4, writer: { uid: 11, name: "일지매", profile: "/no-profile.png" }, files: [`https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg`], like: 1, reply: 5 },
+      { uid: 5, writer: { uid: 11, name: "일지매", profile: "/no-profile.png"}, files: [`https://cdn.vuetifyjs.com/images/cards/sky.jpg`], like: 2, reply: 8 },
     ]
     position.value = 0
   }
