@@ -47,7 +47,7 @@
 import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/gallery"
-import { useViewerStore } from "../../store/gallery.viewer"
+import { useViewerStore } from "../../store/viewer"
 import { GridItem } from "../../interface/gallery"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"

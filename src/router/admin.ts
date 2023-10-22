@@ -6,24 +6,19 @@
 
 export const adminRoutes = [
   {
+    path: "/admin",
+    name: "admin",
+    component: () => import("@/pages/admin/AdminHome.vue")
+  },
+  {
     path: "/admin/board",
     name: "adminBoard",
-    component: () => import("@/pages/admin/BoardList.vue"),
+    component: () => import("@/pages/admin/BoardGroupManager.vue"),
   },
   {
     path: "/admin/board/:id",
     name: "adminBoardManager",
     component: () => import("@/pages/admin/BoardManager.vue"),
-  },
-  {
-    path: "/admin/gallery",
-    name: "adminGallery",
-    component: () => import("@/pages/admin/GalleryList.vue")
-  },
-  {
-    path: "/admin/gallery/:id",
-    name: "adminGalleryManager",
-    component: () => import("@/pages/admin/GalleryManager.vue"),
   },
   {
     path: "/admin/member",

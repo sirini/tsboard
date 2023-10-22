@@ -10,3 +10,32 @@
  * 첫 페이지는 src/pages/home/HomePage.vue 임
  */
 </script>
+
+<style>
+.v-application {
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 400;
+}
+
+body {
+  --sb-track-color: #ffffff;
+  --sb-thumb-color: #919191;
+  --sb-size: 5px;
+
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 5px;
+}
+</style>

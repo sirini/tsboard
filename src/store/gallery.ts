@@ -7,7 +7,7 @@ import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
 import { GridItem } from "../interface/gallery"
-import { useViewerStore } from "./gallery.viewer"
+import { useViewerStore } from "./viewer"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const router = useRouter()
@@ -37,9 +37,9 @@ export const useGalleryStore = defineStore("gallery", () => {
     router.push({name: "galleryUpload", params: { id }})
   }
 
-  // 갤러리 관리 페이지로 이동하기
+  // 관리 페이지로 이동하기
   function admin(id: string): void {
-    router.push({name: "adminGalleryManager", params: { id }})
+    router.push({name: "adminBoardManager", params: { id }})
   }
 
   // 사진들 저장하기

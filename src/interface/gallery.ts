@@ -22,3 +22,15 @@ export interface GridItem {
   like: number
   reply: number
 }
+
+export interface Photo {
+  uid: number
+  writer: Writer
+  files: string[]
+  subject: string
+  content: string
+  like: number
+  reply: number
+  view: number
+  date: string
+}

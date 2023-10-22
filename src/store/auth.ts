@@ -7,25 +7,17 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
-
-export interface User {
-  uid: number
-  name: string
-  point: number
-  level: number
-  profile: string
-  admin: boolean
-}
+import { User } from "../interface/auth"
 
 export const useAuthStore = defineStore("auth", () => {
   const router = useRouter()
   const user = ref<User>({
-    uid: 0,
-    name: "",
-    point: 0,
-    level: 0,
+    uid: 1,
+    name: "시리니",
+    point: 1234,
+    level: 10,
     profile: "",
-    admin: false
+    admin: true
   })
 
   // 로그인 페이지로 이동하기

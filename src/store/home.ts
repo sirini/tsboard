@@ -10,7 +10,6 @@ import { defineStore } from "pinia"
 
 export const useHomeStore = defineStore("home", () => {
   const router = useRouter()
-  const drawer = ref<boolean>(true)
 
   // 첫페이지로 이동
   function main(): void {
@@ -38,7 +37,6 @@ export const useHomeStore = defineStore("home", () => {
   }
 
   return {
-    drawer,
     main,
     about,
     report,

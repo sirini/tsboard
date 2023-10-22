@@ -24,6 +24,14 @@ export const homeRoutes = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
+    path: "/tsboard",
+    name: "tsboard",
+    beforeEnter: () => {
+      location.href = 'https://tsboard.dev'
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
+  {
     path: "/learn/typescript",
     name: "typescript",
     beforeEnter: () => {

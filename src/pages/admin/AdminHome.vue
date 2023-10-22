@@ -4,9 +4,9 @@
     <v-layout class="layout">
       <v-main>
         <v-container>
-          <v-card> Member manager for {{ route.params?.id }} </v-card>
+          <v-card> ADMIN DASHBOARD </v-card>
+          <admin-footer></admin-footer>
         </v-container>
-        <admin-footer></admin-footer>
       </v-main>
     </v-layout>
   </v-app>

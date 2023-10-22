@@ -4,7 +4,7 @@
       ><v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top"> 이전 사진을 봅니다 </v-tooltip>
     </v-btn>
-    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.images.length"
+    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.photo?.files.length"
       ><v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top"> 다음 사진을 봅니다 </v-tooltip>
     </v-btn>
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
-import { useViewerStore } from "../../../store/gallery.viewer"
+import { useViewerStore } from "../../../store/viewer"
 
 const auth = useAuthStore()
 const viewer = useViewerStore()

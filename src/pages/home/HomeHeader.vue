@@ -1,15 +1,11 @@
 <template>
   <v-app-bar flat rounded="0">
-    <v-toolbar color="white">
+    <v-toolbar color="white" class="toolbar">
       <v-app-bar-title>
-        <v-app-bar-nav-icon @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
-        <span class="logo" @click="home.main"
-          >TSBOARD
-          <div class="ts"></div>
-        </span>
+        <span class="logo" @click="home.main">TSBOARD</span>
 
-        <v-btn size="large" class="firstTopButton"
-          >게시판
+        <v-btn size="large" class="firstTopButton btn"
+          >BOARD
           <v-menu activator="parent" open-on-hover>
             <v-list>
               <v-list-item
@@ -25,8 +21,8 @@
             </v-list>
           </v-menu>
         </v-btn>
-        <v-btn size="large">
-          갤러리
+        <v-btn size="large" class="btn">
+          GALLERY
           <v-menu activator="parent" open-on-hover>
             <v-list>
               <v-list-item
@@ -100,26 +96,23 @@ const galleries = ref<Menu[]>([
 </script>
 
 <style type="scss" scoped>
-.logo {
-  position: absolute;
-  top: 16px;
-  left: 75px;
-  font-family: "Oswald", sans-serif;
-  font-size: 1.3em;
-  cursor: pointer;
-  font-weight: bold;
-
-  .ts {
+.toolbar {
+  border-bottom: #f1f1f1 1px solid;
+  .logo {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    background-color: #3178c6;
-    opacity: 0.1;
-    width: 25px;
-    height: 30px;
+    top: 18px;
+    left: 60px;
+    font-family: "Oswald", sans-serif;
+    font-size: 1.3em;
+    cursor: pointer;
+    font-weight: bold;
   }
-}
-.firstTopButton {
-  margin-left: 180px;
+  .firstTopButton {
+    margin-left: 170px;
+  }
+  .btn {
+    font-family: "Oswald", sans-serif;
+    font-size: 1em;
+  }
 }
 </style>

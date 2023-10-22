@@ -8,6 +8,7 @@
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="gallery.admin(route.params?.id.toString())"
+        :disabled="!auth.user.admin"
         >관리</v-btn
       >
     </div>

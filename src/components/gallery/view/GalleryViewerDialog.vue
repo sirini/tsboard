@@ -5,7 +5,7 @@
         <v-main>
           <v-img
             class="text-center"
-            :src="PREFIX + viewer.images.at(viewer.position)?.files.at(0)"
+            :src="PREFIX + viewer.photo?.files.at(viewer.position)"
             @mousedown="viewer.mouseDown"
             @mousemove="viewer.mouseMove"
             @mouseup="viewer.mouseUp"
@@ -24,7 +24,7 @@
         >
           <v-list>
             <v-list-item class="pb-2">
-              여기에 글 제목이 나타납니다.
+              {{ viewer.photo?.subject }}
               <template v-slot:append>
                 <v-btn icon @click="viewer.dialog = false" elevation="0"
                   ><v-icon>mdi-close</v-icon>
@@ -37,24 +37,30 @@
             <v-divider></v-divider>
             <v-list-item class="pt-2 pb-2">
               <v-card elevation="0">
-                <v-card-text class="pa-0 pt-2 content">여기에 글 내용이 나타납니다.</v-card-text>
+                <v-card-text class="pa-0 pt-2 content">{{ viewer.photo?.content }}</v-card-text>
                 <v-card-actions class="pa-0">
-                  <v-chip label size="small" variant="text" color="grey" prepend-icon="mdi-calendar"
-                    >2023-10-22 14:07:01</v-chip
+                  <v-chip
+                    label
+                    size="small"
+                    variant="text"
+                    color="grey"
+                    prepend-icon="mdi-calendar"
+                    >{{ viewer.photo?.date }}</v-chip
                   >
                   <v-spacer></v-spacer>
                   <user-nametag
-                    :profile="'https://cdn.vuetifyjs.com/images/lists/4.jpg'"
-                    :uid="4"
-                    :name="'writer4'"
+                    :uid="viewer.photo?.writer.uid || 0"
+                    :name="viewer.photo?.writer.name || ''"
+                    :profile="viewer.photo?.writer.profile || '/no-profile.png'"
+                    size="small"
                   ></user-nametag>
                 </v-card-actions>
               </v-card>
             </v-list-item>
             <gallery-viewer-toolbar
-              :postLike="3"
-              :postUid="1"
-              :writerUid="11"
+              :postLike="viewer.photo?.like || 0"
+              :postUid="viewer.photo?.uid || 0"
+              :writerUid="viewer.photo?.writer.uid || 0"
             ></gallery-viewer-toolbar>
             <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="i in 3" :key="i">
               <gallery-viewer-comment
@@ -76,6 +82,7 @@
               ></v-textarea>
               <v-btn
                 block
+                size="large"
                 variant="tonal"
                 color="primary"
                 @click="submit"
@@ -84,6 +91,7 @@
               >
               <v-btn
                 block
+                size="large"
                 class="mt-2"
                 variant="text"
                 @click="viewer.dialog = false"
@@ -100,7 +108,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { useViewerStore } from "../../../store/gallery.viewer"
+import { useViewerStore } from "../../../store/viewer"
 import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
