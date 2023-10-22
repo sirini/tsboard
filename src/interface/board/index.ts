@@ -1,3 +1,9 @@
+/**
+ * interface/board/index.ts
+ *
+ * 게시판에서 사용되는 각종 인터페이스 모음
+ */
+
 export interface Category {
   uid: number
   name: string

@@ -9,7 +9,16 @@ export interface Position {
   y: number
 }
 
-export interface GalleryImage {
+export interface Writer {
   uid: number
-  src: string
+  name: string
+  profile: string
+}
+
+export interface GridItem {
+  uid: number
+  writer: Writer
+  files: string[]
+  like: number
+  reply: number
 }

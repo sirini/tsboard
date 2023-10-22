@@ -6,14 +6,14 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
-import { GalleryImage } from "../interface/gallery"
+import { GridItem } from "../interface/gallery"
 import { useViewerStore } from "./gallery.viewer"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const router = useRouter()
   const viewer = useViewerStore()
   const confirmCancelDialog = ref<boolean>(false)
-  const images = ref<GalleryImage[]>([])
+  const images = ref<GridItem[]>([])
   const postUid = ref<number>(0)
   const width = ref<number>(1200)
   const cols = ref<number>(3)

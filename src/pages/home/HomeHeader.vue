@@ -53,6 +53,19 @@
             <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
           </v-icon>
         </v-badge>
+        <v-menu activator="parent" open-on-hover>
+          <v-list>
+            <v-list-item :prepend-avatar="PREFIX + '/no-profile.png'" @click="">
+              일지매님이 내 댓글을 좋아합니다.
+            </v-list-item>
+            <v-list-item :prepend-avatar="PREFIX + '/no-profile.png'" @click="">
+              홍길동님이 내 글을 좋아합니다.
+            </v-list-item>
+            <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/lists/5.jpg" @click="">
+              테스터님이 내 글에 댓글을 남겼습니다.
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-btn>
     </v-toolbar>
   </v-app-bar>
@@ -63,6 +76,7 @@ import { ref } from "vue"
 import { useHomeStore } from "../../store/home"
 
 const home = useHomeStore()
+const PREFIX = process.env.PREFIX || ""
 
 interface Menu {
   id: string

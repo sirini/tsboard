@@ -9,16 +9,16 @@
       <v-img
         cover
         :height="gallery.gridSize"
-        :src="PREFIX + src"
+        :src="PREFIX + item.files[0]"
         class="align-end pointer"
         :class="{ onHover: isHovering }"
-        @click="gallery.open(id, uid)"
+        @click="gallery.open(route.params?.id.toString(), item.uid)"
       ></v-img>
 
       <v-card elevation="0" color="transparent" v-show="isHovering" class="status">
-        <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ totalImage }}</span>
-        <span class="icon"><v-icon>mdi-heart</v-icon> {{ totalLike }}</span>
-        <span class="icon"><v-icon>mdi-comment-multiple-outline</v-icon> {{ totalComment }}</span>
+        <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ item.files.length }}</span>
+        <span class="icon"><v-icon>mdi-heart</v-icon> {{ item.like }}</span>
+        <span class="icon"><v-icon>mdi-comment-multiple-outline</v-icon> {{ item.reply }}</span>
       </v-card>
     </v-card>
   </v-hover>
@@ -27,17 +27,13 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../../store/gallery"
+import { GridItem } from "../../../interface/gallery"
 
 const route = useRoute()
 const gallery = useGalleryStore()
 const PREFIX = process.env.PREFIX || ""
-const id = route.params?.id.toString()
 const props = defineProps<{
-  uid: number
-  src: string
-  totalImage: number
-  totalLike: number
-  totalComment: number
+  item: GridItem
 }>()
 </script>
 

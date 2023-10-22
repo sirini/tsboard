@@ -12,13 +12,7 @@
               class="d-flex child-flex mb-2"
               :cols="gallery.cols"
             >
-              <gallery-grid-item
-                :uid="image.uid"
-                :src="PREFIX + image.files[0]"
-                :totalImage="image.files.length"
-                :totalLike="image.totalLike"
-                :totalComment="image.totalComment"
-              ></gallery-grid-item>
+              <gallery-grid-item :item="image"></gallery-grid-item>
             </v-col>
             <v-col class="pt-1 pl-2 pr-2 pb-4 mb-2 text-center" cols="12" v-if="images.length > 0">
               <v-card-actions class="pa-0">
@@ -54,6 +48,7 @@ import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/gallery"
 import { useViewerStore } from "../../store/gallery.viewer"
+import { GridItem } from "../../interface/gallery"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListSearch from "../../components/gallery/list/GalleryListSearch.vue"
@@ -65,36 +60,61 @@ const route = useRoute()
 const gallery = useGalleryStore()
 const viewer = useViewerStore()
 const PREFIX = process.env.PREFIX || ""
-const images = ref<any>([
+const images = ref<GridItem[]>([
   {
     uid: 10,
+    writer: {
+      uid: 7,
+      name: "일지매",
+      profile: "/no-profile.png",
+    },
     files: [`https://cdn.vuetifyjs.com/images/cards/docks.jpg`],
-    totalLike: 3,
-    totalComment: 7,
+    like: 1,
+    reply: 1,
   },
   {
-    uid: 9,
+    uid: 10,
+    writer: {
+      uid: 7,
+      name: "일지매",
+      profile: "/no-profile.png",
+    },
     files: [`https://cdn.vuetifyjs.com/images/cards/hotel.jpg`],
-    totalLike: 2,
-    totalComment: 8,
+    like: 3,
+    reply: 7,
+  },
+  {
+    uid: 10,
+    writer: {
+      uid: 7,
+      name: "수사반장",
+      profile: "/no-profile.png",
+    },
+    files: [`https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`],
+    like: 2,
+    reply: 2,
   },
   {
     uid: 8,
-    files: [`https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`],
-    totalLike: 1,
-    totalComment: 9,
+    writer: {
+      uid: 5,
+      name: "김흥부",
+      profile: "/no-profile.png",
+    },
+    files: [`https://cdn.vuetifyjs.com/images/cards/cooking.png`],
+    like: 4,
+    reply: 1,
   },
   {
-    uid: 7,
-    files: [`https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg`],
-    totalLike: 5,
-    totalComment: 10,
-  },
-  {
-    uid: 6,
-    files: [`https://cdn.vuetifyjs.com/images/carousel/sky.jpg`],
-    totalLike: 6,
-    totalComment: 11,
+    uid: 10,
+    writer: {
+      uid: 7,
+      name: "홍길동",
+      profile: "/no-profile.png",
+    },
+    files: [`https://cdn.vuetifyjs.com/images/cards/sky.jpg`],
+    like: 2,
+    reply: 8,
   },
 ])
 const lastUid = ref<number>(6)
