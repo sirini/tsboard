@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "dev:server": "bun run --watch src/server/index.ts",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
