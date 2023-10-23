@@ -97,7 +97,7 @@ const galleries = ref<Menu[]>([
 
 <style type="scss" scoped>
 .toolbar {
-  border-bottom: #f1f1f1 1px solid;
+  border-bottom: #d2d2d2 1px solid;
   .logo {
     position: absolute;
     top: 18px;

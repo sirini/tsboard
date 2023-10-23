@@ -6,43 +6,40 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { BoardGroup } from "../interface/admin"
+import { AdminBoardConfig, AdminMenuBoardGroup, AdminPairItem } from "../interface/admin"
 
 export const useAdminStore = defineStore("admin", () => {
-  const group = ref<BoardGroup[]>([
+  const group = ref<AdminMenuBoardGroup[]>([
     {
       uid: 1,
       name: "기본 게시판 그룹",
-      manager: 1,
       boards: [
         {
           uid: 1,
           name: "테스트 게시판",
           info: "기본 게시판입니다",
-          manager: 1,
         },
       ],
     },
     {
       uid: 2,
       name: "기본 갤러리 그룹",
-      manager: 1,
       boards: [
         {
           uid: 1,
           name: "테스트 갤러리",
           info: "기본 갤러리입니다",
-          manager: 1,
         },
       ],
     },
   ])
-  const board = ref<any>({
-    menu: 0,
+  const selectMenu = ref<number>(0)
+  const board = ref<AdminBoardConfig>({
+    uid: 1,
     id: "test",
     group: {
       selected: "default",
-      list: ["another_group", "sample_group", "tsboard_group"],
+      list: [{ uid: 1, name: "another_group" }, { uid: 2, name: "sample_group" }, { uid: 3, name: "tsboard_group" }],
     },
     name: "테스트 게시판",
     info: "이 게시판의 간단 설명입니다.",
@@ -71,8 +68,14 @@ export const useAdminStore = defineStore("admin", () => {
     snackbar.value = true
   }
 
+  // 그룹 변경하기
+  async function changeGroup(group: AdminPairItem): Promise<void> {
+    // do something
+    board.value.group.selected = group.name
+  }
+
   // 카테고리 추가하기
-  function addCategory(): void {
+  async function addCategory(): Promise<void> {
     const name = board.value.category.add.trim()
     if (name.length < 2) {
       snack("카테고리 이름이 너무 짧습니다. 2글자 이상 입력해 주세요.")
@@ -80,11 +83,12 @@ export const useAdminStore = defineStore("admin", () => {
     }
     // do something
     board.value.category.list.push({ uid: 10, name })
+    snack(`${name} 카테고리를 추가했습니다.`)
   }
 
   // 카테고리 삭제 전 확인하기
   function confirmRemoveCategory(uid: number, name: string): void {
-    if (uid === 1) {
+    if (uid < 2) {
       snack("기본 카테고리는 삭제할 수 없습니다.")
       return
     }
@@ -94,21 +98,27 @@ export const useAdminStore = defineStore("admin", () => {
   }
 
   // 카테고리 삭제하기
-  function removeCategory(uid: number): void {
+  async function removeCategory(): Promise<void> {
+    if (board.value.category.remove.uid < 2) {
+      snack("기본 카테고리는 삭제할 수 없습니다.")
+      return
+    }
     // do something
     board.value.category.list = board.value.category.list.filter((cat: any) => {
-      return cat.uid !== uid
+      return cat.uid !== board.value.category.remove.uid
     })
   }
 
   return {
     group,
+    selectMenu,
     board,
     confirmRemoveCategoryDialog,
     snackbar,
     snackbarMessage,
     snackbarTimeout,
     snack,
+    changeGroup,
     addCategory,
     confirmRemoveCategory,
     removeCategory,

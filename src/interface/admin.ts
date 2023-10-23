@@ -4,16 +4,39 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
-export interface Board {
+export interface AdminMenuBoard {
   uid: number
   name: string
   info: string
-  manager: number
 }
 
-export interface BoardGroup {
+export interface AdminMenuBoardGroup {
   uid: number
   name: string
-  manager: number
-  boards: Board[]
+  boards: AdminMenuBoard[]
+}
+
+export interface AdminPairItem {
+  uid: number
+  name: string
+}
+
+export interface AdminBoardConfigGroup {
+  selected: string
+  list: AdminPairItem[]
+}
+
+export interface AdminBoardCategory {
+  add: string
+  remove: AdminPairItem
+  list: AdminPairItem[]
+}
+export interface AdminBoardConfig {
+  uid: number
+  id: string
+  group: AdminBoardConfigGroup
+  name: string
+  info: string
+  rows: number
+  category: AdminBoardCategory
 }

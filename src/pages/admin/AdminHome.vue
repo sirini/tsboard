@@ -9,7 +9,6 @@
         </v-container>
       </v-main>
     </v-layout>
-    <confirm-remove-category-dialog></confirm-remove-category-dialog>
   </v-app>
 </template>
 
@@ -18,7 +17,6 @@ import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
-import confirmRemoveCategoryDialog from "../../components/admin/board/ConfirmRemoveCategoryDialog.vue"
 
 const route = useRoute()
 const admin = useAdminStore()

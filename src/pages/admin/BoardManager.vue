@@ -8,12 +8,12 @@
         >
         <v-divider></v-divider>
         <v-layout>
-          <v-navigation-drawer permanent location="left" width="300">
+          <v-navigation-drawer permanent location="left" width="250">
             <v-list>
               <v-list-item
                 prepend-icon="mdi-cog-outline"
                 append-icon="mdi-chevron-right"
-                @click="admin.board.menu = 0"
+                @click="admin.selectMenu = 0"
               >
                 일반
               </v-list-item>
@@ -21,7 +21,7 @@
           </v-navigation-drawer>
 
           <v-main class="main">
-            <v-card elevation="0" v-if="admin.board.menu === 0">
+            <v-card elevation="0" v-if="admin.selectMenu === 0">
               <v-list>
                 <v-list-item class="mb-2">
                   <v-row>
@@ -43,13 +43,26 @@
                 <v-list-item class="mt-2 mb-2">
                   <v-row>
                     <v-col cols="3">
-                      <v-select
+                      <v-text-field
                         v-model="admin.board.group.selected"
+                        readonly
                         variant="outlined"
                         density="compact"
                         hide-details
-                        :items="admin.board.group.list"
-                      ></v-select>
+                        append-inner-icon="mdi-chevron-down"
+                      >
+                        <v-menu activator="parent">
+                          <v-list>
+                            <v-list-item
+                              v-for="(group, index) in admin.board.group.list"
+                              :key="index"
+                              @click="admin.changeGroup(group)"
+                            >
+                              {{ group.name }}
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </v-text-field>
                     </v-col>
                     <v-col class="mt-2">
                       게시판은 하나의 그룹에만 소속됩니다. 그룹 관리자는 개별 게시판에서도
@@ -78,7 +91,7 @@
 
                 <v-list-item class="mt-2 mb-2">
                   <v-row>
-                    <v-col cols="3">
+                    <v-col cols="6">
                       <v-text-field
                         v-model="admin.board.info"
                         variant="outlined"
@@ -86,10 +99,7 @@
                         hide-details
                       ></v-text-field>
                     </v-col>
-                    <v-col class="mt-2">
-                      게시판 설명입니다. 어떤 목적으로 생성된 게시판인지 간단하게 한줄로 작성해
-                      보세요.
-                    </v-col>
+                    <v-col class="mt-2"> 게시판 설명을 작성해 보세요. </v-col>
                   </v-row>
                 </v-list-item>
                 <v-divider></v-divider>
@@ -119,7 +129,7 @@
                         variant="outlined"
                         density="compact"
                         append-inner-icon="mdi-tag-plus"
-                        @click.append-inner="admin.addCategory()"
+                        @click:append-inner="admin.addCategory()"
                         hide-details
                       >
                         <v-menu activator="parent">
@@ -147,11 +157,13 @@
                             </v-list-item>
                           </v-list>
                         </v-menu>
+                        <v-tooltip activator="parent" location="top">
+                          기본 카테고리는 삭제가 불가능하며, 기본 카테고리만 남아 있으면 자동으로
+                          비활성화 됩니다.
+                        </v-tooltip>
                       </v-text-field>
                     </v-col>
-                    <v-col class="mt-2">
-                      한 페이지에 몇 개의 게시글을 보여줄지 지정합니다. 공지글을 포함한 갯수입니다.
-                    </v-col>
+                    <v-col class="mt-2"> 카테고리를 추가하거나 삭제하실 수 있습니다. </v-col>
                   </v-row>
                 </v-list-item>
                 <v-divider></v-divider>
@@ -162,6 +174,7 @@
       </v-card>
     </v-container>
     <admin-footer></admin-footer>
+    <confirm-remove-category-dialog></confirm-remove-category-dialog>
   </v-app>
 </template>
 
@@ -171,13 +184,14 @@ import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
+import ConfirmRemoveCategoryDialog from "../../components/admin/board/ConfirmRemoveCategoryDialog.vue"
 
 const route = useRoute()
 const admin = useAdminStore()
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {
-    admin.board.id = route.params?.id
+    admin.board.id = route.params?.id.toString()
   }
 })
 </script>
