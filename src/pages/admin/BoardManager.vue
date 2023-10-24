@@ -2,7 +2,7 @@
   <v-app>
     <admin-header></admin-header>
     <v-container class="admin">
-      <v-card class="mx-auto">
+      <v-card class="mx-auto rounded-lg" variant="outlined">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 설정</v-card-title
         >
