@@ -5,13 +5,13 @@
         <v-row>
           <v-col cols="2" class="text-center">
             <v-btn-toggle v-model="point.view.payment">
-              <v-btn prepend-icon="mdi-cash-plus"
+              <v-btn
                 >충전
                 <v-tooltip activator="parent">
                   회원이 글보기 시 {{ point.view.point }} 만큼 포인트를 충전시켜 줍니다.
                 </v-tooltip>
               </v-btn>
-              <v-btn prepend-icon="mdi-cash-minus"
+              <v-btn
                 >지불
                 <v-tooltip activator="parent">
                   회원이 글보기 시 {{ point.view.point }} 만큼 포인트를 지불하도록 합니다.

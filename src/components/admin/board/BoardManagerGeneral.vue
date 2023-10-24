@@ -18,12 +18,14 @@
               </v-col>
               <v-col>
                 <v-btn
-                  prepend-icon="mdi-link-variant"
-                  class="mt-1"
+                  icon
+                  size="small"
                   elevation="0"
                   @click="router.push({ name: 'board', params: { id: general.board.id } })"
-                  >보기</v-btn
                 >
+                  <v-icon>mdi-link-variant</v-icon>
+                  <v-tooltip activator="parent"> 클릭하시면 게시판을 보러 이동합니다. </v-tooltip>
+                </v-btn>
               </v-col>
             </v-row>
           </v-col>
