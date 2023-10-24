@@ -98,7 +98,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     // do something with board.value.uid
-    admin.snack("게시판 이름을 성공적으로 변경 하였습니다.", "success")
+    admin.snack(`게시판 이름을 ${name} (으)로 변경 하였습니다.`, "success")
   }
 
   // 게시판 설명 변경하기
@@ -120,7 +120,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     // do something with board.value.uid
-    admin.snack("게시판 가로폭을 성공적으로 변경 하였습니다.", "success")
+    admin.snack(`게시판 가로폭을 ${width} (으)로 변경 하였습니다.`, "success")
   }
 
   // 한 페이지에 표시할 게시글 개수 변경하기
@@ -132,7 +132,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     // do something with board.value.uid
-    admin.snack("한 페이지에 표시할 게시글 개수를 성공적으로 변경 하였습니다.", "success")
+    admin.snack(`한 페이지에 ${rows} 개씩 게시글이 나오도록 변경 하였습니다.`, "success")
   }
 
   return {

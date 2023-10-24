@@ -2,42 +2,48 @@
   <v-card elevation="0">
     <v-list>
       <v-list-item class="mb-2">
-        <v-row>
-          <v-col cols="2" class="text-center">
-            <v-btn-toggle v-model="point.view.payment">
-              <v-btn
-                >충전
-                <v-tooltip activator="parent">
-                  회원이 글보기 시 {{ point.view.point }} 만큼 포인트를 충전시켜 줍니다.
-                </v-tooltip>
-              </v-btn>
-              <v-btn
-                >지불
-                <v-tooltip activator="parent">
-                  회원이 글보기 시 {{ point.view.point }} 만큼 포인트를 지불하도록 합니다.
-                </v-tooltip>
-              </v-btn>
-            </v-btn-toggle>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field
-              v-model="point.view.point"
-              variant="outlined"
-              density="compact"
-              hide-details
-              append-inner-icon="mdi-content-save"
-              @click:append-inner="point.dealView"
-            >
-              <v-tooltip activator="parent">
-                앞에 충전인지 지불인지 선택한 후 값을 입력하고 <v-icon>mdi-content-save</v-icon> 를
-                클릭하시면 저장됩니다.
-              </v-tooltip>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2">
-            회원이 글보기 시 포인트를 충전 혹은 지불할 수 있도록 합니다. (0 = 해당없음)
-          </v-col>
-        </v-row>
+        <board-change-point
+          :payment="point.view.payment"
+          :point="point.view.point"
+          name="글보기"
+          @update="(payment: 0 | 1, newPoint: number) => point.deal(ACTION.VIEW, payment, newPoint)"
+        ></board-change-point>
+      </v-list-item>
+      <v-divider></v-divider>
+
+      <v-list-item class="mt-2 mb-2">
+        <board-change-point
+          :payment="point.write.payment"
+          :point="point.write.point"
+          name="글쓰기"
+          @update="
+            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.WRITE, payment, newPoint)
+          "
+        ></board-change-point>
+      </v-list-item>
+      <v-divider></v-divider>
+
+      <v-list-item class="mt-2 mb-2">
+        <board-change-point
+          :payment="point.comment.payment"
+          :point="point.comment.point"
+          name="댓글 쓰기"
+          @update="
+            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.COMMENT, payment, newPoint)
+          "
+        ></board-change-point>
+      </v-list-item>
+      <v-divider></v-divider>
+
+      <v-list-item class="mt-2 mb-2">
+        <board-change-point
+          :payment="point.download.payment"
+          :point="point.download.point"
+          name="다운로드"
+          @update="
+            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.DOWNLOAD, payment, newPoint)
+          "
+        ></board-change-point>
       </v-list-item>
       <v-divider></v-divider>
     </v-list>
@@ -45,7 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminBoardPointStore } from "../../../store/admin/board/point"
+import { useAdminBoardPointStore, ACTION } from "../../../store/admin/board/point"
+import BoardChangePoint from "./BoardChangePoint.vue"
 
 const point = useAdminBoardPointStore()
 </script>
