@@ -31,12 +31,27 @@ export interface AdminBoardCategory {
   remove: AdminPairItem
   list: AdminPairItem[]
 }
+
 export interface AdminBoardConfig {
   uid: number
   id: string
   group: AdminBoardConfigGroup
   name: string
   info: string
+  width: number
   rows: number
   category: AdminBoardCategory
+}
+
+export interface AdminBoardPoint {
+  payment: 0 | 1
+  point: number
+}
+
+export interface AdminUserActivity {
+  list: number
+  view: number
+  write: number
+  comment: number
+  download: number
 }

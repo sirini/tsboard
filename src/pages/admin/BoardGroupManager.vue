@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router"
-import { useAdminStore } from "../../store/admin"
+import { useAdminStore } from "../../store/admin/common"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 

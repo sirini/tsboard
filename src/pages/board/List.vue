@@ -10,7 +10,9 @@
             <v-list class="pa-0">
               <v-list-item class="list_item pa-0" v-for="(post, index) in posts" :key="index">
                 <template v-slot:prepend>
-                  <span class="col no text-center">{{ post.uid }}</span>
+                  <span class="col no text-center"
+                    ><v-icon size="small">mdi-heart-outline</v-icon> {{ post.like }}</span
+                  >
                   <v-divider vertical></v-divider>
                   <span class="col cat text-center">{{ post.category.name }}</span>
                   <v-divider vertical></v-divider>
@@ -31,11 +33,6 @@
                   ></user-nametag>
                   <span class="col view text-center"
                     ><v-icon size="small">mdi-eye-outline</v-icon> {{ post.view }}</span
-                  >
-                  <v-divider vertical></v-divider>
-                  <span class="col heart text-center"
-                    ><v-icon size="small" color="red">mdi-heart-outline</v-icon>
-                    {{ post.like }}</span
                   >
                   <v-divider vertical></v-divider>
                   <span class="col date text-center">{{ post.date }}</span>

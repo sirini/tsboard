@@ -17,10 +17,10 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-snackbar v-model="admin.snackbar">
+    <v-snackbar v-model="admin.snackbar" :color="admin.snackbarColor">
       {{ admin.snackbarMessage }}
       <template v-slot:actions>
-        <v-btn icon @click="admin.snackbar = false"><v-icon>mdi-close</v-icon></v-btn>
+        <v-btn icon @click="admin.snackbar = false" elevation="0"><v-icon>mdi-close</v-icon></v-btn>
       </template>
     </v-snackbar>
   </v-footer>
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { useAdminStore } from "../../../store/admin"
+import { useAdminStore } from "../../../store/admin/common"
 
 const router = useRouter()
 const admin = useAdminStore()

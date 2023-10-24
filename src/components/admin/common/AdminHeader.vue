@@ -9,7 +9,7 @@
           <v-menu activator="parent" open-on-hover>
             <v-list>
               <v-list-item
-                v-for="(group, index) in admin.group"
+                v-for="(group, index) in admin.topMenu"
                 :key="index"
                 @click=""
                 append-icon="mdi-chevron-right"
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { useAdminStore } from "../../../store/admin"
+import { useAdminStore } from "../../../store/admin/common"
 
 const router = useRouter()
 const admin = useAdminStore()
