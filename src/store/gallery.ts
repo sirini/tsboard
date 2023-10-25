@@ -1,6 +1,6 @@
 /**
  * store/gallery.ts
- * 
+ *
  * 갤러리 동작과 관련한 상태 및 유틸리티 함수들
  */
 import { ref } from "vue"
@@ -18,7 +18,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const width = ref<number>(1200)
   const cols = ref<number>(3)
   const gridGap = ref<number>(15)
-  const gridSize = ref<number>((width.value / (12 / cols.value)) - gridGap.value)
+  const gridSize = ref<number>(width.value / (12 / cols.value) - gridGap.value)
 
   // 사진 목록 보러가기
   function list(id: string): void {
@@ -27,26 +27,19 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(id: string, no: number): void {
-    router.push({name: "galleryOpen", params: {id, no,}})
+    router.push({ name: "galleryOpen", params: { id, no } })
     postUid.value = no
     viewer.dialog = true
   }
 
   // 사진 업로드 페이지로 이동하기
   function upload(id: string): void {
-    router.push({name: "galleryUpload", params: { id }})
+    router.push({ name: "galleryUpload", params: { id } })
   }
 
   // 관리 페이지로 이동하기
   function admin(id: string): void {
-    router.push({name: "adminBoardManager", params: { id }})
-  }
-
-  // 사진들 저장하기
-  async function save(subject: string, content: string, files: File[]): Promise<boolean> {
-    const result = false
-    // do something
-    return result
+    router.push({ name: "adminBoardManager", params: { id } })
   }
 
   return {
@@ -60,6 +53,5 @@ export const useGalleryStore = defineStore("gallery", () => {
     open,
     upload,
     admin,
-    save,
   }
 })

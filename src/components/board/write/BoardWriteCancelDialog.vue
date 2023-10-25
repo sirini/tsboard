@@ -1,12 +1,11 @@
 <template>
   <v-dialog width="500" v-model="board.confirmCancelDialog">
     <v-card>
-      <v-card-title>정말 작성을 취소하시나요?</v-card-title>
+      <v-card-title>확인</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">
-        업로드 하신 이미지 파일들을 제외한 모든 내용이 삭제 되며, 이 작업은 되돌릴 수 없습니다. 계속
-        진행하시겠습니까? (이미 업로드하신 이미지들은 ⌜기존 이미지 추가/관리⌟ 기능에서 삭제
-        가능합니다.)
+        본문 작성란 내부에서 업로드하신 이미지들을 제외하고 나머지 입력 항목들은 모두 삭제됩니다.
+        계속 진행하시겠습니까?
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
@@ -14,7 +13,7 @@
           >아니요, 계속 작성하겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-check-bold" @click="confirmCancel">예</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel">삭제</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

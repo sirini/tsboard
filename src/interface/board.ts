@@ -4,7 +4,7 @@
  * 게시판에서 사용되는 각종 인터페이스 모음
  */
 
-export interface Category {
+export interface Pair {
   uid: number
   name: string
 }
@@ -17,7 +17,7 @@ export interface Writer {
 
 export interface Post {
   uid: number
-  category: Category
+  category: Pair
   writer: Writer
   subject: string
   content: string
@@ -35,9 +35,4 @@ export interface Comment {
   like: number
   reply: number
   date: string
-}
-
-export interface Attachment {
-  uid: number
-  filename: string
 }
