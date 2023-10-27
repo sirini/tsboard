@@ -11,7 +11,8 @@
               <v-list-item class="list_item pa-0" v-for="(post, index) in posts" :key="index">
                 <template v-slot:prepend>
                   <span class="col no text-center"
-                    ><v-icon size="small">mdi-heart-outline</v-icon> {{ post.like }}</span
+                    ><v-icon size="small" v-if="post.liked" color="red">mdi-heart</v-icon
+                    ><v-icon size="small" v-else>mdi-heart-outline</v-icon> {{ post.like }}</span
                   >
                   <v-divider vertical></v-divider>
                   <span class="col cat text-center">{{ post.category.name }}</span>
@@ -96,6 +97,7 @@ const posts = ref<Post[]>([
     reply: 2,
     view: 152,
     date: "2023-10-22",
+    liked: false,
   },
   {
     uid: 2,
@@ -115,6 +117,7 @@ const posts = ref<Post[]>([
     reply: 2,
     view: 152,
     date: "2023-10-22",
+    liked: true,
   },
 ])
 </script>

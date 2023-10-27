@@ -79,6 +79,7 @@ const comments: Comment[] = [
     like: 5,
     reply: 2,
     date: "2023-10-22 17:48:11",
+    liked: false,
   },
 ]
 

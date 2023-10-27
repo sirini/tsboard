@@ -21,12 +21,19 @@ export const useGalleryStore = defineStore("gallery", () => {
   const cols = ref<number>(3)
   const gridGap = ref<number>(15)
   const gridSize = ref<number>(width.value / (12 / cols.value) - gridGap.value)
+  const liked = ref<boolean>(false)
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(no: number): void {
     router.push({ name: "galleryOpen", params: { id: id.value, no } })
     postUid.value = no
     viewer.dialog = true
+  }
+
+  // 사진에 대해 좋아요 (혹은 좋아요 해제) 토글하기
+  function like(uid: number): void {
+    // do something
+    liked.value = !liked.value
   }
 
   return {
@@ -37,6 +44,8 @@ export const useGalleryStore = defineStore("gallery", () => {
     width,
     cols,
     gridSize,
+    liked,
     open,
+    like,
   }
 })

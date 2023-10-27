@@ -30,7 +30,7 @@ export const useViewerStore = defineStore("viewer", () => {
     (value: any) => {
       if (value.length > 2) return true
       return "3글자 이상 입력해 주세요"
-    }
+    },
   ]
 
   // 사진을 클릭할 때
@@ -110,7 +110,7 @@ export const useViewerStore = defineStore("viewer", () => {
     }
     if (position.value + 1 === images.value.length) {
       util.snack("마지막 사진입니다")
-      return 
+      return
     }
     position.value += 1
   }
@@ -122,15 +122,21 @@ export const useViewerStore = defineStore("viewer", () => {
       writer: {
         uid: 11,
         name: "일지매",
-        profile: "/no-profile.png"
+        profile: "/no-profile.png",
       },
-      files: [`https://cdn.vuetifyjs.com/images/cards/docks.jpg`, `https://cdn.vuetifyjs.com/images/cards/hotel.jpg`, `https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`],
+      files: [
+        `https://cdn.vuetifyjs.com/images/cards/docks.jpg`,
+        `https://cdn.vuetifyjs.com/images/cards/hotel.jpg`,
+        `https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`,
+      ],
       subject: "사진 제목입니다",
       content: "사진 내용입니다",
       like: 5,
       reply: 10,
       view: 1429,
-      date: "2023-10-22 19:03:19"
+      date: "2023-10-22 19:03:19",
+      liked: false,
+      booked: false,
     }
     position.value = 0
   }

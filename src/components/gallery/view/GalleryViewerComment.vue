@@ -12,8 +12,8 @@
         size="small"
         class="ml-2 mr-2"
         :disabled="auth.user.uid < 1"
-        :color="comment.liked ? 'red' : 'surface-variant'"
-        @click="comment.toggleLikeStatus(commentUid)"
+        :color="liked ? 'red' : 'surface-variant'"
+        @click="comment.like(commentUid, liked)"
       >
         {{ commentLike }}
         <v-tooltip activator="parent" location="top"> 이 댓글에 좋아요를 표시합니다 </v-tooltip>
@@ -22,7 +22,7 @@
         icon
         size="small"
         :disabled="auth.user.uid < 1"
-        @click="comment.setReplyComment(commentUid, commentContent)"
+        @click="comment.setReplyComment(commentUid, commentContent, false)"
         ><v-icon>mdi-reply</v-icon>
         <v-tooltip activator="parent" location="top"> 이 댓글에 답글을 작성합니다 </v-tooltip>
       </v-btn>
@@ -64,5 +64,6 @@ const props = defineProps<{
   writerProfile: string
   writerUid: number
   writerName: string
+  liked: boolean
 }>()
 </script>

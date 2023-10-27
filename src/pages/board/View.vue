@@ -25,11 +25,6 @@
                   ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon> {{ post.view }}</span
                 >
                 <v-divider vertical></v-divider>
-                <span class="ml-4 mr-4"
-                  ><v-icon size="small" class="mr-2">mdi-heart-outline</v-icon>
-                  {{ post.like }}</span
-                >
-                <v-divider vertical></v-divider>
                 <span class="ml-4"
                   ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon>
                   {{ post.reply }}</span
@@ -40,22 +35,16 @@
               {{ post.content }}
             </v-list-item>
             <v-toolbar density="compact" class="view_menu">
-              <v-btn icon
-                ><v-icon>mdi-heart</v-icon>
-                <v-tooltip activator="parent" location="top"
-                  >이 글에 좋아요 누르기</v-tooltip
-                ></v-btn
+              <v-chip
+                class="ml-3"
+                :disabled="auth.user.uid < 1"
+                prepend-icon="mdi-heart"
+                :color="post.liked ? 'red' : 'surface-variant'"
+                @click="board.like(post.uid)"
               >
-              <v-btn icon
-                ><v-icon>mdi-bookmark</v-icon>
-                <v-tooltip activator="parent" location="top"
-                  >이 글을 내 북마크에 저장하기</v-tooltip
-                ></v-btn
-              >
-              <v-btn icon
-                ><v-icon>mdi-share</v-icon>
-                <v-tooltip activator="parent" location="top">이 글을 공유하기</v-tooltip></v-btn
-              >
+                {{ post.like }}
+                <v-tooltip activator="parent" location="top">이 글에 좋아요 누르기</v-tooltip>
+              </v-chip>
               <v-spacer></v-spacer>
               <user-nametag
                 :profile="post.writer.profile"
@@ -142,6 +131,7 @@ const post = ref<Post>({
   reply: 2,
   view: 120,
   date: "2023-10-22 17:37:50",
+  liked: false,
 })
 const PREFIX = process.env.PREFIX || ""
 </script>

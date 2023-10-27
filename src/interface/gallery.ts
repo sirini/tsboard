@@ -33,4 +33,6 @@ export interface Photo {
   reply: number
   view: number
   date: string
+  liked: boolean
+  booked: boolean
 }

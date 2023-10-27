@@ -13,16 +13,18 @@ export const useCommentStore = defineStore("comment", () => {
   const modifyTarget = ref<number>(0)
   const replyTarget = ref<number>(0)
   const removeTarget = ref<number>(0)
-  const liked = ref<boolean>(false)
-  const bookmarked = ref<boolean>(false)
   const content = ref<string>("")
   const button = ref<string>("새 댓글 작성하기")
   const confirmRemoveCommentDialog = ref<boolean>(false)
 
   // 댓글에 답글달기 시 대상 지정
-  function setReplyComment(uid: number, comment: string): void {
+  function setReplyComment(uid: number, comment: string, html: boolean = true): void {
     replyTarget.value = uid
-    content.value = `<blockquote>${comment}</blockquote><p>&nbsp;</p>`
+    if (html) {
+      content.value = `<blockquote>${comment}</blockquote><p>&nbsp;</p>`
+    } else {
+      content.value = comment
+    }
     button.value = "기존 댓글에 답글달기"
     util.snack("기존 댓글에 답글을 답니다. 답글 대상 내용이 작성란에 인용 되었습니다.")
   }
@@ -51,9 +53,8 @@ export const useCommentStore = defineStore("comment", () => {
   }
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
-  function toggleLikeStatus(uid: number): void {
+  function like(uid: number, liked: boolean): void {
     // do something with uid
-    liked.value = !liked.value
   }
 
   return {
@@ -63,12 +64,10 @@ export const useCommentStore = defineStore("comment", () => {
     content,
     button,
     confirmRemoveCommentDialog,
-    liked,
-    bookmarked,
     setReplyComment,
     setModifyComment,
     resetCommentMode,
     confirmRemoveComment,
-    toggleLikeStatus,
+    like,
   }
 })

@@ -110,8 +110,6 @@
       </v-menu>
     </v-btn>
 
-    <v-divider vertical></v-divider>
-
     <v-btn icon>
       <v-icon>mdi-image</v-icon>
       <v-tooltip activator="parent" location="top"
@@ -221,8 +219,6 @@
       <v-tooltip activator="parent" location="top">코드 블럭 지정</v-tooltip>
     </v-btn>
 
-    <v-divider vertical></v-divider>
-
     <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()"
       ><v-icon>mdi-format-list-bulleted-type</v-icon>
       <v-tooltip activator="parent" location="top">순서 없는 목록</v-tooltip>
@@ -239,8 +235,6 @@
       ><v-icon>mdi-minus</v-icon>
       <v-tooltip activator="parent" location="top">가로 구분선</v-tooltip>
     </v-btn>
-
-    <v-divider vertical></v-divider>
 
     <v-btn icon @click="editor?.chain().focus().undo().run()"
       ><v-icon>mdi-arrow-u-left-top</v-icon>

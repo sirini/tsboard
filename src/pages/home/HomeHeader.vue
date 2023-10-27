@@ -2,7 +2,7 @@
   <v-app-bar flat rounded="0">
     <v-toolbar color="white" class="toolbar">
       <v-app-bar-title>
-        <span class="logo" @click="util.go('main')">TSBOARD</span>
+        <span class="logo" @click="util.go('home')">TSBOARD</span>
 
         <v-btn size="large" class="firstTopButton btn"
           >BOARD

@@ -1,5 +1,6 @@
 <template>
-  <v-toolbar density="compact">
+  <v-divider></v-divider>
+  <v-toolbar density="compact" color="grey-darken-4">
     <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0"
       ><v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top"> 이전 사진을 봅니다 </v-tooltip>
@@ -11,14 +12,15 @@
 
     <v-spacer></v-spacer>
 
-    <v-chip pill prepend-icon="mdi-heart" @click="">
+    <v-chip
+      pill
+      prepend-icon="mdi-heart"
+      @click="gallery.like(postUid)"
+      :color="liked ? 'red' : 'surface-variant'"
+    >
       {{ postLike }}
       <v-tooltip activator="parent" location="top">이 사진첩에 좋아요 표시하기</v-tooltip>
     </v-chip>
-    <v-btn icon
-      ><v-icon>mdi-bookmark</v-icon>
-      <v-tooltip activator="parent" location="top"> 이 사진첩을 내 북마크에 저장하기 </v-tooltip>
-    </v-btn>
     <v-btn icon @click="viewer.reset"
       ><v-icon>mdi-reload</v-icon>
       <v-tooltip activator="parent" location="top">사진 위치/크기 초기화하기</v-tooltip></v-btn
@@ -53,13 +55,17 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
+import { useGalleryStore } from "../../../store/gallery"
 import { useViewerStore } from "../../../store/viewer"
 
 const auth = useAuthStore()
+const gallery = useGalleryStore()
 const viewer = useViewerStore()
 const props = defineProps<{
   postLike: number
   postUid: number
   writerUid: number
+  liked: boolean
+  booked: boolean
 }>()
 </script>

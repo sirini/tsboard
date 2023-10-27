@@ -25,6 +25,7 @@ export interface Post {
   reply: number
   view: number
   date: string
+  liked: boolean
 }
 
 export interface Comment {
@@ -35,6 +36,7 @@ export interface Comment {
   like: number
   reply: number
   date: string
+  liked: boolean
 }
 
 export interface VideoURL {

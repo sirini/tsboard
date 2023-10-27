@@ -26,6 +26,11 @@ export const useBoardStore = defineStore("board", () => {
     { uid: 3, name: "sample" },
   ])
 
+  // 좋아요 누르기
+  function like(uid: number): void {
+    // do something
+  }
+
   return {
     id,
     uid,
@@ -37,5 +42,6 @@ export const useBoardStore = defineStore("board", () => {
     confirmCancelDialog,
     width,
     categories,
+    like,
   }
 })

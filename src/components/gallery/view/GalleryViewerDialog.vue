@@ -21,12 +21,13 @@
           nav
           :width="viewer.drawerWidth"
           :location="viewer.drawerPosition"
+          color="grey-darken-4"
         >
           <v-list>
             <v-list-item class="pb-2">
               {{ viewer.photo?.subject }}
               <template v-slot:append>
-                <v-btn icon @click="viewer.dialog = false" elevation="0"
+                <v-btn icon @click="viewer.dialog = false" elevation="0" color="grey-darken-4"
                   ><v-icon>mdi-close</v-icon>
                   <v-tooltip activator="parent" location="top">
                     클릭하시면 이 창을 닫습니다
@@ -36,7 +37,7 @@
             </v-list-item>
             <v-divider></v-divider>
             <v-list-item class="pt-2 pb-2">
-              <v-card elevation="0">
+              <v-card elevation="0" color="grey-darken-4">
                 <v-card-text class="pa-0 pt-2 content">{{ viewer.photo?.content }}</v-card-text>
                 <v-card-actions class="pa-0">
                   <v-chip
@@ -62,6 +63,8 @@
               :postLike="viewer.photo?.like || 0"
               :postUid="viewer.photo?.uid || 0"
               :writerUid="viewer.photo?.writer.uid || 0"
+              :liked="viewer.photo?.liked || false"
+              :booked="viewer.photo?.booked || false"
             ></gallery-viewer-toolbar>
 
             <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="i in 3" :key="i">
@@ -72,37 +75,38 @@
                 :writerProfile="PREFIX + '/no-profile.png'"
                 :writerUid="10"
                 writerName="댓작성자"
+                :liked="false"
               ></gallery-viewer-comment>
             </v-list-item>
 
             <v-list-item class="pa-0 mt-2 ml-2 mr-2">
               <v-textarea
-                v-model="comment"
-                class="mt-2 mb-1"
+                v-model="comment.content"
+                variant="outlined"
                 auto-grow
                 :rules="viewer.textRule"
-                label="사진에 대한 댓글을 입력해 주세요"
+                placeholder="사진이 마음에 드셨다면 댓글을 남겨주세요!"
               ></v-textarea>
-              <v-btn
-                block
-                size="large"
-                variant="tonal"
-                color="primary"
-                @click="submit"
-                append-icon="mdi-chevron-right"
-                >댓글 작성하기</v-btn
-              >
-              <v-btn
-                block
-                size="large"
-                class="mt-2"
-                variant="text"
-                @click="viewer.dialog = false"
-                prepend-icon="mdi-close"
-                >닫기</v-btn
-              >
             </v-list-item>
           </v-list>
+
+          <v-card-actions>
+            <v-btn
+              v-show="comment.modifyTarget > 0 || comment.replyTarget > 0"
+              prepend-icon="mdi-new-box"
+              @click="comment.resetCommentMode"
+            >
+              새 댓글로 변경
+              <v-tooltip activator="parent">
+                작성중인 본문 내용을 모두 삭제하고, 새 댓글 작성 모드로 변경합니다. (답글달기,
+                수정하기에서 새 댓글로 변경하고 싶을 때 클릭!)
+              </v-tooltip>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="submit" append-icon="mdi-chevron-right">{{
+              comment.button
+            }}</v-btn>
+          </v-card-actions>
         </v-navigation-drawer>
       </v-layout>
     </v-card>
@@ -111,7 +115,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { watch } from "vue"
+import { useCommentStore } from "../../../store/comment"
 import { useViewerStore } from "../../../store/viewer"
 import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
@@ -122,7 +127,7 @@ import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRe
 const PREFIX = process.env.PREFIX || ""
 const viewer = useViewerStore()
 const util = useUtilStore()
-const comment = ref<string>("")
+const comment = useCommentStore()
 
 // 뷰어 창이 열리면 사진들 가져오기
 watch(
@@ -136,13 +141,13 @@ watch(
 
 // 댓글 작성하기
 async function submit(): Promise<void> {
-  const text = comment.value.trim()
+  const text = comment.content.trim()
   if (text.length < 3) {
     util.snack("댓글은 3글자 이상 입력해 주세요")
     return
   }
   await viewer.save(text)
-  comment.value = ""
+  comment.content = ""
 }
 
 // 댓글 삭제하기 처리
