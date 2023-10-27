@@ -48,9 +48,12 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { TableOption } from "../../../interface/board"
 
 const board = useBoardStore()
-const emits = defineEmits(["addTable"])
+const emits = defineEmits<{
+  addTable: [option: TableOption]
+}>()
 const alert = ref<boolean>(false)
 const rows = ref<number>(3)
 const cols = ref<number>(3)

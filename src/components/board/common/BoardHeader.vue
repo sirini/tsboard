@@ -3,11 +3,18 @@
     >테스트 게시판
     <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
     <div class="login">
-      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인</v-btn>
       <v-btn
+        v-if="auth.user.uid < 1"
+        prepend-icon="mdi-login-variant"
+        variant="text"
+        @click="util.go('login')"
+        >로그인</v-btn
+      >
+      <v-btn
+        v-if="auth.user.admin"
         prepend-icon="mdi-cog-outline"
         variant="text"
-        @click="board.admin(route.params?.id.toString())"
+        @click="util.go('adminBoardManager', board.id)"
         :disabled="!auth.user.admin"
         >관리</v-btn
       >
@@ -23,12 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router"
 import { useAuthStore } from "../../../store/auth"
 import { useBoardStore } from "../../../store/board"
 import { useUtilStore } from "../../../store/util"
 
-const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
 const util = useUtilStore()

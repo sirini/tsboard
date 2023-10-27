@@ -23,11 +23,13 @@
 import { useBoardStore } from "../../../store/board"
 
 const board = useBoardStore()
-const emit = defineEmits(["cancel"])
+const emits = defineEmits<{
+  cancel: []
+}>()
 
 // 글 작성 취소하기
 function confirmCancel(): void {
-  emit("cancel")
+  emits("cancel")
   board.confirmCancelDialog = false
 }
 </script>

@@ -29,7 +29,7 @@
                 <v-btn
                   prepend-icon="mdi-pencil"
                   variant="text"
-                  @click="gallery.upload(route.params?.id.toString())"
+                  @click="util.go('galleryUpload', gallery.id)"
                   >업로드</v-btn
                 >
               </v-card-actions>
@@ -45,8 +45,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/gallery"
+import { useUtilStore } from "../../store/util"
 import { useViewerStore } from "../../store/viewer"
 import { GridItem } from "../../interface/gallery"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
@@ -56,8 +56,8 @@ import GalleryViewerDialog from "../../components/gallery/view/GalleryViewerDial
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
-const route = useRoute()
 const gallery = useGalleryStore()
+const util = useUtilStore()
 const viewer = useViewerStore()
 const PREFIX = process.env.PREFIX || ""
 const images = ref<GridItem[]>([
@@ -121,7 +121,7 @@ const lastUid = ref<number>(6)
 
 // 뷰어가 필요할 때 열어주기
 watch(
-  () => route.params?.no?.toString(),
+  () => gallery.id,
   (value: string) => {
     const no = parseInt(value)
     if (no > 0) {

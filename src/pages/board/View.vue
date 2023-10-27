@@ -94,14 +94,11 @@
 
           <v-divider class="mt-3"></v-divider>
           <v-card-actions>
-            <v-btn prepend-icon="mdi-view-list" @click="board.list(route.params?.id.toString())"
+            <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', board.id)"
               >목록 보기</v-btn
             >
             <v-spacer></v-spacer>
-            <v-btn
-              prepend-icon="mdi-pencil"
-              variant="text"
-              @click="board.write(route.params?.id.toString())"
+            <v-btn prepend-icon="mdi-pencil" variant="text" @click="util.go('boardWrite', board.id)"
               >새글쓰기</v-btn
             >
           </v-card-actions>
@@ -114,9 +111,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
+import { useUtilStore } from "../../store/util"
 import { Post } from "../../interface/board"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
@@ -125,9 +122,9 @@ import UserNametag from "../../components/common/UserNametag.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
-const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
+const util = useUtilStore()
 const post = ref<Post>({
   uid: 7,
   category: {

@@ -19,11 +19,11 @@
           >
         </v-card>
         <v-file-input
-          @change="util.read"
+          @change="write.readSelectedFiles"
           class="mb-3"
           show-size
           counter
-          :rules="util.uploadRule"
+          :rules="write.uploadRule"
           accept="image/png, image/jpeg, image/gif, image/bmp, image/heif, image/heic"
           prepend-icon="mdi-image-search-outline"
           multiple
@@ -69,16 +69,18 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useBoardStore } from "../../../store/board"
-import { useUtilStore } from "../../../store/util"
+import { useWriteStore } from "../../../store/write"
 
-const emits = defineEmits(["addImageURL"])
+const emits = defineEmits<{
+  addImageURL: [src: string]
+}>()
 const board = useBoardStore()
-const util = useUtilStore()
+const write = useWriteStore()
 const uploadImages = ref<string[]>([])
 
 // 선택한 이미지 파일들을 읽어오기
 watch(
-  () => util.files,
+  () => write.files,
   (value: File[]) => {
     for (const v of value) {
       const src = URL.createObjectURL(v)

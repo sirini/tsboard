@@ -11,6 +11,11 @@ export const authRoutes = [
     component: () => import("@/pages/auth/Login.vue"),
   },
   {
+    path: "/logout",
+    name: "logout",
+    component: () => import("@/pages/auth/Logout.vue"),
+  },
+  {
     path: "/resetpassword",
     name: "resetpassword",
     component: () => import("@/pages/auth/ResetPassword.vue"),

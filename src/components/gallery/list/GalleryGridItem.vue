@@ -12,7 +12,7 @@
         :src="PREFIX + item.files[0]"
         class="align-end pointer"
         :class="{ onHover: isHovering }"
-        @click="gallery.open(route.params?.id.toString(), item.uid)"
+        @click="gallery.open(item.uid)"
       ></v-img>
 
       <v-card elevation="0" color="transparent" v-show="isHovering" class="status">
@@ -25,12 +25,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../../store/gallery"
+import { useUtilStore } from "../../../store/util"
 import { GridItem } from "../../../interface/gallery"
 
-const route = useRoute()
 const gallery = useGalleryStore()
+const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 const props = defineProps<{
   item: GridItem

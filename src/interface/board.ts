@@ -36,3 +36,15 @@ export interface Comment {
   reply: number
   date: string
 }
+
+export interface VideoURL {
+  src: string
+  width: number
+  height: number
+}
+
+export interface TableOption {
+  rows: number
+  cols: number
+  withHeaderRow: boolean
+}

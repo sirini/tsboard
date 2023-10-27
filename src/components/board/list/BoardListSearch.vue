@@ -5,7 +5,7 @@
         <v-btn-toggle v-model="util.searchOption" size="small" group>
           <v-btn value="subject">제목</v-btn>
           <v-btn value="content">내용</v-btn>
-          <v-btn value="both">제목+내용</v-btn>
+          <v-btn value="category">카테고리</v-btn>
           <v-btn value="tag">태그</v-btn>
           <v-btn value="writer">작성자</v-btn>
         </v-btn-toggle>

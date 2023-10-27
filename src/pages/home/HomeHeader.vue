@@ -2,7 +2,7 @@
   <v-app-bar flat rounded="0">
     <v-toolbar color="white" class="toolbar">
       <v-app-bar-title>
-        <span class="logo" @click="home.main">TSBOARD</span>
+        <span class="logo" @click="util.go('main')">TSBOARD</span>
 
         <v-btn size="large" class="firstTopButton btn"
           >BOARD
@@ -11,7 +11,7 @@
               <v-list-item
                 v-for="(board, index) in boards"
                 :key="index"
-                @click="home.board(board.id)"
+                @click="util.go('boardList', board.id)"
               >
                 <v-list-item-title
                   >{{ board.name }}
@@ -28,7 +28,7 @@
               <v-list-item
                 v-for="(gallery, index) in galleries"
                 :key="index"
-                @click="home.gallery(gallery.id)"
+                @click="util.go('galleryList', gallery.id)"
               >
                 <v-list-item-title>
                   {{ gallery.name }}
@@ -41,6 +41,16 @@
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
+
+      <v-btn icon @click="util.go('login')" v-if="auth.user.uid < 1">
+        <v-icon>mdi-login-variant</v-icon>
+        <v-tooltip activator="parent"> 로그인 페이지로 이동합니다. </v-tooltip>
+      </v-btn>
+
+      <v-btn icon @click="util.go('logout')" v-else>
+        <v-icon>mdi-logout-variant</v-icon>
+        <v-tooltip activator="parent">로그아웃 페이지로 이동합니다.</v-tooltip>
+      </v-btn>
 
       <v-btn icon>
         <v-badge color="error" dot>
@@ -69,9 +79,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useHomeStore } from "../../store/home"
+import { useAuthStore } from "../../store/auth"
+import { useUtilStore } from "../../store/util"
 
-const home = useHomeStore()
+const auth = useAuthStore()
+const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 
 interface Menu {
@@ -97,7 +109,6 @@ const galleries = ref<Menu[]>([
 
 <style type="scss" scoped>
 .toolbar {
-  border-bottom: #d2d2d2 1px solid;
   .logo {
     position: absolute;
     top: 18px;

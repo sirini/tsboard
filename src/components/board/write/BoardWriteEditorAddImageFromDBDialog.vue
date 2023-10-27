@@ -75,7 +75,10 @@
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
 
-const emits = defineEmits(["addImageURL", "removeImage"])
+const emits = defineEmits<{
+  addImageURL: [src: string]
+  removeImage: [src: string]
+}>()
 const board = useBoardStore()
 const PREFIX = process.env.PREFIX || ""
 const showRemoveImageInfo = ref<boolean>(false)

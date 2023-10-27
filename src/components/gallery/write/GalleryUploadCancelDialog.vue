@@ -25,11 +25,13 @@
 import { useGalleryStore } from "../../../store/gallery"
 
 const gallery = useGalleryStore()
-const emit = defineEmits(["cancel"])
+const emits = defineEmits<{
+  cancel: []
+}>()
 
 // 글 작성 취소하기
 function confirmCancel(): void {
-  emit("cancel")
+  emits("cancel")
   gallery.confirmCancelDialog = false
 }
 </script>

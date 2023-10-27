@@ -7,7 +7,7 @@
 export const galleryRoutes = [
   {
     path: "/gallery/:id",
-    name: "gallery",
+    name: "galleryList",
     component: () => import("@/pages/gallery/List.vue"),
   },
   {

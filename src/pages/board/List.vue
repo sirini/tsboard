@@ -19,7 +19,7 @@
                 </template>
                 <v-list-item-title
                   class="pointer ml-3"
-                  @click="board.view(route.params?.id.toString(), post.uid)"
+                  @click="util.go('boardView', board.id, post.uid)"
                   >{{ post.subject }}
                   <v-icon size="small" color="grey">mdi-image-outline</v-icon>
                   <v-chip class="ml-2" size="small" color="blue">{{ post.reply }}</v-chip>
@@ -51,10 +51,7 @@
             <v-spacer></v-spacer>
             <v-pagination :length="5"></v-pagination>
             <v-spacer></v-spacer>
-            <v-btn
-              prepend-icon="mdi-pencil"
-              variant="text"
-              @click="board.write(route.params?.id.toString())"
+            <v-btn prepend-icon="mdi-pencil" variant="text" @click="util.go('boardWrite', board.id)"
               >새글쓰기</v-btn
             >
           </v-card-actions>
@@ -67,9 +64,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
+import { useUtilStore } from "../../store/util"
 import { Post } from "../../interface/board"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListSearch from "../../components/board/list/BoardListSearch.vue"
@@ -77,9 +74,9 @@ import UserNametag from "../../components/common/UserNametag.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
-const route = useRoute()
 const auth = useAuthStore()
 const board = useBoardStore()
+const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 const posts = ref<Post[]>([
   {

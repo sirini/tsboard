@@ -7,7 +7,7 @@
 export const boardRoutes = [
   {
     path: "/board/:id",
-    name: "board",
+    name: "boardList",
     component: () => import("@/pages/board/List.vue"),
   },
   {

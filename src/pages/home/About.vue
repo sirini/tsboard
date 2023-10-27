@@ -103,7 +103,9 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-link-variant" @click="home.report">버그 신고 (Github)</v-btn>
+              <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')"
+                >버그 신고 (Github)</v-btn
+              >
               <v-spacer></v-spacer>
               <v-btn
                 prepend-icon="mdi-link"
@@ -112,13 +114,13 @@
                 >TypeScript</v-btn
               >
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="router.push({ name: 'vue' })">Vue</v-btn>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="router.push({ name: 'vuetify' })"
+              <v-btn prepend-icon="mdi-link" @click="util.go('vue')">Vue</v-btn>
+              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('vuetify')"
                 >Vuetify</v-btn
               >
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="router.push({ name: 'bun' })">Bun</v-btn>
-              <v-btn prepend-icon="mdi-link" @click="router.push({ name: 'elysia' })">Elysia</v-btn>
+              <v-btn prepend-icon="mdi-link" @click="util.go('bun')">Bun</v-btn>
+              <v-btn prepend-icon="mdi-link" @click="util.go('elysia')">Elysia</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -130,12 +132,12 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 
 const router = useRouter()
-const home = useHomeStore()
+const util = useUtilStore()
 </script>
 
 <style scoped>

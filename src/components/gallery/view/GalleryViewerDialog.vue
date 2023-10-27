@@ -57,11 +57,13 @@
                 </v-card-actions>
               </v-card>
             </v-list-item>
+
             <gallery-viewer-toolbar
               :postLike="viewer.photo?.like || 0"
               :postUid="viewer.photo?.uid || 0"
               :writerUid="viewer.photo?.writer.uid || 0"
             ></gallery-viewer-toolbar>
+
             <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="i in 3" :key="i">
               <gallery-viewer-comment
                 :commentUid="i"
@@ -72,6 +74,7 @@
                 writerName="댓작성자"
               ></gallery-viewer-comment>
             </v-list-item>
+
             <v-list-item class="pa-0 mt-2 ml-2 mr-2">
               <v-textarea
                 v-model="comment"
@@ -104,6 +107,7 @@
       </v-layout>
     </v-card>
   </v-dialog>
+  <board-view-comment-remove-dialog @remove="removeComment"></board-view-comment-remove-dialog>
 </template>
 
 <script setup lang="ts">
@@ -113,6 +117,7 @@ import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import UserNametag from "../../common/UserNametag.vue"
+import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 
 const PREFIX = process.env.PREFIX || ""
 const viewer = useViewerStore()
@@ -138,6 +143,12 @@ async function submit(): Promise<void> {
   }
   await viewer.save(text)
   comment.value = ""
+}
+
+// 댓글 삭제하기 처리
+function removeComment(): void {
+  // do something
+  util.snack("댓글이 정상적으로 삭제(비공개) 되었습니다.")
 }
 </script>
 

@@ -57,9 +57,12 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { VideoURL } from "../../../interface/board"
 
 const board = useBoardStore()
-const emits = defineEmits(["addVideoURL"])
+const emits = defineEmits<{
+  addVideoURL: [video: VideoURL]
+}>()
 const link = ref<string>("https://")
 const width = ref<number>(640)
 const height = ref<number>(480)

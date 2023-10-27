@@ -7,7 +7,7 @@
       <v-btn
         prepend-icon="mdi-cog-outline"
         variant="text"
-        @click="gallery.admin(route.params?.id.toString())"
+        @click="util.go('adminBoardManager', gallery.id)"
         :disabled="!auth.user.admin"
         >관리</v-btn
       >
@@ -23,12 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router"
 import { useAuthStore } from "../../../store/auth"
 import { useGalleryStore } from "../../../store/gallery"
 import { useUtilStore } from "../../../store/util"
 
-const route = useRoute()
 const auth = useAuthStore()
 const gallery = useGalleryStore()
 const util = useUtilStore()

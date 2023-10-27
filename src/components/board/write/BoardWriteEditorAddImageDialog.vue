@@ -35,7 +35,9 @@ import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
 
 const board = useBoardStore()
-const emits = defineEmits(["addImageURL"])
+const emits = defineEmits<{
+  addImageURL: [url: string]
+}>()
 const link = ref<string>("http://")
 const alert = ref<boolean>(false)
 const urlPattern =

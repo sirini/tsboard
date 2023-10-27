@@ -299,6 +299,7 @@ import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
 import { useBoardStore } from "../../../store/board"
+import { VideoURL, TableOption } from "../../../interface/board"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
 import BoardWriteEditorAddImageFromDBDialog from "./BoardWriteEditorAddImageFromDBDialog.vue"
 import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue"
@@ -392,13 +393,6 @@ function removeImage(src: string): void {
   editor.value?.commands.insertContent(newContent || "")
 }
 
-// YouTube 삽입 데이터
-interface VideoURL {
-  src: string
-  width: number
-  height: number
-}
-
 // YouTube 동영상 추가하기
 function addVideoURL(link: VideoURL): void {
   const { src, width, height } = link
@@ -409,13 +403,6 @@ function addVideoURL(link: VideoURL): void {
   })
   editor.value?.commands.enter()
   editor.value?.commands.focus("end")
-}
-
-// 표 삽입 데이터
-interface TableOption {
-  rows: number
-  cols: number
-  withHeaderRow: boolean
 }
 
 // 표 추가하기
