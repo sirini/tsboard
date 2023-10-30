@@ -9,13 +9,23 @@ import { defineStore } from "pinia"
 import { AdminMenuBoardGroup } from "../../interface/admin"
 
 export const MENU = {
-  GENERAL: 0,
-  PERMISSION: 1,
-  POINT: 2,
+  BOARD: {
+    GENERAL: 0,
+    PERMISSION: 1,
+    POINT: 2,
+  },
+  GROUP: {
+    GENERAL: 3,
+    PERMISSION: 4,
+    POINT: 5,
+  },
+  MEMBER: {
+    GENERAL: 6,
+  }
 }
 
 export const useAdminStore = defineStore("admin", () => {
-  const menu = ref<number>(MENU.GENERAL)
+  const menu = ref<number>(MENU.BOARD.GENERAL)
   const topMenu = ref<AdminMenuBoardGroup[]>([
     {
       uid: 1,

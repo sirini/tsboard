@@ -12,7 +12,6 @@ import { useAdminStore } from "../common"
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const admin = useAdminStore()
   const confirmRemoveCategoryDialog = ref<boolean>(false)
-
   const board = ref<AdminBoardConfig>({
     uid: 1,
     id: "test",

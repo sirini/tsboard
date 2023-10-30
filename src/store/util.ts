@@ -56,6 +56,11 @@ export const useUtilStore = defineStore("util", () => {
     router.push({ name, params: { id, no } })
   }
 
+  // 페이지 뒤로가기
+  function back(): void {
+    router.back()
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -73,5 +78,6 @@ export const useUtilStore = defineStore("util", () => {
     snack,
     alert,
     go,
+    back,
   }
 })

@@ -4,25 +4,32 @@
  * 로그인 등 회원 정보 관련 라우팅(경로 지정) 설정
  */
 
+const PREFIX = process.env.PREFIX || ""
+
 export const authRoutes = [
   {
-    path: "/login",
+    path: PREFIX + "/login",
     name: "login",
     component: () => import("@/pages/auth/Login.vue"),
   },
   {
-    path: "/logout",
+    path: PREFIX + "/logout",
     name: "logout",
     component: () => import("@/pages/auth/Logout.vue"),
   },
   {
-    path: "/resetpassword",
+    path: PREFIX + "/resetpassword",
     name: "resetpassword",
     component: () => import("@/pages/auth/ResetPassword.vue"),
   },
   {
-    path: "/signup",
+    path: PREFIX + "/signup",
     name: "signup",
     component: () => import("@/pages/auth/Signup.vue"),
+  },
+  {
+    path: PREFIX + "/myinfo",
+    name: "myinfo",
+    component: () => import("@/pages/auth/MyInfo.vue"),
   },
 ]

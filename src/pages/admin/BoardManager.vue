@@ -2,6 +2,11 @@
   <v-app>
     <admin-header></admin-header>
     <v-container class="admin">
+      <v-breadcrumbs :items="breadcrumbs">
+        <template v-slot:divider>
+          <v-icon icon="mdi-chevron-right"></v-icon>
+        </template>
+      </v-breadcrumbs>
       <v-card class="mx-auto rounded-lg" variant="outlined">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 설정</v-card-title
@@ -13,36 +18,36 @@
               <v-list-item
                 prepend-icon="mdi-cog-outline"
                 append-icon="mdi-chevron-right"
-                @click="admin.menu = MENU.GENERAL"
+                @click="admin.menu = MENU.BOARD.GENERAL"
               >
-                <strong v-if="admin.menu === MENU.GENERAL">일반</strong>
+                <strong v-if="admin.menu === MENU.BOARD.GENERAL">일반</strong>
                 <span v-else>일반</span>
               </v-list-item>
               <v-list-item
                 prepend-icon="mdi-account-check-outline"
                 append-icon="mdi-chevron-right"
-                @click="admin.menu = MENU.PERMISSION"
+                @click="admin.menu = MENU.BOARD.PERMISSION"
               >
-                <strong v-if="admin.menu === MENU.PERMISSION">권한</strong>
+                <strong v-if="admin.menu === MENU.BOARD.PERMISSION">권한</strong>
                 <span v-else>권한</span>
               </v-list-item>
               <v-list-item
                 prepend-icon="mdi-cash-100"
                 append-icon="mdi-chevron-right"
-                @click="admin.menu = MENU.POINT"
+                @click="admin.menu = MENU.BOARD.POINT"
               >
-                <strong v-if="admin.menu === MENU.POINT">포인트</strong>
+                <strong v-if="admin.menu === MENU.BOARD.POINT">포인트</strong>
                 <span v-else>포인트</span>
               </v-list-item>
             </v-list>
           </v-navigation-drawer>
 
           <v-main class="main">
-            <board-manager-general v-if="admin.menu === MENU.GENERAL"></board-manager-general>
+            <board-manager-general v-if="admin.menu === MENU.BOARD.GENERAL"></board-manager-general>
             <board-manager-permission
-              v-if="admin.menu === MENU.PERMISSION"
+              v-if="admin.menu === MENU.BOARD.PERMISSION"
             ></board-manager-permission>
-            <board-manager-point v-if="admin.menu === MENU.POINT"></board-manager-point>
+            <board-manager-point v-if="admin.menu === MENU.BOARD.POINT"></board-manager-point>
           </v-main>
         </v-layout>
       </v-card>
@@ -67,6 +72,24 @@ import ConfirmRemoveCategoryDialog from "../../components/admin/board/ConfirmRem
 const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
+const PREFIX = process.env.PREFIX || ""
+const breadcrumbs = [
+  {
+    title: "Admin",
+    disabled: false,
+    href: PREFIX + "/admin",
+  },
+  {
+    title: "Board Group",
+    disabled: false,
+    href: PREFIX + "/admin/board/group/" + general.board.group.selected,
+  },
+  {
+    title: general.board.id,
+    disabled: true,
+    href: PREFIX + "/admin/board/" + general.board.id,
+  },
+]
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {

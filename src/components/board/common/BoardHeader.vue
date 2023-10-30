@@ -11,11 +11,18 @@
         >로그인</v-btn
       >
       <v-btn
+        v-else
+        prepend-icon="mdi-badge-account-outline"
+        variant="text"
+        @click="util.go('myinfo')"
+        >내정보</v-btn
+      >
+
+      <v-btn
         v-if="auth.user.admin"
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', board.id)"
-        :disabled="!auth.user.admin"
         >관리</v-btn
       >
     </div>

@@ -18,16 +18,21 @@ const INVALID_NICKNAME =
 
 export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
+  const userInfoDialog = ref<boolean>(false)
   const user = ref<User>({
     uid: 1,
+    id: "test@test.com",
     name: "tester",
     point: 100,
     level: 2,
     profile: "",
+    signature: "",
+    lastLogin: "2023-10-30 10:20:30",
     admin: true,
   })
   const id = ref<string>("")
   const password = ref<string>("")
+  const checkedPassword = ref<string>("")
   const idForReset = ref<string>("")
   const nickname = ref<string>("")
 
@@ -102,6 +107,17 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert(INVALID_EMAIL)
       return
     }
+    // do something
+    util.alert(`${idForReset.value}으로 비밀번호 초기화 메일을 발송하였습니다.`, "success")
+  }
+
+  // 닉네임 중복 체크하기
+  async function checkNickname(): Promise<void> {
+    if (user.value.name.length < 2) {
+      util.alert(INVALID_NICKNAME)
+    }
+    // do something
+    util.alert(`${user.value.name}은 사용할 수 있는 닉네임 입니다.`, "success")
   }
 
   // 가입 양식 제출받기
@@ -129,10 +145,28 @@ export const useAuthStore = defineStore("auth", () => {
     }, 5000)
   }
 
+  // 내 정보 수정하기
+  async function saveMyInfo(): Promise<void> {
+    const nick = nickname.value.trim()
+    if (nick.length < 2) {
+      util.alert("닉네임은 2글자 이상 입력해 주세요.")
+      return
+    }
+    if (password.value !== checkedPassword.value) {
+      util.alert("입력하신 비밀번호가 서로 맞지 않습니다.")
+      return
+    }
+
+    // do something
+    util.alert("내 정보를 성공적으로 수정 하였습니다.", "success")
+  }
+
   return {
+    userInfoDialog,
     user,
     id,
     password,
+    checkedPassword,
     idForReset,
     nickname,
     emailRule,
@@ -141,6 +175,8 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     logout,
     resetPassword,
+    checkNickname,
     signup,
+    saveMyInfo,
   }
 })
