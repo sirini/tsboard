@@ -34,11 +34,15 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   })
 
   // 회원 아이디를 입력할 때마다 하단에 검색해서 보여주기
+  let timer: any = null
   async function updateBoardManagerSuggestion(): Promise<void> {
     // do something with manager.value.name
-    suggestions.value = dbresult.value.filter((user: AdminPairItem) => {
-      return user.name.indexOf(manager.value.name) > -1
-    })
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      suggestions.value = dbresult.value.filter((user: AdminPairItem) => {
+        return user.name.indexOf(manager.value.name) > -1
+      })  
+    }, 200)
   }
 
   // 선택한 회원을 관리자로 지정하기

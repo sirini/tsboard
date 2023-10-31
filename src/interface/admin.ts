@@ -62,3 +62,9 @@ export interface AdminGroupList {
   info: string
   admin: string
 }
+
+export interface AdminGroupConfig {
+  uid: number
+  id: string
+  manager: AdminPairItem
+}
