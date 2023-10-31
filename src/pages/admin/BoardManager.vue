@@ -80,7 +80,12 @@ const breadcrumbs = [
     href: PREFIX + "/admin",
   },
   {
-    title: "Board Group",
+    title: "Group List",
+    disabled: false,
+    href: PREFIX + "/admin/board",
+  },
+  {
+    title: `${general.board.group.selected} Group`,
     disabled: false,
     href: PREFIX + "/admin/board/group/" + general.board.group.selected,
   },

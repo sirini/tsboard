@@ -54,12 +54,12 @@ const breadcrumbs = [
     href: PREFIX + "/admin",
   },
   {
-    title: "Board Group List",
+    title: "Group List",
     disabled: false,
     href: PREFIX + "/admin/board",
   },
   {
-    title: general.group.id,
+    title: `${general.group.id} Group`,
     disabled: true,
     href: PREFIX + "/admin/board/group/" + general.group.id,
   },
@@ -68,6 +68,9 @@ const breadcrumbs = [
 watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.group.id = route.params?.id.toString()
+    if (admin.menu < MENU.GROUP.GENERAL) {
+      admin.menu = MENU.GROUP.GENERAL
+    }
   }
 })
 </script>
