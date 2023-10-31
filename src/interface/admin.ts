@@ -55,3 +55,10 @@ export interface AdminUserActivity {
   comment: number
   download: number
 }
+
+export interface AdminGroupList {
+  uid: number
+  id: string
+  info: string
+  admin: string
+}

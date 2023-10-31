@@ -6,24 +6,23 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { AdminPairItem } from "../../../interface/admin"
+import { AdminPairItem, AdminGroupList } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const admin = useAdminStore()
-  const group = ref<{
-    uid: number
-    id: string
-    width: number
-    rows: number
-  }>({
+  const group = ref<AdminPairItem>({
     uid: 1,
-    id: "default",
-    width: 1200,
-    rows: 20,
+    name: "default",
   })
+  const boards = ref<AdminGroupList[]>([
+    { uid: 1, id: "test", info: "테스트용 게시판 입니다.", admin: "master01" },
+    { uid: 2, id: "test2", info: "테스트용 게시판 2 입니다.", admin: "master02" },
+    { uid: 3, id: "free", info: "자유롭게 얘기 나눌 수 있는 게시판입니다.", admin: "master03" },
+  ])
 
   return {
     group,
+    boards,
   }
 })

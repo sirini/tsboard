@@ -12,7 +12,7 @@
                   density="compact"
                   disabled
                   hide-details
-                  prepend-inner-icon="mdi-pencil-off"
+                  prepend-inner-icon="mdi-identifier"
                 >
                 </v-text-field>
               </v-col>
