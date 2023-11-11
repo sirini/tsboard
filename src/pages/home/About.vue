@@ -145,7 +145,7 @@ const util = useUtilStore()
   margin-top: 64px;
 }
 .title {
-  font-family: "Oswald", sans-serif;
+  font-family: "Grandiflora One", cursive;
 }
 .about {
   font-size: 1em;

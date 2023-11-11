@@ -1,43 +1,9 @@
 <template>
   <v-app-bar flat rounded="0">
     <v-toolbar color="white" class="toolbar">
+      <v-app-bar-nav-icon icon="mdi-code-tags-check"></v-app-bar-nav-icon>
       <v-app-bar-title>
-        <span class="logo" @click="util.go('home')">TSBOARD</span>
-
-        <v-btn size="large" class="firstTopButton btn"
-          >BOARD
-          <v-menu activator="parent" open-on-hover>
-            <v-list>
-              <v-list-item
-                v-for="(board, index) in boards"
-                :key="index"
-                @click="util.go('boardList', board.id)"
-              >
-                <v-list-item-title
-                  >{{ board.name }}
-                  <v-tooltip activator="parent">{{ board.info }}</v-tooltip>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-        <v-btn size="large" class="btn">
-          GALLERY
-          <v-menu activator="parent" open-on-hover>
-            <v-list>
-              <v-list-item
-                v-for="(gallery, index) in galleries"
-                :key="index"
-                @click="util.go('galleryList', gallery.id)"
-              >
-                <v-list-item-title>
-                  {{ gallery.name }}
-                  <v-tooltip activator="parent">{{ gallery.info }}</v-tooltip>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
+        <span class="logo" @click="util.go('home')">tsboard.dev</span>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
@@ -78,42 +44,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
 
 const auth = useAuthStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
-
-interface Menu {
-  id: string
-  name: string
-  info: string
-}
-const boards = ref<Menu[]>([
-  {
-    id: "test",
-    name: "테스트 게시판",
-    info: "IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.",
-  },
-])
-const galleries = ref<Menu[]>([
-  {
-    id: "test",
-    name: "테스트 갤러리",
-    info: "인스타그램 느낌이 1g 정도 담긴 사진 갤러리 구성중입니다.",
-  },
-])
 </script>
 
 <style type="scss" scoped>
 .toolbar {
   .logo {
-    position: absolute;
-    top: 18px;
-    left: 60px;
-    font-family: "Oswald", sans-serif;
+    font-family: "Grandiflora One", cursive;
     font-size: 1.3em;
     cursor: pointer;
     font-weight: bold;
@@ -122,7 +64,7 @@ const galleries = ref<Menu[]>([
     margin-left: 170px;
   }
   .btn {
-    font-family: "Oswald", sans-serif;
+    font-family: "Grandiflora One", cursive;
     font-size: 1em;
   }
 }

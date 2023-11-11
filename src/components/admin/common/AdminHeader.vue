@@ -57,7 +57,7 @@ const admin = useAdminStore()
     position: absolute;
     top: 18px;
     left: 60px;
-    font-family: "Oswald", sans-serif;
+    font-family: "Grandiflora One", cursive;
     font-size: 1.3em;
     cursor: pointer;
     font-weight: bold;
@@ -66,7 +66,7 @@ const admin = useAdminStore()
     margin-left: 230px;
   }
   .btn {
-    font-family: "Oswald", sans-serif;
+    font-family: "Grandiflora One", cursive;
     font-size: 1em;
   }
 }

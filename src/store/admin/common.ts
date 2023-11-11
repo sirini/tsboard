@@ -15,13 +15,14 @@ export const MENU = {
     POINT: 2,
   },
   GROUP: {
-    GENERAL: 3,
-    PERMISSION: 4,
-    POINT: 5,
+    GENERAL: 10,
+  },
+  GROUPLIST: {
+    GENERAL: 20,
   },
   MEMBER: {
-    GENERAL: 6,
-  }
+    GENERAL: 30,
+  },
 }
 
 export const useAdminStore = defineStore("admin", () => {

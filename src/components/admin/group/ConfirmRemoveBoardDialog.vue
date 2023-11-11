@@ -1,7 +1,7 @@
 <template>
   <v-dialog width="500" v-model="general.confirmRemoveBoardDialog" persistent>
     <v-card class="mx-auto">
-      <v-card-text class="text mb-2">
+      <v-card-text class="text pa-3 mb-2">
         <v-alert
           type="error"
           text="아래의 내용을 꼼꼼히 확인하세요"

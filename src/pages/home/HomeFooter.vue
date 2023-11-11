@@ -32,7 +32,7 @@ const util = useUtilStore()
 .footer {
   margin-top: 80px;
   .bottom {
-    font-family: "Oswald", sans-serif;
+    font-family: "Grandiflora One", cursive;
     color: #9e9e9e;
     font-size: 0.9em;
   }
