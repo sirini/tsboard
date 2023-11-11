@@ -100,6 +100,10 @@ watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.board.id = route.params?.id.toString()
   }
+
+  if (admin.menu > MENU.BOARD.POINT) {
+    admin.menu = MENU.BOARD.GENERAL
+  }
 })
 </script>
 

@@ -1,11 +1,18 @@
 <template>
   <v-dialog width="500" v-model="general.confirmRemoveBoardDialog" persistent>
     <v-card class="mx-auto">
-      <v-card-title>중요! 게시판이 삭제됩니다!</v-card-title>
-      <v-divider></v-divider>
       <v-card-text class="text mb-2">
-        {{ general.removeBoardTarget.name }} 게시판을 정말로 삭제하시겠습니까? 해당 게시판에 기록된
-        글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 계속 진행하시겠습니까?
+        <v-alert
+          type="error"
+          text="아래의 내용을 꼼꼼히 확인하세요"
+          icon="mdi-alert"
+          class="mb-5"
+        ></v-alert>
+        <span class="red"
+          >{{ general.removeBoardTarget.name }} 게시판을 정말로 삭제하시겠습니까?</span
+        >
+        해당 게시판에 기록된 글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 계속
+        진행하시겠습니까?
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
@@ -47,5 +54,9 @@ function remove(): void {
 .text {
   font-size: 1em;
   line-height: 1.8em;
+}
+
+.red {
+  color: red;
 }
 </style>

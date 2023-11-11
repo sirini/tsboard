@@ -33,9 +33,9 @@
     "pinia": "^2.0.0",
     "roboto-fontface": "*",
     "sharp": "^0.32.6",
-    "vue": "^3.2.0",
+    "vue": "^3.3.8",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.3.22"
+    "vuetify": "^3.4.0"
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",

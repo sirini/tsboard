@@ -9,7 +9,7 @@
           </v-tooltip>
         </v-btn>
         <v-btn color="red"
-          >지불
+          >차감
           <v-tooltip activator="parent">
             회원이 {{ name }} 시 {{ parseInt(target) }} 만큼 포인트를 지불하도록 합니다.
           </v-tooltip>
@@ -32,7 +32,7 @@
       </v-text-field>
     </v-col>
     <v-col class="mt-2">
-      회원이 {{ name }} 시 포인트를 충전 혹은 지불할 수 있도록 합니다. (0 = 해당없음)
+      회원이 {{ name }} 시 포인트를 충전 혹은 차감할 수 있도록 합니다. (0 = 해당없음)
     </v-col>
   </v-row>
 </template>
