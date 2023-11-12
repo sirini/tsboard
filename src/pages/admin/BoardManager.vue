@@ -2,11 +2,6 @@
   <v-app>
     <admin-header></admin-header>
     <v-container class="admin">
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-chevron-right"></v-icon>
-        </template>
-      </v-breadcrumbs>
       <v-card class="mx-auto rounded-lg" variant="outlined">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 설정</v-card-title
@@ -62,6 +57,7 @@ import { watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore, MENU } from "../../store/admin/common"
 import { useAdminBoardGeneralStore } from "../../store/admin/board/general"
+import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardManagerGeneral from "../../components/admin/board/BoardManagerGeneral.vue"
@@ -72,33 +68,29 @@ import ConfirmRemoveCategoryDialog from "../../components/admin/board/ConfirmRem
 const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
-const PREFIX = process.env.PREFIX || ""
-const breadcrumbs = [
-  {
-    title: "Admin",
-    disabled: false,
-    href: PREFIX + "/admin",
-  },
-  {
-    title: "Group List",
-    disabled: false,
-    href: PREFIX + "/admin/board",
-  },
-  {
-    title: `${general.board.group.selected} Group`,
-    disabled: false,
-    href: PREFIX + "/admin/board/group/" + general.board.group.selected,
-  },
-  {
-    title: general.board.id,
-    disabled: true,
-    href: PREFIX + "/admin/board/" + general.board.id,
-  },
-]
+
+const level1: AdminBreadcrumb = {
+  title: `게시판 그룹 목록`,
+  disabled: false,
+  href: `${process.env.PREFIX}/admin/board`,
+}
+
+const level2: AdminBreadcrumb = {
+  title: `${general.board.group.selected} 그룹`,
+  disabled: false,
+  href: `${process.env.PREFIX}/admin/board/group/${general.board.group.selected}`,
+}
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.board.id = route.params?.id.toString()
+
+    const level3: AdminBreadcrumb = {
+      title: `${general.board.id} 게시판 관리`,
+      disabled: true,
+      href: `${process.env.PREFIX}/admin/board/${general.board.id}`,
+    }
+    admin.setBreadcrumbs(level1, level2, level3)
   }
 
   if (admin.menu > MENU.BOARD.POINT) {

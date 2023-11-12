@@ -4,30 +4,17 @@
       <v-list-item class="mb-2">
         <v-row>
           <v-col cols="3">
-            <v-row>
-              <v-col cols="8">
-                <v-text-field
-                  v-model="general.board.id"
-                  variant="outlined"
-                  density="compact"
-                  disabled
-                  hide-details
-                  prepend-inner-icon="mdi-identifier"
-                >
-                </v-text-field>
-              </v-col>
-              <v-col>
-                <v-btn
-                  icon
-                  size="small"
-                  elevation="0"
-                  @click="router.push({ name: 'board', params: { id: general.board.id } })"
-                >
-                  <v-icon>mdi-link-variant</v-icon>
-                  <v-tooltip activator="parent"> 클릭하시면 게시판을 보러 이동합니다. </v-tooltip>
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-text-field
+              v-model="general.board.id"
+              variant="outlined"
+              density="compact"
+              readonly
+              hide-details
+              prepend-inner-icon="mdi-identifier"
+              append-icon="mdi-link-variant"
+              @click:append="router.push({ name: 'boardList', params: { id: general.board.id } })"
+            >
+            </v-text-field>
           </v-col>
           <v-col class="mt-2"> 게시판 아이디는 생성 후 변경이 불가능 합니다. </v-col>
         </v-row>

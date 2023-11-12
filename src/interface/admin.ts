@@ -4,16 +4,10 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
-export interface AdminMenuBoard {
-  uid: number
-  name: string
-  info: string
-}
-
-export interface AdminMenuBoardGroup {
-  uid: number
-  name: string
-  boards: AdminMenuBoard[]
+export interface AdminBreadcrumb {
+  title: string
+  disabled: boolean
+  href: string
 }
 
 export interface AdminPairItem {

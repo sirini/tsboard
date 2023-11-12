@@ -2,11 +2,6 @@
   <v-app>
     <admin-header></admin-header>
     <v-container class="admin">
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-chevron-right"></v-icon>
-        </template>
-      </v-breadcrumbs>
       <v-card class="mx-auto rounded-lg" variant="outlined">
         <v-card-title>{{ general.group.id }} 그룹 관리</v-card-title>
         <v-divider></v-divider>
@@ -39,6 +34,7 @@ import { watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore, MENU } from "../../store/admin/common"
 import { useAdminGroupGeneralStore } from "../../store/admin/group/general"
+import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardGroupGeneral from "../../components/admin/group/BoardGroupGeneral.vue"
@@ -46,28 +42,25 @@ import BoardGroupGeneral from "../../components/admin/group/BoardGroupGeneral.vu
 const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminGroupGeneralStore()
-const PREFIX = process.env.PREFIX || ""
-const breadcrumbs = [
-  {
-    title: "Admin",
-    disabled: false,
-    href: PREFIX + "/admin",
-  },
-  {
-    title: "Group List",
-    disabled: false,
-    href: PREFIX + "/admin/board",
-  },
-  {
-    title: `${general.group.id} Group`,
-    disabled: true,
-    href: PREFIX + "/admin/board/group/" + general.group.id,
-  },
-]
+
+const level1: AdminBreadcrumb = {
+  title: `게시판 그룹 목록`,
+  disabled: false,
+  href: `${process.env.PREFIX}/admin/board`,
+}
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.group.id = route.params?.id.toString()
+
+    const level2: AdminBreadcrumb = {
+      title: `${general.group.id} 그룹`,
+      disabled: false,
+      href: `${process.env.PREFIX}/admin/board/group/${general.group.id}`,
+    }
+
+    admin.setBreadcrumbs(level1, level2)
+
     if (admin.menu < MENU.GROUP.GENERAL) {
       admin.menu = MENU.GROUP.GENERAL
     }

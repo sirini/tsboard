@@ -2,11 +2,6 @@
   <v-app>
     <admin-header></admin-header>
     <v-container class="admin">
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-chevron-right"></v-icon>
-        </template>
-      </v-breadcrumbs>
       <v-card class="mx-auto rounded-lg" variant="outlined">
         <v-card-title>그룹들 관리</v-card-title>
         <v-divider></v-divider>
@@ -38,25 +33,21 @@
 import { watchEffect } from "vue"
 import { useAdminStore, MENU } from "../../store/admin/common"
 import { useAdminGroupListStore } from "../../store/admin/group/list"
+import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import GroupListGeneral from "../../components/admin/grouplist/GroupListGeneral.vue"
 
 const admin = useAdminStore()
 const list = useAdminGroupListStore()
-const PREFIX = process.env.PREFIX || ""
-const breadcrumbs = [
-  {
-    title: "Admin",
-    disabled: false,
-    href: PREFIX + "/admin",
-  },
-  {
-    title: "Group List",
-    disabled: true,
-    href: PREFIX + "/admin/board",
-  },
-]
+
+const level1: AdminBreadcrumb = {
+  title: `게시판 그룹 목록`,
+  disabled: false,
+  href: `${process.env.PREFIX}/admin/board`,
+}
+
+admin.setBreadcrumbs(level1)
 
 watchEffect(() => {
   if (admin.menu !== MENU.GROUPLIST.GENERAL) {
