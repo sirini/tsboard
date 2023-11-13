@@ -8,39 +8,32 @@
         <v-layout>
           <v-navigation-drawer permanent location="left" width="250">
             <v-list>
-              <v-list-item
-                prepend-icon="mdi-cog-outline"
-                append-icon="mdi-chevron-right"
-                @click="admin.menu = MENU.GROUPLIST.GENERAL"
-              >
-                <strong v-if="admin.menu === MENU.GROUPLIST.GENERAL">일반</strong>
-                <span v-else>일반</span>
+              <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right">
+                <strong>일반</strong>
               </v-list-item>
             </v-list>
           </v-navigation-drawer>
 
           <v-main class="main">
-            <group-list-general v-if="admin.menu === MENU.GROUPLIST.GENERAL"></group-list-general>
+            <group-list-general></group-list-general>
           </v-main>
         </v-layout>
       </v-card>
     </v-container>
     <admin-footer></admin-footer>
+    <confirm-remove-group-dialog></confirm-remove-group-dialog>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from "vue"
-import { useAdminStore, MENU } from "../../store/admin/common"
-import { useAdminGroupListStore } from "../../store/admin/group/list"
+import { useAdminStore } from "../../store/admin/common"
 import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import GroupListGeneral from "../../components/admin/grouplist/GroupListGeneral.vue"
+import ConfirmRemoveGroupDialog from "../../components/admin/grouplist/ConfirmRemoveGroupDialog.vue"
 
 const admin = useAdminStore()
-const list = useAdminGroupListStore()
-
 const level1: AdminBreadcrumb = {
   title: `게시판 그룹 목록`,
   disabled: false,
@@ -48,12 +41,6 @@ const level1: AdminBreadcrumb = {
 }
 
 admin.setBreadcrumbs(level1)
-
-watchEffect(() => {
-  if (admin.menu !== MENU.GROUPLIST.GENERAL) {
-    admin.menu = MENU.GROUPLIST.GENERAL
-  }
-})
 </script>
 
 <style scoped>

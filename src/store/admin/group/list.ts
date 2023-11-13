@@ -63,6 +63,29 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     newGroupId.value = ""
   }
 
+  // 그룹 삭제하기 확인
+  function confirmRemoveGroup(uid: number, id: string): void {
+    removeGroupTarget.value.uid = uid
+    removeGroupTarget.value.name = id
+    confirmRemoveGroupDialog.value = true
+  }
+
+  // 그룹 삭제하기
+  async function removeGroup(): Promise<void> {
+    if (removeGroupTarget.value.uid < 2) {
+      admin.snack("기본 그룹은 삭제할 수 없습니다.", "error")
+      return
+    }
+    // do something with uid
+    groups.value = groups.value.filter((group: AdminGroupConfig) => {
+      return group.uid !== removeGroupTarget.value.uid
+    })
+    admin.snack(
+      "선택하신 그룹을 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 옮겼습니다.",
+      "success",
+    )
+  }
+
   return {
     groups,
     removeGroupTarget,
@@ -71,5 +94,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     existGroupIds,
     updateExistGroupIds,
     createNewGroup,
+    confirmRemoveGroup,
+    removeGroup,
   }
 })

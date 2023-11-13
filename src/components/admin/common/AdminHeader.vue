@@ -1,13 +1,21 @@
 <template>
   <v-app-bar flat rounded="0">
-    <v-app-bar-nav-icon icon="mdi-cog-outline" @click="router.push({ name: 'admin' })">
-    </v-app-bar-nav-icon>
+    <v-btn icon @click="router.push({ name: 'admin' })"><v-icon>mdi-cog-outline</v-icon>
+      <v-tooltip activator="parent">클릭하시면 관리화면 첫 페이지로 이동합니다</v-tooltip>
+    </v-btn>
 
     <v-breadcrumbs :items="breadcrumb">
       <template v-slot:divider>
         <v-icon icon="mdi-chevron-right"></v-icon>
       </template>
     </v-breadcrumbs>
+
+    <v-spacer></v-spacer>
+
+    <v-btn icon @click="router.push({ name: 'home' })"
+      ><v-icon>mdi-home</v-icon>
+      <v-tooltip activator="parent">클릭하시면 웹사이트 홈 화면으로 이동합니다</v-tooltip>
+    </v-btn>
   </v-app-bar>
 </template>
 

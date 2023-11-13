@@ -25,13 +25,13 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   })
   const confirmRemoveBoardDialog = ref<boolean>(false)
   const boards = ref<AdminGroupList[]>([
-    { uid: 1, id: "test", info: "테스트용 게시판 입니다.", admin: "master01_sample@test.com" },
-    { uid: 2, id: "test2", info: "테스트용 게시판 2 입니다.", admin: "master02@naver.com" },
+    { uid: 1, id: "test", info: "테스트용 게시판 입니다.", manager: "master01_sample@test.com" },
+    { uid: 2, id: "test2", info: "테스트용 게시판 2 입니다.", manager: "master02@naver.com" },
     {
       uid: 3,
       id: "free",
       info: "자유롭게 얘기 나눌 수 있는 게시판입니다.",
-      admin: "master03.lab@tsboard.dev",
+      manager: "master03.lab@tsboard.dev",
     },
   ])
   const existBoardIds = ref<AdminGroupList[]>(boards.value)
@@ -87,7 +87,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       uid: 10,
       id: newId,
       info: "",
-      admin: "",
+      manager: "",
     })
     admin.snack(
       `${newId} 게시판이 성공적으로 추가 되었습니다. 상세 게시판 수정은 게시판 수정하기 기능을 이용해 주세요.`,

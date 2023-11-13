@@ -8,25 +8,7 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { AdminBreadcrumb } from "../../interface/admin"
 
-export const MENU = {
-  BOARD: {
-    GENERAL: 0,
-    PERMISSION: 1,
-    POINT: 2,
-  },
-  GROUP: {
-    GENERAL: 10,
-  },
-  GROUPLIST: {
-    GENERAL: 20,
-  },
-  MEMBER: {
-    GENERAL: 30,
-  },
-}
-
 export const useAdminStore = defineStore("admin", () => {
-  const menu = ref<number>(MENU.BOARD.GENERAL)
   const snackbar = ref<boolean>(false)
   const snackbarMessage = ref<string>("")
   const snackbarTimeout = ref<number>(3000)
@@ -63,7 +45,6 @@ export const useAdminStore = defineStore("admin", () => {
   }
 
   return {
-    menu,
     snackbar,
     snackbarMessage,
     snackbarTimeout,

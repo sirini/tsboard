@@ -8,7 +8,6 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { AdminBoardPoint } from "../../../interface/admin"
 import { useAdminStore } from "../common"
-import { useAdminBoardGeneralStore } from "./general"
 
 export const ACTION = {
   VIEW: 0,
@@ -19,7 +18,6 @@ export const ACTION = {
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const admin = useAdminStore()
-  const general = useAdminBoardGeneralStore()
   const view = ref<AdminBoardPoint>({ payment: 1, point: 0 })
   const write = ref<AdminBoardPoint>({ payment: 0, point: 0 })
   const comment = ref<AdminBoardPoint>({ payment: 0, point: 0 })

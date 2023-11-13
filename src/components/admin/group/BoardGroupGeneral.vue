@@ -89,7 +89,7 @@
           </v-col>
           <v-col cols="3">
             <v-text-field
-              v-model="board.admin"
+              v-model="board.manager"
               variant="outlined"
               density="compact"
               width="100"

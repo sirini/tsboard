@@ -54,11 +54,17 @@ export interface AdminGroupList {
   uid: number
   id: string
   info: string
-  admin: string
+  manager: string
 }
 
 export interface AdminGroupConfig {
   uid: number
   id: string
   manager: AdminPairItem
+}
+
+export interface AdminHomeSimpleStatus {
+  total: number
+  yesterday: number
+  today: number
 }
