@@ -1,10 +1,10 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
         <v-container>
-          <v-row>
+          <v-row class="mt-6">
             <v-col>
               <v-card>
                 <v-card-title>공지사항</v-card-title>
@@ -44,6 +44,9 @@ const home = useHomeStore()
 </script>
 
 <style scoped>
+.app {
+  background-color: #eceff1;
+}
 .layout {
   margin-top: 64px;
 }

@@ -5,12 +5,11 @@
       <v-divider></v-divider>
       <v-card-text class="text mb-2">
         <strong>{{ list.removeGroupTarget.name }}</strong> 그룹을 정말로 삭제하시겠습니까? 삭제된
-        그룹 소속 게시판들은 모두 기본 그룹 소속으로 변경됩니다. 계속 진행하시겠습니까?
+        그룹 소속 게시판들은 모두 기본 그룹 소속으로 변경됩니다. 삭제를 시작할까요?
       </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn prepend-icon="mdi-check" color="primary" @click="close"
-          >이해했습니다, 그대로 유지할께요</v-btn
+      <v-card-actions class="pa-4">
+        <v-btn prepend-icon="mdi-close" rounded="xl" color="info" variant="tonal" @click="close"
+          >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
         <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제</v-btn>

@@ -1,22 +1,24 @@
 <template>
-  <v-footer class="footer">
-    <v-row>
-      <v-col>
-        <v-card elevation="0" rounded="0" class="mx-auto">
-          <v-card-actions>
-            <v-divider></v-divider>
-            <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('home')">첫화면</v-btn>
-            <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')"
-              >사이트 소개</v-btn
-            >
-            <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('bugReport')"
-              >버그 신고</v-btn
-            >
-            <v-divider></v-divider>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+  <v-footer class="footer" color="blue-grey-lighten-5">
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-card elevation="0" rounded="0" class="mx-auto" color="blue-grey-lighten-5">
+            <v-card-actions>
+              <v-divider></v-divider>
+              <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('home')">첫화면</v-btn>
+              <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')"
+                >사이트 소개</v-btn
+              >
+              <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('bugReport')"
+                >버그 신고</v-btn
+              >
+              <v-divider></v-divider>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-footer>
 </template>
 
@@ -30,11 +32,7 @@ const util = useUtilStore()
 
 <style type="scss" scoped>
 .footer {
-  margin-top: 80px;
-  .bottom {
-    font-family: "Grandiflora One", cursive;
-    color: #9e9e9e;
-    font-size: 0.9em;
-  }
+  margin-top: 100px;
+  min-height: 300px;
 }
 </style>

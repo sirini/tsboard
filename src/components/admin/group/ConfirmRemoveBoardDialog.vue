@@ -1,23 +1,15 @@
 <template>
   <v-dialog width="500" v-model="general.confirmRemoveBoardDialog" persistent>
     <v-card class="mx-auto">
-      <v-card-text class="text pa-3 mb-2">
-        <v-alert
-          type="error"
-          text="아래의 내용을 꼼꼼히 확인하세요"
-          icon="mdi-alert"
-          class="mb-5"
-        ></v-alert>
-        <span class="red"
-          >{{ general.removeBoardTarget.name }} 게시판을 정말로 삭제하시겠습니까?</span
-        >
-        해당 게시판에 기록된 글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 계속
-        진행하시겠습니까?
-      </v-card-text>
+      <v-card-title><v-icon color="error">mdi-alert</v-icon> 주의가 필요합니다</v-card-title>
       <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn prepend-icon="mdi-check" color="primary" @click="close"
-          >이해했습니다, 삭제하지 않겠습니다</v-btn
+      <v-card-text class="text">
+        {{ general.removeBoardTarget.name }} 게시판을 정말로 삭제하시겠습니까? 해당 게시판에 기록된
+        글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 삭제를 시작할까요?
+      </v-card-text>
+      <v-card-actions class="pa-4">
+        <v-btn prepend-icon="mdi-close" rounded="xl" variant="tonal" color="info" @click="close"
+          >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
         <v-btn prepend-icon="mdi-trash-can" @click="remove"

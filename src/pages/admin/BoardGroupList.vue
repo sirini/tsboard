@@ -1,25 +1,23 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <admin-header></admin-header>
-    <v-container class="admin">
-      <v-card class="mx-auto rounded-lg" variant="outlined">
-        <v-card-title>그룹들 관리</v-card-title>
-        <v-divider></v-divider>
-        <v-layout>
-          <v-navigation-drawer permanent location="left" width="250">
-            <v-list>
-              <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right">
-                <strong>일반</strong>
-              </v-list-item>
-            </v-list>
-          </v-navigation-drawer>
+    <v-card class="mx-auto rounded-lg admin" width="1200">
+      <v-card-title>그룹들 관리</v-card-title>
+      <v-divider></v-divider>
+      <v-layout>
+        <v-navigation-drawer permanent location="left" width="250">
+          <v-list>
+            <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right">
+              <strong>일반</strong>
+            </v-list-item>
+          </v-list>
+        </v-navigation-drawer>
 
-          <v-main class="main">
-            <group-list-general></group-list-general>
-          </v-main>
-        </v-layout>
-      </v-card>
-    </v-container>
+        <v-main class="main">
+          <group-list-general></group-list-general>
+        </v-main>
+      </v-layout>
+    </v-card>
     <admin-footer></admin-footer>
     <confirm-remove-group-dialog></confirm-remove-group-dialog>
   </v-app>
@@ -44,8 +42,11 @@ admin.setBreadcrumbs(level1)
 </script>
 
 <style scoped>
+.app {
+  background-color: #eceff1;
+}
 .admin {
-  margin-top: 64px;
+  margin-top: 100px;
 }
 
 .main {

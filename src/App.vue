@@ -13,7 +13,7 @@
 
 <style>
 .v-application {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "IBM Plex Sans KR", sans-serif;
   font-weight: 400;
 }
 
