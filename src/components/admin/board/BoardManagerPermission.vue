@@ -10,7 +10,8 @@
               density="compact"
               hide-details
               @keyup="permission.updateBoardManagerSuggestion"
-              append-inner-icon="mdi-chevron-down"
+              @click:append-inner="permission.updateBoardManager()"
+              append-inner-icon="mdi-cancel"
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>

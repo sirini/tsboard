@@ -9,6 +9,12 @@ import { defineStore } from "pinia"
 import { useAdminStore } from "../common"
 import { AdminHomeSimpleStatus } from "../../../interface/admin"
 
+export interface AdminHomeDate {
+  year: string
+  month: string
+  date: string
+}
+
 export const useAdminHomeMainStore = defineStore("adminHomeMain", () => {
   const admin = useAdminStore()
   const visit = ref<AdminHomeSimpleStatus>({
@@ -27,9 +33,24 @@ export const useAdminHomeMainStore = defineStore("adminHomeMain", () => {
     today: 21,
   })
 
+  // 현재 연월일 반환
+  function today(): AdminHomeDate {
+    let result = ""
+    const d = new Date()
+    const year = `${d.getFullYear()}`
+    const month = `0${d.getMonth() + 1}`.slice(1)
+    const date = `0${d.getDate()}`.slice(1)
+    return {
+      year,
+      month,
+      date,
+    }
+  }
+
   return {
     visit,
     member,
     post,
+    today,
   }
 })

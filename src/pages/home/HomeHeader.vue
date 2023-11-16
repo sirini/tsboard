@@ -1,8 +1,8 @@
 <template>
-  <v-app-bar flat rounded="0">
+  <v-app-bar flat rounded="0" color="blue-grey-lighten-5">
     <v-container>
-      <v-toolbar color="white">
-        <v-app-bar-title @click="util.go('home')">
+      <v-toolbar>
+        <v-app-bar-title @click="util.go('home')" class="pointer">
           <v-icon>mdi-alpha-t-box</v-icon>
           <v-icon>mdi-alpha-s-box</v-icon>
           <v-icon>mdi-alpha-b-box-outline</v-icon>
@@ -58,3 +58,9 @@ const auth = useAuthStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 </script>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

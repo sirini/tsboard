@@ -11,8 +11,12 @@
                 class="mx-2 tsboard"
                 rounded="xl"
                 @click="router.push({ name: 'tsboard' })"
-                >TSBOARD.DEV</v-btn
-              >
+                >TSBOARD.DEV
+                <v-tooltip activator="parent" location="bottom">
+                  클릭하시면 TSBOARD 공식 사이트로 이동합니다! 이곳에서 궁금하신 내용을 물어보거나,
+                  다른 사용자분들의 팁들을 배워 보실 수 있습니다!
+                </v-tooltip>
+              </v-btn>
               <v-divider></v-divider>
             </v-card-actions>
           </v-card>
@@ -42,7 +46,7 @@ const admin = useAdminStore()
 .footer {
   margin-top: 80px;
   .tsboard {
-    font-family: "Edu TAS Beginner", cursive;
+    font-family: "IBM Plex Sans KR", sans-serif;
     color: #9e9e9e;
     font-size: 0.9em;
   }

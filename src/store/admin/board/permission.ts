@@ -41,12 +41,19 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     timer = setTimeout(() => {
       suggestions.value = dbresult.value.filter((user: AdminPairItem) => {
         return user.name.indexOf(manager.value.name) > -1
-      })  
+      })
     }, 200)
   }
 
   // 선택한 회원을 관리자로 지정하기
-  async function updateBoardManager(user: AdminPairItem): Promise<void> {
+  async function updateBoardManager(user?: AdminPairItem): Promise<void> {
+    if (user === undefined) {
+      manager.value.uid = 0
+      manager.value.name = ""
+      admin.snack(`게시판 관리자를 따로 지정하지 않습니다.`, "success")
+      return
+    }
+
     // do something with user.uid, user.name
     manager.value.uid = user.uid
     manager.value.name = user.name

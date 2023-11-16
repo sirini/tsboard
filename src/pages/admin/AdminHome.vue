@@ -8,12 +8,12 @@
         <v-navigation-drawer permanent location="left" width="250">
           <v-list>
             <v-list-item
-              prepend-icon="mdi-monitor-dashboard"
+              prepend-icon="mdi-cog-outline"
               append-icon="mdi-chevron-right"
-              @click="menu = 'main'"
+              @click="menu = 'normal'"
             >
-              <strong v-if="menu === 'main'">메인</strong>
-              <span v-else>메인</span>
+              <strong v-if="menu === 'normal'">일반</strong>
+              <span v-else>일반</span>
             </v-list-item>
             <v-list-item
               prepend-icon="mdi-chart-areaspline"
@@ -27,7 +27,7 @@
         </v-navigation-drawer>
 
         <v-main class="main">
-          <admin-home-main v-if="menu === 'main'"></admin-home-main>
+          <admin-home-main v-if="menu === 'normal'"></admin-home-main>
           <admin-home-stat v-if="menu === 'stat'"></admin-home-stat>
         </v-main>
       </v-layout>
@@ -45,7 +45,7 @@ import AdminHomeMain from "../../components/admin/home/AdminHomeMain.vue"
 import AdminHomeStat from "../../components/admin/home/AdminHomeStat.vue"
 
 const admin = useAdminStore()
-const menu = ref<"main" | "stat">("main")
+const menu = ref<"normal" | "stat">("normal")
 
 admin.setBreadcrumbs()
 </script>
