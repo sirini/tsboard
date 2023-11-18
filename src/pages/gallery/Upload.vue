@@ -2,7 +2,6 @@
   <v-app>
     <home-header></home-header>
     <v-layout class="layout">
-      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto">
@@ -132,7 +131,6 @@ import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryUploadCancelDialog from "../../components/gallery/write/GalleryUploadCancelDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
-import SideDrawer from "../home/SideDrawer.vue"
 
 const gallery = useGalleryStore()
 const util = useUtilStore()

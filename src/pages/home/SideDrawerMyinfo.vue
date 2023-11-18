@@ -1,6 +1,7 @@
 <template>
-  <v-list>
+  <v-list density="compact">
     <v-list-subheader>내 정보</v-list-subheader>
+    <v-divider></v-divider>
     <v-list-item append-icon="mdi-chevron-right" @click="util.go('myinfo')">
       <template v-slot:prepend>
         <v-avatar>
@@ -13,21 +14,9 @@
       <v-list-item-subtitle>{{ auth.user.id }}</v-list-item-subtitle>
       <v-tooltip activator="parent"> 클릭하시면 내 정보를 수정하러 이동합니다. </v-tooltip>
     </v-list-item>
-  </v-list>
-
-  <v-list density="compact">
-    <v-divider></v-divider>
-    <v-list-item>
-      <v-chip variant="text" class="mr-2">포인트</v-chip> {{ auth.user.point }}점
-    </v-list-item>
-    <v-list-item>
-      <v-chip variant="text" class="mr-5">레벨</v-chip> {{ auth.user.level }}
-    </v-list-item>
-    <v-list-item>
-      <v-chip variant="text" class="mr-3">관리자</v-chip>
-      <strong v-if="auth.user.admin">YES</strong>
-      <span v-else>NO</span>
-    </v-list-item>
+    <v-list-item>포인트 {{ auth.user.point }} 점 </v-list-item>
+    <v-list-item>레벨 {{ auth.user.level }} </v-list-item>
+    <v-list-item v-if="auth.user.admin">환영합니다, 관리자님! </v-list-item>
     <v-divider></v-divider>
   </v-list>
 </template>

@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <home-header></home-header>
-    <v-layout>
+    <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto board">
@@ -80,6 +81,7 @@ import BoardListSearch from "../../components/board/list/BoardListSearch.vue"
 import UserNametag from "../../components/common/UserNametag.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
+import SideDrawer from "../home/SideDrawer.vue"
 
 const auth = useAuthStore()
 const board = useBoardStore()
@@ -136,12 +138,13 @@ const posts = ref<Post[]>([
 </script>
 
 <style type="scss" scoped>
+.layout {
+  margin-top: 64px;
+}
 .wrap {
-  min-height: calc(100vh - 54px);
+  min-height: calc(100vh - 118px);
 }
 .board {
-  margin-top: 80px;
-
   .list_item {
     border-bottom: 1px #ddd solid;
 

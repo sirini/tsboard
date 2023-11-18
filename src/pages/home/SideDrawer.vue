@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="home.drawer" width="250" :color="home.color">
+  <v-navigation-drawer v-model="home.drawer" width="250">
     <side-drawer-login v-if="auth.user.uid < 1"></side-drawer-login>
     <side-drawer-myinfo v-else></side-drawer-myinfo>
     <side-drawer-board-list></side-drawer-board-list>

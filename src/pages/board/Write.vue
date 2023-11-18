@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <home-header></home-header>
-    <v-layout>
+    <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board">
+          <v-card elevation="0" rounded="0" class="mx-auto">
             <v-form fast-fail @submit.prevent>
               <board-header></board-header>
               <v-alert
@@ -133,10 +133,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.layout {
+  margin-top: 64px;
+}
 .wrap {
   min-height: calc(100vh - 54px);
-}
-.board {
-  margin-top: 80px;
 }
 </style>

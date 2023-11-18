@@ -3,7 +3,7 @@
     <v-list-subheader>로그인</v-list-subheader>
     <v-list-item>
       <alert-bar class="mb-2"></alert-bar>
-      <v-card elevation="0" :color="home.color">
+      <v-card elevation="0">
         <v-text-field
           v-model="auth.id"
           variant="outlined"
