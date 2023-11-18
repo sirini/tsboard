@@ -13,7 +13,7 @@
       <v-card-text>
         <v-card variant="tonal" class="mt-2 mb-5">
           <v-card-text class="pa-3">
-            본문에 이미지를 추가하기 위한 업로드는 가로폭이 {{ board.width }}px 보다 클 경우
+            본문에 이미지를 추가하기 위한 업로드는 가로폭이 <strong>1000px</strong> 보다 클 경우
             자동으로 줄여서 저장됩니다. 원본 크기로 첨부가 필요할 경우 파일 첨부 기능을
             이용하세요!</v-card-text
           >
