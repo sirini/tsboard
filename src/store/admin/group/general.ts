@@ -14,6 +14,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   const group = ref<AdminGroupConfig>({
     uid: 1,
     id: "default",
+    count: 3,
     manager: {
       uid: 11,
       name: "admin_sample@test.com",

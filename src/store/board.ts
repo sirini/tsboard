@@ -19,7 +19,6 @@ export const useBoardStore = defineStore("board", () => {
   const addVideoURLDialog = ref<boolean>(false)
   const addTableDialog = ref<boolean>(false)
   const confirmCancelDialog = ref<boolean>(false)
-  const width = ref<number>(1200)
   const categories = ref<Pair[]>([
     { uid: 1, name: "news" },
     { uid: 2, name: "test" },
@@ -40,7 +39,6 @@ export const useBoardStore = defineStore("board", () => {
     addVideoURLDialog,
     addTableDialog,
     confirmCancelDialog,
-    width,
     categories,
     like,
   }

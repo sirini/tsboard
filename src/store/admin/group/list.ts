@@ -12,9 +12,9 @@ import { useAdminStore } from "../common"
 export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   const admin = useAdminStore()
   const groups = ref<AdminGroupConfig[]>([
-    { uid: 1, id: "default", manager: { uid: 2, name: "admin_sample@test.com" } },
-    { uid: 2, id: "sample", manager: { uid: 5, name: "admin8@user.com" } },
-    { uid: 3, id: "test", manager: { uid: 6, name: "olduser@example.com" } },
+    { uid: 1, id: "default", count: 3, manager: { uid: 2, name: "admin_sample@test.com" } },
+    { uid: 2, id: "sample", count: 2, manager: { uid: 5, name: "admin8@user.com" } },
+    { uid: 3, id: "test", count: 1, manager: { uid: 6, name: "olduser@example.com" } },
   ])
   const removeGroupTarget = ref<AdminPairItem>({
     uid: 0,
@@ -54,6 +54,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     groups.value.push({
       uid: 10,
       id: newId,
+      count: 0,
       manager: { uid: 0, name: "" },
     })
     admin.snack(

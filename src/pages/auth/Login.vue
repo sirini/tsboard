@@ -3,8 +3,8 @@
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
-        <v-container>
-          <v-card elevation="0" rounded="0" class="mx-auto" width="500">
+        <v-container class="wrap">
+          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
             <v-card-title class="login_title"
               >로그인
               <span class="info ml-3 pl-3">아이디(이메일) 및 비밀번호를 입력해 주세요</span>
@@ -68,24 +68,29 @@
 import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
+import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
 const visible = ref<boolean>(false)
+
+home.color = "blue-grey-lighten-5"
 </script>
 
 <style scoped>
 .layout {
   margin-top: 64px;
 }
-
+.wrap {
+  min-height: calc(100vh - 118px);
+}
 .login_title {
   border-bottom: 1px #828282 solid;
 }
-
 .info {
   color: #828282;
   font-size: 0.65em;

@@ -12,7 +12,7 @@
               hide-details
               prepend-inner-icon="mdi-identifier"
               append-icon="mdi-link-variant"
-              @click:append="router.push({ name: 'boardList', params: { id: general.board.id } })"
+              @click:append="util.go('boardList', general.board.id)"
             >
             </v-text-field>
           </v-col>
@@ -25,7 +25,7 @@
         <v-row>
           <v-col cols="3">
             <v-text-field
-              v-model="general.board.group.selected"
+              v-model="general.board.group"
               readonly
               variant="outlined"
               density="compact"
@@ -35,7 +35,7 @@
               <v-menu activator="parent" open-on-hover>
                 <v-list>
                   <v-list-item
-                    v-for="(group, index) in general.board.group.list"
+                    v-for="(group, index) in general.groups"
                     :key="index"
                     @click="general.changeGroup(group)"
                   >
@@ -102,23 +102,31 @@
       <v-list-item class="mt-2 mb-2">
         <v-row>
           <v-col cols="3">
-            <v-text-field
-              v-model="general.board.width"
-              variant="outlined"
-              density="compact"
-              hide-details
-              append-inner-icon="mdi-content-save"
-              @click:append-inner="general.changeWidth"
-            >
-              <v-tooltip activator="parent">
-                가로폭 지정 후 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면
-                저장됩니다.
-              </v-tooltip>
-            </v-text-field>
+            <v-btn-toggle v-model="general.board.type" mandatory>
+              <v-btn
+                value="board"
+                prepend-icon="mdi-table-large"
+                @click="general.changeType"
+                color="primary"
+                >게시판
+                <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
+              </v-btn>
+              <v-btn
+                value="gallery"
+                prepend-icon="mdi-view-gallery-outline"
+                @click="general.changeType"
+                color="primary"
+                >갤러리
+                <v-tooltip activator="parent"
+                  >업로드 된 사진들이 미리 보여지고, 별도의 이미지 뷰어를 사용하는 갤러리 형식으로
+                  사용합니다.</v-tooltip
+                >
+              </v-btn>
+            </v-btn-toggle>
           </v-col>
           <v-col class="mt-2">
-            게시판 가로폭을 지정해 보세요. (300 이상 10000 이하, px 단위)
-          </v-col>
+            게시판 형태를 일반적인 게시판 형식 혹은 갤러리 형식으로 지정할 수 있습니다.</v-col
+          >
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -198,8 +206,10 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 
 const router = useRouter()
+const util = useUtilStore()
 const general = useAdminBoardGeneralStore()
 </script>

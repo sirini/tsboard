@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar density="compact" class="write_editor_menu">
+  <v-toolbar density="compact" class="write_editor_menu" :color="home.color">
     <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
       ><v-icon>mdi-format-bold</v-icon>
       <v-tooltip activator="parent" location="top">글자 굵게</v-tooltip>
@@ -293,6 +293,7 @@ import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
 import { useBoardStore } from "../../../store/board"
+import { useHomeStore } from "../../../store/home"
 import { VideoURL, TableOption } from "../../../interface/board"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
 import BoardWriteEditorAddImageFromDBDialog from "./BoardWriteEditorAddImageFromDBDialog.vue"
@@ -302,6 +303,7 @@ import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue
 import "../../../assets/board/editor.scss"
 
 const board = useBoardStore()
+const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
 }>()

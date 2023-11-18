@@ -1,7 +1,7 @@
 <template>
   <v-list>
     <v-list-item class="pa-0" v-for="(co, index) in comments" :key="index">
-      <v-toolbar density="compact" class="pl-3 mt-4 comment_menu">
+      <v-toolbar density="compact" class="pl-3 mt-4 comment_menu" :color="home.color">
         <user-nametag
           :name="co.writer.name"
           :uid="co.writer.uid"
@@ -58,6 +58,7 @@
 import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
 import { Comment } from "../../../interface/board"
 import UserNametag from "../../common/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
@@ -65,6 +66,7 @@ import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 const auth = useAuthStore()
 const comment = useCommentStore()
 const util = useUtilStore()
+const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 const comments: Comment[] = [
   {

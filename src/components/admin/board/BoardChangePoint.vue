@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2" class="text-center">
-      <v-btn-toggle v-model="type">
+      <v-btn-toggle v-model="type" mandatory>
         <v-btn color="blue"
           >충전
           <v-tooltip activator="parent">

@@ -3,8 +3,8 @@
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
-        <v-container>
-          <v-card elevation="0" rounded="0" class="mx-auto" width="500">
+        <v-container class="wrap">
+          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
             <v-card-title class="find_password_title">
               비밀번호 찾기
               <span class="info ml-3 pl-3">비밀번호를 잊어버리셨나요?</span>
@@ -52,23 +52,28 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
+import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
+
+home.color = "blue-grey-lighten-5"
 </script>
 
 <style scoped>
 .layout {
   margin-top: 64px;
 }
-
+.wrap {
+  min-height: calc(100vh - 118px);
+}
 .find_password_title {
   border-bottom: 1px #828282 solid;
 }
-
 .info {
   color: #828282;
   font-size: 0.65em;

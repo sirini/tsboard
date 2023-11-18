@@ -2,8 +2,9 @@
   <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
-        <v-container>
+        <v-container class="wrap">
           <v-row class="mt-6">
             <v-col>
               <v-card>
@@ -28,6 +29,26 @@
             <v-col></v-col>
             <v-col></v-col>
           </v-row>
+          <v-row>
+            <v-col>
+              <v-card>
+                <v-card-title>바로가기 링크들</v-card-title>
+                <v-divider></v-divider>
+                <v-list>
+                  <v-list-item @click="util.go('boardList', 'test')" append-icon="mdi-chevron-right"
+                    >테스트 게시판</v-list-item
+                  >
+                  <v-list-item
+                    @click="util.go('galleryList', 'sample')"
+                    append-icon="mdi-chevron-right"
+                    >테스트 갤러리</v-list-item
+                  >
+                </v-list>
+              </v-card>
+            </v-col>
+            <v-col></v-col>
+            <v-col></v-col>
+          </v-row>
         </v-container>
         <home-footer></home-footer>
       </v-main>
@@ -37,15 +58,23 @@
 
 <script setup lang="ts">
 import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
+import SideDrawer from "./SideDrawer.vue"
 
 const home = useHomeStore()
+const util = useUtilStore()
+
+home.footerColor = "white"
 </script>
 
 <style scoped>
 .app {
   background-color: #eceff1;
+}
+.wrap {
+  min-height: calc(100vh - 118px);
 }
 .layout {
   margin-top: 64px;

@@ -15,14 +15,8 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const board = ref<AdminBoardConfig>({
     uid: 1,
     id: "test",
-    group: {
-      selected: "default",
-      list: [
-        { uid: 1, name: "another_group" },
-        { uid: 2, name: "sample_group" },
-        { uid: 3, name: "tsboard_group" },
-      ],
-    },
+    type: "board",
+    group: "default",
     name: "테스트 게시판",
     info: "이 게시판의 간단 설명입니다.",
     width: 1200,
@@ -39,11 +33,16 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ],
     },
   })
+  const groups = ref<AdminPairItem[]>([
+    { uid: 1, name: "sample_group" },
+    { uid: 2, name: "test_group" },
+    { uid: 3, name: "example_group" },
+  ])
 
   // 그룹 변경하기
   async function changeGroup(group: AdminPairItem): Promise<void> {
     // do something with board.value.uid
-    board.value.group.selected = group.name
+    board.value.group = group.name
     admin.snack(
       `${board.value.id} 게시판의 소속 그룹을 ${group.name} 으로 변경 하였습니다.`,
       "success",
@@ -111,15 +110,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     admin.snack("게시판 설명을 성공적으로 변경 하였습니다.", "success")
   }
 
-  async function changeWidth(): Promise<void> {
-    const width = board.value.width
-    if (width < 300 || width > 10000) {
-      admin.snack("게시판 가로폭은 최소 300 이상 최대 10000 이하로 입력해 주세요.", "error")
-      board.value.width = 1200
-      return
-    }
-    // do something with board.value.uid
-    admin.snack(`게시판 가로폭을 ${width} (으)로 변경 하였습니다.`, "success")
+  // 게시판 타입 변경하기
+  async function changeType(): Promise<void> {
+    // do something with board.value.type
+    admin.snack(`게시판 타입을 ${board.value.type}으(로) 변경 하였습니다.`, "success")
   }
 
   // 한 페이지에 표시할 게시글 개수 변경하기
@@ -137,10 +131,11 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   return {
     board,
     confirmRemoveCategoryDialog,
+    groups,
     changeGroup,
     changeName,
     changeInfo,
-    changeWidth,
+    changeType,
     changeRows,
     addCategory,
     confirmRemoveCategory,

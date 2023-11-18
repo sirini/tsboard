@@ -26,10 +26,13 @@
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-subheader>총 {{ list.groups.length }} 개의 게시판 그룹들</v-list-subheader>
+      <v-list-subheader
+        >총 {{ list.groups.length }} 개의 게시판 그룹들 (게시판 아이디 / 관리자 아이디 / 소속 게시판
+        개수)</v-list-subheader
+      >
       <v-list-item v-for="(group, index) in list.groups" :key="index">
         <v-row no-gutters>
-          <v-col cols="5">
+          <v-col cols="4">
             <v-text-field
               v-model="group.id"
               variant="outlined"
@@ -40,16 +43,31 @@
               prepend-inner-icon="mdi-identifier"
             ></v-text-field>
           </v-col>
-          <v-col cols="5">
+          <v-col cols="4">
             <v-text-field
               v-model="group.manager.name"
               variant="outlined"
               hide-details
               density="compact"
               readonly
-              class="mt-2 mb-2"
+              class="mt-2 mb-2 mr-3"
               prepend-inner-icon="mdi-account-tie-hat"
             ></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field
+              v-model="group.count"
+              variant="outlined"
+              hide-details
+              density="compact"
+              readonly
+              class="mt-2 mb-2"
+              prepend-inner-icon="mdi-counter"
+            >
+              <v-tooltip activator="parent"
+                >{{ group.id }} 그룹에 총 {{ group.count }} 개의 게시판이 있습니다.</v-tooltip
+              >
+            </v-text-field>
           </v-col>
           <v-col class="text-right">
             <v-btn

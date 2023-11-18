@@ -29,7 +29,8 @@ export interface AdminBoardCategory {
 export interface AdminBoardConfig {
   uid: number
   id: string
-  group: AdminBoardConfigGroup
+  type: string
+  group: string
   name: string
   info: string
   width: number
@@ -60,6 +61,7 @@ export interface AdminGroupList {
 export interface AdminGroupConfig {
   uid: number
   id: string
+  count: number
   manager: AdminPairItem
 }
 

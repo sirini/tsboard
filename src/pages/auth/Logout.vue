@@ -3,8 +3,8 @@
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
-        <v-container>
-          <v-card elevation="0" rounded="0" class="mx-auto" width="500">
+        <v-container class="wrap">
+          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
             <v-card-title class="logout_title"
               >로그아웃
               <span class="info ml-3 pl-3">안전하게 로그아웃 합니다</span>
@@ -30,12 +30,16 @@
 import { watchEffect } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
+import { useHomeStore } from "../../store/home"
 import AlertBar from "../../components/util/AlertBar.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
+
+home.color = "blue-grey-lighten-5"
 
 // 이미 로그아웃 상태이면 알려주고 홈 화면으로 이동
 watchEffect(() => {
@@ -52,11 +56,12 @@ watchEffect(() => {
 .layout {
   margin-top: 64px;
 }
-
+.wrap {
+  min-height: calc(100vh - 118px);
+}
 .logout_title {
   border-bottom: 1px #828282 solid;
 }
-
 .info {
   color: #828282;
   font-size: 0.65em;

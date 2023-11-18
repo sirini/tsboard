@@ -71,9 +71,9 @@ const level1: AdminBreadcrumb = {
   href: `${process.env.PREFIX}/admin/board`,
 }
 const level2: AdminBreadcrumb = {
-  title: `${general.board.group.selected} 그룹`,
+  title: `${general.board.group} 그룹`,
   disabled: false,
-  href: `${process.env.PREFIX}/admin/board/group/${general.board.group.selected}`,
+  href: `${process.env.PREFIX}/admin/board/group/${general.board.group}`,
 }
 const menu = ref<"normal" | "permission" | "point">("normal")
 

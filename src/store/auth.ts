@@ -20,7 +20,7 @@ export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
   const userInfoDialog = ref<boolean>(false)
   const user = ref<User>({
-    uid: 1,
+    uid: 0,
     id: "test@test.com",
     name: "tester",
     point: 100,
