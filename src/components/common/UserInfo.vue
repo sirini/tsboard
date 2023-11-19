@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="auth.userInfoDialog" persistent width="500">
-    <v-card class="mx-auto">
+  <v-dialog v-model="auth.userInfoDialog" persistent>
+    <v-card class="mx-auto" width="500">
       <v-card-title>
         사용자 정보
         <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
@@ -9,13 +9,13 @@
       <v-list>
         <v-list-item class="text-center">
           <v-avatar size="large">
-            <v-img :src="profile"></v-img>
+            <v-img :src="PREFIX + auth.targetUserInfo.profile"></v-img>
           </v-avatar>
         </v-list-item>
         <v-list-item>
           <v-row>
             <v-col cols="4">닉네임</v-col>
-            <v-col>{{ name }}</v-col>
+            <v-col>{{ auth.targetUserInfo.name }}</v-col>
           </v-row>
         </v-list-item>
         <v-list-item>
@@ -27,7 +27,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">서명</v-col>
-            <v-col>{{ userSignature }}</v-col>
+            <v-col>{{ userSignature || "작성된 서명이 없습니다." }}</v-col>
           </v-row>
         </v-list-item>
         <v-list-item>
@@ -39,33 +39,21 @@
       </v-list>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block @click="auth.userInfoDialog = false">닫기</v-btn>
+        <v-btn block @click="auth.closeUserInfo">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from "vue"
+import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 
 const auth = useAuthStore()
-const props = defineProps<{
-  uid: number
-  profile: string
-  name: string
-}>()
 const userLevel = ref<number>(0)
-const lastLogin = ref<string>("")
+const lastLogin = ref<string>("2023-11-19 17:26")
 const userSignature = ref<string>("")
 const PREFIX = process.env.PREFIX || ""
-
-watchEffect(() => {
-  if (props.uid > 0) {
-    userLevel.value = 1
-    lastLogin.value = "2023-10-30 10:30:00"
-  }
-})
 </script>
 
 <style scoped>

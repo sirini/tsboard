@@ -9,14 +9,14 @@
       <v-list density="compact">
         <v-list-item
           prepend-icon="mdi-card-account-details-outline"
-          @click="auth.userInfoDialog = true"
+          @click="auth.openUserInfo(user)"
         >
           정보 보기
         </v-list-item>
         <v-list-item prepend-icon="mdi-account-filter-outline" @click="">
           글 모아 보기
         </v-list-item>
-        <v-list-item prepend-icon="mdi-card-account-mail-outline" @click=""
+        <v-list-item prepend-icon="mdi-card-account-mail-outline" @click="auth.openSendNote(user)"
           >쪽지 보내기</v-list-item
         >
         <v-list-item prepend-icon="mdi-account-tie-hat-outline" @click="">신고하기</v-list-item>
@@ -26,12 +26,16 @@
       </v-list>
     </v-menu>
   </v-chip>
-  <user-info :uid="uid" :profile="profile" :name="name"></user-info>
+  <user-info></user-info>
+  <send-note></send-note>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import UserInfo from "./UserInfo.vue"
+import SendNote from "./SendNote.vue"
+import { TargetUserInfo } from "../../interface/auth"
 
 const auth = useAuthStore()
 const props = defineProps<{
@@ -40,6 +44,11 @@ const props = defineProps<{
   name: string
   size?: string
 }>()
+const user = ref<TargetUserInfo>({
+  uid: props.uid,
+  profile: props.profile,
+  name: props.name,
+})
 </script>
 
 <style scoped>

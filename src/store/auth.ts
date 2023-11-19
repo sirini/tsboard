@@ -8,7 +8,7 @@ import { SHA256 } from "crypto-js"
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { useUtilStore } from "./util"
-import { User } from "../interface/auth"
+import { User, TargetUserInfo } from "../interface/auth"
 
 const INVALID_EMAIL = "이메일 주소 형식에 맞지 않습니다."
 const INVALID_PASSWORD =
@@ -19,6 +19,13 @@ const INVALID_NICKNAME =
 export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
   const userInfoDialog = ref<boolean>(false)
+  const sendNoteDialog = ref<boolean>(false)
+  const sendReportDialog = ref<boolean>(false)
+  const targetUserInfo = ref<TargetUserInfo>({
+    uid: 0,
+    profile: "",
+    name: "",
+  })
   const user = ref<User>({
     uid: 0,
     id: "test@test.com",
@@ -161,8 +168,71 @@ export const useAuthStore = defineStore("auth", () => {
     util.alert("내 정보를 성공적으로 수정 하였습니다.", "success")
   }
 
+  // 사용자 정보 보기 다이얼로그 열기
+  function openUserInfo(user: TargetUserInfo): void {
+    targetUserInfo.value = user
+    userInfoDialog.value = true
+  }
+
+  // 사용자 정보 보기 다이얼로그 닫기
+  function closeUserInfo(): void {
+    targetUserInfo.value = { uid: 0, profile: "", name: "" }
+    userInfoDialog.value = false
+  }
+
+  // 쪽지 보내기 다이얼로그 열기
+  function openSendNote(user: TargetUserInfo): void {
+    targetUserInfo.value = user
+    sendNoteDialog.value = true
+  }
+
+  // 쪽지 보내기 다이얼로그 닫기
+  function closeSendNote(): void {
+    targetUserInfo.value = { uid: 0, profile: "", name: "" }
+    sendNoteDialog.value = false
+  }
+
+  // 다른 사용자에게 쪽지 보내기
+  async function sendNote(
+    targetUserUid: number,
+    targetUserName: string,
+    note: string,
+  ): Promise<void> {
+    if (targetUserUid < 1) {
+      util.alert("쪽지를 보낼 대상이 제대로 지정되지 않았습니다.")
+      return
+    }
+    if (note.length < 3 || note.length > 1000) {
+      util.alert("쪽지는 3글자 이상, 1000자 미만으로 작성해 주세요.")
+      return
+    }
+    //do something
+    util.alert(`${targetUserName} 님께 성공적으로 쪽지를 발송하였습니다.`, "success")
+  }
+
+  // 운영진에게 특정 사용자 신고하기
+  async function sendReport(
+    targetUserUid: number,
+    targetUserName: string,
+    report: string,
+  ): Promise<void> {
+    if (targetUserUid < 1) {
+      util.alert("신고할 대상이 제대로 지정되지 않았습니다.")
+      return
+    }
+    if (report.length < 3 || report.length > 1000) {
+      util.alert("신고 내용은 3글자 이상, 1000자 미만으로 작성해 주세요.")
+      return
+    }
+    //do something
+    util.alert(`${targetUserName} 님을 운영진에게 신고 하였습니다.`, "success")
+  }
+
   return {
     userInfoDialog,
+    sendNoteDialog,
+    sendReportDialog,
+    targetUserInfo,
     user,
     id,
     password,
@@ -178,5 +248,11 @@ export const useAuthStore = defineStore("auth", () => {
     checkNickname,
     signup,
     saveMyInfo,
+    openUserInfo,
+    closeUserInfo,
+    openSendNote,
+    closeSendNote,
+    sendNote,
+    sendReport,
   }
 })

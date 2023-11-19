@@ -134,6 +134,25 @@ const posts = ref<Post[]>([
     date: "2023-10-22",
     liked: true,
   },
+  {
+    uid: 3,
+    category: {
+      uid: 5,
+      name: "news",
+    },
+    writer: {
+      uid: 14,
+      name: "강감찬",
+      profile: "/no-profile.png",
+    },
+    subject: "새로운 게시글 예시.",
+    content: "",
+    like: 1,
+    reply: 5,
+    view: 12,
+    date: "2023-11-19",
+    liked: false,
+  },
 ])
 </script>
 
@@ -168,7 +187,7 @@ const posts = ref<Post[]>([
       width: 50px;
     }
     .date {
-      width: 80px;
+      width: 100px;
     }
   }
 }
