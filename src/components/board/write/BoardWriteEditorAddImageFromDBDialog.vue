@@ -8,11 +8,11 @@
           <v-card-text class="pa-3">
             정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만
             삭제해 주세요! 만약 이전 게시글들에 이미 사용하셨다면, 해당 게시글들은 더 이상 이미지가
-            나타나지 않게 됩니다. 이 작업은 되돌릴 수 없습니다. 계속 진행하시겠습니까?
+            나타나지 않게 됩니다. 계속 진행하시겠습니까?
           </v-card-text>
           <v-card-actions>
             <v-btn prepend-icon="mdi-check" color="primary" @click="clear"
-              >이해했습니다, 그대로 둘께요</v-btn
+              >아니요, 삭제하지 않겠습니다</v-btn
             >
             <v-spacer></v-spacer>
             <v-btn prepend-icon="mdi-trash-can" @click="remove">
@@ -75,6 +75,11 @@
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
 
+interface Image {
+  uid: number
+  src: string
+}
+
 const emits = defineEmits<{
   addImageURL: [src: string]
   removeImage: [src: string]
@@ -82,9 +87,11 @@ const emits = defineEmits<{
 const board = useBoardStore()
 const PREFIX = process.env.PREFIX || ""
 const showRemoveImageInfo = ref<boolean>(false)
-const removeImageUid = ref<number>(0)
-const removeImageSrc = ref<string>("")
-const uploadedImages = [
+const removeImageTarget = ref<Image>({
+  uid: 0,
+  src: "",
+})
+const uploadedImages = ref<Image[]>([
   {
     uid: 1,
     src: `https://images.unsplash.com/photo-1688494930045-328d0f95efe9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80`,
@@ -101,7 +108,7 @@ const uploadedImages = [
     uid: 4,
     src: `https://images.unsplash.com/photo-1685516882750-807fa81a949f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3280&q=80`,
   },
-]
+])
 
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
@@ -111,22 +118,23 @@ function add(src: string): void {
 // 이미지 삭제하기 전에 확인하기
 function check(uid: number, src: string): void {
   showRemoveImageInfo.value = true
-  removeImageUid.value = uid
-  removeImageSrc.value = PREFIX + src
+  removeImageTarget.value = { uid, src: PREFIX + src }
 }
 
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)
 function remove(): void {
-  emits("removeImage", removeImageSrc.value)
+  emits("removeImage", removeImageTarget.value.src)
   // TODO 서버에 올려진 사진 파일 / DB 레코드 제거
+  uploadedImages.value = uploadedImages.value.filter((value: Image) => {
+    return value.uid !== removeImageTarget.value.uid
+  })
   clear()
 }
 
 // 삭제하지 않기
 function clear(): void {
   showRemoveImageInfo.value = false
-  removeImageUid.value = 0
-  removeImageSrc.value = ""
+  removeImageTarget.value = { uid: 0, src: "" }
 }
 </script>
 
