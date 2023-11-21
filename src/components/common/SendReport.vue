@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="auth.sendNoteDialog" persistent>
+  <v-dialog v-model="auth.sendReportDialog" persistent>
     <v-card class="mx-auto" width="500">
       <v-card-title>
         신고하기
@@ -13,14 +13,26 @@
           <v-list-item-title>{{ auth.targetUserInfo.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>차단</v-list-subheader>
-        <v-list-item>
-          <v-checkbox v-model="blockNote"></v-checkbox> {{ auth.targetUserInfo.name }} 님의 쪽지를
-          차단합니다.
+
+        <v-divider></v-divider>
+        <v-list-item class="pa-0 pl-3">
+          <v-checkbox
+            v-model="blockNote"
+            density="compact"
+            hide-details
+            :label="auth.targetUserInfo.name + '님이 보내는 쪽지를 차단 합니다'"
+          ></v-checkbox>
         </v-list-item>
-        <v-list-item>
-          <v-checkbox v-model="blockPost"></v-checkbox> {{ auth.targetUserInfo.name }} 님의 게시글이
-          보이지 않도록 차단합니다.
+        <v-list-item class="pa-0 pl-3">
+          <v-checkbox
+            v-model="blockPost"
+            density="compact"
+            hide-details
+            :label="auth.targetUserInfo.name + '님의 게시글이 보이지 않도록 차단 합니다'"
+          ></v-checkbox>
         </v-list-item>
+        <v-divider></v-divider>
+
         <v-list-subheader>신고 내용 (1000자 이내)</v-list-subheader>
         <v-list-item>
           <v-textarea
@@ -29,18 +41,18 @@
             variant="outlined"
             counter
             auto-grow
+            hide-details
           ></v-textarea>
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="auth.closeSendNote">취소</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="auth.closeSendReport">취소</v-btn>
         <v-spacer></v-spacer>
         <v-btn
           color="primary"
           variant="text"
           append-icon="mdi-chevron-right"
-          @click="auth.sendNote(auth.targetUserInfo.uid, auth.targetUserInfo.name, report)"
+          @click="auth.sendReport(auth.targetUserInfo.uid, auth.targetUserInfo.name, report)"
           >운영진에게 신고하기</v-btn
         >
       </v-card-actions>

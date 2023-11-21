@@ -192,6 +192,18 @@ export const useAuthStore = defineStore("auth", () => {
     sendNoteDialog.value = false
   }
 
+  // 사용자 신고하기 다이얼로그 열기
+  function openSendReport(user: TargetUserInfo): void {
+    targetUserInfo.value = user
+    sendReportDialog.value = true
+  }
+
+  // 사용자 신고하기 다이얼로그 닫기
+  function closeSendReport(): void {
+    targetUserInfo.value = { uid: 0, profile: "", name: "" }
+    sendReportDialog.value = false
+  }
+
   // 다른 사용자에게 쪽지 보내기
   async function sendNote(
     targetUserUid: number,
@@ -208,6 +220,8 @@ export const useAuthStore = defineStore("auth", () => {
     }
     //do something
     util.alert(`${targetUserName} 님께 성공적으로 쪽지를 발송하였습니다.`, "success")
+
+    setTimeout(closeSendNote, 3000)
   }
 
   // 운영진에게 특정 사용자 신고하기
@@ -226,6 +240,8 @@ export const useAuthStore = defineStore("auth", () => {
     }
     //do something
     util.alert(`${targetUserName} 님을 운영진에게 신고 하였습니다.`, "success")
+
+    setTimeout(closeSendReport, 3000)
   }
 
   return {
@@ -252,6 +268,8 @@ export const useAuthStore = defineStore("auth", () => {
     closeUserInfo,
     openSendNote,
     closeSendNote,
+    openSendReport,
+    closeSendReport,
     sendNote,
     sendReport,
   }
