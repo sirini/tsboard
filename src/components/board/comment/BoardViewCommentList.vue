@@ -60,7 +60,7 @@ import { useCommentStore } from "../../../store/comment"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { Comment } from "../../../interface/board"
-import UserNametag from "../../common/UserNametag.vue"
+import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const auth = useAuthStore()

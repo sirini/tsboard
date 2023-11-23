@@ -121,7 +121,7 @@ import { useViewerStore } from "../../../store/viewer"
 import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
-import UserNametag from "../../common/UserNametag.vue"
+import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 
 const PREFIX = process.env.PREFIX || ""
