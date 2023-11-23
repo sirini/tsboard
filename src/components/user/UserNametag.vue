@@ -9,49 +9,57 @@
       <v-list density="compact">
         <v-list-item
           prepend-icon="mdi-card-account-details-outline"
-          @click="auth.openUserInfo(user)"
+          @click="user.openUserInfo(targetUser)"
         >
           정보 보기
         </v-list-item>
         <v-list-item prepend-icon="mdi-account-filter-outline" @click="">
           글 모아 보기
         </v-list-item>
-        <v-list-item prepend-icon="mdi-card-account-mail-outline" @click=""
+        <v-list-item
+          prepend-icon="mdi-card-account-mail-outline"
+          @click="user.openSendNote(targetUser)"
           >쪽지 보내기</v-list-item
         >
-        <v-list-item prepend-icon="mdi-account-tie-hat-outline" @click="auth.openSendReport(user)"
+        <v-list-item
+          prepend-icon="mdi-account-tie-hat-outline"
+          @click="user.openSendReport(targetUser)"
           >신고하기</v-list-item
         >
         <v-list-item
           prepend-icon="mdi-account-cog"
           :disabled="!auth.user.admin"
-          @click="auth.openSendReport(user)"
+          @click="user.openManageUser(targetUser)"
           >회원 관리</v-list-item
         >
       </v-list>
     </v-menu>
   </v-chip>
-  <user-info></user-info>
-  <send-note></send-note>
-  <send-report></send-report>
+  <user-info-dialog></user-info-dialog>
+  <send-note-dialog></send-note-dialog>
+  <send-report-dialog></send-report-dialog>
+  <manage-user-dialog></manage-user-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
-import { TargetUserInfo } from "../../interface/auth"
-import UserInfo from "./UserInfo.vue"
-import SendNote from "./SendNote.vue"
-import SendReport from "./SendReport.vue"
+import { useUserStore } from "../../store/user"
+import { TargetUserInfo } from "../../interface/user"
+import UserInfoDialog from "./UserInfoDialog.vue"
+import SendNoteDialog from "./SendNoteDialog.vue"
+import SendReportDialog from "./SendReportDialog.vue"
+import ManageUserDialog from "./ManageUserDialog.vue"
 
 const auth = useAuthStore()
+const user = useUserStore()
 const props = defineProps<{
   uid: number
   profile: string
   name: string
   size?: string
 }>()
-const user = ref<TargetUserInfo>({
+const targetUser = ref<TargetUserInfo>({
   uid: props.uid,
   profile: props.profile,
   name: props.name,

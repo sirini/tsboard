@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="auth.sendReportDialog" persistent>
+  <v-dialog v-model="user.sendReportDialog" persistent>
     <v-card class="mx-auto" width="500">
       <v-card-title>
         신고하기
@@ -9,8 +9,8 @@
       <alert-bar></alert-bar>
       <v-list>
         <v-list-subheader>신고 대상자</v-list-subheader>
-        <v-list-item :prepend-avatar="PREFIX + auth.targetUserInfo.profile">
-          <v-list-item-title>{{ auth.targetUserInfo.name }}</v-list-item-title>
+        <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
+          <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>차단</v-list-subheader>
 
@@ -20,7 +20,7 @@
             v-model="blockNote"
             density="compact"
             hide-details
-            :label="auth.targetUserInfo.name + '님이 보내는 쪽지를 차단 합니다'"
+            :label="user.targetUserInfo.name + '님이 보내는 쪽지를 차단 합니다'"
           ></v-checkbox>
         </v-list-item>
         <v-list-item class="pa-0 pl-3">
@@ -28,7 +28,7 @@
             v-model="blockPost"
             density="compact"
             hide-details
-            :label="auth.targetUserInfo.name + '님의 게시글이 보이지 않도록 차단 합니다'"
+            :label="user.targetUserInfo.name + '님의 게시글이 보이지 않도록 차단 합니다'"
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>
@@ -46,13 +46,13 @@
         </v-list-item>
       </v-list>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="auth.closeSendReport">취소</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">취소</v-btn>
         <v-spacer></v-spacer>
         <v-btn
           color="primary"
           variant="text"
           append-icon="mdi-chevron-right"
-          @click="auth.sendReport(auth.targetUserInfo.uid, auth.targetUserInfo.name, report)"
+          @click="user.sendReport(report)"
           >운영진에게 신고하기</v-btn
         >
       </v-card-actions>
@@ -62,10 +62,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/auth"
+import { useUserStore } from "../../store/user"
 import AlertBar from "../util/AlertBar.vue"
 
-const auth = useAuthStore()
+const user = useUserStore()
 const PREFIX = process.env.PREFIX || ""
 const report = ref<string>("")
 const rules: any = [

@@ -15,9 +15,3 @@ export interface User {
   lastLogin: string
   admin: boolean
 }
-
-export interface TargetUserInfo {
-  uid: number
-  profile: string
-  name: string
-}
