@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
-import UserNametag from "../../Nametag.vue"
+import UserNametag from "../../user/UserNametag.vue"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
