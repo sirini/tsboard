@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="auth.userInfoDialog" persistent>
+  <v-dialog v-model="user.userInfoDialog" persistent>
     <v-card class="mx-auto" width="500">
       <v-card-title>
         사용자 정보
@@ -9,13 +9,13 @@
       <v-list>
         <v-list-item class="text-center">
           <v-avatar size="large">
-            <v-img :src="PREFIX + auth.targetUserInfo.profile"></v-img>
+            <v-img :src="PREFIX + user.targetUserInfo.profile"></v-img>
           </v-avatar>
         </v-list-item>
         <v-list-item>
           <v-row>
             <v-col cols="4">닉네임</v-col>
-            <v-col>{{ auth.targetUserInfo.name }}</v-col>
+            <v-col>{{ user.targetUserInfo.name }}</v-col>
           </v-row>
         </v-list-item>
         <v-list-item>
@@ -39,7 +39,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block @click="auth.closeUserInfo">닫기</v-btn>
+        <v-btn block @click="user.closeUserInfo">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -47,9 +47,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/auth"
+import { useUserStore } from "../../store/user"
 
-const auth = useAuthStore()
+const user = useUserStore()
 const userLevel = ref<number>(0)
 const lastLogin = ref<string>("2023-11-19 17:26")
 const userSignature = ref<string>("")
