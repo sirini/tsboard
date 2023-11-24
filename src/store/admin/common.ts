@@ -13,9 +13,7 @@ export const useAdminStore = defineStore("admin", () => {
   const snackbarMessage = ref<string>("")
   const snackbarTimeout = ref<number>(3000)
   const snackbarColor = ref<string>("variant-surface")
-  const breadcrumbLevel1 = ref<AdminBreadcrumb | undefined>(undefined)
-  const breadcrumbLevel2 = ref<AdminBreadcrumb | undefined>(undefined)
-  const breadcrumbLevel3 = ref<AdminBreadcrumb | undefined>(undefined)
+  const breadcrumbs = ref<AdminBreadcrumb[]>([])
   const PREFIX = process.env.PREFIX || ""
 
   // 스낵바 메시지 보이기
@@ -33,15 +31,18 @@ export const useAdminStore = defineStore("admin", () => {
     else snackbarColor.value = "blue-grey"
   }
 
-  // 관리 페이지 최상단 메뉴바 구현
-  function setBreadcrumbs(
-    level1: AdminBreadcrumb | undefined = undefined,
-    level2: AdminBreadcrumb | undefined = undefined,
-    level3: AdminBreadcrumb | undefined = undefined,
-  ): void {
-    breadcrumbLevel1.value = level1
-    breadcrumbLevel2.value = level2
-    breadcrumbLevel3.value = level3
+  // 관리 페이지 최상단 메뉴 초기화
+  function clearBreadcrumbs(): void {
+    breadcrumbs.value = []
+  }
+
+  // 관리 페이지 최상단 메뉴에 메뉴 추가
+  function addBreadcrumbs(title: string, href: string, disabled: boolean = false): void {
+    breadcrumbs.value.push({
+      title,
+      href,
+      disabled,
+    })
   }
 
   return {
@@ -49,10 +50,9 @@ export const useAdminStore = defineStore("admin", () => {
     snackbarMessage,
     snackbarTimeout,
     snackbarColor,
-    breadcrumbLevel1,
-    breadcrumbLevel2,
-    breadcrumbLevel3,
+    breadcrumbs,
     snack,
-    setBreadcrumbs,
+    clearBreadcrumbs,
+    addBreadcrumbs,
   }
 })

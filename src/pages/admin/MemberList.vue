@@ -22,18 +22,14 @@
 
 <script setup lang="ts">
 import { useAdminStore } from "../../store/admin/common"
-import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import MemberListGeneral from "../../components/admin/member/MemberListGeneral.vue"
 
 const admin = useAdminStore()
-const level1: AdminBreadcrumb = {
-  title: `회원 목록`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/member`,
-}
-admin.setBreadcrumbs(level1)
+
+admin.clearBreadcrumbs()
+admin.addBreadcrumbs("회원 목록", `${process.env.PREFIX}/admin/member`)
 </script>
 
 <style scoped>

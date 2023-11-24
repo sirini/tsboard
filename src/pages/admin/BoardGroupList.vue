@@ -25,20 +25,15 @@
 
 <script setup lang="ts">
 import { useAdminStore } from "../../store/admin/common"
-import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import GroupListGeneral from "../../components/admin/grouplist/GroupListGeneral.vue"
 import ConfirmRemoveGroupDialog from "../../components/admin/grouplist/ConfirmRemoveGroupDialog.vue"
 
 const admin = useAdminStore()
-const level1: AdminBreadcrumb = {
-  title: `게시판 그룹 목록`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/board`,
-}
 
-admin.setBreadcrumbs(level1)
+admin.clearBreadcrumbs()
+admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
 </script>
 
 <style scoped>

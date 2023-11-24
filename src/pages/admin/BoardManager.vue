@@ -53,7 +53,6 @@ import { watchEffect, ref } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminBoardGeneralStore } from "../../store/admin/board/general"
-import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardManagerGeneral from "../../components/admin/board/BoardManagerGeneral.vue"
@@ -64,29 +63,22 @@ import ConfirmRemoveCategoryDialog from "../../components/admin/board/ConfirmRem
 const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
-
-const level1: AdminBreadcrumb = {
-  title: `게시판 그룹 목록`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/board`,
-}
-const level2: AdminBreadcrumb = {
-  title: `${general.board.group} 그룹`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/board/group/${general.board.group}`,
-}
 const menu = ref<"normal" | "permission" | "point">("normal")
+
+admin.clearBreadcrumbs()
+admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
+admin.addBreadcrumbs(
+  `${general.board.group} 그룹`,
+  `${process.env.PREFIX}/admin/board/group/${general.board.group}`,
+)
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.board.id = route.params?.id.toString()
-
-    const level3: AdminBreadcrumb = {
-      title: `${general.board.id} 게시판 관리`,
-      disabled: false,
-      href: `${process.env.PREFIX}/admin/board/${general.board.id}`,
-    }
-    admin.setBreadcrumbs(level1, level2, level3)
+    admin.addBreadcrumbs(
+      `${general.board.id} 게시판 관리`,
+      `${process.env.PREFIX}/admin/board/${general.board.id}`,
+    )
   }
 })
 </script>

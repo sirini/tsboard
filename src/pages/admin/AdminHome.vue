@@ -37,7 +37,7 @@ import AdminHomeMain from "../../components/admin/home/AdminHomeMain.vue"
 const admin = useAdminStore()
 const menu = ref<"normal" | "stat">("normal")
 
-admin.setBreadcrumbs()
+admin.clearBreadcrumbs()
 </script>
 
 <style scoped>

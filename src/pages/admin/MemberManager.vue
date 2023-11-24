@@ -21,24 +21,16 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
-import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import MemberManagerGeneral from "../../components/admin/member/MemberManagerGeneral.vue"
 
 const route = useRoute()
 const admin = useAdminStore()
-const level1: AdminBreadcrumb = {
-  title: `회원 목록`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/member`,
-}
-const level2: AdminBreadcrumb = {
-  title: `회원 정보 수정`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/member/${route.params?.id}`,
-}
-admin.setBreadcrumbs(level1, level2)
+
+admin.clearBreadcrumbs()
+admin.addBreadcrumbs("회원 목록", `${process.env.PREFIX}/admin/member`)
+admin.addBreadcrumbs("회원 정보 수정", `${process.env.PREFIX}/admin/member/${route.params?.id}`)
 </script>
 
 <style scoped>

@@ -27,7 +27,6 @@ import { watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminGroupGeneralStore } from "../../store/admin/group/general"
-import { AdminBreadcrumb } from "../../interface/admin"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardGroupGeneral from "../../components/admin/group/BoardGroupGeneral.vue"
@@ -36,23 +35,16 @@ const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminGroupGeneralStore()
 
-const level1: AdminBreadcrumb = {
-  title: `게시판 그룹 목록`,
-  disabled: false,
-  href: `${process.env.PREFIX}/admin/board`,
-}
+admin.clearBreadcrumbs()
+admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
 
 watchEffect(() => {
   if (route.params?.id.length > 1) {
     general.group.id = route.params?.id.toString()
-
-    const level2: AdminBreadcrumb = {
-      title: `${general.group.id} 그룹`,
-      disabled: false,
-      href: `${process.env.PREFIX}/admin/board/group/${general.group.id}`,
-    }
-
-    admin.setBreadcrumbs(level1, level2)
+    admin.addBreadcrumbs(
+      `${general.group.id} 그룹`,
+      `${process.env.PREFIX}/admin/board/group/${general.group.id}`,
+    )
   }
 })
 </script>
