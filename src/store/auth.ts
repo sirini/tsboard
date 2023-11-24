@@ -14,7 +14,7 @@ const INVALID_EMAIL = "이메일 주소 형식에 맞지 않습니다."
 const INVALID_PASSWORD =
   "비밀번호는 8글자 이상, 숫자/대문자/특수문자를 각각 하나 이상 포함해야 합니다."
 const INVALID_NICKNAME =
-  "닉네임은 3글자 이상 입력해 주시고, 우측에 체크 아이콘을 눌러 중복 여부도 확인해보세요."
+  "이름은 2글자 이상 입력해 주시고, 우측에 체크 아이콘을 눌러 중복 여부도 확인해보세요."
 
 export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
@@ -33,7 +33,6 @@ export const useAuthStore = defineStore("auth", () => {
   const password = ref<string>("")
   const checkedPassword = ref<string>("")
   const idForReset = ref<string>("")
-  const nickname = ref<string>("")
 
   // 아이디(이메일) 입력란 체크
   const emailRule = [
@@ -52,7 +51,7 @@ export const useAuthStore = defineStore("auth", () => {
   ]
 
   // 닉네임 입력란 체크
-  const nicknameRule = [
+  const nameRule = [
     (value: any) => {
       if (value?.length > 2) return true
       return INVALID_NICKNAME
@@ -110,13 +109,13 @@ export const useAuthStore = defineStore("auth", () => {
     util.alert(`${idForReset.value}으로 비밀번호 초기화 메일을 발송하였습니다.`, "success")
   }
 
-  // 닉네임 중복 체크하기
-  async function checkNickname(): Promise<void> {
+  // 이름 중복 체크하기
+  async function checkName(): Promise<void> {
     if (user.value.name.length < 2) {
       util.alert(INVALID_NICKNAME)
     }
     // do something
-    util.alert(`${user.value.name}은 사용할 수 있는 닉네임 입니다.`, "success")
+    util.alert(`${user.value.name}은 사용할 수 있는 이름입니다.`, "success")
   }
 
   // 가입 양식 제출받기
@@ -129,7 +128,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert(INVALID_PASSWORD)
       return
     }
-    if (nickname.value.length < 3) {
+    if (user.value.name.length < 3) {
       util.alert(INVALID_NICKNAME)
       return
     }
@@ -146,9 +145,9 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 내 정보 수정하기
   async function saveMyInfo(): Promise<void> {
-    const nick = nickname.value.trim()
-    if (nick.length < 2) {
-      util.alert("닉네임은 2글자 이상 입력해 주세요.")
+    const name = user.value.name.trim()
+    if (name.length < 2) {
+      util.alert("이름은 2글자 이상 입력해 주세요.")
       return
     }
     if (password.value !== checkedPassword.value) {
@@ -166,14 +165,13 @@ export const useAuthStore = defineStore("auth", () => {
     password,
     checkedPassword,
     idForReset,
-    nickname,
     emailRule,
     passwordRule,
-    nicknameRule,
+    nameRule,
     login,
     logout,
     resetPassword,
-    checkNickname,
+    checkName,
     signup,
     saveMyInfo,
   }

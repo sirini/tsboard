@@ -25,14 +25,14 @@
               </v-list-item>
               <v-list-item class="pa-0">
                 <v-text-field
-                  v-model="auth.nickname"
+                  v-model="auth.user.name"
                   variant="outlined"
                   class="mt-3"
-                  :rules="auth.nicknameRule"
+                  :rules="auth.nameRule"
                   prepend-inner-icon="mdi-card-account-details-outline"
                   label="수정할 닉네임을 입력하신 후 중복 여부를 확인해 보세요"
                   append-inner-icon="mdi-check-circle-outline"
-                  @click:append-inner="auth.checkNickname"
+                  @click:append-inner="auth.checkName"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from "vue"
+import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -132,12 +132,6 @@ const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
 home.color = "blue-grey-lighten-5"
-
-watchEffect(() => {
-  if (auth.user.uid > 0) {
-    auth.nickname = auth.user.name
-  }
-})
 </script>
 
 <style scoped>

@@ -13,9 +13,6 @@
         >
           정보 보기
         </v-list-item>
-        <v-list-item prepend-icon="mdi-account-filter-outline" @click="">
-          글 모아 보기
-        </v-list-item>
         <v-list-item
           prepend-icon="mdi-card-account-mail-outline"
           @click="user.openSendNote(targetUser)"

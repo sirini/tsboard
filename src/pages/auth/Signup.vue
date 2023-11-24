@@ -40,13 +40,13 @@
               </v-list-item>
               <v-list-item class="pa-0">
                 <v-text-field
-                  v-model="auth.nickname"
+                  v-model="auth.user.name"
                   variant="outlined"
                   class="mt-2"
                   prepend-inner-icon="mdi-card-account-details-outline"
-                  label="사용하실 닉네임을 입력해 주세요"
+                  label="사이트 내에서 사용하실 이름을 입력해 주세요"
                   append-inner-icon="mdi-check-circle-outline"
-                  :rules="auth.nicknameRule"
+                  :rules="auth.nameRule"
                 ></v-text-field>
               </v-list-item>
             </v-list>

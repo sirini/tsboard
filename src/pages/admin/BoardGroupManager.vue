@@ -7,7 +7,7 @@
       <v-layout>
         <v-navigation-drawer permanent location="left" width="250">
           <v-list>
-            <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right">
+            <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right" @click="">
               <strong>일반</strong>
             </v-list-item>
           </v-list>

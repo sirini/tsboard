@@ -118,7 +118,7 @@ const posts = ref<Post[]>([
     content: "",
     like: 3,
     reply: 2,
-    view: 152,
+    view: 28,
     date: "2023-10-22",
     liked: false,
   },

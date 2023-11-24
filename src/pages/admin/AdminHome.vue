@@ -15,20 +15,11 @@
               <strong v-if="menu === 'normal'">일반</strong>
               <span v-else>일반</span>
             </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-chart-areaspline"
-              append-icon="mdi-chevron-right"
-              @click="menu = 'stat'"
-            >
-              <strong v-if="menu === 'stat'">통계</strong>
-              <span v-else>통계</span>
-            </v-list-item>
           </v-list>
         </v-navigation-drawer>
 
         <v-main class="main">
           <admin-home-main v-if="menu === 'normal'"></admin-home-main>
-          <admin-home-stat v-if="menu === 'stat'"></admin-home-stat>
         </v-main>
       </v-layout>
     </v-card>
@@ -42,7 +33,6 @@ import { useAdminStore } from "../../store/admin/common"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import AdminHomeMain from "../../components/admin/home/AdminHomeMain.vue"
-import AdminHomeStat from "../../components/admin/home/AdminHomeStat.vue"
 
 const admin = useAdminStore()
 const menu = ref<"normal" | "stat">("normal")

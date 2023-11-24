@@ -70,3 +70,13 @@ export interface AdminHomeSimpleStatus {
   yesterday: number
   today: number
 }
+
+export interface AdminMemberTable {
+  uid: number
+  id: string
+  profile: string
+  name: string
+  point: number
+  level: number
+  signupDate: string
+}

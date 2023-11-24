@@ -45,6 +45,7 @@
           ></v-textarea>
         </v-list-item>
       </v-list>
+      <v-divider></v-divider>
       <v-card-actions>
         <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">닫기</v-btn>
         <v-spacer></v-spacer>
