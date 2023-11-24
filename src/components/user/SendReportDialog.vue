@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="user.sendReportDialog" persistent>
-    <v-card class="mx-auto" width="500">
+    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
       <v-card-title>
-        신고하기
+        <span class="title">신고하기</span>
         <span class="report ml-3 pl-3">운영진에게 신고 및 차단 기능을 사용합니다</span>
       </v-card-title>
       <v-divider></v-divider>
@@ -46,7 +46,7 @@
         </v-list-item>
       </v-list>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">취소</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn
           color="primary"
@@ -78,9 +78,12 @@ const blockPost = ref<boolean>(false)
 </script>
 
 <style scoped>
+.title {
+  color: #37474f;
+}
 .report {
-  color: #828282;
+  color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  border-left: 1px #cfd8dc solid;
 }
 </style>

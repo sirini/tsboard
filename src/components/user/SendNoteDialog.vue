@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="user.sendNoteDialog" persistent>
-    <v-card class="mx-auto" width="500">
+    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
       <v-card-title>
-        쪽지 보내기
+        <span class="title">쪽지 보내기</span>
         <span class="note ml-3 pl-3">다른 사용자에게 쪽지를 보냅니다</span>
       </v-card-title>
       <v-divider></v-divider>
@@ -23,7 +23,10 @@
                 <v-img :src="PREFIX + user.targetUserInfo.profile"></v-img>
               </v-avatar>
             </template>
-            <v-card variant="tonal" :color="chat.userUid === auth.user.uid ? 'primary' : ''">
+            <v-card
+              variant="tonal"
+              :color="chat.userUid === auth.user.uid ? 'primary' : 'blue-grey'"
+            >
               <v-card-text>{{ chat.message }}</v-card-text>
             </v-card>
             <template v-slot:append v-if="chat.userUid === auth.user.uid">
@@ -42,12 +45,21 @@
           v-model="user.chatMessage"
           :rules="rules"
           hide-details
+          density="compact"
           append-inner-icon="mdi-send"
           variant="outlined"
           @keyup.enter="user.sendNote"
           @click:append-inner="user.sendNote"
-        ></v-text-field>
-        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote">닫기</v-btn>
+        >
+          <v-tooltip activator="parent"
+            >상대방에게 예의를 지켜주시고, 민감한 개인정보는 노출되지 않도록 각별히 주의해
+            주세요!</v-tooltip
+          >
+        </v-text-field>
+        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote"
+          >닫기
+          <v-tooltip activator="parent">클릭하시면 쪽지 보내기 창을 닫습니다.</v-tooltip>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -118,10 +130,13 @@ onBeforeMount(() => {
   background: var(--sb-thumb-color);
   border-radius: 5px;
 }
+.title {
+  color: #37474f;
+}
 .note {
-  color: #828282;
+  color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  border-left: 1px #cfd8dc solid;
 }
 .wrap {
   overflow-y: scroll;

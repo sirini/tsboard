@@ -1,5 +1,5 @@
 <template>
-  <v-chip class="pointer" :size="size || 'small'">
+  <v-chip class="pointer" :size="size || 'small'" color="blue-grey">
     <v-avatar start>
       <v-img :src="profile"></v-img>
     </v-avatar>

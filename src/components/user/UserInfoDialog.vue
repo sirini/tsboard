@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="user.userInfoDialog" persistent>
-    <v-card class="mx-auto" width="500">
+    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
       <v-card-title>
-        사용자 정보
+        <span class="title">사용자 정보</span>
         <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
       </v-card-title>
       <v-divider></v-divider>
@@ -18,18 +18,21 @@
             <v-col>{{ user.targetUserInfo.name }}</v-col>
           </v-row>
         </v-list-item>
+        <v-divider></v-divider>
         <v-list-item>
           <v-row>
             <v-col cols="4">레벨</v-col>
             <v-col>{{ userLevel }}</v-col>
           </v-row>
         </v-list-item>
+        <v-divider></v-divider>
         <v-list-item>
           <v-row>
             <v-col cols="4">서명</v-col>
             <v-col>{{ userSignature || "작성된 서명이 없습니다." }}</v-col>
           </v-row>
         </v-list-item>
+        <v-divider></v-divider>
         <v-list-item>
           <v-row>
             <v-col cols="4">마지막 로그인</v-col>
@@ -39,7 +42,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block @click="user.closeUserInfo">닫기</v-btn>
+        <v-btn block prepend-icon="mdi-close" @click="user.closeUserInfo">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -57,9 +60,12 @@ const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>
+.title {
+  color: #37474f;
+}
 .info {
-  color: #828282;
+  color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  border-left: 1px #cfd8dc solid;
 }
 </style>

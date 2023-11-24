@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="user.manageUserDialog" persistent>
-    <v-card class="mx-auto" width="500">
+    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
       <v-card-title
-        >회원 관리
+        ><span class="title">회원 관리</span>
         <span class="manage ml-3 pl-3">회원 정보를 관리합니다 (관리자 전용)</span>
       </v-card-title>
       <v-divider></v-divider>
@@ -55,7 +55,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="user.closeManageUser">취소</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="user.closeManageUser">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn
           color="primary"
@@ -92,9 +92,12 @@ const rules: any = [
 </script>
 
 <style scoped>
+.title {
+  color: #37474f;
+}
 .manage {
-  color: #828282;
+  color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  border-left: 1px #cfd8dc solid;
 }
 </style>
