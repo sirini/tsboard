@@ -102,6 +102,10 @@
         <home-footer></home-footer>
       </v-main>
     </v-layout>
+    <user-info-dialog></user-info-dialog>
+    <send-note-dialog></send-note-dialog>
+    <send-report-dialog></send-report-dialog>
+    <manage-user-dialog></manage-user-dialog>
   </v-app>
 </template>
 
@@ -116,6 +120,10 @@ import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
+import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
+import SendNoteDialog from "../../components/user/SendNoteDialog.vue"
+import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"

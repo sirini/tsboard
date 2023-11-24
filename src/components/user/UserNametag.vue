@@ -35,10 +35,6 @@
       </v-list>
     </v-menu>
   </v-chip>
-  <user-info-dialog></user-info-dialog>
-  <send-note-dialog></send-note-dialog>
-  <send-report-dialog></send-report-dialog>
-  <manage-user-dialog></manage-user-dialog>
 </template>
 
 <script setup lang="ts">
@@ -46,10 +42,6 @@ import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUserStore } from "../../store/user"
 import { TargetUserInfo } from "../../interface/user"
-import UserInfoDialog from "./UserInfoDialog.vue"
-import SendNoteDialog from "./SendNoteDialog.vue"
-import SendReportDialog from "./SendReportDialog.vue"
-import ManageUserDialog from "./ManageUserDialog.vue"
 
 const auth = useAuthStore()
 const user = useUserStore()

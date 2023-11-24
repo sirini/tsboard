@@ -32,36 +32,29 @@
               </v-avatar>
             </template>
           </v-list-item>
-          <v-divider></v-divider>
+          <v-divider id="tsboardEndOfChat"></v-divider>
         </v-list>
       </v-card-text>
 
-      <div class="bottom">
-        <v-list>
-          <v-list-item>
-            <v-text-field
-              v-model="user.chatMessage"
-              :rules="rules"
-              hide-details
-              prepend-inner-icon="mdi-note-edit-outline"
-              append-inner-icon="mdi-send"
-              variant="outlined"
-              @keyup.enter="user.sendNote"
-              @click:append-inner="user.sendNote"
-            ></v-text-field>
-          </v-list-item>
-        </v-list>
-      </div>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" block @click="user.closeSendNote">닫기</v-btn>
+        <v-text-field
+          v-model="user.chatMessage"
+          :rules="rules"
+          hide-details
+          append-inner-icon="mdi-send"
+          variant="outlined"
+          @keyup.enter="user.sendNote"
+          @click:append-inner="user.sendNote"
+        ></v-text-field>
+        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watchEffect } from "vue"
+import { onBeforeMount, watch, ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUserStore } from "../../store/user"
 import AlertBar from "../util/AlertBar.vue"
@@ -75,22 +68,19 @@ const rules: any = [
 ]
 
 // 채팅 히스토리가 업데이트 될 때마다 스크롤을 밑으로 이동
-watchEffect(() => {
-  if (user.chatHistory.length > 0) {
-    const history = (document.querySelector("#tsboardChatHistory") as HTMLDivElement) || null
-    if (history) {
-      // TODO
-      // console.log(`history.scrollHeight = ${history.scrollHeight}`)
-      history.scrollTo({
-        top: history.scrollHeight,
-        behavior: "smooth",
-      })
-    }
-  }
-})
+const delayForScroll = 250
+watch(
+  () => user.chatHistory.length,
+  () => {
+    setTimeout(() => {
+      const eos = document.querySelector("#tsboardEndOfChat") as HTMLDivElement
+      eos?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+    }, delayForScroll)
+  },
+)
 
 // for test
-onMounted(() => {
+onBeforeMount(() => {
   user.chatHistory = []
   user.chatHistory.push({
     userUid: 11,
@@ -134,10 +124,6 @@ onMounted(() => {
   border-left: 1px #dddddd solid;
 }
 .wrap {
-  height: calc(100vh - 300px);
   overflow-y: scroll;
-}
-.bottom {
-  background-color: #ffffff;
 }
 </style>

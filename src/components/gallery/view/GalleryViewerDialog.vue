@@ -112,6 +112,10 @@
     </v-card>
   </v-dialog>
   <board-view-comment-remove-dialog @remove="removeComment"></board-view-comment-remove-dialog>
+  <user-info-dialog></user-info-dialog>
+  <send-note-dialog></send-note-dialog>
+  <send-report-dialog></send-report-dialog>
+  <manage-user-dialog></manage-user-dialog>
 </template>
 
 <script setup lang="ts">
@@ -122,6 +126,10 @@ import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import UserNametag from "../../user/UserNametag.vue"
+import UserInfoDialog from "../../user/UserInfoDialog.vue"
+import SendNoteDialog from "../../user/SendNoteDialog.vue"
+import SendReportDialog from "../../user/SendReportDialog.vue"
+import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 
 const PREFIX = process.env.PREFIX || ""
