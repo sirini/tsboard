@@ -154,6 +154,10 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert("입력하신 비밀번호가 서로 맞지 않습니다.")
       return
     }
+    if (util.filterPassword.test(password.value) === false) {
+      util.alert(INVALID_PASSWORD)
+      return
+    }
 
     // do something
     util.alert("내 정보를 성공적으로 수정 하였습니다.", "success")

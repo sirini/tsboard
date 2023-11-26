@@ -6,8 +6,9 @@
         <span class="manage ml-3 pl-3">회원 정보를 관리합니다 (관리자 전용)</span>
       </v-card-title>
       <v-divider></v-divider>
-      <alert-bar></alert-bar>
+
       <v-list>
+        <alert-bar></alert-bar>
         <v-list-subheader>대상 회원</v-list-subheader>
         <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
           <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>

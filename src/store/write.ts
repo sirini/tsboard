@@ -8,23 +8,13 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { useUtilStore } from "../store/util"
 
-export interface Alert {
-  show: boolean
-  type: "success" | "error"
-  text: string
-}
-
 export const useWriteStore = defineStore("write", () => {
   const util = useUtilStore()
   const files = ref<File[]>([])
   const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "10247680"))
-  const alert = ref<Alert>({
-    show: false,
-    type: "error",
-    text: "",
-  })
   const subject = ref<string>("")
   const content = ref<string>("")
+  const contentWithSyntax = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
   const uploadRule = [
@@ -68,13 +58,6 @@ export const useWriteStore = defineStore("write", () => {
     }, 200)
   }
 
-  // 알림 메시지 보여주기
-  function notice(text: string, type: "success" | "error" = "error"): void {
-    alert.value.type = type
-    alert.value.text = text
-    alert.value.show = true
-  }
-
   // 추천 태그를 클릭하거나 스페이스/콤마 키 입력시 추가하기
   function addTag(value: string): void {
     const target = value.replaceAll(util.filterNoSpace, "")
@@ -84,6 +67,9 @@ export const useWriteStore = defineStore("write", () => {
     if (duplicate.length > 0) {
       util.snack(`이미 추가된 태그입니다.`)
       tag.value = ""
+      return
+    }
+    if (target.length < 1) {
       return
     }
     tags.value.push(target)
@@ -97,25 +83,38 @@ export const useWriteStore = defineStore("write", () => {
     })
   }
 
+  // 문법 강조까지 모두 포함된 글 내용 업데이트하기
+  function updateRealHtml(html: string): void {
+    contentWithSyntax.value = html
+  }
+
   // 작성된 글 저장하기
   async function save(id: string): Promise<void> {
     const result = false
     if (subject.value.length < 2) {
-      notice(`제목은 2글자 이상 입력해 주세요.`)
+      util.alert(`제목은 2글자 이상 입력해 주세요.`, "error")
       return
     }
     if (content.value.length < 3) {
-      notice(`글 내용은 3글자 이상 입력해 주세요.`)
+      util.alert(`글 내용은 3글자 이상 입력해 주세요.`, "error")
       return
     }
-    alert.value.show = false
-    // do something with id
+
+    // do something
+    // content.value 대신 contentWithSyntax.value 사용할 것
+    util.alert(`글 작성에 성공 하였습니다.`, "success")
+
+    files.value = []
+    subject.value = ""
+    content.value = ""
+    contentWithSyntax.value = ""
+    tag.value = ""
+    tags.value = []
   }
 
   return {
     limit,
     files,
-    alert,
     subject,
     content,
     tag,
@@ -125,9 +124,9 @@ export const useWriteStore = defineStore("write", () => {
     tagSuggestions,
     readSelectedFiles,
     updateTagSuggestion,
-    notice,
     addTag,
     removeTag,
+    updateRealHtml,
     save,
   }
 })

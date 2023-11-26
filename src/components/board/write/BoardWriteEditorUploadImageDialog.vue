@@ -1,16 +1,11 @@
 <template>
-  <v-dialog width="500" v-model="board.uploadImageDialog" persistent scrollable>
-    <v-card>
+  <v-dialog v-model="board.uploadImageDialog" persistent>
+    <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
       <v-divider></v-divider>
-      <v-alert
-        v-model="showAlert"
-        :type="alertType"
-        closable
-        :title="alertText"
-        class="ma-3"
-      ></v-alert>
-      <v-card-text>
+
+      <v-card-text class="dialogBody">
+        <alert-bar></alert-bar>
         <v-card variant="tonal" class="mt-2 mb-5">
           <v-card-text class="pa-3">
             본문에 이미지를 추가하기 위한 업로드는 가로폭이 <strong>1000px</strong> 보다 클 경우
@@ -70,7 +65,12 @@
 import { ref, watch } from "vue"
 import { useBoardStore } from "../../../store/board"
 import { useWriteStore } from "../../../store/write"
+import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import AlertBar from "../../util/AlertBar.vue"
 
+const util = useUtilStore()
+const home = useHomeStore()
 const emits = defineEmits<{
   addImageURL: [src: string]
 }>()
@@ -95,10 +95,13 @@ function add(): void {
   for (const src of uploadImages.value) {
     emits("addImageURL", src)
   }
+  util.alert("사진을 작성중인 본문에 추가 하였습니다", "success")
 }
-
-// 알림 내용 지정
-const showAlert = ref<boolean>(false)
-const alertText = ref<string>("")
-const alertType = ref<"error" | "success" | "warning" | "info">("success")
 </script>
+
+<style scoped>
+.dialogBody {
+  background-color: white;
+  overflow-y: scroll;
+}
+</style>

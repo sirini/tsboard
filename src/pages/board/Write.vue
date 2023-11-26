@@ -7,12 +7,7 @@
           <v-card elevation="0" rounded="0" class="mx-auto">
             <v-form fast-fail @submit.prevent>
               <board-header></board-header>
-              <v-alert
-                v-if="write.alert.show"
-                :type="write.alert.type"
-                :text="write.alert.text"
-                class="mt-3"
-              ></v-alert>
+              <alert-bar></alert-bar>
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
@@ -51,7 +46,10 @@
                   </v-file-input>
                 </v-list-item>
                 <v-list-item class="pa-0">
-                  <board-write-editor v-model="write.content"></board-write-editor>
+                  <board-write-editor
+                    v-model="write.content"
+                    @updateRealHtml="(html: string) => write.updateRealHtml(html)"
+                  ></board-write-editor>
                 </v-list-item>
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
@@ -59,10 +57,11 @@
                     :rules="write.textRule"
                     class="mt-2"
                     prepend-inner-icon="mdi-tag-multiple"
-                    label="게시글 내용에 적합한 해시태그를 입력해 주세요 (스페이스 키 혹은 콤마로 추가)"
+                    label="게시글 내용에 적합한 해시태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
                     @keyup="write.updateTagSuggestion"
                     @keyup.space="write.addTag(write.tag)"
                     @keyup.,="write.addTag(write.tag)"
+                    @keyup.enter="write.addTag(write.tag)"
                     variant="outlined"
                   >
                     <v-menu activator="parent">
@@ -120,6 +119,7 @@ import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
+import AlertBar from "../../components/util/AlertBar.vue"
 
 const board = useBoardStore()
 const util = useUtilStore()

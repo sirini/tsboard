@@ -1,17 +1,10 @@
 <template>
-  <v-dialog width="500" v-model="board.addVideoURLDialog" persistent>
-    <v-card>
+  <v-dialog v-model="board.addVideoURLDialog" persistent>
+    <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>YouTube URL 추가</v-card-title>
       <v-divider></v-divider>
-      <v-alert
-        v-model="alert"
-        type="error"
-        closable
-        class="ma-3"
-        title="올바른 URL 형식이 아닙니다. 입력하신 URL을 다시 확인해 주세요."
-      >
-      </v-alert>
-      <v-card-text>
+      <v-card-text class="dialogBody">
+        <alert-bar></alert-bar>
         <v-row no-gutters>
           <v-col>
             <v-text-field
@@ -57,16 +50,20 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { useHomeStore } from "../../../store/home"
+import { useUtilStore } from "../../../store/util"
 import { VideoURL } from "../../../interface/board"
+import AlertBar from "../../util/AlertBar.vue"
 
 const board = useBoardStore()
+const home = useHomeStore()
+const util = useUtilStore()
 const emits = defineEmits<{
   addVideoURL: [video: VideoURL]
 }>()
 const link = ref<string>("https://")
 const width = ref<number>(640)
 const height = ref<number>(480)
-const alert = ref<boolean>(false)
 const urlPattern = /(https:\/\/)(www\.)?(youtu(be)?)\.(be|com)?\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/
 const urlRule = [
   (value: string) => {
@@ -82,10 +79,15 @@ const sizeRule = [
 // 외부 이미지 추가 반영하기
 function add(): void {
   if (urlPattern.test(link.value) === false) {
-    alert.value = true
+    util.alert("올바른 URL 형식이 아닙니다.", "error")
     return
   }
-  alert.value = false
   emits("addVideoURL", { src: link.value, width: width.value, height: height.value })
 }
 </script>
+
+<style scoped>
+.dialogBody {
+  background-color: white;
+}
+</style>

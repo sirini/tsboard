@@ -6,9 +6,9 @@
         <span class="note ml-3 pl-3">다른 사용자에게 쪽지를 보냅니다</span>
       </v-card-title>
       <v-divider></v-divider>
-      <alert-bar></alert-bar>
 
       <v-card-text class="wrap pa-0" id="tsboardChatHistory">
+        <alert-bar></alert-bar>
         <v-list>
           <v-list-subheader>받는 사람</v-list-subheader>
           <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">

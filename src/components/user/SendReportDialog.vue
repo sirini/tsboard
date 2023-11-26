@@ -6,8 +6,9 @@
         <span class="report ml-3 pl-3">운영진에게 신고 및 차단 기능을 사용합니다</span>
       </v-card-title>
       <v-divider></v-divider>
-      <alert-bar></alert-bar>
+
       <v-list>
+        <alert-bar></alert-bar>
         <v-list-subheader>신고 대상자</v-list-subheader>
         <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
           <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>

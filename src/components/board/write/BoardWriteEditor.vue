@@ -307,7 +307,7 @@ const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
 }>()
-const emits = defineEmits(["update:modelValue"])
+const emits = defineEmits(["update:modelValue", "updateRealHtml"])
 const lowlight = createLowlight(all)
 lowlight.register("css", css)
 lowlight.register("js", js)
@@ -338,11 +338,14 @@ const editor = useEditor({
     TableRow,
     CodeBlockLowlight.configure({
       lowlight,
-      defaultLanguage: "python",
+      defaultLanguage: "typescript",
     }),
   ],
   onUpdate: () => {
-    emits("update:modelValue", editor.value?.getHTML())
+    let html = editor.value?.getHTML() || ""
+    const e = document.querySelector(".tiptap") as HTMLDivElement
+    emits("update:modelValue", html)
+    emits("updateRealHtml", e.innerHTML)
   },
 })
 declare type Level = 1 | 2 | 3 | 4 | 5 | 6
@@ -409,6 +412,7 @@ function addTable(option: TableOption): void {
   editor.value?.commands.focus("end")
 }
 
+// 에디터 메모리 정리하기
 onBeforeUnmount(() => {
   editor.value?.destroy()
 })

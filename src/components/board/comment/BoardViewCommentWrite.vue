@@ -1,6 +1,9 @@
 <template>
   <v-card elevation="0" rounded="0" class="mt-2">
-    <board-write-editor v-model="comment.content"></board-write-editor>
+    <board-write-editor
+      v-model="comment.content"
+      @updateRealHtml="(html: string) => comment.updateRealHtml(html)"
+    ></board-write-editor>
     <v-card-actions>
       <v-btn
         prepend-icon="mdi-new-box"
@@ -13,7 +16,9 @@
         </v-tooltip>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn append-icon="mdi-chevron-right" color="primary">{{ comment.button }}</v-btn>
+      <v-btn append-icon="mdi-chevron-right" color="primary" @click="comment.save">{{
+        comment.button
+      }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>

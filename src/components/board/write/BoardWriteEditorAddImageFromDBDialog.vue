@@ -1,9 +1,9 @@
 <template>
-  <v-dialog width="500" v-model="board.addImageFromDBDialog" persistent scrollable>
-    <v-card>
+  <v-dialog v-model="board.addImageFromDBDialog" persistent>
+    <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>기존 이미지를 본문에 추가/관리</v-card-title>
       <v-divider></v-divider>
-      <v-card-text>
+      <v-card-text class="dialogBody">
         <v-card v-show="showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">
           <v-card-text class="pa-3">
             정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만
@@ -23,6 +23,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
+
         <v-row>
           <v-col v-for="(image, index) in uploadedImages" :key="index" cols="3">
             <v-img cover height="100" aspect-ratio="1/1" :src="PREFIX + image.src">
@@ -74,6 +75,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { useHomeStore } from "../../../store/home"
+
+const home = useHomeStore()
 
 interface Image {
   uid: number
@@ -139,6 +143,10 @@ function clear(): void {
 </script>
 
 <style scoped>
+.dialogBody {
+  background-color: white;
+  overflow-y: scroll;
+}
 .action {
   position: absolute;
   bottom: 5px;

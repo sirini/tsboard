@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-item class="pa-0" v-for="(co, index) in comments" :key="index">
+    <v-list-item class="pa-0" v-for="(co, index) in comment.comments" :key="index">
       <v-toolbar density="compact" class="pl-3 mt-4 comment_menu" :color="home.color">
         <user-nametag
           :name="co.writer.name"
@@ -48,14 +48,10 @@
           </v-menu>
         </v-btn>
       </v-toolbar>
-      <v-card elevation="0" rounded="0" class="pa-5 comment"> {{ co.content }} </v-card>
+      <v-card elevation="0" rounded="0" class="pa-5 comment tiptap" v-html="co.content"></v-card>
     </v-list-item>
   </v-list>
   <board-view-comment-remove-dialog @remove="removeComment"></board-view-comment-remove-dialog>
-  <user-info-dialog></user-info-dialog>
-  <send-note-dialog></send-note-dialog>
-  <send-report-dialog></send-report-dialog>
-  <manage-user-dialog></manage-user-dialog>
 </template>
 
 <script setup lang="ts">
@@ -63,12 +59,7 @@ import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { Comment } from "../../../interface/board"
 import UserNametag from "../../user/UserNametag.vue"
-import UserInfoDialog from "../../user/UserInfoDialog.vue"
-import SendNoteDialog from "../../user/SendNoteDialog.vue"
-import SendReportDialog from "../../user/SendReportDialog.vue"
-import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const auth = useAuthStore()
@@ -76,22 +67,6 @@ const comment = useCommentStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
-const comments: Comment[] = [
-  {
-    uid: 15,
-    postUid: 3,
-    writer: {
-      uid: 3,
-      name: "홍길동",
-      profile: "/no-profile.png",
-    },
-    content: "여기에 댓글 내용이 나옵니다",
-    like: 5,
-    reply: 2,
-    date: "2023-10-22 17:48:11",
-    liked: false,
-  },
-]
 
 // 댓글 삭제하기 클릭 시 타겟 지정
 function confirmRemoveComment(uid: number): void {

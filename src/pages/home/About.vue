@@ -2,6 +2,7 @@
   <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card class="mt-12">
@@ -72,10 +73,12 @@ import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
+import SideDrawer from "./SideDrawer.vue"
 
 const util = useUtilStore()
 const home = useHomeStore()
 
+home.color = "white"
 home.footerColor = "white"
 </script>
 

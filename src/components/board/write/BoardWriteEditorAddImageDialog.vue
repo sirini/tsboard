@@ -1,17 +1,10 @@
 <template>
-  <v-dialog width="500" v-model="board.addImageURLDialog" persistent>
-    <v-card>
+  <v-dialog v-model="board.addImageURLDialog" persistent>
+    <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>외부 이미지 URL 추가</v-card-title>
       <v-divider></v-divider>
-      <v-alert
-        v-model="alert"
-        type="error"
-        closable
-        class="ma-3"
-        title="올바른 URL 형식이 아닙니다. 입력하신 URL을 다시 확인해 주세요."
-      >
-      </v-alert>
-      <v-card-text>
+      <v-card-text class="dialogBody">
+        <alert-bar></alert-bar>
         <v-text-field
           v-model="link"
           variant="solo"
@@ -33,7 +26,12 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardStore } from "../../../store/board"
+import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import AlertBar from "../../util/AlertBar.vue"
 
+const util = useUtilStore()
+const home = useHomeStore()
 const board = useBoardStore()
 const emits = defineEmits<{
   addImageURL: [url: string]
@@ -56,10 +54,15 @@ const rule = [
 // 외부 이미지 추가 반영하기
 function add(): void {
   if (urlPattern.test(link.value) === false) {
-    alert.value = true
+    util.alert("올바른 URL 형식이 아닙니다.", "error")
     return
   }
-  alert.value = false
   emits("addImageURL", link.value)
 }
 </script>
+
+<style scoped>
+.dialogBody {
+  background-color: white;
+}
+</style>

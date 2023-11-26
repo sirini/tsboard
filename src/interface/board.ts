@@ -30,6 +30,7 @@ export interface Post {
 
 export interface Comment {
   uid: number
+  replyTarget: number
   postUid: number
   writer: Writer
   content: string

@@ -80,7 +80,6 @@
               hide-details
               prepend-inner-icon="mdi-cash-100"
               label="포인트 정보를 수정합니다"
-              readonly
             ></v-text-field>
           </v-list-item>
           <v-divider></v-divider>

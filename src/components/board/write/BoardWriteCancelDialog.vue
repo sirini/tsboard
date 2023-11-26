@@ -1,9 +1,9 @@
 <template>
-  <v-dialog width="500" v-model="board.confirmCancelDialog">
-    <v-card>
+  <v-dialog v-model="board.confirmCancelDialog" persistent>
+    <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>확인</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="mb-3">
+      <v-card-text class="dialogBody">
         본문 작성란 내부에서 업로드하신 이미지들을 제외하고 나머지 입력 항목들은 모두 삭제됩니다.
         계속 진행하시겠습니까?
       </v-card-text>
@@ -21,8 +21,10 @@
 
 <script setup lang="ts">
 import { useBoardStore } from "../../../store/board"
+import { useHomeStore } from "../../../store/home"
 
 const board = useBoardStore()
+const home = useHomeStore()
 const emits = defineEmits<{
   cancel: []
 }>()
@@ -33,3 +35,9 @@ function confirmCancel(): void {
   board.confirmCancelDialog = false
 }
 </script>
+
+<style scoped>
+.dialogBody {
+  background-color: white;
+}
+</style>
