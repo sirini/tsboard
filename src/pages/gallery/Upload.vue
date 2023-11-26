@@ -7,12 +7,7 @@
           <v-card elevation="0" rounded="0" class="mx-auto">
             <v-form fast-fail @submit.prevent>
               <gallery-header></gallery-header>
-              <v-alert
-                v-if="write.alert.show"
-                :type="write.alert.type"
-                :text="write.alert.text"
-                class="mt-3"
-              ></v-alert>
+              <alert-bar></alert-bar>
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
@@ -131,6 +126,7 @@ import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryUploadCancelDialog from "../../components/gallery/write/GalleryUploadCancelDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
+import AlertBar from "../../components/util/AlertBar.vue"
 
 const gallery = useGalleryStore()
 const util = useUtilStore()
