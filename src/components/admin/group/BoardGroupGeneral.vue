@@ -65,7 +65,7 @@
       >
       <v-list-item v-for="(board, index) in general.boards" :key="index">
         <v-row no-gutters>
-          <v-col cols="2">
+          <v-col cols="3">
             <v-text-field
               v-model="board.id"
               variant="outlined"
@@ -76,7 +76,7 @@
               prepend-inner-icon="mdi-identifier"
             ></v-text-field
           ></v-col>
-          <v-col cols="5">
+          <v-col cols="3">
             <v-text-field
               v-model="board.info"
               variant="outlined"

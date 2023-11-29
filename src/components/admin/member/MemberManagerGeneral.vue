@@ -66,7 +66,7 @@
               class="mt-3 mb-3"
               hide-details
               prepend-inner-icon="mdi-card-account-details-outline"
-              label="수정할 이름을 입력하신 후 중복 여부를 확인해 보세요"
+              label="이름 수정 후 중복 여부를 확인해 보세요"
               append-inner-icon="mdi-check-circle-outline"
               @click:append-inner="manager.checkName"
             ></v-text-field>

@@ -14,7 +14,7 @@
                     v-model="write.subject"
                     :rules="write.textRule"
                     class="mt-2"
-                    prepend-inner-icon="mdi-pencil-outline"
+                    prepend-icon="mdi-pencil-outline"
                     variant="outlined"
                     label="글 제목을 입력해 주세요"
                   ></v-text-field>

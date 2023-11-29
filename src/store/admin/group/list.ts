@@ -46,7 +46,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       return
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
-      admin.snack(`그룹 ID는 영문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`, "error")
+      admin.snack(`그룹 ID는 영어 소문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`, "error")
       newGroupId.value = ""
       return
     }

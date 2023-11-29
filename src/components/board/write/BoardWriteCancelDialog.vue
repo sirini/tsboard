@@ -13,7 +13,12 @@
           >아니요, 계속 작성하겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel">삭제</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel"
+          >삭제
+          <v-tooltip activator="parent"
+            >작성중인 내용을 잃게 됩니다! 내용은 다시 복구되지 않습니다.</v-tooltip
+          >
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

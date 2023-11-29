@@ -4,6 +4,7 @@
       <v-text-field
         v-model="target"
         variant="outlined"
+        type="number"
         density="compact"
         hide-details
         readonly
@@ -30,9 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 
-const permission = useAdminBoardPermissionStore()
 const props = defineProps<{
   level: number
   name: string

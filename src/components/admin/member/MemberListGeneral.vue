@@ -2,9 +2,10 @@
   <v-card elevation="0">
     <v-list>
       <v-list-subheader>회원 검색</v-list-subheader>
+      <v-divider></v-divider>
       <v-list-item>
         <v-row>
-          <v-col cols="4">
+          <v-col cols="5">
             <v-btn-toggle v-model="general.option" mandatory class="mt-1">
               <v-btn size="large">이름</v-btn>
               <v-btn size="large">아이디</v-btn>
@@ -16,6 +17,8 @@
               variant="outlined"
               v-model="general.search"
               hide-details
+              density="compact"
+              class="mt-2"
               prepend-inner-icon="mdi-account-question-outline"
               append-inner-icon="mdi-magnify"
               @click:append-inner=""
@@ -34,9 +37,7 @@
         <v-row>
           <v-col cols="2" class="text-center">{{ member.name }}</v-col>
           <v-col cols="4" class="text-center">{{ member.id }}</v-col>
-          <v-col cols="2" class="text-center"
-            >{{ member.point }} <span class="info">points</span></v-col
-          >
+          <v-col cols="2" class="text-center">{{ member.point }} <span class="info">P</span></v-col>
           <v-col cols="2" class="text-center"
             ><span class="info">Lv.</span> {{ member.level }}</v-col
           >

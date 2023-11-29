@@ -38,7 +38,12 @@
         <board-change-access-level
           :level="permission.access.list"
           name="글 목록"
-          @update="(level: number) => permission.updateAccessList(level)"
+          @update="
+            (level: number) => {
+              permission.access.list = level
+              permission.updateAccessPermission()
+            }
+          "
         ></board-change-access-level>
       </v-list-item>
       <v-divider></v-divider>
@@ -47,7 +52,12 @@
         <board-change-access-level
           :level="permission.access.view"
           name="글 보기"
-          @update="(level: number) => permission.updateAccessView(level)"
+          @update="
+            (level: number) => {
+              permission.access.view = level
+              permission.updateAccessPermission()
+            }
+          "
         ></board-change-access-level>
       </v-list-item>
       <v-divider></v-divider>
@@ -56,7 +66,12 @@
         <board-change-access-level
           :level="permission.access.write"
           name="글 작성"
-          @update="(level: number) => permission.updateAccessWrite(level)"
+          @update="
+            (level: number) => {
+              permission.access.write = level
+              permission.updateAccessPermission()
+            }
+          "
         ></board-change-access-level>
       </v-list-item>
       <v-divider></v-divider>
@@ -65,16 +80,26 @@
         <board-change-access-level
           :level="permission.access.comment"
           name="댓글 작성"
-          @update="(level: number) => permission.updateAccessComment(level)"
+          @update="
+            (level: number) => {
+              permission.access.comment = level
+              permission.updateAccessPermission()
+            }
+          "
         ></board-change-access-level>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-1">
         <board-change-access-level
-          :level="permission.access.comment"
+          :level="permission.access.download"
           name="다운로드"
-          @update="(level: number) => permission.updateAccessDownload(level)"
+          @update="
+            (level: number) => {
+              permission.access.download = level
+              permission.updateAccessPermission()
+            }
+          "
         ></board-change-access-level>
       </v-list-item>
     </v-list>

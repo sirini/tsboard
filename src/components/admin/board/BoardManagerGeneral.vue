@@ -3,7 +3,7 @@
     <v-list>
       <v-list-item class="mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
               v-model="general.board.id"
               variant="outlined"
@@ -23,7 +23,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
               v-model="general.board.group"
               readonly
@@ -47,7 +47,7 @@
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
-            게시판은 하나의 그룹에만 소속됩니다. 그룹 관리자는 개별 게시판에서도 관리자입니다.
+            게시판은 하나의 그룹에만 소속됩니다. 그룹 관리자도 이 게시판의 관리자입니다.
           </v-col>
         </v-row>
       </v-list-item>
@@ -55,7 +55,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
               v-model="general.board.name"
               variant="outlined"
@@ -101,7 +101,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-btn-toggle v-model="general.board.type" mandatory>
               <v-btn
                 value="board"
@@ -133,7 +133,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
               v-model="general.board.rows"
               variant="outlined"
@@ -157,7 +157,7 @@
 
       <v-list-item class="mt-2 mb-1">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
               v-model="general.board.category.add"
               variant="outlined"

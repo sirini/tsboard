@@ -3,21 +3,35 @@
     <v-list>
       <v-list-item class="mb-2">
         <board-change-point
-          :payment="point.view.payment"
-          :point="point.view.point"
+          :isPayment="point.deal.view.isPayment"
+          :amount="point.deal.view.amount"
           name="글보기"
-          @update="(payment: 0 | 1, newPoint: number) => point.deal(ACTION.VIEW, payment, newPoint)"
+          @update="
+            (isPayment: boolean, amount: number) => {
+              point.deal.view = {
+                isPayment,
+                amount,
+              }
+              point.updatePointDeal()
+            }
+          "
         ></board-change-point>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
         <board-change-point
-          :payment="point.write.payment"
-          :point="point.write.point"
+          :isPayment="point.deal.write.isPayment"
+          :amount="point.deal.write.amount"
           name="글쓰기"
           @update="
-            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.WRITE, payment, newPoint)
+            (isPayment: boolean, amount: number) => {
+              point.deal.write = {
+                isPayment,
+                amount,
+              }
+              point.updatePointDeal()
+            }
           "
         ></board-change-point>
       </v-list-item>
@@ -25,11 +39,17 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-change-point
-          :payment="point.comment.payment"
-          :point="point.comment.point"
+          :isPayment="point.deal.comment.isPayment"
+          :amount="point.deal.comment.amount"
           name="댓글 쓰기"
           @update="
-            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.COMMENT, payment, newPoint)
+            (isPayment: boolean, amount: number) => {
+              point.deal.comment = {
+                isPayment,
+                amount,
+              }
+              point.updatePointDeal()
+            }
           "
         ></board-change-point>
       </v-list-item>
@@ -37,11 +57,17 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-change-point
-          :payment="point.download.payment"
-          :point="point.download.point"
+          :isPayment="point.deal.download.isPayment"
+          :amount="point.deal.download.amount"
           name="다운로드"
           @update="
-            (payment: 0 | 1, newPoint: number) => point.deal(ACTION.DOWNLOAD, payment, newPoint)
+            (isPayment: boolean, amount: number) => {
+              point.deal.download = {
+                isPayment,
+                amount,
+              }
+              point.updatePointDeal()
+            }
           "
         ></board-change-point>
       </v-list-item>
@@ -50,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminBoardPointStore, ACTION } from "../../../store/admin/board/point"
+import { useAdminBoardPointStore } from "../../../store/admin/board/point"
 import BoardChangePoint from "./BoardChangePoint.vue"
 
 const point = useAdminBoardPointStore()

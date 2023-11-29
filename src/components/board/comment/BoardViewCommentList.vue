@@ -87,5 +87,6 @@ function removeComment(): void {
 }
 .comment {
   line-height: 1.8em;
+  min-height: 70px;
 }
 </style>

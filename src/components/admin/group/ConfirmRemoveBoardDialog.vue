@@ -8,7 +8,7 @@
         글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 삭제를 시작할까요?
       </v-card-text>
       <v-card-actions class="pa-4">
-        <v-btn prepend-icon="mdi-close" rounded="xl" variant="tonal" color="info" @click="close"
+        <v-btn prepend-icon="mdi-close" rounded="xl" color="primary" @click="close"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>

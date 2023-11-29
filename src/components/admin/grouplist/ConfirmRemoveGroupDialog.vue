@@ -8,11 +8,16 @@
         그룹 소속 게시판들은 모두 기본 그룹 소속으로 변경됩니다. 삭제를 시작할까요?
       </v-card-text>
       <v-card-actions class="pa-4">
-        <v-btn prepend-icon="mdi-close" rounded="xl" color="info" variant="tonal" @click="close"
+        <v-btn prepend-icon="mdi-close" rounded="xl" @click="close" color="primary"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="remove"
+          >삭제
+          <v-tooltip activator="parent"
+            >게시판들은 삭제되지 않으며, 기본 그룹 소속으로만 변경됩니다.</v-tooltip
+          >
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

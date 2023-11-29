@@ -63,54 +63,10 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     )
   }
 
-  // 목록보기 액세스 권한 변경
-  async function updateAccessList(level: number): Promise<void> {
-    // do something
-    access.value.list = level
-    admin.snack(
-      `${general.board.id} 게시판의 목록 보기 레벨을 ${level} 이상으로 설정 하였습니다.`,
-      "success",
-    )
-  }
-
-  // 글보기 액세스 권한 변경
-  async function updateAccessView(level: number): Promise<void> {
-    // do something
-    access.value.view = level
-    admin.snack(
-      `${general.board.id} 게시판의 글보기 레벨을 ${level} 이상으로 설정 하였습니다.`,
-      "success",
-    )
-  }
-
-  // 글쓰기 액세스 권한 변경
-  async function updateAccessWrite(level: number): Promise<void> {
-    // do something
-    access.value.write = level
-    admin.snack(
-      `${general.board.id} 게시판의 글작성 레벨을 ${level} 이상으로 설정 하였습니다.`,
-      "success",
-    )
-  }
-
-  // 댓글쓰기 액세스 권한 변경
-  async function updateAccessComment(level: number): Promise<void> {
-    // do something
-    access.value.comment = level
-    admin.snack(
-      `${general.board.id} 게시판의 댓글쓰기 레벨을 ${level} 이상으로 설정 하였습니다.`,
-      "success",
-    )
-  }
-
-  // 다운로드 액세스 권한 변경
-  async function updateAccessDownload(level: number): Promise<void> {
-    // do something
-    access.value.download = level
-    admin.snack(
-      `${general.board.id} 게시판의 다운로드 레벨을 ${level} 이상으로 설정 하였습니다.`,
-      "success",
-    )
+  // 액세스 권한 변경
+  async function updateAccessPermission(): Promise<void> {
+    // axios.put('some path', access.value) ...
+    admin.snack(`${general.board.id} 게시판의 접근 권한을 업데이트 하였습니다.`, "success")
   }
 
   return {
@@ -119,10 +75,6 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     access,
     updateBoardManagerSuggestion,
     updateBoardManager,
-    updateAccessList,
-    updateAccessView,
-    updateAccessWrite,
-    updateAccessComment,
-    updateAccessDownload,
+    updateAccessPermission,
   }
 })

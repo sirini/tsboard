@@ -10,10 +10,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn
-          prepend-icon="mdi-check-bold"
-          color="primary"
-          @click="comment.confirmRemoveCommentDialog = false"
+        <v-btn prepend-icon="mdi-check-bold" color="primary" @click="close"
           >아니요, 그대로 두겠습니다</v-btn
         >
         <v-spacer></v-spacer>
@@ -31,9 +28,14 @@ const emits = defineEmits<{
   removeComment: []
 }>()
 
-// 글 작성 취소하기
+// 댓글 삭제 (혹은 비공개) 처리하기
 function confirmRemove(): void {
   emits("removeComment")
+  close()
+}
+
+// 댓글 삭제 취소
+function close(): void {
   comment.confirmRemoveCommentDialog = false
 }
 </script>

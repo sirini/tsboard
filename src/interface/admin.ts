@@ -39,8 +39,15 @@ export interface AdminBoardConfig {
 }
 
 export interface AdminBoardPoint {
-  payment: 0 | 1
-  point: number
+  isPayment: boolean
+  amount: number
+}
+
+export interface AdminBoardPointList {
+  view: AdminBoardPoint
+  write: AdminBoardPoint
+  comment: AdminBoardPoint
+  download: AdminBoardPoint
 }
 
 export interface AdminUserActivity {

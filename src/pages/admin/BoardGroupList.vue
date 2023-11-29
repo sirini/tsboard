@@ -1,23 +1,25 @@
 <template>
   <v-app class="app">
     <admin-header></admin-header>
-    <v-card class="mx-auto rounded-lg admin" width="1200">
-      <v-card-title>그룹들 관리</v-card-title>
-      <v-divider></v-divider>
-      <v-layout>
-        <v-navigation-drawer permanent location="left" width="250">
-          <v-list>
-            <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right" @click="">
-              <strong>일반</strong>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
+    <v-container>
+      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+        <v-card-title>그룹들 관리</v-card-title>
+        <v-divider></v-divider>
+        <v-layout>
+          <v-navigation-drawer permanent location="left" width="200">
+            <v-list>
+              <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right" @click="">
+                <strong>일반</strong>
+              </v-list-item>
+            </v-list>
+          </v-navigation-drawer>
 
-        <v-main class="main">
-          <group-list-general></group-list-general>
-        </v-main>
-      </v-layout>
-    </v-card>
+          <v-main class="main">
+            <group-list-general></group-list-general>
+          </v-main>
+        </v-layout>
+      </v-card>
+    </v-container>
     <admin-footer></admin-footer>
     <confirm-remove-group-dialog></confirm-remove-group-dialog>
   </v-app>

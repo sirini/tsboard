@@ -12,6 +12,7 @@
               append-inner-icon="mdi-plus-circle-outline"
               @keyup="list.updateExistGroupIds"
               @click:append-inner="list.createNewGroup"
+              @keyup.enter="list.createNewGroup"
             >
               <v-menu activator="parent">
                 <v-list>
@@ -20,6 +21,9 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
+              <v-tooltip activator="parent">
+                그룹명에는 알파벳 소문자와 숫자 그리고 _ (밑줄) 만 허용됩니다.
+              </v-tooltip>
             </v-text-field>
           </v-col>
           <v-col class="mt-2">{{ list.newGroupId }} 그룹을 새롭게 생성합니다.</v-col>

@@ -1,48 +1,50 @@
 <template>
   <v-app class="app">
     <admin-header></admin-header>
-    <v-card class="mx-auto rounded-lg admin" width="1200">
-      <v-card-title
-        ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
-      >
-      <v-divider></v-divider>
-      <v-layout>
-        <v-navigation-drawer permanent location="left" width="250">
-          <v-list>
-            <v-list-item
-              prepend-icon="mdi-cog-outline"
-              append-icon="mdi-chevron-right"
-              @click="menu = 'normal'"
-            >
-              <strong v-if="menu === 'normal'">일반</strong>
-              <span v-else>일반</span>
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-account-check-outline"
-              append-icon="mdi-chevron-right"
-              @click="menu = 'permission'"
-            >
-              <strong v-if="menu === 'permission'">권한</strong>
-              <span v-else>권한</span>
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-cash-100"
-              append-icon="mdi-chevron-right"
-              @click="menu = 'point'"
-            >
-              <strong v-if="menu === 'point'">포인트</strong>
-              <span v-else>포인트</span>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
+    <v-container>
+      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+        <v-card-title
+          ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
+        >
+        <v-divider></v-divider>
+        <v-layout>
+          <v-navigation-drawer permanent location="left" width="200">
+            <v-list>
+              <v-list-item
+                prepend-icon="mdi-cog-outline"
+                append-icon="mdi-chevron-right"
+                @click="menu = 'normal'"
+              >
+                <strong v-if="menu === 'normal'">일반</strong>
+                <span v-else>일반</span>
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-account-check-outline"
+                append-icon="mdi-chevron-right"
+                @click="menu = 'permission'"
+              >
+                <strong v-if="menu === 'permission'">권한</strong>
+                <span v-else>권한</span>
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-cash-100"
+                append-icon="mdi-chevron-right"
+                @click="menu = 'point'"
+              >
+                <strong v-if="menu === 'point'">포인트</strong>
+                <span v-else>포인트</span>
+              </v-list-item>
+            </v-list>
+          </v-navigation-drawer>
 
-        <v-main class="main">
-          <board-manager-general v-if="menu === 'normal'"></board-manager-general>
-          <board-manager-permission v-if="menu === 'permission'"></board-manager-permission>
-          <board-manager-point v-if="menu === 'point'"></board-manager-point>
-        </v-main>
-      </v-layout>
-    </v-card>
+          <v-main class="main">
+            <board-manager-general v-if="menu === 'normal'"></board-manager-general>
+            <board-manager-permission v-if="menu === 'permission'"></board-manager-permission>
+            <board-manager-point v-if="menu === 'point'"></board-manager-point>
+          </v-main>
+        </v-layout>
+      </v-card>
+    </v-container>
     <admin-footer></admin-footer>
     <confirm-remove-category-dialog></confirm-remove-category-dialog>
   </v-app>
