@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="500" v-model="general.confirmRemoveCategoryDialog" persistent>
-    <v-card class="mx-auto">
+  <v-dialog v-model="general.confirmRemoveCategoryDialog" persistent>
+    <v-card width="500" class="mx-auto">
       <v-card-title>확인</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-2">

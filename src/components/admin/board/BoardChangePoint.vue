@@ -56,8 +56,8 @@ const target = ref<string>(props.amount.toString()) // Vuetify v-text-field 제�
 // 포인트, 지불/충전 변경
 function update(): void {
   const amount = parseInt(target.value)
-  if (amount < 1 || amount > 10000) {
-    admin.snack("포인트는 1 이상 10000 이하로 지정해 주세요.", "error")
+  if (amount < 0 || amount > 10000) {
+    admin.snack("포인트는 0 이상 10000 이하로 지정해 주세요.", "error")
     target.value = "0"
     return
   }

@@ -4,12 +4,6 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
-export interface AdminBreadcrumb {
-  title: string
-  disabled: boolean
-  href: string
-}
-
 export interface AdminPairItem {
   uid: number
   name: string
@@ -86,4 +80,10 @@ export interface AdminMemberTable {
   point: number
   level: number
   signupDate: string
+}
+
+export interface AdminMemberReportList {
+  content: string
+  from: AdminPairItem
+  date: string
 }

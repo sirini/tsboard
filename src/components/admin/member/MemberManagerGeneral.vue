@@ -38,6 +38,7 @@
                     @click="manager.changeUserLevel(level)"
                   >
                     {{ level }} 레벨
+                    <v-chip size="small" color="info" v-if="level === 0">비회원과 동일 레벨</v-chip>
                   </v-list-item>
                 </v-list>
               </v-menu>
