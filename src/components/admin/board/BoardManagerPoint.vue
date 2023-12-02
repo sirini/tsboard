@@ -7,13 +7,7 @@
           :amount="point.deal.view.amount"
           name="글보기"
           @update="
-            (isPayment: boolean, amount: number) => {
-              point.deal.view = {
-                isPayment,
-                amount,
-              }
-              point.updatePointDeal()
-            }
+            (isPayment: boolean, amount: number) => point.updateViewPointRule(isPayment, amount)
           "
         ></board-change-point>
       </v-list-item>
@@ -25,13 +19,7 @@
           :amount="point.deal.write.amount"
           name="글쓰기"
           @update="
-            (isPayment: boolean, amount: number) => {
-              point.deal.write = {
-                isPayment,
-                amount,
-              }
-              point.updatePointDeal()
-            }
+            (isPayment: boolean, amount: number) => point.updateWritePointRule(isPayment, amount)
           "
         ></board-change-point>
       </v-list-item>
@@ -43,13 +31,7 @@
           :amount="point.deal.comment.amount"
           name="댓글 쓰기"
           @update="
-            (isPayment: boolean, amount: number) => {
-              point.deal.comment = {
-                isPayment,
-                amount,
-              }
-              point.updatePointDeal()
-            }
+            (isPayment: boolean, amount: number) => point.updateCommentPointRule(isPayment, amount)
           "
         ></board-change-point>
       </v-list-item>
@@ -61,13 +43,7 @@
           :amount="point.deal.download.amount"
           name="다운로드"
           @update="
-            (isPayment: boolean, amount: number) => {
-              point.deal.download = {
-                isPayment,
-                amount,
-              }
-              point.updatePointDeal()
-            }
+            (isPayment: boolean, amount: number) => point.updateDownloadPointRule(isPayment, amount)
           "
         ></board-change-point>
       </v-list-item>

@@ -63,8 +63,38 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     )
   }
 
+  // 글 목록 권한 업데이트
+  function updateListPermission(level: number): void {
+    access.value.list = level
+    updateAllPermissions()
+  }
+
+  // 글 보기 권한 업데이트
+  function updateViewPermission(level: number): void {
+    access.value.view = level
+    updateAllPermissions()
+  }
+
+  // 글 쓰기 권한 업데이트
+  function updateWritePermission(level: number): void {
+    access.value.write = level
+    updateAllPermissions()
+  }
+
+  // 댓글 작성 권한 업데이트
+  function updateCommentPermission(level: number): void {
+    access.value.comment = level
+    updateAllPermissions()
+  }
+
+  // 다운로드 권한 업데이트
+  function updateDownloadPermission(level: number): void {
+    access.value.download = level
+    updateAllPermissions()
+  }
+
   // 액세스 권한 변경
-  async function updateAccessPermission(): Promise<void> {
+  async function updateAllPermissions(): Promise<void> {
     // axios.put('some path', access.value) ...
     admin.snack(`${general.board.id} 게시판의 접근 권한을 업데이트 하였습니다.`, "success")
   }
@@ -75,6 +105,10 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     access,
     updateBoardManagerSuggestion,
     updateBoardManager,
-    updateAccessPermission,
+    updateListPermission,
+    updateViewPermission,
+    updateWritePermission,
+    updateCommentPermission,
+    updateDownloadPermission,
   }
 })
