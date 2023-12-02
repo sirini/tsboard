@@ -25,6 +25,10 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
+    admin.snack(
+      `글 보기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
+      "success",
+    )
   }
 
   // 글 작성 포인트 정책 업데이트
@@ -34,6 +38,10 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
+    admin.snack(
+      `글 작성에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
+      "success",
+    )
   }
 
   // 댓글 쓰기 포인트 정책 업데이트
@@ -43,6 +51,10 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
+    admin.snack(
+      `댓글 쓰기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
+      "success",
+    )
   }
 
   // 다운로드 포인트 정책 업데이트
@@ -52,12 +64,15 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
+    admin.snack(
+      `다운로드에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
+      "success",
+    )
   }
 
   // 포인트 처리
   async function updateAllPointRules(): Promise<void> {
     // axios.put('some path', point.value) ...
-    admin.snack(`포인트 충전/차감 내역을 업데이트 하였습니다.`, "success")
   }
 
   return {
