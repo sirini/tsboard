@@ -37,4 +37,9 @@ export const adminRoutes = [
     name: "adminMemberManager",
     component: () => import("@/pages/admin/MemberManager.vue"),
   },
+  {
+    path: PREFIX + "/admin/report",
+    name: "adminReport",
+    component: () => import("@/pages/admin/ReportList.vue"),
+  },
 ]

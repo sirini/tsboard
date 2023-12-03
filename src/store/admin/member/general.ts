@@ -6,7 +6,7 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { AdminMemberTable, AdminPairItem, AdminMemberReportList } from "../../../interface/admin"
+import { AdminMemberTable, AdminPairItem, AdminMemberReport } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 
 export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () => {
@@ -48,16 +48,18 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
       signupDate: "2023-11-24",
     },
   ])
-  const reports = ref<AdminMemberReportList[]>([
+  const reports = ref<AdminMemberReport[]>([
     {
       content: "예시용 신고 내역 입니다. 회원이 뭔가를 잘못해서 남겨졌습니다.",
       from: { uid: 123, name: "의적단" },
+      to: { uid: 12, name: "악당1" },
       date: "2023-11-30 20:22:10",
     },
     {
       content:
         "다른 회원으로부터 받은 신고 내역입니다. 역시나 뭔가를 잘못했으며 이 회원의 문제 상황을 언급합니다.",
       from: { uid: 321, name: "스나이퍼" },
+      to: { uid: 32, name: "악당2" },
       date: "2023-11-30 20:23:20",
     },
   ])

@@ -54,7 +54,13 @@
         <v-card-title
           >최근 신고
           <div class="more">
-            <v-btn prepend-icon="mdi-magnify" rounded="xl" elevation="0">더 보기</v-btn>
+            <v-btn
+              prepend-icon="mdi-magnify"
+              rounded="xl"
+              elevation="0"
+              @click="util.go('adminReport')"
+              >더 보기</v-btn
+            >
           </div>
         </v-card-title>
         <v-divider></v-divider>

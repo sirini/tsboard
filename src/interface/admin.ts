@@ -13,6 +13,7 @@ export interface AdminBreadcrumb {
 export interface AdminPairItem {
   uid: number
   name: string
+  profile?: string
 }
 
 export interface AdminBoardConfigGroup {
@@ -88,8 +89,9 @@ export interface AdminMemberTable {
   signupDate: string
 }
 
-export interface AdminMemberReportList {
+export interface AdminMemberReport {
   content: string
   from: AdminPairItem
+  to: AdminPairItem
   date: string
 }
