@@ -48,11 +48,14 @@
                     prepend-icon="mdi-calendar"
                     >{{ viewer.photo?.date }}</v-chip
                   >
+                  <v-chip label size="small" variant="text" color="grey" prepend-icon="mdi-eye">{{
+                    viewer.photo?.view
+                  }}</v-chip>
                   <v-spacer></v-spacer>
                   <user-nametag
                     :uid="viewer.photo?.writer.uid || 0"
                     :name="viewer.photo?.writer.name || ''"
-                    :profile="viewer.photo?.writer.profile || '/no-profile.png'"
+                    :profile="PREFIX + (viewer.photo?.writer.profile || '/no-profile.png')"
                     size="small"
                   ></user-nametag>
                 </v-card-actions>

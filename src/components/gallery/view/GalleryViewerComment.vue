@@ -48,20 +48,12 @@
       </v-btn>
     </v-card-actions>
   </v-card>
-  <user-info-dialog></user-info-dialog>
-  <send-note-dialog></send-note-dialog>
-  <send-report-dialog></send-report-dialog>
-  <manage-user-dialog></manage-user-dialog>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
 import UserNametag from "../../user/UserNametag.vue"
-import UserInfoDialog from "../../user/UserInfoDialog.vue"
-import SendNoteDialog from "../../user/SendNoteDialog.vue"
-import SendReportDialog from "../../user/SendReportDialog.vue"
-import ManageUserDialog from "../../user/ManageUserDialog.vue"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
