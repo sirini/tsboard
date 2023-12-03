@@ -38,6 +38,8 @@
         </template>
         <v-list-item-title
           ><span class="ml-3">{{ post.title }}</span>
+        </v-list-item-title>
+        <template v-slot:append>
           <v-chip
             size="small"
             color="blue-grey"
@@ -46,8 +48,9 @@
             >{{ post.comment }}</v-chip
           >
           <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart">{{ post.like }}</v-chip>
-        </v-list-item-title>
-        <template v-slot:append>
+          <v-chip size="small" color="blue-grey" class="ml-1" prepend-icon="mdi-eye">{{
+            post.hit
+          }}</v-chip>
           <v-btn icon elevation="0" @click="util.go('boardView', post.id, post.uid)"
             ><v-icon>mdi-chevron-right</v-icon>
             <v-tooltip activator="parent"> 클릭하시면 이 게시글을 보러 이동 합니다. </v-tooltip>

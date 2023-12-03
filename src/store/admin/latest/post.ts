@@ -25,6 +25,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       },
       comment: 2,
       like: 1,
+      hit: 105,
       date: "2023-12-03 17:31:21",
     },
     {
@@ -39,6 +40,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       },
       comment: 1,
       like: 0,
+      hit: 85,
       date: "2023-12-03 18:04:10",
     },
   ])

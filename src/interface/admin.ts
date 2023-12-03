@@ -103,6 +103,7 @@ export interface AdminLatestPost {
   writer: AdminPairItem
   comment: number
   like: number
+  hit: number
   date: string
 }
 
