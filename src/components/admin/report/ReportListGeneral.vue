@@ -50,7 +50,7 @@
             @click="
               user.openManageUser({
                 uid: report.to.uid,
-                profile: report.to.profile,
+                profile: report.to.profile || '',
                 name: report.to.name,
               })
             "

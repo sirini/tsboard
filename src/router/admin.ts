@@ -42,4 +42,14 @@ export const adminRoutes = [
     name: "adminReport",
     component: () => import("@/pages/admin/ReportList.vue"),
   },
+  {
+    path: PREFIX + "/admin/latest/post",
+    name: "adminLatestPost",
+    component: () => import("@/pages/admin/LatestPost.vue"),
+  },
+  {
+    path: PREFIX + "/admin/latest/comment",
+    name: "adminLatestComment",
+    component: () => import("@/pages/admin/LatestComment.vue"),
+  },
 ]

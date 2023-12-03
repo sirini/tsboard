@@ -5,7 +5,11 @@
         <v-card-title
           >최신 글
           <div class="more">
-            <v-btn prepend-icon="mdi-magnify" rounded="xl" elevation="0"
+            <v-btn
+              prepend-icon="mdi-magnify"
+              rounded="xl"
+              elevation="0"
+              @click="util.go('adminLatestPost')"
               >더 보기
               <v-tooltip activator="parent"
                 >클릭하시면 최신 글들을 모아 둔 관리 화면으로 이동합니다.</v-tooltip
@@ -32,7 +36,13 @@
         <v-card-title
           >최신 댓글
           <div class="more">
-            <v-btn prepend-icon="mdi-magnify" rounded="xl" elevation="0">더 보기</v-btn>
+            <v-btn
+              prepend-icon="mdi-magnify"
+              rounded="xl"
+              elevation="0"
+              @click="util.go('adminLatestComment')"
+              >더 보기</v-btn
+            >
           </div>
         </v-card-title>
         <v-divider></v-divider>

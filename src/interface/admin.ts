@@ -95,3 +95,22 @@ export interface AdminMemberReport {
   to: AdminPairItem
   date: string
 }
+
+export interface AdminLatestPost {
+  id: string
+  uid: number
+  title: string
+  writer: AdminPairItem
+  comment: number
+  like: number
+  date: string
+}
+
+export interface AdminLatestComment {
+  id: string
+  uid: number
+  content: string
+  writer: AdminPairItem
+  like: number
+  date: string
+}
