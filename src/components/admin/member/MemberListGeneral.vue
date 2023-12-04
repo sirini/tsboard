@@ -46,7 +46,11 @@
           <v-col cols="3" class="text-center text-caption">{{ member.signupDate }}</v-col>
         </v-row>
         <template v-slot:append>
-          <v-btn elevation="0" icon @click="util.go('adminMemberManager', member.uid.toString())">
+          <v-btn
+            elevation="0"
+            icon
+            @click="router.push({ name: 'adminMemberManager', params: { uid: member.uid } })"
+          >
             <v-icon>mdi-pencil</v-icon>
             <v-tooltip activator="parent">
               클릭하시면 {{ member.name }}님의 정보를 수정하러 이동합니다.
@@ -74,10 +78,12 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router"
 import { useUtilStore } from "../../../store/util"
 import { useAdminMemberGeneralStore } from "../../../store/admin/member/general"
 import ConfirmBlockUserDialog from "./ConfirmBlockUserDialog.vue"
 
+const router = useRouter()
 const util = useUtilStore()
 const general = useAdminMemberGeneralStore()
 </script>

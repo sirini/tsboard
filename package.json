@@ -10,6 +10,7 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@elysiajs/eden": "^0.7.4",
     "@mdi/font": "7.0.96",
     "@tiptap/extension-code-block-lowlight": "^2.1.12",
     "@tiptap/extension-color": "^2.1.11",
@@ -26,7 +27,7 @@
     "@tiptap/vue-3": "^2.1.11",
     "core-js": "^3.29.0",
     "crypto-js": "^4.2.0",
-    "elysia": "latest",
+    "elysia": "^0.7.29",
     "highlight.js": "^11.9.0",
     "lowlight": "^3.1.0",
     "mysql2": "^3.6.1",
