@@ -13,12 +13,7 @@ export const useBoardStore = defineStore("board", () => {
   const route = useRoute()
   const id = ref<string>(route.params?.id.toString())
   const uid = ref<number>(0)
-  const uploadImageDialog = ref<boolean>(false)
-  const addImageFromDBDialog = ref<boolean>(false)
-  const addImageURLDialog = ref<boolean>(false)
-  const addVideoURLDialog = ref<boolean>(false)
-  const addTableDialog = ref<boolean>(false)
-  const confirmCancelDialog = ref<boolean>(false)
+
   const categories = ref<Pair[]>([
     { uid: 1, name: "news" },
     { uid: 2, name: "test" },
@@ -33,12 +28,6 @@ export const useBoardStore = defineStore("board", () => {
   return {
     id,
     uid,
-    uploadImageDialog,
-    addImageFromDBDialog,
-    addImageURLDialog,
-    addVideoURLDialog,
-    addTableDialog,
-    confirmCancelDialog,
     categories,
     like,
   }

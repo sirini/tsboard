@@ -40,7 +40,7 @@
         icon
         size="small"
         :disabled="auth.user.uid !== writerUid && !auth.user.admin"
-        @click="comment.confirmRemoveComment(commentUid)"
+        @click="comment.openRemoveCommentDialog(commentUid)"
         ><v-icon>mdi-trash-can</v-icon>
         <v-tooltip activator="parent" location="top"
           >댓글을 삭제합니다 (답글이 달려있을 경우 삭제 불가, 작성자/관리자만 가능)</v-tooltip

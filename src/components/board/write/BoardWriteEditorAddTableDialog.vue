@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="board.addTableDialog" persistent>
+  <v-dialog v-model="write.addTableDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>표 추가하기</v-card-title>
       <v-divider></v-divider>
@@ -30,7 +30,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="board.addTableDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="write.addTableDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
       </v-card-actions>
@@ -40,11 +40,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardStore } from "../../../store/board"
+import { useWriteStore } from "../../../store/write"
 import { useHomeStore } from "../../../store/home"
 import { TableOption } from "../../../interface/board"
 
-const board = useBoardStore()
+const write = useWriteStore()
 const home = useHomeStore()
 const emits = defineEmits<{
   addTable: [option: TableOption]

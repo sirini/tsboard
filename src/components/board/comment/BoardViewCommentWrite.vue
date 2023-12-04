@@ -4,6 +4,7 @@
       v-model="comment.content"
       @updateRealHtml="(html: string) => comment.updateRealHtml(html)"
     ></board-write-editor>
+
     <v-card-actions>
       <v-btn
         prepend-icon="mdi-new-box"

@@ -39,7 +39,7 @@
                   prepend-icon="mdi-trash-can"
                   variant="text"
                   :disabled="auth.user.uid !== co.writer.uid && !auth.user.admin"
-                  @click="confirmRemoveComment(co.uid)"
+                  @click="comment.openRemoveCommentDialog(co.uid)"
                 >
                   이 댓글 삭제하기
                 </v-btn>
@@ -48,37 +48,24 @@
           </v-menu>
         </v-btn>
       </v-toolbar>
+
       <v-card elevation="0" rounded="0" class="pa-5 comment tiptap" v-html="co.content"></v-card>
     </v-list-item>
   </v-list>
-  <board-view-comment-remove-dialog @remove="removeComment"></board-view-comment-remove-dialog>
+  <board-view-comment-remove-dialog></board-view-comment-remove-dialog>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
-import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
-const util = useUtilStore()
 const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
-
-// 댓글 삭제하기 클릭 시 타겟 지정
-function confirmRemoveComment(uid: number): void {
-  comment.removeTarget = uid
-  comment.confirmRemoveCommentDialog = true
-}
-
-// 댓글 삭제하기 처리
-function removeComment(): void {
-  // do something
-  util.snack("댓글이 정상적으로 삭제(비공개) 되었습니다.")
-}
 </script>
 
 <style scoped>

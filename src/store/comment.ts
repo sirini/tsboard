@@ -34,6 +34,21 @@ export const useCommentStore = defineStore("comment", () => {
       date: "2023-10-22 17:48:11",
       liked: false,
     },
+    {
+      uid: 30,
+      replyTarget: 0,
+      postUid: 3,
+      writer: {
+        uid: 31,
+        name: "정비공장장",
+        profile: "/no-profile.png",
+      },
+      content: "여기에 추가로 댓글 내용이 나옵니다",
+      like: 1,
+      reply: 0,
+      date: "2023-12-04 12:51:18",
+      liked: true,
+    },
   ])
 
   // 댓글에 답글달기 시 대상 지정
@@ -63,12 +78,6 @@ export const useCommentStore = defineStore("comment", () => {
     button.value = "새 댓글 작성하기"
     content.value = ""
     util.snack("새로운 댓글 작성으로 작성란을 초기화합니다.")
-  }
-
-  // 댓글 삭제하기 시 확인창 띄우기
-  function confirmRemoveComment(uid: number): void {
-    removeTarget.value = uid
-    confirmRemoveCommentDialog.value = true
   }
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
@@ -147,6 +156,32 @@ export const useCommentStore = defineStore("comment", () => {
     util.snack("기존 댓글을 수정하였습니다.")
   }
 
+  // 댓글 삭제 확인용 다이얼로그 열기
+  function openRemoveCommentDialog(uid: number): void {
+    removeTarget.value = uid
+    confirmRemoveCommentDialog.value = true
+  }
+
+  // 댓글 삭제 확인용 다이얼로그 닫그
+  function closeRemoveCommentDialog(): void {
+    removeTarget.value = 0
+    confirmRemoveCommentDialog.value = false
+  }
+
+  // 댓글 삭제하기
+  async function removeComment(): Promise<void> {
+    if (removeTarget.value < 1) {
+      util.snack("삭제할 대상이 지정되지 않았습니다.")
+      return
+    }
+    // do something with removeTarget
+    comments.value = comments.value.filter((comment: Comment) => {
+      return removeTarget.value !== comment.uid
+    })
+    util.snack("댓글이 정상적으로 삭제(혹은 비공개) 되었습니다.")
+    closeRemoveCommentDialog()
+  }
+
   return {
     modifyTarget,
     replyTarget,
@@ -158,9 +193,11 @@ export const useCommentStore = defineStore("comment", () => {
     setReplyComment,
     setModifyComment,
     resetCommentMode,
-    confirmRemoveComment,
     like,
     save,
     updateRealHtml,
+    openRemoveCommentDialog,
+    closeRemoveCommentDialog,
+    removeComment,
   }
 })

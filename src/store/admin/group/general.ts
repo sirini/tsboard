@@ -112,6 +112,13 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     confirmRemoveBoardDialog.value = true
   }
 
+  // 게시판을 삭삭제하지 않고 그대로 닫기
+  function closeRemoveBoardDialog(): void {
+    removeBoardTarget.value.uid = 0
+    removeBoardTarget.value.name = ""
+    confirmRemoveBoardDialog.value = false
+  }
+
   // 게시판을 정말로 삭제할 때 처리
   function removeBoard(): void {
     if (removeBoardTarget.value.uid < 1 || removeBoardTarget.value.name.length < 1) {
@@ -119,9 +126,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return
     }
     // do something
-    removeBoardTarget.value.uid = 0
-    removeBoardTarget.value.name = ""
-    confirmRemoveBoardDialog.value = false
+    closeRemoveBoardDialog()
     admin.snack("게시판이 성공적으로 삭제되었습니다.", "success")
   }
 
@@ -138,6 +143,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     createNewBoard,
     updateGroupManager,
     confirmRemoveBoard,
+    closeRemoveBoardDialog,
     removeBoard,
   }
 })

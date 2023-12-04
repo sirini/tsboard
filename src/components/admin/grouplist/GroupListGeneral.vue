@@ -30,6 +30,7 @@
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
+
       <v-list-subheader
         >총 {{ list.groups.length }} 개의 게시판 그룹들 (게시판 아이디 / 관리자 아이디 / 소속 게시판
         개수)</v-list-subheader

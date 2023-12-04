@@ -19,10 +19,14 @@ export const useUtilStore = defineStore("util", () => {
   const alertTimeout = ref<number>(5000)
   const searchOption = ref<string>("subject")
   const searchValue = ref<string>("")
-  const filter = /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/]/gim
-  const filterNoSpace = /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/ ]/gim
-  const filterEmail = /^([0-9a-z_\.-]+)@([0-9a-z_-]+)(\.[a-z]+){1,2}$/
-  const filterPassword = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/
+  const filters = {
+    basic: /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/]/gim,
+    nospace: /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/ ]/gim,
+    email: /^([0-9a-z_\.-]+)@([0-9a-z_-]+)(\.[a-z]+){1,2}$/,
+    password: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/,
+    url: /(http(s)?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+\/~#=]{2,256}\.(jpg|jpeg|png|gif)?\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/,
+    youtube: /(https:\/\/)(www\.)?(youtu(be)?)\.(be|com)?\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/,
+  }
 
   // 스낵 메시지 보여주기
   function snack(message: string, timeout: number = 3000): void {
@@ -71,10 +75,7 @@ export const useUtilStore = defineStore("util", () => {
     alertTimeout,
     searchOption,
     searchValue,
-    filter,
-    filterNoSpace,
-    filterEmail,
-    filterPassword,
+    filters,
     snack,
     alert,
     go,

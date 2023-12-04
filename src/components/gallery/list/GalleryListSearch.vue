@@ -9,6 +9,7 @@
           <v-btn value="writer">작가명</v-btn>
         </v-btn-toggle>
       </v-list-item>
+
       <v-list-item>
         <v-text-field
           v-model="util.searchValue"

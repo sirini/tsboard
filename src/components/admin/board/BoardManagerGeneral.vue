@@ -40,7 +40,9 @@
                     @click="general.changeGroup(group)"
                   >
                     {{ group.name }}
-                    <v-tooltip activator="parent"> 이 그룹 소속으로 변경합니다. </v-tooltip>
+                    <v-tooltip activator="parent">
+                      {{ group.name }} 그룹 소속으로 변경합니다.
+                    </v-tooltip>
                   </v-list-item>
                 </v-list>
               </v-menu>

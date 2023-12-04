@@ -70,6 +70,15 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
     confirmBlockUserDialog.value = true
   }
 
+  // 차단하지 않고 그냥 닫기
+  function closeBlockUserDialog(): void {
+    blockUserTarget.value = {
+      uid: 0,
+      name: "",
+    }
+    confirmBlockUserDialog.value = false
+  }
+
   // 특정 사용자 차단하기 실행
   async function blockUser(): Promise<void> {
     if (blockUserTarget.value.uid < 1) {
@@ -81,7 +90,7 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
       return member.uid !== blockUserTarget.value.uid
     })
     admin.snack(`${blockUserTarget.value.name} 님의 로그인을 차단 하였습니다.`, "success")
-    blockUserTarget.value = { uid: 0, name: "" }
+    closeBlockUserDialog()
   }
 
   return {
@@ -93,6 +102,7 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
     reports,
     paging,
     openConfirmBlockDialog,
+    closeBlockUserDialog,
     blockUser,
   }
 })

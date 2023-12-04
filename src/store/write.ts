@@ -10,6 +10,12 @@ import { useUtilStore } from "../store/util"
 
 export const useWriteStore = defineStore("write", () => {
   const util = useUtilStore()
+  const confirmWriteCancelDialog = ref<boolean>(false)
+  const uploadImageDialog = ref<boolean>(false)
+  const addImageFromDBDialog = ref<boolean>(false)
+  const addImageURLDialog = ref<boolean>(false)
+  const addVideoURLDialog = ref<boolean>(false)
+  const addTableDialog = ref<boolean>(false)
   const files = ref<File[]>([])
   const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "10247680"))
   const subject = ref<string>("")
@@ -60,7 +66,7 @@ export const useWriteStore = defineStore("write", () => {
 
   // 추천 태그를 클릭하거나 스페이스/콤마 키 입력시 추가하기
   function addTag(value: string): void {
-    const target = value.replaceAll(util.filterNoSpace, "")
+    const target = value.replaceAll(util.filters.nospace, "")
     const duplicate = tags.value.filter((tag: string) => {
       return tag === target
     })
@@ -88,6 +94,16 @@ export const useWriteStore = defineStore("write", () => {
     contentWithSyntax.value = html
   }
 
+  // 글 작성 취소하기 다이얼로그 열기
+  function openWriteCancelDialog(): void {
+    confirmWriteCancelDialog.value = true
+  }
+
+  // 글 작성 취소하기 다이얼로그 닫기
+  function closeWriteCancelDialog(): void {
+    confirmWriteCancelDialog.value = false
+  }
+
   // 작성된 글 저장하기
   async function save(id: string): Promise<void> {
     const result = false
@@ -113,6 +129,12 @@ export const useWriteStore = defineStore("write", () => {
   }
 
   return {
+    confirmWriteCancelDialog,
+    uploadImageDialog,
+    addImageFromDBDialog,
+    addImageURLDialog,
+    addVideoURLDialog,
+    addTableDialog,
     limit,
     files,
     subject,
@@ -127,6 +149,8 @@ export const useWriteStore = defineStore("write", () => {
     addTag,
     removeTag,
     updateRealHtml,
+    openWriteCancelDialog,
+    closeWriteCancelDialog,
     save,
   }
 })

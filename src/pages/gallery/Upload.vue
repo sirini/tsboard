@@ -8,6 +8,7 @@
             <v-form fast-fail @submit.prevent>
               <gallery-header></gallery-header>
               <alert-bar></alert-bar>
+
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
@@ -19,6 +20,7 @@
                     label="사진의 제목을 입력해 주세요"
                   ></v-text-field>
                 </v-list-item>
+
                 <v-list-item class="pa-0">
                   <v-file-input
                     @change="write.readSelectedFiles"
@@ -47,6 +49,7 @@
                     </template>
                   </v-file-input>
                 </v-list-item>
+
                 <v-list-item class="pa-0">
                   <v-textarea
                     class="pt-3"
@@ -58,6 +61,7 @@
                     auto-grow
                   ></v-textarea>
                 </v-list-item>
+
                 <v-list-item class="pa-0">
                   <v-text-field
                     v-model="write.tag"
@@ -83,6 +87,7 @@
                       </v-list>
                     </v-menu>
                   </v-text-field>
+
                   <v-card elevation="0" class="mt-2 mb-2">
                     <v-chip
                       v-for="(tag, index) in write.tags"
@@ -96,6 +101,7 @@
                 </v-list-item>
               </v-list>
             </v-form>
+
             <v-card-actions>
               <v-btn @click="gallery.confirmCancelDialog = true" prepend-icon="mdi-close"
                 >글 작성 취소</v-btn

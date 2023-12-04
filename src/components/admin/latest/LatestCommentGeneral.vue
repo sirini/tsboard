@@ -25,6 +25,7 @@
           </v-col>
         </v-row>
       </v-list-item>
+
       <v-list-subheader>최신 댓글 모음</v-list-subheader>
       <v-divider></v-divider>
       <v-list-item v-for="(comment, index) in latest.comments" :key="index" class="underline">

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="board.uploadImageDialog" persistent>
+  <v-dialog v-model="write.uploadImageDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
       <v-divider></v-divider>
@@ -51,7 +51,7 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="board.uploadImageDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="write.uploadImageDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn @click="add" color="primary"
           >위 사진들을 업로드 하고 본문에 추가하기 <v-icon>mdi-chevron-right</v-icon></v-btn
@@ -63,7 +63,6 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { useBoardStore } from "../../../store/board"
 import { useWriteStore } from "../../../store/write"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
@@ -74,7 +73,6 @@ const home = useHomeStore()
 const emits = defineEmits<{
   addImageURL: [src: string]
 }>()
-const board = useBoardStore()
 const write = useWriteStore()
 const uploadImages = ref<string[]>([])
 

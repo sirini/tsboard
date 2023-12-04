@@ -9,6 +9,7 @@
 
       <v-card-text class="wrap pa-0" id="tsboardChatHistory">
         <alert-bar></alert-bar>
+
         <v-list>
           <v-list-subheader>받는 사람</v-list-subheader>
           <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
@@ -17,6 +18,7 @@
 
           <v-list-subheader>이전 쪽지 내역</v-list-subheader>
           <v-divider></v-divider>
+
           <v-list-item v-for="(chat, index) in user.chatHistory" :key="index" class="mt-2 mb-2">
             <template v-slot:prepend v-if="chat.userUid === user.targetUserInfo.uid">
               <v-avatar>

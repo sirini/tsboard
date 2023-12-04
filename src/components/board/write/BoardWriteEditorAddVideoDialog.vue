@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="board.addVideoURLDialog" persistent>
+  <v-dialog v-model="write.addVideoURLDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>YouTube URL 추가</v-card-title>
       <v-divider></v-divider>
@@ -39,7 +39,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="board.addVideoURLDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="write.addVideoURLDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
       </v-card-actions>
@@ -49,13 +49,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardStore } from "../../../store/board"
+import { useWriteStore } from "../../../store/write"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import { VideoURL } from "../../../interface/board"
 import AlertBar from "../../util/AlertBar.vue"
 
-const board = useBoardStore()
+const write = useWriteStore()
 const home = useHomeStore()
 const util = useUtilStore()
 const emits = defineEmits<{
@@ -64,10 +64,9 @@ const emits = defineEmits<{
 const link = ref<string>("https://")
 const width = ref<number>(640)
 const height = ref<number>(480)
-const urlPattern = /(https:\/\/)(www\.)?(youtu(be)?)\.(be|com)?\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/
 const urlRule = [
   (value: string) => {
-    return urlPattern.test(value) === true || "올바른 YouTube URL 형식이 아닙니다."
+    return util.filters.youtube.test(value) === true || "올바른 YouTube URL 형식이 아닙니다."
   },
 ]
 const sizeRule = [
@@ -78,7 +77,7 @@ const sizeRule = [
 
 // 외부 이미지 추가 반영하기
 function add(): void {
-  if (urlPattern.test(link.value) === false) {
+  if (util.filters.youtube.test(link.value) === false) {
     util.alert("올바른 URL 형식이 아닙니다.", "error")
     return
   }

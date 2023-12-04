@@ -26,6 +26,7 @@
           </v-col>
         </v-row>
       </v-list-item>
+
       <v-list-subheader>신고 내용 목록</v-list-subheader>
       <v-divider></v-divider>
       <v-list-item v-for="(report, index) in general.reports" :key="index" class="underline">
@@ -60,6 +61,7 @@
         </template>
       </v-list-item>
     </v-list>
+
     <v-pagination v-model="general.paging" :length="5" class="mb-3"></v-pagination>
   </v-card>
   <manage-user-dialog></manage-user-dialog>

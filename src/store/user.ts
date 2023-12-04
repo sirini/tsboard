@@ -97,7 +97,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   // 운영진에게 특정 사용자 신고하기
-  async function sendReport(report: string): Promise<void> {
+  async function sendReport(report: string, blockNode: boolean, blockPost: boolean): Promise<void> {
     if (targetUserInfo.value.uid < 1) {
       util.alert("신고할 대상이 제대로 지정되지 않았습니다.")
       return

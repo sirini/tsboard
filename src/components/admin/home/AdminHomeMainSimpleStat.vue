@@ -24,6 +24,7 @@
         </v-card-actions>
       </v-card>
     </v-col>
+
     <v-col>
       <v-card class="mt-3 mb-3">
         <v-card-title>회원 수</v-card-title>
@@ -54,6 +55,7 @@
         </v-card-actions>
       </v-card>
     </v-col>
+
     <v-col>
       <v-card class="mt-3 mb-3 mr-1">
         <v-card-title>게시글 수</v-card-title>

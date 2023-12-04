@@ -11,10 +11,11 @@
           {{ report.content }} <span class="date pl-2">{{ report.date }}</span>
         </v-list-item>
       </v-list>
+      
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="close">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="general.closeBlockUserDialog">닫기</v-btn>
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" color="red" @click="block"
+        <v-btn prepend-icon="mdi-trash-can" color="red" @click="general.blockUser"
           >차단하기
           <v-tooltip activator="parent"
             >차단된 사용자는 로그인을 할 수 없으며, 비회원과 동일해집니다.</v-tooltip
@@ -29,17 +30,6 @@
 import { useAdminMemberGeneralStore } from "../../../store/admin/member/general"
 
 const general = useAdminMemberGeneralStore()
-
-// 차단하기
-function block(): void {
-  general.blockUser()
-  close()
-}
-
-// 닫기
-function close(): void {
-  general.confirmBlockUserDialog = false
-}
 </script>
 
 <style scoped>

@@ -12,6 +12,7 @@
               <v-btn size="large" value="level">레벨</v-btn>
             </v-btn-toggle>
           </v-col>
+
           <v-col>
             <v-text-field
               variant="outlined"
@@ -26,6 +27,7 @@
           </v-col>
         </v-row>
       </v-list-item>
+
       <v-list-subheader>회원 목록</v-list-subheader>
       <v-divider></v-divider>
       <v-list-item
@@ -65,6 +67,7 @@
       </v-list-item>
       <v-divider></v-divider>
     </v-list>
+
     <v-pagination v-model="general.paging" :length="5" class="mb-3"></v-pagination>
   </v-card>
   <confirm-block-user-dialog></confirm-block-user-dialog>

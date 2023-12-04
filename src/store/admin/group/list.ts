@@ -71,6 +71,15 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     confirmRemoveGroupDialog.value = true
   }
 
+  // 그룹 삭제하지 않고 그냥 닫기
+  function closeRemoveGroupDialog(): void {
+    removeGroupTarget.value = {
+      uid: 0,
+      name: "",
+    }
+    confirmRemoveGroupDialog.value = false
+  }
+
   // 그룹 삭제하기
   async function removeGroup(): Promise<void> {
     if (removeGroupTarget.value.uid < 2) {
@@ -85,6 +94,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       "선택하신 그룹을 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 옮겼습니다.",
       "success",
     )
+    closeRemoveGroupDialog()
   }
 
   return {
@@ -96,6 +106,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     updateExistGroupIds,
     createNewGroup,
     confirmRemoveGroup,
+    closeRemoveGroupDialog,
     removeGroup,
   }
 })

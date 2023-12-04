@@ -37,7 +37,7 @@ export const useAuthStore = defineStore("auth", () => {
   // 아이디(이메일) 입력란 체크
   const emailRule = [
     (value: any) => {
-      if (util.filterEmail.test(value)) return true
+      if (util.filters.email.test(value)) return true
       return INVALID_EMAIL
     },
   ]
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore("auth", () => {
   // 비밀번호 입력란 체크
   const passwordRule = [
     (value: any) => {
-      if (util.filterPassword.test(value)) return true
+      if (util.filters.password.test(value)) return true
       return INVALID_PASSWORD
     },
   ]
@@ -60,11 +60,11 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 사용자 로그인하기
   async function login(): Promise<void> {
-    if (util.filterEmail.test(id.value) === false) {
+    if (util.filters.email.test(id.value) === false) {
       util.alert(INVALID_EMAIL)
       return
     }
-    if (util.filterPassword.test(password.value) === false) {
+    if (util.filters.password.test(password.value) === false) {
       util.alert(INVALID_PASSWORD)
       return
     }
@@ -101,7 +101,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 비밀번호 초기화하기
   async function resetPassword(): Promise<void> {
-    if (util.filterEmail.test(idForReset.value) === false) {
+    if (util.filters.email.test(idForReset.value) === false) {
       util.alert(INVALID_EMAIL)
       return
     }
@@ -120,11 +120,11 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 가입 양식 제출받기
   async function signup(): Promise<void> {
-    if (util.filterEmail.test(id.value) === false) {
+    if (util.filters.email.test(id.value) === false) {
       util.alert(INVALID_EMAIL)
       return
     }
-    if (util.filterPassword.test(password.value) === false) {
+    if (util.filters.password.test(password.value) === false) {
       util.alert(INVALID_PASSWORD)
       return
     }
@@ -154,7 +154,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert("입력하신 비밀번호가 서로 맞지 않습니다.")
       return
     }
-    if (util.filterPassword.test(password.value) === false) {
+    if (util.filters.password.test(password.value) === false) {
       util.alert(INVALID_PASSWORD)
       return
     }

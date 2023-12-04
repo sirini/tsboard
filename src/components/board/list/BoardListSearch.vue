@@ -10,6 +10,7 @@
           <v-btn value="writer">작성자</v-btn>
         </v-btn-toggle>
       </v-list-item>
+
       <v-list-item>
         <v-text-field
           v-model="util.searchValue"
@@ -35,7 +36,6 @@ const write = useWriteStore()
 
 // 검색어를 정제해서 업데이트하기
 function refine(): void {
-  const keyword = util.searchValue.replaceAll(util.filter, "")
-  util.searchValue = keyword
+  util.searchValue = util.searchValue.replaceAll(util.filters.basic, "")
 }
 </script>

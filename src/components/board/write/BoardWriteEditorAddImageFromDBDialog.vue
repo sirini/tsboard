@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="board.addImageFromDBDialog" persistent>
+  <v-dialog v-model="write.addImageFromDBDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color">
       <v-card-title>기존 이미지를 본문에 추가/관리</v-card-title>
       <v-divider></v-divider>
@@ -64,7 +64,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="board.addImageFromDBDialog = false"
+        <v-btn block prepend-icon="mdi-close" @click="write.addImageFromDBDialog = false"
           >닫기</v-btn
         >
       </v-card-actions>
@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardStore } from "../../../store/board"
+import { useWriteStore } from "../../../store/write"
 import { useHomeStore } from "../../../store/home"
 
 const home = useHomeStore()
@@ -88,7 +88,7 @@ const emits = defineEmits<{
   addImageURL: [src: string]
   removeImage: [src: string]
 }>()
-const board = useBoardStore()
+const write = useWriteStore()
 const PREFIX = process.env.PREFIX || ""
 const showRemoveImageInfo = ref<boolean>(false)
 const removeImageTarget = ref<Image>({

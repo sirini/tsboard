@@ -6,12 +6,14 @@
         <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
       </v-card-title>
       <v-divider></v-divider>
+
       <v-list>
         <v-list-item class="text-center">
           <v-avatar size="large">
             <v-img :src="PREFIX + user.targetUserInfo.profile"></v-img>
           </v-avatar>
         </v-list-item>
+
         <v-list-item>
           <v-row>
             <v-col cols="4">닉네임</v-col>
@@ -19,6 +21,7 @@
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
+
         <v-list-item>
           <v-row>
             <v-col cols="4">레벨</v-col>
@@ -26,6 +29,7 @@
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
+
         <v-list-item>
           <v-row>
             <v-col cols="4">서명</v-col>
@@ -33,6 +37,7 @@
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
+
         <v-list-item>
           <v-row>
             <v-col cols="4">마지막 로그인</v-col>
@@ -41,6 +46,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+
       <v-card-actions>
         <v-btn block prepend-icon="mdi-close" @click="user.closeUserInfo">닫기</v-btn>
       </v-card-actions>

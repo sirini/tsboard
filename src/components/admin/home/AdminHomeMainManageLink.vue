@@ -31,6 +31,7 @@
         </v-list>
       </v-card>
     </v-col>
+
     <v-col>
       <v-card class="mt-3 mb-3">
         <v-card-title> 게시판 목록 </v-card-title>
@@ -50,6 +51,7 @@
         </v-list>
       </v-card>
     </v-col>
+
     <v-col>
       <v-card class="mt-3 mb-3 mr-1">
         <v-card-title
@@ -71,7 +73,7 @@
             v-for="(member, index) in members"
             :key="index"
             append-icon="mdi-chevron-right"
-            @click="util.go('adminMemberManager', member.id)"
+            @click="router.push({ name: 'adminMemberManager', params: { uid: member.uid } })"
             >{{ member.name }}
             <v-tooltip activator="parent"
               >클릭하시면 {{ member.name }}님 관리 페이지로 이동합니다.</v-tooltip
@@ -84,17 +86,19 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router"
 import { useUtilStore } from "../../../store/util"
 
+const router = useRouter()
 const util = useUtilStore()
 const groups = ["default", "sample", "example"]
 const boards = ["test", "notice", "freeboard", "qna", "gallery", "sample", "example"]
 const members = [
-  { id: "example1@test.com", name: "홍길동" },
-  { id: "sample2@test.com", name: "테스터" },
-  { id: "sudotest@test.com", name: "나전설" },
-  { id: "pingponglegend@test.com", name: "김탁구" },
-  { id: "ganggamchan@test.com", name: "강감찬" },
+  { uid: 111, name: "홍길동" },
+  { uid: 222, name: "테스터" },
+  { uid: 333, name: "나전설" },
+  { uid: 444, name: "김탁구" },
+  { uid: 555, name: "강감찬" },
 ]
 </script>
 

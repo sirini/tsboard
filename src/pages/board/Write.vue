@@ -91,7 +91,7 @@
               </v-list>
             </v-form>
             <v-card-actions>
-              <v-btn @click="board.confirmCancelDialog = true" prepend-icon="mdi-close"
+              <v-btn @click="write.openWriteCancelDialog" prepend-icon="mdi-close"
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>

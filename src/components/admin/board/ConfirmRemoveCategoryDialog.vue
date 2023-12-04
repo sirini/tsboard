@@ -9,6 +9,7 @@
         삭제하시겠습니까? 해당하는 게시글들은 모두 기본 카테고리로 재설정되며 글은 삭제되지
         않습니다. 삭제를 시작할까요?
       </v-card-text>
+
       <v-card-actions class="pa-4">
         <v-btn prepend-icon="mdi-close" rounded="xl" color="primary" @click="close"
           >아니요, 삭제하지 않겠습니다</v-btn

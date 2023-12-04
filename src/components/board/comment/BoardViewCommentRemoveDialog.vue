@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="500" v-model="comment.confirmRemoveCommentDialog" persistent>
-    <v-card>
+  <v-dialog v-model="comment.confirmRemoveCommentDialog" persistent>
+    <v-card width="500" class="mx-auto">
       <v-card-title>댓글을 삭제할까요?</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">
@@ -9,12 +9,16 @@
         삭제 가능)
       </v-card-text>
       <v-divider></v-divider>
+
       <v-card-actions>
-        <v-btn prepend-icon="mdi-check-bold" color="primary" @click="close"
+        <v-btn
+          prepend-icon="mdi-check-bold"
+          color="primary"
+          @click="comment.closeRemoveCommentDialog"
           >아니요, 그대로 두겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="confirmRemove">예, 삭제할께요</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="comment.removeComment">예, 삭제할께요</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -24,18 +28,4 @@
 import { useCommentStore } from "../../../store/comment"
 
 const comment = useCommentStore()
-const emits = defineEmits<{
-  removeComment: []
-}>()
-
-// 댓글 삭제 (혹은 비공개) 처리하기
-function confirmRemove(): void {
-  emits("removeComment")
-  close()
-}
-
-// 댓글 삭제 취소
-function close(): void {
-  comment.confirmRemoveCommentDialog = false
-}
 </script>

@@ -25,6 +25,7 @@
           </v-col>
         </v-row>
       </v-list-item>
+
       <v-list-subheader>최신 글 모음</v-list-subheader>
       <v-divider></v-divider>
       <v-list-item v-for="(post, index) in latest.posts" :key="index" class="underline">
@@ -58,6 +59,7 @@
         </template>
       </v-list-item>
     </v-list>
+
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-pagination :length="5"></v-pagination>

@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="500" v-model="list.confirmRemoveGroupDialog" persistent>
-    <v-card class="mx-auto">
+  <v-dialog v-model="list.confirmRemoveGroupDialog" persistent>
+    <v-card width="500" class="mx-auto">
       <v-card-title>확인</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-2">
@@ -8,11 +8,15 @@
         그룹 소속 게시판들은 모두 기본 그룹 소속으로 변경됩니다. 삭제를 시작할까요?
       </v-card-text>
       <v-card-actions class="pa-4">
-        <v-btn prepend-icon="mdi-close" rounded="xl" @click="close" color="primary"
+        <v-btn
+          prepend-icon="mdi-close"
+          rounded="xl"
+          @click="list.closeRemoveGroupDialog"
+          color="primary"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="remove"
+        <v-btn prepend-icon="mdi-trash-can" @click="list.removeGroup"
           >삭제
           <v-tooltip activator="parent"
             >게시판들은 삭제되지 않으며, 기본 그룹 소속으로만 변경됩니다.</v-tooltip
@@ -24,24 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 
-const route = useRoute()
 const list = useAdminGroupListStore()
-
-// 아무것도 변경하지 않기
-function close(): void {
-  list.removeGroupTarget.uid = 0
-  list.removeGroupTarget.name = ""
-  list.confirmRemoveGroupDialog = false
-}
-
-// 그룹 삭제하기
-async function remove(): Promise<void> {
-  await list.removeGroup()
-  close()
-}
 </script>
 
 <style scoped>

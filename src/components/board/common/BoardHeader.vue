@@ -17,7 +17,6 @@
         @click="util.go('myinfo')"
         >내정보</v-btn
       >
-
       <v-btn
         v-if="auth.user.admin"
         prepend-icon="mdi-cog-outline"

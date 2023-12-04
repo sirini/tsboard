@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="500" v-model="general.confirmRemoveBoardDialog" persistent>
-    <v-card class="mx-auto">
+  <v-dialog v-model="general.confirmRemoveBoardDialog" persistent>
+    <v-card width="500" class="mx-auto">
       <v-card-title><v-icon color="error">mdi-alert</v-icon> 주의가 필요합니다</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text">
@@ -8,11 +8,15 @@
         글과 사진들이 모두 완전히 삭제되며 이후 접근할 수 없습니다. 삭제를 시작할까요?
       </v-card-text>
       <v-card-actions class="pa-4">
-        <v-btn prepend-icon="mdi-close" rounded="xl" color="primary" @click="close"
+        <v-btn
+          prepend-icon="mdi-close"
+          rounded="xl"
+          color="primary"
+          @click="general.closeRemoveBoardDialog"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="remove"
+        <v-btn prepend-icon="mdi-trash-can" @click="general.removeBoard"
           >삭제
           <v-tooltip activator="parent">
             클릭하시면 {{ general.removeBoardTarget.name }} 게시판을 삭제하며 이후 되돌릴 수
@@ -28,18 +32,6 @@
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 
 const general = useAdminGroupGeneralStore()
-
-// 삭제하지 않고 그냥 닫기
-function close(): void {
-  general.removeBoardTarget.uid = 0
-  general.removeBoardTarget.name = ""
-  general.confirmRemoveBoardDialog = false
-}
-
-// 게시판 삭제하기
-function remove(): void {
-  general.removeBoard()
-}
 </script>
 
 <style scoped>

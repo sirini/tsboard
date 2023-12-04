@@ -32,6 +32,7 @@
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
+
       <v-list-item class="mt-2 mb-2">
         <v-row>
           <v-col cols="4">
@@ -59,6 +60,7 @@
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
+
       <v-list-subheader
         >{{ general.group.id }} 그룹 소속 게시판 목록 (총
         {{ general.boards.length }} 개)</v-list-subheader

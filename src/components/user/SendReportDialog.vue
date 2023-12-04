@@ -24,6 +24,7 @@
             :label="user.targetUserInfo.name + '님이 보내는 쪽지를 차단 합니다'"
           ></v-checkbox>
         </v-list-item>
+
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
             v-model="blockPost"
@@ -47,6 +48,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+
       <v-card-actions>
         <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">닫기</v-btn>
         <v-spacer></v-spacer>
@@ -54,7 +56,7 @@
           color="primary"
           variant="text"
           append-icon="mdi-chevron-right"
-          @click="user.sendReport(report)"
+          @click="user.sendReport(report, blockNote, blockPost)"
           >운영진에게 신고하기</v-btn
         >
       </v-card-actions>

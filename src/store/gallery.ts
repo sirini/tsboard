@@ -35,6 +35,16 @@ export const useGalleryStore = defineStore("gallery", () => {
     liked.value = !liked.value
   }
 
+  // 사진 업로드 취소 다이얼로그 열기
+  function openCancelUploadDialog(): void {
+    confirmCancelDialog.value = true
+  }
+
+  // 사진 업로드 취소 다이얼로그 닫기
+  function closeCancelUploadDialog(): void {
+    confirmCancelDialog.value = false
+  }
+
   return {
     id,
     postUid,
@@ -45,5 +55,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     liked,
     open,
     like,
+    openCancelUploadDialog,
+    closeCancelUploadDialog,
   }
 })

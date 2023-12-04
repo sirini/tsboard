@@ -23,6 +23,7 @@
             :label="user.targetUserInfo.name + '님이 글/댓글 작성을 못하게 차단합니다'"
           ></v-checkbox>
         </v-list-item>
+
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
             v-model="block.note"
@@ -31,6 +32,7 @@
             :label="user.targetUserInfo.name + '님이 쪽지 기능을 쓰지 못하게 차단합니다'"
           ></v-checkbox>
         </v-list-item>
+
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
             v-model="block.report"
@@ -39,6 +41,7 @@
             :label="user.targetUserInfo.name + '님이 다른 회원을 신고하지 못하게 차단합니다'"
           ></v-checkbox>
         </v-list-item>
+
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
             v-model="block.login"
@@ -48,6 +51,7 @@
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>
+
         <v-list-subheader>조치 사유 (운영자 및 대상 회원에게 보여집니다)</v-list-subheader>
         <v-list-item>
           <v-textarea v-model="report" :rules="rules" variant="outlined" counter auto-grow>
@@ -55,6 +59,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+
       <v-card-actions>
         <v-btn prepend-icon="mdi-close" @click="user.closeManageUser">닫기</v-btn>
         <v-spacer></v-spacer>

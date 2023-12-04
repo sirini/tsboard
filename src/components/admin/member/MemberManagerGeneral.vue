@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="myinfo_title"> {{ manager.user.name }} 님의 정보 수정하기 </v-card-title>
+    <v-card-title> {{ manager.user.name }} 님의 정보 수정하기 </v-card-title>
     <v-divider></v-divider>
     <alert-bar></alert-bar>
 
@@ -58,6 +58,7 @@
           </v-list-item>
         </v-list>
       </v-col>
+
       <v-col>
         <v-list>
           <v-list-item>
@@ -114,6 +115,7 @@
       </v-col>
     </v-row>
     <v-divider></v-divider>
+
     <v-card-actions>
       <v-btn prepend-icon="mdi-chevron-left" @click="util.back"
         >아무것도 변경하지 않고 뒤로가기</v-btn
@@ -138,9 +140,10 @@ const util = useUtilStore()
 const manager = useAdminMemberManagerStore()
 const visible = ref<boolean>(false)
 
+// 멤버 고유 번호가 파라미터로 넘어오면 회원 정보 가져오기
 watchEffect(() => {
-  if (route.params?.id.length > 0) {
-    const uid = parseInt(route.params?.id.toString())
+  if (route.params?.uid.length > 0) {
+    const uid = parseInt(route.params?.uid.toString())
     manager.loadUserInfo(uid)
   }
 })

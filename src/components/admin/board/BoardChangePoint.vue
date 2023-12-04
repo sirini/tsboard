@@ -16,6 +16,7 @@
         </v-btn>
       </v-btn-toggle>
     </v-col>
+
     <v-col cols="3">
       <v-text-field
         v-model="target"
@@ -51,7 +52,7 @@ const emits = defineEmits<{
   update: [isPayment: boolean, amount: number]
 }>()
 const type = ref<boolean>(props.isPayment)
-const target = ref<string>(props.amount.toString()) // Vuetify v-text-field 제약
+const target = ref<string>(props.amount.toString())
 
 // 포인트, 지불/충전 변경
 function update(): void {
