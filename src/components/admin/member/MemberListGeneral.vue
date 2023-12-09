@@ -79,12 +79,10 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { useUtilStore } from "../../../store/util"
 import { useAdminMemberGeneralStore } from "../../../store/admin/member/general"
 import ConfirmBlockUserDialog from "./ConfirmBlockUserDialog.vue"
 
 const router = useRouter()
-const util = useUtilStore()
 const general = useAdminMemberGeneralStore()
 </script>
 

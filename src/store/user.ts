@@ -2,6 +2,7 @@
  * store/user.ts
  *
  * 쪽지, 신고, 정보 보기, 회원 관리 (관리자용) 관련 상태 및 유틸리티 함수들
+ * 사용자 로그인 및 인증 관련은 auth store 참조
  */
 
 import { ref } from "vue"
