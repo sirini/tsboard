@@ -10,32 +10,33 @@
  * 라고 입력 하시면 실행 됩니다.
  */
 
-console.log(`
- _       _                         _ 
-| |_ ___| |__   ___   __ _ _ __ __| |
-| __/ __| '_ \\ / _ \\ / _\` | '__/ _\` |
-| |_\\__ \\ |_) | (_) | (_| | | | (_| |
- \\__|___/_.__/ \\___/ \\__,_|_|  \\__,_|
+const fs = require("fs")
+import { checkEnvFile, checkAfterModifyEnvFile } from "./install/functions"
+import { env, welcome, install } from "./install/messages"
 
-v0.8.0 | tsboard.dev | Currently only available in Korean.
+checkEnvFile()
+fs.writeFileSync(".env", env)
+console.log(welcome)
+checkAfterModifyEnvFile()
+console.log(install)
 
-✓ 설치 전 폴더 내 .env 파일을 에디터로 열어 아래 내용을 수정하세요!
-  • DB_HOST • DB_USER • DB_PASS • DB_DATA • DB_SOCK_PROD
+import mysql, { ConnectionOptions } from "mysql2/promise"
+import { tables } from "./install/table/query"
 
-✓ 추가로, 설치 전/후에 언제든지 아래 항목들도 꼭 수정해 주세요!
-  • JWT_SECRET_KEY • GMAIL_OAUTH_USER • GMAIL_OAUTH_CLIENT_ID
-  • GAMIL_OAUTH_CLIENT_SECRET • GAMIL_OAUTH_REFRESH_TOKEN
-  
-  [Q] GMAIL_... 항목에는 무엇을 넣어야 하나요?
-  [A] .env 파일에 참고) 에 적힌 URL을 브라우저에서 열어 글 내용대로 해보세요!
-
-✓ 설치 과정에서 문제가 생길경우 .env 파일을 먼저 수정했는지 확인해 주시고,
-  사용에 어려움이 있으실 경우 tsboard.dev 사이트를 방문해서 문의를 남겨주세요!
-
-`)
-
-let answer = prompt("위의 안내를 확인했으며 .env 파일 수정을 완료하셨나요? (yes/no)") ?? "no"
-answer = answer?.toLowerCase()
-if (answer !== "yes") {
-  console.log(`\n\n설치를 종료합니다.\n다시 실행을 원하시면 bun install.ts 로 실행해 주세요!`)
+for (const table of tables) {
+  console.log(table)
 }
+
+async function setup(): Promise<void> {
+  const access: ConnectionOptions = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+  }
+  const conn = await mysql.createConnection(access)
+  await conn.execute(
+    `CREATE DATABASE IF NOT EXISTS ${process.env.DB_DATA} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
+  )
+}
+
+// setup()
