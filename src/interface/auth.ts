@@ -8,10 +8,11 @@ export interface User {
   uid: number
   id: string
   name: string
-  point: number
-  level: number
   profile: string
+  level: number
+  point: number
   signature: string
-  lastLogin: string
+  signup: string
+  signin: string
   admin: boolean
 }

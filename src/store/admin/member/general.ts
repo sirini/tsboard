@@ -11,7 +11,6 @@ import { useAdminStore } from "../common"
 
 export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () => {
   const admin = useAdminStore()
-  const confirmBlockUserDialog = ref<boolean>(false)
   const blockUserTarget = ref<AdminPairItem>({
     uid: 0,
     name: "",
@@ -22,87 +21,56 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
   const members = ref<AdminMemberTable[]>([
     {
       uid: 1,
-      profile: "/no-profile.png",
       id: "test@test.com",
       name: "홍길동",
-      point: 100,
+      profile: "/no-profile.png",
       level: 1,
-      signupDate: "2023-11-24",
+      point: 100,
+      signup: "2023-12-05",
     },
     {
       uid: 2,
+      id: "example@test.com",
+      name: "최고맨",
       profile: "/no-profile.png",
-      id: "example@hoho.com",
-      name: "김예제",
-      point: 100,
       level: 1,
-      signupDate: "2023-11-24",
+      point: 100,
+      signup: "2023-12-07",
     },
     {
       uid: 3,
+      id: "sample@test.com",
+      name: "김예제",
       profile: "/no-profile.png",
-      id: "sample@uhhha.com",
-      name: "박샘플",
-      point: 100,
       level: 1,
-      signupDate: "2023-11-24",
+      point: 100,
+      signup: "2023-12-09",
     },
   ])
   const reports = ref<AdminMemberReport[]>([
     {
-      content: "예시용 신고 내역 입니다. 회원이 뭔가를 잘못해서 남겨졌습니다.",
-      from: { uid: 123, name: "의적단" },
       to: { uid: 12, name: "악당1" },
+      from: { uid: 123, name: "의적단" },
+      request: "예시용 신고 내역 입니다. 회원이 뭔가를 잘못해서 남겨졌습니다.",
+      response: "",
       date: "2023-11-30 20:22:10",
     },
     {
-      content:
+      to: { uid: 12, name: "악당1" },
+      from: { uid: 123, name: "의적단" },
+      request:
         "다른 회원으로부터 받은 신고 내역입니다. 역시나 뭔가를 잘못했으며 이 회원의 문제 상황을 언급합니다.",
-      from: { uid: 321, name: "스나이퍼" },
-      to: { uid: 32, name: "악당2" },
-      date: "2023-11-30 20:23:20",
+      response: "",
+      date: "2023-12-10 20:22:10",
     },
   ])
 
-  // 특정 사용자 차단 하기 시 확인용 다이얼로그 띄우기
-  function openConfirmBlockDialog(user: AdminPairItem): void {
-    blockUserTarget.value = user
-    confirmBlockUserDialog.value = true
-  }
-
-  // 차단하지 않고 그냥 닫기
-  function closeBlockUserDialog(): void {
-    blockUserTarget.value = {
-      uid: 0,
-      name: "",
-    }
-    confirmBlockUserDialog.value = false
-  }
-
-  // 특정 사용자 차단하기 실행
-  async function blockUser(): Promise<void> {
-    if (blockUserTarget.value.uid < 1) {
-      admin.snack("차단할 사용자가 제대로 지정되지 않았습니다.", "error")
-      return
-    }
-    // do something ... axios.delete(...)
-    members.value = members.value.filter((member: AdminMemberTable) => {
-      return member.uid !== blockUserTarget.value.uid
-    })
-    admin.snack(`${blockUserTarget.value.name} 님의 로그인을 차단 하였습니다.`, "success")
-    closeBlockUserDialog()
-  }
-
   return {
-    confirmBlockUserDialog,
     blockUserTarget,
     option,
     search,
     members,
     reports,
     paging,
-    openConfirmBlockDialog,
-    closeBlockUserDialog,
-    blockUser,
   }
 })

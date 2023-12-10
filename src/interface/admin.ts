@@ -34,7 +34,6 @@ export interface AdminBoardConfig {
   group: string
   name: string
   info: string
-  width: number
   rows: number
   category: AdminBoardCategory
 }
@@ -82,17 +81,18 @@ export interface AdminHomeSimpleStatus {
 export interface AdminMemberTable {
   uid: number
   id: string
-  profile: string
   name: string
-  point: number
+  profile: string
   level: number
-  signupDate: string
+  point: number
+  signup: string
 }
 
 export interface AdminMemberReport {
-  content: string
-  from: AdminPairItem
   to: AdminPairItem
+  from: AdminPairItem
+  request: string
+  response: string
   date: string
 }
 

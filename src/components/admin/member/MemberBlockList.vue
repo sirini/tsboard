@@ -30,6 +30,9 @@
 
       <v-list-subheader>차단된 회원 목록</v-list-subheader>
       <v-divider></v-divider>
+      <v-list-item v-if="block.members.length < 1" class="text-center">
+        차단된 회원이 없습니다.
+      </v-list-item>
       <v-list-item
         density="compact"
         v-for="(member, index) in block.members"
@@ -37,13 +40,14 @@
         :prepend-avatar="member.profile"
       >
         <v-row>
-          <v-col cols="2" class="text-center">{{ member.name }}</v-col>
+          <v-col cols="3" class="text-center">{{ member.name }}</v-col>
           <v-col cols="3" class="text-center text-caption">{{ member.id }}</v-col>
-          <v-col cols="2" class="text-center">{{ member.point }} <span class="info">P</span></v-col>
-          <v-col cols="2" class="text-center"
-            ><span class="info">Lv.</span> {{ member.level }}</v-col
+          <v-col cols="3" class="text-center"
+            ><span class="info">Lv.</span> {{ member.level }}
+            <span class="info">/</span>
+            {{ member.point }} <span class="info">P</span></v-col
           >
-          <v-col cols="3" class="text-center text-caption">{{ member.signupDate }}</v-col>
+          <v-col cols="3" class="text-center text-caption">{{ member.signup }}</v-col>
         </v-row>
         <template v-slot:append>
           <v-btn elevation="0" icon @click="block.unblock({ uid: member.uid, name: member.name })">

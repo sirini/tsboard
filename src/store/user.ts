@@ -119,12 +119,13 @@ export const useUserStore = defineStore("user", () => {
       return
     }
     // do something
-    const w = block.write ? "글작성 차단" : "글작성 가능"
+    const w = block.writePost ? "글작성 차단" : "글작성 가능"
+    const c = block.writeComment ? "댓글 작성 차단" : "댓글 작성 가능"
     const n = block.note ? "쪽지 차단" : "쪽지 가능"
     const r = block.report ? "신고 차단" : "신고 가능"
     const l = block.login ? "로그인 차단" : "로그인 가능"
     util.alert(
-      `${targetUserInfo.value.name} 님에 대한 조치를 완료 하였습니다. (${w}, ${n}, ${r}, ${l})`,
+      `${targetUserInfo.value.name} 님에 대한 조치를 완료 하였습니다. (${w}, ${c}, ${n}, ${r}, ${l})`,
       "success",
     )
     setTimeout(closeManageUser, 3000)

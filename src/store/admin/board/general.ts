@@ -19,7 +19,6 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     group: "default",
     name: "테스트 게시판",
     info: "이 게시판의 간단 설명입니다.",
-    width: 1200,
     rows: 20,
     category: {
       add: "",

@@ -11,7 +11,8 @@ export interface TargetUserInfo {
 }
 
 export interface BlockFeature {
-  write: boolean
+  writePost: boolean
+  writeComment: boolean
   note: boolean
   report: boolean
   login: boolean

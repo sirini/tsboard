@@ -17,10 +17,19 @@
         <v-divider></v-divider>
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
-            v-model="block.write"
+            v-model="block.writePost"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님이 글/댓글 작성을 못하게 차단합니다'"
+            :label="user.targetUserInfo.name + '님이 글 작성을 할 수 없도록 합니다'"
+          ></v-checkbox>
+        </v-list-item>
+
+        <v-list-item class="pa-0 pl-3">
+          <v-checkbox
+            v-model="block.writeComment"
+            density="compact"
+            hide-details
+            :label="user.targetUserInfo.name + '님이 댓글 작성을 할 수 없도록 합니다'"
           ></v-checkbox>
         </v-list-item>
 
@@ -29,7 +38,7 @@
             v-model="block.note"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님이 쪽지 기능을 쓰지 못하게 차단합니다'"
+            :label="user.targetUserInfo.name + '님이 쪽지 기능을 쓰지 못하게 합니다'"
           ></v-checkbox>
         </v-list-item>
 
@@ -38,7 +47,7 @@
             v-model="block.report"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님이 다른 회원을 신고하지 못하게 차단합니다'"
+            :label="user.targetUserInfo.name + '님이 다른 회원을 신고하지 못하게 합니다'"
           ></v-checkbox>
         </v-list-item>
 
@@ -47,7 +56,9 @@
             v-model="block.login"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님이 사이트에 로그인 하지 못하게 차단합니다'"
+            :label="
+              user.targetUserInfo.name + '님이 로그인 하지 못하게 차단합니다 (회원 자격 상실)'
+            "
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>
@@ -84,7 +95,8 @@ import AlertBar from "../util/AlertBar.vue"
 const user = useUserStore()
 const PREFIX = process.env.PREFIX || ""
 const block = ref<BlockFeature>({
-  write: false,
+  writePost: false,
+  writeComment: false,
   note: false,
   report: false,
   login: false,

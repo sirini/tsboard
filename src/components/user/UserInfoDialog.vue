@@ -10,14 +10,14 @@
       <v-list>
         <v-list-item class="text-center">
           <v-avatar size="large">
-            <v-img :src="PREFIX + user.targetUserInfo.profile"></v-img>
+            <v-img :src="PREFIX + userInfo?.profile"></v-img>
           </v-avatar>
         </v-list-item>
 
         <v-list-item>
           <v-row>
             <v-col cols="4">닉네임</v-col>
-            <v-col>{{ user.targetUserInfo.name }}</v-col>
+            <v-col>{{ userInfo?.name || "" }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -25,7 +25,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">레벨</v-col>
-            <v-col>{{ userLevel }}</v-col>
+            <v-col>{{ userInfo?.level }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -33,7 +33,15 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">서명</v-col>
-            <v-col>{{ userSignature || "작성된 서명이 없습니다." }}</v-col>
+            <v-col>{{ userInfo?.signature || "작성된 서명이 없습니다." }}</v-col>
+          </v-row>
+        </v-list-item>
+        <v-divider></v-divider>
+
+        <v-list-item>
+          <v-row>
+            <v-col cols="4">가입일</v-col>
+            <v-col>{{ userInfo?.signup }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -41,7 +49,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">마지막 로그인</v-col>
-            <v-col>{{ lastLogin }}</v-col>
+            <v-col>{{ userInfo?.signin }}</v-col>
           </v-row>
         </v-list-item>
       </v-list>
@@ -55,14 +63,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watchEffect } from "vue"
 import { useUserStore } from "../../store/user"
+import { User } from "../../interface/auth"
 
 const user = useUserStore()
-const userLevel = ref<number>(0)
-const lastLogin = ref<string>("2023-11-19 17:26")
-const userSignature = ref<string>("")
+const userInfo = ref<User>()
 const PREFIX = process.env.PREFIX || ""
+
+watchEffect(() => {
+  if (user.targetUserInfo.uid > 0) {
+    userInfo.value = {
+      uid: user.targetUserInfo.uid,
+      id: "",
+      name: user.targetUserInfo.name,
+      profile: user.targetUserInfo.profile,
+      level: 1,
+      point: 123,
+      signature: "",
+      signup: "2023-12-01 11:23:02",
+      signin: "2023-12-10 09:11:45",
+      admin: false,
+    }
+  }
+})
 </script>
 
 <style scoped>

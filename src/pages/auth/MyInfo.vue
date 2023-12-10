@@ -67,7 +67,16 @@
               </v-list-item>
               <v-list-item class="pa-0">
                 <v-text-field
-                  v-model="auth.user.lastLogin"
+                  v-model="auth.user.signup"
+                  variant="outlined"
+                  class="mt-3"
+                  label="최초 가입일입니다."
+                  readonly
+                ></v-text-field>
+              </v-list-item>
+              <v-list-item class="pa-0">
+                <v-text-field
+                  v-model="auth.user.signin"
                   variant="outlined"
                   class="mt-3"
                   label="마지막으로 로그안 한 시간입니다"

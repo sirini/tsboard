@@ -22,11 +22,12 @@ export const useAuthStore = defineStore("auth", () => {
     uid: 1,
     id: "test@test.com",
     name: "tester",
-    point: 100,
-    level: 2,
     profile: "/no-profile.png",
-    signature: "",
-    lastLogin: "2023-10-30 10:20:30",
+    level: 2,
+    point: 100,
+    signature: "그래도 지구는 돈다",
+    signup: "2023-12-01 09:25:31",
+    signin: "2023-12-10 10:20:30",
     admin: true,
   })
   const id = ref<string>("")
