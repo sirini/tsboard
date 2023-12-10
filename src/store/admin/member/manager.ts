@@ -17,11 +17,12 @@ export const useAdminMemberManagerStore = defineStore("adminMemberManager", () =
     uid: 1,
     id: "test@test.com",
     name: "tester",
-    point: 100,
-    level: 2,
     profile: "/no-profile.png",
+    level: 2,
+    point: 100,
     signature: "learning by building something",
-    lastLogin: "2023-10-30 10:20:30",
+    signup: "2023-12-03 10:20:30",
+    signin: "2023-12-10 22:10:12",
     admin: true,
   })
 
