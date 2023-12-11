@@ -11,17 +11,20 @@ import { fileURLToPath, URL } from "node:url"
  * TSBOARD 클라이언트쪽 설정 파일
  * 서버쪽 설정은 .env 파일 참조
  *
- * 참조1 - 사용하는 서버 환경이나 도메인에 따라 아래 설정들은 변경 필요함
- * 참조2 - 실제 운영되는 서버에 배포 전 IS_DEV는 반드시 false 변경 후 build
+ * 매뉴얼 | https://github.com/sirini/tsboard
+ * 문의 | https://tsboard.dev
+ *
  */
-const IS_DEV = true
-const VITE_PORT = 3000
-const SERVER_PORT = 3100 // .env 와 동일
-const DEV_API_PATH = `http://localhost:${SERVER_PORT}/tsapi`
-const PROD_API_PATH = `https://tsboard.dev/tsapi`
-const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH
-const PREFIX = ""
-const MAX_FILE_SIZE = 10247680 // .env 와 동일
+const IS_DEV = true // [A]
+const PREFIX = IS_DEV ? "" : __dirname.split("/").pop() // [B]
+const VITE_PORT = 3000 // [C]
+const SERVER_PORT = 3100 // [D]
+const MAX_FILE_SIZE = 10247680 // [E]
+const DEV_API_PATH = `http://localhost:${SERVER_PORT}/api` // [F]
+const PROD_API_PATH = `http://PLEASE__UPDATE__HERE:${SERVER_PORT}/api` // [G]
+const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH // [H]
+
+// 위의 내용만 수정하시고, 아래 내용은 그대로 두세요!
 
 // https://vitejs.dev/config/
 export default defineConfig({

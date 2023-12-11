@@ -11,32 +11,18 @@
  */
 
 const fs = require("fs")
-import { checkEnvFile, checkAfterModifyEnvFile } from "./install/functions"
-import { env, welcome, install } from "./install/messages"
+import { checkEnvFile, checkAfterModifyEnvFile, setup } from "./install/functions"
+import { env, welcome, install, complete } from "./install/messages"
 
 checkEnvFile()
 fs.writeFileSync(".env", env)
+
 console.log(welcome)
+
 checkAfterModifyEnvFile()
+
 console.log(install)
 
-import mysql, { ConnectionOptions } from "mysql2/promise"
-import { tables } from "./install/table/query"
-
-for (const table of tables) {
-  console.log(table)
-}
-
-async function setup(): Promise<void> {
-  const access: ConnectionOptions = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-  }
-  const conn = await mysql.createConnection(access)
-  await conn.execute(
-    `CREATE DATABASE IF NOT EXISTS ${process.env.DB_DATA} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
-  )
-}
-
 // setup()
+
+console.log(complete)
