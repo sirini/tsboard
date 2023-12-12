@@ -15,8 +15,9 @@ const primary = "PRIMARY KEY (`uid`)"
 const engineEncode = `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`
 
 export const tables: string[] = []
+export const inserts: string[] = []
 
-// v0.8.0 Initial version
+// v0.8.0 Initial version of tables
 // 사용자 기본 정보 테이블, blocked = 1 일 경우 차단된 사용자
 tables.push(`${create} ${prefix}user (
   ${uid},
@@ -239,3 +240,32 @@ tables.push(`${create} ${prefix}notice (
   ${primary},
   KEY (to_uid)
 ) ${engineEncode}`)
+
+// v0.8.0 Initial version of insert queries
+// 관리자 초기 로그인 정보 등록하기 (삭제 불가)
+inserts.push(`INSERT INTO ${prefix}user (
+  id, name, password, profile, level, point, signature, signup, signin, blocked
+) VALUES (
+  'admin', 'Admin', SHA2('admin', 256), '', 9, 0, '', ${Date.now()}, 0, 0
+)`)
+
+// 기본 그룹 생성하기 (삭제 불가)
+inserts.push(`INSERT INTO ${prefix}group (
+  id, admin_uid, timestamp
+) VALUES (
+  'admin', 1, ${Date.now()}
+)`)
+
+// 자유 게시판 생성하기 (삭제 가능)
+inserts.push(`INSERT INTO ${prefix}board (
+  id, group_uid, admin_uid, type, name, info, row, use_category,
+  level_list, level_view, level_write, level_comment, level_download,
+  point_view, point_write, point_comment, point_download
+) VALUES (
+  'free', 1, 1, 0, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1,
+  0, 0, 0, 0, 0,
+  0, 0, 0, 0
+)`)
+
+// 자유 게시판의 기본 카테고리 TODO
+// inserts.push(``)
