@@ -1,28 +1,47 @@
 /**
  * install.ts
  *
- * 이 파일은 최초 설치 시 단 한 번 실행 필요합니다.
- * 파일 실행은 Bun을 사용합니다. 아래 명령어를 참조하세요.
- * Git clone을 통해 내려받으신 tsboard 폴더로 이동 후,
+ * 이 파일은 최초 설치 시 단 한 번 실행 필요, 실행 시 bun 런타임 사용
  *
  * bun install.ts
- *
- * 라고 입력 하시면 실행 됩니다.
  */
 
 const fs = require("fs")
-import { checkEnvFile, checkAfterModifyEnvFile, setup } from "./install/functions"
+import {
+  checkEnvFile,
+  getDatabaseInformation,
+  generateJWTSecretKey,
+  setup,
+} from "./install/functions"
 import { env, welcome, install, complete } from "./install/messages"
+import chalk from "chalk"
 
 checkEnvFile()
-fs.writeFileSync(".env", env)
-
 console.log(welcome)
 
-checkAfterModifyEnvFile()
+const db = getDatabaseInformation()
+if (db.host === "" || db.user === "" || db.pass === "" || db.name === "") {
+  console.log(
+    `\n\n${chalk.red("설치를 중단")}합니다.\n\n${chalk.yellow(
+      "bun install.ts",
+    )} 를 다시 실행하여 DB 접속 정보를 넣어주세요!\n`,
+  )
+  process.exit(0)
+}
+const jwtSecret = generateJWTSecretKey()
+let uEnv = env.replace("#dbhost#", db.host)
+uEnv = uEnv.replace("#dbuser#", db.user)
+uEnv = uEnv.replace("#dbpass#", db.pass)
+uEnv = uEnv.replace("#dbname#", db.name)
+uEnv = uEnv.replace("#dbprefix#", db.prefix)
+uEnv = uEnv.replace("#jwtsecret#", jwtSecret)
+fs.writeFileSync(".env", uEnv)
 
 console.log(install)
+await setup(db)
 
-// setup()
+let message = complete.replace("#dbname#", db.name)
+message = message.replace("#dbprefix#", db.prefix)
+console.log(message)
 
-console.log(complete)
+process.exit(0)
