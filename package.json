@@ -11,7 +11,9 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@elysiajs/cookie": "^0.7.0",
     "@elysiajs/eden": "^0.7.4",
+    "@elysiajs/jwt": "^0.7.1",
     "@mdi/font": "7.0.96",
     "@tiptap/extension-code-block-lowlight": "^2.1.12",
     "@tiptap/extension-color": "^2.1.11",
@@ -26,6 +28,7 @@
     "@tiptap/pm": "^2.1.11",
     "@tiptap/starter-kit": "^2.1.11",
     "@tiptap/vue-3": "^2.1.11",
+    "axios": "^1.6.2",
     "chalk": "^5.3.0",
     "core-js": "^3.29.0",
     "crypto-js": "^4.2.0",
@@ -54,7 +57,7 @@
     "eslint-plugin-vue": "^9.3.0",
     "prettier": "^3.0.3",
     "sass": "^1.60.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "unplugin-fonts": "^1.0.3",
     "vite": "^4.2.0",
     "vite-plugin-vuetify": "^1.0.0",

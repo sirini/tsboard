@@ -19,16 +19,16 @@ const INVALID_NICKNAME =
 export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
   const user = ref<User>({
-    uid: 1,
-    id: "test@test.com",
-    name: "tester",
+    uid: 0,
+    id: "",
+    name: "",
     profile: "/no-profile.png",
-    level: 2,
-    point: 100,
-    signature: "그래도 지구는 돈다",
-    signup: "2023-12-01 09:25:31",
-    signin: "2023-12-10 10:20:30",
-    admin: true,
+    level: 0,
+    point: 0,
+    signature: "",
+    signup: "",
+    signin: "",
+    admin: false,
   })
   const id = ref<string>("")
   const password = ref<string>("")

@@ -23,6 +23,7 @@ DB_USER=#dbuser#
 DB_PASS=#dbpass#
 DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
+DB_SOCK_PATH=#dbsock#
 
 # JWT 비밀 키
 JWT_SECRET_KEY=#jwtsecret#
