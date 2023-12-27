@@ -1,10 +1,11 @@
 /**
  * server/database/pool.ts
  *
- * MySQL(Maria) DBMS CRUD 메소드
+ * MySQL(Maria) DBMS CRUD용 함수들
  */
 import mysql, { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise"
 
+// MySQL(Maria) 연결하기 (외부에 노출되지 않음)
 async function connection(): Promise<PoolConnection> {
   const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -23,8 +24,10 @@ async function connection(): Promise<PoolConnection> {
   return pool.getConnection()
 }
 
+// 테이블 prefix
 export const table = process.env.DB_TABLE_PREFIX ?? "tsb_"
 
+// SELECT 쿼리 실행 후 결과 리턴
 export async function select(
   query: string,
   values: (string | number)[] = [],
@@ -45,6 +48,7 @@ export async function select(
   return result
 }
 
+// UPDATE 쿼리 실행
 export async function update(query: string, values: (string | number)[]): Promise<void> {
   const db = await connection()
   try {
@@ -56,6 +60,7 @@ export async function update(query: string, values: (string | number)[]): Promis
   }
 }
 
+// INSERT 쿼리 실행 후 insertId 리턴
 export async function insert(query: string, values: (string | number)[]): Promise<number> {
   let insertId = 0
   const db = await connection()

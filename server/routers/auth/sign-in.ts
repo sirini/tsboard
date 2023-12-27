@@ -19,7 +19,7 @@ export const signIn = new Elysia()
   .use(cookie())
   .post(
     "/sign-in",
-    async ({ jwt, cookie, setCookie, body }) => {
+    async ({ jwt, setCookie, body }) => {
       const id = body.id.trim()
       const password = body.password.trim()
       if (id.length < 4 || password.length !== 64) {
@@ -41,6 +41,7 @@ export const signIn = new Elysia()
       const token: Token = {
         access: await jwt.sign({
           uid: user.uid,
+          id: user.id,
           signin: user.signin,
         }),
         refresh: await jwt.sign({
@@ -50,7 +51,7 @@ export const signIn = new Elysia()
 
       setCookie("refresh", token.refresh, {
         httpOnly: true,
-        maxAge: 86400,
+        maxAge: 86400 * 14,
       })
 
       saveTokens(user.uid, token)

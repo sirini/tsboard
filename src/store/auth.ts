@@ -37,7 +37,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 아이디(이메일) 입력란 체크
   const emailRule = [
-    (value: any) => {
+    (value: string) => {
       if (util.filters.email.test(value)) return true
       return INVALID_EMAIL
     },
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 비밀번호 입력란 체크
   const passwordRule = [
-    (value: any) => {
+    (value: string) => {
       if (util.filters.password.test(value)) return true
       return INVALID_PASSWORD
     },
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 닉네임 입력란 체크
   const nameRule = [
-    (value: any) => {
+    (value: string) => {
       if (value?.length > 2) return true
       return INVALID_NICKNAME
     },

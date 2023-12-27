@@ -10,6 +10,7 @@ import { SignIn, Token } from "../../interface/auth"
 export async function userSignIn(id: string, password: string): Promise<SignIn> {
   let result: SignIn = {
     uid: 0,
+    id: "",
     name: "",
     profile: "",
     level: 0,
@@ -20,31 +21,32 @@ export async function userSignIn(id: string, password: string): Promise<SignIn> 
   }
 
   const [user] = await select(
-    `SELECT uid, name, profile, level, point, signature, signup 
+    `SELECT uid, id, name, profile, level, point, signature, signup 
       FROM ${table}user 
       WHERE blocked = 0 AND id = ? AND password = ? LIMIT 1`,
     [id, password],
   )
-  if (!user[0]) {
+  if (!user) {
     return result
   }
 
   const signin = Date.now()
   result = {
-    uid: user[0].uid,
-    name: user[0].name,
-    profile: user[0].profile,
-    level: user[0].level,
-    point: user[0].point,
-    signature: user[0].signature,
-    signup: user[0].signup,
+    uid: user.uid,
+    id: user.id,
+    name: user.name,
+    profile: user.profile,
+    level: user.level,
+    point: user.point,
+    signature: user.signature,
+    signup: user.signup,
     signin,
   }
   await update(
     `UPDATE ${table}user 
       SET signin = ?
       WHERE uid = ? LIMIT 1`,
-    [signin, user[0].uid],
+    [signin, user.uid],
   )
   return result
 }
@@ -55,7 +57,7 @@ export async function saveTokens(userUid: number, token: Token): Promise<void> {
     userUid,
   ])
   const now = Date.now()
-  if (!row[0]) {
+  if (!row) {
     await insert(
       `INSERT INTO ${table}user_token (user_uid, access, refresh, timestamp_access, timestamp_refresh) 
         VALUES (?, ?, ?, ?, ?)`,

@@ -5,6 +5,7 @@ export interface Token {
 
 export interface SignIn {
   uid: number
+  id: string
   name: string
   profile: string
   level: number
