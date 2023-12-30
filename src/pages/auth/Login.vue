@@ -15,11 +15,12 @@
             <v-list>
               <v-list-item class="pa-0">
                 <v-text-field
-                  v-model="auth.id"
+                  v-model="auth.user.id"
                   variant="outlined"
                   class="mt-3"
                   prepend-inner-icon="mdi-email-outline"
                   label="아이디(이메일 주소)를 입력해 주세요"
+                  @keyup.enter="auth.login"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -32,6 +33,7 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  @keyup.enter="auth.login"
                 ></v-text-field>
               </v-list-item>
 

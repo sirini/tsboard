@@ -11,9 +11,11 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@elysiajs/bearer": "^0.8.0",
     "@elysiajs/cookie": "^0.7.0",
-    "@elysiajs/eden": "^0.7.4",
-    "@elysiajs/jwt": "^0.7.1",
+    "@elysiajs/cors": "^0.8.0",
+    "@elysiajs/eden": "^0.7.7",
+    "@elysiajs/jwt": "^0.8.0",
     "@mdi/font": "7.0.96",
     "@tiptap/extension-code-block-lowlight": "^2.1.12",
     "@tiptap/extension-color": "^2.1.11",
@@ -32,7 +34,7 @@
     "chalk": "^5.3.0",
     "core-js": "^3.29.0",
     "crypto-js": "^4.2.0",
-    "elysia": "^0.7.30",
+    "elysia": "^0.8.6",
     "highlight.js": "^11.9.0",
     "lowlight": "^3.1.0",
     "mysql2": "^3.6.5",

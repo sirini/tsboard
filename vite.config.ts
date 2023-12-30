@@ -20,8 +20,8 @@ const PREFIX = IS_DEV ? "" : __dirname.split("/").pop() // [B]
 const VITE_PORT = 3000 // [C]
 const SERVER_PORT = 3100 // [D]
 const MAX_FILE_SIZE = 10247680 // [E]
-const DEV_API_PATH = `http://localhost:${SERVER_PORT}/api` // [F]
-const PROD_API_PATH = `http://PLEASE__UPDATE__HERE:${SERVER_PORT}/api` // [G]
+const DEV_API_PATH = `http://localhost:${SERVER_PORT}` // [F]
+const PROD_API_PATH = `http://PLEASE__UPDATE__HERE:${SERVER_PORT}` // [G]
 const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH // [H]
 
 // 위의 내용만 수정하시고, 아래 내용은 그대로 두세요!

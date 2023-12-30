@@ -247,7 +247,7 @@ tables.push(`${create} #db#notice (
 inserts.push(`INSERT INTO #db#user (
   id, name, password, profile, level, point, signature, signup, signin, blocked
 ) VALUES (
-  'admin', 'Admin', SHA2('admin', 256), '', 9, 0, '', ${Date.now()}, 0, 0
+  'admin@tsboard.dev', 'Admin', SHA2('Tsboard@1', 256), '', 9, 0, '', ${Date.now()}, 0, 0
 )`)
 
 // 기본 그룹 생성하기 (삭제 불가)

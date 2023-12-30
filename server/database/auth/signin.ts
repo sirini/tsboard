@@ -1,14 +1,15 @@
 /**
- * server/database/auth/sign-in
+ * server/database/auth/signin
  *
  * 사용자 로그인 처리에 필요한 함수들
  */
+
 import { table, select, update, insert } from "../common"
-import { SignIn, Token } from "../../interface/auth"
+import { User, Token } from "../../../src/interface/auth"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
-export async function userSignIn(id: string, password: string): Promise<SignIn> {
-  let result: SignIn = {
+export async function userSignIn(id: string, password: string): Promise<User> {
+  let result: User = {
     uid: 0,
     id: "",
     name: "",
@@ -18,6 +19,8 @@ export async function userSignIn(id: string, password: string): Promise<SignIn> 
     signature: "",
     signup: 0,
     signin: 0,
+    admin: false,
+    token: "",
   }
 
   const [user] = await select(
@@ -41,6 +44,8 @@ export async function userSignIn(id: string, password: string): Promise<SignIn> 
     signature: user.signature,
     signup: user.signup,
     signin,
+    admin: false,
+    token: "",
   }
   await update(
     `UPDATE ${table}user 
@@ -71,7 +76,7 @@ export async function saveTokens(userUid: number, token: Token): Promise<void> {
         timestamp_access = ?, 
         timestamp_refresh = ? 
         WHERE user_uid = ? LIMIT 1`,
-      [token.access, token.refresh, now, now],
+      [token.access, token.refresh, now, now, userUid],
     )
   }
 }

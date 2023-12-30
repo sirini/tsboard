@@ -15,13 +15,15 @@
             <v-list>
               <v-list-item class="pa-0">
                 <v-text-field
-                  v-model="auth.id"
+                  v-model="auth.user.id"
                   variant="outlined"
                   class="mt-3"
                   prepend-inner-icon="mdi-email-outline"
                   :rules="auth.emailRule"
                   label="평소 사용하시는 이메일 주소를 입력해 주세요"
                   append-inner-icon="mdi-check-circle-outline"
+                  @click:append-inner="auth.checkEmail"
+                  @blur="auth.checkEmail"
                 >
                 </v-text-field>
               </v-list-item>
@@ -46,6 +48,8 @@
                   prepend-inner-icon="mdi-card-account-details-outline"
                   label="사이트 내에서 사용하실 이름을 입력해 주세요"
                   append-inner-icon="mdi-check-circle-outline"
+                  @click:append-inner="auth.checkName"
+                  @blur="auth.checkName"
                   :rules="auth.nameRule"
                 ></v-text-field>
               </v-list-item>

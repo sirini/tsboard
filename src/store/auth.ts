@@ -7,6 +7,8 @@
 import { SHA256 } from "crypto-js"
 import { ref } from "vue"
 import { defineStore } from "pinia"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../server/index"
 import { useUtilStore } from "./util"
 import { User } from "../interface/auth"
 
@@ -17,7 +19,11 @@ const INVALID_NICKNAME =
   "이름은 2글자 이상 입력해 주시고, 우측에 체크 아이콘을 눌러 중복 여부도 확인해보세요."
 
 export const useAuthStore = defineStore("auth", () => {
+  const server = edenTreaty<App>(process.env.API!)
   const util = useUtilStore()
+  const password = ref<string>("")
+  const checkedPassword = ref<string>("")
+  const idForReset = ref<string>("")
   const user = ref<User>({
     uid: 0,
     id: "",
@@ -26,14 +32,12 @@ export const useAuthStore = defineStore("auth", () => {
     level: 0,
     point: 0,
     signature: "",
-    signup: "",
-    signin: "",
+    signup: 0,
+    signin: 0,
     admin: false,
+    token: "",
   })
-  const id = ref<string>("")
-  const password = ref<string>("")
-  const checkedPassword = ref<string>("")
-  const idForReset = ref<string>("")
+  loadUserInfo()
 
   // 아이디(이메일) 입력란 체크
   const emailRule = [
@@ -59,9 +63,17 @@ export const useAuthStore = defineStore("auth", () => {
     },
   ]
 
+  // 기존에 로그인 한 사용자라면 스토리지 공간에서 정보 가져오기
+  function loadUserInfo(): void {
+    const storageUserInfo = window.localStorage.getItem("tsboardUserInfo") || ""
+    if (storageUserInfo.length > 0) {
+      user.value = JSON.parse(storageUserInfo)
+    }
+  }
+
   // 사용자 로그인하기
   async function login(): Promise<void> {
-    if (util.filters.email.test(id.value) === false) {
+    if (util.filters.email.test(user.value.id) === false) {
       util.alert(INVALID_EMAIL)
       return
     }
@@ -69,16 +81,17 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert(INVALID_PASSWORD)
       return
     }
-    const userId = id.value.trim()
-    const userPass = SHA256(password.value)
 
-    // TODO
-    user.value.uid = 1
-    user.value.name = "테스터"
-    user.value.point = 1000
-    user.value.level = 9
-    user.value.profile = ""
-    user.value.admin = true
+    const response = await server.api.auth.signin.post({
+      id: user.value.id.trim(),
+      password: SHA256(password.value).toString(),
+    })
+    if (response.data!.success === false) {
+      util.alert(`아이디 혹은 비밀번호가 올바르지 않습니다.`, "error")
+      return
+    }
+    user.value = response.data!.user!
+    window.localStorage.setItem("tsboardUserInfo", JSON.stringify(user.value))
 
     util.alert(`환영합니다, ${user.value.name}님!`, "success", 1000)
 
@@ -89,13 +102,16 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 사용자 로그아웃 하기
   async function logout(): Promise<void> {
-    // TODO
+    await server.api.auth.logout.post({ token: user.value.token })
+
     user.value.uid = 0
-    user.value.name = ""
-    user.value.point = 0
-    user.value.level = 0
-    user.value.profile = ""
     user.value.admin = false
+    user.value.token = ""
+    user.value.name = ""
+    user.value.level = 0
+    user.value.point = 0
+    user.value.signature = ""
+    window.localStorage.removeItem("tsboardUserInfo")
 
     util.alert(`다음에 다시 뵐께요!`, "success")
   }
@@ -110,18 +126,44 @@ export const useAuthStore = defineStore("auth", () => {
     util.alert(`${idForReset.value}으로 비밀번호 초기화 메일을 발송하였습니다.`, "success")
   }
 
+  // 아이디(이메일) 중복 체크하기
+  async function checkEmail(): Promise<void> {
+    if (user.value.id.length < 6) {
+      util.alert(INVALID_EMAIL)
+      return
+    }
+    const response = await server.api.auth.checkemail.post({
+      email: user.value.id.trim(),
+    })
+    if (response.data!.success === false) {
+      util.alert(`이미 등록된 아이디(이메일) 입니다. 다른 이메일 주소를 넣어주세요!`, "error")
+      user.value.id = ""
+      return
+    }
+
+    util.alert(`${user.value.id}는 사용할 수 있는 아이디입니다.`, "success")
+  }
+
   // 이름 중복 체크하기
   async function checkName(): Promise<void> {
     if (user.value.name.length < 2) {
       util.alert(INVALID_NICKNAME)
     }
-    // do something
+    const response = await server.api.auth.checkname.post({
+      name: user.value.name.trim(),
+    })
+    if (response.data!.success === false) {
+      util.alert(`이미 등록된 이름입니다. 다른 이름을 만들어보세요!`, "error")
+      user.value.name = ""
+      return
+    }
+
     util.alert(`${user.value.name}은 사용할 수 있는 이름입니다.`, "success")
   }
 
   // 가입 양식 제출받기
   async function signup(): Promise<void> {
-    if (util.filters.email.test(id.value) === false) {
+    if (util.filters.email.test(user.value.id) === false) {
       util.alert(INVALID_EMAIL)
       return
     }
@@ -133,9 +175,9 @@ export const useAuthStore = defineStore("auth", () => {
       util.alert(INVALID_NICKNAME)
       return
     }
-    // do something
+
     util.alert(
-      `${id.value}로 메일을 보내드렸습니다. 인증 메일 속 링크를 클릭하셔서 가입 절차를 완료하실 수 있습니다!`,
+      `${user.value.id}로 메일을 보내드렸습니다. 인증 메일 속 링크를 클릭하셔서 가입 절차를 완료하실 수 있습니다!`,
       "success",
     )
 
@@ -166,7 +208,6 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     user,
-    id,
     password,
     checkedPassword,
     idForReset,
@@ -176,6 +217,7 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     logout,
     resetPassword,
+    checkEmail,
     checkName,
     signup,
     saveMyInfo,

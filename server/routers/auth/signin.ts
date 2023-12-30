@@ -1,24 +1,24 @@
 /**
- * server/routers/auth/sign-in
+ * server/routers/auth/signin
  *
  * 사용자 로그인 처리
  */
 import { Elysia, t } from "elysia"
-import { cookie } from "@elysiajs/cookie"
 import { jwt } from "@elysiajs/jwt"
-import { userSignIn, saveTokens } from "../../database/auth/sign-in"
-import { Token } from "../../interface/auth"
+import { cookie } from "@elysiajs/cookie"
+import { userSignIn, saveTokens } from "../../database/auth/signin"
+import { Token } from "../../../src/interface/auth"
 
 export const signIn = new Elysia()
   .use(
     jwt({
       name: "jwt",
-      secret: process.env.JWT_SECRET_KEY ?? "!!_please_%_update_@_env_!!",
+      secret: process.env.JWT_SECRET_KEY!,
     }),
   )
   .use(cookie())
   .post(
-    "/sign-in",
+    "/signin",
     async ({ jwt, setCookie, body }) => {
       const id = body.id.trim()
       const password = body.password.trim()
@@ -48,6 +48,8 @@ export const signIn = new Elysia()
           signin: user.signin,
         }),
       }
+      user.token = token.access
+      user.admin = user.uid === 1 ? true : false
 
       setCookie("refresh", token.refresh, {
         httpOnly: true,
@@ -58,8 +60,7 @@ export const signIn = new Elysia()
 
       return {
         success: true,
-        ...user,
-        token: token.access,
+        user,
       }
     },
     {
