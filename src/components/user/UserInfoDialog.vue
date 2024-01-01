@@ -81,9 +81,10 @@ watchEffect(() => {
       level: 1,
       point: 123,
       signature: "",
-      signup: "2023-12-01 11:23:02",
-      signin: "2023-12-10 09:11:45",
+      signup: 0,
+      signin: 0,
       admin: false,
+      token: "",
     }
   }
 })

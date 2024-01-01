@@ -5,7 +5,6 @@
  */
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { cookie } from "@elysiajs/cookie"
 import { userSignIn, saveTokens } from "../../database/auth/signin"
 import { Token } from "../../../src/interface/auth"
 
@@ -16,10 +15,9 @@ export const signIn = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .use(cookie())
   .post(
     "/signin",
-    async ({ jwt, setCookie, body }) => {
+    async ({ jwt, cookie: { refresh }, body }) => {
       const id = body.id.trim()
       const password = body.password.trim()
       if (id.length < 4 || password.length !== 64) {
@@ -49,10 +47,9 @@ export const signIn = new Elysia()
       user.token = token.access
       user.admin = user.uid === 1 ? true : false
 
-      setCookie("refresh", token.refresh, {
-        httpOnly: true,
-        maxAge: 86400 * 14,
-      })
+      refresh.value = token.refresh
+      refresh.httpOnly = true
+      refresh.maxAge = 86400 * 14
 
       saveTokens(user.uid, token)
 

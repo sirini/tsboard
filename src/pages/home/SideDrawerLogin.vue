@@ -5,7 +5,7 @@
       <alert-bar class="mb-2"></alert-bar>
       <v-card elevation="0">
         <v-text-field
-          v-model="auth.id"
+          v-model="auth.user.id"
           variant="outlined"
           density="compact"
           hide-details
