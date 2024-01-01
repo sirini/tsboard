@@ -26,7 +26,6 @@ export const signIn = new Elysia()
         return {
           success: false,
           error: `Invalid id or password`,
-          body,
         }
       }
       const user = await userSignIn(id, password)
@@ -34,7 +33,6 @@ export const signIn = new Elysia()
         return {
           success: false,
           error: `Unable to get an user information`,
-          body,
         }
       }
 

@@ -51,7 +51,7 @@ const rule = [
 // 외부 이미지 추가 반영하기
 function add(): void {
   if (util.filters.url.test(link.value) === false) {
-    util.alert("올바른 URL 형식이 아닙니다.", "error")
+    util.error("올바른 URL 형식이 아닙니다.")
     return
   }
   emits("addImageURL", link.value)

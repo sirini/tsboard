@@ -9,7 +9,7 @@ export const env = `#
 # TSBOARD 서버쪽 설정 파일
 # 클라이언트쪽 설정은 vite.config.ts 참조
 # 
-# 참조1 - 서버쪽 mysqld.sock 파일 경로는 시스템마다 상이하므로 따로 확인 필요 (DB_SOCK_PROD)
+# 참조1 - 서버쪽 mysqld.sock 파일 경로는 시스템마다 상이하므로 따로 확인 필요 (DB_SOCK_PATH)
 # 참조2 - 메일 자동 발송을 위해 구글 메일 계정 필요하며, 맨 아래 참고) 부분을 꼭 따라해야 함
 #
 # 하다가 어려움이 있을 땐? tsboard.dev 방문!
@@ -28,8 +28,13 @@ DB_SOCK_PATH=#dbsock#
 # JWT 비밀 키
 JWT_SECRET_KEY=#jwtsecret#
 
+# 웹사이트 정보 설정 (메일 발송 시 링크 생성 등에 활용)
+SITE_NAME=tsboard.dev
+SITE_URL=https://tsboard.dev
+SITE_TSBOARD_PATH=/
+
 # GMAIL OAUTH (이메일 발송 기능에 사용되며, 빈 값으로 둘 경우 해당 기능을 쓸 수 없습니다.)
-# 참고) https://iamiet.tistory.com/entry/Nodemailer-Gmail-OAuth20%EC%9C%BC%EB%A1%9C-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EB%B0%9C%EC%86%A1%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
+# 참고) https://velog.io/@13circle/Nodemailer-X-Gmail-OAuth-2.0
 GMAIL_OAUTH_USER=                # Oauth Client에서 테스트 사용자로 등록된 이메일 주소
 GMAIL_OAUTH_CLIENT_ID=           # OAuth Client의 아이디
 GAMIL_OAUTH_CLIENT_SECRET=       # OAuth Client의 보안 비밀번호

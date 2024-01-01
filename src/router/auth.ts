@@ -1,7 +1,7 @@
 /**
  * router/auth.ts
  *
- * 로그인 등 회원 정보 관련 라우팅(경로 지정) 설정
+ * 로그인, 인증 등 회원 정보 관련 라우팅(경로 지정) 설정
  */
 
 const PREFIX = process.env.PREFIX || ""
@@ -31,5 +31,10 @@ export const authRoutes = [
     path: PREFIX + "/myinfo",
     name: "myinfo",
     component: () => import("@/pages/auth/MyInfo.vue"),
+  },
+  {
+    path: PREFIX + "/verify/:target(\\d+)",
+    name: "verify",
+    component: () => import("@/pages/auth/Verify.vue"),
   },
 ]

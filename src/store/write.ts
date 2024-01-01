@@ -108,17 +108,17 @@ export const useWriteStore = defineStore("write", () => {
   async function save(id: string): Promise<void> {
     const result = false
     if (subject.value.length < 2) {
-      util.alert(`제목은 2글자 이상 입력해 주세요.`, "error")
+      util.error(`제목은 2글자 이상 입력해 주세요.`)
       return
     }
     if (content.value.length < 3) {
-      util.alert(`글 내용은 3글자 이상 입력해 주세요.`, "error")
+      util.error(`글 내용은 3글자 이상 입력해 주세요.`)
       return
     }
 
     // do something
     // content.value 대신 contentWithSyntax.value 사용할 것
-    util.alert(`글 작성에 성공 하였습니다.`, "success")
+    util.success(`글 작성에 성공 하였습니다.`)
 
     files.value = []
     subject.value = ""

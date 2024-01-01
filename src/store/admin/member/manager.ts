@@ -21,19 +21,20 @@ export const useAdminMemberManagerStore = defineStore("adminMemberManager", () =
     level: 2,
     point: 100,
     signature: "learning by building something",
-    signup: "2023-12-03 10:20:30",
-    signin: "2023-12-10 22:10:12",
+    signup: 0,
+    signin: 0,
     admin: true,
+    token: "",
   })
 
   // 이름 중복 체크하기
   async function checkName(): Promise<void> {
     if (user.value.name.length < 2) {
-      util.alert(`이름이 너무 짧습니다. 2글자 이상 입력해 주세요.`, "error")
+      util.error(`이름이 너무 짧습니다. 2글자 이상 입력해 주세요.`)
       return
     }
     // do something
-    util.alert(`${user.value.name}은 사용할 수 있는 이름입니다.`, "success")
+    util.success(`${user.value.name}은 사용할 수 있는 이름입니다.`)
   }
 
   // 기존 회원 정보를 가져와 업데이트하기
@@ -51,14 +52,14 @@ export const useAdminMemberManagerStore = defineStore("adminMemberManager", () =
   async function updateUserInfo(): Promise<void> {
     if (password.value.length > 0 || checkedPassword.value.length > 0) {
       if (password.value != checkedPassword.value) {
-        util.alert("입력하신 비밀번호가 서로 다릅니다. 다시 확인해 주세요.")
+        util.error("입력하신 비밀번호가 서로 다릅니다. 다시 확인해 주세요.")
         return
       }
     }
     // do something
     password.value = ""
     checkedPassword.value = ""
-    util.alert(`${user.value.name}님의 정보를 업데이트 하였습니다.`, "success")
+    util.success(`${user.value.name}님의 정보를 업데이트 하였습니다.`)
   }
 
   return {

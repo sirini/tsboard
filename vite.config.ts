@@ -15,14 +15,15 @@ import { fileURLToPath, URL } from "node:url"
  * 문의 | https://tsboard.dev
  *
  */
-const IS_DEV = true // [A]
-const PREFIX = IS_DEV ? "" : __dirname.split("/").pop() // [B]
-const VITE_PORT = 3000 // [C]
-const SERVER_PORT = 3100 // [D]
-const MAX_FILE_SIZE = 10247680 // [E]
-const DEV_API_PATH = `http://localhost:${SERVER_PORT}` // [F]
-const PROD_API_PATH = `http://PLEASE__UPDATE__HERE:${SERVER_PORT}` // [G]
-const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH // [H]
+const IS_DEV = true // [1]
+const PREFIX = IS_DEV ? "" : __dirname.split("/").pop() // [2]
+const VITE_PORT = 3000 // [3]
+const SERVER_PORT = 3100 // [4]
+const MAX_FILE_SIZE = 10247680 // [5]
+const DOMAIN = "localhost" // [6]
+const DEV_API_PATH = `http://localhost:${SERVER_PORT}` // [7]
+const PROD_API_PATH = `http://${DOMAIN}:${SERVER_PORT}` // [8]
+const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH // [9]
 
 // 위의 내용만 수정하시고, 아래 내용은 그대로 두세요!
 

@@ -47,6 +47,21 @@ export const useUtilStore = defineStore("util", () => {
     alertTimeout.value = timeout
   }
 
+  // 성공 메시지 축약형
+  function success(message: string, timeout: number = 5000): void {
+    alert(message, "success", timeout)
+  }
+
+  // 에러 메시지 축약형
+  function error(message: string, timeout: number = 5000): void {
+    alert(message, "error", timeout)
+  }
+
+  // 정보 메시지 축약형
+  function info(message: string, timeout: number = 5000): void {
+    alert(message, "info", timeout)
+  }
+
   // 페이지 이동하기
   function go(name: string, id: string = "", no: number = 0): void {
     if (id.length < 1) {
@@ -65,6 +80,18 @@ export const useUtilStore = defineStore("util", () => {
     router.back()
   }
 
+  // 디바운스 함수
+  function debounce<T extends (...args: any[]) => any>(func: T, delay: number = 300) {
+    let timeout: any = null
+    return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+      const context = this as ThisParameterType<T>
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        func.apply(context, args)
+      }, delay)
+    }
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -77,8 +104,11 @@ export const useUtilStore = defineStore("util", () => {
     searchValue,
     filters,
     snack,
-    alert,
+    success,
+    error,
+    info,
     go,
     back,
+    debounce,
   }
 })

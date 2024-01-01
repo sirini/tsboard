@@ -40,7 +40,7 @@ export async function select(
       return result
     }
     result = rows
-  } catch (e) {
+  } catch (e: any) {
     console.log(`[error/select] ${query} (${values.toString()})`)
   } finally {
     db.release()
@@ -53,7 +53,7 @@ export async function update(query: string, values: (string | number)[]): Promis
   const db = await connection()
   try {
     await db.execute(query, values)
-  } catch (e) {
+  } catch (e: any) {
     console.log(`[error/update] ${query} (${values.toString()})`)
   } finally {
     db.release()
@@ -67,7 +67,7 @@ export async function insert(query: string, values: (string | number)[]): Promis
   try {
     const [rows] = await db.execute<ResultSetHeader>(query, values)
     insertId = rows.insertId
-  } catch (e) {
+  } catch (e: any) {
     console.log(`[error/insert] ${query} (${values.toString()})`)
   } finally {
     db.release()

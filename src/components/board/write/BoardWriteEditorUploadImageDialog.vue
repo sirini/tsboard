@@ -93,7 +93,7 @@ function add(): void {
   for (const src of uploadImages.value) {
     emits("addImageURL", src)
   }
-  util.alert("사진을 작성중인 본문에 추가 하였습니다", "success")
+  util.success("사진을 작성중인 본문에 추가 하였습니다")
 }
 </script>
 

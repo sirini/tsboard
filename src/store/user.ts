@@ -82,7 +82,7 @@ export const useUserStore = defineStore("user", () => {
     clearTimeout(chatTimer)
     chatTimer = setTimeout(() => {
       if (targetUserInfo.value.uid < 1) {
-        util.alert("쪽지를 보낼 대상이 제대로 지정되지 않았습니다.")
+        util.error("쪽지를 보낼 대상이 제대로 지정되지 않았습니다.")
         return
       }
       if (chatMessage.value.length < 2) {
@@ -100,22 +100,22 @@ export const useUserStore = defineStore("user", () => {
   // 운영진에게 특정 사용자 신고하기
   async function sendReport(report: string, blockNode: boolean, blockPost: boolean): Promise<void> {
     if (targetUserInfo.value.uid < 1) {
-      util.alert("신고할 대상이 제대로 지정되지 않았습니다.")
+      util.error("신고할 대상이 제대로 지정되지 않았습니다.")
       return
     }
     if (report.length < 3 || report.length > 1000) {
-      util.alert("신고 내용은 3글자 이상, 1000자 미만으로 작성해 주세요.")
+      util.error("신고 내용은 3글자 이상, 1000자 미만으로 작성해 주세요.")
       return
     }
     //do something
-    util.alert(`${targetUserInfo.value.name} 님을 운영진에게 신고 하였습니다.`, "success")
+    util.success(`${targetUserInfo.value.name} 님을 운영진에게 신고 하였습니다.`)
     setTimeout(closeSendReport, 3000)
   }
 
   // 회원 관리하기
   async function manageUser(block: BlockFeature, report: string): Promise<void> {
     if (report.length < 3 || report.length > 1000) {
-      util.alert("조치 사유는 3글자 이상, 1000자 미만으로 작성해 주세요.")
+      util.error("조치 사유는 3글자 이상, 1000자 미만으로 작성해 주세요.")
       return
     }
     // do something
@@ -124,9 +124,8 @@ export const useUserStore = defineStore("user", () => {
     const n = block.note ? "쪽지 차단" : "쪽지 가능"
     const r = block.report ? "신고 차단" : "신고 가능"
     const l = block.login ? "로그인 차단" : "로그인 가능"
-    util.alert(
+    util.success(
       `${targetUserInfo.value.name} 님에 대한 조치를 완료 하였습니다. (${w}, ${c}, ${n}, ${r}, ${l})`,
-      "success",
     )
     setTimeout(closeManageUser, 3000)
   }

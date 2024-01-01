@@ -1,0 +1,83 @@
+<template>
+  <v-app>
+    <home-header></home-header>
+    <v-layout class="layout">
+      <v-main>
+        <v-container class="wrap">
+          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
+            <v-card-title class="signup_title">
+              인증 코드 입력
+              <span class="info ml-3 pl-3">메일에 적혀 있던 6자리 인증 코드를 입력해주세요</span>
+            </v-card-title>
+
+            <alert-bar></alert-bar>
+
+            <div class="text-center pt-3">
+              <v-otp-input
+                v-model="auth.verificationCode"
+                type="text"
+                length="6"
+                variant="outlined"
+              ></v-otp-input>
+            </div>
+
+            <v-card-actions>
+              <v-btn
+                prepend-icon="mdi-email-alert-outline"
+                v-if="auth.user.id.length > 0"
+                :disabled="auth.verificationCode.length > 5"
+                @click="retrySendMail"
+                >메일을 받지 못하셨나요?</v-btn
+              >
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                append-icon="mdi-chevron-right"
+                :disabled="auth.verificationCode.length < 6"
+                @click="auth.verify(parseInt(route.params?.target.toString()))"
+                >인증 완료하기</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-container>
+        <home-footer></home-footer>
+      </v-main>
+    </v-layout>
+  </v-app>
+</template>
+
+<script setup lang="ts">
+import { useRoute } from "vue-router"
+import { useAuthStore } from "../../store/auth"
+import { useUtilStore } from "../../store/util"
+import HomeHeader from "../home/HomeHeader.vue"
+import HomeFooter from "../home/HomeFooter.vue"
+import AlertBar from "../../components/util/AlertBar.vue"
+
+const route = useRoute()
+const auth = useAuthStore()
+const util = useUtilStore()
+
+// 메일 재발송하기
+function retrySendMail(): void {
+  const signup = util.debounce(auth.signup, 1000)
+  signup()
+}
+</script>
+
+<style scoped>
+.layout {
+  margin-top: 64px;
+}
+.wrap {
+  min-height: calc(100vh - 118px);
+}
+.signup_title {
+  border-bottom: 1px #828282 solid;
+}
+.info {
+  color: #828282;
+  font-size: 0.65em;
+  border-left: 1px #dddddd solid;
+}
+</style>

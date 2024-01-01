@@ -11,7 +11,7 @@
             </v-card-title>
 
             <v-card-text v-if="auth.user.uid < 1" class="mt-6">
-              안전하게 로그아웃 되셨습니다. 다음에 다시 만나요!
+              안전하게 로그아웃 되셨습니다. 첫화면으로 곧 이동합니다...!
             </v-card-text>
 
             <v-card-text v-else class="mt-6">
