@@ -1,7 +1,7 @@
 /**
- * store/admin/home/main.ts
+ * store/admin/home/main
  *
- * 각종 기본적인 수치 데이터들들의 상태 및 유유틸리티 함수들
+ * 각종 기본적인 수치 데이터들들의 상태 및 유함수들
  */
 
 import { ref } from "vue"

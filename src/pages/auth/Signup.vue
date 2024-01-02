@@ -22,8 +22,8 @@
                   :rules="auth.emailRule"
                   label="평소 사용하시는 이메일 주소를 입력해 주세요"
                   append-inner-icon="mdi-check-circle-outline"
-                  @click:append-inner="auth.checkEmail"
-                  @blur="auth.checkEmail"
+                  @click:append-inner="signup.checkEmail"
+                  @blur="signup.checkEmail"
                 >
                 </v-text-field>
               </v-list-item>
@@ -61,7 +61,7 @@
                   prepend-inner-icon="mdi-card-account-details-outline"
                   label="사이트 내에서 사용하실 이름을 입력해 주세요"
                   append-inner-icon="mdi-check-circle-outline"
-                  @click:append-inner="auth.checkName"
+                  @click:append-inner="signup.checkName"
                   :rules="auth.nameRule"
                 ></v-text-field>
               </v-list-item>
@@ -79,7 +79,7 @@
             <v-card-actions>
               <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">로그인 하기</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" append-icon="mdi-chevron-right" @click="auth.signup"
+              <v-btn color="primary" append-icon="mdi-chevron-right" @click="signup.submit"
                 >가입 신청서 제출하기</v-btn
               >
             </v-card-actions>
@@ -94,12 +94,14 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
+import { useSignupStore } from "../../store/signup"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
 const auth = useAuthStore()
+const signup = useSignupStore()
 const util = useUtilStore()
 const visible = ref<boolean>(false)
 </script>

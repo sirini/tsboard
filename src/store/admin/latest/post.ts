@@ -1,7 +1,7 @@
 /**
- * store/admin/latest/post.ts
+ * store/admin/latest/post
  *
- * 최신 글 조회 및 관리에 필요한 상태 및 유틸리티 함수들
+ * 최신 글 조회 및 관리에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

@@ -28,3 +28,9 @@ export interface Signup {
   password: string
   name: string
 }
+
+export interface ChangePassword {
+  target: number
+  code: string
+  password: string
+}

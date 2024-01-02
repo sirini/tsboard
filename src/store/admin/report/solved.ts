@@ -1,7 +1,7 @@
 /**
- * store/admin/report/solved.ts
+ * store/admin/report/solved
  *
- * 조치 완료된 신고 내역 조회에 필요한 상태 및 유틸리티 함수들
+ * 조치 완료된 신고 내역 조회에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

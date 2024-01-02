@@ -14,7 +14,7 @@
 
             <div class="text-center pt-3">
               <v-otp-input
-                v-model="auth.verificationCode"
+                v-model="signup.verificationCode"
                 type="text"
                 length="6"
                 variant="outlined"
@@ -25,7 +25,7 @@
               <v-btn
                 prepend-icon="mdi-email-alert-outline"
                 v-if="auth.user.id.length > 0"
-                :disabled="auth.verificationCode.length > 5"
+                :disabled="signup.verificationCode.length > 5"
                 @click="retrySendMail"
                 >메일을 받지 못하셨나요?</v-btn
               >
@@ -33,8 +33,8 @@
               <v-btn
                 color="primary"
                 append-icon="mdi-chevron-right"
-                :disabled="auth.verificationCode.length < 6"
-                @click="auth.verify(parseInt(route.params?.target.toString()))"
+                :disabled="signup.verificationCode.length < 6"
+                @click="signup.verify(parseInt(route.params?.target.toString()))"
                 >인증 완료하기</v-btn
               >
             </v-card-actions>
@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/auth"
+import { useSignupStore } from "../../store/signup"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
@@ -56,12 +57,13 @@ import AlertBar from "../../components/util/AlertBar.vue"
 
 const route = useRoute()
 const auth = useAuthStore()
+const signup = useSignupStore()
 const util = useUtilStore()
 
 // 메일 재발송하기
 function retrySendMail(): void {
-  const signup = util.debounce(auth.signup, 1000)
-  signup()
+  const func = util.debounce(signup.submit)
+  func()
 }
 </script>
 

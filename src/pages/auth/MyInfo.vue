@@ -32,7 +32,7 @@
                   prepend-inner-icon="mdi-card-account-details-outline"
                   label="수정할 닉네임을 입력하신 후 중복 여부를 확인해 보세요"
                   append-inner-icon="mdi-check-circle-outline"
-                  @click:append-inner="auth.checkName"
+                  @click:append-inner="signup.checkName"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -130,6 +130,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
+import { useSignupStore } from "../../store/signup"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
@@ -137,6 +138,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
 const auth = useAuthStore()
+const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)

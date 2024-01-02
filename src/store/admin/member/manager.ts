@@ -1,7 +1,7 @@
 /**
- * store/admin/member/manager.ts
+ * store/admin/member/manager
  *
- * 회원 정보 수정에 필요한 상태 및 유틸리티 함수들
+ * 회원 정보 수정에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

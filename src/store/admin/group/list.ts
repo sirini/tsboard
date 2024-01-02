@@ -1,7 +1,7 @@
 /**
- * store/admin/group/list.ts
+ * store/admin/group/list
  *
- * 게시판 그룹 목록 관리에 필요한 상태 및 유틸리티 함수들
+ * 게시판 그룹 목록 관리에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

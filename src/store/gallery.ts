@@ -1,8 +1,9 @@
 /**
- * store/gallery.ts
+ * store/gallery
  *
- * 갤러리 동작과 관련한 상태 및 유틸리티 함수들
+ * 갤러리 동작과 관련한 상태 및 함수들
  */
+
 import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { defineStore } from "pinia"

@@ -1,7 +1,7 @@
 /**
- * store/board.ts
+ * store/board
  *
- * 게시판 동작과 관련한 상태 및 유틸리티 함수들
+ * 게시판 동작과 관련한 상태 및 함수들
  */
 
 import { ref } from "vue"

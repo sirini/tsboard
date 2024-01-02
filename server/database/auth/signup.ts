@@ -4,10 +4,11 @@
  * 신규 사용자 추가하기에 필요한 함수들
  */
 
-import { table, select, insert, update } from "../common"
+import { table, select, insert } from "../common"
+import { prepareVerificationCode } from "./verify"
 import { Signup } from "../../../src/interface/auth"
-import { createTransport } from "nodemailer"
-import { MailOptions } from "nodemailer/lib/json-transport"
+import { generateRandomCode } from "../../util/tools"
+import { sendMail } from "../../util/sendmail"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
 export async function isDuplicatedEmail(email: string): Promise<boolean> {
@@ -32,40 +33,13 @@ export async function isDuplicatedName(name: string): Promise<boolean> {
   return true
 }
 
-// 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다
-function generateRandomCode() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz0123456789"
-  let random = ""
+// 이메일 인증 진행을 위해 메일 발송하기
+export async function sendVerificationMail(email: string, name: string): Promise<number> {
+  const code = generateRandomCode()
+  const uid = await prepareVerificationCode(code, email)
 
-  for (let i = 0; i < 6; i++) {
-    const index = Math.floor(Math.random() * chars.length)
-    random += chars.charAt(index)
-  }
-  return random
-}
-
-// 실제 메일 발송하는 함수, 인증 코드와 링크를 넣어서 발송한다
-async function sendMail(uid: number, email: string, code: string, name: string): Promise<void> {
-  try {
-    const transporter = createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: true,
-      auth: {
-        type: "OAuth2",
-        user: process.env.GMAIL_OAUTH_USER,
-        clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
-        clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
-      },
-    })
-
-    const options: MailOptions = {
-      from: process.env.GMAIL_OAUTH_USER,
-      to: email,
-      subject: `[${process.env.SITE_NAME}] ${name}님, 인증 코드를 입력해 주세요!`,
-      html: `안녕하세요 <strong>${name}</strong>님!<br />
+  const subject = `[${process.env.SITE_NAME}] ${name}님, 인증 코드를 입력해 주세요.`
+  const html = `안녕하세요 <strong>${name}</strong>님!<br />
 <br />
 회원 가입을 완료하기 위해서 아래의 링크에 인증 코드 6자리를 입력해 주세요!<br />
 <br />
@@ -75,38 +49,8 @@ async function sendMail(uid: number, email: string, code: string, name: string):
 </div>
 <br />
 From <a href="${process.env.SITE_URL}" target="_blank">${process.env.SITE_URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>
-`,
-    }
-
-    await transporter.sendMail(options)
-  } catch (e: any) {
-    console.log(`[signup/sendMail] ${e}`)
-  }
-}
-
-// 이메일 인증 진행을 위해 메일 발송하기
-export async function sendVerificationMail(email: string, name: string): Promise<number> {
-  const code = generateRandomCode()
-  let uid = 0
-  const [result] = await select(
-    `SELECT uid, email FROM ${table}user_verification WHERE email = ? LIMIT 1`,
-    [email],
-  )
-  if (!result) {
-    uid = await insert(
-      `INSERT INTO ${table}user_verification (email, code, timestamp) 
-    VALUES (?, ?, ?)`,
-      [email, code, Date.now()],
-    )
-  } else {
-    uid = result.uid
-    await update(
-      `UPDATE ${table}user_verification SET code = ?, timestamp = ? 
-    WHERE uid = ? LIMIT 1`,
-      [code, Date.now(), uid],
-    )
-  }
-  sendMail(uid, email, code, name)
+`
+  await sendMail(email, subject, html)
   return uid
 }
 

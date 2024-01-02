@@ -1,7 +1,7 @@
 /**
- * store/admin/member/block.ts
+ * store/admin/member/block
  *
- * 차단된 회원 목록 보는 페이지에 필요한 상태 및 유틸리티 함수들
+ * 차단된 회원 목록 보는 페이지에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

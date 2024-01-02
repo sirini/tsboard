@@ -23,6 +23,11 @@ export const authRoutes = [
     component: () => import("@/pages/auth/ResetPassword.vue"),
   },
   {
+    path: PREFIX + "/changepassword/:target(\\d+)/:code",
+    name: "changepassword",
+    component: () => import("@/pages/auth/ChangePassword.vue"),
+  },
+  {
     path: PREFIX + "/signup",
     name: "signup",
     component: () => import("@/pages/auth/Signup.vue"),

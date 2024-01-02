@@ -1,7 +1,7 @@
 /**
- * store/admin/board/point.ts
+ * store/admin/board/point
  *
- * 게시글 열람, 글작성 등에 소비되는(혹은 충전되는) 포인트 상태 및 유틸리티 함수들
+ * 게시글 열람, 글작성 등에 소비되는(혹은 충전되는) 포인트 상태 및 함수들
  */
 
 import { ref } from "vue"

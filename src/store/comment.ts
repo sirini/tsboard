@@ -1,7 +1,7 @@
 /**
- * store/comment.ts
+ * store/comment
  *
- * 게시판, 갤러리의 댓글 상태 및 유틸리티 함수들
+ * 게시판, 갤러리의 댓글 상태 및 함수들
  */
 
 import { ref } from "vue"

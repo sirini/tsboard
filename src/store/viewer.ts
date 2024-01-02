@@ -1,5 +1,5 @@
 /**
- * store/viewer.ts
+ * store/viewer
  *
  * 뷰어 다이얼로그에서 이미지 대상으로 하는 상호작용 처리
  */

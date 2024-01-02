@@ -1,7 +1,7 @@
 /**
- * store/admin/board/general.ts
+ * store/admin/board/general
  *
- * 게시판 관리자 페이지에서 일반 부분에 필요한 상태 및 유틸리티 함수들
+ * 게시판 관리자 페이지에서 일반 부분에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

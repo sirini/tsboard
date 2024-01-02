@@ -81,10 +81,22 @@ tables.push(`${create} #db#report (
   from_uid INT(11) ${unnd0},
   request VARCHAR(1000) ${nnde},
   response VARCHAR(1000) ${nnde},
-  timestamp BIGINT(14) ${nnd0},
+  timestamp BIGINT(14) ${unnd0},
   solved TINYINT(1) ${unnd0},
   ${primary},
   KEY (solved)
+) ${engineEncode}`)
+
+// 쪽지 테이블
+tables.push(`${create} #db#note (
+  ${uid},
+  to_uid INT(11) ${unnd0},
+  from_uid INT(11) ${unnd0},
+  note VARCHAR(1000) ${nnde},
+  timestamp BIGINT(14) ${unnd0},
+  ${primary},
+  KEY (to_uid),
+  KEY (from_uid)
 ) ${engineEncode}`)
 
 // 그룹 관리용 테이블
@@ -272,7 +284,7 @@ inserts.push(`INSERT INTO #db#board (
 inserts.push(`INSERT INTO #db#board_category (
   board_uid, name
 ) VALUES (
-  1, '새소식'
+  1, '일반'
 )`)
 inserts.push(`INSERT INTO #db#board_category (
   board_uid, name
@@ -283,4 +295,9 @@ inserts.push(`INSERT INTO #db#board_category (
   board_uid, name
 ) VALUES (
   1, '질문답변'
+)`)
+inserts.push(`INSERT INTO #db#board_category (
+  board_uid, name
+) VALUES (
+  1, '새소식'
 )`)

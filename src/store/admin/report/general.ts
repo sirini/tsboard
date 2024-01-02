@@ -1,7 +1,7 @@
 /**
- * store/admin/report/general.ts
+ * store/admin/report/general
  *
- * 신고 내역 조회 및 조치에 필요한 상태 및 유틸리티 함수들
+ * 신고 내역 조회 및 조치에 필요한 상태 및 함수들
  */
 
 import { ref } from "vue"

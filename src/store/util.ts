@@ -1,7 +1,7 @@
 /**
- * store/util.ts
+ * store/util
  *
- * 여러 곳에서 자주 사용되는 유틸리티 함수들 모음
+ * 여러 곳에서 자주 사용되는 함수들 모음
  */
 
 import { ref } from "vue"
