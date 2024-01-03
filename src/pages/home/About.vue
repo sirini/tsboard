@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mt-12">
+          <v-card class="mx-auto mt-12" max-width="1000">
             <v-card-title>사이트 소개</v-card-title>
             <v-divider></v-divider>
             <v-card-text class="about">

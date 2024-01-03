@@ -21,7 +21,8 @@ const VITE_PORT = 3000 // [3]
 const SERVER_PORT = 3100 // [4]
 const MAX_FILE_SIZE = 10247680 // [5]
 const DOMAIN = "localhost" // [6]
-const DEV_API_PATH = `http://localhost:${SERVER_PORT}` // [7]
+// const DEV_API_PATH = `http://localhost:${SERVER_PORT}` // [7]
+const DEV_API_PATH = `http://geunyul2.asuscomm.com:${SERVER_PORT}`
 const PROD_API_PATH = `http://${DOMAIN}:${SERVER_PORT}` // [8]
 const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH // [9]
 

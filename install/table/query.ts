@@ -118,6 +118,7 @@ tables.push(`${create} #db#board (
   name VARCHAR(20) ${nnde},
   info VARCHAR(100) ${nnde},
   row TINYINT(2) UNSIGNED ${nnd} '20',
+  width INT(11) UNSIGNED NOT NULL DEFAULT '1000',
   use_category TINYINT(1) ${unnd0},
   level_list TINYINT(2) ${unnd0},
   level_view TINYINT(2) ${unnd0},
@@ -255,12 +256,6 @@ tables.push(`${create} #db#notice (
 
 ///////////////////////////////////////////
 // v0.8.0 Initial version of insert queries
-// 관리자 초기 로그인 정보 등록하기 (삭제 불가)
-inserts.push(`INSERT INTO #db#user (
-  id, name, password, profile, level, point, signature, signup, signin, blocked
-) VALUES (
-  'admin@tsboard.dev', 'Admin', SHA2('Tsboard@1', 256), '', 9, 0, '', ${Date.now()}, 0, 0
-)`)
 
 // 기본 그룹 생성하기 (삭제 불가)
 inserts.push(`INSERT INTO #db#group (
@@ -271,11 +266,11 @@ inserts.push(`INSERT INTO #db#group (
 
 // 자유 게시판 생성하기 (삭제 가능)
 inserts.push(`INSERT INTO #db#board (
-  id, group_uid, admin_uid, type, name, info, row, use_category,
+  id, group_uid, admin_uid, type, name, info, row, width, use_category,
   level_list, level_view, level_write, level_comment, level_download,
   point_view, point_write, point_comment, point_download
 ) VALUES (
-  'free', 1, 1, 0, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1,
+  'free', 1, 1, 0, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1000, 1,
   0, 0, 0, 0, 0,
   0, 0, 0, 0
 )`)

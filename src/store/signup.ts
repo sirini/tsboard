@@ -20,6 +20,7 @@ export const useSignupStore = defineStore("signup", () => {
   const auth = useAuthStore()
   const server = edenTreaty<App>(process.env.API!)
   const verificationCode = ref<string>("")
+  const loading = ref<boolean>(false)
 
   // 아이디(이메일) 중복 체크하기
   async function checkEmail(): Promise<void> {
@@ -73,6 +74,8 @@ export const useSignupStore = defineStore("signup", () => {
       return
     }
 
+    loading.value = true
+
     const response = await server.api.auth.signup.post({
       email: auth.user.id,
       password: SHA256(auth.password).toString(),
@@ -80,6 +83,7 @@ export const useSignupStore = defineStore("signup", () => {
     })
     if (response.data!.success === false) {
       util.error(AUTH.FAILED_ADD_USER)
+      loading.value = false
       return
     }
     if (response.data!.sendmail === false) {
@@ -87,12 +91,14 @@ export const useSignupStore = defineStore("signup", () => {
       setTimeout(() => {
         util.go("login")
       }, 5000)
+      loading.value = false
       return
     }
     util.success(
       `${auth.user.id}로 메일을 보내드렸습니다. 인증 메일을 확인해 주시고, 가입 절차를 완료해 보세요!`,
     )
     router.push({ name: "verify", params: { target: response.data!.target! } })
+    loading.value = false
   }
 
   // 인증 완료하기
@@ -138,6 +144,7 @@ export const useSignupStore = defineStore("signup", () => {
   }
 
   return {
+    loading,
     verificationCode,
     checkEmail,
     checkName,

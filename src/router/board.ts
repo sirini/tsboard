@@ -1,5 +1,5 @@
 /**
- * router/board.ts
+ * router/board
  *
  * 게시판 관련 라우팅(경로 지정) 설정
  */

@@ -7,20 +7,22 @@
  */
 
 const fs = require("fs")
-import {
-  checkEnvFile,
-  getDatabaseInformation,
-  saveEnvFile,
-  createDBTables,
-} from "./install/functions"
+import { checkEnvFile, getSetupInformation, saveEnvFile, initDatabase } from "./install/functions"
 import { welcome, install, complete } from "./install/messages"
 import chalk from "chalk"
 
 checkEnvFile()
 console.log(welcome)
 
-const db = getDatabaseInformation()
-if (db.host === "" || db.user === "" || db.pass === "" || db.name === "") {
+const info = getSetupInformation()
+if (
+  info.db.host === "" ||
+  info.db.user === "" ||
+  info.db.pass === "" ||
+  info.db.name === "" ||
+  info.admin.id === "" ||
+  info.admin.pw === ""
+) {
   console.log(
     `\n${chalk.red.bold("설치를 중단")}합니다.\n\n${chalk.bgBlack.blue.bold(
       "bun setup.ts",
@@ -29,12 +31,12 @@ if (db.host === "" || db.user === "" || db.pass === "" || db.name === "") {
   process.exit(0)
 }
 
-saveEnvFile(db)
+saveEnvFile(info)
 console.log(install)
-await createDBTables(db)
+await initDatabase(info)
 
-let message = complete.replace("#dbname#", db.name)
-message = message.replace("#dbprefix#", db.prefix)
+let message = complete.replace("#dbname#", info.db.name)
+message = message.replace("#dbprefix#", info.db.prefix)
 console.log(message)
 
 process.exit(0)

@@ -20,6 +20,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     name: "테스트 게시판",
     info: "이 게시판의 간단 설명입니다.",
     rows: 20,
+    width: 1000,
     category: {
       add: "",
       remove: { uid: 0, name: "" },
@@ -127,6 +128,18 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     admin.snack(`한 페이지에 ${rows} 개씩 게시글이 나오도록 변경 하였습니다.`, "success")
   }
 
+  // 게시판 최대 너비 지정하기
+  async function changeWidth(): Promise<void> {
+    const width = board.value.width
+    if (width < 300 || width > 3000) {
+      admin.snack("게시판 최대 너비는 최최소 300 이상, 최대 3000 이하여야 합니다.", "error")
+      board.value.width = 1000
+      return
+    }
+    // do something with board.value.width
+    admin.snack(`게시판 최대 너비를 ${width}로 지정하였습니다.`, "success")
+  }
+
   return {
     board,
     confirmRemoveCategoryDialog,
@@ -136,6 +149,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     changeInfo,
     changeType,
     changeRows,
+    changeWidth,
     addCategory,
     confirmRemoveCategory,
     removeCategory,

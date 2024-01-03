@@ -35,6 +35,7 @@ export interface AdminBoardConfig {
   name: string
   info: string
   rows: number
+  width: number
   category: AdminBoardCategory
 }
 

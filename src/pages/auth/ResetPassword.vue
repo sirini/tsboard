@@ -4,7 +4,13 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
+          <v-card
+            elevation="0"
+            rounded="0"
+            class="mx-auto"
+            max-width="500"
+            :loading="password.loading"
+          >
             <v-card-title class="reset_password_title">
               비밀번호 초기화
               <span class="info ml-3 pl-3">비밀번호를 잊어버리셨나요?</span>

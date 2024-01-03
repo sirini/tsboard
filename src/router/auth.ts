@@ -1,5 +1,5 @@
 /**
- * router/auth.ts
+ * router/auth
  *
  * 로그인, 인증 등 회원 정보 관련 라우팅(경로 지정) 설정
  */

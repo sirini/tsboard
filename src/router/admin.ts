@@ -1,5 +1,5 @@
 /**
- * router/admin.ts
+ * router/admin
  *
  * 관리자 전용 라우팅(경로 지정) 설정
  */

@@ -23,10 +23,13 @@ DB_USER=#dbuser#
 DB_PASS=#dbpass#
 DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
-DB_SOCK_PATH=#dbsock#
 
 # JWT 비밀 키
 JWT_SECRET_KEY=#jwtsecret#
+
+# 관리자 아이디(이메일) 및 비밀번호
+ADMIN_ID=#adminid#
+ADMIN_PW=#adminpw#
 
 # 웹사이트 정보 설정 (메일 발송 시 링크 생성 등에 활용)
 SITE_NAME=tsboard.dev
@@ -38,7 +41,8 @@ SITE_TSBOARD_PATH=/
 GMAIL_OAUTH_USER=                # Oauth Client에서 테스트 사용자로 등록된 이메일 주소
 GMAIL_OAUTH_CLIENT_ID=           # OAuth Client의 아이디
 GAMIL_OAUTH_CLIENT_SECRET=       # OAuth Client의 보안 비밀번호
-GAMIL_OAUTH_REFRESH_TOKEN=       # playground에서 발급받은 리프레쉬 토큰`
+GAMIL_OAUTH_REFRESH_TOKEN=       # playground에서 발급받은 리프레쉬 토큰
+`
 
 const foundEnvTitle = `
  __                       _                    

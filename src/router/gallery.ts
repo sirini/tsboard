@@ -1,5 +1,5 @@
 /**
- * router/gallery.ts
+ * router/gallery
  *
  * 갤러리 관련 라우팅(경로 지정) 설정
  */

@@ -4,7 +4,7 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto">
+          <v-card elevation="0" rounded="0" class="mx-auto" max-width="1000">
             <v-form fast-fail @submit.prevent>
               <board-header></board-header>
               <alert-bar></alert-bar>

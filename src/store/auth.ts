@@ -71,10 +71,6 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(AUTH.INVALID_EMAIL)
       return
     }
-    if (util.filters.password.test(password.value) === false) {
-      util.error(AUTH.INVALID_PASSWORD)
-      return
-    }
 
     const response = await server.api.auth.signin.post({
       id: user.value.id.trim(),

@@ -36,42 +36,68 @@ export interface DBInfo {
   pass: string
   name: string
   prefix: string
-  socket: string
+}
+
+export interface SetupInfo {
+  db: DBInfo
+  admin: {
+    id: string
+    pw: string
+  }
 }
 
 // 데이터베이스 접속 정보 받기
-export function getDatabaseInformation(): DBInfo {
+export function getSetupInformation(): SetupInfo {
   let cont = true
-  let result: DBInfo = {
+  let db: DBInfo = {
     host: "",
     user: "",
     pass: "",
     name: "",
     prefix: "",
-    socket: "",
   }
+  let admin = {
+    id: "",
+    pw: "",
+  }
+
   while (cont) {
-    console.log(`\n이제 데이터베이스 접속 정보를 하나씩 입력해 주세요!\n`)
-    result.host = prompt(`DB 호스트명 입력 (기본 → ${chalk.yellow("localhost")}) :`) ?? "localhost"
-    result.user = prompt(`DB 사용자명 입력 :`) ?? ""
-    result.pass = prompt(`DB 비밀번호 입력 :`) ?? ""
-    result.name = prompt(`DB 데이터베이스명 (기본 → tsboard) :`) ?? "tsboard"
-    result.prefix =
-      prompt(`테이블명의 앞머리 글자 지정 (기본 → ${chalk.yellow("tsb_")}) :`) ?? "tsb_"
-    result.socket =
-      prompt(`DB 소켓 경로 (기본 → ${chalk.yellow("/var/run/mysqld/myqsld.sock")}) :`) ?? ""
+    log(`\n이제 데이터베이스 접속 정보를 하나씩 입력해 주세요!\n`)
+    db.host = prompt(`DB 호스트명 입력 (기본 → ${chalk.yellow("localhost")}) :`) ?? "localhost"
+    db.user = prompt(`DB 사용자명 입력 :`) ?? ""
+    db.pass = prompt(`DB 비밀번호 입력 :`) ?? ""
+    db.name = prompt(`DB 데이터베이스명 (기본 → ${chalk.yellow("tsboard")}) :`) ?? "tsboard"
+    db.prefix = prompt(`테이블명의 앞머리 글자 지정 (기본 → ${chalk.yellow("tsb_")}) :`) ?? "tsb_"
+
+    log(`\n다음으로, 관리자 아이디(이메일)와 비밀번호를 입력해 주세요!\n`)
+    admin.id =
+      prompt(`관리자 아이디 입력 (기본 → ${chalk.yellow("admin@tsboard.dev")}) :`) ??
+      "admin@tsboard.dev"
+    admin.pw = prompt(`관리자 비밀번호 입력 :`) ?? ""
 
     const confirm = `\n입력하신 내용을 확인해 주세요.\n
-    - DB 호스트명 : ${chalk.green.bold(result.host)}
-    - DB 사용자명 : ${chalk.green.bold(result.user)}
-    - DB 비밀번호 : ${chalk.green.bold(result.pass)}
-    - DB 데이터베이스 이름 : ${chalk.green.bold(result.name)}
-    - 테이블 앞머리 글자 : ${chalk.green.bold(result.prefix)}
-    - mysqld.socket 경로 : ${chalk.green.bold(result.socket)}`
+    [데이터베이스]
+    - DB 호스트명 : ${chalk.green.bold(db.host)}
+    - DB 사용자명 : ${chalk.green.bold(db.user)}
+    - DB 비밀번호 : ${chalk.green.bold(db.pass)}
+    - DB 데이터베이스 이름 : ${chalk.green.bold(db.name)}
+    - 테이블 앞머리 글자 : ${chalk.green.bold(db.prefix)}
+    
+    [관리자]
+    - 아이디(이메일) : ${chalk.green.bold(admin.id)}
+    - 비밀번호 : ${chalk.green.bold(admin.pw)}
+    `
     log(confirm)
     const answer = prompt("\n위 내용이 확실한가요? (yes/no/retry) :")
     if (answer === "yes") {
-      if (result.host === "" || result.user === "" || result.pass === "" || result.name === "") {
+      if (
+        db.host === "" ||
+        db.user === "" ||
+        db.pass === "" ||
+        db.name === "" ||
+        admin.id === "" ||
+        admin.pw === ""
+      ) {
         log(`\n${chalk.red.bold("빈 칸으로 입력")}된 항목이 있습니다. 다시 입력해 주세요!`)
         continue
       } else {
@@ -80,18 +106,24 @@ export function getDatabaseInformation(): DBInfo {
     } else if (answer === "retry") {
       continue
     } else {
-      result = {
+      db = {
         host: "",
         user: "",
         pass: "",
         name: "",
         prefix: "",
-        socket: "",
+      }
+      admin = {
+        id: "",
+        pw: "",
       }
       break
     }
   }
-  return result
+  return {
+    db,
+    admin,
+  }
 }
 
 // JWT 비밀 키값으로 사용할 랜덤 문자열 만들기
@@ -107,31 +139,33 @@ function generateJWTSecretKey(limit: number = 20): string {
 }
 
 // .env 파일에 DB 접속 정보 저장하기
-export function saveEnvFile(db: DBInfo): void {
-  let uEnv = env.replace("#dbhost#", db.host)
+export function saveEnvFile(info: SetupInfo): void {
+  let uEnv = env.replace("#dbhost#", info.db.host)
   const jwtSecret = generateJWTSecretKey()
-  uEnv = uEnv.replace("#dbuser#", db.user)
-  uEnv = uEnv.replace("#dbpass#", db.pass)
-  uEnv = uEnv.replace("#dbname#", db.name)
-  uEnv = uEnv.replace("#dbprefix#", db.prefix)
-  uEnv = uEnv.replace("#dbsock#", db.socket)
+
+  uEnv = uEnv.replace("#dbuser#", info.db.user)
+  uEnv = uEnv.replace("#dbpass#", info.db.pass)
+  uEnv = uEnv.replace("#dbname#", info.db.name)
+  uEnv = uEnv.replace("#dbprefix#", info.db.prefix)
   uEnv = uEnv.replace("#jwtsecret#", jwtSecret)
+  uEnv = uEnv.replace("#adminid#", info.admin.id)
+  uEnv = uEnv.replace("#adminpw#", info.admin.pw)
+
   fs.writeFileSync(".env", uEnv)
 }
 
 // 데이터터베이스 및 테이블 추가하기 진행
-export async function createDBTables(db: DBInfo): Promise<void> {
+export async function initDatabase(info: SetupInfo): Promise<void> {
   const conn = await mysql.createConnection({
-    host: db.host,
-    user: db.user,
-    password: db.pass,
-    socketPath: db.socket,
+    host: info.db.host,
+    user: info.db.user,
+    password: info.db.pass,
   })
   await conn.execute(
     `CREATE DATABASE IF NOT EXISTS tsboard CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
   )
 
-  const prefix = `${db.name}.${db.prefix}`
+  const prefix = `${info.db.name}.${info.db.prefix}`
   for (const sql of tables) {
     const query = sql.replace("#db#", prefix)
     await conn.execute(query)
@@ -141,4 +175,10 @@ export async function createDBTables(db: DBInfo): Promise<void> {
     const query = sql.replace("#db#", prefix)
     await conn.execute(query)
   }
+
+  // 관리자 초기 로그인 정보 등록하기
+  await conn.execute(`INSERT INTO ${prefix}user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+  VALUES ('${info.admin.id}', 'Admin', SHA2('${
+    info.admin.pw
+  }', 256), '', 9, 0, '', ${Date.now()}, 0, 0)`)
 }

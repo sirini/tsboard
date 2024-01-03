@@ -157,6 +157,28 @@
       </v-list-item>
       <v-divider></v-divider>
 
+      <v-list-item class="mt-2 mb-2">
+        <v-row>
+          <v-col cols="4">
+            <v-text-field
+              v-model="general.board.width"
+              variant="outlined"
+              density="compact"
+              hide-details
+              append-inner-icon="mdi-content-save"
+              @click:append-inner="general.changeWidth"
+            >
+              <v-tooltip activator="parent">
+                게시판의 최대 너비를 입력하고 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을
+                클릭하시면 저장됩니다.
+              </v-tooltip>
+            </v-text-field>
+          </v-col>
+          <v-col class="mt-2"> 게시판의 최대 너비를 지정합니다. </v-col>
+        </v-row>
+      </v-list-item>
+      <v-divider></v-divider>
+
       <v-list-item class="mt-2 mb-1">
         <v-row>
           <v-col cols="4">
@@ -165,7 +187,7 @@
               variant="outlined"
               density="compact"
               append-inner-icon="mdi-tag-plus"
-              @click:append-inner="general.addCategory()"
+              @click:append-inner="general.addCategory"
               hide-details
             >
               <v-menu activator="parent" open-on-hover>
