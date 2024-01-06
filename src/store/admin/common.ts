@@ -19,16 +19,28 @@ export const useAdminStore = defineStore("admin", () => {
   // 스낵바 메시지 보이기
   function snack(
     message: string,
-    type: "success" | "error" | "info" = "info",
+    color: "blue" | "red" | "blue-grey" = "blue-grey",
     timeout: number = 3000,
   ): void {
     snackbarMessage.value = message
     snackbarTimeout.value = timeout
+    snackbarColor.value = color
     snackbar.value = true
+  }
 
-    if (type === "success") snackbarColor.value = "blue"
-    else if (type === "error") snackbarColor.value = "red"
-    else snackbarColor.value = "blue-grey"
+  // 스낵바 성공 메시지
+  function success(message: string, timeout: number = 3000): void {
+    snack(message, "blue", timeout)
+  }
+
+  // 스낵바 경고 메시지
+  function error(message: string, timeout: number = 3000): void {
+    snack(message, "red", timeout)
+  }
+
+  // 스낵바 일반 메시지
+  function info(message: string, timeout: number = 3000): void {
+    snack(message, "blue-grey", timeout)
   }
 
   // 관리 페이지 최상단 메뉴 초기화
@@ -51,7 +63,9 @@ export const useAdminStore = defineStore("admin", () => {
     snackbarTimeout,
     snackbarColor,
     breadcrumbs,
-    snack,
+    success,
+    error,
+    info,
     clearBreadcrumbs,
     addBreadcrumbs,
   }

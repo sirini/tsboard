@@ -42,11 +42,11 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   async function createNewGroup(): Promise<void> {
     const newId = newGroupId.value.trim()
     if (newId.length < 2) {
-      admin.snack(`그룹 ID는 2글자 이상 입력해 주세요`, "error")
+      admin.error(`그룹 ID는 2글자 이상 입력해 주세요`)
       return
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
-      admin.snack(`그룹 ID는 영어 소문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`, "error")
+      admin.error(`그룹 ID는 영어 소문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`)
       newGroupId.value = ""
       return
     }
@@ -57,9 +57,8 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       count: 0,
       manager: { uid: 0, name: "" },
     })
-    admin.snack(
+    admin.success(
       `${newId} 그룹이 성공적으로 추가 되었습니다. 상세 그룹 수정은 그룹 수정하기 기능을 이용해 주세요.`,
-      "success",
     )
     newGroupId.value = ""
   }
@@ -83,16 +82,15 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   // 그룹 삭제하기
   async function removeGroup(): Promise<void> {
     if (removeGroupTarget.value.uid < 2) {
-      admin.snack("기본 그룹은 삭제할 수 없습니다.", "error")
+      admin.error("기본 그룹은 삭제할 수 없습니다.")
       return
     }
     // do something with uid
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
       return group.uid !== removeGroupTarget.value.uid
     })
-    admin.snack(
+    admin.success(
       "선택하신 그룹을 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 옮겼습니다.",
-      "success",
     )
     closeRemoveGroupDialog()
   }

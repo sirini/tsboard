@@ -24,12 +24,18 @@ DB_PASS=#dbpass#
 DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
 
-# JWT 비밀 키
+# JWT 설정
+JWT_ACCESS_TIMEOUT=30   # min
+JWT_REFRESH_TIMEOUT=14  # day
 JWT_SECRET_KEY=#jwtsecret#
 
 # 관리자 아이디(이메일) 및 비밀번호
 ADMIN_ID=#adminid#
 ADMIN_PW=#adminpw#
+
+# 쿠키 설정
+COOKIE_HTTP_ONLY=true
+COOKIE_SECURE=false
 
 # 웹사이트 정보 설정 (메일 발송 시 링크 생성 등에 활용)
 SITE_NAME=tsboard.dev

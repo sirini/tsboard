@@ -15,3 +15,32 @@ export function generateRandomCode() {
   }
   return random
 }
+
+interface Result {
+  success: boolean
+  error: string
+  result: any
+}
+
+// Elysia 실패 메시지 리턴
+export function fail(error: string): Result {
+  return {
+    success: false,
+    error,
+    result: null,
+  }
+}
+
+// Elysia 성공 메시지 리턴
+export function success(result: any = null): Result {
+  return {
+    success: true,
+    error: "",
+    result,
+  }
+}
+
+// 문자 or 숫자를 숫자 형태로 변환
+export function number(numeric: string | number): number {
+  return parseInt(numeric.toString())
+}

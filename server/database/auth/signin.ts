@@ -55,28 +55,3 @@ export async function userSignIn(id: string, password: string): Promise<User> {
   )
   return result
 }
-
-// 로그인 성공 시점에 생성된 access, refresh 토근을 DB에 저장
-export async function saveTokens(userUid: number, token: Token): Promise<void> {
-  const [row] = await select(`SELECT user_uid FROM ${table}user_token WHERE user_uid = ? LIMIT 1`, [
-    userUid,
-  ])
-  const now = Date.now()
-  if (!row) {
-    await insert(
-      `INSERT INTO ${table}user_token (user_uid, access, refresh, timestamp_access, timestamp_refresh) 
-        VALUES (?, ?, ?, ?, ?)`,
-      [userUid, token.access, token.refresh, now, now],
-    )
-  } else {
-    await update(
-      `UPDATE ${table}user_token SET 
-        access = ?, 
-        refresh = ?, 
-        timestamp_access = ?, 
-        timestamp_refresh = ? 
-        WHERE user_uid = ? LIMIT 1`,
-      [token.access, token.refresh, now, now, userUid],
-    )
-  }
-}

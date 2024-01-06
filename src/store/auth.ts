@@ -11,16 +11,16 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useUtilStore } from "./util"
 import { User } from "../interface/auth"
-import { AUTH } from "../messages/store/auth"
+import { AUTH, USER_INFO_KEY } from "../messages/store/auth"
 
 export const useAuthStore = defineStore("auth", () => {
   const server = edenTreaty<App>(process.env.API!)
   const util = useUtilStore()
-  const password = ref<string>("")
+  const password = ref<string>("Tsboard@1")
   const checkedPassword = ref<string>("")
   const user = ref<User>({
     uid: 0,
-    id: "",
+    id: "sirini@gmail.com",
     name: "",
     profile: "/no-profile.png",
     level: 0,
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 기존에 로그인 한 사용자라면 스토리지 공간에서 정보 가져오기
   function loadUserInfo(): void {
-    const storageUserInfo = window.localStorage.getItem("tsboardUserInfo") || ""
+    const storageUserInfo = window.localStorage.getItem(USER_INFO_KEY) || ""
     if (storageUserInfo.length > 0) {
       user.value = JSON.parse(storageUserInfo)
     }
@@ -71,19 +71,23 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(AUTH.INVALID_EMAIL)
       return
     }
-
     const response = await server.api.auth.signin.post({
       id: user.value.id.trim(),
       password: SHA256(password.value).toString(),
     })
-    if (response.data!.success === false) {
-      util.error(`아이디 혹은 비밀번호가 올바르지 않습니다.`)
+    if (response.data === null) {
+      util.error(AUTH.NO_RESPONSE)
       return
     }
-    user.value = response.data!.user!
-    window.localStorage.setItem("tsboardUserInfo", JSON.stringify(user.value))
-
-    util.success(`환영합니다, ${user.value.name}님!`, 2000)
+    if (response.data.success === false) {
+      util.error(AUTH.INVALID_ID_PW)
+      return
+    }
+    user.value = response.data.result.user
+    if (user.value) {
+      window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
+    }
+    util.success(`${AUTH.WELCOME_USER}, ${user.value.name}!`, 2000)
 
     setTimeout(() => {
       util.go("home")
@@ -92,7 +96,12 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 사용자 로그아웃 하기
   async function logout(): Promise<void> {
-    await server.api.auth.logout.post({ token: user.value.token })
+    const token = user.value.token
+    server.api.auth.logout.post({
+      $headers: {
+        authorization: token,
+      },
+    })
 
     user.value.uid = 0
     user.value.admin = false
@@ -100,21 +109,27 @@ export const useAuthStore = defineStore("auth", () => {
     user.value.name = ""
     user.value.level = 0
     user.value.point = 0
-    user.value.signature = ""
-    window.localStorage.removeItem("tsboardUserInfo")
 
-    util.success(`다음에 다시 뵐께요!`)
+    window.localStorage.removeItem(USER_INFO_KEY)
+
+    util.success(AUTH.GOODBYE_USER)
+  }
+
+  // 사용자 토큰 업데이트 하기
+  function updateUserToken(token: string): void {
+    user.value.token = token
+    window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
   }
 
   // 내 정보 수정하기
   async function saveMyInfo(): Promise<void> {
     const name = user.value.name.trim()
     if (name.length < 2) {
-      util.error("이름은 2글자 이상 입력해 주세요.")
+      util.error(AUTH.INVALID_NAME)
       return
     }
     if (password.value !== checkedPassword.value) {
-      util.error("입력하신 비밀번호가 서로 맞지 않습니다.")
+      util.error(AUTH.DIFFERENT_PASSWORD)
       return
     }
     if (util.filters.password.test(password.value) === false) {
@@ -123,7 +138,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     // do something
-    util.success("내 정보를 성공적으로 수정 하였습니다.")
+    util.success(AUTH.MYINFO_SUCCESS)
   }
 
   return {
@@ -136,5 +151,6 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     logout,
     saveMyInfo,
+    updateUserToken,
   }
 })

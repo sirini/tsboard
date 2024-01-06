@@ -58,7 +58,7 @@ const target = ref<string>(props.amount.toString())
 function update(): void {
   const amount = parseInt(target.value)
   if (amount < 0 || amount > 10000) {
-    admin.snack("포인트는 0 이상 10000 이하로 지정해 주세요.", "error")
+    admin.error("포인트는 0 이상 10000 이하로 지정해 주세요.")
     target.value = "0"
     return
   }

@@ -25,10 +25,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
-    admin.snack(
-      `글 보기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-      "success",
-    )
+    admin.success(`글 보기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`)
   }
 
   // 글 작성 포인트 정책 업데이트
@@ -38,10 +35,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
-    admin.snack(
-      `글 작성에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-      "success",
-    )
+    admin.success(`글 작성에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`)
   }
 
   // 댓글 쓰기 포인트 정책 업데이트
@@ -51,9 +45,8 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
-    admin.snack(
+    admin.success(
       `댓글 쓰기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-      "success",
     )
   }
 
@@ -64,9 +57,8 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       amount,
     }
     updateAllPointRules()
-    admin.snack(
+    admin.success(
       `다운로드에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-      "success",
     )
   }
 

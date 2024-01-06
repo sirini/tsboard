@@ -81,12 +81,16 @@ export const useSignupStore = defineStore("signup", () => {
       password: SHA256(auth.password).toString(),
       name: auth.user.name,
     })
-    if (response.data!.success === false) {
+    if (response.data === null) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
       util.error(AUTH.FAILED_ADD_USER)
       loading.value = false
       return
     }
-    if (response.data!.sendmail === false) {
+    if (response.data.result.sendmail === false) {
       util.success(AUTH.SIGNUP_COMPLETE)
       setTimeout(() => {
         util.go("login")
@@ -94,35 +98,33 @@ export const useSignupStore = defineStore("signup", () => {
       loading.value = false
       return
     }
-    util.success(
-      `${auth.user.id}로 메일을 보내드렸습니다. 인증 메일을 확인해 주시고, 가입 절차를 완료해 보세요!`,
-    )
-    router.push({ name: "verify", params: { target: response.data!.target! } })
+    util.success(`${auth.user.id} ${AUTH.SENT_VERIFICATION}`)
+    router.push({ name: "verify", params: { target: response.data.result.target } })
     loading.value = false
   }
 
   // 인증 완료하기
   async function verify(target: number): Promise<void> {
     if (target < 1) {
-      util.error(`인증 대상이 잘못 지정되어 있습니다.`)
+      util.error(AUTH.WRONG_VERIFY_TARGET)
       return
     }
     if (verificationCode.value.length !== 6) {
-      util.error(`인증 코드는 6자리여야 합니다.`)
+      util.error(AUTH.WRONG_VERIFICATION_LENGTH)
       return
     }
     if (auth.user.id.length < 1) {
-      util.error(`이메일 주소가 기입되어 있지 않습니다. 가입 화면으로 이동합니다.`)
+      util.error(AUTH.VERIFY_EMPTY_EMAIL)
       util.go("signup")
       return
     }
     if (auth.user.name.length < 1) {
-      util.error(`이름이 작성되지 않습니다. 가입 화면으로 이동합니다.`)
+      util.error(AUTH.VERIFY_EMPTY_NAME)
       util.go("signup")
       return
     }
     if (auth.password.length < 8) {
-      util.error(`비밀번호가 작성되지 않습니다. 가입 화면으로 이동합니다.`)
+      util.error(AUTH.VERIFY_EMPTY_PASSWORD)
       util.go("signup")
       return
     }
@@ -135,6 +137,10 @@ export const useSignupStore = defineStore("signup", () => {
         password: SHA256(auth.password).toString(),
       },
     })
+    if (response.data === null) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
     if (response.data!.success === false) {
       util.error(`인증 코드가 잘못되었습니다. 대소문자 등 다시 확인해 주세요.`)
       return

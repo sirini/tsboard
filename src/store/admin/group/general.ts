@@ -75,11 +75,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   async function createNewBoard(): Promise<void> {
     const newId = newBoardId.value.trim()
     if (newId.length < 2) {
-      admin.snack(`게시판 ID는 2글자 이상 입력해 주세요.`, "error")
+      admin.error(`게시판 ID는 2글자 이상 입력해 주세요.`)
       return
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
-      admin.snack(`게시판 ID는 영문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`, "error")
+      admin.error(`게시판 ID는 영문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`)
       newBoardId.value = ""
       return
     }
@@ -90,9 +90,8 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       info: "",
       manager: "",
     })
-    admin.snack(
+    admin.success(
       `${newId} 게시판이 성공적으로 추가 되었습니다. 상세 게시판 수정은 게시판 수정하기 기능을 이용해 주세요.`,
-      "success",
     )
     newBoardId.value = ""
   }
@@ -102,7 +101,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     // do something with user.uid, user.name
     group.value.manager.uid = user.uid
     group.value.manager.name = user.name
-    admin.snack(`${user.name} 님을 ${group.value.id} 그룹의 관리자로 지정 하였습니다.`, "success")
+    admin.success(`${user.name} 님을 ${group.value.id} 그룹의 관리자로 지정 하였습니다.`)
   }
 
   // 게시판을 정말로 삭제할건지 확인하는 창 띄우기
@@ -122,12 +121,12 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   // 게시판을 정말로 삭제할 때 처리
   function removeBoard(): void {
     if (removeBoardTarget.value.uid < 1 || removeBoardTarget.value.name.length < 1) {
-      admin.snack("삭제할 게시판이 올바르게 지정되지 않았습니다.", "error")
+      admin.error("삭제할 게시판이 올바르게 지정되지 않았습니다.")
       return
     }
     // do something
     closeRemoveBoardDialog()
-    admin.snack("게시판이 성공적으로 삭제되었습니다.", "success")
+    admin.success("게시판이 성공적으로 삭제되었습니다.")
   }
 
   return {

@@ -12,6 +12,7 @@ import {
   sendVerificationMail,
   verify,
 } from "../../database/auth/signup"
+import { fail, success } from "../../util/tools"
 
 export const signUp = new Elysia()
   .post(
@@ -19,45 +20,26 @@ export const signUp = new Elysia()
     async ({ body }) => {
       const { email, password, name } = body
       if ((await isDuplicatedEmail(email)) === true) {
-        return {
-          success: false,
-          error: `Duplicated email address.`,
-        }
+        return fail(`Duplicated email address.`)
       }
       if (password.length !== 64) {
-        return {
-          success: false,
-          error: `Invalid password, it needs a sha256 hash code.`,
-        }
+        return fail(`Invalid password, it needs a sha256 hash code.`)
       }
       if ((await isDuplicatedName(name)) === true) {
-        return {
-          success: false,
-          error: `Duplicated name.`,
-        }
+        return fail(`Duplicated name.`)
       }
 
       // .env 에서 GMAIL 설정이 안되어 있을 경우 바로 추가
       if (process.env.GMAIL_OAUTH_USER === "") {
         const result = await addNewUser({ email, password, name })
         if (result === false) {
-          return {
-            success: false,
-            error: `Unable to add a new user. (${email}, ${password}, ${name})`,
-          }
+          return fail(`Unable to add a new user. (${email}, ${password}, ${name})`)
         }
-        return {
-          success: true,
-          sendmail: false,
-        }
+        return success({ sendmail: false })
       }
       // GMAIL 설정이 되어 있다면 인증 메일을 발송한다
       const target = await sendVerificationMail(email, name)
-      return {
-        success: true,
-        sendmail: true,
-        target,
-      }
+      return success({ sendmail: true, target })
     },
     {
       body: t.Object({
@@ -71,14 +53,9 @@ export const signUp = new Elysia()
     "/checkemail",
     async ({ body }) => {
       if ((await isDuplicatedEmail(body.email.trim())) === true) {
-        return {
-          success: false,
-          error: `Duplicated email address.`,
-        }
+        return fail(`Duplicated email address.`)
       }
-      return {
-        success: true,
-      }
+      return success()
     },
     {
       body: t.Object({
@@ -90,14 +67,9 @@ export const signUp = new Elysia()
     "/checkname",
     async ({ body }) => {
       if ((await isDuplicatedName(body.name.trim())) === true) {
-        return {
-          success: false,
-          error: `Duplicated name`,
-        }
+        return fail(`Duplicated name`)
       }
-      return {
-        success: true,
-      }
+      return success()
     },
     {
       body: t.Object({
@@ -109,9 +81,7 @@ export const signUp = new Elysia()
     "/verify",
     async ({ body }) => {
       const result = await verify(body.target, body.code, body.user)
-      return {
-        success: result,
-      }
+      return success()
     },
     {
       body: t.Object({
@@ -125,3 +95,4 @@ export const signUp = new Elysia()
       }),
     },
   )
+/** TODO 회원가입이 완료되면 완료했다고 메일 발송해주기 */

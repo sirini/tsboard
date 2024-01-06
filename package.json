@@ -11,7 +11,6 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@elysiajs/bearer": "^0.8.0",
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/eden": "^0.7.7",
     "@elysiajs/jwt": "^0.8.0",

@@ -41,7 +41,7 @@ export const useAdminMemberBlockStore = defineStore("adminMemberBlock", () => {
     members.value = members.value.filter((member: AdminMemberTable) => {
       return member.uid !== target.uid
     })
-    admin.snack(`${target.name}님을 차단 해제하였습니다.`, "success")
+    admin.success(`${target.name}님을 차단 해제하였습니다.`)
   }
 
   return {
