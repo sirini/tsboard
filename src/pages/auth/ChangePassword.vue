@@ -80,7 +80,7 @@ home.color = "blue-grey-lighten-5"
 // 비밀번호 변경하기
 function change(): void {
   const func = util.debounce(password.changePassword)
-  func(parseInt(route.params!.target.toString()), route.params!.code.toString())
+  func(parseInt(route.params.target as string), route.params.code as string)
 }
 </script>
 

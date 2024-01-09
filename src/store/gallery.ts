@@ -15,7 +15,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const route = useRoute()
   const util = useUtilStore()
   const viewer = useViewerStore()
-  const id = ref<string>(route.params?.id.toString())
+  const id = ref<string>(route.params.id as string)
   const confirmCancelDialog = ref<boolean>(false)
   const images = ref<GridItem[]>([])
   const postUid = ref<number>(0)

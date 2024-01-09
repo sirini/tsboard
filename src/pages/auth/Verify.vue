@@ -34,7 +34,7 @@
                 color="primary"
                 append-icon="mdi-chevron-right"
                 :disabled="signup.verificationCode.length < 6"
-                @click="signup.verify(parseInt(route.params?.target.toString()))"
+                @click="signup.verify(parseInt(route.params.target as string))"
                 >인증 완료하기</v-btn
               >
             </v-card-actions>

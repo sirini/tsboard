@@ -11,17 +11,15 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from "vue"
+import { onMounted } from "vue"
 import { useUtilStore } from "../../store/util"
 
 const util = useUtilStore()
 
 // 타임아웃되면 닫아주기
-watchEffect(() => {
-  if (util.alertbar) {
-    setTimeout(() => {
-      util.alertbar = false
-    }, util.alertTimeout)
-  }
+onMounted(() => {
+  setTimeout(() => {
+    util.alertbar = false
+  }, util.alertTimeout)
 })
 </script>

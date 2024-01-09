@@ -8,7 +8,7 @@ import { Elysia } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { board } from "./admin/board"
 import { isLoggedOut } from "../database/auth/authorization"
-import { fail, number } from "../util/tools"
+import { fail } from "../util/tools"
 
 export const admin = new Elysia().group("/admin", (app) => {
   return app
@@ -24,13 +24,13 @@ export const admin = new Elysia().group("/admin", (app) => {
         return fail(`Invalid authorization.`)
       }
 
-      const userUid = number(access.uid)
+      const userUid = access.uid as number
       if (userUid !== 1) {
         return fail(`Not an admin.`)
       }
 
       const now = Date.now()
-      const accessTokenTime = number(access.signin)
+      const accessTokenTime = access.signin as number
 
       if (accessTokenTime < now) {
         if ((await isLoggedOut(userUid)) === true) {
@@ -40,7 +40,7 @@ export const admin = new Elysia().group("/admin", (app) => {
         if (refreshToken === false) {
           return fail(`Invalid token.`)
         }
-        const refreshTokenTime = number(refreshToken.signin)
+        const refreshTokenTime = refreshToken.signin as number
         if (refreshTokenTime < now) {
           return fail(`Expired token.`)
         }

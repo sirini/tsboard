@@ -8,7 +8,8 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { Token } from "../../../../src/interface/auth"
 import { saveTokens } from "../../../database/auth/authorization"
-import { fail, success, number } from "../../../util/tools"
+import { getBoardConfig } from "../../../database/admin/board/general"
+import { fail, success } from "../../../util/tools"
 
 export const general = new Elysia()
   .use(
@@ -20,14 +21,13 @@ export const general = new Elysia()
   .group("/general", (app) => {
     return app.get(
       "/load",
-      async ({ jwt, cookie: { refresh }, headers }) => {
-        /** TODO 코드 중복 발생 요소들 정리 방안 마련하기 */
+      async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
         const access = await jwt.verify(headers.authorization)
         if (access === false) {
           return fail(`Invalid authorization.`)
         }
-        const userUid = number(access.uid)
-        const accessTokenTime = number(access.signin)
+        const userUid = access.uid as number
+        const accessTokenTime = access.signin as number
         const now = Date.now()
         let updateAccessToken = ""
 
@@ -44,8 +44,13 @@ export const general = new Elysia()
           saveTokens(userUid, token)
         }
 
-        /** TODO 게시판 일반 설정 항목 가져와서 반환하기 */
+        const config = await getBoardConfig(id)
+        if (config.uid < 1) {
+          return fail(`Invalid id.`)
+        }
+
         return success({
+          config,
           updateAccessToken,
         })
       },
@@ -55,6 +60,9 @@ export const general = new Elysia()
         }),
         cookie: t.Cookie({
           refresh: t.String(),
+        }),
+        query: t.Object({
+          id: t.String(),
         }),
       },
     )

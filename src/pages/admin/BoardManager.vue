@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminBoardGeneralStore } from "../../store/admin/board/general"
@@ -74,14 +74,12 @@ admin.addBreadcrumbs(
   `${process.env.PREFIX}/admin/board/group/${general.board.group}`,
 )
 
-watchEffect(() => {
-  if (route.params?.id.length > 1) {
-    general.board.id = route.params?.id.toString()
-    admin.addBreadcrumbs(
-      `${general.board.id} 게시판 관리`,
-      `${process.env.PREFIX}/admin/board/${general.board.id}`,
-    )
-  }
+onMounted(() => {
+  general.board.id = route.params.id as string
+  admin.addBreadcrumbs(
+    `${general.board.id} 게시판 관리`,
+    `${process.env.PREFIX}/admin/board/${general.board.id}`,
+  )
 })
 </script>
 

@@ -12,7 +12,9 @@ import {
   sendVerificationMail,
   verify,
 } from "../../database/auth/signup"
+import { sendMail } from "../../util/sendmail"
 import { fail, success } from "../../util/tools"
+import { WELCOME } from "../../../src/messages/mail/welcome"
 
 export const signUp = new Elysia()
   .post(
@@ -67,7 +69,7 @@ export const signUp = new Elysia()
     "/checkname",
     async ({ body }) => {
       if ((await isDuplicatedName(body.name.trim())) === true) {
-        return fail(`Duplicated name`)
+        return fail(`Duplicated name.`)
       }
       return success()
     },
@@ -81,7 +83,13 @@ export const signUp = new Elysia()
     "/verify",
     async ({ body }) => {
       const result = await verify(body.target, body.code, body.user)
-      return success()
+      if (result) {
+        const subject = WELCOME.SUBJECT.replaceAll("#name#", body.user.name)
+        const html = WELCOME.HTML.replaceAll("#name#", body.user.name)
+        sendMail(body.user.email, subject, html)
+        return success()
+      }
+      return fail(`Invalid code.`)
     },
     {
       body: t.Object({
@@ -95,4 +103,3 @@ export const signUp = new Elysia()
       }),
     },
   )
-/** TODO 회원가입이 완료되면 완료했다고 메일 발송해주기 */

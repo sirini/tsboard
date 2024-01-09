@@ -21,22 +21,18 @@ export interface AdminBoardConfigGroup {
   list: AdminPairItem[]
 }
 
-export interface AdminBoardCategory {
-  add: string
-  remove: AdminPairItem
-  list: AdminPairItem[]
-}
+export type BoardType = "board" | "gallery" | "blog"
 
 export interface AdminBoardConfig {
   uid: number
   id: string
-  type: string
+  type: BoardType
   group: string
   name: string
   info: string
-  rows: number
+  row: number
   width: number
-  category: AdminBoardCategory
+  category: AdminPairItem[]
 }
 
 export interface AdminBoardPoint {

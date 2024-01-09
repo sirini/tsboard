@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from "vue"
+import { onMounted } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -55,12 +55,10 @@ const home = useHomeStore()
 home.color = "blue-grey-lighten-5"
 
 // 이미 로그아웃 상태이면 알려주고 홈 화면으로 이동
-watchEffect(() => {
-  if (auth.user.uid < 1) {
-    setTimeout(() => {
-      util.go("home")
-    }, 2000)
-  }
+onMounted(() => {
+  setTimeout(() => {
+    util.go("home")
+  }, 2000)
 })
 </script>
 

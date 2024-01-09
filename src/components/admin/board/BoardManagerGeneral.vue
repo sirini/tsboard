@@ -137,7 +137,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.board.rows"
+              v-model="general.board.row"
               variant="outlined"
               density="compact"
               hide-details
@@ -183,7 +183,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.board.category.add"
+              v-model="general.boardAddCategory"
               variant="outlined"
               density="compact"
               append-inner-icon="mdi-tag-plus"
@@ -192,10 +192,7 @@
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
-                  <v-list-item
-                    v-for="(category, index) in general.board.category.list"
-                    :key="index"
-                  >
+                  <v-list-item v-for="(category, index) in general.board.category" :key="index">
                     <v-list-item-title>
                       {{ category.name }}
                     </v-list-item-title>
@@ -229,11 +226,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router"
+import { onMounted } from "vue"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 
-const router = useRouter()
 const util = useUtilStore()
 const general = useAdminBoardGeneralStore()
+
+onMounted(() => general.loadGeneralConfig())
 </script>

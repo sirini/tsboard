@@ -5,6 +5,7 @@
  */
 
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
@@ -14,6 +15,7 @@ import { useAuthStore } from "../../auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
+  const route = useRoute()
   const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
   const auth = useAuthStore()
@@ -21,26 +23,26 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const board = ref<AdminBoardConfig>({
     uid: 1,
     id: "",
-    type: "",
+    type: "board",
     group: "default",
     name: "",
     info: GENERAL.UNKNOWN_INFO,
-    rows: 0,
+    row: 0,
     width: 0,
-    category: {
-      add: "",
-      remove: { uid: 0, name: "" },
-      list: [{ uid: 1, name: "기본" }],
-    },
+    category: [{ uid: 1, name: "기본" }],
   })
+  const boardAddCategory = ref<string>("")
+  const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
   const groups = ref<AdminPairItem[]>([{ uid: 1, name: "unknown" }])
-  loadGeneralConfig()
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
     const response = await server.api.admin.board.general.load.get({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        id: route.params.id as string,
       },
     })
     if (response.data === null) {
@@ -51,9 +53,16 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
       return
     }
+    if (response.data.result.config.uid < 1) {
+      admin.error(GENERAL.UNKNOWN_INFO)
+      return
+    }
     if (response.data.result.updateAccessToken !== "") {
       auth.updateUserToken(response.data.result.updateAccessToken!)
     }
+    board.value = response.data.result.config
+
+    admin.success(GENERAL.LOADED_CONFIG)
   }
 
   // 그룹 변경하기
@@ -67,36 +76,36 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 카테고리 추가하기
   async function addCategory(): Promise<void> {
-    const name = board.value.category.add.trim()
+    const name = boardAddCategory.value.trim()
     if (name.length < 2) {
       admin.error(GENERAL.TOO_SHORT_CATEGORY)
       return
     }
     // do something with board.value.uid
-    board.value.category.list.push({ uid: 10, name })
+    board.value.category.push({ uid: 10, name })
     admin.success(`${name} ${GENERAL.ADDED_CATEGORY}`)
   }
 
   // 카테고리 삭제 전 확인하기
   function confirmRemoveCategory(uid: number, name: string): void {
-    if (uid < 2) {
-      admin.error(GENERAL.REMOVE_DEFAULT_CATEGORY)
+    if (board.value.category.length < 2) {
+      admin.error(GENERAL.REMOVE_LAST_CATEGORY)
       return
     }
-    board.value.category.remove.uid = uid
-    board.value.category.remove.name = name
+    boardRemoveCategory.value.uid = uid
+    boardRemoveCategory.value.name = name
     confirmRemoveCategoryDialog.value = true
   }
 
   // 카테고리 삭제하기
   async function removeCategory(): Promise<void> {
-    if (board.value.category.remove.uid < 2) {
-      admin.error(GENERAL.REMOVE_DEFAULT_CATEGORY)
+    if (board.value.category.length < 2) {
+      admin.error(GENERAL.REMOVE_LAST_CATEGORY)
       return
     }
     // do something with board.value.uid
-    board.value.category.list = board.value.category.list.filter((cat: any) => {
-      return cat.uid !== board.value.category.remove.uid
+    board.value.category = board.value.category.filter((cat: AdminPairItem) => {
+      return cat.uid !== boardRemoveCategory.value.uid
     })
     admin.success(GENERAL.REMOVED_CATEGORY)
   }
@@ -131,10 +140,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 한 페이지에 표시할 게시글 개수 변경하기
   async function changeRows(): Promise<void> {
-    const rows = board.value.rows
+    const rows = board.value.row
     if (rows < 1 || rows > 100) {
       admin.error(GENERAL.ROWS_LIMITATION)
-      board.value.rows = 20
+      board.value.row = 20
       return
     }
     // do something with board.value.uid
@@ -155,8 +164,11 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   return {
     board,
+    boardAddCategory,
+    boardRemoveCategory,
     confirmRemoveCategoryDialog,
     groups,
+    loadGeneralConfig,
     changeGroup,
     changeName,
     changeInfo,

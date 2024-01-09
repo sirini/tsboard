@@ -19,7 +19,7 @@ export const logout = new Elysia()
     async ({ jwt, cookie: { refresh }, headers }) => {
       const access = await jwt.verify(headers.authorization)
       if (access !== false) {
-        clearUserToken(parseInt(access.uid.toString()))
+        clearUserToken(access.uid as number)
       }
       refresh.remove()
 

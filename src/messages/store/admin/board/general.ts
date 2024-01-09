@@ -11,7 +11,7 @@ export const GENERAL = {
   CHANGED_GROUP2: "으로 변경 하였습니다.",
   TOO_SHORT_CATEGORY: "카테고리 이름이 너무 짧습니다. 2글자 이상 입력해 주세요.",
   ADDED_CATEGORY: "카테고리를 추가했습니다.",
-  REMOVE_DEFAULT_CATEGORY: "기본 카테고리는 삭제할 수 없습니다.",
+  REMOVE_LAST_CATEGORY: "카테고리는 최소 1개 이상 존재해야 합니다.",
   REMOVED_CATEGORY:
     "선택하신 카테고리를 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 변경 하였습니다.",
   TOO_SHORT_NAME: "게시판 이름이 너무 짧습니다. 2글자 이상 입력해 주세요.",
@@ -26,4 +26,5 @@ export const GENERAL = {
   CHANGED_WIDTH1: "게시판 최대 너비를",
   CHANGED_WIDTH2: "(으)로 지정하였습니다.",
   UNABLE_LOAD_CONFIG: "서버로부터 게시판 설정(일반) 값들을 가져오지 못했습니다.",
+  LOADED_CONFIG: "게시판 설정을 성공적으로 불러들였습니다.",
 }

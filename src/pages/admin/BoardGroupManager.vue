@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from "vue"
+import { onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminGroupGeneralStore } from "../../store/admin/group/general"
@@ -40,9 +40,9 @@ const general = useAdminGroupGeneralStore()
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
 
-watchEffect(() => {
+onMounted(() => {
   if (route.params?.id.length > 1) {
-    general.group.id = route.params?.id.toString()
+    general.group.id = route.params.id as string
     admin.addBreadcrumbs(
       `${general.group.id} 그룹`,
       `${process.env.PREFIX}/admin/board/group/${general.group.id}`,

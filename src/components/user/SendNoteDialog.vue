@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, watch, ref } from "vue"
+import { onBeforeMount, watch } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUserStore } from "../../store/user"
 import AlertBar from "../util/AlertBar.vue"

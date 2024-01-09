@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from "vue"
+import { ref, onMounted } from "vue"
 import { useUserStore } from "../../store/user"
 import { User } from "../../interface/auth"
 
@@ -71,21 +71,19 @@ const user = useUserStore()
 const userInfo = ref<User>()
 const PREFIX = process.env.PREFIX || ""
 
-watchEffect(() => {
-  if (user.targetUserInfo.uid > 0) {
-    userInfo.value = {
-      uid: user.targetUserInfo.uid,
-      id: "",
-      name: user.targetUserInfo.name,
-      profile: user.targetUserInfo.profile,
-      level: 1,
-      point: 123,
-      signature: "",
-      signup: 0,
-      signin: 0,
-      admin: false,
-      token: "",
-    }
+onMounted(() => {
+  userInfo.value = {
+    uid: user.targetUserInfo.uid,
+    id: "",
+    name: user.targetUserInfo.name,
+    profile: user.targetUserInfo.profile,
+    level: 1,
+    point: 123,
+    signature: "",
+    signup: 0,
+    signin: 0,
+    admin: false,
+    token: "",
   }
 })
 </script>

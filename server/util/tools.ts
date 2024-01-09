@@ -39,8 +39,3 @@ export function success(result: any = null): Result {
     result,
   }
 }
-
-// 문자 or 숫자를 숫자 형태로 변환
-export function number(numeric: string | number): number {
-  return parseInt(numeric.toString())
-}

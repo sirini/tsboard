@@ -4,8 +4,8 @@
  * 사용자 로그인 처리에 필요한 함수들
  */
 
-import { table, select, update, insert } from "../common"
-import { User, Token } from "../../../src/interface/auth"
+import { table, select, update } from "../common"
+import { User } from "../../../src/interface/auth"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
 export async function userSignIn(id: string, password: string): Promise<User> {

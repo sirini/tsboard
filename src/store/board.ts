@@ -11,7 +11,7 @@ import { Pair } from "../interface/board"
 
 export const useBoardStore = defineStore("board", () => {
   const route = useRoute()
-  const id = ref<string>(route.params?.id.toString())
+  const id = ref<string>(route.params.id as string)
   const uid = ref<number>(0)
 
   const categories = ref<Pair[]>([

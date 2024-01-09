@@ -9,6 +9,7 @@ import { prepareVerificationCode } from "./verify"
 import { Signup } from "../../../src/interface/auth"
 import { generateRandomCode } from "../../util/tools"
 import { sendMail } from "../../util/sendmail"
+import { VERIFICATION } from "../../../src/messages/mail/verification"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
 export async function isDuplicatedEmail(email: string): Promise<boolean> {
@@ -38,18 +39,11 @@ export async function sendVerificationMail(email: string, name: string): Promise
   const code = generateRandomCode()
   const uid = await prepareVerificationCode(code, email)
 
-  const subject = `[${process.env.SITE_NAME}] ${name}님, 인증 코드를 입력해 주세요.`
-  const html = `안녕하세요 <strong>${name}</strong>님!<br />
-<br />
-회원 가입을 완료하기 위해서 아래의 링크에 인증 코드 6자리를 입력해 주세요!<br />
-<br />
-<div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
-&middot; 인증 코드 : <strong style="letter-spacing: 5px;">${code}</strong><br />
-&middot; 코드 입력 : <a href="${process.env.SITE_URL}${process.env.SITE_TSBOARD_PATH}verify/${uid}" target="_blank">여기를 눌러 위의 인증 코드 입력하기!</a>
-</div>
-<br />
-From <a href="${process.env.SITE_URL}" target="_blank">${process.env.SITE_URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>
-`
+  const subject = VERIFICATION.SUBJECT.replace("#name#", name)
+  let html = VERIFICATION.HTML.replaceAll("#name#", name)
+  html = html.replaceAll("#code#", code)
+  html = html.replaceAll("#uid#", uid.toString())
+
   await sendMail(email, subject, html)
   return uid
 }

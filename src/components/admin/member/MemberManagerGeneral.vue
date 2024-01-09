@@ -129,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from "vue"
+import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useUtilStore } from "../../../store/util"
 import { useAdminMemberManagerStore } from "../../../store/admin/member/manager"
@@ -141,10 +141,8 @@ const manager = useAdminMemberManagerStore()
 const visible = ref<boolean>(false)
 
 // 멤버 고유 번호가 파라미터로 넘어오면 회원 정보 가져오기
-watchEffect(() => {
-  if (route.params?.uid.length > 0) {
-    const uid = parseInt(route.params?.uid.toString())
-    manager.loadUserInfo(uid)
-  }
+onMounted(() => {
+  const uid = parseInt(route.params.uid as string)
+  manager.loadUserInfo(uid)
 })
 </script>
