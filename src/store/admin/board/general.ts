@@ -32,6 +32,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     width: 0,
     categories: [{ uid: 1, name: "기본" }],
   })
+  const boardGroupName = ref<string>("")
   const boardAddCategory = ref<string>("")
   const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
 
@@ -60,6 +61,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     auth.updateUserToken(response.data.result.newAccessToken!)
     board.value = response.data.result.config as AdminBoardConfig
     admin.success(GENERAL.LOADED_CONFIG)
+  }
+
+  // 그룹 이름 업데이트하기
+  function updateGroupName(): void {
+    board.value.groups.map((group: AdminPairItem) => {
+      if (group.uid === board.value.groupUid) {
+        boardGroupName.value = group.name
+      }
+    })
   }
 
   // 그룹 변경하기
@@ -176,10 +186,12 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   return {
     board,
+    boardGroupName,
     boardAddCategory,
     boardRemoveCategory,
     confirmRemoveCategoryDialog,
     loadGeneralConfig,
+    updateGroupName,
     changeGroup,
     changeName,
     changeInfo,

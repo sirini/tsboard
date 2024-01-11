@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminBoardGeneralStore } from "../../store/admin/board/general"
@@ -70,8 +70,8 @@ const menu = ref<"normal" | "permission" | "point">("normal")
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
 admin.addBreadcrumbs(
-  `${general.board.group} 그룹`,
-  `${process.env.PREFIX}/admin/board/group/${general.board.group}`,
+  `${general.boardGroupName} 그룹`,
+  `${process.env.PREFIX}/admin/board/group/${general.boardGroupName}`,
 )
 
 onMounted(() => {
@@ -81,6 +81,8 @@ onMounted(() => {
     `${process.env.PREFIX}/admin/board/${general.board.id}`,
   )
 })
+
+watch(() => general.board.groupUid, general.updateGroupName)
 </script>
 
 <style scoped>

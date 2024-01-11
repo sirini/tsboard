@@ -25,7 +25,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="boardSelectedGroup"
+              v-model="general.boardGroupName"
               readonly
               variant="outlined"
               density="compact"
@@ -226,26 +226,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted } from "vue"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
-import { AdminPairItem } from "../../../interface/admin"
 
 const util = useUtilStore()
 const general = useAdminBoardGeneralStore()
-const boardSelectedGroup = ref<string>("")
 
 onMounted(() => general.loadGeneralConfig())
-watch(
-  () => general.board.groupUid,
-  (value: number) => {
-    if (value > 0) {
-      general.board.groups.map((group: AdminPairItem) => {
-        if (group.uid === general.board.groupUid) {
-          boardSelectedGroup.value = group.name
-        }
-      })
-    }
-  },
-)
 </script>
