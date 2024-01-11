@@ -32,17 +32,20 @@ export async function saveTokens(userUid: number, token: Token): Promise<void> {
   }
 }
 
-// access token 만료 시 (다른 브라우저에서) 이미 로그아웃 처리되었는지 한 번 더 확인
-export async function isLoggedOut(userUid: number): Promise<boolean> {
-  const [row] = await select(
-    `SELECT timestamp_access FROM ${table}user_token WHERE user_uid = ? LIMIT 1`,
+// access token 만료 시 리프레시 토큰이 유효한지 확인
+export async function isValidRefreshToken(userUid: number, refresh: string): Promise<boolean> {
+  if (refresh.length < 1) {
+    return false
+  }
+  const [token] = await select(
+    `SELECT refresh FROM ${table}user_token WHERE user_uid = ? LIMIT 1`,
     [userUid],
   )
-  if (!row) {
-    return true /* never logged in */
+  if (!token) {
+    return false
   }
-  if (row.timestamp_access > 0) {
-    return false /* still logged in */
+  if ((token.refresh as string) === refresh) {
+    return true
   }
-  return true
+  return false
 }

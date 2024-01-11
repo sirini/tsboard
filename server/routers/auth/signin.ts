@@ -30,6 +30,7 @@ export const signIn = new Elysia()
         return fail(`Unable to get an user information`)
       }
 
+      // 토큰 만료 시간까지 추가해서 입력
       const token: Token = {
         access: await jwt.sign({
           uid: user.uid,

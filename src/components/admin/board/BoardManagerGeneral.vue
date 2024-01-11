@@ -25,7 +25,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.board.group"
+              v-model="boardSelectedGroup"
               readonly
               variant="outlined"
               density="compact"
@@ -35,7 +35,7 @@
               <v-menu activator="parent" open-on-hover>
                 <v-list>
                   <v-list-item
-                    v-for="(group, index) in general.groups"
+                    v-for="(group, index) in general.board.groups"
                     :key="index"
                     @click="general.changeGroup(group)"
                   >
@@ -192,7 +192,7 @@
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
-                  <v-list-item v-for="(category, index) in general.board.category" :key="index">
+                  <v-list-item v-for="(category, index) in general.board.categories" :key="index">
                     <v-list-item-title>
                       {{ category.name }}
                     </v-list-item-title>
@@ -226,12 +226,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
+import { AdminPairItem } from "../../../interface/admin"
 
 const util = useUtilStore()
 const general = useAdminBoardGeneralStore()
+const boardSelectedGroup = ref<string>("")
 
 onMounted(() => general.loadGeneralConfig())
+watch(
+  () => general.board.groupUid,
+  (value: number) => {
+    if (value > 0) {
+      general.board.groups.map((group: AdminPairItem) => {
+        if (group.uid === general.board.groupUid) {
+          boardSelectedGroup.value = group.name
+        }
+      })
+    }
+  },
+)
 </script>

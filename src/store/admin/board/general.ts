@@ -24,16 +24,16 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     uid: 1,
     id: "",
     type: "board",
-    group: "default",
+    groups: [],
+    groupUid: 0,
     name: "",
     info: GENERAL.UNKNOWN_INFO,
     row: 0,
     width: 0,
-    category: [{ uid: 1, name: "기본" }],
+    categories: [{ uid: 1, name: "기본" }],
   })
   const boardAddCategory = ref<string>("")
   const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
-  const groups = ref<AdminPairItem[]>([{ uid: 1, name: "unknown" }])
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
@@ -57,18 +57,30 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(GENERAL.UNKNOWN_INFO)
       return
     }
-    if (response.data.result.updateAccessToken !== "") {
-      auth.updateUserToken(response.data.result.updateAccessToken!)
-    }
-    board.value = response.data.result.config
-
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    board.value = response.data.result.config as AdminBoardConfig
     admin.success(GENERAL.LOADED_CONFIG)
   }
 
   // 그룹 변경하기
   async function changeGroup(group: AdminPairItem): Promise<void> {
-    // do something with board.value.uid
-    board.value.group = group.name
+    const response = await server.api.admin.board.general.changegroup.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      groupUid: group.uid,
+      boardUid: board.value.uid,
+    })
+    if (response.data === null) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    board.value.groupUid = group.uid
     admin.success(
       `${board.value.id} ${GENERAL.CHANGED_GROUP1} ${group.name} ${GENERAL.CHANGED_GROUP2}`,
     )
@@ -82,13 +94,13 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     // do something with board.value.uid
-    board.value.category.push({ uid: 10, name })
+    board.value.categories.push({ uid: 10, name })
     admin.success(`${name} ${GENERAL.ADDED_CATEGORY}`)
   }
 
   // 카테고리 삭제 전 확인하기
   function confirmRemoveCategory(uid: number, name: string): void {
-    if (board.value.category.length < 2) {
+    if (board.value.categories.length < 2) {
       admin.error(GENERAL.REMOVE_LAST_CATEGORY)
       return
     }
@@ -99,12 +111,12 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 카테고리 삭제하기
   async function removeCategory(): Promise<void> {
-    if (board.value.category.length < 2) {
+    if (board.value.categories.length < 2) {
       admin.error(GENERAL.REMOVE_LAST_CATEGORY)
       return
     }
     // do something with board.value.uid
-    board.value.category = board.value.category.filter((cat: AdminPairItem) => {
+    board.value.categories = board.value.categories.filter((cat: AdminPairItem) => {
       return cat.uid !== boardRemoveCategory.value.uid
     })
     admin.success(GENERAL.REMOVED_CATEGORY)
@@ -167,7 +179,6 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     boardAddCategory,
     boardRemoveCategory,
     confirmRemoveCategoryDialog,
-    groups,
     loadGeneralConfig,
     changeGroup,
     changeName,

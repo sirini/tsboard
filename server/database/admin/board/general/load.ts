@@ -1,11 +1,11 @@
 /**
- * server/database/admin/board
+ * server/database/admin/board/general/load
  *
- * 게시판 관리 > 일반 설정에 필요한 함수들
+ * 게시판 관리 > 일반 > 불러오기에 필요한 함수들
  */
 
-import { table, select, update, insert } from "../../common"
-import { AdminBoardConfig, AdminPairItem, BoardType } from "../../../../src/interface/admin"
+import { table, select } from "../../../common"
+import { AdminBoardConfig, AdminPairItem, BoardType } from "../../../../../src/interface/admin"
 
 // 게시판 형태 반영
 function convertBoardType(type: number): BoardType {
@@ -20,12 +20,13 @@ export async function getBoardConfig(id: string): Promise<AdminBoardConfig> {
     uid: 0,
     id,
     type: "board",
-    group: "",
+    groups: [],
+    groupUid: 0,
     name: "",
     info: "",
     row: 0,
     width: 0,
-    category: [],
+    categories: [],
   }
 
   const [board] = await select(
@@ -37,13 +38,14 @@ FROM ${table}board WHERE id = ? LIMIT 1`,
     return result
   }
 
-  const [group] = await select(
-    `SELECT id FROM ${table}group 
-WHERE uid = ? LIMIT 1`,
-    [board.group_uid],
-  )
-  if (!group) {
+  const groups = await select(`SELECT uid, id FROM ${table}group`)
+  if (!groups[0]) {
     return result
+  }
+
+  const grps: AdminPairItem[] = []
+  for (const grp of groups) {
+    grps.push({ uid: grp.uid, name: grp.id })
   }
 
   const categories = await select(
@@ -64,12 +66,13 @@ WHERE board_uid = ?`,
     uid: board.uid,
     id,
     type: convertBoardType(board.type as number),
-    group: group.id,
+    groups: grps,
+    groupUid: board.group_uid,
     name: board.name,
     info: board.info,
     row: board.row,
     width: board.width,
-    category: cats,
+    categories: cats,
   }
 
   return result

@@ -261,7 +261,7 @@ tables.push(`${create} #db#notice (
 inserts.push(`INSERT INTO #db#group (
   id, admin_uid, timestamp
 ) VALUES (
-  'admin', 1, ${Date.now()}
+  'default', 1, ${Date.now()}
 )`)
 
 // 자유 게시판 생성하기 (삭제 가능)

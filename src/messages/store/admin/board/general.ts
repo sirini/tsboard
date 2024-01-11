@@ -9,6 +9,7 @@ export const GENERAL = {
   UNKNOWN_INFO: "존재하지 않는 게시판 ID 입니다.",
   CHANGED_GROUP1: "게시판의 소속 그룹을",
   CHANGED_GROUP2: "으로 변경 하였습니다.",
+  UNABLE_UPDATE_GROUP: "소속 그룹을 변경할 수 없었습니다.",
   TOO_SHORT_CATEGORY: "카테고리 이름이 너무 짧습니다. 2글자 이상 입력해 주세요.",
   ADDED_CATEGORY: "카테고리를 추가했습니다.",
   REMOVE_LAST_CATEGORY: "카테고리는 최소 1개 이상 존재해야 합니다.",

@@ -27,12 +27,13 @@ export interface AdminBoardConfig {
   uid: number
   id: string
   type: BoardType
-  group: string
+  groups: AdminPairItem[]
+  groupUid: number
   name: string
   info: string
   row: number
   width: number
-  category: AdminPairItem[]
+  categories: AdminPairItem[]
 }
 
 export interface AdminBoardPoint {
