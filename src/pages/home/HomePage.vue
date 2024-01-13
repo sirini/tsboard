@@ -35,13 +35,13 @@
                 <v-card-title>바로가기 링크들</v-card-title>
                 <v-divider></v-divider>
                 <v-list>
-                  <v-list-item @click="util.go('boardList', 'test')" append-icon="mdi-chevron-right"
-                    >테스트 게시판</v-list-item
+                  <v-list-item @click="util.go('boardList', 'free')" append-icon="mdi-chevron-right"
+                    >자유 게시판</v-list-item
                   >
                   <v-list-item
                     @click="util.go('galleryList', 'sample')"
                     append-icon="mdi-chevron-right"
-                    >테스트 갤러리</v-list-item
+                    >실험용 갤러리</v-list-item
                   >
                 </v-list>
               </v-card>
