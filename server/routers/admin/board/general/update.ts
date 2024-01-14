@@ -6,8 +6,26 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { changeGroup } from "../../../../database/admin/board/general/update"
+import {
+  changeGroup,
+  updateName,
+  updateInfo,
+  changeType,
+  updateRows,
+  updateWidth,
+  addCategory,
+  removeCategory,
+} from "../../../../database/admin/board/general/update"
 import { fail, success, updateAccessToken } from "../../../../util/tools"
+
+const defaultTypeCheck = {
+  headers: t.Object({
+    authorization: t.String(),
+  }),
+  cookie: t.Cookie({
+    refresh: t.String(),
+  }),
+}
 
 export const update = new Elysia()
   .use(
@@ -24,22 +42,192 @@ export const update = new Elysia()
         return fail(`Invalid target.`)
       }
 
-      changeGroup(body.groupUid, body.boardUid)
+      changeGroup(body.boardUid, body.groupUid)
 
       return success({
         newAccessToken,
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...defaultTypeCheck,
       body: t.Object({
         groupUid: t.Number(),
         boardUid: t.Number(),
       }),
-      cookie: t.Cookie({
-        refresh: t.String(),
+    },
+  )
+  .patch(
+    "/updatename",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+      if (body.newName.length < 2) {
+        return fail(`Board name is too short.`)
+      }
+
+      updateName(body.boardUid, body.newName)
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newName: t.String(),
+      }),
+    },
+  )
+  .patch(
+    "/updateinfo",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+      if (body.newInfo.length < 2) {
+        return fail(`Board info is too short.`)
+      }
+
+      updateInfo(body.boardUid, body.newInfo)
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newInfo: t.String(),
+      }),
+    },
+  )
+  .patch(
+    "/changetype",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+
+      changeType(body.boardUid, body.newType)
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newType: t.Number(),
+      }),
+    },
+  )
+  .patch(
+    "/updaterows",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+
+      updateRows(body.boardUid, body.newRows)
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newRows: t.Number(),
+      }),
+    },
+  )
+  .patch(
+    "/updatewidth",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+
+      updateWidth(body.boardUid, body.newWidth)
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newWidth: t.Number(),
+      }),
+    },
+  )
+  .post(
+    "/addcategory",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+      if (body.newCategory.length < 2) {
+        return fail(`Category name is too short.`)
+      }
+
+      const categoryUid = await addCategory(body.boardUid, body.newCategory)
+
+      if (categoryUid < 1) {
+        return fail(`Already added.`)
+      }
+
+      return success({
+        newAccessToken,
+        categoryUid,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        newCategory: t.String(),
+      }),
+    },
+  )
+  .delete(
+    "/removecategory",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      if (body.boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
+      if (body.categoryUid < 1) {
+        return fail(`Invalid category uid.`)
+      }
+
+      const result = await removeCategory(body.boardUid, body.categoryUid)
+
+      if (result === false) {
+        return fail(`Unable to remove last category.`)
+      }
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Number(),
+        categoryUid: t.Number(),
       }),
     },
   )

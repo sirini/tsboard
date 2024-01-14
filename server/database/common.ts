@@ -72,3 +72,15 @@ export async function insert(query: string, values: (string | number)[]): Promis
   }
   return insertId
 }
+
+// DELETE 쿼리 실행하기
+export async function remove(query: string, values: (string | number)[]): Promise<void> {
+  const db = await pool.getConnection()
+  try {
+    await db.execute(query, values)
+  } catch (e: any) {
+    console.log(`[error/delete] ${query} (${values.toString()})`)
+  } finally {
+    db.release()
+  }
+}

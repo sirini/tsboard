@@ -64,7 +64,7 @@
               density="compact"
               hide-details
               append-inner-icon="mdi-content-save"
-              @click:append-inner="general.changeName"
+              @click:append-inner="general.updateName"
             >
               <v-tooltip activator="parent">
                 이름 작성 후 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면
@@ -88,7 +88,7 @@
               density="compact"
               hide-details
               append-inner-icon="mdi-content-save"
-              @click:append-inner="general.changeInfo"
+              @click:append-inner="general.updateInfo"
             >
               <v-tooltip activator="parent">
                 설명 작성 후 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면
@@ -137,15 +137,15 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.board.row"
+              v-model="general.boardRows"
               variant="outlined"
               density="compact"
               hide-details
               append-inner-icon="mdi-content-save"
-              @click:append-inner="general.changeRows"
+              @click:append-inner="general.updateRows"
             >
               <v-tooltip activator="parent">
-                게시글 숫자를 입력하고 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면
+                게시글 숫자 입력 후 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면
                 저장됩니다.
               </v-tooltip>
             </v-text-field>
@@ -161,16 +161,16 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.board.width"
+              v-model="general.boardWidth"
               variant="outlined"
               density="compact"
               hide-details
               append-inner-icon="mdi-content-save"
-              @click:append-inner="general.changeWidth"
+              @click:append-inner="general.updateWidth"
             >
               <v-tooltip activator="parent">
-                게시판의 최대 너비를 입력하고 우측의 <v-icon>mdi-content-save</v-icon> 아이콘을
-                클릭하시면 저장됩니다.
+                게시판의 최대 너비를 입력하고 우측의
+                <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면 저장됩니다.
               </v-tooltip>
             </v-text-field>
           </v-col>
@@ -226,7 +226,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { onMounted } from "vue"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 

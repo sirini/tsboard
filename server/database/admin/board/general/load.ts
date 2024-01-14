@@ -50,7 +50,7 @@ FROM ${table}board WHERE id = ? LIMIT 1`,
 
   const categories = await select(
     `SELECT uid, name FROM ${table}board_category 
-WHERE board_uid = ?`,
+WHERE board_uid = ? ORDER BY uid ASC`,
     [board.uid],
   )
   if (!categories[0]) {
