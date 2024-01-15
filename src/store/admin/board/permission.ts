@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardPermission, AdminDefaultParams, AdminPairItem } from "../../../interface/admin"
+import { AdminBoardPermission, AdminPairItem } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { useUtilStore } from "../../util"
@@ -21,14 +21,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const dbresult = ref<AdminPairItem[]>([
-    { uid: 1, name: "sample_user@test.com" },
-    { uid: 2, name: "example_user@naver.com" },
-    { uid: 3, name: "test_user_id@gmail.com" },
-    { uid: 4, name: "abc@studio.net" },
-    { uid: 5, name: "zflip5@samsung.com" },
-  ])
-  const suggestions = ref<AdminPairItem[]>(dbresult.value)
+  const suggestions = ref<AdminPairItem[]>([])
   const board = ref<AdminBoardPermission>({
     uid: 0,
     id: "",
@@ -46,12 +39,6 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     },
   })
   const boardNewAdmin = ref<string>("")
-  const defaultParams = ref<AdminDefaultParams>({
-    $headers: {
-      authorization: auth.user.token,
-    },
-    boardUid: board.value.uid,
-  })
 
   // 게시판 권한 설정 불러오기
   async function loadPermissionConfig(): Promise<void> {
@@ -82,22 +69,38 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 회원 이름(닉네임)을 입력할 때마다 하단에 검색해서 보여주기
   async function _updateBoardManagerSuggestion(): Promise<void> {
-    // TODO 회원명 검색 시 적합한 리스트를 가져와서 보여주기
+    const response = await server.api.admin.board.permission.candidates.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        name: boardNewAdmin.value,
+        limit: 5,
+      },
+    })
+    if (response.data === null) {
+      admin.error(PERMISSION.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      return
+    }
+    if (response.data.result.candidates.length < 1) {
+      suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
+      return
+    }
+    suggestions.value = response.data.result.candidates as AdminPairItem[]
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
   // 선택한 회원을 관리자로 지정하기
-  async function updateBoardManager(user?: AdminPairItem): Promise<void> {
-    if (user === undefined) {
-      board.value.admin.uid = 0
-      board.value.admin.name = ""
-      admin.success(`게시판 관리자를 따로 지정하지 않습니다.`)
-      return
-    }
-
+  async function updateBoardManager(user: AdminPairItem): Promise<void> {
     // do something with user.uid, user.name
-    board.value.admin.uid = user.uid
-    board.value.admin.name = user.name
+    // TODO 관리자 후보를 클릭할 경우 해당 회원이 이 게시판 관리자가 되도록 하기
+    board.value.admin = {
+      uid: user.uid,
+      name: user.name,
+    }
     admin.success(`${user.name} 님을 ${board.value.id} 게시판의 관리자로 지정 하였습니다.`)
   }
 

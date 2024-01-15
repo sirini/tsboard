@@ -31,6 +31,9 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
+      if (id.length < 2) {
+        return fail(`Board ID is too short.`)
+      }
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const permission = await getBoardPermission(id)
       if (permission.uid < 1) {
@@ -57,6 +60,12 @@ export const load = new Elysia()
   .get(
     "/candidates",
     async ({ jwt, cookie: { refresh }, headers, query: { name, limit } }) => {
+      if (name.length < 2) {
+        return fail(`name is too short.`)
+      }
+      if (limit < 1) {
+        return fail(`Invalid a limit.`)
+      }
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const candidates = await getAdminCandidates(name, limit)
 
@@ -69,7 +78,7 @@ export const load = new Elysia()
       ...defaultTypeCheck,
       query: t.Object({
         name: t.String(),
-        limit: t.Number(),
+        limit: t.Numeric(),
       }),
     },
   )

@@ -9,4 +9,5 @@ export const PERMISSION = {
   UNABLE_LOAD_PERMISSION: "게시판 권한 설정 부분을 가져올 수 없었습니다.",
   LOADED_PERMISSION: "게시판 권한 설정을 성공적으로 불러들였습니다.",
   UNKNOWN_INFO: "존재하지 않는 게시판 ID 입니다.",
+  EMPTY_CANDIDATES: "검색된 관리자 후보가 없습니다.",
 }

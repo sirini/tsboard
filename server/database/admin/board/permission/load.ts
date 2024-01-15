@@ -72,10 +72,10 @@ export async function getBoardPermission(id: string): Promise<AdminBoardPermissi
 export async function getAdminCandidates(name: string, limit: number): Promise<AdminPairItem[]> {
   let result: AdminPairItem[] = []
 
-  const users = await select(`SELECT uid, id, name FROM ${table}user WHERE name LIKE ? LIMIT ?`, [
-    `'%${name}%'`,
-    limit,
-  ])
+  const users = await select(
+    `SELECT uid, id, name FROM ${table}user WHERE name LIKE '%${name}%' LIMIT ${limit}`,
+  )
+
   if (!users[0]) {
     return result
   }

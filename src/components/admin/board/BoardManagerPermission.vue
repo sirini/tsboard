@@ -10,8 +10,7 @@
               density="compact"
               hide-details
               @keyup="permission.updateBoardManagerSuggestion"
-              @click:append-inner="permission.updateBoardManager()"
-              append-inner-icon="mdi-content-save"
+              append-inner-icon="mdi-chevron-down"
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
@@ -27,6 +26,10 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
+              <v-tooltip activator="parent"
+                >회원명(닉네임)으로 검색하시면 되며, 검색하는 동안 마우스를 계속
+                올려두세요!</v-tooltip
+              >
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
