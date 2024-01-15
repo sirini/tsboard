@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardConfig, AdminPairItem } from "../../../interface/admin"
+import { AdminBoardConfig, AdminDefaultParams, AdminPairItem } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
@@ -37,7 +37,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
   const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
-  const defaultParams = ref({
+  const defaultParams = ref<AdminDefaultParams>({
     $headers: {
       authorization: auth.user.token,
     },

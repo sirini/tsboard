@@ -6,7 +6,8 @@
 
 import { Elysia } from "elysia"
 import { general } from "./board/general"
+import { permission } from "./board/permission"
 
 export const board = new Elysia().group("/board", (app) => {
-  return app.use(general)
+  return app.use(general).use(permission)
 })

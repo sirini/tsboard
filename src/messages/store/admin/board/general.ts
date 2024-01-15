@@ -1,7 +1,7 @@
 /**
  * messages/store/admin/board/general
  *
- * 게시판 관리자 > 일반 부분에 필요한 텍스트들 모음
+ * 게시판 관리 > 일반 부분에 필요한 텍스트들 모음
  */
 
 export const GENERAL = {

@@ -3,15 +3,15 @@
     <v-list>
       <v-list-item class="mb-2">
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field
-              v-model="permission.manager.name"
+              v-model="permission.boardNewAdmin"
               variant="outlined"
               density="compact"
               hide-details
               @keyup="permission.updateBoardManagerSuggestion"
               @click:append-inner="permission.updateBoardManager()"
-              append-inner-icon="mdi-cancel"
+              append-inner-icon="mdi-content-save"
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
@@ -22,21 +22,30 @@
                   >
                     {{ user.name }}
                     <v-tooltip activator="parent" location="right">
-                      이 회원을 {{ general.board.id }} 게시판 관리자로 지정합니다.
+                      이 회원을 {{ permission.board.id }} 게시판 관리자로 지정합니다.
                     </v-tooltip>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2">게시판 관리자를 지정합니다 (아이디 입력)</v-col>
+          <v-col class="mt-2">
+            <v-chip
+              size="small"
+              label
+              :prepend-avatar="permission.board.admin.profile"
+              variant="tonal"
+              >{{ permission.board.admin.name }}
+              <v-tooltip activator="parent">현재 게시판 관리자입니다.</v-tooltip>
+            </v-chip></v-col
+          >
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
         <board-change-access-level
-          :level="permission.access.list"
+          :level="permission.board.level.list"
           name="글 목록"
           @update="(level: number) => permission.updateListPermission(level)"
         ></board-change-access-level>
@@ -45,7 +54,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-change-access-level
-          :level="permission.access.view"
+          :level="permission.board.level.view"
           name="글 보기"
           @update="(level: number) => permission.updateViewPermission(level)"
         ></board-change-access-level>
@@ -54,7 +63,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-change-access-level
-          :level="permission.access.write"
+          :level="permission.board.level.write"
           name="글 작성"
           @update="(level: number) => permission.updateWritePermission(level)"
         ></board-change-access-level>
@@ -63,7 +72,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-change-access-level
-          :level="permission.access.comment"
+          :level="permission.board.level.comment"
           name="댓글 작성"
           @update="(level: number) => permission.updateCommentPermission(level)"
         ></board-change-access-level>
@@ -72,7 +81,7 @@
 
       <v-list-item class="mt-2 mb-1">
         <board-change-access-level
-          :level="permission.access.download"
+          :level="permission.board.level.download"
           name="다운로드"
           @update="(level: number) => permission.updateDownloadPermission(level)"
         ></board-change-access-level>
@@ -82,10 +91,10 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
+import { onMounted } from "vue"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import BoardChangeAccessLevel from "../../../components/admin/board/BoardChangeAccessLevel.vue"
 
-const general = useAdminBoardGeneralStore()
 const permission = useAdminBoardPermissionStore()
+onMounted(() => permission.loadPermissionConfig())
 </script>

@@ -10,6 +10,13 @@ export interface AdminBreadcrumb {
   disabled: boolean
 }
 
+export interface AdminDefaultParams {
+  $headers: {
+    authorization: string
+  }
+  boardUid: number
+}
+
 export interface AdminPairItem {
   uid: number
   name: string
@@ -34,6 +41,20 @@ export interface AdminBoardConfig {
   row: number
   width: number
   categories: AdminPairItem[]
+}
+
+export interface AdminPermissionLevel {
+  list: number
+  view: number
+  write: number
+  comment: number
+  download: number
+}
+export interface AdminBoardPermission {
+  uid: number
+  id: string
+  admin: AdminPairItem
+  level: AdminPermissionLevel
 }
 
 export interface AdminBoardPoint {

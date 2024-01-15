@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="2">
+    <v-col cols="3">
       <v-text-field
         v-model="target"
         variant="outlined"
