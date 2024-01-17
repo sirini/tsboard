@@ -57,24 +57,24 @@ export interface AdminBoardPermission {
   level: AdminPermissionLevel
 }
 
-export interface AdminBoardPoint {
+export interface AdminPointPair {
   isPayment: boolean
   amount: number
 }
 
 export interface AdminBoardPointList {
-  view: AdminBoardPoint
-  write: AdminBoardPoint
-  comment: AdminBoardPoint
-  download: AdminBoardPoint
+  view: AdminPointPair
+  write: AdminPointPair
+  comment: AdminPointPair
+  download: AdminPointPair
 }
 
-export interface AdminUserActivity {
-  list: number
-  view: number
-  write: number
-  comment: number
-  download: number
+export interface AdminPoint {
+  uid: number
+  view: AdminPointPair
+  write: AdminPointPair
+  comment: AdminPointPair
+  download: AdminPointPair
 }
 
 export interface AdminGroupList {
