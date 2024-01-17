@@ -73,7 +73,7 @@ export async function getAdminCandidates(name: string, limit: number): Promise<A
   let result: AdminPairItem[] = []
 
   const users = await select(
-    `SELECT uid, id, name FROM ${table}user WHERE name LIKE '%${name}%' LIMIT ${limit}`,
+    `SELECT uid, id, name FROM ${table}user WHERE blocked = 0 AND name LIKE '%${name}%' LIMIT ${limit}`,
   )
 
   if (!users[0]) {

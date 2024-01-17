@@ -50,7 +50,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         id: route.params.id as string,
       },
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(PERMISSION.NO_RESPONSE)
       return
     }
@@ -78,7 +78,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         limit: 5,
       },
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(PERMISSION.NO_RESPONSE)
       return
     }
@@ -89,14 +89,29 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
       return
     }
+    auth.updateUserToken(response.data.result.newAccessToken!)
     suggestions.value = response.data.result.candidates as AdminPairItem[]
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
   // 선택한 회원을 관리자로 지정하기
   async function updateBoardManager(user: AdminPairItem): Promise<void> {
-    // do something with user.uid, user.name
-    // TODO 관리자 후보를 클릭할 경우 해당 회원이 이 게시판 관리자가 되도록 하기
+    const response = await server.api.admin.board.permission.changeadmin.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
+      userUid: user.uid,
+    })
+    if (!response.data) {
+      admin.error(PERMISSION.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
     board.value.admin = {
       uid: user.uid,
       name: user.name,
@@ -105,43 +120,64 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   }
 
   // 글 목록 권한 업데이트
-  function updateListPermission(level: number): void {
+  async function updateListPermission(level: number): Promise<void> {
     board.value.level.list = level
-    updateAllPermissions()
-    admin.success(`글 목록은 ${level} 이상 가능 하도록 수정하였습니다.`)
+    if ((await updateAllPermissions()) === true) {
+      admin.success(`글 목록은 ${level} 이상 가능 하도록 수정하였습니다.`)
+    }
   }
 
   // 글 보기 권한 업데이트
-  function updateViewPermission(level: number): void {
+  async function updateViewPermission(level: number): Promise<void> {
     board.value.level.view = level
-    updateAllPermissions()
-    admin.success(`글 보기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    if ((await updateAllPermissions()) === true) {
+      admin.success(`글 보기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    }
   }
 
   // 글 쓰기 권한 업데이트
-  function updateWritePermission(level: number): void {
+  async function updateWritePermission(level: number): Promise<void> {
     board.value.level.write = level
-    updateAllPermissions()
-    admin.success(`글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    if ((await updateAllPermissions()) === true) {
+      admin.success(`글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    }
   }
 
   // 댓글 작성 권한 업데이트
-  function updateCommentPermission(level: number): void {
+  async function updateCommentPermission(level: number): Promise<void> {
     board.value.level.comment = level
-    updateAllPermissions()
-    admin.success(`댓글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    if ((await updateAllPermissions()) === true) {
+      admin.success(`댓글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    }
   }
 
   // 다운로드 권한 업데이트
-  function updateDownloadPermission(level: number): void {
+  async function updateDownloadPermission(level: number): Promise<void> {
     board.value.level.download = level
-    updateAllPermissions()
-    admin.success(`다운로드는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    if ((await updateAllPermissions()) === true) {
+      admin.success(`다운로드는 ${level} 이상 가능 하도록 수정하였습니다.`)
+    }
   }
 
   // 액세스 권한 변경
-  async function updateAllPermissions(): Promise<void> {
-    // axios.put('some path', access.value) ...
+  async function updateAllPermissions(): Promise<boolean> {
+    const response = await server.api.admin.board.permission.updatelevels.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
+      levels: board.value.level,
+    })
+    if (!response.data) {
+      admin.error(PERMISSION.NO_RESPONSE)
+      return false
+    }
+    if (response.data.success === false) {
+      admin.error(`${PERMISSION.UNABLE_UPDATE_LEVEL} (${response.data.error})`)
+      return false
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    return true
   }
 
   return {

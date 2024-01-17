@@ -54,7 +54,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         id: route.params.id as string,
       },
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -88,7 +88,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       groupUid: group.uid,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -114,7 +114,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newName,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -137,7 +137,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newInfo,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -159,7 +159,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newType,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -183,7 +183,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newRows,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -207,7 +207,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newWidth,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -231,7 +231,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       newCategory,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
@@ -268,7 +268,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       ...defaultParams.value,
       categoryUid: boardRemoveCategory.value.uid,
     })
-    if (response.data === null) {
+    if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }

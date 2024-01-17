@@ -75,7 +75,7 @@ export const useAuthStore = defineStore("auth", () => {
       id: user.value.id.trim(),
       password: SHA256(password.value).toString(),
     })
-    if (response.data === null) {
+    if (!response.data) {
       util.error(AUTH.NO_RESPONSE)
       return
     }

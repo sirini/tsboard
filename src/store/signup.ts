@@ -81,7 +81,7 @@ export const useSignupStore = defineStore("signup", () => {
       password: SHA256(auth.password).toString(),
       name: auth.user.name,
     })
-    if (response.data === null) {
+    if (!response.data) {
       util.error(AUTH.NO_RESPONSE)
       return
     }
@@ -137,7 +137,7 @@ export const useSignupStore = defineStore("signup", () => {
         password: SHA256(auth.password).toString(),
       },
     })
-    if (response.data === null) {
+    if (!response.data) {
       util.error(AUTH.NO_RESPONSE)
       return
     }

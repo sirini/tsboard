@@ -6,7 +6,8 @@
 
 import { Elysia } from "elysia"
 import { load } from "./permission/load"
+import { update } from "./permission/update"
 
 export const permission = new Elysia().group("/permission", (app) => {
-  return app.use(load)
+  return app.use(load).use(update)
 })
