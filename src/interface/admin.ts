@@ -43,6 +43,14 @@ export interface AdminBoardConfig {
   categories: AdminPairItem[]
 }
 
+export const ACTION_TYPE = {
+  LIST: 0,
+  VIEW: 1,
+  WRITE: 2,
+  COMMENT: 3,
+  DOWNLOAD: 4,
+}
+
 export interface AdminPermissionLevel {
   list: number
   view: number

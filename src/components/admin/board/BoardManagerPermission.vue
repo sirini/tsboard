@@ -47,162 +47,42 @@
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
-        <v-row>
-          <v-col cols="3">
-            <v-text-field
-              v-model="permission.board.level.list"
-              variant="outlined"
-              type="number"
-              density="compact"
-              hide-details
-              readonly
-              prepend-inner-icon="mdi-format-list-numbered"
-              append-inner-icon="mdi-chevron-down"
-            >
-              <v-menu activator="parent" open-on-hover>
-                <v-list>
-                  <v-list-item
-                    v-for="(_, lv) in 10"
-                    :key="lv"
-                    @click="permission.updateListPermission(lv)"
-                    :append-icon="permission.board.level.list === lv ? 'mdi-check' : ''"
-                  >
-                    {{ lv }} 레벨
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2"> 글 목록 레벨 제한을 설정합니다. (0 = 비회원, 9 = 최고레벨) </v-col>
-        </v-row>
+        <board-manager-permission-item
+          :type="ACTION_TYPE.LIST"
+          @update="(level: number) => permission.updateListPermission(level)"
+        ></board-manager-permission-item>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
-        <v-row>
-          <v-col cols="3">
-            <v-text-field
-              v-model="permission.board.level.view"
-              variant="outlined"
-              type="number"
-              density="compact"
-              hide-details
-              readonly
-              prepend-inner-icon="mdi-format-list-numbered"
-              append-inner-icon="mdi-chevron-down"
-            >
-              <v-menu activator="parent" open-on-hover>
-                <v-list>
-                  <v-list-item
-                    v-for="(_, lv) in 10"
-                    :key="lv"
-                    @click="permission.updateViewPermission(lv)"
-                    :append-icon="permission.board.level.view === lv ? 'mdi-check' : ''"
-                  >
-                    {{ lv }} 레벨
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2"> 글 보기 레벨 제한을 설정합니다. (0 = 비회원, 9 = 최고레벨) </v-col>
-        </v-row>
+        <board-manager-permission-item
+          :type="ACTION_TYPE.VIEW"
+          @update="(level: number) => permission.updateViewPermission(level)"
+        ></board-manager-permission-item>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
-        <v-row>
-          <v-col cols="3">
-            <v-text-field
-              v-model="permission.board.level.write"
-              variant="outlined"
-              type="number"
-              density="compact"
-              hide-details
-              readonly
-              prepend-inner-icon="mdi-format-list-numbered"
-              append-inner-icon="mdi-chevron-down"
-            >
-              <v-menu activator="parent" open-on-hover>
-                <v-list>
-                  <v-list-item
-                    v-for="(_, lv) in 10"
-                    :key="lv"
-                    @click="permission.updateWritePermission(lv)"
-                    :append-icon="permission.board.level.write === lv ? 'mdi-check' : ''"
-                  >
-                    {{ lv }} 레벨
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2"> 글 쓰기 레벨 제한을 설정합니다. (0 = 비회원, 9 = 최고레벨) </v-col>
-        </v-row>
+        <board-manager-permission-item
+          :type="ACTION_TYPE.WRITE"
+          @update="(level: number) => permission.updateWritePermission(level)"
+        ></board-manager-permission-item>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-2">
-        <v-row>
-          <v-col cols="3">
-            <v-text-field
-              v-model="permission.board.level.comment"
-              variant="outlined"
-              type="number"
-              density="compact"
-              hide-details
-              readonly
-              prepend-inner-icon="mdi-format-list-numbered"
-              append-inner-icon="mdi-chevron-down"
-            >
-              <v-menu activator="parent" open-on-hover>
-                <v-list>
-                  <v-list-item
-                    v-for="(_, lv) in 10"
-                    :key="lv"
-                    @click="permission.updateCommentPermission(lv)"
-                    :append-icon="permission.board.level.comment === lv ? 'mdi-check' : ''"
-                  >
-                    {{ lv }} 레벨
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2"> 댓글 작성 레벨 제한을 설정합니다. (0 = 비회원, 9 = 최고레벨) </v-col>
-        </v-row>
+        <board-manager-permission-item
+          :type="ACTION_TYPE.COMMENT"
+          @update="(level: number) => permission.updateCommentPermission(level)"
+        ></board-manager-permission-item>
       </v-list-item>
       <v-divider></v-divider>
 
       <v-list-item class="mt-2 mb-1">
-        <v-row>
-          <v-col cols="3">
-            <v-text-field
-              v-model="permission.board.level.download"
-              variant="outlined"
-              type="number"
-              density="compact"
-              hide-details
-              readonly
-              prepend-inner-icon="mdi-format-list-numbered"
-              append-inner-icon="mdi-chevron-down"
-            >
-              <v-menu activator="parent" open-on-hover>
-                <v-list>
-                  <v-list-item
-                    v-for="(_, lv) in 10"
-                    :key="lv"
-                    @click="permission.updateDownloadPermission(lv)"
-                    :append-icon="permission.board.level.download === lv ? 'mdi-check' : ''"
-                  >
-                    {{ lv }} 레벨
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-text-field>
-          </v-col>
-          <v-col class="mt-2"> 다운로드 레벨 제한을 설정합니다. (0 = 비회원, 9 = 최고레벨) </v-col>
-        </v-row>
+        <board-manager-permission-item
+          :type="ACTION_TYPE.DOWNLOAD"
+          @update="(level: number) => permission.updateDownloadPermission(level)"
+        ></board-manager-permission-item>
       </v-list-item>
     </v-list>
   </v-card>
@@ -211,6 +91,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
+import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
+import { ACTION_TYPE } from "../../../interface/admin"
 
 const permission = useAdminBoardPermissionStore()
 onMounted(() => permission.loadPermissionConfig())

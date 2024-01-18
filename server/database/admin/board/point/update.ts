@@ -1,7 +1,7 @@
 /**
- * server/database/admin/board/permission/update
+ * server/database/admin/board/point/update
  *
- * 게시판 관리 > 권한 > 업데이트에 필요한 함수들
+ * 게시판 관리 > 포인트 > 업데이트에 필요한 함수들
  */
 
 import { AdminBoardPointList } from "../../../../../src/interface/admin"

@@ -192,7 +192,7 @@
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
-                  <v-list-item v-for="(category, index) in general.board.categories" :key="index">
+                  <v-list-item v-for="(category, index) in general.board.categories" :key="index" @click="">
                     <v-list-item-title>
                       {{ category.name }}
                     </v-list-item-title>

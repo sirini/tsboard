@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardPointList, AdminPoint } from "../../../interface/admin"
+import { AdminPoint } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { POINT } from "../../../messages/store/admin/board/point"
@@ -19,7 +19,8 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const admin = useAdminStore()
   const auth = useAuthStore()
   const server = edenTreaty<App>(process.env.API!)
-  const board = ref<AdminBoardPointList>({
+  const board = ref<AdminPoint>({
+    uid: 0,
     view: { isPayment: true, amount: 0 },
     write: { isPayment: false, amount: 0 },
     comment: { isPayment: false, amount: 0 },
@@ -40,6 +41,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
         id: route.params.id as string,
       },
     })
+
     if (!response.data) {
       admin.error(POINT.NO_RESPONSE)
       return
@@ -54,56 +56,94 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken!)
     board.value = response.data.result.point as AdminPoint
+    boardView.value = board.value.view.amount.toString()
+    boardWrite.value = board.value.write.amount.toString()
+    boardComment.value = board.value.comment.amount.toString()
+    boardDownload.value = board.value.download.amount.toString()
+
     admin.success(POINT.LOADED_POINT)
   }
 
   // 글 보기 포인트 정책 업데이트
-  function updateViewPoint(): void {
-    board.value.view = {
-      isPayment,
-      amount,
+  async function updateViewPoint(isPayment: boolean, amount: string): Promise<void> {
+    board.value.view.isPayment = isPayment
+    board.value.view.amount = parseInt(amount)
+
+    if ((await updateAllPoints()) === true) {
+      admin.success(
+        `글 보기에 ${board.value.view.amount} 만큼 ${
+          board.value.view.isPayment ? "차감" : "충전"
+        } 하도록 수정 하였습니다.`,
+      )
     }
-    updateAllPoints()
-    admin.success(`글 보기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`)
   }
 
   // 글 작성 포인트 정책 업데이트
-  function updateWritePoint(): void {
-    board.value.write = {
-      isPayment,
-      amount,
+  async function updateWritePoint(isPayment: boolean, amount: string): Promise<void> {
+    board.value.write.isPayment = isPayment
+    board.value.write.amount = parseInt(amount)
+
+    if ((await updateAllPoints()) === true) {
+      admin.success(
+        `글 작성에 ${board.value.write.amount} 만큼 ${
+          board.value.write.isPayment ? "차감" : "충전"
+        } 하도록 수정 하였습니다.`,
+      )
     }
-    updateAllPoints()
-    admin.success(`글 작성에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`)
   }
 
   // 댓글 쓰기 포인트 정책 업데이트
-  function updateCommentPoint(): void {
-    board.value.comment = {
-      isPayment,
-      amount,
+  async function updateCommentPoint(isPayment: boolean, amount: string): Promise<void> {
+    board.value.comment.isPayment = isPayment
+    board.value.comment.amount = parseInt(amount)
+
+    if ((await updateAllPoints()) === true) {
+      admin.success(
+        `댓글 쓰기에 ${board.value.comment.amount} 만큼 ${
+          board.value.comment.isPayment ? "차감" : "충전"
+        } 하도록 수정 하였습니다.`,
+      )
     }
-    updateAllPoints()
-    admin.success(
-      `댓글 쓰기에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-    )
   }
 
   // 다운로드 포인트 정책 업데이트
-  function updateDownloadPoint(): void {
-    board.value.download = {
-      isPayment,
-      amount,
+  async function updateDownloadPoint(isPayment: boolean, amount: string): Promise<void> {
+    board.value.download.isPayment = isPayment
+    board.value.download.amount = parseInt(amount)
+
+    if ((await updateAllPoints()) === true) {
+      admin.success(
+        `다운로드에 ${board.value.download.amount} 만큼 ${
+          board.value.download.isPayment ? "차감" : "충전"
+        } 하도록 수정 하였습니다.`,
+      )
     }
-    updateAllPoints()
-    admin.success(
-      `다운로드에 ${amount} 만큼 ${isPayment ? "차감" : "충전"} 하도록 수정 하였습니다.`,
-    )
   }
 
   // 포인트 처리
-  async function updateAllPoints(): Promise<void> {
-    // axios.put('some path', point.value) ...
+  async function updateAllPoints(): Promise<boolean> {
+    const response = await server.api.admin.board.point.updatepoints.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
+      points: {
+        view: board.value.view,
+        write: board.value.write,
+        comment: board.value.comment,
+        download: board.value.download,
+      },
+    })
+    if (!response.data) {
+      admin.error(POINT.NO_RESPONSE)
+      return false
+    }
+    if (response.data.success === false) {
+      admin.error(`${POINT.UNABLE_UPDATE_POINT} (${response.data.error})`)
+      return false
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    return true
   }
 
   return {
