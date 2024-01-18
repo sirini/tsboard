@@ -5,19 +5,27 @@
  */
 
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../../server/index"
 import { AdminPairItem, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
 import { useAdminStore } from "../common"
+import { useAuthStore } from "../../../store/auth"
+import { GENERAL } from "../../../messages/store/admin/group/general"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
+  const route = useRoute()
+  const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
+  const auth = useAuthStore()
   const group = ref<AdminGroupConfig>({
-    uid: 1,
-    id: "default",
-    count: 3,
+    uid: 0,
+    id: "",
+    count: 0,
     manager: {
-      uid: 11,
-      name: "admin_sample@test.com",
+      uid: 0,
+      name: "",
     },
   })
   const removeBoardTarget = ref<AdminPairItem>({
@@ -25,26 +33,43 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     name: "",
   })
   const confirmRemoveBoardDialog = ref<boolean>(false)
-  const boards = ref<AdminGroupList[]>([
-    { uid: 1, id: "test", info: "테스트용 게시판 입니다.", manager: "master01_sample@test.com" },
-    { uid: 2, id: "test2", info: "테스트용 게시판 2 입니다.", manager: "master02@naver.com" },
-    {
-      uid: 3,
-      id: "free",
-      info: "자유롭게 얘기 나눌 수 있는 게시판입니다.",
-      manager: "master03.lab@tsboard.dev",
-    },
-  ])
+  const boards = ref<AdminGroupList[]>([])
   const existBoardIds = ref<AdminGroupList[]>(boards.value)
   const dbresult = ref<AdminPairItem[]>([
     { uid: 1, name: "sample_user@test.com" },
     { uid: 2, name: "example_user@naver.com" },
     { uid: 3, name: "test_user_id@gmail.com" },
-    { uid: 4, name: "abc@studio.net" },
-    { uid: 5, name: "zflip5@samsung.com" },
   ])
   const suggestions = ref<AdminPairItem[]>(dbresult.value)
   const newBoardId = ref<string>("")
+
+  // 지정된 그룹의 설정값 불러오기
+  async function loadGeneralConfig(): Promise<void> {
+    const response = await server.api.admin.group.general.load.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: route.params.id as string,
+      },
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
+      return
+    }
+    if (response.data.result.config.uid < 1) {
+      admin.error(GENERAL.UNKNOWN_INFO)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    group.value = response.data.result.config as AdminGroupConfig
+    boards.value = response.data.result.boards as AdminGroupList[]
+    admin.success(GENERAL.LOADED_CONFIG)
+  }
 
   // 회원 아이디를 입력할 때마다 하단에 검색해서 보여주기
   let timer: any = null
@@ -87,8 +112,12 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     boards.value.push({
       uid: 10,
       id: newId,
+      name: "",
       info: "",
-      manager: "",
+      manager: {
+        uid: 0,
+        name: "",
+      },
     })
     admin.success(
       `${newId} 게시판이 성공적으로 추가 되었습니다. 상세 게시판 수정은 게시판 수정하기 기능을 이용해 주세요.`,
@@ -137,6 +166,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     suggestions,
     newBoardId,
     existBoardIds,
+    loadGeneralConfig,
     updateGroupManagerSuggestion,
     updateExistBoardIds,
     createNewBoard,

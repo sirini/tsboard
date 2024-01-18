@@ -88,8 +88,9 @@ export interface AdminPoint {
 export interface AdminGroupList {
   uid: number
   id: string
+  name: string
   info: string
-  manager: string
+  manager: AdminPairItem
 }
 
 export interface AdminGroupConfig {

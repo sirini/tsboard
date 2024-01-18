@@ -67,7 +67,7 @@
       >
       <v-list-item v-for="(board, index) in general.boards" :key="index">
         <v-row no-gutters>
-          <v-col cols="3">
+          <v-col cols="2">
             <v-text-field
               v-model="board.id"
               variant="outlined"
@@ -76,9 +76,11 @@
               readonly
               class="mt-2 mr-3"
               prepend-inner-icon="mdi-identifier"
-            ></v-text-field
-          ></v-col>
-          <v-col cols="3">
+            >
+              <v-tooltip activator="parent">{{ board.name }} 게시판입니다</v-tooltip>
+            </v-text-field></v-col
+          >
+          <v-col cols="4">
             <v-text-field
               v-model="board.info"
               variant="outlined"
@@ -90,16 +92,9 @@
             ></v-text-field>
           </v-col>
           <v-col cols="3">
-            <v-text-field
-              v-model="board.manager"
-              variant="outlined"
-              density="compact"
-              width="100"
-              hide-details
-              readonly
-              class="mt-2 mr-3"
-              prepend-inner-icon="mdi-account-tie-hat"
-            ></v-text-field>
+            <v-chip class="mt-3" :prepend-avatar="board.manager.profile">{{
+              board.manager.name
+            }}</v-chip>
           </v-col>
           <v-col class="text-right">
             <v-btn icon @click="util.go('boardList', board.id)" elevation="0" class="mt-1"
@@ -129,10 +124,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
+import { watch } from "fs"
 
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()
+
+onMounted(() => general.loadGeneralConfig())
 </script>
