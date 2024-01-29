@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
-              v-model="general.group.manager.name"
+              v-model="general.newGroupManager"
               variant="outlined"
               density="compact"
               hide-details
@@ -26,9 +26,23 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
+              <v-tooltip activator="parent"
+                >회원명으로 검색하시면 되며, 검색하시는 동안 마우스를 계속 올려두세요!</v-tooltip
+              >
             </v-text-field>
           </v-col>
-          <v-col class="mt-2">그룹 관리자를 지정합니다 (아이디 입력)</v-col>
+          <v-col class="mt-2">
+            <v-chip
+              size="small"
+              label
+              :prepend-avatar="general.group.manager.profile"
+              variant="tonal"
+              >{{ general.group.manager.name }}
+              <v-tooltip activator="parent"
+                >현재 {{ general.group.id }} 그룹 관리자입니다.</v-tooltip
+              >
+            </v-chip>
+          </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -48,10 +62,13 @@
               <v-menu activator="parent">
                 <v-list>
                   <v-list-item v-for="(board, index) in general.existBoardIds" :key="index">
-                    {{ board.id }} 는 이미 사용중입니다
+                    {{ board.name }}
                   </v-list-item>
                 </v-list>
               </v-menu>
+              <v-tooltip activator="parent"
+                >게시판 ID를 입력하시는 동안 마우스를 계속 올려두세요!</v-tooltip
+              >
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
@@ -67,40 +84,29 @@
       >
       <v-list-item v-for="(board, index) in general.boards" :key="index">
         <v-row no-gutters>
-          <v-col cols="2">
-            <v-text-field
-              v-model="board.id"
+          <v-col cols="10">
+            <v-chip
+              class="mt-3"
+              prepend-icon="mdi-identifier"
               variant="outlined"
-              density="compact"
-              hide-details
-              readonly
-              class="mt-2 mr-3"
-              prepend-inner-icon="mdi-identifier"
+              color="blue-grey"
+              @click="util.go('boardList', board.id)"
             >
-              <v-tooltip activator="parent">{{ board.name }} 게시판입니다</v-tooltip>
-            </v-text-field></v-col
-          >
-          <v-col cols="4">
-            <v-text-field
-              v-model="board.info"
-              variant="outlined"
-              density="compact"
-              hide-details
-              readonly
-              class="mt-2 mr-3"
-              prepend-inner-icon="mdi-information"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-chip class="mt-3" :prepend-avatar="board.manager.profile">{{
+              {{ board.id }}
+              <v-tooltip activator="parent"
+                >클릭하시면 [{{ board.name }}] 게시판으로 이동합니다.</v-tooltip
+              >
+            </v-chip>
+
+            <v-chip class="mt-3 ml-2 mr-2" prepend-icon="mdi-information" color="blue-grey">{{
+              board.info
+            }}</v-chip>
+
+            <v-chip class="mt-3" :prepend-avatar="board.manager.profile" color="blue-grey">{{
               board.manager.name
             }}</v-chip>
           </v-col>
           <v-col class="text-right">
-            <v-btn icon @click="util.go('boardList', board.id)" elevation="0" class="mt-1"
-              ><v-icon>mdi-link-variant</v-icon>
-              <v-tooltip activator="parent"> 클릭하시면 게시판을 보러 이동합니다 </v-tooltip>
-            </v-btn>
             <v-btn icon @click="util.go('adminBoardManager', board.id)" elevation="0" class="mt-1"
               ><v-icon>mdi-pencil</v-icon>
               <v-tooltip activator="parent">
@@ -128,7 +134,6 @@ import { onMounted } from "vue"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
-import { watch } from "fs"
 
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()

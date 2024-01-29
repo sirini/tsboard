@@ -29,7 +29,6 @@ export const update = new Elysia()
   .patch(
     "/updatepoints",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -42,6 +41,7 @@ export const update = new Elysia()
 
       updatePoints(body.boardUid, body.points as AdminBoardPointList)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

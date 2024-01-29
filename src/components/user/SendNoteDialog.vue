@@ -53,15 +53,8 @@
           @keyup.enter="user.sendNote"
           @click:append-inner="user.sendNote"
         >
-          <v-tooltip activator="parent"
-            >상대방에게 예의를 지켜주시고, 민감한 개인정보는 노출되지 않도록 각별히 주의해
-            주세요!</v-tooltip
-          >
         </v-text-field>
-        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote"
-          >닫기
-          <v-tooltip activator="parent">클릭하시면 쪽지 보내기 창을 닫습니다.</v-tooltip>
-        </v-btn>
+        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote">닫기 </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -142,5 +135,20 @@ onBeforeMount(() => {
 }
 .wrap {
   overflow-y: scroll;
+}
+
+/** 다이얼로그 배경 조정 */
+.v-overlay--active {
+  animation: tsboardCustomOverlay 0.5s ease-in forwards;
+}
+@keyframes tsboardCustomOverlay {
+  from {
+    backdrop-filter: blur(0px);
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.2);
+  }
 }
 </style>

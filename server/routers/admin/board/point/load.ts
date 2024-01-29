@@ -19,12 +19,12 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const point = await getPointConfig(id)
       if (point.uid < 1) {
         return fail(`Invalid board ID.`)
       }
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         point,
         newAccessToken,

@@ -9,9 +9,15 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminPairItem, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
+import {
+  AdminPairItem,
+  AdminGroupList,
+  AdminGroupConfig,
+  AdminDefaultParams,
+} from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../../store/auth"
+import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/group/general"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
@@ -19,6 +25,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
   const auth = useAuthStore()
+  const util = useUtilStore()
   const group = ref<AdminGroupConfig>({
     uid: 0,
     id: "",
@@ -34,13 +41,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   })
   const confirmRemoveBoardDialog = ref<boolean>(false)
   const boards = ref<AdminGroupList[]>([])
-  const existBoardIds = ref<AdminGroupList[]>(boards.value)
-  const dbresult = ref<AdminPairItem[]>([
-    { uid: 1, name: "sample_user@test.com" },
-    { uid: 2, name: "example_user@naver.com" },
-    { uid: 3, name: "test_user_id@gmail.com" },
-  ])
-  const suggestions = ref<AdminPairItem[]>(dbresult.value)
+  const existBoardIds = ref<AdminPairItem[]>([])
+  const suggestions = ref<AdminPairItem[]>([])
+  const newGroupManager = ref<string>("")
   const newBoardId = ref<string>("")
 
   // 지정된 그룹의 설정값 불러오기
@@ -72,39 +75,74 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   }
 
   // 회원 아이디를 입력할 때마다 하단에 검색해서 보여주기
-  let timer: any = null
-  async function updateGroupManagerSuggestion(): Promise<void> {
-    // do something with group.value.manager.name
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      suggestions.value = dbresult.value.filter((user: AdminPairItem) => {
-        return user.name.indexOf(group.value.manager.name) > -1
-      })
-    }, 200)
+  async function _updateGroupManagerSuggestion(): Promise<void> {
+    if (newGroupManager.value.length < 2) {
+      return
+    }
+    const response = await server.api.admin.group.general.candidates.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        name: newGroupManager.value,
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      return
+    }
+    if (response.data.result.candidates.length < 1) {
+      suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES }]
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    suggestions.value = response.data.result.candidates as AdminPairItem[]
   }
+  const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 
   // 새 게시판 생성을 위해 아이디를 입력할 때 기존 게시판 아이디를 보여주기
-  async function updateExistBoardIds(): Promise<void> {
+  async function _updateExistBoardIds(): Promise<void> {
     if (newBoardId.value.length < 2) {
       return
     }
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      existBoardIds.value = boards.value.filter((board: AdminGroupList) => {
-        return board.id.indexOf(newBoardId.value) > -1
-      })
-    }, 200)
+    const response = await server.api.admin.group.general.boardids.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: newBoardId.value,
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      return
+    }
+    if (response.data.result.ids.length < 1) {
+      existBoardIds.value = [{ uid: 0, name: GENERAL.NO_DUPLICATE_ID }]
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    existBoardIds.value = response.data.result.ids as AdminPairItem[]
   }
+  const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)
 
   // 새 게시판 생성하기
   async function createNewBoard(): Promise<void> {
     const newId = newBoardId.value.trim()
     if (newId.length < 2) {
-      admin.error(`게시판 ID는 2글자 이상 입력해 주세요.`)
+      admin.error(GENERAL.TOO_SHORT_BOARD_ID)
       return
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
-      admin.error(`게시판 ID는 영문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`)
+      admin.error(GENERAL.INVALID_BOARD_ID)
       newBoardId.value = ""
       return
     }
@@ -119,18 +157,32 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         name: "",
       },
     })
-    admin.success(
-      `${newId} 게시판이 성공적으로 추가 되었습니다. 상세 게시판 수정은 게시판 수정하기 기능을 이용해 주세요.`,
-    )
+    admin.success(`[${newId}] ${GENERAL.ADDED_NEW_BOARD}`)
     newBoardId.value = ""
   }
 
   // 선택한 회원을 그룹 관리자로 지정하기
   async function updateGroupManager(user: AdminPairItem): Promise<void> {
-    // do something with user.uid, user.name
+    const response = await server.api.admin.group.general.changeadmin.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      groupUid: group.value.uid,
+      userUid: user.uid,
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+
     group.value.manager.uid = user.uid
     group.value.manager.name = user.name
-    admin.success(`${user.name} 님을 ${group.value.id} 그룹의 관리자로 지정 하였습니다.`)
+    admin.success(`[${user.name}] ${GENERAL.CHANGED_GROUP_ADMIN}`)
   }
 
   // 게시판을 정말로 삭제할건지 확인하는 창 띄우기
@@ -164,6 +216,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     confirmRemoveBoardDialog,
     boards,
     suggestions,
+    newGroupManager,
     newBoardId,
     existBoardIds,
     loadGeneralConfig,

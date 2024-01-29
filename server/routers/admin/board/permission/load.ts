@@ -34,12 +34,13 @@ export const load = new Elysia()
       if (id.length < 2) {
         return fail(`Board ID is too short.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+
       const permission = await getBoardPermission(id)
       if (permission.uid < 1) {
         return fail(`Invalid board ID.`)
       }
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         permission,
         newAccessToken,

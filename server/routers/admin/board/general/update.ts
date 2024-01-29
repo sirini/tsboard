@@ -37,13 +37,13 @@ export const update = new Elysia()
   .patch(
     "/changegroup",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.groupUid < 1 || body.boardUid < 1) {
         return fail(`Invalid target.`)
       }
 
       changeGroup(body.boardUid, body.groupUid)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -59,7 +59,6 @@ export const update = new Elysia()
   .patch(
     "/updatename",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -69,6 +68,7 @@ export const update = new Elysia()
 
       updateName(body.boardUid, body.newName)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -84,7 +84,6 @@ export const update = new Elysia()
   .patch(
     "/updateinfo",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -94,6 +93,7 @@ export const update = new Elysia()
 
       updateInfo(body.boardUid, body.newInfo)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -109,13 +109,13 @@ export const update = new Elysia()
   .patch(
     "/changetype",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
       changeType(body.boardUid, body.newType)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -131,13 +131,13 @@ export const update = new Elysia()
   .patch(
     "/updaterows",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
       updateRows(body.boardUid, body.newRows)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -153,13 +153,13 @@ export const update = new Elysia()
   .patch(
     "/updatewidth",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
       updateWidth(body.boardUid, body.newWidth)
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -175,7 +175,6 @@ export const update = new Elysia()
   .post(
     "/addcategory",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -184,11 +183,11 @@ export const update = new Elysia()
       }
 
       const categoryUid = await addCategory(body.boardUid, body.newCategory)
-
       if (categoryUid < 1) {
         return fail(`Already added.`)
       }
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         categoryUid,
@@ -205,7 +204,6 @@ export const update = new Elysia()
   .delete(
     "/removecategory",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       if (body.boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -214,11 +212,11 @@ export const update = new Elysia()
       }
 
       const result = await removeCategory(body.boardUid, body.categoryUid)
-
       if (result === false) {
         return fail(`Unable to remove last category.`)
       }
 
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

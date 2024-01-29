@@ -90,4 +90,19 @@ const blockPost = ref<boolean>(false)
   font-size: 0.65em;
   border-left: 1px #cfd8dc solid;
 }
+
+/** 다이얼로그 배경 조정 */
+.v-overlay--active {
+  animation: tsboardCustomOverlay 0.5s ease-in forwards;
+}
+@keyframes tsboardCustomOverlay {
+  from {
+    backdrop-filter: blur(0px);
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
 </style>

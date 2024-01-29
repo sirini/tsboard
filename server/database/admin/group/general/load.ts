@@ -16,6 +16,7 @@ export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
     manager: {
       uid: 0,
       name: "",
+      profile: "",
     },
   }
 
@@ -26,7 +27,7 @@ export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
     return result
   }
 
-  const [admin] = await select(`SELECT name FROM ${table}user WHERE uid = ? LIMIT 1`, [
+  const [admin] = await select(`SELECT id, name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
     group.admin_uid,
   ])
   if (!admin) {
@@ -39,7 +40,8 @@ export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
     count: 0,
     manager: {
       uid: group.admin_uid,
-      name: admin.name,
+      name: `${admin.name} (${admin.id})`,
+      profile: admin.profile === "" ? "/no-profile.png" : admin.profile,
     },
   }
 
@@ -91,6 +93,49 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       info: board.info,
       manager,
     })
+  }
+
+  return result
+}
+
+// 그룹 관리자 후보 목록 가져오기
+export async function getGroupAdminCandidates(
+  name: string,
+  limit: number,
+): Promise<AdminPairItem[]> {
+  let result: AdminPairItem[] = []
+  const users = await select(
+    `SELECT uid, id, name, profile FROM ${table}user WHERE blocked = 0 AND name LIKE '%${name}%' LIMIT ${limit}`,
+  )
+
+  if (!users[0]) {
+    return result
+  }
+
+  for (const user of users) {
+    result.push({
+      uid: user.uid,
+      name: `${user.name} (${user.id})`,
+      profile: user.profile === "" ? "/no-profile.png" : user.profile,
+    })
+  }
+
+  return result
+}
+
+// 기존 게시판 아이디들 목록 가져오기 (중복복인지 알려주기 위함)
+export async function getExistBoardIds(id: string, limit: number): Promise<AdminPairItem[]> {
+  let result: AdminPairItem[] = []
+  const ids = await select(
+    `SELECT uid, id, name FROM ${table}board WHERE id LIKE '%${id}%' LIMIT ${limit}`,
+  )
+
+  if (!ids[0]) {
+    return result
+  }
+
+  for (const id of ids) {
+    result.push({ uid: id.uid, name: `${id.id} (${id.name})` })
   }
 
   return result
