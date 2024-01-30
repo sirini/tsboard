@@ -13,7 +13,7 @@ const app = new Elysia()
   .group("/api", (app) => {
     return app.use(auth).use(admin)
   })
-  .listen(process.env.SERVER_PORT)
+  .listen(process.env.SERVER_PORT ?? 3100)
 
 export type App = typeof app
 
