@@ -5,7 +5,8 @@
  */
 
 import { unlinkSync } from "node:fs"
-import { table, update, select, remove } from "../../../common"
+import { table, update, select, remove, insert } from "../../../common"
+import { removeFile } from "../../../../util/tools"
 
 // 그룹 관리자 변경하기
 export async function changeGroupAdmin(groupUid: number, userUid: number): Promise<boolean> {
@@ -33,11 +34,7 @@ async function removeComments(postUid: number): Promise<void> {
 async function removeFiles(postUid: number): Promise<void> {
   const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [postUid])
   for (const file of files) {
-    const path = `.${file.path}`
-    const filepath = Bun.file(path)
-    if ((await filepath.exists()) === true) {
-      unlinkSync(path)
-    }
+    removeFile(`.${file.path}`)
   }
   await remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid])
 }
@@ -61,6 +58,25 @@ export async function removeBoard(boardUid: number): Promise<boolean> {
   await remove(`DELETE FROM ${table}board_category WHERE board_uid = ?`, [boardUid])
   await remove(`DELETE FROM ${table}post WHERE board_uid = ?`, [boardUid])
   await remove(`DELETE FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUid])
+
+  return true
+}
+
+// 게시판 생성하기
+export async function createBoard(newId: string): Promise<boolean> {
+  const [check] = await select(`SELECT uid FROM ${table}board WHERE id = ? LIMIT 1`, [newId])
+  if (check) {
+    return false
+  }
+  await insert(
+    `INSERT INTO ${table}board 
+  (id, group_uid, admin_uid, type, name, 
+    info, row, width, use_category, 
+    level_list, level_view, level_write, level_comment, level_download, 
+    point_view, point_write, point_comment, point_download) VALUES 
+  ()`,
+    [],
+  )
 
   return true
 }

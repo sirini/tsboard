@@ -58,6 +58,7 @@ export interface AdminPermissionLevel {
   comment: number
   download: number
 }
+
 export interface AdminBoardPermission {
   uid: number
   id: string
@@ -70,34 +71,30 @@ export interface AdminPointPair {
   amount: number
 }
 
-export interface AdminBoardPointList {
+export type AdminBoardPointList = {
   view: AdminPointPair
   write: AdminPointPair
   comment: AdminPointPair
   download: AdminPointPair
 }
 
-export interface AdminPoint {
+export type AdminPoint = AdminBoardPointList & {
   uid: number
-  view: AdminPointPair
-  write: AdminPointPair
-  comment: AdminPointPair
-  download: AdminPointPair
 }
 
-export interface AdminGroupList {
+type AdminGroupCommon = {
   uid: number
   id: string
+  manager: AdminPairItem
+}
+
+export type AdminGroupList = AdminGroupCommon & {
   name: string
   info: string
-  manager: AdminPairItem
 }
 
-export interface AdminGroupConfig {
-  uid: number
-  id: string
+export type AdminGroupConfig = AdminGroupCommon & {
   count: number
-  manager: AdminPairItem
 }
 
 export interface AdminHomeSimpleStatus {
@@ -124,22 +121,21 @@ export interface AdminMemberReport {
   date: string
 }
 
-export interface AdminLatestPost {
+type AdminLatestCommon = {
   id: string
   uid: number
+  like: number
+  date: number
+}
+
+export type AdminLatestPost = AdminLatestCommon & {
   title: string
   writer: AdminPairItem
   comment: number
-  like: number
   hit: number
-  date: string
 }
 
-export interface AdminLatestComment {
-  id: string
-  uid: number
+export type AdminLatestComment = AdminLatestCommon & {
   content: string
   writer: AdminPairItem
-  like: number
-  date: string
 }

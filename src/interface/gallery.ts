@@ -15,7 +15,7 @@ export interface Writer {
   profile: string
 }
 
-export interface GridItem {
+export type GridItem = {
   uid: number
   writer: Writer
   files: string[]
@@ -23,14 +23,9 @@ export interface GridItem {
   reply: number
 }
 
-export interface Photo {
-  uid: number
-  writer: Writer
-  files: string[]
+export type Photo = GridItem & {
   subject: string
   content: string
-  like: number
-  reply: number
   view: number
   date: string
   liked: boolean

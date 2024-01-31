@@ -48,6 +48,24 @@ GMAIL_OAUTH_USER=                # Oauth Client에서 테스트 사용자로 등
 GMAIL_OAUTH_CLIENT_ID=           # OAuth Client의 아이디
 GAMIL_OAUTH_CLIENT_SECRET=       # OAuth Client의 보안 비밀번호
 GAMIL_OAUTH_REFRESH_TOKEN=       # playground에서 발급받은 리프레쉬 토큰
+
+# 게시판 기본 생성 시 초기값 지정
+BOARD_ADMIN=1
+BOARD_TYPE=0  # 0 = 게시판 / 1 = 갤러리 / 2 = 블로그(TBD)
+BOARD_NAME=please_update_name
+BOARD_INFO=please_update_info
+BOARD_ROW=20
+BOARD_WIDTH=1000
+BOARD_USE_CATEGORY=1
+BOARD_LEVEL_LIST=0
+BOARD_LEVEL_VIEW=0
+BOARD_LEVEL_WRITE=1
+BOARD_LEVEL_COMMENT=1
+BOARD_LEVEL_DOWNLOAD=1
+BOARD_POINT_VIEW=0
+BOARD_POINT_WRITE=10
+BOARD_POINT_COMMENT=5
+BOARD_POINT_DOWNLOAD=-10
 `
 
 const foundEnvTitle = `

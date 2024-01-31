@@ -4,6 +4,7 @@
  * 서버단에서 활용할 함수들 정의
  */
 
+import { unlinkSync } from "node:fs"
 import { JWTPayloadSpec } from "@elysiajs/jwt"
 import { Token } from "../../src/interface/auth"
 import { saveTokens } from "../database/auth/authorization"
@@ -74,4 +75,14 @@ export async function updateAccessToken(
     saveTokens(userUid, token)
   }
   return newAccessToken
+}
+
+// 주어진 파일 경로가 유효한지 확인하고 삭제하기
+export async function removeFile(path: string): Promise<boolean> {
+  const filepath = Bun.file(path)
+  if ((await filepath.exists()) === true) {
+    unlinkSync(path)
+    return true
+  }
+  return false
 }

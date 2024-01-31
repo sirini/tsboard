@@ -7,7 +7,11 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, updateAccessToken } from "../../../../util/tools"
-import { changeGroupAdmin, removeBoard } from "../../../../database/admin/group/general/update"
+import {
+  changeGroupAdmin,
+  removeBoard,
+  createBoard,
+} from "../../../../database/admin/group/general/update"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -74,6 +78,30 @@ export const update = new Elysia()
       ...defaultTypeCheck,
       body: t.Object({
         boardUid: t.Number(),
+      }),
+    },
+  )
+  .post(
+    "/createboard",
+    async ({ jwt, cookie: { refresh }, headers, body }) => {
+      if (body.newId.length < 2) {
+        return fail(`Board ID is too short.`)
+      }
+
+      const result = await createBoard(body.newId)
+      if (result === false) {
+        return fail(`Failed to create a new board, try another ID.`)
+      }
+
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        newId: t.String(),
       }),
     },
   )
