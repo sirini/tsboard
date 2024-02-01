@@ -16,11 +16,11 @@ import { fileURLToPath, URL } from "node:url"
  *
  */
 const IS_DEV = true // [1]
-const PREFIX = IS_DEV ? "" : __dirname.split("/").pop() // [2]
+const PREFIX = "" // [2]
 const VITE_PORT = 3000 // [3]
 const SERVER_PORT = 3100 // [4]
 const MAX_FILE_SIZE = 10247680 // [5]
-const DOMAIN = "geunyul2.asuscomm.com" // [6]
+const DOMAIN = "localhost" // [6]
 const DEV_API_PATH = `http://${DOMAIN}:${VITE_PORT}` // [7]
 const PROD_API_PATH = `http://${DOMAIN}` // [8]
 const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH

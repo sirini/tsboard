@@ -84,23 +84,34 @@ export const update = new Elysia()
   .post(
     "/createboard",
     async ({ jwt, cookie: { refresh }, headers, body }) => {
+      if (body.groupUid < 1) {
+        return fail(`Invalid group uid.`)
+      }
       if (body.newId.length < 2) {
         return fail(`Board ID is too short.`)
       }
 
-      const result = await createBoard(body.newId)
-      if (result === false) {
+      const newBoardUid = await createBoard(body.newId, body.groupUid)
+      if (newBoardUid < 1) {
         return fail(`Failed to create a new board, try another ID.`)
       }
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
+        uid: newBoardUid,
+        name: process.env.BOARD_NAME!,
+        info: process.env.BOARD_INFO!,
+        manager: {
+          uid: process.env.BOARD_ADMIN!,
+          name: "Admin",
+        },
       })
     },
     {
       ...defaultTypeCheck,
       body: t.Object({
+        groupUid: t.Number(),
         newId: t.String(),
       }),
     },

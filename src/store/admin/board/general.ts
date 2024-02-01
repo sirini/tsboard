@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardConfig, AdminDefaultParams, AdminPairItem } from "../../../interface/admin"
+import { AdminBoardConfig, AdminPairItem } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
@@ -37,12 +37,6 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
   const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
-  const defaultParams = ref<AdminDefaultParams>({
-    $headers: {
-      authorization: auth.user.token,
-    },
-    boardUid: board.value.uid,
-  })
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
@@ -85,7 +79,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   // 그룹 변경하기
   async function changeGroup(group: AdminPairItem): Promise<void> {
     const response = await server.api.admin.board.general.changegroup.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       groupUid: group.uid,
     })
     if (!response.data) {
@@ -111,7 +108,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.updatename.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newName,
     })
     if (!response.data) {
@@ -134,7 +134,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.updateinfo.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newInfo,
     })
     if (!response.data) {
@@ -156,7 +159,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     else if (board.value.type === "blog") newType = 2
 
     const response = await server.api.admin.board.general.changetype.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newType,
     })
     if (!response.data) {
@@ -180,7 +186,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.updaterows.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newRows,
     })
     if (!response.data) {
@@ -204,7 +213,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.updatewidth.patch({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newWidth,
     })
     if (!response.data) {
@@ -228,7 +240,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.addcategory.post({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       newCategory,
     })
     if (!response.data) {
@@ -265,7 +280,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     const response = await server.api.admin.board.general.removecategory.delete({
-      ...defaultParams.value,
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
       categoryUid: boardRemoveCategory.value.uid,
     })
     if (!response.data) {

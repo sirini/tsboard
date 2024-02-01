@@ -9,12 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import {
-  AdminPairItem,
-  AdminGroupList,
-  AdminGroupConfig,
-  AdminDefaultParams,
-} from "../../../interface/admin"
+import { AdminPairItem, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../../store/auth"
 import { useUtilStore } from "../../util"
@@ -146,15 +141,31 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       newBoardId.value = ""
       return
     }
-    // do something
+    const response = await server.api.admin.group.general.createboard.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      groupUid: group.value.uid,
+      newId,
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+
     boards.value.push({
-      uid: 10,
+      uid: response.data.result.uid as number,
       id: newId,
-      name: "",
-      info: "",
+      name: response.data.result.name as string,
+      info: response.data.result.info as string,
       manager: {
-        uid: 0,
-        name: "",
+        uid: response.data.result.manager.uid as number,
+        name: response.data.result.manager.name as string,
       },
     })
     admin.success(`[${newId}] ${GENERAL.ADDED_NEW_BOARD}`)
@@ -200,14 +211,32 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   }
 
   // 게시판을 정말로 삭제할 때 처리
-  function removeBoard(): void {
+  async function removeBoard(): Promise<void> {
     if (removeBoardTarget.value.uid < 1 || removeBoardTarget.value.name.length < 1) {
-      admin.error("삭제할 게시판이 올바르게 지정되지 않았습니다.")
+      admin.error(GENERAL.INVALID_REMOVE_TARGET)
       return
     }
-    // do something
+
+    const response = await server.api.admin.group.general.removeboard.delete({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: removeBoardTarget.value.uid,
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.FAILED_REMOVE_BOARD} (${response.data.error})`)
+      return
+    }
+
+    boards.value = boards.value.filter((board) => {
+      return board.uid !== removeBoardTarget.value.uid
+    })
     closeRemoveBoardDialog()
-    admin.success("게시판이 성공적으로 삭제되었습니다.")
+    admin.success(GENERAL.REMOVED_BOARD)
   }
 
   return {

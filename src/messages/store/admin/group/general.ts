@@ -17,4 +17,8 @@ export const GENERAL = {
     "게시판이 성공적으로 추가 되었습니다. 상세 게시판 수정은 게시판 수정하기 기능을 이용해 주세요.",
   UNABLE_CHANGE_ADMIN: "그룹 관리자를 변경할 수 없었습니다.",
   CHANGED_GROUP_ADMIN: "님을 그룹 관리자를 성공적으로 변경하였습니다.",
+  FAILED_CREATE_BOARD: "새 게시판을 생성하지 못했습니다.",
+  INVALID_REMOVE_TARGET: "삭제할 게시판이 올바르게 지정되지 않았습니다.",
+  FAILED_REMOVE_BOARD: "지정된 게시판을 삭제할 수 없었습니다.",
+  REMOVED_BOARD: "게시판이 성공적으로 삭제되었습니다.",
 }

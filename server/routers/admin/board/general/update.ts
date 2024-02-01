@@ -41,7 +41,7 @@ export const update = new Elysia()
         return fail(`Invalid target.`)
       }
 
-      changeGroup(body.boardUid, body.groupUid)
+      await changeGroup(body.boardUid, body.groupUid)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -66,7 +66,7 @@ export const update = new Elysia()
         return fail(`Board name is too short.`)
       }
 
-      updateName(body.boardUid, body.newName)
+      await updateName(body.boardUid, body.newName)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -91,7 +91,7 @@ export const update = new Elysia()
         return fail(`Board info is too short.`)
       }
 
-      updateInfo(body.boardUid, body.newInfo)
+      await updateInfo(body.boardUid, body.newInfo)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -113,7 +113,7 @@ export const update = new Elysia()
         return fail(`Invalid board uid.`)
       }
 
-      changeType(body.boardUid, body.newType)
+      await changeType(body.boardUid, body.newType)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -135,7 +135,7 @@ export const update = new Elysia()
         return fail(`Invalid board uid.`)
       }
 
-      updateRows(body.boardUid, body.newRows)
+      await updateRows(body.boardUid, body.newRows)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -157,7 +157,7 @@ export const update = new Elysia()
         return fail(`Invalid board uid.`)
       }
 
-      updateWidth(body.boardUid, body.newWidth)
+      await updateWidth(body.boardUid, body.newWidth)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({

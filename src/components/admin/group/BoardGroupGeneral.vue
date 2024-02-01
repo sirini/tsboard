@@ -98,9 +98,9 @@
               >
             </v-chip>
 
-            <v-chip class="mt-3 ml-2 mr-2" prepend-icon="mdi-information" color="blue-grey">{{
-              board.info
-            }}</v-chip>
+            <v-chip class="mt-3 ml-2 mr-2" prepend-icon="mdi-information" color="blue-grey"
+              ><strong>{{ board.name }}</strong> / {{ board.info }}</v-chip
+            >
 
             <v-chip class="mt-3" :prepend-avatar="board.manager.profile" color="blue-grey">{{
               board.manager.name

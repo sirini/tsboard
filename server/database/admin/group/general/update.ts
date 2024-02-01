@@ -4,7 +4,6 @@
  * 그룹 관리에 필요한 함수들
  */
 
-import { unlinkSync } from "node:fs"
 import { table, update, select, remove, insert } from "../../../common"
 import { removeFile } from "../../../../util/tools"
 
@@ -63,20 +62,57 @@ export async function removeBoard(boardUid: number): Promise<boolean> {
 }
 
 // 게시판 생성하기
-export async function createBoard(newId: string): Promise<boolean> {
+export async function createBoard(newId: string, groupUid: number): Promise<number> {
   const [check] = await select(`SELECT uid FROM ${table}board WHERE id = ? LIMIT 1`, [newId])
   if (check) {
-    return false
+    return 0
   }
-  await insert(
+  const boardUid = await insert(
     `INSERT INTO ${table}board 
-  (id, group_uid, admin_uid, type, name, 
-    info, row, width, use_category, 
+  (id, group_uid, admin_uid, type, name, info, row, width, use_category, 
     level_list, level_view, level_write, level_comment, level_download, 
     point_view, point_write, point_comment, point_download) VALUES 
-  ()`,
-    [],
+  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      newId,
+      groupUid,
+      process.env.BOARD_ADMIN!,
+      process.env.BOARD_TYPE!,
+      process.env.BOARD_NAME!,
+      process.env.BOARD_INFO!,
+      process.env.BOARD_ROW!,
+      process.env.BOARD_WIDTH!,
+      process.env.BOARD_USE_CATEGORY!,
+      process.env.BOARD_LEVEL_LIST!,
+      process.env.BOARD_LEVEL_VIEW!,
+      process.env.BOARD_LEVEL_WRITE!,
+      process.env.BOARD_LEVEL_COMMENT!,
+      process.env.BOARD_LEVEL_DOWNLOAD!,
+      process.env.BOARD_POINT_VIEW!,
+      process.env.BOARD_POINT_WRITE!,
+      process.env.BOARD_POINT_COMMENT!,
+      process.env.BOARD_POINT_DOWNLOAD!,
+    ],
   )
 
-  return true
+  if (process.env.BOARD_USE_CATEGORY! === "1") {
+    await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
+      boardUid,
+      "lounge",
+    ])
+    await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
+      boardUid,
+      "news",
+    ])
+    await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
+      boardUid,
+      "qna",
+    ])
+    await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
+      boardUid,
+      "discussion",
+    ])
+  }
+
+  return boardUid
 }

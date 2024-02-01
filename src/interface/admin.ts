@@ -10,13 +10,6 @@ export interface AdminBreadcrumb {
   disabled: boolean
 }
 
-export interface AdminDefaultParams {
-  $headers: {
-    authorization: string
-  }
-  boardUid: number
-}
-
 export interface AdminPairItem {
   uid: number
   name: string
