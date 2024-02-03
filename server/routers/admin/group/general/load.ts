@@ -62,12 +62,10 @@ export const load = new Elysia()
       if (limit < 1) {
         return fail(`Invalid a limit.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const candidates = await getGroupAdminCandidates(name, limit)
 
       return success({
         candidates,
-        newAccessToken,
       })
     },
     {
@@ -84,11 +82,9 @@ export const load = new Elysia()
       if (id.length < 2) {
         return fail(`ID is too short.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const ids = await getExistBoardIds(id, limit)
 
       return success({
-        newAccessToken,
         ids,
       })
     },

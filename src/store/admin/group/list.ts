@@ -6,60 +6,110 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../../server/index"
 import { AdminPairItem, AdminGroupConfig } from "../../../interface/admin"
 import { useAdminStore } from "../common"
+import { useAuthStore } from "../../auth"
+import { useUtilStore } from "../../util"
+import { LIST } from "../../../messages/store/admin/group/list"
 
 export const useAdminGroupListStore = defineStore("adminGroupList", () => {
+  const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
-  const groups = ref<AdminGroupConfig[]>([
-    { uid: 1, id: "default", count: 3, manager: { uid: 2, name: "admin_sample@test.com" } },
-    { uid: 2, id: "sample", count: 2, manager: { uid: 5, name: "admin8@user.com" } },
-    { uid: 3, id: "test", count: 1, manager: { uid: 6, name: "olduser@example.com" } },
-  ])
+  const auth = useAuthStore()
+  const util = useUtilStore()
+  const groups = ref<AdminGroupConfig[]>([])
   const removeGroupTarget = ref<AdminPairItem>({
     uid: 0,
     name: "",
   })
   const confirmRemoveGroupDialog = ref<boolean>(false)
-  const existGroupIds = ref<AdminGroupConfig[]>(groups.value)
+  const existGroupIds = ref<AdminPairItem[]>([])
   const newGroupId = ref<string>("")
 
+  // 그룹들 목록 가져오기
+  async function loadGroupList(): Promise<void> {
+    const response = await server.api.admin.group.list.load.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+    })
+    if (!response.data) {
+      admin.error(LIST.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    groups.value = response.data.result.groups as AdminGroupConfig[]
+  }
+
   // 새 그룹 생성을 위해 아이디를 입력할 때 기존 그룹 아이디를 보여주기
-  let timer: any = null
-  async function updateExistGroupIds(): Promise<void> {
+  async function _updateExistGroupIds(): Promise<void> {
     if (newGroupId.value.length < 2) {
       return
     }
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      existGroupIds.value = groups.value.filter((group: AdminGroupConfig) => {
-        return group.id.indexOf(newGroupId.value) > -1
-      })
-    }, 200)
+    const response = await server.api.admin.group.list.groupids.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: newGroupId.value,
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      admin.error(LIST.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      return
+    }
+    if (response.data.result.ids.length < 1) {
+      existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
+      return
+    }
+    existGroupIds.value = response.data.result.ids as AdminPairItem[]
   }
+  const updateExistGroupIds = util.debounce(_updateExistGroupIds, 250)
 
   // 새 그룹 생성하기
   async function createNewGroup(): Promise<void> {
     const newId = newGroupId.value.trim()
     if (newId.length < 2) {
-      admin.error(`그룹 ID는 2글자 이상 입력해 주세요`)
+      admin.error(LIST.TOO_SHORT_GROUP_ID)
       return
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
-      admin.error(`그룹 ID는 영어 소문자, 숫자, _ (밑줄)로만 작성할 수 있습니다.`)
+      admin.error(LIST.INVALID_GROUP_ID)
       newGroupId.value = ""
       return
     }
-    // do something
+    const response = await server.api.admin.group.list.creategroup.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      newId,
+    })
+    if (!response.data) {
+      admin.error(LIST.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
     groups.value.push({
-      uid: 10,
+      uid: response.data.result.uid as number,
       id: newId,
       count: 0,
-      manager: { uid: 0, name: "" },
+      manager: response.data.result.manager as AdminPairItem,
     })
-    admin.success(
-      `${newId} 그룹이 성공적으로 추가 되었습니다. 상세 그룹 수정은 그룹 수정하기 기능을 이용해 주세요.`,
-    )
+    admin.success(LIST.ADDED_NEW_GROUP)
     newGroupId.value = ""
   }
 
@@ -81,17 +131,30 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
 
   // 그룹 삭제하기
   async function removeGroup(): Promise<void> {
-    if (removeGroupTarget.value.uid < 2) {
-      admin.error("기본 그룹은 삭제할 수 없습니다.")
+    if (groups.value.length < 2) {
+      admin.error(LIST.MINIMUM_GROUP_COUNT)
       return
     }
-    // do something with uid
+    const response = await server.api.admin.group.list.removegroup.delete({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      groupUid: removeGroupTarget.value.uid,
+    })
+    if (!response.data) {
+      admin.error(LIST.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
       return group.uid !== removeGroupTarget.value.uid
     })
-    admin.success(
-      "선택하신 그룹을 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 옮겼습니다.",
-    )
+    admin.success(LIST.REMOVED_GROUP)
     closeRemoveGroupDialog()
   }
 
@@ -101,6 +164,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     confirmRemoveGroupDialog,
     newGroupId,
     existGroupIds,
+    loadGroupList,
     updateExistGroupIds,
     createNewGroup,
     confirmRemoveGroup,

@@ -34,7 +34,7 @@
           <user-nametag
             :uid="post.writer.uid"
             :name="post.writer.name"
-            :profile="PREFIX + (post.writer.profile || '/no-profile.png')"
+            :profile="PREFIX + (post.writer.profile || '/no-profile.svg')"
           ></user-nametag>
         </template>
         <v-list-item-title

@@ -41,7 +41,7 @@ export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
     manager: {
       uid: group.admin_uid,
       name: `${admin.name} (${admin.id})`,
-      profile: admin.profile === "" ? "/no-profile.png" : admin.profile,
+      profile: admin.profile,
     },
   }
 
@@ -82,7 +82,7 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       manager = {
         uid: board.admin_uid,
         name: `${admin.name} (${admin.id})`,
-        profile: admin.profile === "" ? "/no-profile.png" : "",
+        profile: admin.profile,
       }
     }
 
@@ -116,7 +116,7 @@ export async function getGroupAdminCandidates(
     result.push({
       uid: user.uid,
       name: `${user.name} (${user.id})`,
-      profile: user.profile === "" ? "/no-profile.png" : user.profile,
+      profile: user.profile,
     })
   }
 

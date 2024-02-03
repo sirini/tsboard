@@ -55,7 +55,7 @@
                   <user-nametag
                     :uid="viewer.photo?.writer.uid || 0"
                     :name="viewer.photo?.writer.name || ''"
-                    :profile="PREFIX + (viewer.photo?.writer.profile || '/no-profile.png')"
+                    :profile="PREFIX + (viewer.photo?.writer.profile || '/no-profile.svg')"
                     size="small"
                   ></user-nametag>
                 </v-card-actions>
@@ -75,7 +75,7 @@
                 :commentUid="i"
                 commentContent="댓글 내용"
                 :commentLike="i"
-                :writerProfile="PREFIX + '/no-profile.png'"
+                :writerProfile="PREFIX + '/no-profile.svg'"
                 :writerUid="10"
                 writerName="댓작성자"
                 :liked="false"

@@ -22,7 +22,7 @@ export const inserts: string[] = []
 tables.push(`${create} #db#user (
   ${uid},
   id VARCHAR(100) ${nnde},
-  name VARCHAR(10) ${nnde},
+  name VARCHAR(20) ${nnde},
   password CHAR(64) ${nnde},
   profile VARCHAR(300) ${nnde},
   level TINYINT(2) ${unnd0},

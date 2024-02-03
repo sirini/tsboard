@@ -34,13 +34,13 @@
       <v-list-item v-for="(report, index) in general.reports" :key="index" class="underline">
         <v-row>
           <v-col cols="2" class="text-center"
-            ><v-chip :prepend-avatar="report.to.profile" color="red" class="mt-1">{{
+            ><v-chip :prepend-avatar="PREFIX + report.to.profile" color="red" class="mt-1">{{
               report.to.name
             }}</v-chip></v-col
           >
           <v-col class="text-center mt-1 mb-1">{{ report.request }}</v-col>
           <v-col cols="2" class="text-center mt-1">
-            <v-chip :prepend-avatar="report.from.profile" color="blue-grey" class="mt-1">{{
+            <v-chip :prepend-avatar="PREFIX + report.from.profile" color="blue-grey" class="mt-1">{{
               report.from.name
             }}</v-chip>
           </v-col>
@@ -53,7 +53,7 @@
             @click="
               user.openManageUser({
                 uid: report.to.uid,
-                profile: report.to.profile || '',
+                profile: PREFIX + (report.to.profile || ''),
                 name: report.to.name,
               })
             "
@@ -76,6 +76,7 @@ import { useUserStore } from "../../../store/user"
 
 const general = useAdminReportGeneralStore()
 const user = useUserStore()
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

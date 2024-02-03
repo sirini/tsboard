@@ -94,7 +94,6 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES }]
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
     suggestions.value = response.data.result.candidates as AdminPairItem[]
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
@@ -124,7 +123,6 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       existBoardIds.value = [{ uid: 0, name: GENERAL.NO_DUPLICATE_ID }]
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
     existBoardIds.value = response.data.result.ids as AdminPairItem[]
   }
   const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)

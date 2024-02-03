@@ -67,12 +67,10 @@ export const load = new Elysia()
       if (limit < 1) {
         return fail(`Invalid a limit.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       const candidates = await getAdminCandidates(name, limit)
 
       return success({
         candidates,
-        newAccessToken,
       })
     },
     {

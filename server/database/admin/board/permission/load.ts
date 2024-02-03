@@ -15,7 +15,7 @@ export async function getBoardPermission(id: string): Promise<AdminBoardPermissi
     admin: {
       uid: 0,
       name: "",
-      profile: "/no-profile.png",
+      profile: "",
     },
     level: {
       list: 0,
@@ -62,7 +62,7 @@ export async function getBoardPermission(id: string): Promise<AdminBoardPermissi
   result.admin = {
     uid: board.admin_uid,
     name: `${admin.name} (${admin.id})`,
-    profile: admin.profile === "" ? "/no-profile.png" : admin.profile,
+    profile: admin.profile,
   }
 
   return result

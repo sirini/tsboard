@@ -36,7 +36,7 @@
             <v-chip
               size="small"
               label
-              :prepend-avatar="permission.board.admin.profile"
+              :prepend-avatar="PREFIX + (permission.board.admin.profile || '/no-profile.svg')"
               variant="tonal"
               >{{ permission.board.admin.name }}
               <v-tooltip activator="parent">현재 게시판 관리자입니다.</v-tooltip>
@@ -94,6 +94,7 @@ import { useAdminBoardPermissionStore } from "../../../store/admin/board/permiss
 import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"
 
+const PREFIX = process.env.PREFIX || ""
 const permission = useAdminBoardPermissionStore()
 onMounted(() => permission.loadPermissionConfig())
 </script>

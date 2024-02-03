@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+      <v-card class="mx-auto rounded-lg admin">
         <v-card-title>{{ general.group.id }} 그룹 관리</v-card-title>
         <v-divider></v-divider>
         <v-layout>

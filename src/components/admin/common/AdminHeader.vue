@@ -1,24 +1,26 @@
 <template>
-  <v-app-bar flat rounded="0" :color="home.color">
-    <v-toolbar :color="home.color" class="toolbar">
-      <v-btn @click="util.go('admin')" prepend-icon="mdi-cog-outline" rounded="xl"
-        >Admin
-        <v-tooltip activator="parent">클릭하시면 관리화면 첫 페이지로 이동합니다</v-tooltip>
-      </v-btn>
+  <v-app-bar flat rounded="0" :color="home.color" class="appbar">
+    <v-container>
+      <v-toolbar :color="home.color">
+        <v-btn @click="util.go('admin')" prepend-icon="mdi-cog-outline" rounded="xl"
+          >Admin
+          <v-tooltip activator="parent">클릭하시면 관리화면 첫 페이지로 이동합니다</v-tooltip>
+        </v-btn>
 
-      <v-breadcrumbs :items="admin.breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-chevron-right"></v-icon>
-        </template>
-      </v-breadcrumbs>
+        <v-breadcrumbs :items="admin.breadcrumbs">
+          <template v-slot:divider>
+            <v-icon icon="mdi-chevron-right"></v-icon>
+          </template>
+        </v-breadcrumbs>
 
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
-      <v-btn @click="util.go('home')" prepend-icon="mdi-home" rounded="xl"
-        >Home
-        <v-tooltip activator="parent">클릭하시면 웹사이트 홈 화면으로 이동합니다</v-tooltip>
-      </v-btn>
-    </v-toolbar>
+        <v-btn @click="util.go('home')" prepend-icon="mdi-home" rounded="xl"
+          >Home
+          <v-tooltip activator="parent">클릭하시면 웹사이트 홈 화면으로 이동합니다</v-tooltip>
+        </v-btn>
+      </v-toolbar>
+    </v-container>
   </v-app-bar>
 </template>
 
@@ -33,7 +35,8 @@ const home = useHomeStore()
 </script>
 
 <style scoped>
-.toolbar {
-  border-bottom: #cfd8dc 1px solid;
+.appbar {
+  opacity: 0.9;
+  border-bottom: #cccccc 1px solid;
 }
 </style>

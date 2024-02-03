@@ -94,7 +94,7 @@ const images = ref<GridItem[]>([
     writer: {
       uid: 7,
       name: "일지매",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/docks.jpg`],
     like: 1,
@@ -105,7 +105,7 @@ const images = ref<GridItem[]>([
     writer: {
       uid: 7,
       name: "일지매",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/hotel.jpg`],
     like: 3,
@@ -116,7 +116,7 @@ const images = ref<GridItem[]>([
     writer: {
       uid: 7,
       name: "수사반장",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`],
     like: 2,
@@ -127,7 +127,7 @@ const images = ref<GridItem[]>([
     writer: {
       uid: 5,
       name: "김흥부",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/cooking.png`],
     like: 4,
@@ -138,7 +138,7 @@ const images = ref<GridItem[]>([
     writer: {
       uid: 7,
       name: "홍길동",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/sky.jpg`],
     like: 2,

@@ -122,7 +122,7 @@ export const useViewerStore = defineStore("viewer", () => {
       writer: {
         uid: 11,
         name: "일지매",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       files: [
         `https://cdn.vuetifyjs.com/images/cards/docks.jpg`,

@@ -31,7 +31,7 @@
                     <user-nametag
                       :uid="post.writer.uid"
                       :name="post.writer.name"
-                      :profile="post.writer.profile"
+                      :profile="PREFIX + post.writer.profile"
                       :size="'default'"
                     ></user-nametag>
                     <span class="col view text-center"
@@ -112,7 +112,7 @@ const posts = ref<Post[]>([
     writer: {
       uid: 11,
       name: "홍길동",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     subject: "글 제목이 나타납니다",
     content: "",
@@ -131,7 +131,7 @@ const posts = ref<Post[]>([
     writer: {
       uid: 14,
       name: "일지매",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     subject:
       "글 제목을 좀 더 길게 적어보도록 하겠습니다. 만약 엄청나게 긴 제목일 경우 잘라서 보여줘야 합니다. 자르는 문제는 추후 생각해 보겠습니다.",
@@ -151,7 +151,7 @@ const posts = ref<Post[]>([
     writer: {
       uid: 14,
       name: "강감찬",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     subject: "새로운 게시글 예시.",
     content: "",

@@ -26,7 +26,7 @@ export const useCommentStore = defineStore("comment", () => {
       writer: {
         uid: 3,
         name: "홍길동",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       content: "여기에 댓글 내용이 나옵니다",
       like: 5,
@@ -41,7 +41,7 @@ export const useCommentStore = defineStore("comment", () => {
       writer: {
         uid: 31,
         name: "정비공장장",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       content: "여기에 추가로 댓글 내용이 나옵니다",
       like: 1,
@@ -118,7 +118,7 @@ export const useCommentStore = defineStore("comment", () => {
       writer: {
         uid: 3,
         name: "새글맨",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       content: contentWithSyntax.value,
       like: 1,
@@ -139,7 +139,7 @@ export const useCommentStore = defineStore("comment", () => {
       writer: {
         uid: 3,
         name: "대댓맨",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       content: contentWithSyntax.value,
       like: 1,

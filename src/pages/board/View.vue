@@ -50,7 +50,7 @@
                 </v-chip>
                 <v-spacer></v-spacer>
                 <user-nametag
-                  :profile="post.writer.profile"
+                  :profile="PREFIX + post.writer.profile"
                   :uid="post.writer.uid"
                   :name="post.writer.name"
                   size="default"
@@ -147,7 +147,7 @@ const post = ref<Post>({
   writer: {
     uid: 11,
     name: "홍길동",
-    profile: "/no-profile.png",
+    profile: "/no-profile.svg",
   },
   subject: "글 제목입니다",
   content: "글 내용입니다",

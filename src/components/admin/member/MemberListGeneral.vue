@@ -64,7 +64,7 @@
             @click="
               user.openManageUser({
                 uid: member.uid,
-                profile: member.profile,
+                profile: PREFIX + member.profile,
                 name: member.name,
               })
             "
@@ -94,6 +94,7 @@ import ManageUserDialog from "../../user/ManageUserDialog.vue"
 const router = useRouter()
 const general = useAdminMemberGeneralStore()
 const user = useUserStore()
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

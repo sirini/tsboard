@@ -6,7 +6,7 @@
       <template v-slot:prepend>
         <v-avatar>
           <v-img
-            :src="PREFIX + (auth.user.profile.length < 1 ? '/no-profile.png' : auth.user.profile)"
+            :src="PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)"
           ></v-img>
         </v-avatar>
       </template>

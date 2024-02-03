@@ -388,7 +388,7 @@ function encodeSpecialChars(target: string): string {
 function removeImage(src: string): void {
   const originalContent = editor.value?.getHTML() || ""
   const encodedSrc = encodeSpecialChars(src)
-  const newContent = originalContent.replaceAll(encodedSrc, "/image-not-found.png")
+  const newContent = originalContent.replaceAll(encodedSrc, "/image-not-found.svg")
 
   editor.value?.commands.clearContent()
   editor.value?.commands.insertContent(newContent || "")

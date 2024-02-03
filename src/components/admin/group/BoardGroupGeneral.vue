@@ -17,6 +17,7 @@
                   <v-list-item
                     v-for="(user, index) in general.suggestions"
                     :key="index"
+                    :prepend-avatar="PREFIX + (user.profile || '/no-profile.svg')"
                     @click="general.updateGroupManager(user)"
                   >
                     {{ user.name }}
@@ -35,7 +36,7 @@
             <v-chip
               size="small"
               label
-              :prepend-avatar="general.group.manager.profile"
+              :prepend-avatar="PREFIX + (general.group.manager.profile || '/no-profile.svg')"
               variant="tonal"
               >{{ general.group.manager.name }}
               <v-tooltip activator="parent"
@@ -58,6 +59,7 @@
               append-inner-icon="mdi-plus-circle-outline"
               @keyup="general.updateExistBoardIds"
               @click:append-inner="general.createNewBoard"
+              @keyup.enter="general.createNewBoard"
             >
               <v-menu activator="parent">
                 <v-list>
@@ -82,47 +84,40 @@
         >{{ general.group.id }} 그룹 소속 게시판 목록 (총
         {{ general.boards.length }} 개)</v-list-subheader
       >
-      <v-list-item v-for="(board, index) in general.boards" :key="index">
-        <v-row no-gutters>
-          <v-col cols="10">
-            <v-chip
-              class="mt-3"
-              prepend-icon="mdi-identifier"
-              variant="outlined"
-              color="blue-grey"
-              @click="util.go('boardList', board.id)"
+      <v-list-item v-for="(board, index) in general.boards" :key="index" density="compact">
+        <template v-slot:prepend>
+          <v-chip
+            prepend-icon="mdi-identifier"
+            variant="outlined"
+            color="blue-grey"
+            @click="util.go('boardList', board.id)"
+          >
+            {{ board.id }}
+            <v-tooltip activator="parent"
+              >클릭하시면 [{{ board.name }}] 게시판으로 이동합니다.</v-tooltip
             >
-              {{ board.id }}
-              <v-tooltip activator="parent"
-                >클릭하시면 [{{ board.name }}] 게시판으로 이동합니다.</v-tooltip
-              >
-            </v-chip>
+          </v-chip>
+        </template>
 
-            <v-chip class="mt-3 ml-2 mr-2" prepend-icon="mdi-information" color="blue-grey"
-              ><strong>{{ board.name }}</strong> / {{ board.info }}</v-chip
-            >
+        <v-chip variant="tonal" color="blue-grey" class="ml-2"
+          ><strong>{{ board.name }}</strong> <v-divider vertical class="ml-2 mr-2"></v-divider>
+          {{ board.info }}</v-chip
+        >
 
-            <v-chip class="mt-3" :prepend-avatar="board.manager.profile" color="blue-grey">{{
-              board.manager.name
-            }}</v-chip>
-          </v-col>
-          <v-col class="text-right">
-            <v-btn icon @click="util.go('adminBoardManager', board.id)" elevation="0" class="mt-1"
-              ><v-icon>mdi-pencil</v-icon>
-              <v-tooltip activator="parent">
-                클릭하시면 게시판 설정을 수정하러 이동합니다
-              </v-tooltip>
-            </v-btn>
-            <v-btn
-              icon
-              @click="general.confirmRemoveBoard(board.uid, board.id)"
-              elevation="0"
-              class="mt-1"
-              ><v-icon>mdi-trash-can</v-icon>
-              <v-tooltip activator="parent"> 클릭하시면 이 게시판을 삭제합니다 </v-tooltip>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <template v-slot:append>
+          <v-btn icon @click="util.go('adminBoardManager', board.id)" elevation="0" class="mt-1"
+            ><v-icon>mdi-pencil</v-icon>
+            <v-tooltip activator="parent"> 클릭하시면 게시판 설정을 수정하러 이동합니다 </v-tooltip>
+          </v-btn>
+          <v-btn
+            icon
+            @click="general.confirmRemoveBoard(board.uid, board.id)"
+            elevation="0"
+            class="mt-1"
+            ><v-icon>mdi-trash-can</v-icon>
+            <v-tooltip activator="parent"> 클릭하시면 이 게시판을 삭제합니다 </v-tooltip>
+          </v-btn>
+        </template>
       </v-list-item>
     </v-list>
   </v-card>
@@ -137,6 +132,7 @@ import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
 
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()
+const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => general.loadGeneralConfig())
 </script>

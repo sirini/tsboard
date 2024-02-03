@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+      <v-card class="mx-auto rounded-lg admin">
         <v-layout>
           <v-navigation-drawer permanent location="left" wdith="200">
             <v-list>

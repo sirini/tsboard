@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
     uid: 0,
     id: "sirini@gmail.com",
     name: "",
-    profile: "/no-profile.png",
+    profile: "/no-profile.svg",
     level: 0,
     point: 0,
     signature: "",

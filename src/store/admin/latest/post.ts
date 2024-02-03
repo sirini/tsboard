@@ -21,7 +21,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       writer: {
         uid: 2,
         name: "테스트맨",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       comment: 2,
       like: 1,
@@ -36,7 +36,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       writer: {
         uid: 3,
         name: "홍길동",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       comment: 1,
       like: 0,

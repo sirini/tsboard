@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+      <v-card class="mx-auto rounded-lg admin">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
         >

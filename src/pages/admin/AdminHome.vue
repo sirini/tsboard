@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" max-width="1100">
+      <v-card class="mx-auto rounded-lg admin">
         <v-card-title>관리 화면에 오신 것을 환영합니다!</v-card-title>
         <v-divider></v-divider>
         <v-layout>

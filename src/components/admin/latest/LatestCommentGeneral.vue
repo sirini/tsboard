@@ -34,7 +34,7 @@
           <user-nametag
             :uid="comment.writer.uid"
             :name="comment.writer.name"
-            :profile="PREFIX + (comment.writer.profile || '/no-profile.png')"
+            :profile="PREFIX + (comment.writer.profile || '/no-profile.svg')"
           ></user-nametag>
         </template>
         <v-list-item-title

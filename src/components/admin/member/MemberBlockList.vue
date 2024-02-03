@@ -37,7 +37,7 @@
         density="compact"
         v-for="(member, index) in block.members"
         :key="index"
-        :prepend-avatar="member.profile"
+        :prepend-avatar="PREFIX + member.profile"
       >
         <v-row>
           <v-col cols="3" class="text-center">{{ member.name }}</v-col>
@@ -68,6 +68,7 @@
 import { useAdminMemberBlockStore } from "../../../store/admin/member/block"
 
 const block = useAdminMemberBlockStore()
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

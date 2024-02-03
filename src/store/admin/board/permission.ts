@@ -28,7 +28,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     admin: {
       uid: 0,
       name: "",
-      profile: "/no-profile.png",
+      profile: "/no-profile.svg",
     },
     level: {
       list: 0,
@@ -89,7 +89,6 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
     suggestions.value = response.data.result.candidates as AdminPairItem[]
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)

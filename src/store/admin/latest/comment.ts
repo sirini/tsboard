@@ -21,7 +21,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       writer: {
         uid: 2,
         name: "테스트 댓글맨",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       like: 1,
       date: "2023-12-03 19:20:11",
@@ -34,7 +34,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       writer: {
         uid: 3,
         name: "홍길동 댓글",
-        profile: "/no-profile.png",
+        profile: "/no-profile.svg",
       },
       like: 0,
       date: "2023-12-03 19:21:14",

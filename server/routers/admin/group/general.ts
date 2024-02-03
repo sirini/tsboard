@@ -1,5 +1,5 @@
 /**
- * server/routers/admin/group
+ * server/routers/admin/group/general
  *
  * 특정 그룹과 관련된 라우팅 처리
  */

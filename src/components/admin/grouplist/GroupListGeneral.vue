@@ -17,7 +17,7 @@
               <v-menu activator="parent">
                 <v-list>
                   <v-list-item v-for="(group, index) in list.existGroupIds" :key="index">
-                    {{ group.id }} 는 이미 사용중입니다
+                    {{ group.name }}
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -36,72 +36,54 @@
         개수)</v-list-subheader
       >
       <v-list-item v-for="(group, index) in list.groups" :key="index">
-        <v-row no-gutters>
-          <v-col cols="4">
-            <v-text-field
-              v-model="group.id"
-              variant="outlined"
-              density="compact"
-              hide-details
-              readonly
-              class="mt-2 mb-2 mr-3"
-              prepend-inner-icon="mdi-identifier"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="group.manager.name"
-              variant="outlined"
-              hide-details
-              density="compact"
-              readonly
-              class="mt-2 mb-2 mr-3"
-              prepend-inner-icon="mdi-account-tie-hat"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field
-              v-model="group.count"
-              variant="outlined"
-              hide-details
-              density="compact"
-              readonly
-              class="mt-2 mb-2"
-              prepend-inner-icon="mdi-counter"
-            >
-              <v-tooltip activator="parent"
-                >{{ group.id }} 그룹에 총 {{ group.count }} 개의 게시판이 있습니다.</v-tooltip
-              >
-            </v-text-field>
-          </v-col>
-          <v-col class="text-right">
-            <v-btn
-              icon
-              @click="util.go('adminBoardGroupManager', group.id)"
-              elevation="0"
-              class="mt-1"
-              ><v-icon>mdi-pencil</v-icon>
-              <v-tooltip activator="parent">클릭하시면 그룹 설정을 수정하러 이동합니다</v-tooltip>
-            </v-btn>
-            <v-btn
-              icon
-              @click="list.confirmRemoveGroup(group.uid, group.id)"
-              elevation="0"
-              class="mt-1"
-              ><v-icon>mdi-trash-can</v-icon>
-              <v-tooltip activator="parent">클릭하시면 이 그룹을 삭제합니다</v-tooltip>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <template v-slot:prepend>
+          <v-chip variant="outlined" color="blue-grey" prepend-icon="mdi-identifier">{{
+            group.id
+          }}</v-chip>
+        </template>
+
+        <v-chip
+          variant="tonal"
+          color="blue-grey"
+          class="ml-2"
+          :prepend-avatar="PREFIX + (group.manager.profile || '/no-profile.svg')"
+        >
+          <strong class="ml-1">{{ group.manager.name }}</strong>
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          <strong class="mr-1">{{ group.count }}</strong> board(s)
+        </v-chip>
+
+        <template v-slot:append>
+          <v-btn
+            icon
+            @click="util.go('adminBoardGroupManager', group.id)"
+            elevation="0"
+            class="mt-1"
+            ><v-icon>mdi-pencil</v-icon>
+            <v-tooltip activator="parent">클릭하시면 그룹 설정을 수정하러 이동합니다</v-tooltip>
+          </v-btn>
+          <v-btn
+            icon
+            @click="list.confirmRemoveGroup(group.uid, group.id)"
+            elevation="0"
+            class="mt-1"
+            ><v-icon>mdi-trash-can</v-icon>
+            <v-tooltip activator="parent">클릭하시면 이 그룹을 삭제합니다</v-tooltip>
+          </v-btn>
+        </template>
       </v-list-item>
     </v-list>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 import { useUtilStore } from "../../../store/util"
 
 const list = useAdminGroupListStore()
 const util = useUtilStore()
+const PREFIX = process.env.PREFIX || ""
+
+onMounted(() => list.loadGroupList())
 </script>

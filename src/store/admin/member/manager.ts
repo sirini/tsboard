@@ -17,7 +17,7 @@ export const useAdminMemberManagerStore = defineStore("adminMemberManager", () =
     uid: 1,
     id: "test@test.com",
     name: "tester",
-    profile: "/no-profile.png",
+    profile: "/no-profile.svg",
     level: 2,
     point: 100,
     signature: "learning by building something",
