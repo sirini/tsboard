@@ -6,6 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { dashboard } from "./admin/dashboard"
 import { board } from "./admin/board"
 import { group } from "./admin/group"
 import { isValidRefreshToken } from "../database/auth/authorization"
@@ -41,6 +42,7 @@ export const admin = new Elysia().group("/admin", (app) => {
         }
       }
     })
+    .use(dashboard)
     .use(board)
     .use(group)
 })

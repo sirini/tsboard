@@ -7,14 +7,15 @@ import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
 import { auth } from "./routers/auth"
 import { admin } from "./routers/admin"
+import { home } from "./routers/home"
 
 const app = new Elysia()
   .use(cors())
   .group("/api", (app) => {
-    return app.use(auth).use(admin)
+    return app.use(auth).use(admin).use(home)
   })
   .listen(process.env.SERVER_PORT ?? 3100)
 
 export type App = typeof app
 
-console.log(`TSBOARD [server] is running at ${app.server?.hostname}:${app.server?.port}`)
+console.log(`🚀 tsboard.server is running at ${app.server?.hostname}:${app.server?.port}`)

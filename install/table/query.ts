@@ -65,11 +65,10 @@ tables.push(`${create} #db#user_verification (
   ${primary}
 ) ${engineEncode}`)
 
-// 사용자 접속 기록, ip 주소는 MySQL 내장 함수 INET_ATON() 이용, 숫자 형태로 저장한다
+// 사용자 접속 기록
 tables.push(`${create} #db#user_access_log (
   ${uid},
   user_uid INT(11) ${unnd0},
-  ip INT(11) ${unnd0},
   timestamp BIGINT(14) ${unnd0},
   ${primary}
 ) ${engineEncode}`)
