@@ -17,11 +17,8 @@ export const useHomeStore = defineStore("home", () => {
   const color = ref<string>("blue-grey-lighten-5")
   const footerColor = ref<string>("white")
 
-  // 방문 기록 저장하기 (로그인 한 사용자만 체크)
+  // 방문 기록 저장하기
   async function visit(): Promise<void> {
-    if (auth.user.uid < 1) {
-      return
-    }
     const date = new Date()
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, "0")
@@ -33,7 +30,6 @@ export const useHomeStore = defineStore("home", () => {
       return
     }
     window.localStorage.setItem("tsboardVisit", today)
-
     server.api.home.visit.get({
       $query: {
         userUid: auth.user.uid,

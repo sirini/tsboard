@@ -20,7 +20,7 @@
           </v-navigation-drawer>
 
           <v-main class="main">
-            <admin-home-main v-if="menu === 'normal'"></admin-home-main>
+            <dashboard-general v-if="menu === 'normal'"></dashboard-general>
           </v-main>
         </v-layout>
       </v-card>
@@ -34,7 +34,7 @@ import { ref } from "vue"
 import { useAdminStore } from "../../store/admin/common"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
-import AdminHomeMain from "../../components/admin/home/AdminHomeMain.vue"
+import DashboardGeneral from "../../components/admin/dashboard/DashboardGeneral.vue"
 
 const admin = useAdminStore()
 const menu = ref<"normal" | "stat">("normal")

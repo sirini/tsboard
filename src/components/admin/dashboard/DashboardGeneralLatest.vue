@@ -93,8 +93,10 @@
 </template>
 
 <script setup lang="ts">
+import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 
+const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
 const latestPosts = [
   { id: "freeboard", uid: 1, subject: "최신 글 예시 제목입니다. 조금 길게 작성해 둡니다." },

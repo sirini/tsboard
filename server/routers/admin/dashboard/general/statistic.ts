@@ -4,22 +4,28 @@
  * 관리화면 첫페이지의 통계 부분 데이터 가져오기
  */
 
-import { Elysia, t } from "elysia"
-import { jwt } from "@elysiajs/jwt"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { Elysia } from "elysia"
+import {
+  getVisitStat,
+  getMemberStat,
+  getPostStat,
+} from "../../../../database/admin/dashboard/general/statistic"
+import { success } from "../../../../util/tools"
 
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+export const statistic = new Elysia().get("/load", async () => {
+  const now = new Date()
+  const day = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const today = day.getTime()
+  const yesterday = new Date(day).setDate(day.getDate() - 1)
+  const daybefore = new Date(day).setDate(day.getDate() - 2)
 
-export const statistic = new Elysia().use(
-  jwt({
-    name: "jwt",
-    secret: process.env.JWT_SECRET_KEY!,
-  }),
-)
+  const visit = await getVisitStat({ today, yesterday, daybefore })
+  const member = await getMemberStat({ today, yesterday, daybefore })
+  const post = await getPostStat({ today, yesterday, daybefore })
+
+  return success({
+    visit,
+    member,
+    post,
+  })
+})

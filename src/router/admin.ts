@@ -10,7 +10,7 @@ export const adminRoutes = [
   {
     path: PREFIX + "/admin",
     name: "admin",
-    component: () => import("@/pages/admin/AdminHome.vue"),
+    component: () => import("@/pages/admin/Dashboard.vue"),
   },
   {
     path: PREFIX + "/admin/board",

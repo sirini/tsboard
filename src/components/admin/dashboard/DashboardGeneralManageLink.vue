@@ -87,9 +87,11 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 
 const router = useRouter()
+const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
 const groups = ["default", "sample", "example"]
 const boards = ["test", "notice", "freeboard", "qna", "gallery", "sample", "example"]

@@ -4,26 +4,26 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
-export interface AdminBreadcrumb {
+export type AdminBreadcrumb = {
   title: string
   href: string
   disabled: boolean
 }
 
-export interface AdminPairItem {
+export type AdminPairItem = {
   uid: number
   name: string
   profile?: string
 }
 
-export interface AdminBoardConfigGroup {
+export type AdminBoardConfigGroup = {
   selected: string
   list: AdminPairItem[]
 }
 
 export type BoardType = "board" | "gallery" | "blog"
 
-export interface AdminBoardConfig {
+export type AdminBoardConfig = {
   uid: number
   id: string
   type: BoardType
@@ -90,13 +90,19 @@ export type AdminGroupConfig = AdminGroupCommon & {
   count: number
 }
 
-export interface AdminHomeSimpleStatus {
+export type AdminDashboardStat = {
   total: number
   yesterday: number
   today: number
 }
 
-export interface AdminMemberTable {
+export type AdminDate = {
+  today: number
+  yesterday: number
+  daybefore: number
+}
+
+export type AdminMemberTable = {
   uid: number
   id: string
   name: string
@@ -106,7 +112,7 @@ export interface AdminMemberTable {
   signup: string
 }
 
-export interface AdminMemberReport {
+export type AdminMemberReport = {
   to: AdminPairItem
   from: AdminPairItem
   request: string

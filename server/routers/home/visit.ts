@@ -5,20 +5,13 @@
  */
 
 import { Elysia, t } from "elysia"
-import { isVisitedToday, addAccessLog } from "../../database/home/visit"
-import { fail, success } from "../../util/tools"
+import { addAccessLog } from "../../database/home/visit"
 
 export const visit = new Elysia().get(
   "/visit",
   async ({ query: { userUid } }) => {
-    if (userUid < 1) {
-      return fail(`Invalid user uid.`)
-    }
-    if ((await isVisitedToday(userUid)) === true) {
-      return fail(`Already counted.`)
-    }
     addAccessLog(userUid)
-    return success({})
+    return {}
   },
   {
     query: t.Object({

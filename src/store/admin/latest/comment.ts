@@ -24,7 +24,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
         profile: "/no-profile.svg",
       },
       like: 1,
-      date: "2023-12-03 19:20:11",
+      date: 1706972400000,
     },
     {
       id: "test",
@@ -37,7 +37,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
         profile: "/no-profile.svg",
       },
       like: 0,
-      date: "2023-12-03 19:21:14",
+      date: 1706972400000,
     },
   ])
 

@@ -5,7 +5,7 @@
         <v-card-title>방문자수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
-          ><h1>{{ main.visit.today }} 명</h1>
+          ><h1>{{ dashboard.visit.today }} 명</h1>
           <v-btn
             prepend-icon="mdi-calendar"
             variant="text"
@@ -16,11 +16,11 @@
           >
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-plus"
-            >어제 {{ main.visit.yesterday }}명</v-chip
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+            >어제 {{ dashboard.visit.yesterday }}명</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2">총 {{ main.visit.total }}명</v-chip>
+          <v-chip color="blue-grey-lighten-2">총 {{ dashboard.visit.total }}명</v-chip>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -30,7 +30,7 @@
         <v-card-title>회원 수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
-          ><h1>총 {{ main.member.total }} 명</h1>
+          ><h1>총 {{ dashboard.member.total }} 명</h1>
           <v-btn
             prepend-icon="mdi-cog-outline"
             color="blue-grey-lighten-2"
@@ -46,12 +46,12 @@
           </v-btn>
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-plus"
-            >어제 {{ main.member.yesterday }}명</v-chip
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+            >어제 {{ dashboard.member.yesterday }}명</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-plus"
-            >오늘 {{ main.member.today }}명</v-chip
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+            >오늘 {{ dashboard.member.today }}명</v-chip
           >
         </v-card-actions>
       </v-card>
@@ -62,7 +62,7 @@
         <v-card-title>게시글 수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
-          ><h1>{{ main.post.today }} 개</h1>
+          ><h1>{{ dashboard.post.today }} 개</h1>
           <v-btn
             prepend-icon="mdi-calendar"
             variant="text"
@@ -73,11 +73,11 @@
           >
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-plus"
-            >어제 {{ main.post.yesterday }}개</v-chip
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+            >어제 {{ dashboard.post.yesterday }}개</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2">총 {{ main.post.total }}개</v-chip>
+          <v-chip color="blue-grey-lighten-2">총 {{ dashboard.post.total }}개</v-chip>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -85,10 +85,10 @@
 </template>
 
 <script setup lang="ts">
+import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
-import { useAdminHomeMainStore } from "../../../store/admin/home/main"
 
+const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
-const main = useAdminHomeMainStore()
-const today = main.today()
+const today = dashboard.today()
 </script>
