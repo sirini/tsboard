@@ -10,7 +10,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
-import { AdminDashboardStat } from "../../../interface/admin"
+import { AdminDashboardStat, AdminLatest } from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 
 type Today = {
@@ -38,6 +38,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     yesterday: 0,
     today: 0,
   })
+  const posts = ref<AdminLatest[]>([])
+  const comments = ref<AdminLatest[]>([])
+  const reports = ref<AdminLatest[]>([])
 
   // 현재 연월일 반환
   function today(): Today {
@@ -54,7 +57,7 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 간단 통계 데이터 가져오기
   async function loadStatistics(): Promise<void> {
-    const response = await server.api.admin.dashboard.general.load.get({
+    const response = await server.api.admin.dashboard.general.load.statistic.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -68,11 +71,34 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     post.value = response.data.result.post as AdminDashboardStat
   }
 
+  // 최신 글/댓글/신고 가져오기
+  async function loadLatests(): Promise<void> {
+    const response = await server.api.admin.dashboard.general.load.latest.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    posts.value = response.data.result.posts as AdminLatest[]
+    comments.value = response.data.result.comments as AdminLatest[]
+    reports.value = response.data.result.reports as AdminLatest[]
+  }
+
   return {
     visit,
     member,
     post,
+    posts,
+    comments,
+    reports,
     today,
     loadStatistics,
+    loadLatests,
   }
 })

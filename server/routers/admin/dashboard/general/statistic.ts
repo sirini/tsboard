@@ -12,7 +12,7 @@ import {
 } from "../../../../database/admin/dashboard/general/statistic"
 import { success } from "../../../../util/tools"
 
-export const statistic = new Elysia().get("/load", async () => {
+export const statistic = new Elysia().get("/load/statistic", async () => {
   const now = new Date()
   const day = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const today = day.getTime()

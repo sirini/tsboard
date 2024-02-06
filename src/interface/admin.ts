@@ -120,6 +120,12 @@ export type AdminMemberReport = {
   date: string
 }
 
+export type AdminLatest = {
+  uid: number
+  id?: string
+  content: string
+}
+
 type AdminLatestCommon = {
   id: string
   uid: number

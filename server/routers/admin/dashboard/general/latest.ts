@@ -5,21 +5,29 @@
  */
 
 import { Elysia, t } from "elysia"
-import { jwt } from "@elysiajs/jwt"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import {
+  getLatestPosts,
+  getLatestComments,
+  getLatestReports,
+} from "../../../../database/admin/dashboard/general/latest"
+import { success } from "../../../../util/tools"
 
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+export const latest = new Elysia().get(
+  "/load/latest",
+  async ({ query: { limit } }) => {
+    const posts = await getLatestPosts(limit)
+    const comments = await getLatestComments(limit)
+    const reports = await getLatestReports(limit)
 
-export const latest = new Elysia().use(
-  jwt({
-    name: "jwt",
-    secret: process.env.JWT_SECRET_KEY!,
-  }),
+    return success({
+      posts,
+      comments,
+      reports,
+    })
+  },
+  {
+    query: t.Object({
+      limit: t.Numeric(),
+    }),
+  },
 )

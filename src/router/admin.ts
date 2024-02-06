@@ -43,6 +43,11 @@ export const adminRoutes = [
     component: () => import("@/pages/admin/ReportList.vue"),
   },
   {
+    path: PREFIX + "/admin/report/:uid(\\d+)",
+    name: "adminReportView",
+    component: () => import("@/pages/admin/ReportList.vue"),
+  },
+  {
     path: PREFIX + "/admin/latest/post",
     name: "adminLatestPost",
     component: () => import("@/pages/admin/LatestPost.vue"),

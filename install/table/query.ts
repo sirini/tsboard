@@ -22,7 +22,7 @@ export const inserts: string[] = []
 tables.push(`${create} #db#user (
   ${uid},
   id VARCHAR(100) ${nnde},
-  name VARCHAR(20) ${nnde},
+  name VARCHAR(30) ${nnde},
   password CHAR(64) ${nnde},
   profile VARCHAR(300) ${nnde},
   level TINYINT(2) ${unnd0},
@@ -101,7 +101,7 @@ tables.push(`${create} #db#note (
 // 그룹 관리용 테이블
 tables.push(`${create} #db#group (
   ${uid},
-  id VARCHAR(20) ${nnde},
+  id VARCHAR(30) ${nnde},
   admin_uid INT(11) ${unnd0},
   timestamp BIGINT(14) ${unnd0},
   ${primary}
@@ -110,7 +110,7 @@ tables.push(`${create} #db#group (
 // 게시판 관리용 테이블 (type = 0 게시판 / 1 갤러리 / 2 블로그(TBD))
 tables.push(`${create} #db#board (
   ${uid},
-  id VARCHAR(20) ${nnde},
+  id VARCHAR(30) ${nnde},
   group_uid INT(11) ${unnd0},
   admin_uid INT(11) ${unnd0},
   type TINYINT(1) ${nnd0},
@@ -135,7 +135,7 @@ tables.push(`${create} #db#board (
 tables.push(`${create} #db#board_category (
   ${uid},
   board_uid INT(11) ${unnd0},
-  name VARCHAR(20) ${nnde},
+  name VARCHAR(30) ${nnde},
   ${primary},
   KEY (board_uid)
 ) ${engineEncode}`)
@@ -178,7 +178,7 @@ tables.push(`${create} #db#post_hashtag (
 // 해시태그 테이블
 tables.push(`${create} #db#hashtag (
   ${uid},
-  name VARCHAR(20) ${nnde},
+  name VARCHAR(30) ${nnde},
   used INT(11) ${unnd0},
   timestamp BIGINT(14) ${unnd0},
   ${primary}

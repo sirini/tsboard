@@ -1,7 +1,7 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-card class="mt-3 mb-3 ml-1">
+  <v-row no-gutters>
+    <v-col class="pa-1">
+      <v-card class="mt-3 mb-3">
         <v-card-title>방문자수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
@@ -25,7 +25,7 @@
       </v-card>
     </v-col>
 
-    <v-col>
+    <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
         <v-card-title>회원 수</v-card-title>
         <v-divider></v-divider>
@@ -57,8 +57,8 @@
       </v-card>
     </v-col>
 
-    <v-col>
-      <v-card class="mt-3 mb-3 mr-1">
+    <v-col class="pa-1">
+      <v-card class="mt-3 mb-3">
         <v-card-title>게시글 수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"

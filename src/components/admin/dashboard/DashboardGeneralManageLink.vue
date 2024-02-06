@@ -1,7 +1,7 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-card class="ml-1 mt-3 mb-3">
+  <v-row no-gutters>
+    <v-col class="pa-1">
+      <v-card class="mt-3 mb-3">
         <v-card-title>
           그룹 목록
           <div class="more">
@@ -32,7 +32,7 @@
       </v-card>
     </v-col>
 
-    <v-col>
+    <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
         <v-card-title> 게시판 목록 </v-card-title>
         <v-divider></v-divider>
@@ -52,8 +52,8 @@
       </v-card>
     </v-col>
 
-    <v-col>
-      <v-card class="mt-3 mb-3 mr-1">
+    <v-col class="pa-1">
+      <v-card class="mt-3 mb-3">
         <v-card-title
           >회원 목록
           <div class="more">

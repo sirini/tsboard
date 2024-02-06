@@ -25,5 +25,8 @@ import DashboardGeneralLatest from "./DashboardGeneralLatest.vue"
 import DashboardGeneralManageLink from "./DashboardGeneralManageLink.vue"
 
 const general = useAdminDashboardStore()
-onMounted(() => general.loadStatistics())
+onMounted(() => {
+  general.loadStatistics()
+  general.loadLatests()
+})
 </script>
