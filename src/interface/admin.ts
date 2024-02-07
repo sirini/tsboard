@@ -112,8 +112,8 @@ export type AdminMemberTable = AdminPair & {
 }
 
 export type AdminMemberReport = {
-  to: AdminPair
-  from: AdminPair
+  to: AdminUserInfo
+  from: AdminUserInfo
   request: string
   response: string
   date: string
