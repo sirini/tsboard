@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="0">
+  <v-card elevation="0" rounded="0">
     <v-list>
       <v-list-item class="mb-2">
         <v-row>

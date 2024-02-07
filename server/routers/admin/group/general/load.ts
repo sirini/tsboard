@@ -55,7 +55,7 @@ export const load = new Elysia()
   )
   .get(
     "/candidates",
-    async ({ jwt, cookie: { refresh }, headers, query: { name, limit } }) => {
+    async ({ query: { name, limit } }) => {
       if (name.length < 2) {
         return fail(`name is too short.`)
       }
@@ -69,7 +69,6 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
       query: t.Object({
         name: t.String(),
         limit: t.Numeric(),
@@ -78,7 +77,7 @@ export const load = new Elysia()
   )
   .get(
     "/boardids",
-    async ({ jwt, cookie: { refresh }, headers, query: { id, limit } }) => {
+    async ({ query: { id, limit } }) => {
       if (id.length < 2) {
         return fail(`ID is too short.`)
       }
@@ -89,7 +88,6 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
       query: t.Object({
         id: t.String(),
         limit: t.Numeric(),

@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="0">
+  <v-card elevation="0" rounded="0">
     <v-list>
       <v-list-item class="mb-2">
         <v-row>
@@ -90,11 +90,21 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { useAdminStore } from "../../../store/admin/common"
+import { useAuthStore } from "../../../store/auth"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"
 
+const admin = useAdminStore()
+const auth = useAuthStore()
 const PREFIX = process.env.PREFIX || ""
 const permission = useAdminBoardPermissionStore()
-onMounted(() => permission.loadPermissionConfig())
+onMounted(() => {
+  if (auth.user.uid !== 1) {
+    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    return
+  }
+  permission.loadPermissionConfig()
+})
 </script>

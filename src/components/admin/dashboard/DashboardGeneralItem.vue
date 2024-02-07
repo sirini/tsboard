@@ -2,7 +2,7 @@
   <v-row no-gutters>
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title>
+        <v-card-title class="title">
           그룹 목록
           <div class="more">
             <v-btn
@@ -34,7 +34,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title> 게시판 목록 </v-card-title>
+        <v-card-title class="title"> 게시판 목록 </v-card-title>
         <v-divider></v-divider>
         <v-list density="compact">
           <v-list-item
@@ -54,7 +54,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title
+        <v-card-title class="title"
           >회원 목록
           <div class="more">
             <v-btn
@@ -100,5 +100,9 @@ const util = useUtilStore()
   position: absolute;
   top: 6px;
   right: 5px;
+}
+
+.title {
+  border-top: #607d8b 2px solid;
 }
 </style>

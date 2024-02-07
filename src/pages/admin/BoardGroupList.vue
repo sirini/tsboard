@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
         <v-card-title>그룹들 관리</v-card-title>
         <v-divider></v-divider>
         <v-layout>
@@ -48,5 +48,6 @@ admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/boa
 
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
         <v-card-title>대시보드</v-card-title>
         <v-divider></v-divider>
         <v-layout>
@@ -52,5 +52,6 @@ admin.clearBreadcrumbs()
 
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

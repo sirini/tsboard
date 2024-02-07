@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
         >
@@ -99,5 +99,6 @@ watch(
 }
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

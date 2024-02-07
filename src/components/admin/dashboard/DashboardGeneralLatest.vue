@@ -2,7 +2,7 @@
   <v-row no-gutters>
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title
+        <v-card-title class="title"
           >최신 글
           <div class="more">
             <v-btn
@@ -34,7 +34,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title
+        <v-card-title class="title"
           >최신 댓글
           <div class="more">
             <v-btn
@@ -63,7 +63,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title
+        <v-card-title class="title"
           >최근 신고
           <div class="more">
             <v-btn
@@ -105,5 +105,9 @@ const util = useUtilStore()
   position: absolute;
   top: 6px;
   right: 5px;
+}
+
+.title {
+  border-top: #607d8b 2px solid;
 }
 </style>

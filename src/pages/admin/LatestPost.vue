@@ -2,7 +2,8 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+        <v-card-title>최신 글 톺아보기</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" wdith="200">
             <v-list>
@@ -43,5 +44,6 @@ admin.addBreadcrumbs("최신 글", `${process.env.PREFIX}/admin/latest/post`)
 }
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

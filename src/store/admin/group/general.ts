@@ -9,7 +9,12 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminPair, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
+import {
+  AdminPair,
+  AdminGroupList,
+  AdminGroupConfig,
+  AdminUserInfo,
+} from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../../store/auth"
 import { useUtilStore } from "../../util"
@@ -38,7 +43,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   const confirmRemoveBoardDialog = ref<boolean>(false)
   const boards = ref<AdminGroupList[]>([])
   const existBoardIds = ref<AdminPair[]>([])
-  const suggestions = ref<AdminPair[]>([])
+  const suggestions = ref<AdminUserInfo[]>([])
   const newGroupManager = ref<string>("")
   const newBoardId = ref<string>("")
 
@@ -92,10 +97,10 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return
     }
     if (response.data.result.candidates.length < 1) {
-      suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES }]
+      suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES, profile: "" }]
       return
     }
-    suggestions.value = response.data.result.candidates as AdminPair[]
+    suggestions.value = response.data.result.candidates as AdminUserInfo[]
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 

@@ -126,13 +126,23 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { useAdminStore } from "../../../store/admin/common"
+import { useAuthStore } from "../../../store/auth"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
 
+const admin = useAdminStore()
+const auth = useAuthStore()
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 
-onMounted(() => general.loadGeneralConfig())
+onMounted(() => {
+  if (auth.user.uid !== 1) {
+    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    return
+  }
+  general.loadGeneralConfig()
+})
 </script>

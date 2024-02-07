@@ -134,12 +134,12 @@ type AdminLatestCommon = {
 
 export type AdminLatestPost = AdminLatestCommon & {
   title: string
-  writer: AdminPair
+  writer: AdminUserInfo
   comment: number
   hit: number
 }
 
 export type AdminLatestComment = AdminLatestCommon & {
   content: string
-  writer: AdminPair
+  writer: AdminUserInfo
 }

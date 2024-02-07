@@ -1,12 +1,10 @@
 <template>
-  <v-card elevation="0">
+  <v-card elevation="0" rounded="0">
     <v-list>
       <v-list-item class="mb-2">
         <board-manager-point-item
           :type="ACTION_TYPE.VIEW"
-          @update="
-            (isPayment: boolean, amount: string) => point.updateViewPoint(isPayment, amount)
-          "
+          @update="(isPayment: boolean, amount: string) => point.updateViewPoint(isPayment, amount)"
         ></board-manager-point-item>
       </v-list-item>
       <v-divider></v-divider>
@@ -46,10 +44,20 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { useAdminStore } from "../../../store/admin/common"
+import { useAuthStore } from "../../../store/auth"
 import { useAdminBoardPointStore } from "../../../store/admin/board/point"
 import BoardManagerPointItem from "./BoardManagerPointItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"
 
+const admin = useAdminStore()
+const auth = useAuthStore()
 const point = useAdminBoardPointStore()
-onMounted(() => point.loadPointConfig())
+onMounted(() => {
+  if (auth.user.uid !== 1) {
+    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    return
+  }
+  point.loadPointConfig()
+})
 </script>

@@ -2,7 +2,7 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
         <v-card-title>{{ general.group.id }} 그룹 관리</v-card-title>
         <v-divider></v-divider>
         <v-layout>
@@ -61,5 +61,6 @@ onMounted(() => {
 
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

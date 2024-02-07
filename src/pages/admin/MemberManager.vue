@@ -2,7 +2,8 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin">
+      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+        <v-card-title>회원 정보</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" width="200">
             <v-list>
@@ -44,5 +45,6 @@ admin.addBreadcrumbs("회원 정보 수정", `${process.env.PREFIX}/admin/member
 }
 .main {
   min-height: 300px;
+  background-color: white;
 }
 </style>

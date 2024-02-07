@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="0">
+  <v-card elevation="0" rounded="0">
     <v-list>
       <v-list-item class="mb-2">
         <v-row>
@@ -192,7 +192,11 @@
             >
               <v-menu activator="parent" open-on-hover>
                 <v-list>
-                  <v-list-item v-for="(category, index) in general.board.categories" :key="index" @click="">
+                  <v-list-item
+                    v-for="(category, index) in general.board.categories"
+                    :key="index"
+                    @click=""
+                  >
                     <v-list-item-title>
                       {{ category.name }}
                     </v-list-item-title>
@@ -227,11 +231,21 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { useAdminStore } from "../../../store/admin/common"
+import { useAuthStore } from "../../../store/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 
+const admin = useAdminStore()
 const util = useUtilStore()
+const auth = useAuthStore()
 const general = useAdminBoardGeneralStore()
 
-onMounted(() => general.loadGeneralConfig())
+onMounted(() => {
+  if (auth.user.uid !== 1) {
+    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    return
+  }
+  general.loadGeneralConfig()
+})
 </script>

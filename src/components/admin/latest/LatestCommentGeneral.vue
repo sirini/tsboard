@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="0">
+  <v-card elevation="0" rounded="0">
     <v-list>
       <v-list-subheader>댓글 전체 검색</v-list-subheader>
       <v-divider></v-divider>

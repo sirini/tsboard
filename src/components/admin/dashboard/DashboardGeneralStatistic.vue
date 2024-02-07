@@ -2,7 +2,7 @@
   <v-row no-gutters>
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title>방문자수</v-card-title>
+        <v-card-title class="title">방문자수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
           ><h1>{{ dashboard.visit.today }} 명</h1>
@@ -27,7 +27,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title>회원 수</v-card-title>
+        <v-card-title class="title">회원 수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
           ><h1>총 {{ dashboard.member.total }} 명</h1>
@@ -59,7 +59,7 @@
 
     <v-col class="pa-1">
       <v-card class="mt-3 mb-3">
-        <v-card-title>게시글 수</v-card-title>
+        <v-card-title class="title">게시글 수</v-card-title>
         <v-divider></v-divider>
         <v-sheet class="text-center pa-3"
           ><h1>{{ dashboard.post.today }} 개</h1>
@@ -92,3 +92,9 @@ const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
 const today = dashboard.today()
 </script>
+
+<style scoped>
+.title {
+  border-top: #607d8b 2px solid;
+}
+</style>
