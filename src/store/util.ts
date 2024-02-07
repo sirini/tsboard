@@ -65,7 +65,11 @@ export const useUtilStore = defineStore("util", () => {
   // 페이지 이동하기
   function go(name: string, id: string = "", no: number = 0): void {
     if (id.length < 1) {
-      router.push({ name })
+      if (no < 1) {
+        router.push({ name })
+        return
+      }
+      router.push({ name, params: { no } })
       return
     }
     if (no < 1) {

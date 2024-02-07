@@ -7,8 +7,8 @@
 import { Elysia } from "elysia"
 import { statistic } from "./general/statistic"
 import { latest } from "./general/latest"
-import { list } from "../group/list"
+import { item } from "./general/item"
 
 export const general = new Elysia().group("/general", (app) => {
-  return app.use(statistic).use(latest).use(list)
+  return app.use(statistic).use(latest).use(item)
 })

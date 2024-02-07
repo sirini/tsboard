@@ -5,7 +5,7 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminGroupConfig, AdminPairItem } from "../../../../../src/interface/admin"
+import { AdminGroupConfig, AdminPair } from "../../../../../src/interface/admin"
 
 // 게시판 그룹 목록 가져오기
 export async function getGroupList(): Promise<AdminGroupConfig[]> {
@@ -35,8 +35,8 @@ export async function getGroupList(): Promise<AdminGroupConfig[]> {
 }
 
 // 기존의 게시판 그룹 ID들 가져오기
-export async function getExistGroupIds(id: string, limit: number): Promise<AdminPairItem[]> {
-  let result: AdminPairItem[] = []
+export async function getExistGroupIds(id: string, limit: number): Promise<AdminPair[]> {
+  let result: AdminPair[] = []
   const ids = await select(
     `SELECT uid, id FROM ${table}group WHERE id LIKE '%${id}%' LIMIT ${limit}`,
   )

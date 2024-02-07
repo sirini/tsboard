@@ -10,7 +10,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
-import { AdminDashboardStat, AdminLatest } from "../../../interface/admin"
+import { AdminDashboardStat, AdminLatest, AdminUserInfo } from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 
 type Today = {
@@ -41,6 +41,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
   const posts = ref<AdminLatest[]>([])
   const comments = ref<AdminLatest[]>([])
   const reports = ref<AdminLatest[]>([])
+  const groups = ref<string[]>([])
+  const boards = ref<string[]>([])
+  const members = ref<AdminUserInfo[]>([])
 
   // 현재 연월일 반환
   function today(): Today {
@@ -90,6 +93,25 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     reports.value = response.data.result.reports as AdminLatest[]
   }
 
+  // 그룹/게시판/회원 최신 목록 가져오기
+  async function loadItems(): Promise<void> {
+    const response = await server.api.admin.dashboard.general.load.item.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    groups.value = response.data.result.groups as string[]
+    boards.value = response.data.result.boards as string[]
+    members.value = response.data.result.members as AdminUserInfo[]
+  }
+
   return {
     visit,
     member,
@@ -97,8 +119,12 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     posts,
     comments,
     reports,
+    groups,
+    boards,
+    members,
     today,
     loadStatistics,
     loadLatests,
+    loadItems,
   }
 })

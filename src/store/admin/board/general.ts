@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardConfig, AdminPairItem } from "../../../interface/admin"
+import { AdminBoardConfig, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
@@ -36,7 +36,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardRows = ref<string>("20")
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
-  const boardRemoveCategory = ref<AdminPairItem>({ uid: 0, name: "" })
+  const boardRemoveCategory = ref<AdminPair>({ uid: 0, name: "" })
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
@@ -69,7 +69,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 그룹 이름 업데이트하기
   function updateGroupName(): void {
-    board.value.groups.map((group: AdminPairItem) => {
+    board.value.groups.map((group: AdminPair) => {
       if (group.uid === board.value.groupUid) {
         boardGroupName.value = group.name
       }
@@ -77,7 +77,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   }
 
   // 그룹 변경하기
-  async function changeGroup(group: AdminPairItem): Promise<void> {
+  async function changeGroup(group: AdminPair): Promise<void> {
     const response = await server.api.admin.board.general.changegroup.patch({
       $headers: {
         authorization: auth.user.token,
@@ -295,7 +295,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken!)
-    board.value.categories = board.value.categories.filter((cat: AdminPairItem) => {
+    board.value.categories = board.value.categories.filter((cat: AdminPair) => {
       return cat.uid !== boardRemoveCategory.value.uid
     })
     admin.success(GENERAL.REMOVED_CATEGORY)

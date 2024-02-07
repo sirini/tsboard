@@ -6,12 +6,12 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { AdminMemberTable, AdminPairItem, AdminMemberReport } from "../../../interface/admin"
+import { AdminMemberTable, AdminPair, AdminMemberReport } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 
 export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () => {
   const admin = useAdminStore()
-  const blockUserTarget = ref<AdminPairItem>({
+  const blockUserTarget = ref<AdminPair>({
     uid: 0,
     name: "",
   })

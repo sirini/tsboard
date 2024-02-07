@@ -5,7 +5,12 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminGroupConfig, AdminGroupList, AdminPairItem } from "../../../../../src/interface/admin"
+import {
+  AdminGroupConfig,
+  AdminGroupList,
+  AdminPair,
+  AdminUserInfo,
+} from "../../../../../src/interface/admin"
 
 // 주어진 아이디에 해당하는 그룹 설정 가져오기
 export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
@@ -74,9 +79,10 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       `SELECT name, id, profile FROM ${table}user WHERE uid = ? LIMIT 1`,
       [board.admin_uid],
     )
-    let manager: AdminPairItem = {
+    let manager: AdminUserInfo = {
       uid: 0,
       name: "",
+      profile: "",
     }
     if (admin) {
       manager = {
@@ -102,8 +108,8 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
 export async function getGroupAdminCandidates(
   name: string,
   limit: number,
-): Promise<AdminPairItem[]> {
-  let result: AdminPairItem[] = []
+): Promise<AdminUserInfo[]> {
+  let result: AdminUserInfo[] = []
   const users = await select(
     `SELECT uid, id, name, profile FROM ${table}user WHERE blocked = 0 AND name LIKE '%${name}%' LIMIT ${limit}`,
   )
@@ -124,8 +130,8 @@ export async function getGroupAdminCandidates(
 }
 
 // 기존 게시판 아이디들 목록 가져오기 (중복복인지 알려주기 위함)
-export async function getExistBoardIds(id: string, limit: number): Promise<AdminPairItem[]> {
-  let result: AdminPairItem[] = []
+export async function getExistBoardIds(id: string, limit: number): Promise<AdminPair[]> {
+  let result: AdminPair[] = []
   const ids = await select(
     `SELECT uid, id, name FROM ${table}board WHERE id LIKE '%${id}%' LIMIT ${limit}`,
   )

@@ -7,7 +7,7 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { useAdminStore } from "../common"
-import { AdminMemberTable, AdminPairItem } from "../../../interface/admin"
+import { AdminMemberTable, AdminPair } from "../../../interface/admin"
 
 export const useAdminMemberBlockStore = defineStore("adminMemberBlock", () => {
   const admin = useAdminStore()
@@ -36,7 +36,7 @@ export const useAdminMemberBlockStore = defineStore("adminMemberBlock", () => {
   ])
 
   // 차단된 회원을 다시 풀어주기
-  async function unblock(target: AdminPairItem): Promise<void> {
+  async function unblock(target: AdminPair): Promise<void> {
     // do something axios.put(...)
     members.value = members.value.filter((member: AdminMemberTable) => {
       return member.uid !== target.uid

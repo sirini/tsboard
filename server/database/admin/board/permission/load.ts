@@ -5,7 +5,7 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminBoardPermission, AdminPairItem } from "../../../../../src/interface/admin"
+import { AdminBoardPermission, AdminPair } from "../../../../../src/interface/admin"
 
 // 게시판 관리 권한 부분 필요 정보들 가져오기
 export async function getBoardPermission(id: string): Promise<AdminBoardPermission> {
@@ -69,8 +69,8 @@ export async function getBoardPermission(id: string): Promise<AdminBoardPermissi
 }
 
 // 신규 관리자 후보 목록 반환하기
-export async function getAdminCandidates(name: string, limit: number): Promise<AdminPairItem[]> {
-  let result: AdminPairItem[] = []
+export async function getAdminCandidates(name: string, limit: number): Promise<AdminPair[]> {
+  let result: AdminPair[] = []
 
   const users = await select(
     `SELECT uid, id, name FROM ${table}user WHERE blocked = 0 AND name LIKE '%${name}%' LIMIT ${limit}`,

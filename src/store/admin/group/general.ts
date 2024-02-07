@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminPairItem, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
+import { AdminPair, AdminGroupList, AdminGroupConfig } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../../store/auth"
 import { useUtilStore } from "../../util"
@@ -28,16 +28,17 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     manager: {
       uid: 0,
       name: "",
+      profile: "",
     },
   })
-  const removeBoardTarget = ref<AdminPairItem>({
+  const removeBoardTarget = ref<AdminPair>({
     uid: 0,
     name: "",
   })
   const confirmRemoveBoardDialog = ref<boolean>(false)
   const boards = ref<AdminGroupList[]>([])
-  const existBoardIds = ref<AdminPairItem[]>([])
-  const suggestions = ref<AdminPairItem[]>([])
+  const existBoardIds = ref<AdminPair[]>([])
+  const suggestions = ref<AdminPair[]>([])
   const newGroupManager = ref<string>("")
   const newBoardId = ref<string>("")
 
@@ -94,7 +95,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES }]
       return
     }
-    suggestions.value = response.data.result.candidates as AdminPairItem[]
+    suggestions.value = response.data.result.candidates as AdminPair[]
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 
@@ -123,7 +124,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       existBoardIds.value = [{ uid: 0, name: GENERAL.NO_DUPLICATE_ID }]
       return
     }
-    existBoardIds.value = response.data.result.ids as AdminPairItem[]
+    existBoardIds.value = response.data.result.ids as AdminPair[]
   }
   const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)
 
@@ -164,6 +165,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       manager: {
         uid: response.data.result.manager.uid as number,
         name: response.data.result.manager.name as string,
+        profile: "",
       },
     })
     admin.success(`[${newId}] ${GENERAL.ADDED_NEW_BOARD}`)
@@ -171,7 +173,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   }
 
   // 선택한 회원을 그룹 관리자로 지정하기
-  async function updateGroupManager(user: AdminPairItem): Promise<void> {
+  async function updateGroupManager(user: AdminPair): Promise<void> {
     const response = await server.api.admin.group.general.changeadmin.patch({
       $headers: {
         authorization: auth.user.token,

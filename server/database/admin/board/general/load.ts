@@ -5,7 +5,7 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminBoardConfig, AdminPairItem, BoardType } from "../../../../../src/interface/admin"
+import { AdminBoardConfig, AdminPair, BoardType } from "../../../../../src/interface/admin"
 
 // 게시판 형태 반영
 function convertBoardType(type: number): BoardType {
@@ -43,7 +43,7 @@ FROM ${table}board WHERE id = ? LIMIT 1`,
     return result
   }
 
-  const grps: AdminPairItem[] = []
+  const grps: AdminPair[] = []
   for (const grp of groups) {
     grps.push({ uid: grp.uid, name: grp.id })
   }
@@ -57,7 +57,7 @@ WHERE board_uid = ? ORDER BY uid ASC`,
     return result
   }
 
-  const cats: AdminPairItem[] = []
+  const cats: AdminPair[] = []
   for (const cat of categories) {
     cats.push({ uid: cat.uid, name: cat.name })
   }

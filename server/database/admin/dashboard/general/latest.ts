@@ -4,7 +4,7 @@
  * 관리화면 첫페이지 > 최근 게시글, 댓글, 신고글에 필요한 함수들
  */
 
-import { AdminLatest, AdminPairItem } from "../../../../../src/interface/admin"
+import { AdminLatest, AdminPair } from "../../../../../src/interface/admin"
 import { table, update, select, remove, insert } from "../../../common"
 
 // 대시보드에서 볼 최신 글 목록 가져오기

@@ -3,7 +3,7 @@
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin">
-        <v-card-title>관리 화면에 오신 것을 환영합니다!</v-card-title>
+        <v-card-title>대시보드</v-card-title>
         <v-divider></v-divider>
         <v-layout>
           <v-navigation-drawer permanent location="left" width="200">

@@ -9,7 +9,7 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminBoardPermission, AdminPairItem } from "../../../interface/admin"
+import { AdminBoardPermission, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { useUtilStore } from "../../util"
@@ -21,7 +21,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const suggestions = ref<AdminPairItem[]>([])
+  const suggestions = ref<AdminPair[]>([])
   const board = ref<AdminBoardPermission>({
     uid: 0,
     id: "",
@@ -89,12 +89,12 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
       return
     }
-    suggestions.value = response.data.result.candidates as AdminPairItem[]
+    suggestions.value = response.data.result.candidates as AdminPair[]
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
   // 선택한 회원을 관리자로 지정하기
-  async function updateBoardManager(user: AdminPairItem): Promise<void> {
+  async function updateBoardManager(user: AdminPair): Promise<void> {
     const response = await server.api.admin.board.permission.changeadmin.patch({
       $headers: {
         authorization: auth.user.token,
@@ -114,6 +114,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     board.value.admin = {
       uid: user.uid,
       name: user.name,
+      profile: "",
     }
     admin.success(`${user.name} 님을 ${board.value.id} 게시판의 관리자로 지정 하였습니다.`)
   }

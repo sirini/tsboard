@@ -8,7 +8,7 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminPairItem, AdminGroupConfig } from "../../../interface/admin"
+import { AdminPair, AdminGroupConfig, AdminUserInfo } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../auth"
 import { useUtilStore } from "../../util"
@@ -20,12 +20,12 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const groups = ref<AdminGroupConfig[]>([])
-  const removeGroupTarget = ref<AdminPairItem>({
+  const removeGroupTarget = ref<AdminPair>({
     uid: 0,
     name: "",
   })
   const confirmRemoveGroupDialog = ref<boolean>(false)
-  const existGroupIds = ref<AdminPairItem[]>([])
+  const existGroupIds = ref<AdminPair[]>([])
   const newGroupId = ref<string>("")
 
   // 그룹들 목록 가져오기
@@ -72,7 +72,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
       return
     }
-    existGroupIds.value = response.data.result.ids as AdminPairItem[]
+    existGroupIds.value = response.data.result.ids as AdminPair[]
   }
   const updateExistGroupIds = util.debounce(_updateExistGroupIds, 250)
 
@@ -107,7 +107,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       uid: response.data.result.uid as number,
       id: newId,
       count: 0,
-      manager: response.data.result.manager as AdminPairItem,
+      manager: response.data.result.manager as AdminUserInfo,
     })
     admin.success(LIST.ADDED_NEW_GROUP)
     newGroupId.value = ""

@@ -10,30 +10,31 @@ export type AdminBreadcrumb = {
   disabled: boolean
 }
 
-export type AdminPairItem = {
+export type AdminPair = {
   uid: number
   name: string
-  profile?: string
+}
+
+export type AdminUserInfo = AdminPair & {
+  profile: string
 }
 
 export type AdminBoardConfigGroup = {
   selected: string
-  list: AdminPairItem[]
+  list: AdminPair[]
 }
 
 export type BoardType = "board" | "gallery" | "blog"
 
-export type AdminBoardConfig = {
-  uid: number
+export type AdminBoardConfig = AdminPair & {
   id: string
   type: BoardType
-  groups: AdminPairItem[]
+  groups: AdminPair[]
   groupUid: number
-  name: string
   info: string
   row: number
   width: number
-  categories: AdminPairItem[]
+  categories: AdminPair[]
 }
 
 export const ACTION_TYPE = {
@@ -55,7 +56,7 @@ export interface AdminPermissionLevel {
 export interface AdminBoardPermission {
   uid: number
   id: string
-  admin: AdminPairItem
+  admin: AdminUserInfo
   level: AdminPermissionLevel
 }
 
@@ -78,7 +79,7 @@ export type AdminPoint = AdminBoardPointList & {
 type AdminGroupCommon = {
   uid: number
   id: string
-  manager: AdminPairItem
+  manager: AdminUserInfo
 }
 
 export type AdminGroupList = AdminGroupCommon & {
@@ -102,10 +103,8 @@ export type AdminDate = {
   daybefore: number
 }
 
-export type AdminMemberTable = {
-  uid: number
+export type AdminMemberTable = AdminPair & {
   id: string
-  name: string
   profile: string
   level: number
   point: number
@@ -113,8 +112,8 @@ export type AdminMemberTable = {
 }
 
 export type AdminMemberReport = {
-  to: AdminPairItem
-  from: AdminPairItem
+  to: AdminPair
+  from: AdminPair
   request: string
   response: string
   date: string
@@ -135,12 +134,12 @@ type AdminLatestCommon = {
 
 export type AdminLatestPost = AdminLatestCommon & {
   title: string
-  writer: AdminPairItem
+  writer: AdminPair
   comment: number
   hit: number
 }
 
 export type AdminLatestComment = AdminLatestCommon & {
   content: string
-  writer: AdminPairItem
+  writer: AdminPair
 }

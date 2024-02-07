@@ -18,7 +18,7 @@
         <v-divider></v-divider>
         <v-list density="compact">
           <v-list-item
-            v-for="(group, index) in groups"
+            v-for="(group, index) in dashboard.groups"
             :key="index"
             @click="util.go('adminBoardGroupManager', group)"
             append-icon="mdi-chevron-right"
@@ -38,7 +38,7 @@
         <v-divider></v-divider>
         <v-list density="compact">
           <v-list-item
-            v-for="(board, index) in boards"
+            v-for="(board, index) in dashboard.boards"
             :key="index"
             append-icon="mdi-chevron-right"
             @click="util.go('adminBoardManager', board)"
@@ -70,7 +70,7 @@
         <v-divider></v-divider>
         <v-list density="compact">
           <v-list-item
-            v-for="(member, index) in members"
+            v-for="(member, index) in dashboard.members"
             :key="index"
             append-icon="mdi-chevron-right"
             @click="router.push({ name: 'adminMemberManager', params: { uid: member.uid } })"
@@ -93,15 +93,6 @@ import { useUtilStore } from "../../../store/util"
 const router = useRouter()
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
-const groups = ["default", "sample", "example"]
-const boards = ["test", "notice", "freeboard", "qna", "gallery", "sample", "example"]
-const members = [
-  { uid: 111, name: "홍길동" },
-  { uid: 222, name: "테스터" },
-  { uid: 333, name: "나전설" },
-  { uid: 444, name: "김탁구" },
-  { uid: 555, name: "강감찬" },
-]
 </script>
 
 <style scoped>
