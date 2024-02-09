@@ -23,7 +23,6 @@
             v-for="(post, index) in dashboard.posts"
             :key="index"
             @click="util.go('boardView', post.id, post.uid)"
-            append-icon="mdi-chevron-right"
           >
             <v-list-item-title>{{ post.content }}</v-list-item-title>
             <v-tooltip activator="parent">게시글을 확인하러 갑니다.</v-tooltip>
@@ -52,7 +51,6 @@
             v-for="(comment, index) in dashboard.comments"
             :key="index"
             @click="util.go('boardView', comment.id, comment.uid)"
-            append-icon="mdi-chevron-right"
           >
             <v-list-item-title>{{ comment.content }}</v-list-item-title>
             <v-tooltip activator="parent">댓글을 확인하러 갑니다.</v-tooltip>
@@ -81,7 +79,6 @@
             v-for="(report, index) in dashboard.reports"
             :key="index"
             @click="util.go('adminReportView', '', report.uid)"
-            append-icon="mdi-chevron-right"
           >
             <v-list-item-title>{{ report.content }}</v-list-item-title>
             <v-tooltip activator="parent">신고 내역을 확인하러 갑니다.</v-tooltip>

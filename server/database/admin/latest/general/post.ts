@@ -5,7 +5,7 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestPost } from "../../../../../src/interface/admin"
+import { AdminLatestPost, AdminLatestSearchParams } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
 // 전체 글 개수 반환하기
@@ -17,7 +17,6 @@ export async function getTotalPostCount(): Promise<number> {
     return result
   }
   result = total.post_count
-
   return result
 }
 
@@ -81,6 +80,7 @@ async function makePostResult(posts: RowDataPacket[]): Promise<AdminLatestPost[]
       },
       comment: info.comment,
       hit: post.hit,
+      removed: post.removed > 0 ? true : false,
     })
   }
   return result
@@ -95,7 +95,7 @@ export async function getPosts(
   let result: AdminLatestPost[] = []
   const last = 1 + total - (page - 1) * bunch
   const posts = await select(
-    `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
+    `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit, removed FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
     [last, bunch],
   )
   if (!posts[0]) {
@@ -105,16 +105,10 @@ export async function getPosts(
   return result
 }
 
-type SearchParams = {
-  option: string
-  keyword: string
-  page: number
-  bunch: number
-  total: number
-}
-
 // 검색 결과 가져오기
-export async function getSearchedPosts(search: SearchParams): Promise<AdminLatestPost[]> {
+export async function getSearchedPosts(
+  search: AdminLatestSearchParams,
+): Promise<AdminLatestPost[]> {
   let result: AdminLatestPost[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch
   const posts = await select(

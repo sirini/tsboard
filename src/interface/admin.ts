@@ -130,6 +130,7 @@ type AdminLatestCommon = {
   uid: number
   like: number
   date: number
+  removed: boolean
 }
 
 export type AdminLatestPost = AdminLatestCommon & {
@@ -142,4 +143,12 @@ export type AdminLatestPost = AdminLatestCommon & {
 export type AdminLatestComment = AdminLatestCommon & {
   content: string
   writer: AdminUserInfo
+}
+
+export type AdminLatestSearchParams = {
+  option: string
+  keyword: string
+  page: number
+  bunch: number
+  total: number
 }

@@ -6,7 +6,8 @@
 
 import { Elysia } from "elysia"
 import { post } from "./latest/general/post"
+import { comment } from "./latest/general/comment"
 
 export const latest = new Elysia().group("/latest", (app) => {
-  return app.use(post)
+  return app.use(post).use(comment)
 })

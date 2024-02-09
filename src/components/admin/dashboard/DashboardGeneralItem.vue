@@ -21,7 +21,6 @@
             v-for="(group, index) in dashboard.groups"
             :key="index"
             @click="util.go('adminBoardGroupManager', group)"
-            append-icon="mdi-chevron-right"
           >
             <v-list-item-title>{{ group }}</v-list-item-title>
             <v-tooltip activator="parent">
@@ -40,7 +39,6 @@
           <v-list-item
             v-for="(board, index) in dashboard.boards"
             :key="index"
-            append-icon="mdi-chevron-right"
             @click="util.go('adminBoardManager', board)"
           >
             <v-list-item-title>{{ board }}</v-list-item-title>
@@ -72,7 +70,6 @@
           <v-list-item
             v-for="(member, index) in dashboard.members"
             :key="index"
-            append-icon="mdi-chevron-right"
             @click="router.push({ name: 'adminMemberManager', params: { uid: member.uid } })"
             >{{ member.name }}
             <v-tooltip activator="parent"

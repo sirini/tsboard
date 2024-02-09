@@ -23,8 +23,7 @@
           @click:append-inner="latest.updateLatestPosts"
         >
           <v-tooltip activator="parent"
-            >검색어를 입력해 보세요.<br />초기 화면으로 가려면 왼쪽의 반시계 방향 아이콘을
-            클릭하세요.
+            >검색어를 입력해 보세요.<br />초기 목록을 보려면 왼쪽의 반시계 방향 아이콘을 클릭하세요.
           </v-tooltip>
         </v-text-field>
 
@@ -57,7 +56,7 @@
         </template>
 
         <v-list-item-title
-          ><span class="ml-3">{{ post.title }}</span>
+          ><span class="ml-3" :class="post.removed ? 'removed' : ''">{{ post.title }}</span>
         </v-list-item-title>
         <template v-slot:append>
           <v-chip
@@ -78,22 +77,12 @@
       </v-list-item>
     </v-list>
 
-    <v-card-actions class="mb-3">
-      <v-btn prepend-icon="mdi-chevron-left" :disabled="latest.page < 2" @click="latest.page -= 1"
-        >이전</v-btn
-      >
-      <v-spacer></v-spacer>
-      <v-chip variant="tonal" color="blue-grey-lighten-3"
-        >{{ latest.page }} / {{ latest.pageLength }}</v-chip
-      >
-      <v-spacer></v-spacer>
-      <v-btn
-        append-icon="mdi-chevron-right"
-        :disabled="latest.page > latest.pageLength"
-        @click="latest.page += 1"
-        >다음</v-btn
-      >
-    </v-card-actions>
+    <latest-paging
+      :page="latest.page"
+      :page-length="latest.pageLength"
+      @prev="latest.page -= 1"
+      @next="latest.page += 1"
+    ></latest-paging>
   </v-card>
   <user-info-dialog></user-info-dialog>
   <send-note-dialog></send-note-dialog>
@@ -110,6 +99,7 @@ import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import SendNoteDialog from "../../user/SendNoteDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
+import LatestPaging from "./LatestPaging.vue"
 
 const latest = useAdminLatestPostStore()
 const util = useUtilStore()
@@ -129,5 +119,9 @@ watch(
 }
 .underline {
   border-bottom: #eceff1 1px solid;
+}
+.removed {
+  color: #f44336;
+  font-style: italic;
 }
 </style>

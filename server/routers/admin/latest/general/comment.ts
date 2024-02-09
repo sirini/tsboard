@@ -1,16 +1,16 @@
 /**
- * server/routers/admin/latest/general/post
+ * server/routers/admin/latest/general/comment
  *
- * 최신 글 톺아보기에 필요한 라우팅 처리
+ * 최신 댓글 톺아보기에 필요한 라우팅 처리
  */
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import {
-  getPosts,
-  getTotalPostCount,
-  getSearchedPosts,
-} from "../../../../database/admin/latest/general/post"
+  getComments,
+  getSearchedComments,
+  getTotalCommentCount,
+} from "../../../../database/admin/latest/general/comment"
 import { fail, success, updateAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
@@ -22,7 +22,7 @@ const defaultTypeCheck = {
   }),
 }
 
-export const post = new Elysia()
+export const comment = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -30,7 +30,7 @@ export const post = new Elysia()
     }),
   )
   .get(
-    "/post",
+    "/comment",
     async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
       if (page < 1) {
         return fail(`Invalid page.`)
@@ -39,13 +39,13 @@ export const post = new Elysia()
         return fail(`Invalid bunch parameter.`)
       }
 
-      const totalPostCount = await getTotalPostCount()
-      const posts = await getPosts(page, bunch, totalPostCount)
+      const totalCommentCount = await getTotalCommentCount()
+      const comments = await getComments(page, bunch, totalCommentCount)
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
-        posts,
-        totalPostCount,
+        comments,
+        totalCommentCount,
       })
     },
     {
@@ -57,7 +57,7 @@ export const post = new Elysia()
     },
   )
   .get(
-    "/search/post",
+    "/search/comment",
     async ({ jwt, cookie: { refresh }, headers, query: { option, keyword, page, bunch } }) => {
       if (option.length < 2) {
         return fail(`Unknown option.`)
@@ -72,17 +72,17 @@ export const post = new Elysia()
         return fail(`Invalid bunch parameter.`)
       }
 
-      const totalPostCount = await getTotalPostCount()
-      const posts = await getSearchedPosts({
+      const totalCommentCount = await getTotalCommentCount()
+      const comments = await getSearchedComments({
         option,
         keyword,
         page,
         bunch,
-        total: totalPostCount,
+        total: totalCommentCount,
       })
       return success({
-        posts,
-        totalPostCount,
+        comments,
+        totalCommentCount,
       })
     },
     {

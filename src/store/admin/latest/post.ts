@@ -65,7 +65,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (keyword.value.length < 2) {
       return
     }
-    const response = await server.api.admin.latest.search.get({
+    const response = await server.api.admin.latest.search.post.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -83,7 +83,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (!response.data.result) {
       return
     }
-    pageLength.value = Math.floor((response.data.result.totalPostCount as number) / bunch.value)
+    pageLength.value = Math.ceil((response.data.result.totalPostCount as number) / bunch.value)
     posts.value = response.data.result.posts as AdminLatestPost[]
   }
   const updateLatestPosts = util.debounce(_updateLatestPosts, 250)
