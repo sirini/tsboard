@@ -4,11 +4,12 @@
  * 관리화면에 연관된 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
+import { Elysia } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { dashboard } from "./admin/dashboard"
 import { board } from "./admin/board"
 import { group } from "./admin/group"
+import { latest } from "./admin/latest"
 import { isValidRefreshToken } from "../database/auth/authorization"
 import { fail } from "../util/tools"
 
@@ -20,16 +21,14 @@ export const admin = new Elysia().group("/admin", (app) => {
         secret: process.env.JWT_SECRET_KEY!,
       }),
     )
-    .onBeforeHandle(async ({ set, cookie: { refresh }, jwt, headers }) => {
+    .onBeforeHandle(async ({ cookie: { refresh }, jwt, headers }) => {
       const access = await jwt.verify(headers.authorization ?? "")
       if (access === false) {
-        set.status = "Unauthorized"
         return fail(`Invalid authorization.`)
       }
 
       const userUid = access.uid as number
       if (userUid !== 1) {
-        set.status = "Unauthorized"
         return fail(`Not an admin.`)
       }
 
@@ -45,4 +44,5 @@ export const admin = new Elysia().group("/admin", (app) => {
     .use(dashboard)
     .use(board)
     .use(group)
+    .use(latest)
 })

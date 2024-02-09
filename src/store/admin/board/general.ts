@@ -48,6 +48,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         id: route.params.id as string,
       },
     })
+
     if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
@@ -56,7 +57,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
       return
     }
-    if (response.data.result.config.uid < 1) {
+    if (!response.data.result) {
       admin.error(GENERAL.UNKNOWN_INFO)
       return
     }

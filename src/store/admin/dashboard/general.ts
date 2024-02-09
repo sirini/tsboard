@@ -69,6 +69,10 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
+    if (!response.data.result) {
+      admin.error(GENERAL.FAILED_LOAD)
+      return
+    }
     visit.value = response.data.result.visit as AdminDashboardStat
     member.value = response.data.result.member as AdminDashboardStat
     post.value = response.data.result.post as AdminDashboardStat
@@ -88,6 +92,10 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
+    if (!response.data.result) {
+      admin.error(GENERAL.FAILED_LOAD)
+      return
+    }
     posts.value = response.data.result.posts as AdminLatest[]
     comments.value = response.data.result.comments as AdminLatest[]
     reports.value = response.data.result.reports as AdminLatest[]
@@ -105,6 +113,10 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     })
     if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(GENERAL.FAILED_LOAD)
       return
     }
     groups.value = response.data.result.groups as string[]

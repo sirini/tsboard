@@ -5,7 +5,7 @@
  */
 const fs = require("fs")
 import mysql from "mysql2/promise"
-import { tables, inserts } from "./table/query"
+import { tables, inserts, tests } from "./table/query"
 import { env, foundEnv } from "./messages"
 import chalk from "chalk"
 const log = console.log
@@ -75,19 +75,11 @@ export function getSetupInformation(): SetupInfo {
       "admin@tsboard.dev"
     admin.pw = prompt(`관리자 비밀번호 입력 :`) ?? ""
 
-    const confirm = `\n입력하신 내용을 확인해 주세요.\n
-    [데이터베이스]
-    - DB 호스트명 : ${chalk.green.bold(db.host)}
-    - DB 사용자명 : ${chalk.green.bold(db.user)}
-    - DB 비밀번호 : ${chalk.green.bold(db.pass)}
-    - DB 데이터베이스 이름 : ${chalk.green.bold(db.name)}
-    - 테이블 앞머리 글자 : ${chalk.green.bold(db.prefix)}
-    
-    [관리자]
-    - 아이디(이메일) : ${chalk.green.bold(admin.id)}
-    - 비밀번호 : ${chalk.green.bold(admin.pw)}
-    `
-    log(confirm)
+    log(`\n입력하신 내용을 확인해 주세요.\n\n${chalk.bgBlack.bold("[데이터베이스]")}\n`)
+    console.table(db)
+    log(`\n${chalk.bgBlack.bold("[관리자]")}\n`)
+    console.table(admin)
+
     const answer = prompt("\n위 내용이 확실한가요? (yes/no/retry) :")
     if (answer === "yes") {
       if (
@@ -156,13 +148,25 @@ export function saveEnvFile(info: SetupInfo): void {
 
 // 데이터터베이스 및 테이블 추가하기 진행
 export async function initDatabase(info: SetupInfo): Promise<void> {
-  const conn = await mysql.createConnection({
-    host: info.db.host,
-    user: info.db.user,
-    password: info.db.pass,
-  })
+  let conn: any = null
+  try {
+    conn = await mysql.createConnection({
+      host: info.db.host,
+      user: info.db.user,
+      password: info.db.pass,
+    })
+  } catch (e) {
+    console.table(info.db)
+    console.log(chalk.red.bold("데이터베이스에 연결할 수 없었습니다. 설치를 중단합니다..."))
+    console.log(
+      `MySQL(MariaDB) 접속 정보를 다시 확인하셔서 ${chalk.blue.bold(
+        "bun setup.ts",
+      )} 를 실행해 주세요!`,
+    )
+    return
+  }
   await conn.execute(
-    `CREATE DATABASE IF NOT EXISTS tsboard CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
+    `CREATE DATABASE IF NOT EXISTS ${info.db.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
   )
 
   const prefix = `${info.db.name}.${info.db.prefix}`
@@ -181,4 +185,10 @@ export async function initDatabase(info: SetupInfo): Promise<void> {
   VALUES ('${info.admin.id}', 'Admin', SHA2('${
     info.admin.pw
   }', 256), '', 9, 0, '', ${Date.now()}, 0, 0)`)
+
+  // for test only
+  for (const sql of tests) {
+    const query = sql.replace("#db#", prefix)
+    await conn.execute(query)
+  }
 }

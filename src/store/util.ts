@@ -96,6 +96,26 @@ export const useUtilStore = defineStore("util", () => {
     }
   }
 
+  // 밀리세컨드 숫자를 날짜 형식으로 보여주기
+  function date(milliseconds: number, showYmd: boolean = true, showHms: boolean = false): string {
+    const time = new Date(milliseconds)
+    let result = ""
+    if (showYmd) {
+      const year = time.getFullYear()
+      const month = String(time.getMonth() + 1).padStart(2, "0")
+      const day = String(time.getDate()).padStart(2, "0")
+      result = `${year}/${month}/${day}`
+    }
+    if (showHms) {
+      const hour = time.getHours()
+      const minute = time.getMinutes()
+      const second = time.getSeconds()
+      result += ` ${hour}:${minute}:${second}`
+    }
+
+    return result
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -114,5 +134,6 @@ export const useUtilStore = defineStore("util", () => {
     go,
     back,
     debounce,
+    date,
   }
 })

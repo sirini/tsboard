@@ -15,9 +15,10 @@ const engineEncode = `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_gene
 
 export const tables: string[] = []
 export const inserts: string[] = []
+export const tests: string[] = []
 
-///////////////////////////////////
-// v0.8.0 Initial version of tables
+//////////
+// v0.8.0
 // 사용자 기본 정보 테이블, blocked = 1 일 경우 차단된 사용자
 tables.push(`${create} #db#user (
   ${uid},
@@ -195,7 +196,8 @@ tables.push(`${create} #db#post_like (
   liked TINYINT ${unnd0},
   timestamp BIGINT ${unnd0},
   KEY (post_uid),
-  KEY (user_uid)
+  KEY (user_uid),
+  KEY (liked)
 ) ${engineEncode}`)
 
 // 댓글 보관 테이블
@@ -207,9 +209,12 @@ tables.push(`${create} #db#comment (
   content VARCHAR(1000) ${nnde},
   submitted BIGINT ${unnd0},
   modified BIGINT ${unnd0},
+  removed TINYINT ${unnd0},
   ${primary},
   KEY (reply_uid),
-  KEY (post_uid)
+  KEY (post_uid),
+  KEY (user_uid),
+  KEY (removed)
 ) ${engineEncode}`)
 
 // 댓글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
@@ -219,7 +224,8 @@ tables.push(`${create} #db#comment_like (
   liked TINYINT ${unnd0},
   timestamp BIGINT ${unnd0},
   KEY (comment_uid),
-  KEY (user_uid)
+  KEY (user_uid),
+  KEY (liked)
 ) ${engineEncode}`)
 
 // 파일 첨부하기 기능으로 추가한 파일 정보 보관하는 테이블
@@ -254,11 +260,14 @@ tables.push(`${create} #db#notice (
   checked TINYINT ${unnd0},
   timestamp BIGINT ${unnd0},
   ${primary},
-  KEY (to_uid)
+  KEY (to_uid),
+  KEY (from_uid),
+  KEY (post_uid),
+  KEY (checked)
 ) ${engineEncode}`)
 
-///////////////////////////////////////////
-// v0.8.0 Initial version of insert queries
+//////////
+// v0.8.0
 
 // 기본 그룹 생성하기 (삭제 불가)
 inserts.push(`INSERT INTO #db#group (
@@ -299,3 +308,145 @@ inserts.push(`INSERT INTO #db#board_category (
 ) VALUES (
   1, '새소식'
 )`)
+
+//////////////////////////////////
+// TEST ONLY
+// Dummy datas for testing v0.8.0
+//////////////////////////////////
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('anna@naver.com', 'Anna Kim', sha2('Tsboard@1', 256), '', 2, 120, 'Hi there! My name is anna!', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('bhclover@github.com', 'Bendrake Han', sha2('Tsboard@1', 256), '', 3, 220, 'Bendrake is here.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('chooseyourcake@nate.com', 'Cate Andresson', sha2('Tsboard@1', 256), '', 2, 150, 'Cake is fake.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('drainmana@hosting.io', 'Drake Heissome', sha2('Tsboard@1', 256), '', 3, 110, 'Drain my energy.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('etrondriver@audi.com', 'Ethan Park', sha2('Tsboard@1', 256), '', 2, 120, 'Driving is so fun.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('fakerholic@skt.com', 'Faker Sang', sha2('Tsboard@1', 256), '', 2, 100, 'God of game', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('giantlotte@lotte.com', 'Gong cha', sha2('Tsboard@1', 256), '', 2, 160, 'Gongcha lover', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('hyundai@hyundai.com', 'Hyun Sook Yim', sha2('Tsboard@1', 256), '', 3, 170, 'Cost is the real big thing.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('ironman@marvel.com', 'Iron Robert Jr.', sha2('Tsboard@1', 256), '', 3, 200, 'I am ironman.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('juicemadehappy@kickstarter.com', 'John smith', sha2('Tsboard@1', 256), '', 3, 90, 'Make more weapons.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
+VALUES ('koreachicken@kakao.com', 'Korean San', sha2('Tsboard@1', 256), '', 3, 90, 'Best chicken is made in Korea.', ${Date.now()}, 0, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 2, 1, 'Welcome to the tsboard world.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 3, 2, 'Tsboard is awecome! But why I trust this system?', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 4, 3, 'Because tsboard was made by sirini who made grboard.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 5, 2, 'Writing test script is boring.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 6, 2, 'I would like to travel in Canada.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 7, 2, 'This post was banned by administrator...!', 'This post was banned, but administrator could see this contents.', ${Date.now()}, 0, 12, 1)`)
+
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+VALUES (1, 8, 2, 'Going higher!', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (1, 1, 3, 'This comment was generated for test #1', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (2, 2, 2, 'This comment was generated for test #2', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (3, 3, 1, 'This comment was generated for test #3', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (4, 1, 1, 'This comment was generated for test #4', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (5, 2, 1, 'This comment was generated for test.', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (5, 2, 3, 'Reply test #1', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (5, 2, 4, 'Reply test #2', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  VALUES (5, 2, 6, 'Reply test #3', ${Date.now()}, 0, 0)`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (1, 9, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (3, 10, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (3, 3, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 1, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 2, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 3, 1, ${Date.now()})`,
+)
+
+tests.push(
+  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (1, 10, 1, ${Date.now()})`,
+)
+
+tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
+VALUES (2, 5, 1, ${Date.now()})`)
+
+tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
+VALUES (2, 6, 1, ${Date.now()})`)
+
+tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
+VALUES (4, 2, 1, ${Date.now()})`)
+
+tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
+VALUES (3, 8, 1, ${Date.now()})`)
+
+tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
+VALUES (3, 8, 1, ${Date.now()})`)

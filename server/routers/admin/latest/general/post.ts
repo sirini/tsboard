@@ -6,6 +6,11 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import {
+  getPosts,
+  getTotalPostCount,
+  getSearchedPosts,
+} from "../../../../database/admin/latest/general/post"
 import { fail, success, updateAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
@@ -26,13 +31,66 @@ export const post = new Elysia()
   )
   .get(
     "/post",
-    async ({ jwt, cookie: { refresh }, headers, query: { lastPostUid, bunch } }) => {
-      // TODO
+    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+      if (page < 1) {
+        return fail(`Invalid page.`)
+      }
+      if (bunch < 5 || bunch > 100) {
+        return fail(`Invalid bunch parameter.`)
+      }
+
+      const totalPostCount = await getTotalPostCount()
+      const posts = await getPosts(page, bunch, totalPostCount)
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      return success({
+        newAccessToken,
+        posts,
+        totalPostCount,
+      })
     },
     {
       ...defaultTypeCheck,
       query: t.Object({
-        lastPostUid: t.Numeric(),
+        page: t.Numeric(),
+        bunch: t.Numeric(),
+      }),
+    },
+  )
+  .get(
+    "/search",
+    async ({ jwt, cookie: { refresh }, headers, query: { option, keyword, page, bunch } }) => {
+      if (option.length < 2) {
+        return fail(`Unknown option.`)
+      }
+      if (keyword.length < 2) {
+        return fail(`Keyword is too short.`)
+      }
+      if (page < 1) {
+        return fail(`Invalid page.`)
+      }
+      if (bunch < 5 || bunch > 100) {
+        return fail(`Invalid bunch parameter.`)
+      }
+
+      const totalPostCount = await getTotalPostCount()
+      const posts = await getSearchedPosts({
+        option,
+        keyword,
+        page,
+        bunch,
+        total: totalPostCount,
+      })
+      return success({
+        posts,
+        totalPostCount,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        option: t.String(),
+        keyword: t.String(),
+        page: t.Numeric(),
         bunch: t.Numeric(),
       }),
     },

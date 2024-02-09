@@ -58,7 +58,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
       return
     }
-    if (response.data.result.permission.uid < 1) {
+    if (!response.data.result) {
       admin.error(PERMISSION.UNKNOWN_INFO)
       return
     }

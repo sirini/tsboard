@@ -3,40 +3,59 @@
     <v-list>
       <v-list-subheader>글 전체 검색</v-list-subheader>
       <v-divider></v-divider>
-      <v-list-item>
-        <v-row>
-          <v-col cols="5">
-            <v-btn-toggle v-model="latest.option" mandatory class="mt-1">
-              <v-btn size="large" value="name">이름</v-btn>
-              <v-btn size="large" value="content">내용</v-btn>
-            </v-btn-toggle>
-          </v-col>
-          <v-col>
-            <v-text-field
-              variant="outlined"
-              v-model="latest.search"
-              hide-details
-              density="compact"
-              class="mt-2"
-              prepend-inner-icon="mdi-comment-search-outline"
-              append-inner-icon="mdi-magnify"
-              @click:append-inner=""
-            ></v-text-field>
-          </v-col>
-        </v-row>
+      <v-list-item class="mt-3 mb-3">
+        <template v-slot:prepend>
+          <v-btn-toggle v-model="latest.option" mandatory class="mt-1">
+            <v-btn value="title">제목</v-btn>
+            <v-btn value="content">내용</v-btn>
+          </v-btn-toggle>
+        </template>
+
+        <v-text-field
+          variant="outlined"
+          v-model="latest.keyword"
+          hide-details
+          class="ml-5 mt-1 mr-1"
+          prepend-inner-icon="mdi-restore"
+          append-inner-icon="mdi-magnify"
+          @keyup="latest.updateLatestPosts"
+          @click:prepend-inner="latest.resetKeyword"
+          @click:append-inner="latest.updateLatestPosts"
+        >
+          <v-tooltip activator="parent"
+            >검색어를 입력해 보세요.<br />초기 화면으로 가려면 왼쪽의 반시계 방향 아이콘을
+            클릭하세요.
+          </v-tooltip>
+        </v-text-field>
+
+        <template v-slot:append>
+          <v-select
+            v-model="latest.bunch"
+            variant="outlined"
+            hide-details
+            class="mt-1"
+            :items="[5, 10, 15, 20, 25, 30, 40, 50, 100]"
+          ></v-select>
+        </template>
       </v-list-item>
 
       <v-list-subheader>최신 글 모음</v-list-subheader>
       <v-divider></v-divider>
-      <v-list-item v-for="(post, index) in latest.posts" :key="index" class="underline">
+      <v-list-item
+        v-for="(post, index) in latest.posts"
+        :key="index"
+        class="underline"
+        @click="util.go('boardView', post.id, post.uid)"
+      >
         <template v-slot:prepend>
-          <span class="date mr-3">{{ post.date }}</span>
+          <span class="date mr-3">{{ util.date(post.date) }}</span>
           <user-nametag
             :uid="post.writer.uid"
             :name="post.writer.name"
             :profile="PREFIX + (post.writer.profile || '/no-profile.svg')"
           ></user-nametag>
         </template>
+
         <v-list-item-title
           ><span class="ml-3">{{ post.title }}</span>
         </v-list-item-title>
@@ -48,22 +67,32 @@
             class="ml-2 mr-1"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart">{{ post.like }}</v-chip>
-          <v-chip size="small" color="blue-grey" class="ml-1" prepend-icon="mdi-eye">{{
+          <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline">{{
+            post.like
+          }}</v-chip>
+          <v-chip size="small" color="blue-grey" class="ml-1" prepend-icon="mdi-eye-outline">{{
             post.hit
           }}</v-chip>
-          <v-btn icon elevation="0" @click="util.go('boardView', post.id, post.uid)"
-            ><v-icon>mdi-chevron-right</v-icon>
-            <v-tooltip activator="parent"> 클릭하시면 이 게시글을 보러 이동 합니다. </v-tooltip>
-          </v-btn>
         </template>
+        <v-tooltip activator="parent">클릭하시면 게시글을 보러 갑니다.</v-tooltip>
       </v-list-item>
     </v-list>
 
-    <v-card-actions>
+    <v-card-actions class="mb-3">
+      <v-btn prepend-icon="mdi-chevron-left" :disabled="latest.page < 2" @click="latest.page -= 1"
+        >이전</v-btn
+      >
       <v-spacer></v-spacer>
-      <v-pagination :length="5"></v-pagination>
+      <v-chip variant="tonal" color="blue-grey-lighten-3"
+        >{{ latest.page }} / {{ latest.pageLength }}</v-chip
+      >
       <v-spacer></v-spacer>
+      <v-btn
+        append-icon="mdi-chevron-right"
+        :disabled="latest.page > latest.pageLength"
+        @click="latest.page += 1"
+        >다음</v-btn
+      >
     </v-card-actions>
   </v-card>
   <user-info-dialog></user-info-dialog>
@@ -73,6 +102,7 @@
 </template>
 
 <script setup lang="ts">
+import { watch, onMounted } from "vue"
 import { useAdminLatestPostStore } from "../../../store/admin/latest/post"
 import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
@@ -84,6 +114,12 @@ import ManageUserDialog from "../../user/ManageUserDialog.vue"
 const latest = useAdminLatestPostStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
+
+onMounted(() => latest.loadLatestPosts())
+watch(
+  () => [latest.page, latest.bunch],
+  () => latest.loadLatestPosts(),
+)
 </script>
 
 <style scoped>

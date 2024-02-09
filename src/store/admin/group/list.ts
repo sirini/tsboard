@@ -43,6 +43,10 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
       return
     }
+    if (!response.data.result) {
+      admin.error(LIST.FAILED_LOAD)
+      return
+    }
     auth.updateUserToken(response.data.result.newAccessToken!)
     groups.value = response.data.result.groups as AdminGroupConfig[]
   }
@@ -68,7 +72,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return
     }
-    if (response.data.result.ids.length < 1) {
+    if (!response.data.result) {
       existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
       return
     }

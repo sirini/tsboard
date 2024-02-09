@@ -6,6 +6,7 @@
 
 export const LIST = {
   NO_RESPONSE: "서버로부터 응답을 받을 수 없습니다. 관리자에게 문의해 주세요.",
+  FAILED_LOAD: "관리자 정보를 확인할 수 없어 서버로부터 데이터를 가져올 수 없었습니다.",
   UNABLE_LOAD_LIST: "게시판 그룹 목록을 가져올 수 없었습니다.",
   LOADED_LIST: "게시판 그룹 목록을 성공적으로 가져왔습니다.",
   TOO_SHORT_GROUP_ID: "그룹 ID는 2글자 이상 입력해 주세요.",

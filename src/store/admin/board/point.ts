@@ -50,7 +50,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
       return
     }
-    if (response.data.result.point.uid < 1) {
+    if (!response.data.result) {
       admin.error(POINT.UNKNOWN_INFO)
       return
     }

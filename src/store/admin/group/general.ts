@@ -65,7 +65,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
       return
     }
-    if (response.data.result.config.uid < 1) {
+    if (!response.data.result) {
       admin.error(GENERAL.UNKNOWN_INFO)
       return
     }

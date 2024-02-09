@@ -22,12 +22,12 @@ const SERVER_PORT = 3100 // [4]
 const MAX_FILE_SIZE = 10247680 // [5]
 const DOMAIN = "localhost" // [6]
 const DEV_API_PATH = `http://${DOMAIN}:${VITE_PORT}` // [7]
-const PROD_API_PATH = `http://${DOMAIN}` // [8]
+const PROD_API_PATH = `http://${DOMAIN}/api` // [8]
 const API = IS_DEV ? DEV_API_PATH : PROD_API_PATH
 
-//////////////////////////////////////////
+//////////////////////////////////////////////////////
 // 위의 내용만 수정하시고, 아래 내용은 그대로 두세요!
-//////////////////////////////////////////
+//////////////////////////////////////////////////////
 
 export default defineConfig({
   plugins: [

@@ -6,48 +6,97 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
+import { useAuthStore } from "../../auth"
+import { useUtilStore } from "../../util"
 import { AdminLatestPost } from "../../../interface/admin"
+import { POST } from "../../../messages/store/admin/latest/post"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
+  const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
-  const option = ref<"name" | "content">("content")
-  const search = ref<string>("")
-  const posts = ref<AdminLatestPost[]>([
-    {
-      id: "test",
-      uid: 12,
-      title: "최근 글 제목 테스트 1",
-      writer: {
-        uid: 2,
-        name: "테스트맨",
-        profile: "/no-profile.svg",
+  const auth = useAuthStore()
+  const util = useUtilStore()
+  const option = ref<"title" | "content">("title")
+  const keyword = ref<string>("")
+  const page = ref<number>(1)
+  const pageLength = ref<number>(5)
+  const bunch = ref<number>(10)
+  const posts = ref<AdminLatestPost[]>([])
+
+  // 최신 글 목록 가져오기
+  async function loadLatestPosts(): Promise<void> {
+    const response = await server.api.admin.latest.post.get({
+      $headers: {
+        authorization: auth.user.token,
       },
-      comment: 2,
-      like: 1,
-      hit: 105,
-      date: 1706972400000,
-    },
-    {
-      id: "test",
-      uid: 13,
-      title:
-        "최근 글 제목인데 이번에는 엄청 긴 제목을 형성해 봅니다. 이런 긴 제목들은 보통 끝에 ... 으로 잘리게 됩니다.",
-      writer: {
-        uid: 3,
-        name: "홍길동",
-        profile: "/no-profile.svg",
+      $query: {
+        page: page.value,
+        bunch: bunch.value,
       },
-      comment: 1,
-      like: 0,
-      hit: 85,
-      date: 1706972400000,
-    },
-  ])
+    })
+    if (!response.data) {
+      admin.error(POST.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(POST.FAILED_LOAD)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(POST.FAILED_LOAD)
+      return
+    }
+    pageLength.value = Math.floor((response.data.result.totalPostCount as number) / bunch.value)
+    posts.value = response.data.result.posts as AdminLatestPost[]
+    admin.success(POST.LOADED_POST)
+  }
+
+  // 검색어 지우고 목록 초기화하기
+  async function resetKeyword(): Promise<void> {
+    keyword.value = ""
+    loadLatestPosts()
+  }
+
+  // 검색어 입력하면 반응하기
+  async function _updateLatestPosts(): Promise<void> {
+    if (keyword.value.length < 2) {
+      return
+    }
+    const response = await server.api.admin.latest.search.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        option: option.value,
+        keyword: keyword.value,
+        page: page.value,
+        bunch: bunch.value,
+      },
+    })
+    if (!response.data) {
+      admin.error(POST.NO_RESPONSE)
+      return
+    }
+    if (!response.data.result) {
+      return
+    }
+    pageLength.value = Math.floor((response.data.result.totalPostCount as number) / bunch.value)
+    posts.value = response.data.result.posts as AdminLatestPost[]
+  }
+  const updateLatestPosts = util.debounce(_updateLatestPosts, 250)
 
   return {
     option,
-    search,
+    keyword,
+    bunch,
     posts,
+    page,
+    pageLength,
+    loadLatestPosts,
+    resetKeyword,
+    updateLatestPosts,
   }
 })

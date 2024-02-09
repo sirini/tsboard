@@ -6,7 +6,7 @@
 
 export const GENERAL = {
   NO_RESPONSE: "서버로부터 응답을 받을 수 없습니다. 관리자에게 문의해 주세요.",
-  UNKNOWN_INFO: "존재하지 않는 게시판 ID 입니다.",
+  UNKNOWN_INFO: "존재하지 않는 게시판 ID 이거나, 관리자 세션 문제로 정보를 가져올 수 없었습니다.",
   CHANGED_GROUP1: "게시판의 소속 그룹을",
   CHANGED_GROUP2: "으로 변경 하였습니다.",
   UNABLE_UPDATE_GROUP: "소속 그룹을 변경할 수 없었습니다.",
