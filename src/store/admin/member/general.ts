@@ -47,23 +47,7 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
       signup: "2023-12-09",
     },
   ])
-  const reports = ref<AdminReport[]>([
-    {
-      to: { uid: 12, name: "악당1", profile: "" },
-      from: { uid: 123, name: "의적단", profile: "" },
-      request: "예시용 신고 내역 입니다. 회원이 뭔가를 잘못해서 남겨졌습니다.",
-      response: "",
-      date: "2023-11-30 20:22:10",
-    },
-    {
-      to: { uid: 12, name: "악당1", profile: "" },
-      from: { uid: 123, name: "의적단", profile: "" },
-      request:
-        "다른 회원으로부터 받은 신고 내역입니다. 역시나 뭔가를 잘못했으며 이 회원의 문제 상황을 언급합니다.",
-      response: "",
-      date: "2023-12-10 20:22:10",
-    },
-  ])
+  const reports = ref<AdminReport[]>([])
 
   return {
     blockUserTarget,
