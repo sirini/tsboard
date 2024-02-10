@@ -9,8 +9,17 @@
 
       <v-list>
         <alert-bar></alert-bar>
-        <v-list-subheader>대상 회원</v-list-subheader>
-        <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
+        <v-list-subheader>관리 대상 회원</v-list-subheader>
+        <v-divider></v-divider>
+        <v-list-item
+          class="mt-2 mb-2"
+          :prepend-avatar="
+            PREFIX +
+            (user.targetUserInfo.profile.length < 1
+              ? '/no-profile.svg'
+              : user.targetUserInfo.profile)
+          "
+        >
           <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>조치 항목</v-list-subheader>
@@ -56,9 +65,7 @@
             v-model="block.login"
             density="compact"
             hide-details
-            :label="
-              user.targetUserInfo.name + '님이 로그인 하지 못하게 차단합니다 (회원 자격 상실)'
-            "
+            :label="user.targetUserInfo.name + '님이 로그인 하지 못하게 차단합니다'"
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>

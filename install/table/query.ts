@@ -163,13 +163,13 @@ tables.push(`${create} #db#post (
   submitted BIGINT ${unnd0},
   modified BIGINT ${unnd0},
   hit INT ${unnd0},
-  removed TINYINT ${unnd0},
+  status TINYINT ${nnd0},
   ${primary},
   KEY (board_uid),
   KEY (user_uid),
   KEY (category_uid),
   KEY (hit),
-  KEY (removed)
+  KEY (status)
 ) ${engineEncode}`)
 
 // 게시글과 해시태그들의 연관성 정보 보관 테이블
@@ -209,12 +209,12 @@ tables.push(`${create} #db#comment (
   content VARCHAR(1000) ${nnde},
   submitted BIGINT ${unnd0},
   modified BIGINT ${unnd0},
-  removed TINYINT ${unnd0},
+  status TINYINT ${nnd0},
   ${primary},
   KEY (reply_uid),
   KEY (post_uid),
   KEY (user_uid),
-  KEY (removed)
+  KEY (status)
 ) ${engineEncode}`)
 
 // 댓글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
@@ -347,64 +347,64 @@ VALUES ('juicemadehappy@kickstarter.com', 'John smith', sha2('Tsboard@1', 256), 
 tests.push(`INSERT INTO #db#user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
 VALUES ('koreachicken@kakao.com', 'Korean San', sha2('Tsboard@1', 256), '', 3, 90, 'Best chicken is made in Korea.', ${Date.now()}, 0, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 2, 1, 'Welcome to the tsboard world.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 3, 2, 'Tsboard is awecome! But why I trust this system?', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 4, 3, 'Because tsboard was made by sirini who made grboard.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 5, 2, 'Writing test script is boring.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 6, 2, 'I would like to travel in Canada.', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
-VALUES (1, 7, 2, 'This post was banned by administrator...!', 'This post was banned, but administrator could see this contents.', ${Date.now()}, 0, 12, 1)`)
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
+VALUES (1, 7, 2, 'This post was banned by administrator...!', 'This post was banned, but administrator could see this contents.', ${Date.now()}, 0, 12, -1)`)
 
-tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, removed) 
+tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
 VALUES (1, 8, 2, 'Going higher!', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (1, 1, 3, 'This comment was generated for test #1', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (2, 2, 2, 'This comment was generated for test #2', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (3, 3, 1, 'This comment was generated for test #3', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (4, 1, 1, 'This comment was generated for test #4', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (5, 2, 1, 'This comment was generated for test.', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (5, 2, 3, 'Reply test #1', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (5, 2, 4, 'Reply test #2', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, removed) 
+  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (5, 2, 6, 'Reply test #3', ${Date.now()}, 0, 0)`,
 )
 

@@ -32,7 +32,7 @@ export const GENERAL = {
   ADDED_CATEGORY: "카테고리를 추가했습니다.",
   UNABLE_ADD_CATEGORY: "카테고리를 추가할 수 없었습니다.",
   REMOVE_LAST_CATEGORY: "카테고리는 최소 1개 이상 존재해야 합니다.",
-  REMOVED_CATEGORY:
+  status_CATEGORY:
     "선택하신 카테고리를 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 변경 하였습니다.",
   UNABLE_REMOVE_CATEGORY: "선택하신 카테고리를 삭제할 수 없었습니다.",
 }

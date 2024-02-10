@@ -49,7 +49,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       admin.error(POST.FAILED_LOAD)
       return
     }
-    pageLength.value = Math.floor((response.data.result.totalPostCount as number) / bunch.value)
+    pageLength.value = Math.ceil((response.data.result.totalPostCount as number) / bunch.value)
     posts.value = response.data.result.posts as AdminLatestPost[]
     admin.success(POST.LOADED_POST)
   }

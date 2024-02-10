@@ -36,7 +36,7 @@ export const comment = new Elysia()
         return fail(`Invalid page.`)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch parameter.`)
+        return fail(`Invalid bunch.`)
       }
 
       const totalCommentCount = await getTotalCommentCount()
@@ -69,7 +69,7 @@ export const comment = new Elysia()
         return fail(`Invalid page.`)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch parameter.`)
+        return fail(`Invalid bunch.`)
       }
 
       const totalCommentCount = await getTotalCommentCount()

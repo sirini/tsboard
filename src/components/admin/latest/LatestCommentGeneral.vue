@@ -54,7 +54,7 @@
           ></user-nametag>
         </template>
         <v-list-item-title
-          ><span class="ml-3 mr-2" :class="comment.removed ? 'removed' : ''">{{
+          ><span class="ml-3 mr-2" :class="comment.status < 0 ? 'removed' : ''">{{
             comment.content
           }}</span>
         </v-list-item-title>
@@ -67,12 +67,12 @@
         </template>
       </v-list-item>
     </v-list>
-    <latest-paging
+    <paging
       :page="latest.page"
       :page-length="latest.pageLength"
       @prev="latest.page -= 1"
       @next="latest.page += 1"
-    ></latest-paging>
+    ></paging>
   </v-card>
   <user-info-dialog></user-info-dialog>
   <send-note-dialog></send-note-dialog>
@@ -89,7 +89,7 @@ import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import SendNoteDialog from "../../user/SendNoteDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
-import LatestPaging from "./LatestPaging.vue"
+import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()

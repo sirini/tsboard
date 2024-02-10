@@ -1,17 +1,17 @@
 /**
- * server/routers/admin/latest/general/post
+ * server/routers/admin/report/solved
  *
- * 최신 글 톺아보기에 필요한 라우팅 처리
+ * 신고 목록 중에서 해결된 건들 라우팅 처리
  */
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import {
-  getPosts,
-  getTotalPostCount,
-  getSearchedPosts,
-} from "../../../../database/admin/latest/general/post"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+  getTotalReportCount,
+  getReports,
+  getSearchedReports,
+} from "../../../database/admin/report/common"
+import { fail, success, updateAccessToken } from "../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -22,7 +22,7 @@ const defaultTypeCheck = {
   }),
 }
 
-export const post = new Elysia()
+export const common = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -30,22 +30,28 @@ export const post = new Elysia()
     }),
   )
   .get(
-    "/post",
-    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+    "/list",
+    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch, isSolved } }) => {
       if (page < 1) {
         return fail(`Invalid page.`)
       }
       if (bunch < 5 || bunch > 100) {
         return fail(`Invalid bunch.`)
       }
-
-      const totalPostCount = await getTotalPostCount()
-      const posts = await getPosts(page, bunch, totalPostCount)
+      const solved = isSolved > 0 ? true : false
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const totalReportCount = await getTotalReportCount(solved)
+      const reports = await getReports({
+        page,
+        bunch,
+        total: totalReportCount,
+        isSolved: solved,
+      })
+
       return success({
         newAccessToken,
-        posts,
-        totalPostCount,
+        reports,
+        totalReportCount,
       })
     },
     {
@@ -53,12 +59,18 @@ export const post = new Elysia()
       query: t.Object({
         page: t.Numeric(),
         bunch: t.Numeric(),
+        isSolved: t.Numeric(),
       }),
     },
   )
   .get(
-    "/search/post",
-    async ({ jwt, cookie: { refresh }, headers, query: { option, keyword, page, bunch } }) => {
+    "/search/list",
+    async ({
+      jwt,
+      cookie: { refresh },
+      headers,
+      query: { option, keyword, page, bunch, isSolved },
+    }) => {
       if (option.length < 2) {
         return fail(`Unknown option.`)
       }
@@ -71,18 +83,22 @@ export const post = new Elysia()
       if (bunch < 5 || bunch > 100) {
         return fail(`Invalid bunch.`)
       }
+      const solved = isSolved > 0 ? true : false
+      const totalReportCount = await getTotalReportCount(solved)
+      const reports = await getSearchedReports(
+        {
+          option,
+          keyword,
+          page,
+          bunch,
+          total: totalReportCount,
+        },
+        solved,
+      )
 
-      const totalPostCount = await getTotalPostCount()
-      const posts = await getSearchedPosts({
-        option,
-        keyword,
-        page,
-        bunch,
-        total: totalPostCount,
-      })
       return success({
-        posts,
-        totalPostCount,
+        reports,
+        totalReportCount,
       })
     },
     {
@@ -92,6 +108,7 @@ export const post = new Elysia()
         keyword: t.String(),
         page: t.Numeric(),
         bunch: t.Numeric(),
+        isSolved: t.Numeric(),
       }),
     },
   )

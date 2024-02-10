@@ -111,12 +111,12 @@ export type AdminMemberTable = AdminPair & {
   signup: string
 }
 
-export type AdminMemberReport = {
+export type AdminReport = {
   to: AdminUserInfo
   from: AdminUserInfo
   request: string
   response: string
-  date: string
+  date: number
 }
 
 export type AdminLatest = {
@@ -130,7 +130,7 @@ type AdminLatestCommon = {
   uid: number
   like: number
   date: number
-  removed: boolean
+  status: number
 }
 
 export type AdminLatestPost = AdminLatestCommon & {
@@ -145,10 +145,17 @@ export type AdminLatestComment = AdminLatestCommon & {
   writer: AdminUserInfo
 }
 
-export type AdminLatestSearchParams = {
-  option: string
-  keyword: string
+type AdminSearchCommon = {
   page: number
   bunch: number
   total: number
+}
+
+export type AdminSearchParams = AdminSearchCommon & {
+  option: string
+  keyword: string
+}
+
+export type AdminReportParams = AdminSearchCommon & {
+  isSolved: boolean
 }

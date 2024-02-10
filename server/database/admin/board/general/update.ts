@@ -90,7 +90,7 @@ async function checkCategoryCount(boardUid: number): Promise<boolean> {
 }
 
 // 카테고리 삭제 후 삭제된 카테고리 소속 게시글들은 uid가 가장 낮은 카테고리 소속으로 변경
-async function updateRemovedCategory(boardUid: number, categoryUid: number): Promise<void> {
+async function updatestatusCategory(boardUid: number, categoryUid: number): Promise<void> {
   const [cat] = await select(
     `SELECT uid FROM ${table}board_category WHERE board_uid = ? ORDER BY uid ASC LIMIT 1`,
     [boardUid],
@@ -115,7 +115,7 @@ export async function removeCategory(boardUid: number, categoryUid: number): Pro
   }
 
   remove(`DELETE FROM ${table}board_category WHERE uid = ? LIMIT 1`, [categoryUid])
-  updateRemovedCategory(boardUid, categoryUid)
+  updatestatusCategory(boardUid, categoryUid)
 
   return true
 }

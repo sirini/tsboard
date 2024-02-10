@@ -299,7 +299,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     board.value.categories = board.value.categories.filter((cat: AdminPair) => {
       return cat.uid !== boardRemoveCategory.value.uid
     })
-    admin.success(GENERAL.REMOVED_CATEGORY)
+    admin.success(GENERAL.status_CATEGORY)
   }
 
   return {

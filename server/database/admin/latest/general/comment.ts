@@ -5,19 +5,16 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestComment, AdminLatestSearchParams } from "../../../../../src/interface/admin"
+import { AdminLatestComment, AdminSearchParams } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
 // 전체 댓글 개수 반환하기
 export async function getTotalCommentCount(): Promise<number> {
-  let result = 0
-
   const [total] = await select(`SELECT COUNT(*) AS comment_count FROM ${table}comment`)
   if (!total) {
-    return result
+    return 0
   }
-  result = total.comment_count
-  return result
+  return total.comment_count
 }
 
 type RelatedResults = {
@@ -75,7 +72,7 @@ async function makeCommentResult(comments: RowDataPacket[]): Promise<AdminLatest
         name: info.writer.name,
         profile: info.writer.profile,
       },
-      removed: comment.removed > 0 ? true : false,
+      status: comment.status,
     })
   }
   return result
@@ -90,7 +87,7 @@ export async function getComments(
   let result: AdminLatestComment[] = []
   const last = 1 + total - (page - 1) * bunch
   const comments = await select(
-    `SELECT uid, post_uid, user_uid, content, submitted, removed FROM ${table}comment WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
+    `SELECT uid, post_uid, user_uid, content, submitted, status FROM ${table}comment WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
     [last, bunch],
   )
   if (!comments[0]) {
@@ -102,11 +99,11 @@ export async function getComments(
 
 // 검색 결과 가져오기
 export async function getSearchedComments(
-  search: AdminLatestSearchParams,
+  search: AdminSearchParams,
 ): Promise<AdminLatestComment[]> {
   let result: AdminLatestComment[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch
-  const comments = await select(`SELECT uid, post_uid, user_uid, content, submitted, removed 
+  const comments = await select(`SELECT uid, post_uid, user_uid, content, submitted, status 
   FROM ${table}comment WHERE uid < ${last} AND ${search.option} LIKE '%${search.keyword}%'
   ORDER BY uid DESC LIMIT ${search.bunch}`)
   if (!comments[0]) {

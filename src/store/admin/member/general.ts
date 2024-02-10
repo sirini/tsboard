@@ -6,7 +6,7 @@
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { AdminMemberTable, AdminPair, AdminMemberReport } from "../../../interface/admin"
+import { AdminMemberTable, AdminPair, AdminReport } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 
 export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () => {
@@ -47,7 +47,7 @@ export const useAdminMemberGeneralStore = defineStore("adminMemberGeneral", () =
       signup: "2023-12-09",
     },
   ])
-  const reports = ref<AdminMemberReport[]>([
+  const reports = ref<AdminReport[]>([
     {
       to: { uid: 12, name: "악당1", profile: "" },
       from: { uid: 123, name: "의적단", profile: "" },

@@ -83,7 +83,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     if (!response.data.result) {
       return
     }
-    pageLength.value = Math.floor((response.data.result.totalCommentCount as number) / bunch.value)
+    pageLength.value = Math.ceil((response.data.result.totalCommentCount as number) / bunch.value)
     comments.value = response.data.result.comments as AdminLatestComment[]
   }
   const updateLatestComments = util.debounce(_updateLatestComments, 250)

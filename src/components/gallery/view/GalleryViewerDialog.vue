@@ -133,7 +133,7 @@ import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import SendNoteDialog from "../../user/SendNoteDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
-import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
+import BoardViewCommentstatusialog from "../../board/comment/BoardViewCommentstatusialog.vue"
 
 const PREFIX = process.env.PREFIX || ""
 const viewer = useViewerStore()

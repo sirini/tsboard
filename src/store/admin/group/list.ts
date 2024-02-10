@@ -158,7 +158,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
       return group.uid !== removeGroupTarget.value.uid
     })
-    admin.success(LIST.REMOVED_GROUP)
+    admin.success(LIST.status_GROUP)
     closeRemoveGroupDialog()
   }
 

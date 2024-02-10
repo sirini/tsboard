@@ -60,7 +60,7 @@ import { useAuthStore } from "../../../store/auth"
 import { useCommentStore } from "../../../store/comment"
 import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../user/UserNametag.vue"
-import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
+import BoardViewCommentstatusialog from "./BoardViewCommentstatusialog.vue"
 
 const auth = useAuthStore()
 const comment = useCommentStore()

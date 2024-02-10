@@ -241,7 +241,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return board.uid !== removeBoardTarget.value.uid
     })
     closeRemoveBoardDialog()
-    admin.success(GENERAL.REMOVED_BOARD)
+    admin.success(GENERAL.status_BOARD)
   }
 
   return {

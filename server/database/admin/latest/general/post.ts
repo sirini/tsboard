@@ -5,19 +5,16 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestPost, AdminLatestSearchParams } from "../../../../../src/interface/admin"
+import { AdminLatestPost, AdminSearchParams } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
 // 전체 글 개수 반환하기
 export async function getTotalPostCount(): Promise<number> {
-  let result = 0
-
   const [total] = await select(`SELECT COUNT(*) AS post_count FROM ${table}post`)
   if (!total) {
-    return result
+    return 0
   }
-  result = total.post_count
-  return result
+  return total.post_count
 }
 
 type RelatedResults = {
@@ -80,7 +77,7 @@ async function makePostResult(posts: RowDataPacket[]): Promise<AdminLatestPost[]
       },
       comment: info.comment,
       hit: post.hit,
-      removed: post.removed > 0 ? true : false,
+      status: post.status,
     })
   }
   return result
@@ -95,7 +92,7 @@ export async function getPosts(
   let result: AdminLatestPost[] = []
   const last = 1 + total - (page - 1) * bunch
   const posts = await select(
-    `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit, removed FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
+    `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit, status FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
     [last, bunch],
   )
   if (!posts[0]) {
@@ -106,9 +103,7 @@ export async function getPosts(
 }
 
 // 검색 결과 가져오기
-export async function getSearchedPosts(
-  search: AdminLatestSearchParams,
-): Promise<AdminLatestPost[]> {
+export async function getSearchedPosts(search: AdminSearchParams): Promise<AdminLatestPost[]> {
   let result: AdminLatestPost[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch
   const posts = await select(
