@@ -4,21 +4,26 @@
  * 쪽지, 신고, 정보 보기, 관리 하기 (관리자용) 관련 인터페이스
  */
 
-export interface TargetUserInfo {
+export type TargetUserInfo = {
   uid: number
   profile: string
   name: string
 }
 
-export interface BlockFeature {
+export type UserPermission = {
   writePost: boolean
   writeComment: boolean
-  note: boolean
-  report: boolean
+  sendNote: boolean
+  sendReport: boolean
   login: boolean
 }
 
-export interface ChatHistory {
+export type UserPermissionParams = UserPermission & {
+  userUid: number
+  reason: string
+}
+
+export type ChatHistory = {
   userUid: number
   message: string
 }

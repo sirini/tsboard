@@ -51,8 +51,9 @@ tables.push(`${create} #db#user_permission (
   user_uid INT ${unnd0},
   write_post TINYINT UNSIGNED ${nnd} '1',
   write_comment TINYINT UNSIGNED ${nnd} '1',
-  note TINYINT UNSIGNED ${nnd} '1',
-  report TINYINT UNSIGNED ${nnd} '1',
+  send_note TINYINT UNSIGNED ${nnd} '1',
+  send_report TINYINT UNSIGNED ${nnd} '1',
+  reason VARCHAR(1000) ${nnde},
   ${primary},
   KEY (user_uid)
 ) ${engineEncode}`)

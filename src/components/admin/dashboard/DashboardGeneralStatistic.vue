@@ -16,11 +16,11 @@
           >
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance" size="small"
             >어제 {{ dashboard.visit.yesterday }}명</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2">총 {{ dashboard.visit.total }}명</v-chip>
+          <v-chip color="blue-grey-lighten-2" size="small">총 {{ dashboard.visit.total }}명</v-chip>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -46,11 +46,11 @@
           </v-btn>
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance" size="small"
             >어제 {{ dashboard.member.yesterday }}명</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance" size="small"
             >오늘 {{ dashboard.member.today }}명</v-chip
           >
         </v-card-actions>
@@ -73,11 +73,11 @@
           >
         </v-sheet>
         <v-card-actions class="pa-0 ml-3 mr-3">
-          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance"
+          <v-chip color="blue-grey-lighten-2" prepend-icon="mdi-finance" size="small"
             >어제 {{ dashboard.post.yesterday }}개</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2">총 {{ dashboard.post.total }}개</v-chip>
+          <v-chip color="blue-grey-lighten-2" size="small">총 {{ dashboard.post.total }}개</v-chip>
         </v-card-actions>
       </v-card>
     </v-col>

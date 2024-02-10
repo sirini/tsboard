@@ -7,12 +7,13 @@ import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
 import { auth } from "./routers/auth"
 import { admin } from "./routers/admin"
+import { user } from "./routers/user"
 import { home } from "./routers/home"
 
 const app = new Elysia()
   .use(cors())
   .group("/api", (app) => {
-    return app.use(auth).use(admin).use(home)
+    return app.use(auth).use(admin).use(home).use(user)
   })
   .listen(process.env.SERVER_PORT ?? 3100)
 

@@ -2,17 +2,20 @@
  * store/user
  *
  * 쪽지, 신고, 정보 보기, 회원 관리 (관리자용) 관련 상태 및 함수들
- * 사용자 로그인 및 인증 관련은 auth store 참조
  */
 
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { useUtilStore } from "./util"
-import { TargetUserInfo, BlockFeature, ChatHistory } from "../interface/user"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../server/index"
+import { useAdminStore } from "./admin/common"
+import { TargetUserInfo, ChatHistory, UserPermissionParams } from "../interface/user"
 import { useAuthStore } from "./auth"
+import { USER } from "../messages/store/user"
 
 export const useUserStore = defineStore("user", () => {
-  const util = useUtilStore()
+  const server = edenTreaty<App>(process.env.API!)
+  const admin = useAdminStore()
   const auth = useAuthStore()
   const userInfoDialog = ref<boolean>(false)
   const sendNoteDialog = ref<boolean>(false)
@@ -22,6 +25,15 @@ export const useUserStore = defineStore("user", () => {
     uid: 0,
     profile: "",
     name: "",
+  })
+  const permission = ref<UserPermissionParams>({
+    writePost: false,
+    writeComment: false,
+    sendNote: false,
+    sendReport: false,
+    login: false,
+    userUid: 0,
+    reason: "",
   })
 
   // 사용자 정보 보기 다이얼로그 열기
@@ -64,6 +76,7 @@ export const useUserStore = defineStore("user", () => {
   function openManageUser(user: TargetUserInfo): void {
     targetUserInfo.value = user
     manageUserDialog.value = true
+    loadUserPermission()
   }
 
   // 사용자 관리하기 다이얼로그 닫기
@@ -82,7 +95,7 @@ export const useUserStore = defineStore("user", () => {
     clearTimeout(chatTimer)
     chatTimer = setTimeout(() => {
       if (targetUserInfo.value.uid < 1) {
-        util.error("쪽지를 보낼 대상이 제대로 지정되지 않았습니다.")
+        admin.error(USER.UNKNOWN_NOTE_TARGET)
         return
       }
       if (chatMessage.value.length < 2) {
@@ -100,34 +113,85 @@ export const useUserStore = defineStore("user", () => {
   // 운영진에게 특정 사용자 신고하기
   async function sendReport(report: string, blockNode: boolean, blockPost: boolean): Promise<void> {
     if (targetUserInfo.value.uid < 1) {
-      util.error("신고할 대상이 제대로 지정되지 않았습니다.")
+      admin.error(USER.UNKNOWN_REPORT_TARGET)
       return
     }
     if (report.length < 3 || report.length > 1000) {
-      util.error("신고 내용은 3글자 이상, 1000자 미만으로 작성해 주세요.")
+      admin.error(USER.INVALID_TEXT_LENGTH)
       return
     }
     //do something
-    util.success(`${targetUserInfo.value.name} 님을 운영진에게 신고 하였습니다.`)
+    admin.success(`${targetUserInfo.value.name} ${USER.REPORTED_USER}`)
     setTimeout(closeSendReport, 3000)
   }
 
-  // 회원 관리하기
-  async function manageUser(block: BlockFeature, report: string): Promise<void> {
-    if (report.length < 3 || report.length > 1000) {
-      util.error("조치 사유는 3글자 이상, 1000자 미만으로 작성해 주세요.")
+  // 회원의 기존 권한들 불러오기
+  async function loadUserPermission(): Promise<void> {
+    const response = await server.api.user.loadpermission.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        userUid: targetUserInfo.value.uid,
+      },
+    })
+    if (!response.data) {
+      admin.error(USER.NO_RESPONSE)
       return
     }
-    // do something
-    const w = block.writePost ? "글작성 차단" : "글작성 가능"
-    const c = block.writeComment ? "댓글 작성 차단" : "댓글 작성 가능"
-    const n = block.note ? "쪽지 차단" : "쪽지 가능"
-    const r = block.report ? "신고 차단" : "신고 가능"
-    const l = block.login ? "로그인 차단" : "로그인 가능"
-    util.success(
-      `${targetUserInfo.value.name} 님에 대한 조치를 완료 하였습니다. (${w}, ${c}, ${n}, ${r}, ${l})`,
-    )
-    setTimeout(closeManageUser, 3000)
+    if (response.data.success === false) {
+      admin.error(`${USER.FAILED_LOAD_PERMISSION} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(USER.FAILED_LOAD_PERMISSION)
+      return
+    }
+    permission.value = response.data.result.permission as UserPermissionParams
+    admin.success(USER.LOADED_PERMISSION)
+
+    console.log(permission.value) // DEBUG
+  }
+
+  // 회원 관리하기
+  async function manageUser(): Promise<void> {
+    if (permission.value.reason.length < 3 || permission.value.reason.length > 1000) {
+      admin.error(USER.INVALID_TEXT_LENGTH)
+      return
+    }
+    const response = await server.api.user.manageuser.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      userUid: targetUserInfo.value.uid,
+      writePost: permission.value.writePost,
+      writeComment: permission.value.writeComment,
+      sendNote: permission.value.sendNote,
+      sendReport: permission.value.sendReport,
+      login: permission.value.login,
+      reason: permission.value.reason,
+    })
+    if (!response.data) {
+      admin.error(USER.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${USER.FAILED_MANAGE_USER} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(USER.FAILED_MANAGE_USER)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+
+    const w = permission.value.writePost ? USER.BLOCK_WRITE : USER.UNBLOCK_WRITE
+    const c = permission.value.writeComment ? USER.BLOCK_REPLY : USER.UNBLOCK_REPLY
+    const n = permission.value.sendNote ? USER.BLOCK_NOTE : USER.UNBLOCK_NOTE
+    const r = permission.value.sendReport ? USER.BLOCK_REPORT : USER.UNBLOCK_REPORT
+    const l = permission.value.login ? USER.BLOCK_LOGIN : USER.UNBLOCK_LOGIN
+    admin.success(`${targetUserInfo.value.name} ${USER.ACTION_TAKEN}`)
+    closeManageUser()
   }
 
   return {
@@ -138,6 +202,7 @@ export const useUserStore = defineStore("user", () => {
     manageUserDialog,
     chatMessage,
     chatHistory,
+    permission,
     openUserInfo,
     closeUserInfo,
     openSendNote,
@@ -148,6 +213,7 @@ export const useUserStore = defineStore("user", () => {
     closeManageUser,
     sendNote,
     sendReport,
+    loadUserPermission,
     manageUser,
   }
 })
