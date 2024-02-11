@@ -26,10 +26,10 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
     sendReport: true,
     login: true,
     userUid,
-    reason: "",
+    response: "",
   }
   const [perm] = await select(
-    `SELECT write_post, write_comment, send_note, send_report, reason FROM ${table}user_permission 
+    `SELECT write_post, write_comment, send_note, send_report FROM ${table}user_permission 
   WHERE user_uid = ? LIMIT 1`,
     [userUid],
   )
@@ -37,6 +37,9 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
     return result
   }
   const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const [report] = await select(`SELECT response FROM ${table}report WHERE to_uid = ? LIMIT 1`, [
+    userUid,
+  ])
   result = {
     writePost: perm.write_post > 0 ? true : false,
     writeComment: perm.write_comment > 0 ? true : false,
@@ -44,7 +47,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
     sendReport: perm.send_report > 0 ? true : false,
     login: user.blocked < 1 ? true : false,
     userUid,
-    reason: perm.reason,
+    response: report.response,
   }
   return result
 }
@@ -60,31 +63,35 @@ export async function updateUserPermission(
   )
   if (perm) {
     await update(
-      `UPDATE ${table}user_permission SET write_post = ?, write_comment = ?, send_note = ?, send_report = ?, reason = ? 
+      `UPDATE ${table}user_permission SET write_post = ?, write_comment = ?, send_note = ?, send_report = ?
     WHERE user_uid = ? LIMIT 1`,
       [
         param.writePost ? 1 : 0,
         param.writeComment ? 1 : 0,
         param.sendNote ? 1 : 0,
         param.sendReport ? 1 : 0,
-        param.reason,
         param.userUid,
       ],
     )
   } else {
     await insert(
-      `INSERT INTO ${table}user_permission (user_uid, write_post, write_comment, send_note, send_report, reason) 
-    VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO ${table}user_permission (user_uid, write_post, write_comment, send_note, send_report) 
+    VALUES (?, ?, ?, ?, ?)`,
       [
         param.userUid,
         param.writePost ? 1 : 0,
         param.writeComment ? 1 : 0,
         param.sendNote ? 1 : 0,
         param.sendReport ? 1 : 0,
-        param.reason,
       ],
     )
   }
+  await update(`UPDATE ${table}report SET response = ?, solved = ? WHERE to_uid = ?`, [
+    param.response,
+    1,
+    param.userUid,
+  ])
+
   // 주의) login == true 로그인 가능이므로 blocked = 0
   await update(`UPDATE ${table}user SET blocked = ? WHERE uid = ? LIMIT 1`, [
     param.login ? 0 : 1,
@@ -93,7 +100,6 @@ export async function updateUserPermission(
   await insert(`INSERT INTO ${table}note (to_uid, from_uid, note, timestamp) VALUES (?, ?, ?, ?)`, [
     param.userUid,
     accessUserUid,
-    param.reason,
     Date.now(),
   ])
 }

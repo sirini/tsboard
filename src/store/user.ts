@@ -26,15 +26,6 @@ export const useUserStore = defineStore("user", () => {
     profile: "",
     name: "",
   })
-  const permission = ref<UserPermissionParams>({
-    writePost: false,
-    writeComment: false,
-    sendNote: false,
-    sendReport: false,
-    login: false,
-    userUid: 0,
-    reason: "",
-  })
 
   // 사용자 정보 보기 다이얼로그 열기
   function openUserInfo(user: TargetUserInfo): void {

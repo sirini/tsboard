@@ -93,7 +93,7 @@
         >
         <v-list-item>
           <v-textarea
-            v-model="manage.permission.reason"
+            v-model="manage.permission.response"
             :rules="rules"
             variant="outlined"
             counter

@@ -56,7 +56,13 @@
 
         <div class="ml-2 mr-2">
           {{ list.request }}
-          <v-chip label color="blue-grey-lighten-3" size="small">{{ util.date(list.date) }}</v-chip>
+          <v-card class="mt-2 mb-2 pa-0 response" v-if="report.isSolved" elevation="0">
+            <v-icon color="success" class="mr-2 mb-1" size="small">mdi-check-circle</v-icon
+            >{{ list.response }}
+          </v-card>
+          <v-chip v-else label color="blue-grey-lighten-3" size="small">{{
+            util.date(list.date)
+          }}</v-chip>
         </div>
 
         <template v-slot:append
@@ -120,5 +126,8 @@ watch(
 <style scoped>
 .underline {
   border-bottom: #eceff1 1px solid;
+}
+.response {
+  color: #4caf50;
 }
 </style>

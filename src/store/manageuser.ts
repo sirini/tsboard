@@ -30,7 +30,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
     sendReport: false,
     login: false,
     userUid: 0,
-    reason: "",
+    response: "",
   })
 
   // 사용자 관리하기 다이얼로그 열기
@@ -74,7 +74,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
 
   // 회원 관리하기
   async function manageUser(): Promise<void> {
-    if (permission.value.reason.length < 3 || permission.value.reason.length > 1000) {
+    if (permission.value.response.length < 3 || permission.value.response.length > 1000) {
       util.error(USER.INVALID_TEXT_LENGTH)
       return
     }
@@ -88,7 +88,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
       sendNote: permission.value.sendNote,
       sendReport: permission.value.sendReport,
       login: permission.value.login,
-      reason: permission.value.reason,
+      response: permission.value.response,
     })
     if (!response.data) {
       util.error(USER.NO_RESPONSE)

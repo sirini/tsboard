@@ -10,7 +10,7 @@ export const USER = {
   UNKNOWN_NOTE_TARGET: "쪽지를 보낼 대상이 제대로 지정되지 않았습니다.",
   UNKNOWN_REPORT_TARGET: "신고할 대상이 제대로 지정되지 않았습니다.",
   REPORTED_USER: "님을 운영진에게 신고 하였습니다.",
-  ACTION_TAKEN: "님에 대한 조치를 완료 하였습니다.",
+  ACTION_TAKEN: "님에 대한 조치를 완료 하였습니다. 곧 창을 닫습니다...",
   FAILED_MANAGE_USER: "회원에 대한 조치사항을 반영하지 못했습니다.",
   FAILED_LOAD_PERMISSION: "회원에 대한 기존 조치사항을 가져오지 못했습니다.",
   LOADED_PERMISSION: "회원에 대한 기존 조치사항을 성공적으로 불러들였습니다.",

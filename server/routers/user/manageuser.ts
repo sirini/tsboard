@@ -72,7 +72,7 @@ export const manageUser = new Elysia()
       if (body.userUid < 1) {
         return fail(`Invalid target user.`)
       }
-      if (body.reason.length < 3) {
+      if (body.response.length < 3) {
         return fail(`Invalid content.`)
       }
       await updateUserPermission(
@@ -83,7 +83,7 @@ export const manageUser = new Elysia()
           sendReport: body.sendReport,
           login: body.login,
           userUid: body.userUid,
-          reason: body.reason,
+          response: body.response,
         },
         store.accessUserUid,
       )
@@ -100,7 +100,7 @@ export const manageUser = new Elysia()
         sendNote: t.Boolean(),
         sendReport: t.Boolean(),
         login: t.Boolean(),
-        reason: t.String(),
+        response: t.String(),
       }),
     },
   )

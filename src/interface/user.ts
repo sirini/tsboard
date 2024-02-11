@@ -20,7 +20,7 @@ export type UserPermission = {
 
 export type UserPermissionParams = UserPermission & {
   userUid: number
-  reason: string
+  response: string
 }
 
 export type ChatHistory = {
