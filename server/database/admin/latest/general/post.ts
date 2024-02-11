@@ -5,7 +5,7 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestPost, AdminSearchParams } from "../../../../../src/interface/admin"
+import { AdminLatestPost, AdminSearchCommon } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
 // 전체 글 개수 반환하기
@@ -103,7 +103,7 @@ export async function getPosts(
 }
 
 // 검색 결과 가져오기
-export async function getSearchedPosts(search: AdminSearchParams): Promise<AdminLatestPost[]> {
+export async function getSearchedPosts(search: AdminSearchCommon): Promise<AdminLatestPost[]> {
   let result: AdminLatestPost[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch
   const posts = await select(

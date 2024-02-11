@@ -103,12 +103,12 @@ export type AdminDate = {
   daybefore: number
 }
 
-export type AdminMemberTable = AdminPair & {
+export type AdminUser = AdminPair & {
   id: string
   profile: string
   level: number
   point: number
-  signup: string
+  signup: number
 }
 
 export type AdminReport = {
@@ -145,17 +145,21 @@ export type AdminLatestComment = AdminLatestCommon & {
   writer: AdminUserInfo
 }
 
-type AdminSearchCommon = {
+type AdminList = {
   page: number
   bunch: number
   total: number
 }
 
-export type AdminSearchParams = AdminSearchCommon & {
+export type AdminSearchCommon = AdminList & {
   option: string
   keyword: string
 }
 
 export type AdminReportParams = AdminSearchCommon & {
   isSolved: boolean
+}
+
+export type AdminUserParams = AdminSearchCommon & {
+  isBlocked: boolean
 }

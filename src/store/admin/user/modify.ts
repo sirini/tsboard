@@ -1,0 +1,138 @@
+/**
+ * store/admin/member/manager
+ *
+ * 회원 정보 수정에 필요한 상태 및 함수들
+ */
+
+import { ref } from "vue"
+import { defineStore } from "pinia"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../../server/index"
+import { useAdminStore } from "../common"
+import { useAuthStore } from "../../auth"
+import { useUtilStore } from "../../util"
+import { UserModifyResult } from "../../../interface/auth"
+import { MODIFY } from "../../../messages/store/admin/user/modify"
+
+export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
+  const server = edenTreaty<App>(process.env.API!)
+  const admin = useAdminStore()
+  const auth = useAuthStore()
+  const util = useUtilStore()
+  const password = ref<string>("")
+  const checkedPassword = ref<string>("")
+  const user = ref<UserModifyResult>({
+    uid: 0,
+    id: "",
+    name: "",
+    profile: `/no-profile.svg`,
+    level: 0,
+    point: 0,
+    signature: "",
+  })
+  const newProfile = ref<File | undefined>(undefined)
+  const newProfilePreview = ref<string>("")
+
+  // 이름 중복 체크하기
+  async function checkName(): Promise<void> {
+    if (user.value.name.length < 2) {
+      util.error(MODIFY.TOO_SHORT_NAME)
+      return
+    }
+    // do something
+    util.success(`${user.value.name} ${MODIFY.VALID_NAME}`)
+  }
+
+  // 기존 회원 정보를 가져와 업데이트하기
+  async function loadUserInfo(userUid: number): Promise<void> {
+    const response = await server.api.admin.user.load.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        userUid,
+      },
+    })
+    if (!response.data) {
+      admin.error(MODIFY.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${MODIFY.FAILED_LOAD} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(MODIFY.FAILED_LOAD)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    user.value = response.data.result.user as UserModifyResult
+    admin.success(MODIFY.LOADED_USER)
+  }
+
+  // 변경할 프로필 사진 받기
+  function selectProfileImage(event: Event): void {
+    const input = event.target as HTMLInputElement
+    if (!input.files?.length) return
+    newProfile.value = input.files[0] as File
+    newProfilePreview.value = URL.createObjectURL(newProfile.value)
+  }
+
+  // 회원 레벨 변경하기
+  function changeUserLevel(level: number): void {
+    user.value.level = level
+  }
+
+  // 변경된 사항 업데이트하기
+  async function updateUserInfo(): Promise<void> {
+    if (password.value.length > 0 || checkedPassword.value.length > 0) {
+      if (password.value != checkedPassword.value) {
+        util.error(MODIFY.DIFFERENT_PASSWORD)
+        return
+      }
+    }
+    // TODO
+    const response = await server.api.admin.user.update.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      userUid: user.value.uid,
+      name: user.value.name,
+      level: user.value.level,
+      point: user.value.point,
+      signature: user.value.signature,
+      password: password.value.length < 1 ? undefined : password.value,
+      newProfile: newProfile.value,
+    })
+    if (!response.data) {
+      admin.error(MODIFY.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${MODIFY.FAILED_UPDATE} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      admin.error(MODIFY.FAILED_UPDATE)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    password.value = ""
+    checkedPassword.value = ""
+    newProfile.value = undefined
+    newProfilePreview.value = ""
+    util.success(`${user.value.name} ${MODIFY.UPDATED_USER}`)
+  }
+
+  return {
+    user,
+    password,
+    checkedPassword,
+    newProfilePreview,
+    checkName,
+    loadUserInfo,
+    selectProfileImage,
+    changeUserLevel,
+    updateUserInfo,
+  }
+})

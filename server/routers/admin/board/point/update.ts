@@ -28,18 +28,18 @@ export const update = new Elysia()
   )
   .patch(
     "/updatepoints",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, points } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
-      const points = Object.values(body.points)
-      for (const point of points) {
+      const pointKeys = Object.values(points)
+      for (const point of pointKeys) {
         if (point.amount < 0 || point.amount > 10_000) {
           return fail(`Invalid point value. (0 ≤ point ≤ 10,000)`)
         }
       }
 
-      updatePoints(body.boardUid, body.points as AdminBoardPointList)
+      updatePoints(boardUid, points as AdminBoardPointList)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({

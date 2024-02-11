@@ -68,22 +68,28 @@ export const manageUser = new Elysia()
   )
   .post(
     "/manageuser",
-    async ({ jwt, cookie: { refresh }, headers, body, store }) => {
-      if (body.userUid < 1) {
+    async ({
+      jwt,
+      cookie: { refresh },
+      headers,
+      body: { userUid, writePost, writeComment, sendNote, sendReport, login, response },
+      store,
+    }) => {
+      if (userUid < 1) {
         return fail(`Invalid target user.`)
       }
-      if (body.response.length < 3) {
+      if (response.length < 3) {
         return fail(`Invalid content.`)
       }
       await updateUserPermission(
         {
-          writePost: body.writePost,
-          writeComment: body.writeComment,
-          sendNote: body.sendNote,
-          sendReport: body.sendReport,
-          login: body.login,
-          userUid: body.userUid,
-          response: body.response,
+          writePost,
+          writeComment,
+          sendNote,
+          sendReport,
+          login,
+          userUid,
+          response,
         },
         store.accessUserUid,
       )

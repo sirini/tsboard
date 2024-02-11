@@ -1,6 +1,16 @@
 <template>
   <v-card>
-    <v-card-title> {{ manager.user.name }} 님의 정보 수정하기 </v-card-title>
+    <v-card-title
+      ><v-avatar size="small" class="mb-1 mr-2"
+        ><v-img
+          :src="
+            PREFIX +
+            (userModify.user.profile.length < 1 ? '/no-profile.svg' : userModify.user.profile)
+          "
+        ></v-img
+      ></v-avatar>
+      {{ userModify.user.name }} 님의 정보 수정하기
+    </v-card-title>
     <v-divider></v-divider>
     <alert-bar></alert-bar>
 
@@ -9,9 +19,9 @@
         <v-list>
           <v-list-item>
             <v-text-field
-              v-model="manager.user.id"
+              v-model="userModify.user.id"
               variant="outlined"
-              class="mt-3 mb-3"
+              class="mt-2 mb-3"
               hide-details
               prepend-inner-icon="mdi-email-outline"
               label="회원 아이디는 변경이 불가능 합니다"
@@ -21,7 +31,7 @@
           <v-divider></v-divider>
           <v-list-item>
             <v-text-field
-              v-model="manager.user.level"
+              v-model="userModify.user.level"
               variant="outlined"
               class="mt-3 mb-3"
               readonly
@@ -35,10 +45,15 @@
                   <v-list-item
                     v-for="(_, level) in 10"
                     :key="level"
-                    @click="manager.changeUserLevel(level)"
+                    @click="userModify.changeUserLevel(level)"
                   >
                     {{ level }} 레벨
-                    <v-chip size="small" color="info" v-if="level === 0">비회원과 동일 레벨</v-chip>
+                    <v-chip size="small" color="warning" v-if="level === 0"
+                      >비회원과 동일 레벨</v-chip
+                    >
+                    <v-chip size="small" color="info" v-if="level === 9"
+                      >최고 관리자와 동일 레벨</v-chip
+                    >
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -47,7 +62,7 @@
           <v-divider></v-divider>
           <v-list-item>
             <v-textarea
-              v-model="manager.user.signature"
+              v-model="userModify.user.signature"
               variant="outlined"
               class="mt-3 mb-3"
               label="회원의 서명 내용을 수정합니다 (250자 미만)"
@@ -63,20 +78,20 @@
         <v-list>
           <v-list-item>
             <v-text-field
-              v-model="manager.user.name"
+              v-model="userModify.user.name"
               variant="outlined"
-              class="mt-3 mb-3"
+              class="mt-2 mb-3"
               hide-details
               prepend-inner-icon="mdi-card-account-details-outline"
               label="이름 수정 후 중복 여부를 확인해 보세요"
               append-inner-icon="mdi-check-circle-outline"
-              @click:append-inner="manager.checkName"
+              @click:append-inner="userModify.checkName"
             ></v-text-field>
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item>
             <v-text-field
-              v-model="manager.user.point"
+              v-model="userModify.user.point"
               variant="outlined"
               class="mt-3 mb-3"
               hide-details
@@ -87,7 +102,7 @@
           <v-divider></v-divider>
           <v-list-item>
             <v-text-field
-              v-model="manager.password"
+              v-model="userModify.password"
               class="mt-3 mb-3"
               hide-details
               :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -100,8 +115,8 @@
           </v-list-item>
           <v-list-item>
             <v-text-field
-              v-model="manager.checkedPassword"
-              class="mt-3 mb-3"
+              v-model="userModify.checkedPassword"
+              class="mt-5 mb-3"
               hide-details
               :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
               :type="visible ? 'text' : 'password'"
@@ -115,13 +130,36 @@
       </v-col>
     </v-row>
     <v-divider></v-divider>
+    <v-row no-gutters>
+      <v-col>
+        <v-list>
+          <v-list-item>
+            <template v-slot:prepend>
+              <v-avatar v-if="userModify.newProfilePreview.length > 0">
+                <v-img :src="userModify.newProfilePreview"></v-img>
+              </v-avatar>
+            </template>
+
+            <v-file-input
+              variant="outlined"
+              hide-details
+              class="mt-2 mb-2"
+              prepend-icon="mdi-camera"
+              accept="image/*"
+              label="프로필 사진을 선택해 보세요"
+              @change="userModify.selectProfileImage"
+            ></v-file-input>
+          </v-list-item> </v-list
+      ></v-col>
+    </v-row>
+    <v-divider></v-divider>
 
     <v-card-actions>
       <v-btn prepend-icon="mdi-chevron-left" @click="util.back"
         >아무것도 변경하지 않고 뒤로가기</v-btn
       >
       <v-spacer></v-spacer>
-      <v-btn color="primary" append-icon="mdi-chevron-right" @click="manager.updateUserInfo"
+      <v-btn color="primary" append-icon="mdi-chevron-right" @click="userModify.updateUserInfo"
         >사용자 정보 업데이트 하기</v-btn
       >
     </v-card-actions>
@@ -132,17 +170,18 @@
 import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useUtilStore } from "../../../store/util"
-import { useAdminMemberManagerStore } from "../../../store/admin/member/manager"
+import { useAdminUserModifyStore } from "../../../store/admin/user/modify"
 import AlertBar from "../../util/AlertBar.vue"
 
 const route = useRoute()
 const util = useUtilStore()
-const manager = useAdminMemberManagerStore()
+const userModify = useAdminUserModifyStore()
 const visible = ref<boolean>(false)
+const PREFIX = process.env.PREFIX || ""
 
 // 멤버 고유 번호가 파라미터로 넘어오면 회원 정보 가져오기
 onMounted(() => {
-  const uid = parseInt(route.params.uid as string)
-  manager.loadUserInfo(uid)
+  const userUid = parseInt(route.params.no as string)
+  userModify.loadUserInfo(userUid)
 })
 </script>

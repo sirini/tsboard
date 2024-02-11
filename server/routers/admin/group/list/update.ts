@@ -31,11 +31,11 @@ export const update = new Elysia()
   )
   .post(
     "/creategroup",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.newId.length < 2) {
+    async ({ jwt, cookie: { refresh }, headers, body: { newId } }) => {
+      if (newId.length < 2) {
         return fail(`Group id is too short.`)
       }
-      const newGroupUid = await createGroup(body.newId)
+      const newGroupUid = await createGroup(newId)
       if (newGroupUid < 1) {
         return fail(`Failed to create a new group, try another ID.`)
       }
@@ -48,7 +48,7 @@ export const update = new Elysia()
       return success({
         newAccessToken,
         uid: newGroupUid,
-        id: body.newId,
+        id: newId,
         manager: admin,
       })
     },
@@ -61,11 +61,11 @@ export const update = new Elysia()
   )
   .delete(
     "/removegroup",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.groupUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { groupUid } }) => {
+      if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
-      const result = await removeGroup(body.groupUid)
+      const result = await removeGroup(groupUid)
       if (result === false) {
         return fail(`Failed to remove a group, it might be a last one.`)
       }

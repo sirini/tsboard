@@ -20,9 +20,7 @@ export const signIn = new Elysia()
   )
   .post(
     "/signin",
-    async ({ jwt, cookie: { refresh }, body }) => {
-      const id = body.id.trim()
-      const password = body.password.trim()
+    async ({ jwt, cookie: { refresh }, body: { id, password } }) => {
       if (id.length < 4 || password.length !== 64) {
         return fail(`Invalid id or password`)
       }

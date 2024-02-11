@@ -31,15 +31,15 @@ export const update = new Elysia()
   )
   .patch(
     "/changeadmin",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.groupUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { groupUid, userUid } }) => {
+      if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
-      if (body.userUid < 1) {
+      if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
 
-      const result = await changeGroupAdmin(body.groupUid, body.userUid)
+      const result = await changeGroupAdmin(groupUid, userUid)
       if (result === false) {
         return fail(`User not found.`)
       }
@@ -59,12 +59,12 @@ export const update = new Elysia()
   )
   .delete(
     "/removeboard",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
-      const result = await removeBoard(body.boardUid)
+      const result = await removeBoard(boardUid)
       if (result === false) {
         return fail(`Board not found.`)
       }
@@ -83,15 +83,15 @@ export const update = new Elysia()
   )
   .post(
     "/createboard",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.groupUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { groupUid, newId } }) => {
+      if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
-      if (body.newId.length < 2) {
+      if (newId.length < 2) {
         return fail(`Board ID is too short.`)
       }
 
-      const newBoardUid = await createBoard(body.newId, body.groupUid)
+      const newBoardUid = await createBoard(newId, groupUid)
       if (newBoardUid < 1) {
         return fail(`Failed to create a new board, try another ID.`)
       }

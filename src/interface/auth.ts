@@ -4,12 +4,12 @@
  * 로그인 등 사용자 관련 인터페이스
  */
 
-export interface Token {
+export type Token = {
   access: string
   refresh: string
 }
 
-export interface User {
+export type UserModifyResult = {
   uid: number
   id: string
   name: string
@@ -17,19 +17,22 @@ export interface User {
   level: number
   point: number
   signature: string
+}
+
+export type User = UserModifyResult & {
   signup: number
   signin: number
   admin: boolean
   token: string
 }
 
-export interface Signup {
+export type Signup = {
   email: string
   password: string
   name: string
 }
 
-export interface ChangePassword {
+export type ChangePassword = {
   target: number
   code: string
   password: string

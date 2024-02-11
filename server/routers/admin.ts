@@ -11,6 +11,7 @@ import { board } from "./admin/board"
 import { group } from "./admin/group"
 import { latest } from "./admin/latest"
 import { report } from "./admin/report"
+import { user } from "./admin/user"
 import { isValidRefreshToken } from "../database/auth/authorization"
 import { fail } from "../util/tools"
 import { hasPermission } from "../database/user/manageuser"
@@ -48,4 +49,5 @@ export const admin = new Elysia().group("/admin", (app) => {
     .use(group)
     .use(latest)
     .use(report)
+    .use(user)
 })

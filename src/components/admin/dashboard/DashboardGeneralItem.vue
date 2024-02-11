@@ -59,7 +59,7 @@
               prepend-icon="mdi-cog-outline"
               rounded="xl"
               elevation="0"
-              @click="util.go('adminMember')"
+              @click="util.go('adminUser')"
               >관리
               <v-tooltip activator="parent"> 클릭하시면 회원 관리 페이지로 이동합니다. </v-tooltip>
             </v-btn>
@@ -70,7 +70,7 @@
           <v-list-item
             v-for="(member, index) in dashboard.members"
             :key="index"
-            @click="router.push({ name: 'adminMemberManager', params: { uid: member.uid } })"
+            @click="router.push({ name: 'adminUserManager', params: { uid: member.uid } })"
             >{{ member.name }}
             <v-tooltip activator="parent"
               >클릭하시면 {{ member.name }}님 관리 페이지로 이동합니다.</v-tooltip

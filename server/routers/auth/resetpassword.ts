@@ -15,21 +15,21 @@ import {
 export const resetPassword = new Elysia()
   .post(
     "/resetpassword",
-    async ({ body }) => {
-      if ((await isValidEmail(body.email)) === false) {
+    async ({ body: { email } }) => {
+      if ((await isValidEmail(email)) === false) {
         return {
           success: false,
           error: `Invalid email address.`,
         }
       }
       if (process.env.GMAIL_OAUTH_USER === "") {
-        await askResetPassword(body.email)
+        await askResetPassword(email)
         return {
           success: true,
           sendmail: false,
         }
       }
-      await sendResetPassword(body.email)
+      await sendResetPassword(email)
       return {
         success: true,
         sendmail: true,
@@ -43,8 +43,7 @@ export const resetPassword = new Elysia()
   )
   .post(
     "/changepassword",
-    async ({ body }) => {
-      const { target, code, password } = body
+    async ({ body: { target, code, password } }) => {
       if (target < 1 || code.length !== 6 || password.length !== 64) {
         return {
           success: false,

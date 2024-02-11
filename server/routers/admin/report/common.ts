@@ -45,6 +45,8 @@ export const common = new Elysia()
         page,
         bunch,
         total: totalReportCount,
+        option: "",
+        keyword: "",
         isSolved: solved,
       })
 
@@ -85,16 +87,14 @@ export const common = new Elysia()
       }
       const solved = isSolved > 0 ? true : false
       const totalReportCount = await getTotalReportCount(solved)
-      const reports = await getSearchedReports(
-        {
-          option,
-          keyword,
-          page,
-          bunch,
-          total: totalReportCount,
-        },
-        solved,
-      )
+      const reports = await getSearchedReports({
+        option,
+        keyword,
+        page,
+        bunch,
+        total: totalReportCount,
+        isSolved: solved,
+      })
 
       return success({
         reports,

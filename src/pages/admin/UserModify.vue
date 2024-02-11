@@ -13,7 +13,7 @@
             </v-list>
           </v-navigation-drawer>
 
-          <v-main class="main"><member-manager-general></member-manager-general></v-main>
+          <v-main class="main"><user-modify></user-modify></v-main>
         </v-layout>
       </v-card>
     </v-container>
@@ -26,7 +26,7 @@ import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
-import MemberManagerGeneral from "../../components/admin/member/MemberManagerGeneral.vue"
+import UserModify from "../../components/admin/user/UserModify.vue"
 
 const route = useRoute()
 const admin = useAdminStore()

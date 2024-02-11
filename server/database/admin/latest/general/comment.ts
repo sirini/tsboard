@@ -5,7 +5,7 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestComment, AdminSearchParams } from "../../../../../src/interface/admin"
+import { AdminLatestComment, AdminSearchCommon } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
 // 전체 댓글 개수 반환하기
@@ -99,7 +99,7 @@ export async function getComments(
 
 // 검색 결과 가져오기
 export async function getSearchedComments(
-  search: AdminSearchParams,
+  search: AdminSearchCommon,
 ): Promise<AdminLatestComment[]> {
   let result: AdminLatestComment[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch

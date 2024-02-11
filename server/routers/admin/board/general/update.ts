@@ -36,12 +36,12 @@ export const update = new Elysia()
   )
   .patch(
     "/changegroup",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.groupUid < 1 || body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { groupUid, boardUid } }) => {
+      if (groupUid < 1 || boardUid < 1) {
         return fail(`Invalid target.`)
       }
 
-      await changeGroup(body.boardUid, body.groupUid)
+      await changeGroup(boardUid, groupUid)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -58,15 +58,15 @@ export const update = new Elysia()
   )
   .patch(
     "/updatename",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newName } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
-      if (body.newName.length < 2) {
+      if (newName.length < 2) {
         return fail(`Board name is too short.`)
       }
 
-      await updateName(body.boardUid, body.newName)
+      await updateName(boardUid, newName)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -83,15 +83,15 @@ export const update = new Elysia()
   )
   .patch(
     "/updateinfo",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newInfo } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
-      if (body.newInfo.length < 2) {
+      if (newInfo.length < 2) {
         return fail(`Board info is too short.`)
       }
 
-      await updateInfo(body.boardUid, body.newInfo)
+      await updateInfo(boardUid, newInfo)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -108,12 +108,12 @@ export const update = new Elysia()
   )
   .patch(
     "/changetype",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newType } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
-      await changeType(body.boardUid, body.newType)
+      await changeType(boardUid, newType)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -130,12 +130,12 @@ export const update = new Elysia()
   )
   .patch(
     "/updaterows",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newRows } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
-      await updateRows(body.boardUid, body.newRows)
+      await updateRows(boardUid, newRows)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -152,12 +152,12 @@ export const update = new Elysia()
   )
   .patch(
     "/updatewidth",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newWidth } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
 
-      await updateWidth(body.boardUid, body.newWidth)
+      await updateWidth(boardUid, newWidth)
 
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -174,15 +174,15 @@ export const update = new Elysia()
   )
   .post(
     "/addcategory",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, newCategory } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
-      if (body.newCategory.length < 2) {
+      if (newCategory.length < 2) {
         return fail(`Category name is too short.`)
       }
 
-      const categoryUid = await addCategory(body.boardUid, body.newCategory)
+      const categoryUid = await addCategory(boardUid, newCategory)
       if (categoryUid < 1) {
         return fail(`Already added.`)
       }
@@ -203,15 +203,15 @@ export const update = new Elysia()
   )
   .delete(
     "/removecategory",
-    async ({ jwt, cookie: { refresh }, headers, body }) => {
-      if (body.boardUid < 1) {
+    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, categoryUid } }) => {
+      if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
-      if (body.categoryUid < 1) {
+      if (categoryUid < 1) {
         return fail(`Invalid category uid.`)
       }
 
-      const result = await removeCategory(body.boardUid, body.categoryUid)
+      const result = await removeCategory(boardUid, categoryUid)
       if (result === false) {
         return fail(`Unable to remove last category.`)
       }

@@ -28,14 +28,14 @@ export const adminRoutes = [
     component: () => import("@/pages/admin/BoardManager.vue"),
   },
   {
-    path: PREFIX + "/admin/member",
-    name: "adminMember",
-    component: () => import("@/pages/admin/MemberList.vue"),
+    path: PREFIX + "/admin/user",
+    name: "adminUser",
+    component: () => import("@/pages/admin/UserList.vue"),
   },
   {
-    path: PREFIX + "/admin/member/:no(\\d+)",
-    name: "adminMemberManager",
-    component: () => import("@/pages/admin/MemberManager.vue"),
+    path: PREFIX + "/admin/user/:no(\\d+)",
+    name: "adminUserManager",
+    component: () => import("@/pages/admin/UserModify.vue"),
   },
   {
     path: PREFIX + "/admin/report",

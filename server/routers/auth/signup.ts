@@ -19,8 +19,7 @@ import { WELCOME } from "../../../src/messages/mail/welcome"
 export const signUp = new Elysia()
   .post(
     "/signup",
-    async ({ body }) => {
-      const { email, password, name } = body
+    async ({ body: { email, password, name } }) => {
       if ((await isDuplicatedEmail(email)) === true) {
         return fail(`Duplicated email address.`)
       }
@@ -53,8 +52,8 @@ export const signUp = new Elysia()
   )
   .post(
     "/checkemail",
-    async ({ body }) => {
-      if ((await isDuplicatedEmail(body.email.trim())) === true) {
+    async ({ body: { email } }) => {
+      if ((await isDuplicatedEmail(email.trim())) === true) {
         return fail(`Duplicated email address.`)
       }
       return success()
@@ -67,8 +66,8 @@ export const signUp = new Elysia()
   )
   .post(
     "/checkname",
-    async ({ body }) => {
-      if ((await isDuplicatedName(body.name.trim())) === true) {
+    async ({ body: { name } }) => {
+      if ((await isDuplicatedName(name.trim())) === true) {
         return fail(`Duplicated name.`)
       }
       return success()
@@ -81,12 +80,12 @@ export const signUp = new Elysia()
   )
   .post(
     "/verify",
-    async ({ body }) => {
-      const result = await verify(body.target, body.code, body.user)
+    async ({ body: { target, code, user } }) => {
+      const result = await verify(target, code, user)
       if (result) {
-        const subject = WELCOME.SUBJECT.replaceAll("#name#", body.user.name)
-        const html = WELCOME.HTML.replaceAll("#name#", body.user.name)
-        sendMail(body.user.email, subject, html)
+        const subject = WELCOME.SUBJECT.replaceAll("#name#", user.name)
+        const html = WELCOME.HTML.replaceAll("#name#", user.name)
+        sendMail(user.email, subject, html)
         return success()
       }
       return fail(`Invalid code.`)

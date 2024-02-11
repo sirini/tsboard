@@ -5,7 +5,7 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminReport, AdminReportParams, AdminSearchParams } from "../../../../src/interface/admin"
+import { AdminReport, AdminReportParams } from "../../../../src/interface/admin"
 import { select, table } from "../../common"
 
 // 총 신고 개수 반환하기
@@ -61,7 +61,6 @@ export async function getReports(param: AdminReportParams): Promise<AdminReport[
       param.isSolved ? "=" : "<"
     } 1 ORDER BY uid DESC LIMIT ${param.bunch}`,
   )
-
   if (!reports[0]) {
     return result
   }
@@ -83,10 +82,7 @@ async function getUserUid(target: string, name: string): Promise<string> {
 }
 
 // 검색 결과 가져오기
-export async function getSearchedReports(
-  search: AdminSearchParams,
-  isSolved: boolean,
-): Promise<AdminReport[]> {
+export async function getSearchedReports(search: AdminReportParams): Promise<AdminReport[]> {
   let result: AdminReport[] = []
   const last = 1 + search.total - (search.page - 1) * search.bunch
   const whereUser = await getUserUid(search.option, search.keyword)
@@ -96,7 +92,7 @@ export async function getSearchedReports(
   }
   const reports = await select(
     `SELECT uid, to_uid, from_uid, request, response, timestamp FROM ${table}report WHERE uid < ${last} AND solved ${
-      isSolved ? "=" : "<"
+      search.isSolved ? "=" : "<"
     } 1 ${whereUser} ${whereRequest} ORDER BY uid DESC LIMIT ${search.bunch}`,
   )
 
