@@ -73,7 +73,7 @@
             elevation="0"
             icon
             @click="
-              user.openManageUser({
+              manage.openManageUser({
                 uid: list.to.uid,
                 profile: PREFIX + (list.to.profile || ''),
                 name: list.to.name,
@@ -101,12 +101,12 @@
 <script setup lang="ts">
 import { watch, onMounted } from "vue"
 import { useAdminReportStore } from "../../../store/admin/report/common"
-import { useUserStore } from "../../../store/user"
+import { useManageUserStore } from "../../../store/manageuser"
 import { useUtilStore } from "../../../store/util"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const report = useAdminReportStore()
-const user = useUserStore()
+const manage = useManageUserStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
 

@@ -26,7 +26,7 @@
         <v-list-item
           prepend-icon="mdi-account-cog"
           :disabled="!auth.user.admin"
-          @click="user.openManageUser(targetUser)"
+          @click="manage.openManageUser(targetUser)"
           >회원 관리</v-list-item
         >
       </v-list>
@@ -38,10 +38,12 @@
 import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUserStore } from "../../store/user"
+import { useManageUserStore } from "../../store/manageuser"
 import { TargetUserInfo } from "../../interface/user"
 
 const auth = useAuthStore()
 const user = useUserStore()
+const manage = useManageUserStore()
 const props = defineProps<{
   uid: number
   profile: string

@@ -62,7 +62,7 @@
             elevation="0"
             icon
             @click="
-              user.openManageUser({
+              manage.openManageUser({
                 uid: member.uid,
                 profile: PREFIX + member.profile,
                 name: member.name,
@@ -88,12 +88,12 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 import { useAdminMemberGeneralStore } from "../../../store/admin/member/general"
-import { useUserStore } from "../../../store/user"
+import { useManageUserStore } from "../../../store/manageuser"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 
 const router = useRouter()
 const general = useAdminMemberGeneralStore()
-const user = useUserStore()
+const manage = useManageUserStore()
 const PREFIX = process.env.PREFIX || ""
 </script>
 

@@ -72,13 +72,6 @@ export const useUserStore = defineStore("user", () => {
     sendReportDialog.value = false
   }
 
-  // 사용자 관리하기 다이얼로그 열기
-  function openManageUser(user: TargetUserInfo): void {
-    targetUserInfo.value = user
-    manageUserDialog.value = true
-    loadUserPermission()
-  }
-
   // 사용자 관리하기 다이얼로그 닫기
   function closeManageUser(): void {
     targetUserInfo.value = { uid: 0, profile: "", name: "" }
@@ -125,95 +118,20 @@ export const useUserStore = defineStore("user", () => {
     setTimeout(closeSendReport, 3000)
   }
 
-  // 회원의 기존 권한들 불러오기
-  async function loadUserPermission(): Promise<void> {
-    const response = await server.api.user.loadpermission.get({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        userUid: targetUserInfo.value.uid,
-      },
-    })
-    if (!response.data) {
-      admin.error(USER.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      admin.error(`${USER.FAILED_LOAD_PERMISSION} (${response.data.error})`)
-      return
-    }
-    if (!response.data.result) {
-      admin.error(USER.FAILED_LOAD_PERMISSION)
-      return
-    }
-    permission.value = response.data.result.permission as UserPermissionParams
-    admin.success(USER.LOADED_PERMISSION)
-
-    console.log(permission.value) // DEBUG
-  }
-
-  // 회원 관리하기
-  async function manageUser(): Promise<void> {
-    if (permission.value.reason.length < 3 || permission.value.reason.length > 1000) {
-      admin.error(USER.INVALID_TEXT_LENGTH)
-      return
-    }
-    const response = await server.api.user.manageuser.post({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      userUid: targetUserInfo.value.uid,
-      writePost: permission.value.writePost,
-      writeComment: permission.value.writeComment,
-      sendNote: permission.value.sendNote,
-      sendReport: permission.value.sendReport,
-      login: permission.value.login,
-      reason: permission.value.reason,
-    })
-    if (!response.data) {
-      admin.error(USER.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      admin.error(`${USER.FAILED_MANAGE_USER} (${response.data.error})`)
-      return
-    }
-    if (!response.data.result) {
-      admin.error(USER.FAILED_MANAGE_USER)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-
-    const w = permission.value.writePost ? USER.BLOCK_WRITE : USER.UNBLOCK_WRITE
-    const c = permission.value.writeComment ? USER.BLOCK_REPLY : USER.UNBLOCK_REPLY
-    const n = permission.value.sendNote ? USER.BLOCK_NOTE : USER.UNBLOCK_NOTE
-    const r = permission.value.sendReport ? USER.BLOCK_REPORT : USER.UNBLOCK_REPORT
-    const l = permission.value.login ? USER.BLOCK_LOGIN : USER.UNBLOCK_LOGIN
-    admin.success(`${targetUserInfo.value.name} ${USER.ACTION_TAKEN}`)
-    closeManageUser()
-  }
-
   return {
     targetUserInfo,
     userInfoDialog,
     sendNoteDialog,
     sendReportDialog,
-    manageUserDialog,
     chatMessage,
     chatHistory,
-    permission,
     openUserInfo,
     closeUserInfo,
     openSendNote,
     closeSendNote,
     openSendReport,
     closeSendReport,
-    openManageUser,
-    closeManageUser,
     sendNote,
     sendReport,
-    loadUserPermission,
-    manageUser,
   }
 })
