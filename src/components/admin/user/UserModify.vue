@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title
-      ><v-avatar size="small" class="mb-1 mr-2"
+      ><v-avatar size="100" class="mt-2 mb-2 mr-3"
         ><v-img
           :src="
             PREFIX +

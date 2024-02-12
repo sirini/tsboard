@@ -163,3 +163,13 @@ export type AdminReportParams = AdminSearchCommon & {
 export type AdminUserParams = AdminSearchCommon & {
   isBlocked: boolean
 }
+
+export type AdminUserModifyParams = {
+  userUid: number
+  name: string
+  level: number
+  point: number
+  signature: string
+  password: string
+  profile: File | undefined
+}

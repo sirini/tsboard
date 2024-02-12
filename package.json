@@ -36,6 +36,7 @@
     "highlight.js": "^11.9.0",
     "lowlight": "^3.1.0",
     "mysql2": "^3.6.5",
+    "nanoid": "^5.0.5",
     "nodemailer": "^6.9.8",
     "pinia": "^2.0.0",
     "roboto-fontface": "*",

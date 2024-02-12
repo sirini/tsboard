@@ -32,8 +32,8 @@ const route = useRoute()
 const admin = useAdminStore()
 
 admin.clearBreadcrumbs()
-admin.addBreadcrumbs("회원 목록", `${process.env.PREFIX}/admin/member`)
-admin.addBreadcrumbs("회원 정보 수정", `${process.env.PREFIX}/admin/member/${route.params?.id}`)
+admin.addBreadcrumbs("회원 목록", `${process.env.PREFIX}/admin/user`)
+admin.addBreadcrumbs("회원 정보 수정", `${process.env.PREFIX}/admin/user/${route.params?.id}`)
 </script>
 
 <style scoped>

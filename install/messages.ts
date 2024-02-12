@@ -13,9 +13,12 @@ export const env = `#
 # 참조2 - 메일 자동 발송을 위해 구글 메일 계정 필요하며, 맨 아래 참고) 부분을 꼭 따라해야 함
 #
 # 하다가 어려움이 있을 땐? tsboard.dev 방문!
-# 
+#
+
+# 기본 설정들
 SERVER_PORT=3100
 MAX_FILE_SIZE=10247680
+PROFILE_SIZE=256
 
 # 데이터베이스 세팅 (각 서버 설정에 맞게 변경 필요)
 DB_HOST=#dbhost#

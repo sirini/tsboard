@@ -8,17 +8,41 @@ import { unlinkSync } from "node:fs"
 import { JWTPayloadSpec } from "@elysiajs/jwt"
 import { Token } from "../../src/interface/auth"
 import { saveTokens } from "../database/auth/authorization"
+import { exists, mkdir } from "node:fs/promises"
+import { nanoid, customAlphabet } from "nanoid"
 
 // 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다
 export function generateRandomCode() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz0123456789"
-  let random = ""
+  const customId = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz")
+  return customId(6)
+}
 
-  for (let i = 0; i < 6; i++) {
-    const index = Math.floor(Math.random() * chars.length)
-    random += chars.charAt(index)
+// 랜덤한 문자열 반환
+export function generateRandomID(): string {
+  return nanoid()
+}
+
+interface Date {
+  year: string
+  month: string
+  day: string
+  hour: string
+  minute: string
+  second: string
+}
+
+// 현재 시간을 연월일시분초 형태 객체로 반환
+export function generateDate(): Date {
+  const date = new Date()
+  const result: Date = {
+    year: date.getFullYear().toString(),
+    month: ("0" + (date.getMonth() + 1)).slice(-2),
+    day: ("0" + date.getDate()).slice(-2),
+    hour: ("0" + date.getHours()).slice(-2),
+    minute: ("0" + date.getMinutes()).slice(-2),
+    second: ("0" + date.getSeconds()).slice(-2),
   }
-  return random
+  return result
 }
 
 interface Result {
@@ -85,4 +109,21 @@ export async function removeFile(path: string): Promise<boolean> {
     return true
   }
   return false
+}
+
+// 업로드된 파일을 임시 경로에 잠깐 저장하기
+export async function saveUploadedFile(file: File, dirPath: string): Promise<string> {
+  if ((await exists(dirPath)) === false) {
+    await mkdir(dirPath)
+  }
+  const savedPath = `${dirPath}/${file.name}`
+  await Bun.write(savedPath, file)
+  return savedPath
+}
+
+// 주어진 폴더 경로를 생성하기
+export async function makeDirectory(recursivePath: string): Promise<void> {
+  if ((await exists(recursivePath)) === false) {
+    await mkdir(recursivePath, { recursive: true })
+  }
 }

@@ -1,10 +1,10 @@
 <template>
   <v-alert
     v-model="util.alertbar"
-    class="mt-3"
     :type="util.alertType"
     :text="util.alertText"
     variant="tonal"
+    rounded="0"
     closable
     @click.close="util.alertbar = false"
   ></v-alert>

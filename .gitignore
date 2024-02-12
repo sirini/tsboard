@@ -2,6 +2,7 @@
 node_modules
 /dist
 bun.lockb
+/upload
 
 # local env files
 .env

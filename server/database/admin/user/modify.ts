@@ -4,9 +4,17 @@
  * 사용자 정보 수정하기와 관련된 처리
  */
 
+import { AdminUserModifyParams } from "../../../../src/interface/admin"
 import { UserModifyResult } from "../../../../src/interface/auth"
+import {
+  generateDate,
+  generateRandomID,
+  makeDirectory,
+  removeFile,
+  saveUploadedFile,
+} from "../../../util/tools"
 import { table, select, update } from "../../common"
-import { mkdir, unlink } from "node:fs/promises"
+import { mkdir, exists } from "node:fs/promises"
 import sharp from "sharp"
 
 // 기존 회원 정보 가져오기
@@ -39,24 +47,12 @@ export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
   return result
 }
 
-// 새 패스워드가 있을 경우 업데이트
-export async function updateUserPassword(
-  userUid: number,
-  newPassword: string | undefined,
-): Promise<void> {
-  if (newPassword === undefined) {
-    return
-  }
-  await update(`UPDATE ${table}user SET password = ? WHERE uid = ? LIMIT 1`, [newPassword, userUid])
-}
-
 // 프로필 사진 저장 경로 만들기
-function makeSavePath(): string {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = ("0" + (date.getMonth() + 1)).slice(-2)
-  const day = ("0" + date.getDate()).slice(-2)
-  return `./upload/profile/${year}/${month}/${day}`
+async function makeSavePath(): Promise<string> {
+  const date = generateDate()
+  const savePath = `./upload/profile/${date.year}/${date.month}/${date.day}`
+  await makeDirectory(savePath)
+  return savePath
 }
 
 // 기존 프로필이 있을 경우 삭제하기
@@ -65,23 +61,58 @@ async function removeOldProfile(userUid: number): Promise<void> {
   if (!old) {
     return
   }
-  const oldProfile = `.${old.profile}`
-  const f = Bun.file(oldProfile)
-  if ((await f.exists()) === true) {
-    unlink(oldProfile)
+  if (old.profile === "") {
+    return
   }
+  const oldProfile = `.${old.profile}`
+  removeFile(oldProfile)
 }
 
 // 새 프로필 사진이 있을 경우 업데이트
-export async function updateUserProfile(
-  userUid: number,
-  newProfile: File | undefined,
-): Promise<string> {
-  if (newProfile === undefined) {
+async function updateUserProfile(userUid: number, newProfile: File): Promise<string> {
+  removeOldProfile(userUid)
+  const savePath = await makeSavePath()
+  let newSavePath = `${savePath}/${generateRandomID()}.webp`
+  const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
+  const profileSize = parseInt(process.env.PROFILE_SIZE || "256")
+
+  await sharp(tempFilePath)
+    .resize(profileSize, profileSize)
+    .rotate()
+    .withMetadata()
+    .toFormat("webp")
+    .toFile(newSavePath)
+
+  removeFile(tempFilePath)
+
+  if ((await exists(newSavePath)) === false) {
     return ""
   }
-  removeOldProfile(userUid)
-  let newSavePath = `${makeSavePath()}/${userUid}.webp`
-  // TODO
   return newSavePath
+}
+
+// 프로필 내용 수정하기
+export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void> {
+  if (param.password.length === 64) {
+    await update(`UPDATE ${table}user SET password = ? WHERE uid = ? LIMIT 1`, [
+      param.password,
+      param.userUid,
+    ])
+  }
+
+  let pathForProfile = ""
+  if (param.profile !== undefined) {
+    const newProfilePath = await updateUserProfile(param.userUid, param.profile)
+    if (newProfilePath.length > 0) {
+      pathForProfile = newProfilePath.slice(1)
+      await update(`UPDATE ${table}user SET profile = '${pathForProfile}' WHERE uid = ? LIMIT 1`, [
+        param.userUid,
+      ])
+    }
+  }
+
+  await update(
+    `UPDATE ${table}user SET name = '${param.name}', level = ${param.level}, point = ${param.point}, signature = '${param.signature}' WHERE uid = ? LIMIT 1`,
+    [param.userUid],
+  )
 }

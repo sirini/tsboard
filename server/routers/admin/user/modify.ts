@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, updateAccessToken } from "../../../util/tools"
-import { getUserInfo } from "../../../database/admin/user/modify"
+import { getUserInfo, modifyUserInfo } from "../../../database/admin/user/modify"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -46,12 +46,12 @@ export const modify = new Elysia()
     },
   )
   .patch(
-    "/update",
+    "/modify",
     async ({
       jwt,
       cookie: { refresh },
       headers,
-      body: { userUid, name, level, point, signature, password, newProfile },
+      body: { userUid, name, level, point, signature, password, profile },
     }) => {
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
@@ -62,19 +62,36 @@ export const modify = new Elysia()
       if (level < 0 || point < 0) {
         return fail(`Minus value is not allowed.`)
       }
-      console.log(newProfile) // DEBUG
-      return fail(`Not implemented yet.`)
+
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      await modifyUserInfo({
+        userUid,
+        name,
+        level,
+        point,
+        signature,
+        password,
+        profile,
+      })
+      return success({
+        newAccessToken,
+      })
     },
     {
       ...defaultTypeCheck,
       body: t.Object({
-        userUid: t.Number(),
+        userUid: t.Numeric(),
         name: t.String(),
-        level: t.Number(),
-        point: t.Number(),
+        level: t.Numeric(),
+        point: t.Numeric(),
         signature: t.String(),
-        password: t.MaybeEmpty(t.String()),
-        newProfile: t.MaybeEmpty(t.File()),
+        password: t.String(),
+        profile: t.Optional(
+          t.File({
+            type: "image",
+            error: "Invalid profile image.",
+          }),
+        ),
       }),
     },
   )

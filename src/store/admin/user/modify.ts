@@ -13,6 +13,7 @@ import { useAuthStore } from "../../auth"
 import { useUtilStore } from "../../util"
 import { UserModifyResult } from "../../../interface/auth"
 import { MODIFY } from "../../../messages/store/admin/user/modify"
+import { SHA256 } from "crypto-js"
 
 export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -91,8 +92,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
         return
       }
     }
-    // TODO
-    const response = await server.api.admin.user.update.patch({
+    const response = await server.api.admin.user.modify.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -101,8 +101,8 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       level: user.value.level,
       point: user.value.point,
       signature: user.value.signature,
-      password: password.value.length < 1 ? undefined : password.value,
-      newProfile: newProfile.value,
+      password: password.value.length > 0 ? SHA256(password.value).toString() : "",
+      profile: newProfile.value,
     })
     if (!response.data) {
       admin.error(MODIFY.NO_RESPONSE)
@@ -122,6 +122,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
     newProfile.value = undefined
     newProfilePreview.value = ""
     util.success(`${user.value.name} ${MODIFY.UPDATED_USER}`)
+    loadUserInfo(user.value.uid)
   }
 
   return {
