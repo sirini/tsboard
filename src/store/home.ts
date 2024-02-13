@@ -14,8 +14,14 @@ export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const drawer = ref<boolean>(false)
-  const color = ref<string>("blue-grey-lighten-5")
-  const footerColor = ref<string>("white")
+  const color = {
+    header: "blue-grey-darken-3",
+    footer: "blue-grey-lighten-5",
+    admin: {
+      header: "blue-grey-lighten-5",
+      footer: "blue-grey-lighten-5",
+    },
+  }
 
   // 방문 기록 저장하기
   async function visit(): Promise<void> {
@@ -40,7 +46,6 @@ export const useHomeStore = defineStore("home", () => {
   return {
     drawer,
     color,
-    footerColor,
     visit,
   }
 })

@@ -34,6 +34,7 @@ export const AUTH = {
   VERIFY_EMPTY_NAME: "이름이 작성되지 않습니다. 가입 화면으로 이동합니다.",
   VERIFY_EMPTY_PASSWORD: "비밀번호가 작성되지 않습니다. 가입 화면으로 이동합니다.",
   FAILED_UPDATE_MYINFO: "내 정보를 수정할 수 없었습니다.",
+  FAILED_LOAD_MYINFO: "내 정보를 가져올 수 없었습니다.",
 }
 
 export const USER_INFO_KEY = "tsboardUserInfo"

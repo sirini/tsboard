@@ -52,8 +52,6 @@ const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 
-home.color = "blue-grey-lighten-5"
-
 // 이미 로그아웃 상태이면 알려주고 홈 화면으로 이동
 onMounted(() => {
   setTimeout(() => {

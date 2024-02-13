@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="write.addTableDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color">
+    <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>표 추가하기</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="dialogBody">

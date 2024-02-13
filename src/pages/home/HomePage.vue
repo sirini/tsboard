@@ -65,8 +65,6 @@ import SideDrawer from "./SideDrawer.vue"
 
 const home = useHomeStore()
 const util = useUtilStore()
-
-home.footerColor = "white"
 </script>
 
 <style scoped>

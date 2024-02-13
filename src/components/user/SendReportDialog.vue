@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="user.sendReportDialog" persistent>
-    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
+    <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
         <span class="title">신고하기</span>
         <span class="report ml-3 pl-3">운영진에게 신고 및 차단 기능을 사용합니다</span>
@@ -67,9 +67,11 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useUserStore } from "../../store/user"
+import { useHomeStore } from "../../store/home"
 import AlertBar from "../util/AlertBar.vue"
 
 const user = useUserStore()
+const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 const report = ref<string>("")
 const rules: any = [

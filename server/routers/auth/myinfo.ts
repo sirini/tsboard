@@ -8,6 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { isDuplicatedName } from "../../database/auth/signup"
 import { fail, success, updateAccessToken } from "../../util/tools"
+import { getUser } from "../../database/auth/myinfo"
 import { getUserInfo, modifyUserInfo } from "../../database/admin/user/modify"
 
 const defaultTypeCheck = {
@@ -25,6 +26,26 @@ export const myInfo = new Elysia()
       name: "jwt",
       secret: process.env.JWT_SECRET_KEY!,
     }),
+  )
+  .get(
+    "/load",
+    async ({ jwt, cookie: { refresh }, headers, query: { userUid } }) => {
+      if (userUid < 1) {
+        return fail(`Invalid user uid.`)
+      }
+      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const user = await getUser(userUid)
+      return success({
+        newAccessToken,
+        user,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        userUid: t.Numeric(),
+      }),
+    },
   )
   .patch(
     "/update",

@@ -1,22 +1,14 @@
 <template>
-  <v-footer :color="home.color" class="mt-16">
-    <v-card elevation="0" class="mx-auto" :color="home.color">
+  <v-footer :color="home.color.admin.footer" class="mt-16 mb-8">
+    <v-card elevation="0" class="mx-auto" :color="home.color.admin.footer">
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="grey" class="mx-2 tsboard" rounded="xl" @click="util.go('tsboard')">
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-t-box</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-s-box</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-b-box-outline</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-o-box-outline</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-a-box-outline</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-r-box-outline</v-icon>
-          <v-icon color="blue-grey-lighten-4" size="large">mdi-alpha-d-box-outline</v-icon>
+        <v-btn class="mx-3 tsboard" rounded="xl" @click="util.go('tsboard')">
+          TSBOARD.dev
           <v-tooltip activator="parent" location="top">
             클릭하시면 TSBOARD 공식 사이트로 이동합니다! 이곳에서 궁금하신 내용을 물어보거나, 다른
             사용자분들의 팁들을 배워 보실 수 있습니다!
           </v-tooltip>
         </v-btn>
-        <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
 
@@ -38,3 +30,11 @@ const util = useUtilStore()
 const admin = useAdminStore()
 const home = useHomeStore()
 </script>
+
+<style scoped>
+.tsboard {
+  font-family: "Protest Strike", sans-serif;
+  font-size: 1.2em;
+  opacity: 0.1;
+}
+</style>

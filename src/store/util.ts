@@ -112,7 +112,16 @@ export const useUtilStore = defineStore("util", () => {
       const second = time.getSeconds()
       result += ` ${hour}:${minute}:${second}`
     }
+    return result
+  }
 
+  // HTML unescape 처리 (<--> Bun.escapeHTML)
+  function unescapeHTML(text: string): string {
+    let result = text.replaceAll("&quot;", '"')
+    result = result.replaceAll("&amp;", "&")
+    result = result.replaceAll("&#x27;", "'")
+    result = result.replaceAll("&lt;", "<")
+    result = result.replaceAll("&gt;", ">")
     return result
   }
 
@@ -135,5 +144,6 @@ export const useUtilStore = defineStore("util", () => {
     back,
     debounce,
     date,
+    unescapeHTML,
   }
 })

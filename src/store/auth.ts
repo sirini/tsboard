@@ -59,11 +59,34 @@ export const useAuthStore = defineStore("auth", () => {
   ]
 
   // 기존에 로그인 한 사용자라면 스토리지 공간에서 정보 가져오기
-  function loadUserInfo(): void {
-    const storageUserInfo = window.localStorage.getItem(USER_INFO_KEY) || ""
-    if (storageUserInfo.length > 0) {
-      user.value = JSON.parse(storageUserInfo)
+  async function loadUserInfo(): Promise<void> {
+    const savedUserInfo = window.localStorage.getItem(USER_INFO_KEY)
+    if (savedUserInfo) {
+      user.value = JSON.parse(savedUserInfo) as User
     }
+    const response = await server.api.auth.load.get({
+      $headers: {
+        authorization: user.value.token,
+      },
+      $query: {
+        userUid: user.value.uid,
+      },
+    })
+    if (!response.data) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.error(`${AUTH.FAILED_LOAD_MYINFO} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.error(AUTH.FAILED_LOAD_MYINFO)
+      return
+    }
+    updateUserToken(response.data.result.newAccessToken!)
+    user.value = response.data.result.user as User
+    user.value.signature = util.unescapeHTML(user.value.signature)
   }
 
   // 사용자 로그인하기

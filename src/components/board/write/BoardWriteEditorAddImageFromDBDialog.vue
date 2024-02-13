@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="write.addImageFromDBDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color">
+    <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>기존 이미지를 본문에 추가/관리</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="dialogBody">

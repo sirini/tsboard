@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat rounded="0" :color="home.color" class="appbar">
+  <v-app-bar flat rounded="0" :color="home.color.admin.header" class="appbar">
     <v-container>
-      <v-toolbar :color="home.color">
+      <v-toolbar :color="home.color.admin.header">
         <v-btn @click="util.go('admin')" prepend-icon="mdi-cog-outline" rounded="xl"
           >Admin
           <v-tooltip activator="parent">클릭하시면 관리화면 첫 페이지로 이동합니다</v-tooltip>
@@ -36,7 +36,7 @@ const home = useHomeStore()
 
 <style scoped>
 .appbar {
-  opacity: 0.9;
-  border-bottom: #cccccc 1px solid;
+  border-bottom: 1px #dddddd solid;
+  opacity: 0.8;
 }
 </style>

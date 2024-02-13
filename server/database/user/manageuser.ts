@@ -47,7 +47,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
     sendReport: perm.send_report > 0 ? true : false,
     login: user.blocked < 1 ? true : false,
     userUid,
-    response: report.response,
+    response: report?.response ?? "",
   }
   return result
 }
@@ -86,11 +86,23 @@ export async function updateUserPermission(
       ],
     )
   }
-  await update(`UPDATE ${table}report SET response = ?, solved = ? WHERE to_uid = ?`, [
-    param.response,
-    1,
+
+  const [report] = await select(`SELECT uid FROM ${table}report WHERE to_uid = ? LIMIT 1`, [
     param.userUid,
   ])
+  if (report) {
+    await update(`UPDATE ${table}report SET response = ?, solved = ? WHERE to_uid = ?`, [
+      param.response,
+      1,
+      param.userUid,
+    ])
+  } else {
+    await insert(
+      `INSERT INTO ${table}report (to_uid, from_uid, request, response, timestamp, solved) VALUES 
+    (?, ?, ?, ?, ?, ?)`,
+      [param.userUid, accessUserUid, "", param.response, Date.now(), 1],
+    )
+  }
 
   // 주의) login == true 로그인 가능이므로 blocked = 0
   await update(`UPDATE ${table}user SET blocked = ? WHERE uid = ? LIMIT 1`, [
@@ -100,6 +112,7 @@ export async function updateUserPermission(
   await insert(`INSERT INTO ${table}note (to_uid, from_uid, note, timestamp) VALUES (?, ?, ?, ?)`, [
     param.userUid,
     accessUserUid,
+    param.response,
     Date.now(),
   ])
 }

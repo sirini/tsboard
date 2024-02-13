@@ -38,7 +38,7 @@
             variant="text"
             rounded="xl"
             class="mt-2 mb-2"
-            @click="util.go('adminMember')"
+            @click="util.go('adminUser')"
             >회원 관리 페이지
             <v-tooltip activator="parent">
               클릭하시면 TSBOARD 회원 관리 페이지로 이동합니다

@@ -42,8 +42,6 @@ import HomeFooter from "./HomeFooter.vue"
 
 const util = useUtilStore()
 const home = useHomeStore()
-
-home.color = "blue-grey-lighten-5"
 </script>
 
 <style scoped>

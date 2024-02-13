@@ -75,7 +75,6 @@ const password = usePasswordStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
-home.color = "blue-grey-lighten-5"
 
 // 비밀번호 변경하기
 function change(): void {

@@ -123,7 +123,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
 import { useGalleryStore } from "../../store/gallery"
 import { useUtilStore } from "../../store/util"
 import { useWriteStore } from "../../store/write"
@@ -138,11 +137,6 @@ const gallery = useGalleryStore()
 const util = useUtilStore()
 const write = useWriteStore()
 const home = useHomeStore()
-
-onMounted(() => {
-  home.color = "blue-grey-lighten-5"
-  home.footerColor = "blue-grey-lighten-5"
-})
 </script>
 
 <style scoped>

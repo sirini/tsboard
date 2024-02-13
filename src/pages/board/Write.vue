@@ -109,7 +109,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
 import { useBoardStore } from "../../store/board"
 import { useUtilStore } from "../../store/util"
 import { useWriteStore } from "../../store/write"
@@ -125,11 +124,6 @@ const board = useBoardStore()
 const util = useUtilStore()
 const write = useWriteStore()
 const home = useHomeStore()
-
-onMounted(() => {
-  home.color = "blue-grey-lighten-5"
-  home.footerColor = "blue-grey-lighten-5"
-})
 </script>
 
 <style scoped>

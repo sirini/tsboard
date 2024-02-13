@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="write.uploadImageDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color">
+    <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
       <v-divider></v-divider>
 

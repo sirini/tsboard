@@ -15,5 +15,4 @@ import SideDrawerBoardList from "./SideDrawerBoardList.vue"
 
 const auth = useAuthStore()
 const home = useHomeStore()
-home.color = "white"
 </script>

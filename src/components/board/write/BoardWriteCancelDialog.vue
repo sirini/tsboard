@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="write.confirmWriteCancelDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color">
+    <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>확인</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="dialogBody">

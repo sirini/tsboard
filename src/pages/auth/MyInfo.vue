@@ -135,7 +135,6 @@ import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useSignupStore } from "../../store/signup"
 import { useUtilStore } from "../../store/util"
-import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
@@ -143,11 +142,9 @@ import AlertBar from "../../components/util/AlertBar.vue"
 const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
-const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 
 const visible = ref<boolean>(false)
-home.color = "blue-grey-lighten-5"
 </script>
 
 <style scoped>

@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useBoardStore } from "../../store/board"
 import { useUtilStore } from "../../store/util"
@@ -96,12 +96,6 @@ const board = useBoardStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
-
-onMounted(() => {
-  home.color = "blue-grey-lighten-5"
-  home.footerColor = "blue-grey-lighten-5"
-})
-
 const posts = ref<Post[]>([
   {
     uid: 1,

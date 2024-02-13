@@ -79,8 +79,6 @@ const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
-
-home.color = "blue-grey-lighten-5"
 </script>
 
 <style scoped>

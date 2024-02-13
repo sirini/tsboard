@@ -1,15 +1,9 @@
 <template>
-  <v-app-bar rounded="0" flat :color="home.color" class="appbar">
-    <v-toolbar :color="home.color">
+  <v-app-bar rounded="0" flat :color="home.color.header" class="appbar">
+    <v-toolbar :color="home.color.header">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title @click="util.go('home')" class="pointer">
-        <v-icon>mdi-alpha-t-box</v-icon>
-        <v-icon>mdi-alpha-s-box</v-icon>
-        <v-icon>mdi-alpha-b-box-outline</v-icon>
-        <v-icon>mdi-alpha-o-box-outline</v-icon>
-        <v-icon>mdi-alpha-a-box-outline</v-icon>
-        <v-icon>mdi-alpha-r-box-outline</v-icon>
-        <v-icon>mdi-alpha-d-box-outline</v-icon>
+      <v-app-bar-title @click="util.go('home')" class="title">
+        TSBOARD<span>.dev</span>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
@@ -60,11 +54,17 @@ const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 </script>
 
-<style scoped>
+<style scoped type="scss">
 .appbar {
   border-bottom: #cfd8dc 1px solid;
 }
-.pointer {
+.title {
   cursor: pointer;
+  font-family: "Protest Strike", sans-serif;
+  font-size: 1.6em;
+
+  span {
+    opacity: 0.3;
+  }
 }
 </style>

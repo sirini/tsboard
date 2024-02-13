@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="user.userInfoDialog" persistent>
-    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
+    <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
         <span class="title">사용자 정보</span>
         <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
@@ -65,9 +65,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useUserStore } from "../../store/user"
+import { useHomeStore } from "../../store/home"
 import { User } from "../../interface/auth"
 
 const user = useUserStore()
+const home = useHomeStore()
 const userInfo = ref<User>()
 const PREFIX = process.env.PREFIX || ""
 

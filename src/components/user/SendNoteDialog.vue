@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="user.sendNoteDialog" persistent>
-    <v-card class="mx-auto" width="500" color="blue-grey-lighten-5">
+    <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
         <span class="title">쪽지 보내기</span>
         <span class="note ml-3 pl-3">다른 사용자에게 쪽지를 보냅니다</span>
@@ -64,10 +64,12 @@
 import { onBeforeMount, watch } from "vue"
 import { useAuthStore } from "../../store/auth"
 import { useUserStore } from "../../store/user"
+import { useHomeStore } from "../../store/home"
 import AlertBar from "../util/AlertBar.vue"
 
 const auth = useAuthStore()
 const user = useUserStore()
+const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 const rules: any = [
   (value: string) =>

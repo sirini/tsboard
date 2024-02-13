@@ -37,7 +37,7 @@
               <v-list-item class="view_content pa-5">
                 {{ post.content }}
               </v-list-item>
-              <v-toolbar density="compact" class="view_menu" :color="home.color">
+              <v-toolbar density="compact" class="view_menu" :color="home.color.header">
                 <v-chip
                   class="ml-3"
                   :disabled="auth.user.uid < 1"
@@ -132,12 +132,6 @@ const auth = useAuthStore()
 const board = useBoardStore()
 const util = useUtilStore()
 const home = useHomeStore()
-
-onMounted(() => {
-  home.color = "blue-grey-lighten-5"
-  home.footerColor = "blue-grey-lighten-5"
-})
-
 const post = ref<Post>({
   uid: 7,
   category: {

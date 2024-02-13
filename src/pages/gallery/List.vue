@@ -72,8 +72,6 @@ const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => {
-  home.color = "blue-grey-lighten-5"
-  home.footerColor = "blue-grey-lighten-5"
   setGalleryItemWidth()
   window.addEventListener("resize", setGalleryItemWidth)
 })
