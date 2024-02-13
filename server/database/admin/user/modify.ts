@@ -112,7 +112,11 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
   }
 
   await update(
-    `UPDATE ${table}user SET name = '${param.name}', level = ${param.level}, point = ${param.point}, signature = '${param.signature}' WHERE uid = ? LIMIT 1`,
+    `UPDATE ${table}user SET name = '${Bun.escapeHTML(param.name)}', level = ${
+      param.level
+    }, point = ${param.point}, signature = '${Bun.escapeHTML(
+      param.signature,
+    )}' WHERE uid = ? LIMIT 1`,
     [param.userUid],
   )
 }

@@ -8,6 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, updateAccessToken } from "../../../util/tools"
 import { getUserInfo, modifyUserInfo } from "../../../database/admin/user/modify"
+import { isDuplicatedName } from "../../../database/auth/signup"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -62,7 +63,9 @@ export const modify = new Elysia()
       if (level < 0 || point < 0) {
         return fail(`Minus value is not allowed.`)
       }
-
+      if ((await isDuplicatedName(userUid, name)) === true) {
+        return fail(`Duplicated name.`)
+      }
       const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
       await modifyUserInfo({
         userUid,

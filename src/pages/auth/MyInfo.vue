@@ -13,21 +13,31 @@
             <alert-bar></alert-bar>
 
             <v-list>
-              <v-list-item class="pa-0">
-                <v-text-field
-                  v-model="auth.user.id"
-                  variant="outlined"
-                  class="mt-3"
-                  prepend-inner-icon="mdi-email-outline"
-                  label="아이디는 외부로 노출하지 않는 걸 권장합니다"
-                  readonly
-                ></v-text-field>
+              <v-list-item class="pa-0 text-center">
+                <v-chip
+                  size="x-large"
+                  color="blue-grey"
+                  class="mt-3 mb-3"
+                  :prepend-avatar="
+                    PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
+                  "
+                >
+                  {{ auth.user.id }}
+                  <v-divider vertical class="ml-2 mr-2"></v-divider>
+                  <v-icon>mdi-alpha-l</v-icon> {{ auth.user.level }}
+                  <v-divider vertical class="ml-2 mr-2"></v-divider>
+                  <v-icon>mdi-alpha-p</v-icon> {{ auth.user.point }}
+                  <v-tooltip activator="parent"
+                    >아이디(이메일)는 다른 회원에게 보여주지 마세요.</v-tooltip
+                  >
+                </v-chip>
               </v-list-item>
+
               <v-list-item class="pa-0">
                 <v-text-field
                   v-model="auth.user.name"
                   variant="outlined"
-                  class="mt-3"
+                  class="mt-3 ml-3 mr-3"
                   :rules="auth.nameRule"
                   prepend-inner-icon="mdi-card-account-details-outline"
                   label="수정할 닉네임을 입력하신 후 중복 여부를 확인해 보세요"
@@ -35,58 +45,49 @@
                   @click:append-inner="signup.checkName"
                 ></v-text-field>
               </v-list-item>
+
               <v-list-item class="pa-0">
-                <v-text-field
-                  v-model="auth.user.level"
+                <v-file-input
                   variant="outlined"
-                  class="mt-3"
-                  prepend-inner-icon="mdi-star-shooting-outline"
-                  label="현재 레벨입니다"
-                  readonly
-                ></v-text-field>
+                  hide-details
+                  class="mt-1 mb-3 ml-3 mr-3"
+                  prepend-icon="mdi-camera"
+                  accept="image/*"
+                  label="프로필 사진을 선택해 보세요"
+                  @change="auth.selectProfileImage"
+                ></v-file-input>
               </v-list-item>
-              <v-list-item class="pa-0">
-                <v-text-field
-                  v-model="auth.user.point"
-                  variant="outlined"
-                  class="mt-3"
-                  prepend-inner-icon="mdi-cash-100"
-                  label="현재 보유중인 포인트입니다"
-                  readonly
-                ></v-text-field>
-              </v-list-item>
+
               <v-list-item class="pa-0">
                 <v-textarea
                   v-model="auth.user.signature"
                   variant="outlined"
-                  class="mt-3"
+                  class="mt-3 ml-3 mr-3"
                   label="나의 서명입니다 (~250자)"
                   counter
                   auto-grow
                 ></v-textarea>
               </v-list-item>
+
               <v-list-item class="pa-0">
-                <v-text-field
-                  v-model="auth.user.signup"
-                  variant="outlined"
-                  class="mt-3"
-                  label="최초 가입일입니다."
-                  readonly
-                ></v-text-field>
+                <template v-slot:prepend>
+                  <div class="ml-3">
+                    <v-icon class="mr-2">mdi-account-check-outline</v-icon>
+                    {{ util.date(auth.user.signup) }} 가입
+                  </div>
+                </template>
+                <template v-slot:append>
+                  <div class="mr-3">
+                    <v-icon class="mr-2">mdi-login-variant</v-icon>
+                    {{ util.date(auth.user.signin) }} 마지막 로그인
+                  </div>
+                </template>
               </v-list-item>
-              <v-list-item class="pa-0">
-                <v-text-field
-                  v-model="auth.user.signin"
-                  variant="outlined"
-                  class="mt-3"
-                  label="마지막으로 로그안 한 시간입니다"
-                  readonly
-                ></v-text-field>
-              </v-list-item>
+
               <v-list-item class="pa-0">
                 <v-text-field
                   v-model="auth.password"
-                  class="mt-3"
+                  class="mt-3 ml-3 mr-3"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   placeholder="수정할 비밀번호를 입력해 주세요"
@@ -96,10 +97,11 @@
                   @click:append-inner="visible = !visible"
                 ></v-text-field>
               </v-list-item>
+
               <v-list-item class="pa-0">
                 <v-text-field
                   v-model="auth.checkedPassword"
-                  class="mt-3"
+                  class="mt-3 ml-3 mr-3"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   placeholder="수정할 비밀번호를 한 번 더 입력해 주세요"
@@ -110,12 +112,13 @@
                 ></v-text-field>
               </v-list-item>
             </v-list>
-            <v-card-actions>
+
+            <v-card-actions class="mt-3">
               <v-btn prepend-icon="mdi-chevron-left" @click="util.back"
                 >변경 취소하고 뒤로가기</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" append-icon="mdi-chevron-right" @click="auth.saveMyInfo"
+              <v-btn color="primary" append-icon="mdi-chevron-right" @click="auth.updateMyInfo"
                 >변경 사항 저장하기</v-btn
               >
             </v-card-actions>
@@ -141,6 +144,8 @@ const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const PREFIX = process.env.PREFIX || ""
+
 const visible = ref<boolean>(false)
 home.color = "blue-grey-lighten-5"
 </script>

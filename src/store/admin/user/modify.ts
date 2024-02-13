@@ -40,7 +40,18 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       util.error(MODIFY.TOO_SHORT_NAME)
       return
     }
-    // do something
+    const response = await server.api.auth.checkname.post({
+      name: user.value.name,
+      userUid: user.value.uid,
+    })
+    if (!response.data) {
+      util.error(MODIFY.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.error(`${user.value.name} ${MODIFY.DUPLICATED_NAME}`)
+      return
+    }
     util.success(`${user.value.name} ${MODIFY.VALID_NAME}`)
   }
 

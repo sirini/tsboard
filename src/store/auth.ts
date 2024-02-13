@@ -1,7 +1,7 @@
 /**
  * store/auth
  *
- * 로그인 등 사용자 관련 상태 및 함수들
+ * 로그인, 내 정보 수정 등 사용자 관련 상태 및 함수들
  */
 
 import { SHA256 } from "crypto-js"
@@ -16,8 +16,9 @@ import { AUTH, USER_INFO_KEY } from "../messages/store/auth"
 export const useAuthStore = defineStore("auth", () => {
   const server = edenTreaty<App>(process.env.API!)
   const util = useUtilStore()
-  const password = ref<string>("Tsboard@1")
+  const password = ref<string>("")
   const checkedPassword = ref<string>("")
+  const newProfile = ref<File | undefined>(undefined)
   const user = ref<User>({
     uid: 0,
     id: "sirini@gmail.com",
@@ -102,16 +103,13 @@ export const useAuthStore = defineStore("auth", () => {
         authorization: token,
       },
     })
-
     user.value.uid = 0
     user.value.admin = false
     user.value.token = ""
     user.value.name = ""
     user.value.level = 0
     user.value.point = 0
-
     window.localStorage.removeItem(USER_INFO_KEY)
-
     util.success(AUTH.GOODBYE_USER)
   }
 
@@ -124,23 +122,54 @@ export const useAuthStore = defineStore("auth", () => {
     window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
   }
 
+  // 변경할 프로필 사진 받기
+  function selectProfileImage(event: Event): void {
+    const input = event.target as HTMLInputElement
+    if (!input.files?.length) return
+    newProfile.value = input.files[0] as File
+    user.value.profile = URL.createObjectURL(newProfile.value)
+  }
+
   // 내 정보 수정하기
-  async function saveMyInfo(): Promise<void> {
+  async function updateMyInfo(): Promise<void> {
     const name = user.value.name.trim()
     if (name.length < 2) {
       util.error(AUTH.INVALID_NAME)
       return
     }
-    if (password.value !== checkedPassword.value) {
+    if (password.value.length > 7 && password.value !== checkedPassword.value) {
       util.error(AUTH.DIFFERENT_PASSWORD)
       return
     }
-    if (util.filters.password.test(password.value) === false) {
+    if (password.value.length > 7 && util.filters.password.test(password.value) === false) {
       util.error(AUTH.INVALID_PASSWORD)
       return
     }
-
-    // do something
+    const response = await server.api.auth.update.patch({
+      $headers: {
+        authorization: user.value.token,
+      },
+      name: user.value.name,
+      password: password.value.length < 1 ? "" : SHA256(password.value).toString(),
+      signature: user.value.signature,
+      profile: newProfile.value,
+    })
+    if (!response.data) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.error(`${AUTH.FAILED_UPDATE_MYINFO} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.error(AUTH.FAILED_UPDATE_MYINFO)
+      return
+    }
+    updateUserToken(response.data.result.newAccessToken!)
+    loadUserInfo()
+    password.value = ""
+    checkedPassword.value = ""
     util.success(AUTH.MYINFO_SUCCESS)
   }
 
@@ -153,7 +182,8 @@ export const useAuthStore = defineStore("auth", () => {
     nameRule,
     login,
     logout,
-    saveMyInfo,
+    updateMyInfo,
+    selectProfileImage,
     updateUserToken,
   }
 })

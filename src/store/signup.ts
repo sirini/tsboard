@@ -43,9 +43,11 @@ export const useSignupStore = defineStore("signup", () => {
   async function checkName(): Promise<void> {
     if (auth.user.name.length < 2) {
       util.error(AUTH.INVALID_NAME)
+      return
     }
     const response = await server.api.auth.checkname.post({
       name: auth.user.name.trim(),
+      userUid: auth.user.uid,
     })
     if (response.data!.success === false) {
       util.error(AUTH.EXIST_NAME)

@@ -26,7 +26,7 @@ export const signUp = new Elysia()
       if (password.length !== 64) {
         return fail(`Invalid password, it needs a sha256 hash code.`)
       }
-      if ((await isDuplicatedName(name)) === true) {
+      if ((await isDuplicatedName(0, name)) === true) {
         return fail(`Duplicated name.`)
       }
 
@@ -66,8 +66,8 @@ export const signUp = new Elysia()
   )
   .post(
     "/checkname",
-    async ({ body: { name } }) => {
-      if ((await isDuplicatedName(name.trim())) === true) {
+    async ({ body: { name, userUid } }) => {
+      if ((await isDuplicatedName(userUid, name.trim())) === true) {
         return fail(`Duplicated name.`)
       }
       return success()
@@ -75,6 +75,7 @@ export const signUp = new Elysia()
     {
       body: t.Object({
         name: t.String(),
+        userUid: t.Number(),
       }),
     },
   )

@@ -26,8 +26,10 @@ export async function isDuplicatedEmail(email: string): Promise<boolean> {
 }
 
 // 이미 등록된 이름인지 확인하기 (true -> 이미 등록됨)
-export async function isDuplicatedName(name: string): Promise<boolean> {
-  const [result] = await select(`SELECT uid FROM ${table}user WHERE name = ? LIMIT 1`, [name])
+export async function isDuplicatedName(userUid: number, name: string): Promise<boolean> {
+  const [result] = await select(
+    `SELECT uid FROM ${table}user WHERE uid != ${userUid} AND name = '${name}' LIMIT 1`,
+  )
   if (!result) {
     return false
   }
