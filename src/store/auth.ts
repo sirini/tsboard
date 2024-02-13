@@ -61,9 +61,10 @@ export const useAuthStore = defineStore("auth", () => {
   // 기존에 로그인 한 사용자라면 스토리지 공간에서 정보 가져오기
   async function loadUserInfo(): Promise<void> {
     const savedUserInfo = window.localStorage.getItem(USER_INFO_KEY)
-    if (savedUserInfo) {
-      user.value = JSON.parse(savedUserInfo) as User
+    if (!savedUserInfo) {
+      return
     }
+    user.value = JSON.parse(savedUserInfo) as User
     const response = await server.api.auth.load.get({
       $headers: {
         authorization: user.value.token,
