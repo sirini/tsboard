@@ -82,10 +82,17 @@ type AdminGroupCommon = {
   manager: AdminUserInfo
 }
 
+type AdminGroupTotalCount = {
+  post: number
+  comment: number
+  file: number
+  image: number
+}
+
 export type AdminGroupList = AdminGroupCommon & {
   name: string
   info: string
-  totalPost: number
+  total: AdminGroupTotalCount
 }
 
 export type AdminGroupConfig = AdminGroupCommon & {

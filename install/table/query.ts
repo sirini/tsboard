@@ -174,8 +174,10 @@ tables.push(`${create} #db#post (
 
 // 게시글과 해시태그들의 연관성 정보 보관 테이블
 tables.push(`${create} #db#post_hashtag (
+  board_uid INT ${unnd0},
   post_uid INT ${unnd0},
   hashtag_uid INT ${unnd0},
+  KEY (board_uid),
   KEY (post_uid),
   KEY (hashtag_uid)
 ) ${engineEncode}`)
@@ -191,6 +193,7 @@ tables.push(`${create} #db#hashtag (
 
 // 게시글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
 tables.push(`${create} #db#post_like (
+  board_uid INT ${unnd0},
   post_uid INT ${unnd0},
   user_uid INT ${unnd0},
   liked TINYINT ${unnd0},
@@ -204,6 +207,7 @@ tables.push(`${create} #db#post_like (
 tables.push(`${create} #db#comment (
   ${uid},
   reply_uid INT ${unnd0},
+  board_uid INT ${unnd0},
   post_uid INT ${unnd0},
   user_uid INT ${unnd0},
   content VARCHAR(1000) ${nnde},
@@ -212,6 +216,7 @@ tables.push(`${create} #db#comment (
   status TINYINT ${nnd0},
   ${primary},
   KEY (reply_uid),
+  KEY (board_uid),
   KEY (post_uid),
   KEY (user_uid),
   KEY (status)
@@ -219,6 +224,7 @@ tables.push(`${create} #db#comment (
 
 // 댓글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
 tables.push(`${create} #db#comment_like (
+  board_uid INT ${unnd0},
   comment_uid INT ${unnd0},
   user_uid INT ${unnd0},
   liked TINYINT ${unnd0},
@@ -231,6 +237,7 @@ tables.push(`${create} #db#comment_like (
 // 파일 첨부하기 기능으로 추가한 파일 정보 보관하는 테이블
 tables.push(`${create} #db#file (
   ${uid},
+  board_uid INT ${unnd0},
   post_uid INT ${unnd0},
   name VARCHAR(100) ${nnde},
   path VARCHAR(300) ${nnde},
@@ -242,6 +249,7 @@ tables.push(`${create} #db#file (
 // 본문 작성 시 이미지 첨부하기 기능으로 추가한 이미지 정보 보관하는 테이블, 이미지는 1000px 이하로 리사이즈 후 저장됨
 tables.push(`${create} #db#image (
   ${uid},
+  board_uid INT ${unnd0},
   user_uid INT ${unnd0},
   path VARCHAR(300) ${nnde},
   timestamp BIGINT ${unnd0},
@@ -369,84 +377,84 @@ tests.push(`INSERT INTO #db#post (board_uid, user_uid, category_uid, title, cont
 VALUES (1, 8, 2, 'Going higher!', 'This article is just for test', ${Date.now()}, 0, 12, 0)`)
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (1, 1, 3, 'This comment was generated for test #1', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (1, 1, 1, 3, 'This comment was generated for test #1', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (2, 2, 2, 'This comment was generated for test #2', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (2, 1, 2, 2, 'This comment was generated for test #2', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (3, 3, 1, 'This comment was generated for test #3', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (3, 1, 3, 1, 'This comment was generated for test #3', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (4, 1, 1, 'This comment was generated for test #4', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (4, 1, 1, 1, 'This comment was generated for test #4', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (5, 2, 1, 'This comment was generated for test.', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (5, 1, 2, 1, 'This comment was generated for test.', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (5, 2, 3, 'Reply test #1', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (5, 1, 2, 3, 'Reply test #1', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (5, 2, 4, 'Reply test #2', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (5, 1, 2, 4, 'Reply test #2', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#comment (reply_uid, post_uid, user_uid, content, submitted, modified, status) 
-  VALUES (5, 2, 6, 'Reply test #3', ${Date.now()}, 0, 0)`,
+  `INSERT INTO #db#comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (5, 1, 2, 6, 'Reply test #3', ${Date.now()}, 0, 0)`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (1, 9, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 1, 9, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (3, 10, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 3, 10, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (3, 3, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 3, 3, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 1, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 6, 1, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 2, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 6, 2, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (6, 3, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 6, 3, 1, ${Date.now()})`,
 )
 
 tests.push(
-  `INSERT INTO #db#post_like (post_uid, user_uid, liked, timestamp) VALUES (1, 10, 1, ${Date.now()})`,
+  `INSERT INTO #db#post_like (board_uid, post_uid, user_uid, liked, timestamp) VALUES (1, 1, 10, 1, ${Date.now()})`,
 )
 
-tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
-VALUES (2, 5, 1, ${Date.now()})`)
+tests.push(`INSERT INTO #db#comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
+VALUES (1, 2, 5, 1, ${Date.now()})`)
 
-tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
-VALUES (2, 6, 1, ${Date.now()})`)
+tests.push(`INSERT INTO #db#comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
+VALUES (1, 2, 6, 1, ${Date.now()})`)
 
-tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
-VALUES (4, 2, 1, ${Date.now()})`)
+tests.push(`INSERT INTO #db#comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
+VALUES (1, 4, 2, 1, ${Date.now()})`)
 
-tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
-VALUES (3, 8, 1, ${Date.now()})`)
+tests.push(`INSERT INTO #db#comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
+VALUES (1, 3, 8, 1, ${Date.now()})`)
 
-tests.push(`INSERT INTO #db#comment_like (comment_uid, user_uid, liked, timestamp) 
-VALUES (3, 8, 1, ${Date.now()})`)
+tests.push(`INSERT INTO #db#comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
+VALUES (1, 3, 8, 1, ${Date.now()})`)

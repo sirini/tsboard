@@ -104,7 +104,13 @@
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           {{ board.info }}
           <v-divider vertical class="ml-2 mr-2"></v-divider>
-          <strong class="mr-2">{{ board.totalPost }}</strong> posts
+          <strong class="mr-2">{{ board.total.post }}</strong> posts
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          <strong class="mr-2">{{ board.total.comment }}</strong> comments
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          <strong class="mr-2">{{ board.total.file }}</strong> files
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          <strong class="mr-2">{{ board.total.image }}</strong> images
         </v-chip>
 
         <template v-slot:append>

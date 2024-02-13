@@ -96,6 +96,18 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       `SELECT COUNT(*) AS total_count FROM ${table}post WHERE board_uid = ?`,
       [board.uid],
     )
+    const [comment] = await select(
+      `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE board_uid = ?`,
+      [board.uid],
+    )
+    const [file] = await select(
+      `SELECT COUNT(*) AS total_count FROM ${table}file WHERE board_uid = ?`,
+      [board.uid],
+    )
+    const [image] = await select(
+      `SELECT COUNT(*) AS total_count FROM ${table}image WHERE board_uid = ?`,
+      [board.uid],
+    )
 
     result.push({
       uid: board.uid,
@@ -103,7 +115,12 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       name: board.name,
       info: board.info,
       manager,
-      totalPost: post.total_count,
+      total: {
+        post: post.total_count,
+        comment: comment.total_count,
+        file: file.total_count,
+        image: image.total_count,
+      },
     })
   }
 

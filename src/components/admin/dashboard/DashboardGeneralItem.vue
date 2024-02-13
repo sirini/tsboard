@@ -70,7 +70,10 @@
           <v-list-item
             v-for="(member, index) in dashboard.members"
             :key="index"
-            @click="router.push({ name: 'adminUserManager', params: { uid: member.uid } })"
+            :prepend-avatar="
+              PREFIX + (member.profile.length < 1 ? '/no-profile.svg' : member.profile)
+            "
+            @click="util.go('adminUserManager', '', member.uid)"
             >{{ member.name }}
             <v-tooltip activator="parent"
               >클릭하시면 {{ member.name }}님 관리 페이지로 이동합니다.</v-tooltip
@@ -83,13 +86,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router"
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 
-const router = useRouter()
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

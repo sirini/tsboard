@@ -23,21 +23,12 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
   const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const visit = ref<AdminDashboardStat>({
-    total: 0,
-    yesterday: 0,
-    today: 0,
-  })
-  const member = ref<AdminDashboardStat>({
-    total: 0,
-    yesterday: 0,
-    today: 0,
-  })
-  const post = ref<AdminDashboardStat>({
-    total: 0,
-    yesterday: 0,
-    today: 0,
-  })
+  const visit = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const member = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const post = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const reply = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const file = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const image = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
   const posts = ref<AdminLatest[]>([])
   const comments = ref<AdminLatest[]>([])
   const reports = ref<AdminLatest[]>([])
@@ -76,6 +67,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     visit.value = response.data.result.visit as AdminDashboardStat
     member.value = response.data.result.member as AdminDashboardStat
     post.value = response.data.result.post as AdminDashboardStat
+    reply.value = response.data.result.reply as AdminDashboardStat
+    file.value = response.data.result.file as AdminDashboardStat
+    image.value = response.data.result.image as AdminDashboardStat
   }
 
   // 최신 글/댓글/신고 가져오기
@@ -128,6 +122,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     visit,
     member,
     post,
+    reply,
+    file,
+    image,
     posts,
     comments,
     reports,

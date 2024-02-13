@@ -19,6 +19,7 @@ export const env = `#
 SERVER_PORT=3100
 MAX_FILE_SIZE=10247680
 PROFILE_SIZE=256
+IMAGE_SIZE=800
 
 # 데이터베이스 세팅 (각 서버 설정에 맞게 변경 필요)
 DB_HOST=#dbhost#
