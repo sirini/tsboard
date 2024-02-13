@@ -92,12 +92,18 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
       }
     }
 
+    const [post] = await select(
+      `SELECT COUNT(*) AS total_count FROM ${table}post WHERE board_uid = ?`,
+      [board.uid],
+    )
+
     result.push({
       uid: board.uid,
       id: board.id,
       name: board.name,
       info: board.info,
       manager,
+      totalPost: post.total_count,
     })
   }
 

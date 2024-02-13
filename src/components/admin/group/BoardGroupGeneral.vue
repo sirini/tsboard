@@ -100,9 +100,12 @@
         </template>
 
         <v-chip variant="tonal" color="blue-grey" class="ml-2"
-          ><strong>{{ board.name }}</strong> <v-divider vertical class="ml-2 mr-2"></v-divider>
-          {{ board.info }}</v-chip
-        >
+          ><strong>{{ board.name }}</strong>
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          {{ board.info }}
+          <v-divider vertical class="ml-2 mr-2"></v-divider>
+          <strong class="mr-2">{{ board.totalPost }}</strong> posts
+        </v-chip>
 
         <template v-slot:append>
           <v-btn icon @click="util.go('adminBoardManager', board.id)" elevation="0" class="mt-1"

@@ -172,6 +172,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         name: response.data.result.manager.name as string,
         profile: "",
       },
+      totalPost: 0,
     })
     admin.success(`[${newId}] ${GENERAL.ADDED_NEW_BOARD}`)
     newBoardId.value = ""
