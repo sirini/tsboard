@@ -45,7 +45,7 @@ tables.push(`${create} #db#user_token (
   KEY (user_uid)
 ) ${engineEncode}`)
 
-// 사용자의 권한들은 1 = 차단 / 0 = 가능
+// 사용자의 권한들은 1 = 가능 / 0 = 차단
 tables.push(`${create} #db#user_permission (
   ${uid},
   user_uid INT ${unnd0},
