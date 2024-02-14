@@ -32,10 +32,9 @@
               >
             </v-text-field>
           </v-col>
-          <v-col class="mt-2">
+          <v-col class="mt-1">
             <v-chip
-              size="small"
-              label
+              color="blue-grey"
               :prepend-avatar="PREFIX + (permission.board.admin.profile || '/no-profile.svg')"
               variant="tonal"
               >{{ permission.board.admin.name }}
