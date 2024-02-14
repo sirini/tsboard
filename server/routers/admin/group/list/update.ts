@@ -11,7 +11,7 @@ import {
   getAdminInfo,
   removeGroup,
 } from "../../../../database/admin/group/list/update"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -44,7 +44,7 @@ export const update = new Elysia()
         return fail(`Unable to get a default admin information.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         uid: newGroupUid,
@@ -69,7 +69,7 @@ export const update = new Elysia()
       if (result === false) {
         return fail(`Failed to remove a group, it might be a last one.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

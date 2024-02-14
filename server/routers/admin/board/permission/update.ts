@@ -10,7 +10,7 @@ import {
   changeBoardAdmin,
   updatePermissionLevels,
 } from "../../../../database/admin/board/permission/update"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 import { AdminPermissionLevel } from "../../../../../src/interface/admin"
 
 const defaultTypeCheck = {
@@ -44,7 +44,7 @@ export const update = new Elysia()
         return fail(`User not found.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -72,7 +72,7 @@ export const update = new Elysia()
 
       updatePermissionLevels(boardUid, levels as AdminPermissionLevel)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

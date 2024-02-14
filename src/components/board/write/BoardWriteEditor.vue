@@ -292,7 +292,7 @@ import cpp from "highlight.js/lib/languages/cpp"
 import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
-import { useBoardStore } from "../../../store/board"
+import { useBoardListStore } from "../../../store/board/list"
 import { useWriteStore } from "../../../store/write"
 import { useHomeStore } from "../../../store/home"
 import { VideoURL, TableOption } from "../../../interface/board"
@@ -304,7 +304,7 @@ import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue
 import "../../../assets/board/editor.scss"
 
 const write = useWriteStore()
-const board = useBoardStore()
+const list = useBoardListStore()
 const home = useHomeStore()
 const props = defineProps<{
   modelValue: string

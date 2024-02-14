@@ -1,15 +1,15 @@
 /**
- * server/routers/admin/board/point/load
+ * server/routers/board/list
  *
- * 게시판 관리화면 > 포인트 > 불러오기 처리
+ * 게시판 목록보기 처리
  */
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { getPointConfig } from "../../../../database/admin/board/point/load"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { getBoardConfig } from "../../database/board/list"
+import { fail, success, getUpdatedAccessToken } from "../../util/tools"
 
-export const load = new Elysia()
+export const list = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -17,17 +17,16 @@ export const load = new Elysia()
     }),
   )
   .get(
-    "/load",
+    "/list",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
-      const point = await getPointConfig(id)
-      if (point.uid < 1) {
+      if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
-
+      const config = await getBoardConfig(id)
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
-        point,
         newAccessToken,
+        config,
       })
     },
     {

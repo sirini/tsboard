@@ -11,7 +11,7 @@ import {
   getReports,
   getSearchedReports,
 } from "../../../database/admin/report/common"
-import { fail, success, updateAccessToken } from "../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -39,7 +39,7 @@ export const common = new Elysia()
         return fail(`Invalid bunch.`)
       }
       const solved = isSolved > 0 ? true : false
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const totalReportCount = await getTotalReportCount(solved)
       const reports = await getReports({
         page,

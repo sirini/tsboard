@@ -95,7 +95,7 @@
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="write.save(board.id)" append-icon="mdi-chevron-right"
+              <v-btn color="primary" @click="write.save(list.id)" append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >
             </v-card-actions>
@@ -104,12 +104,12 @@
         <home-footer></home-footer>
       </v-main>
     </v-layout>
-    <board-write-cancel-dialog @cancel="util.go('boardList', board.id)"></board-write-cancel-dialog>
+    <board-write-cancel-dialog @cancel="util.go('boardList', list.id)"></board-write-cancel-dialog>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { useBoardStore } from "../../store/board"
+import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useWriteStore } from "../../store/write"
 import { useHomeStore } from "../../store/home"
@@ -120,7 +120,7 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
-const board = useBoardStore()
+const list = useBoardListStore()
 const util = useUtilStore()
 const write = useWriteStore()
 const home = useHomeStore()

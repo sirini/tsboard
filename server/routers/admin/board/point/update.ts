@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { updatePoints } from "../../../../database/admin/board/point/update"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 import { AdminBoardPointList } from "../../../../../src/interface/admin"
 
 const defaultTypeCheck = {
@@ -41,7 +41,7 @@ export const update = new Elysia()
 
       updatePoints(boardUid, points as AdminBoardPointList)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

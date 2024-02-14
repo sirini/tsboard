@@ -11,7 +11,7 @@ import {
   getSearchedComments,
   getTotalCommentCount,
 } from "../../../../database/admin/latest/general/comment"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -41,7 +41,7 @@ export const comment = new Elysia()
 
       const totalCommentCount = await getTotalCommentCount()
       const comments = await getComments(page, bunch, totalCommentCount)
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         comments,

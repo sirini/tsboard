@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, updateAccessToken } from "../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../util/tools"
 import {
   getUserPermission,
   hasPermission,
@@ -41,7 +41,7 @@ export const manageUser = new Elysia()
       return fail(`Access denied.`)
     }
     store.accessUserUid = accessUserUid
-    store.newAccessToken = await updateAccessToken(
+    store.newAccessToken = await getUpdatedAccessToken(
       jwt,
       headers.authorization as string,
       refresh.value,

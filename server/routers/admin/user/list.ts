@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getTotalUserCount, getUsers, getSearchedUsers } from "../../../database/admin/user/list"
-import { fail, success, updateAccessToken } from "../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -35,7 +35,7 @@ export const list = new Elysia()
         return fail(`Invalid bunch.`)
       }
       const blocked = isBlocked > 0 ? true : false
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const totalUserCount = await getTotalUserCount(blocked)
       const users = await getUsers({
         page,

@@ -10,7 +10,7 @@ import {
   getAdminCandidates,
   getBoardPermission,
 } from "../../../../database/admin/board/permission/load"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -40,7 +40,7 @@ export const load = new Elysia()
         return fail(`Invalid board ID.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         permission,
         newAccessToken,

@@ -70,7 +70,7 @@ export function success(result: any = null): Result {
 }
 
 // 액세스 토큰 [만료] & 리프레시 토큰 [유효] 때 액세스 토큰 업데이트 후 반환
-export async function updateAccessToken(
+export async function getUpdatedAccessToken(
   jwt: any,
   accessToken: string,
   refreshToken: string,

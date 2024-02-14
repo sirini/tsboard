@@ -16,7 +16,7 @@ import {
   addCategory,
   removeCategory,
 } from "../../../../database/admin/board/general/update"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -43,7 +43,7 @@ export const update = new Elysia()
 
       await changeGroup(boardUid, groupUid)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -68,7 +68,7 @@ export const update = new Elysia()
 
       await updateName(boardUid, newName)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -93,7 +93,7 @@ export const update = new Elysia()
 
       await updateInfo(boardUid, newInfo)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -115,7 +115,7 @@ export const update = new Elysia()
 
       await changeType(boardUid, newType)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -137,7 +137,7 @@ export const update = new Elysia()
 
       await updateRows(boardUid, newRows)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -159,7 +159,7 @@ export const update = new Elysia()
 
       await updateWidth(boardUid, newWidth)
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -187,7 +187,7 @@ export const update = new Elysia()
         return fail(`Already added.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         categoryUid,
@@ -216,7 +216,7 @@ export const update = new Elysia()
         return fail(`Unable to remove last category.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

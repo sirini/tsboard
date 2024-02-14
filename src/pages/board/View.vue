@@ -9,7 +9,7 @@
             <board-header></board-header>
             <v-list>
               <v-list-item>
-                <v-list-item-title class="view_title">{{ post.subject }}</v-list-item-title>
+                <v-list-item-title class="view_title">{{ post.title }}</v-list-item-title>
               </v-list-item>
               <v-list-item class="view_info">
                 <template v-slot:prepend>
@@ -19,13 +19,13 @@
                   >
                   <v-divider vertical></v-divider>
                   <span class="ml-4 mr-4"
-                    ><v-icon size="small" class="mr-2">mdi-calendar</v-icon> {{ post.date }}</span
+                    ><v-icon size="small" class="mr-2">mdi-calendar</v-icon>
+                    {{ post.submitted }}</span
                   >
                 </template>
                 <template v-slot:append>
                   <span class="mr-4"
-                    ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon>
-                    {{ post.view }}</span
+                    ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon> {{ post.hit }}</span
                   >
                   <v-divider vertical></v-divider>
                   <span class="ml-4"
@@ -43,7 +43,7 @@
                   :disabled="auth.user.uid < 1"
                   prepend-icon="mdi-heart"
                   :color="post.liked ? 'red' : 'surface-variant'"
-                  @click="board.like(post.uid)"
+                  @click=""
                 >
                   {{ post.like }}
                   <v-tooltip activator="parent" location="top">이 글에 좋아요 누르기</v-tooltip>
@@ -86,14 +86,14 @@
 
             <v-divider class="mt-3"></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', board.id)"
+              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', list.id)"
                 >목록 보기</v-btn
               >
               <v-spacer></v-spacer>
               <v-btn
                 prepend-icon="mdi-pencil"
                 variant="text"
-                @click="util.go('boardWrite', board.id)"
+                @click="util.go('boardWrite', list.id)"
                 >새글쓰기</v-btn
               >
             </v-card-actions>
@@ -110,9 +110,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref } from "vue"
 import { useAuthStore } from "../../store/auth"
-import { useBoardStore } from "../../store/board"
+import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import { Post } from "../../interface/board"
@@ -129,7 +129,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 
 const auth = useAuthStore()
-const board = useBoardStore()
+const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const post = ref<Post>({
@@ -143,13 +143,15 @@ const post = ref<Post>({
     name: "홍길동",
     profile: "/no-profile.svg",
   },
-  subject: "글 제목입니다",
+  title: "글 제목입니다",
   content: "글 내용입니다",
   like: 5,
   reply: 2,
-  view: 120,
-  date: "2023-10-22 17:37:50",
+  hit: 120,
+  submitted: 0,
+  modified: 0,
   liked: false,
+  status: 0,
 })
 const PREFIX = process.env.PREFIX || ""
 </script>

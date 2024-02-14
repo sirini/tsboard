@@ -108,7 +108,7 @@ tables.push(`${create} #db#group (
   ${primary}
 ) ${engineEncode}`)
 
-// 게시판 관리용 테이블 (type = 0 게시판 / 1 갤러리 / 2 블로그(TBD))
+// 게시판 관리용 테이블 (type = 0 게시판 / 1 갤러리 / 2 블로그 / 3 쇼핑몰)
 tables.push(`${create} #db#board (
   ${uid},
   id VARCHAR(30) ${nnde},
@@ -152,7 +152,7 @@ tables.push(`${create} #db#point_history (
   KEY (user_uid)
 ) ${engineEncode}`)
 
-// 게시글 보관 테이블
+// 게시글 보관 테이블 (status = -1 삭제됨 / 0 정상 / 1 공지)
 tables.push(`${create} #db#post (
   ${uid},
   board_uid INT ${unnd0},
@@ -168,6 +168,7 @@ tables.push(`${create} #db#post (
   KEY (board_uid),
   KEY (user_uid),
   KEY (category_uid),
+  KEY (submitted),
   KEY (hit),
   KEY (status)
 ) ${engineEncode}`)
@@ -203,7 +204,7 @@ tables.push(`${create} #db#post_like (
   KEY (liked)
 ) ${engineEncode}`)
 
-// 댓글 보관 테이블
+// 댓글 보관 테이블 (status = -1 삭제됨 / 0 정상 / 1 공지)
 tables.push(`${create} #db#comment (
   ${uid},
   reply_uid INT ${unnd0},
@@ -219,6 +220,7 @@ tables.push(`${create} #db#comment (
   KEY (board_uid),
   KEY (post_uid),
   KEY (user_uid),
+  KEY (submitted),
   KEY (status)
 ) ${engineEncode}`)
 

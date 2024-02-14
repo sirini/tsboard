@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, updateAccessToken } from "../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 import { getUserInfo, modifyUserInfo } from "../../../database/admin/user/modify"
 import { isDuplicatedName } from "../../../database/auth/signup"
 
@@ -32,7 +32,7 @@ export const modify = new Elysia()
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const user = await getUserInfo(userUid)
       return success({
         newAccessToken,
@@ -66,7 +66,7 @@ export const modify = new Elysia()
       if ((await isDuplicatedName(userUid, name)) === true) {
         return fail(`Duplicated name.`)
       }
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       await modifyUserInfo({
         userUid,
         name,

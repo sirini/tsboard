@@ -30,24 +30,10 @@ export const useCommentStore = defineStore("comment", () => {
       },
       content: "여기에 댓글 내용이 나옵니다",
       like: 5,
-      reply: 2,
-      date: "2023-10-22 17:48:11",
+      submitted: 0,
+      modified: 0,
       liked: false,
-    },
-    {
-      uid: 30,
-      replyTarget: 0,
-      postUid: 3,
-      writer: {
-        uid: 31,
-        name: "정비공장장",
-        profile: "/no-profile.svg",
-      },
-      content: "여기에 추가로 댓글 내용이 나옵니다",
-      like: 1,
-      reply: 0,
-      date: "2023-12-04 12:51:18",
-      liked: true,
+      status: 0,
     },
   ])
 
@@ -122,9 +108,10 @@ export const useCommentStore = defineStore("comment", () => {
       },
       content: contentWithSyntax.value,
       like: 1,
-      reply: 0,
-      date: "2023-11-26 21:31:11",
+      submitted: 0,
+      modified: 0,
       liked: false,
+      status: 0,
     })
     util.snack("새 댓글을 남겼습니다.")
   }
@@ -143,9 +130,10 @@ export const useCommentStore = defineStore("comment", () => {
       },
       content: contentWithSyntax.value,
       like: 1,
-      reply: 0,
-      date: "2023-11-26 21:24:11",
+      submitted: 0,
+      modified: 0,
       liked: false,
+      status: 0,
     })
     util.snack("답글을 남겼습니다.")
   }

@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, updateAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 import {
   changeGroupAdmin,
   removeBoard,
@@ -44,7 +44,7 @@ export const update = new Elysia()
         return fail(`User not found.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -69,7 +69,7 @@ export const update = new Elysia()
         return fail(`Board not found.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -96,7 +96,7 @@ export const update = new Elysia()
         return fail(`Failed to create a new board, try another ID.`)
       }
 
-      const newAccessToken = await updateAccessToken(jwt, headers.authorization, refresh.value)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         uid: newBoardUid,

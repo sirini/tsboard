@@ -1,7 +1,10 @@
 <template>
   <v-card-title class="list_title"
     >테스트 게시판
-    <span class="info ml-3 pl-3">IT 커뮤니티 사이트들의 게시판을 참조하여 개발중입니다.</span>
+    <span class="info ml-3 pl-3"
+      ><v-icon>mdi-information-outline</v-icon> IT 커뮤니티 사이트들의 게시판을 참조하여
+      개발중입니다.</span
+    >
     <div class="login">
       <v-btn
         v-if="auth.user.uid < 1"
@@ -21,7 +24,7 @@
         v-if="auth.user.admin"
         prepend-icon="mdi-cog-outline"
         variant="text"
-        @click="util.go('adminBoardManager', board.id)"
+        @click="util.go('adminBoardManager', list.id)"
         >관리</v-btn
       >
     </div>
@@ -37,11 +40,11 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/auth"
-import { useBoardStore } from "../../../store/board"
+import { useBoardListStore } from "../../../store/board/list"
 import { useUtilStore } from "../../../store/util"
 
 const auth = useAuthStore()
-const board = useBoardStore()
+const list = useBoardListStore()
 const util = useUtilStore()
 </script>
 
@@ -53,7 +56,6 @@ const util = useUtilStore()
 .info {
   color: #828282;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
 }
 .login {
   position: absolute;
