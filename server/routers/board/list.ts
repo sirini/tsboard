@@ -17,17 +17,28 @@ export const list = new Elysia()
     }),
   )
   .get(
-    "/list",
-    async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
+    "/config",
+    async ({ query: { id } }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
       const config = await getBoardConfig(id)
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
-        newAccessToken,
         config,
       })
+    },
+    {
+      query: t.Object({
+        id: t.String(),
+      }),
+    },
+  )
+  .get(
+    "/list",
+    async ({ jwt, cookie: { refresh }, headers, query: { boardUid, page, bunch } }) => {
+      if (boardUid < 1) {
+        return fail(`Invalid board uid.`)
+      }
     },
     {
       headers: t.Object({
@@ -37,7 +48,9 @@ export const list = new Elysia()
         refresh: t.String(),
       }),
       query: t.Object({
-        id: t.String(),
+        boardUid: t.Numeric(),
+        page: t.Numeric(),
+        bunch: t.Numeric(),
       }),
     },
   )

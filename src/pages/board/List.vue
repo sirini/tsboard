@@ -61,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, watch } from "vue"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
@@ -77,6 +78,10 @@ import SideDrawer from "../home/SideDrawer.vue"
 const list = useBoardListStore()
 const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
+
+onMounted(async () => {
+  await list.loadBoardConfig()
+})
 </script>
 
 <style type="scss" scoped>

@@ -4,7 +4,7 @@
  * 게시판 목록보기에 필요한 함수들
  */
 
-import { BoardConfig, Pair } from "../../../src/interface/board"
+import { BoardConfig, Pair, Post, PostParams, Writer } from "../../../src/interface/board"
 import { table, select } from "../common"
 
 // 게시판 기본 설정 가져오기
@@ -87,5 +87,73 @@ export async function getBoardConfig(id: string): Promise<BoardConfig> {
     },
   }
 
+  return result
+}
+
+// 글 개수 반환하기
+export async function getPostCount(boardUid: number): Promise<number> {
+  const [total] = await select(
+    `SELECT COUNT(*) AS post_count FROM ${table}post WHERE board_uid = ? AND status > ?`,
+    [boardUid, -1],
+  )
+  if (!total) {
+    return 0
+  }
+  return total.post_count
+}
+
+type RelatedInfo = {
+  writer: Writer
+  like: number
+  liked: boolean
+  category: Pair
+  reply: number
+}
+
+// 게시글에 연관된 정보 가져오기
+async function getRelatedInfo(postUid: number, userUid: number): Promise<RelatedInfo> {
+  let result: RelatedInfo = {
+    writer: { uid: userUid, name: "", profile: "" },
+    like: 0,
+    liked: false,
+    category: { uid: 0, name: "" },
+    reply: 0,
+  }
+
+  const [user] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUid,
+  ])
+  if (!user) {
+    return result
+  }
+  result.writer.name = user.name
+  result.writer.profile = user.profile
+
+  // TODO
+
+  return result
+}
+
+// 글 목록 가져오기
+export async function getPosts(param: PostParams): Promise<Post[]> {
+  let result: Post[] = []
+  const last = 1 + param.total - (param.page - 1) * param.bunch
+  const notices = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit FROM ${table}post 
+  WHERE board_uid ? AND status > ?`,
+    [param.boardUid, 0],
+  )
+  for (const notice of notices) {
+    //
+  }
+
+  const posts = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status FROM ${table}post 
+    WHERE board_uid = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
+    [last, param.bunch],
+  )
+  if (!posts[0]) {
+    return result
+  }
   return result
 }

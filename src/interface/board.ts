@@ -72,6 +72,13 @@ export type Post = ContentCommon & {
   hit: number
 }
 
+export type PostParams = {
+  boardUid: number
+  page: number
+  bunch: number
+  total: number
+}
+
 export type Comment = ContentCommon & {
   replyTarget: number
   postUid: number
