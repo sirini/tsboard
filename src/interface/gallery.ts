@@ -20,14 +20,13 @@ export type GridItem = {
   writer: Writer
   files: string[]
   like: number
+  liked: boolean
   reply: number
 }
 
 export type Photo = GridItem & {
   subject: string
   content: string
-  view: number
-  date: string
-  liked: boolean
-  booked: boolean
+  hit: number
+  submitted: number
 }

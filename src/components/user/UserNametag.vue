@@ -1,7 +1,7 @@
 <template>
   <v-chip class="pointer" :size="size || 'small'" color="blue-grey">
     <v-avatar start>
-      <v-img :src="profile"></v-img>
+      <v-img :src="PREFIX + (profile.length < 1 ? '/no-profile.svg' : profile)"></v-img>
     </v-avatar>
     {{ name }}
 
@@ -55,6 +55,7 @@ const targetUser = ref<TargetUserInfo>({
   profile: props.profile,
   name: props.name,
 })
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

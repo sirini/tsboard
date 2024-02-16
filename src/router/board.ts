@@ -18,31 +18,6 @@ export const boardRoutes = [
     component: () => import("@/pages/board/List.vue"),
   },
   {
-    path: PREFIX + "/board/:id/subject/:subject/:page(\\d+)",
-    name: "boardListSubject",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
-    path: PREFIX + "/board/:id/content/:content/:page(\\d+)",
-    name: "boardListContent",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
-    path: PREFIX + "/board/:id/category/:category/:page(\\d+)",
-    name: "boardListCategory",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
-    path: PREFIX + "/board/:id/tag/:tag/:page(\\d+)",
-    name: "boardListTag",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
-    path: PREFIX + "/board/:id/writer/:writer/:page(\\d+)",
-    name: "boardListWriter",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
     path: PREFIX + "/board/:id/:no(\\d+)",
     name: "boardView",
     component: () => import("@/pages/board/View.vue"),

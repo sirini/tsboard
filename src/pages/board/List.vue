@@ -10,6 +10,10 @@
 
             <v-card-text class="pa-0">
               <v-list class="pa-0">
+                <v-list-item v-if="list.posts.length < 1" class="text-center">
+                  <v-icon>mdi-alert-circle</v-icon> 게시글이 존재하지 않습니다.
+                </v-list-item>
+
                 <v-list-item
                   class="list_item pa-0"
                   v-for="(post, index) in list.posts"
@@ -18,31 +22,45 @@
                   <template v-slot:prepend>
                     <span class="col no text-center"
                       ><v-icon size="small" v-if="post.liked" color="red">mdi-heart</v-icon
-                      ><v-icon size="small" v-else>mdi-heart-outline</v-icon> {{ post.like }}</span
+                      ><v-icon size="small" v-else>mdi-heart-outline</v-icon>
+                      {{ util.num(post.like) }}</span
                     >
+
                     <v-divider vertical></v-divider>
                     <span class="col cat text-center">{{ post.category.name }}</span>
                     <v-divider vertical></v-divider>
                   </template>
+
                   <v-list-item-title
-                    class="pointer ml-3"
+                    class="pointer ml-2 mr-2"
                     @click="util.go('boardView', list.id, post.uid)"
-                    >{{ post.title }}
+                  >
+                    <v-chip
+                      size="small"
+                      color="blue-grey"
+                      prepend-icon="mdi-bullhorn-variant-outline"
+                      class="mr-2"
+                      v-if="post.status === CONTENT_STATUS.NOTICE"
+                      >NOTICE</v-chip
+                    >
+                    {{ post.title }}
                     <v-icon size="small" color="grey">mdi-image-outline</v-icon>
+
                     <v-chip class="ml-2" size="small" color="blue">{{ post.reply }}</v-chip>
                   </v-list-item-title>
+
                   <template v-slot:append>
                     <user-nametag
                       :uid="post.writer.uid"
                       :name="post.writer.name"
-                      :profile="PREFIX + post.writer.profile"
-                      :size="'default'"
+                      :profile="post.writer.profile"
                     ></user-nametag>
+
                     <span class="col view text-center"
-                      ><v-icon size="small">mdi-eye-outline</v-icon> {{ post.hit }}</span
+                      ><v-icon size="small">mdi-eye-outline</v-icon> {{ util.num(post.hit) }}</span
                     >
                     <v-divider vertical></v-divider>
-                    <span class="col date text-center">{{ post.submitted }}</span>
+                    <span class="col date text-center">{{ util.date(post.submitted) }}</span>
                   </template>
                 </v-list-item>
               </v-list>
@@ -74,14 +92,16 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import { CONTENT_STATUS } from "../../interface/board"
 
 const list = useBoardListStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
-onMounted(async () => {
-  await list.loadBoardConfig()
-})
+onMounted(() => list.loadPostList())
+watch(
+  () => [list.page, list.id],
+  () => list.loadPostList(),
+)
 </script>
 
 <style type="scss" scoped>

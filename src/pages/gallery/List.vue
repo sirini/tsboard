@@ -96,6 +96,7 @@ const images = ref<GridItem[]>([
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/docks.jpg`],
     like: 1,
+    liked: false,
     reply: 1,
   },
   {
@@ -107,6 +108,7 @@ const images = ref<GridItem[]>([
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/hotel.jpg`],
     like: 3,
+    liked: true,
     reply: 7,
   },
   {
@@ -118,6 +120,7 @@ const images = ref<GridItem[]>([
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`],
     like: 2,
+    liked: false,
     reply: 2,
   },
   {
@@ -129,6 +132,7 @@ const images = ref<GridItem[]>([
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/cooking.png`],
     like: 4,
+    liked: true,
     reply: 1,
   },
   {
@@ -140,6 +144,7 @@ const images = ref<GridItem[]>([
     },
     files: [`https://cdn.vuetifyjs.com/images/cards/sky.jpg`],
     like: 2,
+    liked: false,
     reply: 8,
   },
 ])

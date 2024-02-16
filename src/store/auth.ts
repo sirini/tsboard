@@ -87,7 +87,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
     updateUserToken(response.data.result.newAccessToken!)
     user.value = response.data.result.user as User
-    user.value.signature = util.unescapeHTML(user.value.signature)
+    user.value.signature = util.unescape(user.value.signature)
   }
 
   // 사용자 로그인하기

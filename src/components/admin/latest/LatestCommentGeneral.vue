@@ -50,7 +50,7 @@
           <user-nametag
             :uid="comment.writer.uid"
             :name="comment.writer.name"
-            :profile="PREFIX + (comment.writer.profile || '/no-profile.svg')"
+            :profile="comment.writer.profile"
           ></user-nametag>
         </template>
         <v-list-item-title

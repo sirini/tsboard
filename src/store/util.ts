@@ -101,7 +101,7 @@ export const useUtilStore = defineStore("util", () => {
     const time = new Date(milliseconds)
     let result = ""
     if (showYmd) {
-      const year = time.getFullYear()
+      const year = time.getFullYear().toString().slice(2)
       const month = String(time.getMonth() + 1).padStart(2, "0")
       const day = String(time.getDate()).padStart(2, "0")
       result = `${year}/${month}/${day}`
@@ -115,14 +115,25 @@ export const useUtilStore = defineStore("util", () => {
     return result
   }
 
-  // HTML unescape 처리 (<--> Bun.escapeHTML)
-  function unescapeHTML(text: string): string {
+  // HTML unescape HTML 처리 (<--> Bun.escapeHTML)
+  function unescape(text: string): string {
     let result = text.replaceAll("&quot;", '"')
     result = result.replaceAll("&amp;", "&")
     result = result.replaceAll("&#x27;", "'")
     result = result.replaceAll("&lt;", "<")
     result = result.replaceAll("&gt;", ">")
     return result
+  }
+
+  // 큰 숫자는 K, M 단위를 뒤에 붙여서 표현
+  function num(big: number): string {
+    if (big > 999999) {
+      return (big / 1000000).toFixed(1) + "M"
+    } else if (big > 999) {
+      return (big / 1000).toFixed(1) + "K"
+    } else {
+      return big.toString()
+    }
   }
 
   return {
@@ -144,6 +155,7 @@ export const useUtilStore = defineStore("util", () => {
     back,
     debounce,
     date,
-    unescapeHTML,
+    unescape,
+    num,
   }
 })

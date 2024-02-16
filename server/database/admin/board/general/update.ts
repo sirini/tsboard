@@ -57,6 +57,7 @@ export async function addCategory(boardUid: number, newCategory: string): Promis
     `INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`,
     [boardUid, newCategory],
   )
+  update(`UPDATE ${table}board SET use_category = ? WHERE uid = ? LIMIT 1`, [1, boardUid])
   return catUid
 }
 
@@ -111,6 +112,7 @@ export async function removeCategory(boardUid: number, categoryUid: number): Pro
     return false
   }
   if ((await checkCategoryCount(boardUid)) === false) {
+    update(`UPDATE ${table}board SET use_category = ? WHERE uid = ? LIMIT 1`, [0, boardUid])
     return false
   }
 

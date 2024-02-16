@@ -66,6 +66,5 @@ const props = defineProps<{
   postUid: number
   writerUid: number
   liked: boolean
-  booked: boolean
 }>()
 </script>

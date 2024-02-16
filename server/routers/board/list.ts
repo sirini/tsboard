@@ -6,8 +6,8 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { getBoardConfig } from "../../database/board/list"
-import { fail, success, getUpdatedAccessToken } from "../../util/tools"
+import { getBoardConfig, getPostCount, getPosts, getUserLevel } from "../../database/board/list"
+import { fail, success } from "../../util/tools"
 
 export const list = new Elysia()
   .use(
@@ -17,40 +17,58 @@ export const list = new Elysia()
     }),
   )
   .get(
-    "/config",
-    async ({ query: { id } }) => {
+    "/list",
+    async ({ jwt, cookie: { refresh }, headers, query: { id, page } }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
       const config = await getBoardConfig(id)
+      if (config.uid < 1) {
+        return fail(`Board not found.`)
+      }
+      if (config.level.list > 0) {
+        if (headers.authorization.length < 1 || refresh.value.length < 1) {
+          return fail(`Please log in.`)
+        }
+
+        const access = await jwt.verify(headers.authorization)
+        if (access === false) {
+          return fail(`Invalid authorization.`)
+        }
+
+        const userLevel = await getUserLevel(access.uid as number)
+        if (config.level.list > userLevel) {
+          return fail(`Level restrictions.`)
+        }
+      }
+
+      const total = await getPostCount(config.uid)
+      const posts = await getPosts({
+        boardUid: config.uid,
+        page,
+        bunch: config.row,
+        total,
+      })
       return success({
+        total,
         config,
+        posts,
       })
     },
     {
+      headers: t.Optional(
+        t.Object({
+          authorization: t.String(),
+        }),
+      ),
+      cookie: t.Optional(
+        t.Cookie({
+          refresh: t.String(),
+        }),
+      ),
       query: t.Object({
         id: t.String(),
-      }),
-    },
-  )
-  .get(
-    "/list",
-    async ({ jwt, cookie: { refresh }, headers, query: { boardUid, page, bunch } }) => {
-      if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
-      }
-    },
-    {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
-      cookie: t.Cookie({
-        refresh: t.String(),
-      }),
-      query: t.Object({
-        boardUid: t.Numeric(),
         page: t.Numeric(),
-        bunch: t.Numeric(),
       }),
     },
   )

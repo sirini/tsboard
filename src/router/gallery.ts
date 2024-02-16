@@ -18,31 +18,6 @@ export const galleryRoutes = [
     component: () => import("@/pages/gallery/List.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/subject/:subject/:page(\\d+)",
-    name: "galleryListSubject",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
-    path: PREFIX + "/gallery/:id/content/:content/:page(\\d+)",
-    name: "galleryListContent",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
-    path: PREFIX + "/gallery/:id/category/:category/:page(\\d+)",
-    name: "galleryListCategory",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
-    path: PREFIX + "/gallery/:id/tag/:tag/:page(\\d+)",
-    name: "galleryListTag",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
-    path: PREFIX + "/gallery/:id/writer/:writer/:page(\\d+)",
-    name: "galleryListWriter",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
     path: PREFIX + "/gallery/:id/:no(\\d+)",
     name: "galleryOpen",
     component: () => import("@/pages/gallery/List.vue"),

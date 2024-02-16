@@ -1,9 +1,8 @@
 <template>
   <v-card-title class="list_title"
-    >테스트 게시판
+    >{{ util.unescape(list.config.name) }}
     <span class="info ml-3 pl-3"
-      ><v-icon>mdi-information-outline</v-icon> IT 커뮤니티 사이트들의 게시판을 참조하여
-      개발중입니다.</span
+      ><v-icon>mdi-information-outline</v-icon> {{ util.unescape(list.config.info) }}</span
     >
     <div class="login">
       <v-btn

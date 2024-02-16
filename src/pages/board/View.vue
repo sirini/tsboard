@@ -50,7 +50,7 @@
                 </v-chip>
                 <v-spacer></v-spacer>
                 <user-nametag
-                  :profile="PREFIX + post.writer.profile"
+                  :profile="post.writer.profile"
                   :uid="post.writer.uid"
                   :name="post.writer.name"
                   size="default"

@@ -51,7 +51,7 @@
           <user-nametag
             :uid="post.writer.uid"
             :name="post.writer.name"
-            :profile="PREFIX + (post.writer.profile || '/no-profile.svg')"
+            :profile="post.writer.profile"
           ></user-nametag>
         </template>
 

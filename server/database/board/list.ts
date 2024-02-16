@@ -4,7 +4,15 @@
  * 게시판 목록보기에 필요한 함수들
  */
 
-import { BoardConfig, Pair, Post, PostParams, Writer } from "../../../src/interface/board"
+import { RowDataPacket } from "mysql2"
+import {
+  BoardConfig,
+  CONTENT_STATUS,
+  Pair,
+  Post,
+  PostParams,
+  Writer,
+} from "../../../src/interface/board"
 import { table, select } from "../common"
 
 // 게시판 기본 설정 가져오기
@@ -111,7 +119,11 @@ type RelatedInfo = {
 }
 
 // 게시글에 연관된 정보 가져오기
-async function getRelatedInfo(postUid: number, userUid: number): Promise<RelatedInfo> {
+async function getRelatedInfo(
+  postUid: number,
+  userUid: number,
+  categoryUid: number,
+): Promise<RelatedInfo> {
   let result: RelatedInfo = {
     writer: { uid: userUid, name: "", profile: "" },
     like: 0,
@@ -129,8 +141,63 @@ async function getRelatedInfo(postUid: number, userUid: number): Promise<Related
   result.writer.name = user.name
   result.writer.profile = user.profile
 
-  // TODO
+  const [like] = await select(
+    `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
+    [postUid, 1],
+  )
+  if (like) {
+    result.like = like.total_count
+  }
 
+  const [isLiked] = await select(
+    `SELECT liked FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? LIMIT 1`,
+    [postUid, userUid],
+  )
+  if (isLiked) {
+    result.liked = isLiked.liked > 0 ? true : false
+  }
+
+  const [category] = await select(
+    `SELECT uid, name FROM ${table}board_category WHERE uid = ? LIMIT 1`,
+    [categoryUid],
+  )
+  if (category) {
+    result.category = {
+      uid: category.uid,
+      name: category.name,
+    }
+  }
+
+  const [reply] = await select(
+    `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE post_uid = ?`,
+    [postUid],
+  )
+  if (reply) {
+    result.reply = reply.total_count
+  }
+  return result
+}
+
+// (검색된) 포스트들 결과로 정리하여 반환하기
+async function makePostResult(posts: RowDataPacket[]): Promise<Post[]> {
+  let result: Post[] = []
+  for (const post of posts) {
+    const info = await getRelatedInfo(post.uid, post.user_uid, post.category_uid)
+    result.push({
+      uid: post.uid,
+      writer: info.writer,
+      content: post.content,
+      like: info.like,
+      liked: info.liked,
+      submitted: post.submitted,
+      modified: post.modified,
+      status: post.status,
+      category: info.category,
+      reply: info.reply,
+      title: post.title,
+      hit: post.hit,
+    })
+  }
   return result
 }
 
@@ -139,21 +206,28 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
   let result: Post[] = []
   const last = 1 + param.total - (param.page - 1) * param.bunch
   const notices = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit FROM ${table}post 
-  WHERE board_uid ? AND status > ?`,
-    [param.boardUid, 0],
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status FROM ${table}post 
+  WHERE board_uid = ? AND status > ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL],
   )
-  for (const notice of notices) {
-    //
-  }
+  result.push(...(await makePostResult(notices)))
 
   const posts = await select(
     `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status FROM ${table}post 
-    WHERE board_uid = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-    [last, param.bunch],
+    WHERE board_uid = ? AND status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, last, param.bunch - result.length],
   )
-  if (!posts[0]) {
-    return result
-  }
+  result.push(...(await makePostResult(posts)))
+
   return result
+}
+
+// 목록보기에 레벨 제한이 있을 시 회원의 레벨 가져오기
+export async function getUserLevel(userUid: number): Promise<number> {
+  let level = 0
+  const [user] = await select(`SELECT level FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  if (user) {
+    level = user.level
+  }
+  return level
 }

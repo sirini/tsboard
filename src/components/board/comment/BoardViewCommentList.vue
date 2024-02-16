@@ -5,7 +5,7 @@
         <user-nametag
           :name="co.writer.name"
           :uid="co.writer.uid"
-          :profile="PREFIX + co.writer.profile"
+          :profile="co.writer.profile"
           size="default"
         ></user-nametag>
         <v-spacer></v-spacer>

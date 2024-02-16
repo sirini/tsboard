@@ -24,7 +24,18 @@ export const useViewerStore = defineStore("viewer", () => {
   const zoomMax = 20.0
   const zoomMin = 0.5
   const images = ref<GridItem[]>([])
-  const photo = ref<Photo | undefined>()
+  const photo = ref<Photo>({
+    uid: 0,
+    writer: { uid: 0, name: "", profile: "" },
+    files: [],
+    like: 0,
+    liked: false,
+    reply: 0,
+    subject: "",
+    content: "",
+    hit: 0,
+    submitted: 0,
+  })
   const position = ref<number>(0)
   const textRule = [
     (value: any) => {
@@ -133,10 +144,9 @@ export const useViewerStore = defineStore("viewer", () => {
       content: "사진 내용입니다",
       like: 5,
       reply: 10,
-      view: 1429,
-      date: "2023-10-22 19:03:19",
+      hit: 1429,
+      submitted: 0,
       liked: false,
-      booked: false,
     }
     position.value = 0
   }

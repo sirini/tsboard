@@ -5,7 +5,7 @@
         <v-main>
           <v-img
             class="text-center"
-            :src="PREFIX + viewer.photo?.files.at(viewer.position)"
+            :src="PREFIX + viewer.photo.files?.at(viewer.position)"
             @mousedown="viewer.mouseDown"
             @mousemove="viewer.mouseMove"
             @mouseup="viewer.mouseUp"
@@ -46,16 +46,16 @@
                     variant="text"
                     color="grey"
                     prepend-icon="mdi-calendar"
-                    >{{ viewer.photo?.date }}</v-chip
+                    >{{ util.date(viewer.photo.submitted) }}</v-chip
                   >
                   <v-chip label size="small" variant="text" color="grey" prepend-icon="mdi-eye">{{
-                    viewer.photo?.view
+                    viewer.photo.hit
                   }}</v-chip>
                   <v-spacer></v-spacer>
                   <user-nametag
-                    :uid="viewer.photo?.writer.uid || 0"
-                    :name="viewer.photo?.writer.name || ''"
-                    :profile="PREFIX + (viewer.photo?.writer.profile || '/no-profile.svg')"
+                    :uid="viewer.photo.writer.uid"
+                    :name="viewer.photo.writer.name"
+                    :profile="viewer.photo.writer.profile"
                     size="small"
                   ></user-nametag>
                 </v-card-actions>
@@ -67,7 +67,6 @@
               :postUid="viewer.photo?.uid || 0"
               :writerUid="viewer.photo?.writer.uid || 0"
               :liked="viewer.photo?.liked || false"
-              :booked="viewer.photo?.booked || false"
             ></gallery-viewer-toolbar>
 
             <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="i in 3" :key="i">
@@ -133,7 +132,7 @@ import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import SendNoteDialog from "../../user/SendNoteDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
-import BoardViewCommentstatusialog from "../../board/comment/BoardViewCommentstatusialog.vue"
+import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 
 const PREFIX = process.env.PREFIX || ""
 const viewer = useViewerStore()
