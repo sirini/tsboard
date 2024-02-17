@@ -48,6 +48,7 @@
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
           :type="ACTION_TYPE.LIST"
+          :auth-user-only="false"
           @update="(level: number) => permission.updateListPermission(level)"
         ></board-manager-permission-item>
       </v-list-item>
@@ -56,6 +57,7 @@
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
           :type="ACTION_TYPE.VIEW"
+          :auth-user-only="false"
           @update="(level: number) => permission.updateViewPermission(level)"
         ></board-manager-permission-item>
       </v-list-item>
@@ -64,6 +66,7 @@
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
           :type="ACTION_TYPE.WRITE"
+          :auth-user-only="true"
           @update="(level: number) => permission.updateWritePermission(level)"
         ></board-manager-permission-item>
       </v-list-item>
@@ -72,6 +75,7 @@
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
           :type="ACTION_TYPE.COMMENT"
+          :auth-user-only="true"
           @update="(level: number) => permission.updateCommentPermission(level)"
         ></board-manager-permission-item>
       </v-list-item>
@@ -80,6 +84,7 @@
       <v-list-item class="mt-2 mb-1">
         <board-manager-permission-item
           :type="ACTION_TYPE.DOWNLOAD"
+          :auth-user-only="false"
           @update="(level: number) => permission.updateDownloadPermission(level)"
         ></board-manager-permission-item>
       </v-list-item>

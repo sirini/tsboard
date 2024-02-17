@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board" max-width="1000">
+          <v-card elevation="0" rounded="0" class="mx-auto board" :width="list.config.width">
             <board-header></board-header>
 
             <v-card-text class="pa-0">

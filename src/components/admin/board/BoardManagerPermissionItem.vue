@@ -17,9 +17,13 @@
               v-for="(_, lv) in 10"
               :key="lv"
               @click="updateLevel(lv)"
+              :disabled="authUserOnly && lv < 1"
               :append-icon="item === lv ? 'mdi-check' : ''"
             >
               {{ lv }} 레벨
+              <v-chip size="small" color="warning" class="ml-2" v-if="authUserOnly && lv < 1"
+                >비회원은 사용불가</v-chip
+              >
             </v-list-item>
           </v-list>
         </v-menu>
@@ -36,6 +40,7 @@ import { ACTION_TYPE } from "../../../interface/admin"
 
 const prop = defineProps<{
   type: number
+  authUserOnly: boolean
 }>()
 const emit = defineEmits<{
   update: [level: number]
