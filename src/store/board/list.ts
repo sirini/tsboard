@@ -9,30 +9,11 @@ import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
-import { useAuthStore } from "../auth"
+import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { BOARD_TYPE, BoardConfig, Pair, Post } from "../../interface/board"
+import { BoardConfig, Pair, Post } from "../../interface/board"
 import { LIST } from "../../messages/store/board/list"
-
-const TYPE_MATCH = [
-  { path: "/board/", name: "boardList" },
-  { path: "/gallery/", name: "galleryList" },
-  { path: "/blog/", name: "blogList" },
-]
-
-const INIT_CONFIG: BoardConfig = {
-  uid: 0,
-  admin: { group: 0, board: 0 },
-  type: 0,
-  name: "",
-  info: "",
-  row: 0,
-  width: 0,
-  useCategory: false,
-  category: [],
-  level: { list: 0, view: 0, comment: 0, write: 0, download: 0 },
-  point: { view: 0, comment: 0, write: 0, download: 0 },
-}
+import { TYPE_MATCH, INIT_CONFIG } from "./const"
 
 export const useBoardListStore = defineStore("boardList", () => {
   const server = edenTreaty<App>(process.env.API!)

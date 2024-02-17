@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useAuthStore } from "../../store/auth"
+import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"

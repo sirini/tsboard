@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import { useGalleryStore } from "../../../store/gallery"
 import { useUtilStore } from "../../../store/util"
 

@@ -104,7 +104,7 @@
 <script setup lang="ts">
 import { watch, onMounted } from "vue"
 import { useAdminUserStore } from "../../../store/admin/user/common"
-import { useManageUserStore } from "../../../store/manageuser"
+import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"

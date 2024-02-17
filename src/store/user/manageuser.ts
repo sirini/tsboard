@@ -7,31 +7,20 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../server/index"
-import { useUtilStore } from "./util"
-import { TargetUserInfo, UserPermissionParams } from "../interface/user"
+import type { App } from "../../../server/index"
+import { useUtilStore } from "../util"
+import { TargetUserInfo, UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
-import { USER } from "../messages/store/user"
+import { USER } from "../../messages/store/user/user"
+import { INIT_PERMISSION } from "./const"
 
 export const useManageUserStore = defineStore("manageuser", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
   const manageUserDialog = ref<boolean>(false)
-  const targetUserInfo = ref<TargetUserInfo>({
-    uid: 0,
-    profile: "",
-    name: "",
-  })
-  const permission = ref<UserPermissionParams>({
-    writePost: false,
-    writeComment: false,
-    sendNote: false,
-    sendReport: false,
-    login: false,
-    userUid: 0,
-    response: "",
-  })
+  const targetUserInfo = ref<TargetUserInfo>({ uid: 0, profile: "", name: "" })
+  const permission = ref<UserPermissionParams>(INIT_PERMISSION)
 
   // 사용자 관리하기 다이얼로그 열기
   function openManageUser(user: TargetUserInfo): void {

@@ -135,7 +135,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useAdminStore } from "../../../store/admin/common"
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"

@@ -8,7 +8,7 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
-import { useAuthStore } from "./auth"
+import { useAuthStore } from "./user/auth"
 
 export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)

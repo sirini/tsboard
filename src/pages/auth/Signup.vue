@@ -4,7 +4,13 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500" :loading="signup.loading">
+          <v-card
+            elevation="0"
+            rounded="0"
+            class="mx-auto"
+            max-width="500"
+            :loading="signup.loading"
+          >
             <v-card-title class="signup_title"
               >회원가입
               <span class="info ml-3 pl-3">사이트에서 활용할 최소한의 정보를 요청 드립니다</span>
@@ -93,8 +99,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/auth"
-import { useSignupStore } from "../../store/signup"
+import { useAuthStore } from "../../store/user/auth"
+import { useSignupStore } from "../../store/user/signup"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"

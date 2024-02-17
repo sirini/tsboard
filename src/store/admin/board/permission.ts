@@ -11,9 +11,10 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { AdminBoardPermission, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../auth"
+import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { PERMISSION } from "../../../messages/store/admin/board/permission"
+import { BOARD_PERMISSION } from "./const"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
@@ -22,22 +23,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   const auth = useAuthStore()
   const util = useUtilStore()
   const suggestions = ref<AdminPair[]>([])
-  const board = ref<AdminBoardPermission>({
-    uid: 0,
-    id: "",
-    admin: {
-      uid: 0,
-      name: "",
-      profile: "/no-profile.svg",
-    },
-    level: {
-      list: 0,
-      view: 0,
-      write: 0,
-      comment: 0,
-      download: 0,
-    },
-  })
+  const board = ref<AdminBoardPermission>(BOARD_PERMISSION)
   const boardNewAdmin = ref<string>("")
 
   // 게시판 권한 설정 불러오기
@@ -116,14 +102,14 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       name: user.name,
       profile: "",
     }
-    admin.success(`${user.name} 님을 ${board.value.id} 게시판의 관리자로 지정 하였습니다.`)
+    admin.success(`${user.name} ${PERMISSION.UPDATED_BOARD_ADMIN}`)
   }
 
   // 글 목록 권한 업데이트
   async function updateListPermission(level: number): Promise<void> {
     board.value.level.list = level
     if ((await updateAllPermissions()) === true) {
-      admin.success(`글 목록은 ${level} 이상 가능 하도록 수정하였습니다.`)
+      admin.success(`${level} ${PERMISSION.UPDATED_LIST_LEVEL}`)
     }
   }
 
@@ -131,7 +117,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   async function updateViewPermission(level: number): Promise<void> {
     board.value.level.view = level
     if ((await updateAllPermissions()) === true) {
-      admin.success(`글 보기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+      admin.success(`${level} ${PERMISSION.UPDATED_VIEW_LEVEL}`)
     }
   }
 
@@ -139,7 +125,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   async function updateWritePermission(level: number): Promise<void> {
     board.value.level.write = level
     if ((await updateAllPermissions()) === true) {
-      admin.success(`글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+      admin.success(`${level} ${PERMISSION.UPDATED_WRITE_LEVEL}`)
     }
   }
 
@@ -147,7 +133,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   async function updateCommentPermission(level: number): Promise<void> {
     board.value.level.comment = level
     if ((await updateAllPermissions()) === true) {
-      admin.success(`댓글 쓰기는 ${level} 이상 가능 하도록 수정하였습니다.`)
+      admin.success(`${level} ${PERMISSION.UPDATED_COMMENT_LEVEL}`)
     }
   }
 
@@ -155,7 +141,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   async function updateDownloadPermission(level: number): Promise<void> {
     board.value.level.download = level
     if ((await updateAllPermissions()) === true) {
-      admin.success(`다운로드는 ${level} 이상 가능 하도록 수정하였습니다.`)
+      admin.success(`${level} ${PERMISSION.UPDATED_DOWNLOAD_LEVEL}`)
     }
   }
 

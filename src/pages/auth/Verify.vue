@@ -48,8 +48,8 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router"
-import { useAuthStore } from "../../store/auth"
-import { useSignupStore } from "../../store/signup"
+import { useAuthStore } from "../../store/user/auth"
+import { useSignupStore } from "../../store/user/signup"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"

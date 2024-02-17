@@ -10,17 +10,14 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { AdminUser, AdminPair, AdminReport } from "../../../interface/admin"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../auth"
+import { useAuthStore } from "../../user/auth"
 import { COMMON } from "../../../messages/store/admin/user/common"
 
 export const useAdminUserStore = defineStore("adminUser", () => {
   const server = edenTreaty<App>(process.env.API!)
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const blockUserTarget = ref<AdminPair>({
-    uid: 0,
-    name: "",
-  })
+  const blockUserTarget = ref<AdminPair>({ uid: 0, name: "" })
   const option = ref<"name" | "id" | "level">("name")
   const keyword = ref<string>("")
   const page = ref<number>(1)

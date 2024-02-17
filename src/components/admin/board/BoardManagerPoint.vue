@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useAdminStore } from "../../../store/admin/common"
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import { useAdminBoardPointStore } from "../../../store/admin/board/point"
 import BoardManagerPointItem from "./BoardManagerPointItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"

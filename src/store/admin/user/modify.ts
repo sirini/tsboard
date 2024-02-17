@@ -9,11 +9,12 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../auth"
+import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { UserModifyResult } from "../../../interface/auth"
 import { MODIFY } from "../../../messages/store/admin/user/modify"
 import { SHA256 } from "crypto-js"
+import { USER_INFO } from "./const"
 
 export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -22,15 +23,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
   const util = useUtilStore()
   const password = ref<string>("")
   const checkedPassword = ref<string>("")
-  const user = ref<UserModifyResult>({
-    uid: 0,
-    id: "",
-    name: "",
-    profile: `/no-profile.svg`,
-    level: 0,
-    point: 0,
-    signature: "",
-  })
+  const user = ref<UserModifyResult>(USER_INFO)
   const newProfile = ref<File | undefined>(undefined)
   const newProfilePreview = ref<string>("")
 

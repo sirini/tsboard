@@ -95,7 +95,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useAdminStore } from "../../../store/admin/common"
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"

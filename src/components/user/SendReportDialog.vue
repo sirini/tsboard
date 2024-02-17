@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useUserStore } from "../../store/user"
+import { useUserStore } from "../../store/user/user"
 import { useHomeStore } from "../../store/home"
 import AlertBar from "../util/AlertBar.vue"
 

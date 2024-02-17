@@ -8,10 +8,11 @@ import { SHA256 } from "crypto-js"
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../server/index"
-import { useUtilStore } from "./util"
-import { User } from "../interface/auth"
-import { AUTH, USER_INFO_KEY } from "../messages/store/auth"
+import type { App } from "../../../server/index"
+import { useUtilStore } from "../util"
+import { User } from "../../interface/auth"
+import { AUTH, USER_INFO_KEY } from "../../messages/store/user/auth"
+import { INIT_USER } from "./const"
 
 export const useAuthStore = defineStore("auth", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -19,19 +20,7 @@ export const useAuthStore = defineStore("auth", () => {
   const password = ref<string>("")
   const checkedPassword = ref<string>("")
   const newProfile = ref<File | undefined>(undefined)
-  const user = ref<User>({
-    uid: 0,
-    id: "sirini@gmail.com",
-    name: "",
-    profile: "/no-profile.svg",
-    level: 0,
-    point: 0,
-    signature: "",
-    signup: 0,
-    signin: 0,
-    admin: false,
-    token: "",
-  })
+  const user = ref<User>(INIT_USER)
   loadUserInfo()
 
   // 아이디(이메일) 입력란 체크

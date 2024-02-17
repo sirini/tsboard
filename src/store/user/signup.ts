@@ -9,10 +9,10 @@ import { SHA256 } from "crypto-js"
 import { defineStore } from "pinia"
 import { useRouter } from "vue-router"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../server/index"
-import { useUtilStore } from "./util"
+import type { App } from "../../../server/index"
+import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
-import { AUTH } from "../messages/store/auth"
+import { AUTH } from "../../messages/store/user/auth"
 
 export const useSignupStore = defineStore("signup", () => {
   const router = useRouter()

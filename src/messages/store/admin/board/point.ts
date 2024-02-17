@@ -10,4 +10,11 @@ export const POINT = {
   LOADED_POINT: "게시판 포인트 정책을 성공적으로 불러들였습니다.",
   UNKNOWN_INFO: "존재하지 않는 게시판 ID 입니다.",
   UNABLE_UPDATE_POINT: "게시판 포인트 정책을 업데이트하지 못했습니다.",
+  ACTION_VIEW: "글 보기에",
+  ACTION_WRITE: "글 작성에",
+  ACTION_COMMENT: "댓글 쓰기에",
+  ACTION_DOWNLOAD: "다운로드에",
+  RESULT_DECREASE: "차감",
+  RESULT_INCREASE: "충전",
+  UPDATED_ACTION_RESULT: "하도록 수정하였습니다.",
 }

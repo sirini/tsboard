@@ -37,47 +37,38 @@
               <v-list-item class="view_content pa-5">
                 {{ post.content }}
               </v-list-item>
-              <v-toolbar density="compact" class="view_menu" :color="home.color.header">
+              <v-toolbar density="compact" class="view_menu" color="white">
                 <v-chip
-                  class="ml-3"
+                  class="ml-3 mr-2"
                   :disabled="auth.user.uid < 1"
                   prepend-icon="mdi-heart"
+                  size="small"
                   :color="post.liked ? 'red' : 'surface-variant'"
                   @click=""
                 >
                   {{ post.like }}
                   <v-tooltip activator="parent" location="top">이 글에 좋아요 누르기</v-tooltip>
                 </v-chip>
-                <v-spacer></v-spacer>
                 <user-nametag
                   :profile="post.writer.profile"
                   :uid="post.writer.uid"
                   :name="post.writer.name"
-                  size="default"
                 ></user-nametag>
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                  <v-menu activator="parent" open-on-hover>
-                    <v-list density="compact">
-                      <v-list-item>
-                        <v-btn
-                          prepend-icon="mdi-pencil"
-                          variant="text"
-                          :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
-                          >이 글 수정하기</v-btn
-                        >
-                      </v-list-item>
-                      <v-list-item>
-                        <v-btn
-                          prepend-icon="mdi-trash-can"
-                          variant="text"
-                          :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
-                        >
-                          이 글 삭제하기
-                        </v-btn>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  prepend-icon="mdi-pencil"
+                  variant="text"
+                  size="small"
+                  :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
+                  >수정</v-btn
+                >
+                <v-btn
+                  prepend-icon="mdi-trash-can"
+                  size="small"
+                  variant="text"
+                  :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
+                  >삭제
                 </v-btn>
               </v-toolbar>
             </v-list>
@@ -111,7 +102,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/auth"
+import { useAuthStore } from "../../store/user/auth"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"

@@ -11,21 +11,16 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { AdminPoint } from "../../../interface/admin"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../auth"
+import { useAuthStore } from "../../user/auth"
 import { POINT } from "../../../messages/store/admin/board/point"
+import { BOARD_POINT } from "./const"
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
   const admin = useAdminStore()
   const auth = useAuthStore()
   const server = edenTreaty<App>(process.env.API!)
-  const board = ref<AdminPoint>({
-    uid: 0,
-    view: { isPayment: true, amount: 0 },
-    write: { isPayment: false, amount: 0 },
-    comment: { isPayment: false, amount: 0 },
-    download: { isPayment: true, amount: 0 },
-  })
+  const board = ref<AdminPoint>(BOARD_POINT)
   const boardView = ref<string>("0")
   const boardWrite = ref<string>("0")
   const boardComment = ref<string>("0")
@@ -71,9 +66,9 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `글 보기에 ${board.value.view.amount} 만큼 ${
-          board.value.view.isPayment ? "차감" : "충전"
-        } 하도록 수정 하였습니다.`,
+        `${POINT.ACTION_VIEW} ${board.value.view.amount} ${
+          board.value.view.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
   }
@@ -85,9 +80,9 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `글 작성에 ${board.value.write.amount} 만큼 ${
-          board.value.write.isPayment ? "차감" : "충전"
-        } 하도록 수정 하였습니다.`,
+        `${POINT.ACTION_WRITE} ${board.value.write.amount} ${
+          board.value.write.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
   }
@@ -99,9 +94,9 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `댓글 쓰기에 ${board.value.comment.amount} 만큼 ${
-          board.value.comment.isPayment ? "차감" : "충전"
-        } 하도록 수정 하였습니다.`,
+        `${POINT.ACTION_COMMENT} ${board.value.comment.amount} ${
+          board.value.comment.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
   }
@@ -113,9 +108,9 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `다운로드에 ${board.value.download.amount} 만큼 ${
-          board.value.download.isPayment ? "차감" : "충전"
-        } 하도록 수정 하였습니다.`,
+        `${POINT.ACTION_DOWNLOAD} ${board.value.download.amount} ${
+          board.value.download.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
   }

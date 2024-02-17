@@ -62,8 +62,8 @@
 
 <script setup lang="ts">
 import { onBeforeMount, watch } from "vue"
-import { useAuthStore } from "../../store/auth"
-import { useUserStore } from "../../store/user"
+import { useAuthStore } from "../../store/user/auth"
+import { useUserStore } from "../../store/user/user"
 import { useHomeStore } from "../../store/home"
 import AlertBar from "../util/AlertBar.vue"
 

@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/comment"
 import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../user/UserNametag.vue"

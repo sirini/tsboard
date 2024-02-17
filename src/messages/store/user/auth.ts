@@ -1,5 +1,5 @@
 /**
- * messages/store/auth
+ * messages/store/user/auth
  *
  * 사용자 로그인, 가입 관련 텍스트들 모음
  */

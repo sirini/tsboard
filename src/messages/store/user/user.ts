@@ -1,5 +1,5 @@
 /**
- * messages/store/user
+ * messages/store/user/user
  *
  * 쪽지, 신고, 정보 보기, 회원 관리 (관리자용) 관련 텍스트 모음
  */

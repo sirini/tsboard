@@ -16,9 +16,10 @@ import {
   AdminUserInfo,
 } from "../../../interface/admin"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/group/general"
+import { GROUP_CONFIG } from "./const"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
@@ -26,20 +27,8 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const group = ref<AdminGroupConfig>({
-    uid: 0,
-    id: "",
-    count: 0,
-    manager: {
-      uid: 0,
-      name: "",
-      profile: "",
-    },
-  })
-  const removeBoardTarget = ref<AdminPair>({
-    uid: 0,
-    name: "",
-  })
+  const group = ref<AdminGroupConfig>(GROUP_CONFIG)
+  const removeBoardTarget = ref<AdminPair>({ uid: 0, name: "" })
   const confirmRemoveBoardDialog = ref<boolean>(false)
   const boards = ref<AdminGroupList[]>([])
   const existBoardIds = ref<AdminPair[]>([])

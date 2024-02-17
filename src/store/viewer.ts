@@ -5,7 +5,7 @@
  */
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useAuthStore } from "./auth"
+import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
 import { Position, GridItem, Photo } from "../interface/gallery"
 

@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
-import { useAuthStore } from "../../auth"
+import { useAuthStore } from "../../user/auth"
 import { AdminDashboardStat, AdminLatest, AdminUserInfo } from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 

@@ -12,4 +12,10 @@ export const PERMISSION = {
   EMPTY_CANDIDATES: "검색된 관리자 후보가 없습니다.",
   UNABLE_CHANGE_ADMIN: "게시판 관리자를 변경할 수 없었습니다.",
   UNABLE_UPDATE_LEVEL: "게시판 권한 레벨들을 업데이트 할 수 없었습니다.",
+  UPDATED_BOARD_ADMIN: "님을 이 게시판의 관리자로 지정 하였습니다.",
+  UPDATED_LIST_LEVEL: "이상 레벨만 목록을 볼 수 있도록 수정하였습니다.",
+  UPDATED_VIEW_LEVEL: "이상 레벨만 글 보기를 할 수 있도록 수정하였습니다.",
+  UPDATED_WRITE_LEVEL: "이상 레벨만 글 작성이 가능하도록 수정하였습니다.",
+  UPDATED_COMMENT_LEVEL: "이상 레벨만 댓글 쓰기가 가능하도록 수정하였습니다.",
+  UPDATED_DOWNLOAD_LEVEL: "이상 레벨만 다운로드 가능하도록 수정하였습니다.",
 }

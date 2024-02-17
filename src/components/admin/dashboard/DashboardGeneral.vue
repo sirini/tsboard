@@ -21,7 +21,7 @@
 import { onMounted } from "vue"
 import { useAdminStore } from "../../../store/admin/common"
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
-import { useAuthStore } from "../../../store/auth"
+import { useAuthStore } from "../../../store/user/auth"
 import DashboardGeneralStatistic from "./DashboardGeneralStatistic.vue"
 import DashboardGeneralLatest from "./DashboardGeneralLatest.vue"
 import DashboardGeneralItem from "./DashboardGeneralItem.vue"

@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { useAuthStore } from "../../store/auth"
+import { useAuthStore } from "../../store/user/auth"
 import { usePasswordStore } from "../../store/password"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"

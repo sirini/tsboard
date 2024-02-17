@@ -7,11 +7,11 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../server/index"
-import { useAdminStore } from "./admin/common"
-import { TargetUserInfo, ChatHistory, UserPermissionParams } from "../interface/user"
+import type { App } from "../../../server/index"
+import { useAdminStore } from "../admin/common"
+import { TargetUserInfo, ChatHistory, UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
-import { USER } from "../messages/store/user"
+import { USER } from "../../messages/store/user/user"
 
 export const useUserStore = defineStore("user", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -21,11 +21,7 @@ export const useUserStore = defineStore("user", () => {
   const sendNoteDialog = ref<boolean>(false)
   const sendReportDialog = ref<boolean>(false)
   const manageUserDialog = ref<boolean>(false)
-  const targetUserInfo = ref<TargetUserInfo>({
-    uid: 0,
-    profile: "",
-    name: "",
-  })
+  const targetUserInfo = ref<TargetUserInfo>({ uid: 0, profile: "", name: "" })
 
   // 사용자 정보 보기 다이얼로그 열기
   function openUserInfo(user: TargetUserInfo): void {

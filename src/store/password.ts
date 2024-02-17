@@ -9,9 +9,9 @@ import { SHA256 } from "crypto-js"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
-import { useAuthStore } from "./auth"
+import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
-import { AUTH } from "../messages/store/auth"
+import { AUTH } from "../messages/store/user/auth"
 
 export const usePasswordStore = defineStore("password", () => {
   const server = edenTreaty<App>(process.env.API!)

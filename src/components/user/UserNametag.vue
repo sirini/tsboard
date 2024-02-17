@@ -37,9 +37,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/auth"
-import { useUserStore } from "../../store/user"
-import { useManageUserStore } from "../../store/manageuser"
+import { useAuthStore } from "../../store/user/auth"
+import { useUserStore } from "../../store/user/user"
+import { useManageUserStore } from "../../store/user/manageuser"
 import { TargetUserInfo } from "../../interface/user"
 
 const auth = useAuthStore()

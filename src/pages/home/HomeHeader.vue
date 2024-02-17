@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../store/auth"
+import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 

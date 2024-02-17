@@ -121,8 +121,8 @@
 </template>
 
 <script setup lang="ts">
-import { useManageUserStore } from "../../store/manageuser"
-import { USER } from "../../messages/store/user"
+import { useManageUserStore } from "../../store/user/manageuser"
+import { USER } from "../../messages/store/user/user"
 import AlertBar from "../util/AlertBar.vue"
 
 const manage = useManageUserStore()
