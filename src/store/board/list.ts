@@ -20,7 +20,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const id = ref<string>(route.params.id as string)
+  const id = ref<string>("")
   const config = ref<BoardConfig>(INIT_CONFIG)
   const posts = ref<Post[]>([])
   const categories = ref<Pair[]>([])
@@ -28,6 +28,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const pageLength = ref<number>(1)
 
   async function loadPostList(): Promise<void> {
+    id.value = route.params.id as string
     if (id.value.length < 2) {
       util.snack(LIST.NO_BOARD_ID)
       return
