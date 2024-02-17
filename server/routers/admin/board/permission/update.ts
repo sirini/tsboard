@@ -71,7 +71,6 @@ export const update = new Elysia()
       }
 
       updatePermissionLevels(boardUid, levels as AdminPermissionLevel)
-
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,

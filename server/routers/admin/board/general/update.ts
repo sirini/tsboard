@@ -66,8 +66,7 @@ export const update = new Elysia()
         return fail(`Board name is too short.`)
       }
 
-      await updateName(boardUid, newName)
-
+      await updateName(boardUid, Bun.escapeHTML(newName))
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
@@ -91,8 +90,7 @@ export const update = new Elysia()
         return fail(`Board info is too short.`)
       }
 
-      await updateInfo(boardUid, newInfo)
-
+      await updateInfo(boardUid, Bun.escapeHTML(newInfo))
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
@@ -182,7 +180,7 @@ export const update = new Elysia()
         return fail(`Category name is too short.`)
       }
 
-      const categoryUid = await addCategory(boardUid, newCategory)
+      const categoryUid = await addCategory(boardUid, Bun.escapeHTML(newCategory))
       if (categoryUid < 1) {
         return fail(`Already added.`)
       }
