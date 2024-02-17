@@ -6,7 +6,7 @@
       <v-main>
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto board" :width="list.config.width">
-            <board-header></board-header>
+            <board-header :name="list.config.name" :info="list.config.info"></board-header>
 
             <v-card-text class="pa-0">
               <v-list class="pa-0">
@@ -46,9 +46,8 @@
                       >공지</v-chip
                     >
                     {{ post.title }}
-                    <v-icon size="small" color="grey">mdi-image-outline</v-icon>
 
-                    <v-chip class="ml-2" size="small" color="blue">{{ post.reply }}</v-chip>
+                    <v-chip class="ml-2" size="small" color="blue-grey">{{ post.reply }}</v-chip>
                   </v-list-item-title>
 
                   <template v-slot:append>

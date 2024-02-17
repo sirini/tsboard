@@ -45,18 +45,18 @@ export function generateDate(): Date {
   return result
 }
 
-interface Result {
+type Result = {
   success: boolean
   error: string
   result: any
 }
 
 // Elysia 실패 메시지 리턴
-export function fail(error: string): Result {
+export function fail(error: string, result: any = null): Result {
   return {
     success: false,
     error,
-    result: null,
+    result,
   }
 }
 

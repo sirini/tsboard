@@ -6,8 +6,8 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { getBoardConfig, getPostCount, getPosts, getUserLevel } from "../../database/board/list"
-import { fail, success } from "../../util/tools"
+import { getBoardConfig, getMaxPostUid, getPosts, getUserLevel } from "../../database/board/list"
+import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 
 export const list = new Elysia()
   .use(
@@ -16,9 +16,26 @@ export const list = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .state("accessUserUid", 0)
+  .state("userLevel", 0)
+  .onBeforeHandle(async ({ jwt, cookie: { refresh }, headers, store }) => {
+    if (headers.authorization !== undefined && refresh.value.length > 0) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        store.accessUserUid = access.uid as number
+        store.userLevel = await getUserLevel(store.accessUserUid)
+      }
+    }
+  })
   .get(
     "/list",
-    async ({ jwt, cookie: { refresh }, headers, query: { id, page } }) => {
+    async ({
+      jwt,
+      cookie: { refresh },
+      headers,
+      query: { id, page },
+      store: { accessUserUid, userLevel },
+    }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
@@ -26,33 +43,24 @@ export const list = new Elysia()
       if (config.uid < 1) {
         return fail(`Board not found.`)
       }
-      if (config.level.list > 0) {
-        if (headers.authorization.length < 1 || refresh.value.length < 1) {
-          return fail(JSON.stringify(config))
-        }
-
-        const access = await jwt.verify(headers.authorization)
-        if (access === false) {
-          return fail(`Invalid authorization.`)
-        }
-
-        const userLevel = await getUserLevel(access.uid as number)
-        if (config.level.list > userLevel) {
-          return fail(`Level restrictions.`)
-        }
+      if (config.level.list > userLevel) {
+        return fail(`Level restriction.`, config)
       }
 
-      const total = await getPostCount(config.uid)
+      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
+      const maxUid = await getMaxPostUid(config.uid)
       const posts = await getPosts({
         boardUid: config.uid,
         page,
         bunch: config.row,
-        total,
+        maxUid,
+        accessUserUid,
       })
       return success({
-        total,
+        maxUid,
         config,
         posts,
+        newAccessToken,
       })
     },
     {

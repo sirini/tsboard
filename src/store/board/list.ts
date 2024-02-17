@@ -1,7 +1,7 @@
 /**
- * store/board
+ * store/board/list
  *
- * 게시판 동작과 관련한 상태 및 함수들
+ * 게시판 목록보기와 관련한 상태 및 함수들
  */
 
 import { ref } from "vue"
@@ -46,14 +46,15 @@ export const useBoardListStore = defineStore("boardList", () => {
       return
     }
     if (response.data.success === false) {
-      config.value = JSON.parse(response.data.error) as BoardConfig
-      util.snack(`${LIST.FAILED_LOAD_LIST}`)
+      config.value = response.data.result.config as BoardConfig
+      util.snack(`${LIST.FAILED_LOAD_LIST} (${response.data.error})`)
       return
     }
     if (!response.data.result) {
       util.snack(LIST.FAILED_LOAD_LIST)
       return
     }
+    auth.updateUserToken(response.data.result.newAccessToken!)
     config.value = response.data.result.config as BoardConfig
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
@@ -62,7 +63,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
 
     posts.value = response.data.result.posts as Post[]
-    pageLength.value = Math.ceil((response.data.result.total as number) / config.value.row)
+    pageLength.value = Math.ceil((response.data.result.maxUid as number) / config.value.row)
   }
 
   return {

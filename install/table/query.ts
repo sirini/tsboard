@@ -211,7 +211,7 @@ tables.push(`${create} #db#comment (
   board_uid INT ${unnd0},
   post_uid INT ${unnd0},
   user_uid INT ${unnd0},
-  content VARCHAR(1000) ${nnde},
+  content VARCHAR(10000) ${nnde},
   submitted BIGINT ${unnd0},
   modified BIGINT ${unnd0},
   status TINYINT ${nnd0},

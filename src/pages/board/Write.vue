@@ -6,7 +6,7 @@
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto" max-width="1000">
             <v-form fast-fail @submit.prevent>
-              <board-header></board-header>
+              <board-header :name="'TODO'" :info="'TODO'"></board-header>
               <alert-bar></alert-bar>
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">

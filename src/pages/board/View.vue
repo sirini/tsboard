@@ -6,85 +6,100 @@
       <v-main>
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto board" max-width="1000">
-            <board-header></board-header>
+            <board-header :name="view.config.name" :info="view.config.info"></board-header>
             <v-list>
               <v-list-item>
-                <v-list-item-title class="view_title">{{ post.title }}</v-list-item-title>
+                <v-list-item-title class="view_title">{{
+                  util.unescape(view.post.title)
+                }}</v-list-item-title>
               </v-list-item>
               <v-list-item class="view_info">
                 <template v-slot:prepend>
-                  <span class="mr-4"
+                  <span class="mr-4 text-caption" v-if="view.config.useCategory"
                     ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
-                    {{ post.category.name }}</span
+                    {{ view.post.category.name }}</span
                   >
+
                   <v-divider vertical></v-divider>
-                  <span class="ml-4 mr-4"
-                    ><v-icon size="small" class="mr-2">mdi-calendar</v-icon>
-                    {{ post.submitted }}</span
+                  <span class="ml-4 mr-4 text-caption"
+                    >작성: {{ util.date(view.post.submitted, true, true) }}</span
+                  >
+
+                  <v-divider vertical></v-divider>
+                  <span class="ml-4 mr-4 text-caption" v-if="view.post.modified > 0"
+                    >수정: {{ util.date(view.post.modified, true, true) }}</span
                   >
                 </template>
                 <template v-slot:append>
-                  <span class="mr-4"
-                    ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon> {{ post.hit }}</span
+                  <span class="mr-4 text-caption"
+                    ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon>
+                    {{ util.num(view.post.hit) }}</span
                   >
                   <v-divider vertical></v-divider>
-                  <span class="ml-4"
+                  <span class="ml-4 text-caption"
                     ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon>
-                    {{ post.reply }}</span
+                    {{ view.post.reply }}</span
                   >
                 </template>
               </v-list-item>
-              <v-list-item class="view_content pa-5">
-                {{ post.content }}
-              </v-list-item>
-              <v-toolbar density="compact" class="view_menu" color="white">
-                <v-chip
-                  class="ml-3 mr-2"
-                  :disabled="auth.user.uid < 1"
-                  prepend-icon="mdi-heart"
-                  size="small"
-                  :color="post.liked ? 'red' : 'surface-variant'"
-                  @click=""
-                >
-                  {{ post.like }}
-                  <v-tooltip activator="parent" location="top">이 글에 좋아요 누르기</v-tooltip>
-                </v-chip>
-                <user-nametag
-                  :profile="post.writer.profile"
-                  :uid="post.writer.uid"
-                  :name="post.writer.name"
-                ></user-nametag>
-                <v-spacer></v-spacer>
 
-                <v-btn
-                  prepend-icon="mdi-pencil"
-                  variant="text"
-                  size="small"
-                  :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
-                  >수정</v-btn
-                >
-                <v-btn
-                  prepend-icon="mdi-trash-can"
-                  size="small"
-                  variant="text"
-                  :disabled="auth.user.uid !== post.writer.uid && !auth.user.admin"
-                  >삭제
-                </v-btn>
-              </v-toolbar>
+              <v-list-item class="view_content pa-3 mt-3 mb-16" v-html="view.post.content">
+              </v-list-item>
+
+              <v-list-item class="pa-3 text-caption signature" v-if="view.post.writer.signature">
+                {{ util.unescape(view.post.writer.signature) }}
+              </v-list-item>
+
+              <v-list-item density="compact" class="pa-0 mt-6 mb-3">
+                <template v-slot:prepend>
+                  <v-chip
+                    class="mr-2"
+                    :disabled="auth.user.uid < 1"
+                    :prepend-icon="view.post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
+                    :color="view.post.liked ? 'red' : 'blue-grey'"
+                    @click="view.like(!view.post.liked)"
+                  >
+                    {{ util.num(view.post.like) }}
+                    <v-tooltip activator="parent">이 글에 좋아요 누르기</v-tooltip>
+                  </v-chip>
+
+                  <user-nametag
+                    :profile="view.post.writer.profile"
+                    :uid="view.post.writer.uid"
+                    :name="view.post.writer.name"
+                    :size="'default'"
+                  ></user-nametag>
+                </template>
+
+                <template v-slot:append>
+                  <v-btn
+                    prepend-icon="mdi-pencil"
+                    variant="text"
+                    :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
+                    >수정</v-btn
+                  >
+                  <v-btn
+                    prepend-icon="mdi-trash-can"
+                    variant="text"
+                    :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
+                    >삭제
+                  </v-btn>
+                </template>
+              </v-list-item>
             </v-list>
             <board-view-comment-write></board-view-comment-write>
             <board-view-comment-list></board-view-comment-list>
 
-            <v-divider class="mt-3"></v-divider>
+            <v-divider class="mt-12"></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', list.id)"
+              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', view.id)"
                 >목록 보기</v-btn
               >
               <v-spacer></v-spacer>
               <v-btn
                 prepend-icon="mdi-pencil"
                 variant="text"
-                @click="util.go('boardWrite', list.id)"
+                @click="util.go('boardWrite', view.id)"
                 >새글쓰기</v-btn
               >
             </v-card-actions>
@@ -101,12 +116,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
-import { useBoardListStore } from "../../store/board/list"
+import { useBoardViewStore } from "../../store/board/view"
 import { useUtilStore } from "../../store/util"
-import { useHomeStore } from "../../store/home"
-import { Post } from "../../interface/board"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
@@ -120,31 +133,11 @@ import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 
 const auth = useAuthStore()
-const list = useBoardListStore()
+const view = useBoardViewStore()
 const util = useUtilStore()
-const home = useHomeStore()
-const post = ref<Post>({
-  uid: 7,
-  category: {
-    uid: 6,
-    name: "news",
-  },
-  writer: {
-    uid: 11,
-    name: "홍길동",
-    profile: "/no-profile.svg",
-  },
-  title: "글 제목입니다",
-  content: "글 내용입니다",
-  like: 5,
-  reply: 2,
-  hit: 120,
-  submitted: 0,
-  modified: 0,
-  liked: false,
-  status: 0,
-})
 const PREFIX = process.env.PREFIX || ""
+
+onMounted(() => view.loadPostView())
 </script>
 
 <style scoped>
@@ -157,6 +150,7 @@ const PREFIX = process.env.PREFIX || ""
 .board {
   .view_title {
     font-weight: bold;
+    font-size: 1.2em;
   }
   .view_info {
     border-bottom: 1px #dddddd solid;
@@ -164,14 +158,10 @@ const PREFIX = process.env.PREFIX || ""
     font-size: 0.85em;
   }
   .view_content {
-    border-left: 1px #eeeeee solid;
-    border-right: 1px #eeeeee solid;
     line-height: 1.8em;
   }
-  .view_menu {
-    border-left: 1px #dddddd solid;
-    border-right: 1px #dddddd solid;
-    border-bottom: 1px #dddddd solid;
+  .signature {
+    color: #90a4ae;
   }
 }
 </style>

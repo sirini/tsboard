@@ -1,36 +1,49 @@
 <template>
   <v-list>
-    <v-list-item class="pa-0" v-for="(co, index) in comment.comments" :key="index">
-      <v-toolbar density="compact" class="pl-3 mt-4 comment_menu" :color="home.color.header">
+    <v-list-item
+      class="pa-0"
+      :class="reply.uid !== reply.replyUid ? 'ml-8' : ''"
+      :prepend-icon="reply.uid !== reply.replyUid ? 'mdi-arrow-right-bottom' : ''"
+      v-for="(reply, index) in comment.comments"
+      :key="index"
+    >
+      <v-toolbar density="compact" class="pl-3 mt-4">
         <user-nametag
-          :name="co.writer.name"
-          :uid="co.writer.uid"
-          :profile="co.writer.profile"
-          size="default"
+          :name="reply.writer.name"
+          :uid="reply.writer.uid"
+          :profile="reply.writer.profile"
+          :size="'default'"
         ></user-nametag>
+
         <v-spacer></v-spacer>
-        <v-chip :disabled="auth.user.uid < 1" prepend-icon="mdi-heart">
-          {{ co.like }}
+
+        <v-chip
+          :prepend-icon="reply.liked ? 'mdi-heart' : 'mdi-heart-outline'"
+          @click="comment.like(reply.uid, !reply.liked)"
+          :color="reply.liked ? 'red' : 'blue-grey'"
+          class="mr-2"
+          >{{ reply.like }}
           <v-tooltip activator="parent" location="top">이 댓글에 좋아요 누르기</v-tooltip>
         </v-chip>
+
         <v-btn
           :disabled="auth.user.uid < 1"
           icon
-          @click="comment.setReplyComment(co.uid, co.content)"
+          @click="comment.setReplyComment(reply.uid, reply.content)"
           ><v-icon size="small">mdi-reply</v-icon>
           <v-tooltip activator="parent" location="top">이 댓글에 답글 달기</v-tooltip>
         </v-btn>
 
         <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
+          <v-icon size="small">mdi-dots-vertical</v-icon>
           <v-menu activator="parent" open-on-hover>
             <v-list density="compact">
               <v-list-item>
                 <v-btn
                   prepend-icon="mdi-pencil"
                   variant="text"
-                  :disabled="auth.user.uid !== co.writer.uid && !auth.user.admin"
-                  @click="comment.setModifyComment(co.uid, co.content)"
+                  :disabled="auth.user.uid !== reply.writer.uid && !auth.user.admin"
+                  @click="comment.setModifyComment(reply.uid, reply.content)"
                   >이 댓글 수정하기</v-btn
                 >
               </v-list-item>
@@ -38,42 +51,52 @@
                 <v-btn
                   prepend-icon="mdi-trash-can"
                   variant="text"
-                  :disabled="auth.user.uid !== co.writer.uid && !auth.user.admin"
-                  @click="comment.openRemoveCommentDialog(co.uid)"
+                  :disabled="auth.user.uid !== reply.writer.uid && !auth.user.admin"
+                  @click="comment.openRemoveCommentDialog(reply.uid)"
                 >
                   이 댓글 삭제하기
                 </v-btn>
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-tooltip activator="parent" location="top">추가 작업 메뉴</v-tooltip>
         </v-btn>
       </v-toolbar>
 
-      <v-card elevation="0" rounded="0" class="pa-5 comment tiptap" v-html="co.content"></v-card>
+      <v-card elevation="0" rounded="0" class="pa-0 comment">
+        <v-card-text v-html="reply.content" class="content"></v-card-text>
+      </v-card>
     </v-list-item>
   </v-list>
   <board-view-comment-remove-dialog></board-view-comment-remove-dialog>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { useAuthStore } from "../../../store/user/auth"
-import { useCommentStore } from "../../../store/comment"
-import { useHomeStore } from "../../../store/home"
+import { useCommentStore } from "../../../store/board/comment"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
-const home = useHomeStore()
-const PREFIX = process.env.PREFIX || ""
+
+onMounted(() => comment.loadCommentList())
 </script>
 
-<style scoped>
-.comment_menu {
-  border: 1px #dddddd solid;
-}
+<style scoped type="scss">
 .comment {
   line-height: 1.8em;
   min-height: 70px;
+
+  .content {
+    font-size: 1em;
+  }
+
+  .heart {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
 }
 </style>

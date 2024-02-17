@@ -4,7 +4,7 @@
  * 게시판 스토어들에 사용되는 상수 기본값들 정의
  */
 
-import { BoardConfig } from "../../interface/board"
+import { BoardConfig, Post } from "../../interface/board"
 
 export const TYPE_MATCH = [
   { path: "/board/", name: "boardList" },
@@ -24,4 +24,19 @@ export const INIT_CONFIG: BoardConfig = {
   category: [],
   level: { list: 0, view: 0, comment: 0, write: 0, download: 0 },
   point: { view: 0, comment: 0, write: 0, download: 0 },
+}
+
+export const INIT_POST: Post = {
+  uid: 0,
+  writer: { uid: 0, name: "", profile: "", signature: "" },
+  content: "",
+  like: 0,
+  liked: false,
+  submitted: 0,
+  modified: 0,
+  status: 0,
+  category: { uid: 0, name: "" },
+  reply: 0,
+  title: "",
+  hit: 0,
 }

@@ -5,12 +5,23 @@
  */
 
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { useUtilStore } from "./util"
-import { Comment } from "../interface/board"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../server/index"
+import { useAuthStore } from "../user/auth"
+import { useUtilStore } from "../util"
+import { Comment } from "../../interface/board"
+import { COMMENT } from "../../messages/store/board/comment"
 
 export const useCommentStore = defineStore("comment", () => {
+  const server = edenTreaty<App>(process.env.API!)
+  const route = useRoute()
+  const auth = useAuthStore()
   const util = useUtilStore()
+  const id = ref<string>("")
+  const boardUid = ref<number>(0)
+  const postUid = ref<number>(0)
   const modifyTarget = ref<number>(0)
   const replyTarget = ref<number>(0)
   const removeTarget = ref<number>(0)
@@ -18,24 +29,44 @@ export const useCommentStore = defineStore("comment", () => {
   const contentWithSyntax = ref<string>("")
   const button = ref<string>("새 댓글 작성하기")
   const confirmRemoveCommentDialog = ref<boolean>(false)
-  const comments = ref<Comment[]>([
-    {
-      uid: 15,
-      replyTarget: 0,
-      postUid: 3,
-      writer: {
-        uid: 3,
-        name: "홍길동",
-        profile: "/no-profile.svg",
+  const comments = ref<Comment[]>([])
+  const page = ref<number>(1)
+  const pageLength = ref<number>(1)
+  const bunch = ref<number>(100)
+
+  // 기존 댓글 불러오기
+  async function loadCommentList(): Promise<void> {
+    id.value = route.params.id as string
+    postUid.value = parseInt(route.params.no as string)
+
+    const response = await server.api.board.comment.get({
+      $headers: {
+        authorization: auth.user.token,
       },
-      content: "여기에 댓글 내용이 나옵니다",
-      like: 5,
-      submitted: 0,
-      modified: 0,
-      liked: false,
-      status: 0,
-    },
-  ])
+      $query: {
+        id: id.value,
+        postUid: postUid.value,
+        page: page.value,
+        bunch: bunch.value,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(COMMENT.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
+    }
+    if (!response.data.result) {
+      util.snack(COMMENT.FAILED_LOAD_COMMENT)
+      return
+    }
+    boardUid.value = response.data.result.boardUid as number
+    const commentList = response.data.result.comments as Comment[]
+    comments.value = commentList.reverse()
+    pageLength.value = Math.ceil((response.data.result.maxCommentUid as number) / bunch.value)
+  }
 
   // 댓글에 답글달기 시 대상 지정
   function setReplyComment(uid: number, comment: string, html: boolean = true): void {
@@ -45,8 +76,8 @@ export const useCommentStore = defineStore("comment", () => {
     } else {
       content.value = comment
     }
-    button.value = "기존 댓글에 답글달기"
-    util.snack("기존 댓글에 답글을 답니다. 답글 대상 내용이 작성란에 인용 되었습니다.")
+    button.value = COMMENT.BUTTON_REPLY
+    util.snack(COMMENT.INFO_REPLY)
   }
 
   // 댓글 수정하기 클릭 시 대상 지정
@@ -67,8 +98,28 @@ export const useCommentStore = defineStore("comment", () => {
   }
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
-  function like(uid: number, liked: boolean): void {
-    // do something with uid
+  async function like(commentUid: number, isLike: boolean): Promise<void> {
+    const response = await server.api.board.likecomment.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: boardUid.value,
+      commentUid,
+      liked: isLike ? 1 : 0,
+    })
+
+    if (response.data && response.data.success === true) {
+      comments.value.map((comment) => {
+        if (comment.uid === commentUid) {
+          comment.liked = isLike
+          if (isLike) {
+            comment.like += 1
+          } else {
+            comment.like -= 1
+          }
+        }
+      })
+    }
   }
 
   // 문법 강조까지 모두 포함된 글 내용 업데이트하기
@@ -97,44 +148,12 @@ export const useCommentStore = defineStore("comment", () => {
   // 새 댓글 작성하기
   async function saveNewComment(): Promise<void> {
     // do something
-    comments.value.push({
-      uid: 20,
-      replyTarget: 0,
-      postUid: 3,
-      writer: {
-        uid: 3,
-        name: "새글맨",
-        profile: "/no-profile.svg",
-      },
-      content: contentWithSyntax.value,
-      like: 1,
-      submitted: 0,
-      modified: 0,
-      liked: false,
-      status: 0,
-    })
     util.snack("새 댓글을 남겼습니다.")
   }
 
   // 답글 작성하기
   async function saveReplyComment(): Promise<void> {
     // do something
-    comments.value.push({
-      uid: 19,
-      replyTarget: 15,
-      postUid: 3,
-      writer: {
-        uid: 3,
-        name: "대댓맨",
-        profile: "/no-profile.svg",
-      },
-      content: contentWithSyntax.value,
-      like: 1,
-      submitted: 0,
-      modified: 0,
-      liked: false,
-      status: 0,
-    })
     util.snack("답글을 남겼습니다.")
   }
 
@@ -171,6 +190,7 @@ export const useCommentStore = defineStore("comment", () => {
   }
 
   return {
+    id,
     modifyTarget,
     replyTarget,
     removeTarget,
@@ -178,6 +198,9 @@ export const useCommentStore = defineStore("comment", () => {
     button,
     confirmRemoveCommentDialog,
     comments,
+    page,
+    pageLength,
+    bunch,
     setReplyComment,
     setModifyComment,
     resetCommentMode,
@@ -187,5 +210,6 @@ export const useCommentStore = defineStore("comment", () => {
     openRemoveCommentDialog,
     closeRemoveCommentDialog,
     removeComment,
+    loadCommentList,
   }
 })

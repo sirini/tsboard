@@ -122,7 +122,7 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
-import { useCommentStore } from "../../../store/comment"
+import { useCommentStore } from "../../../store/board/comment"
 import { useViewerStore } from "../../../store/viewer"
 import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"

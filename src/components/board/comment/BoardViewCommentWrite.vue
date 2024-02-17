@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCommentStore } from "../../../store/comment"
+import { useCommentStore } from "../../../store/board/comment"
 import BoardWriteEditor from "../write/BoardWriteEditor.vue"
 
 const comment = useCommentStore()

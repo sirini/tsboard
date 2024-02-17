@@ -1,8 +1,8 @@
 <template>
   <v-card-title class="list_title"
-    >{{ util.unescape(list.config.name) }}
+    >{{ util.unescape(name) }}
     <span class="info ml-3 pl-3"
-      ><v-icon>mdi-information-outline</v-icon> {{ util.unescape(list.config.info) }}</span
+      ><v-icon>mdi-information-outline</v-icon> {{ util.unescape(info) }}</span
     >
     <div class="login">
       <v-btn
@@ -45,6 +45,10 @@ import { useUtilStore } from "../../../store/util"
 const auth = useAuthStore()
 const list = useBoardListStore()
 const util = useUtilStore()
+const props = defineProps<{
+  name: string
+  info: string
+}>()
 </script>
 
 <style scoped>

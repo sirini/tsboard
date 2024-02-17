@@ -24,6 +24,7 @@ export type Pair = {
 
 export type Writer = Pair & {
   profile: string
+  signature?: string
 }
 
 export type BoardAccessPoint = {
@@ -72,16 +73,58 @@ export type Post = ContentCommon & {
   hit: number
 }
 
-export type PostParams = {
-  boardUid: number
+type PostCommentParams = {
   page: number
   bunch: number
-  total: number
+  maxUid: number
+  accessUserUid: number
+}
+
+export type PostParams = PostCommentParams & {
+  boardUid: number
+}
+
+export type PostFile = {
+  uid: number
+  name: string
+  path: string
+}
+
+export type CommentParams = PostCommentParams & {
+  postUid: number
 }
 
 export type Comment = ContentCommon & {
-  replyTarget: number
+  replyUid: number
   postUid: number
+}
+
+type UserUid = {
+  writerUid: number
+  viewerUid: number
+}
+
+export type RelatedParams = {
+  uid: number
+  user: UserUid
+}
+
+export type PostRelatedParams = RelatedParams & {
+  categoryUid: number
+}
+
+type LikeParams = {
+  boardUid: number
+  accessUserUid: number
+  liked: number
+}
+
+export type PostLikeParams = LikeParams & {
+  postUid: number
+}
+
+export type CommentLikeParams = LikeParams & {
+  commentUid: number
 }
 
 export type VideoURL = {

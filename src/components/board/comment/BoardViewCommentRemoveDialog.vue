@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCommentStore } from "../../../store/comment"
+import { useCommentStore } from "../../../store/board/comment"
 
 const comment = useCommentStore()
 </script>
