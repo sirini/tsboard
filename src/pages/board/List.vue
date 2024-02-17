@@ -11,13 +11,15 @@
             <v-card-text class="pa-0">
               <v-list class="pa-0">
                 <v-list-item v-if="list.posts.length < 1" class="text-center">
-                  <v-icon>mdi-alert-circle</v-icon> 게시글이 존재하지 않습니다.
+                  <v-icon>mdi-alert-circle</v-icon> 게시글이 존재하지 않습니다. 아직 글이 없거나,
+                  목록을 볼 수 있는 레벨이 아닙니다.
                 </v-list-item>
 
                 <v-list-item
                   class="list_item pa-0"
                   v-for="(post, index) in list.posts"
                   :key="index"
+                  :class="post.status === CONTENT_STATUS.NOTICE ? 'notice' : ''"
                 >
                   <template v-slot:prepend>
                     <span class="col no text-center"
@@ -41,7 +43,7 @@
                       prepend-icon="mdi-bullhorn-variant-outline"
                       class="mr-2"
                       v-if="post.status === CONTENT_STATUS.NOTICE"
-                      >NOTICE</v-chip
+                      >공지</v-chip
                     >
                     {{ post.title }}
                     <v-icon size="small" color="grey">mdi-image-outline</v-icon>
@@ -112,6 +114,9 @@ watch(
   min-height: calc(100vh - 118px);
 }
 .board {
+  .notice {
+    background-color: #f9f9f9;
+  }
   .list_item {
     border-bottom: 1px #ddd solid;
 
@@ -129,13 +134,13 @@ watch(
       width: 100px;
     }
     .view {
-      width: 100px;
+      width: 80px;
     }
     .heart {
       width: 50px;
     }
     .date {
-      width: 100px;
+      width: 80px;
     }
   }
 }

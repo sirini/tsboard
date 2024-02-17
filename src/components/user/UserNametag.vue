@@ -27,6 +27,7 @@
           prepend-icon="mdi-account-cog"
           :disabled="!auth.user.admin"
           @click="manage.openManageUser(targetUser)"
+          v-if="auth.user.uid === 1"
           >회원 관리</v-list-item
         >
       </v-list>

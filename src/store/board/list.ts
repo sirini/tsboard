@@ -65,9 +65,8 @@ export const useBoardListStore = defineStore("boardList", () => {
       return
     }
     if (response.data.success === false) {
-      config.value.name = LIST.FAILED_CONFIG_NAME
-      config.value.info = `${id.value} ${LIST.FAILED_CONFIG_INFO}`
-      util.snack(`${LIST.FAILED_LOAD_LIST} (${response.data.error})`)
+      config.value = JSON.parse(response.data.error) as BoardConfig
+      util.snack(`${LIST.FAILED_LOAD_LIST}`)
       return
     }
     if (!response.data.result) {

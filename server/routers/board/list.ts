@@ -28,7 +28,7 @@ export const list = new Elysia()
       }
       if (config.level.list > 0) {
         if (headers.authorization.length < 1 || refresh.value.length < 1) {
-          return fail(`Please log in.`)
+          return fail(JSON.stringify(config))
         }
 
         const access = await jwt.verify(headers.authorization)
