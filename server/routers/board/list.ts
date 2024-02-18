@@ -16,25 +16,39 @@ export const list = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .state("accessUserUid", 0)
-  .state("userLevel", 0)
-  .onBeforeHandle(async ({ jwt, cookie: { refresh }, headers, store }) => {
-    if (headers.authorization !== undefined && refresh.value.length > 0) {
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let userLevel = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
       const access = await jwt.verify(headers.authorization)
       if (access !== false) {
-        store.accessUserUid = access.uid as number
-        store.userLevel = await getUserLevel(store.accessUserUid)
+        accessUserUid = access.uid as number
+        userLevel = await getUserLevel(accessUserUid)
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
       }
+    }
+    return {
+      accessUserUid,
+      userLevel,
+      newAccessToken,
     }
   })
   .get(
     "/list",
     async ({
       jwt,
-      cookie: { refresh },
       headers,
+      cookie,
       query: { id, page },
-      store: { accessUserUid, userLevel },
+      accessUserUid,
+      userLevel,
+      newAccessToken,
     }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
@@ -47,7 +61,6 @@ export const list = new Elysia()
         return fail(`Level restriction.`, config)
       }
 
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const maxUid = await getMaxPostUid(config.uid)
       const posts = await getPosts({
         boardUid: config.uid,
@@ -64,16 +77,9 @@ export const list = new Elysia()
       })
     },
     {
-      headers: t.Optional(
-        t.Object({
-          authorization: t.String(),
-        }),
-      ),
-      cookie: t.Optional(
-        t.Cookie({
-          refresh: t.String(),
-        }),
-      ),
+      headers: t.Object({
+        authorization: t.String(),
+      }),
       query: t.Object({
         id: t.String(),
         page: t.Numeric(),

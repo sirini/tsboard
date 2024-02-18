@@ -16,19 +16,6 @@ import {
 } from "../../database/board/comment"
 import { fail, success } from "../../util/tools"
 
-const optionalHeaders = {
-  headers: t.Optional(
-    t.Object({
-      authorization: t.String(),
-    }),
-  ),
-  cookie: t.Optional(
-    t.Cookie({
-      refresh: t.String(),
-    }),
-  ),
-}
-
 export const comment = new Elysia()
   .use(
     jwt({
@@ -36,26 +23,25 @@ export const comment = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .state("accessUserUid", 0)
-  .state("userLevel", 0)
-  .onBeforeHandle(async ({ jwt, cookie: { refresh }, headers, store }) => {
-    if (headers.authorization !== undefined && refresh.value.length > 0) {
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let userLevel = 0
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
       const access = await jwt.verify(headers.authorization)
       if (access !== false) {
-        store.accessUserUid = access.uid as number
-        store.userLevel = await getUserLevel(store.accessUserUid)
+        accessUserUid = access.uid as number
+        userLevel = await getUserLevel(accessUserUid)
       }
+    }
+    return {
+      accessUserUid,
+      userLevel,
     }
   })
   .get(
     "/comment",
-    async ({
-      jwt,
-      cookie: { refresh },
-      headers,
-      query: { postUid, id, page, bunch },
-      store: { accessUserUid, userLevel },
-    }) => {
+    async ({ query: { postUid, id, page, bunch }, accessUserUid, userLevel }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
@@ -84,7 +70,9 @@ export const comment = new Elysia()
       })
     },
     {
-      ...optionalHeaders,
+      headers: t.Object({
+        authorization: t.String(),
+      }),
       query: t.Object({
         id: t.String(),
         postUid: t.Numeric(),
@@ -95,13 +83,7 @@ export const comment = new Elysia()
   )
   .patch(
     "/likecomment",
-    async ({
-      jwt,
-      cookie: { refresh },
-      headers,
-      body: { boardUid, commentUid, liked },
-      store: { accessUserUid },
-    }) => {
+    async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
       if (accessUserUid < 1) {
         return fail(`Please log in.`)
       }
@@ -114,7 +96,9 @@ export const comment = new Elysia()
       return success({})
     },
     {
-      ...optionalHeaders,
+      headers: t.Object({
+        authorization: t.String(),
+      }),
       body: t.Object({
         boardUid: t.Numeric(),
         commentUid: t.Numeric(),
