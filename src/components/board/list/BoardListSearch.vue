@@ -15,7 +15,7 @@
           class="mt-2"
           variant="outlined"
           placeholder="검색할 내용을 입력하세요"
-          :rules="write.textRule"
+          :rules="editor.textRule"
           append-inner-icon="mdi-magnify"
           @click:append-inner="refine"
           @keyup.enter="refine"
@@ -27,10 +27,10 @@
 
 <script setup lang="ts">
 import { useUtilStore } from "../../../store/util"
-import { useWriteStore } from "../../../store/write"
+import { useBoardEditorStore } from "../../../store/board/editor"
 
 const util = useUtilStore()
-const write = useWriteStore()
+const editor = useBoardEditorStore()
 
 // 검색어를 정제해서 업데이트하기
 function refine(): void {

@@ -11,8 +11,8 @@
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
-                    v-model="write.subject"
-                    :rules="write.textRule"
+                    v-model="editor.subject"
+                    :rules="editor.textRule"
                     class="mt-2"
                     prepend-icon="mdi-pencil-outline"
                     variant="outlined"
@@ -21,7 +21,7 @@
                 </v-list-item>
                 <v-list-item class="pa-0">
                   <v-file-input
-                    @change="write.readSelectedFiles"
+                    @change="editor.uploadImageFiles"
                     show-size
                     counter
                     class="pt-3"
@@ -47,30 +47,30 @@
                 </v-list-item>
                 <v-list-item class="pa-0">
                   <board-write-editor
-                    v-model="write.content"
-                    @updateRealHtml="(html: string) => write.updateRealHtml(html)"
+                    v-model="editor.content"
+                    @updateRealHtml="(html: string) => editor.updateRealHtml(html)"
                   ></board-write-editor>
                 </v-list-item>
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
-                    v-model="write.tag"
-                    :rules="write.textRule"
+                    v-model="editor.tag"
+                    :rules="editor.textRule"
                     class="mt-2"
                     prepend-inner-icon="mdi-tag-multiple"
                     label="게시글 내용에 적합한 해시태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
-                    @keyup="write.updateTagSuggestion"
-                    @keyup.space="write.addTag(write.tag)"
-                    @keyup.,="write.addTag(write.tag)"
-                    @keyup.enter="write.addTag(write.tag)"
+                    @keyup="editor.updateTagSuggestion"
+                    @keyup.space="editor.addTag(editor.tag)"
+                    @keyup.,="editor.addTag(editor.tag)"
+                    @keyup.enter="editor.addTag(editor.tag)"
                     variant="outlined"
                   >
                     <v-menu activator="parent">
                       <v-list>
                         <v-list-item
-                          v-for="(tag, index) in write.tagSuggestions"
+                          v-for="(tag, index) in editor.tagSuggestions"
                           :key="index"
                           prepend-icon="mdi-tag-plus"
-                          @click="write.addTag(tag)"
+                          @click="editor.addTag(tag)"
                           >{{ tag }}
                           <v-tooltip activator="parent"> {{ tag }} 태그를 추가합니다 </v-tooltip>
                         </v-list-item>
@@ -79,10 +79,10 @@
                   </v-text-field>
                   <v-card elevation="0" class="mt-2 mb-2">
                     <v-chip
-                      v-for="(tag, index) in write.tags"
+                      v-for="(tag, index) in editor.tags"
                       :key="index"
                       closable
-                      @click.close="write.removeTag(tag)"
+                      @click.close="editor.removeTag(tag)"
                       class="mt-1 ml-1"
                       >{{ tag }}</v-chip
                     >
@@ -91,11 +91,11 @@
               </v-list>
             </v-form>
             <v-card-actions>
-              <v-btn @click="write.openWriteCancelDialog" prepend-icon="mdi-close"
+              <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close"
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="write.save(list.id)" append-icon="mdi-chevron-right"
+              <v-btn color="primary" @click="editor.save(list.id)" append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >
             </v-card-actions>
@@ -111,8 +111,7 @@
 <script setup lang="ts">
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
-import { useWriteStore } from "../../store/write"
-import { useHomeStore } from "../../store/home"
+import { useBoardEditorStore } from "../../store/board/editor"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
@@ -122,8 +121,7 @@ import AlertBar from "../../components/util/AlertBar.vue"
 
 const list = useBoardListStore()
 const util = useUtilStore()
-const write = useWriteStore()
-const home = useHomeStore()
+const editor = useBoardEditorStore()
 </script>
 
 <style scoped>

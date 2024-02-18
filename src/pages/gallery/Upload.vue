@@ -12,8 +12,8 @@
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
-                    v-model="write.subject"
-                    :rules="write.textRule"
+                    v-model="editor.subject"
+                    :rules="editor.textRule"
                     class="mt-2"
                     prepend-icon="mdi-pencil"
                     variant="outlined"
@@ -23,11 +23,11 @@
 
                 <v-list-item class="pa-0">
                   <v-file-input
-                    @change="write.readSelectedFiles"
+                    @change="editor.uploadImageFiles"
                     show-size
                     counter
                     class="pt-3"
-                    :rules="write.uploadRule"
+                    :rules="editor.uploadRule"
                     prepend-icon="mdi-image-plus"
                     accept="image/png, image/jpeg, image/gif, image/bmp, image/heif, image/heic"
                     multiple
@@ -53,34 +53,34 @@
                 <v-list-item class="pa-0">
                   <v-textarea
                     class="pt-3"
-                    v-model="write.content"
+                    v-model="editor.content"
                     prepend-icon="mdi-comment-outline"
                     label="사진들에 대해서 소개해 주세요 (어디에서 촬영하셨나요? 마음에 쏙 드는 점은 무엇이었나요?)"
                     variant="outlined"
-                    :rules="write.textRule"
+                    :rules="editor.textRule"
                     auto-grow
                   ></v-textarea>
                 </v-list-item>
 
                 <v-list-item class="pa-0">
                   <v-text-field
-                    v-model="write.tag"
-                    :rules="write.textRule"
+                    v-model="editor.tag"
+                    :rules="editor.textRule"
                     class="pt-2"
                     prepend-icon="mdi-tag-multiple"
                     label="게시글 내용에 적합한 해시태그를 입력해 주세요 (스페이스 키 혹은 콤마로 추가)"
-                    @keyup="write.updateTagSuggestion"
-                    @keyup.space="write.addTag(write.tag)"
-                    @keyup.,="write.addTag(write.tag)"
+                    @keyup="editor.updateTagSuggestion"
+                    @keyup.space="editor.addTag(editor.tag)"
+                    @keyup.,="editor.addTag(editor.tag)"
                     variant="outlined"
                   >
                     <v-menu activator="parent">
                       <v-list>
                         <v-list-item
-                          v-for="(tag, index) in write.tagSuggestions"
+                          v-for="(tag, index) in editor.tagSuggestions"
                           :key="index"
                           prepend-icon="mdi-tag-plus"
-                          @click="write.addTag(tag)"
+                          @click="editor.addTag(tag)"
                           >{{ tag }}
                           <v-tooltip activator="parent"> {{ tag }} 태그를 추가합니다 </v-tooltip>
                         </v-list-item>
@@ -90,10 +90,10 @@
 
                   <v-card elevation="0" class="mt-2 mb-2">
                     <v-chip
-                      v-for="(tag, index) in write.tags"
+                      v-for="(tag, index) in editor.tags"
                       :key="index"
                       closable
-                      @click.close="write.removeTag(tag)"
+                      @click.close="editor.removeTag(tag)"
                       class="mt-1 ml-1"
                       >{{ tag }}</v-chip
                     >
@@ -107,7 +107,10 @@
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="write.save(gallery.id)" append-icon="mdi-chevron-right"
+              <v-btn
+                color="primary"
+                @click="editor.save(gallery.id)"
+                append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >
             </v-card-actions>
@@ -125,7 +128,7 @@
 <script setup lang="ts">
 import { useGalleryStore } from "../../store/gallery"
 import { useUtilStore } from "../../store/util"
-import { useWriteStore } from "../../store/write"
+import { useBoardEditorStore } from "../../store/board/editor"
 import { useHomeStore } from "../../store/home"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryUploadCancelDialog from "../../components/gallery/write/GalleryUploadCancelDialog.vue"
@@ -135,7 +138,7 @@ import AlertBar from "../../components/util/AlertBar.vue"
 
 const gallery = useGalleryStore()
 const util = useUtilStore()
-const write = useWriteStore()
+const editor = useBoardEditorStore()
 const home = useHomeStore()
 </script>
 
