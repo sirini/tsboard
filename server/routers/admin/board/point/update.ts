@@ -38,9 +38,7 @@ export const update = new Elysia()
           return fail(`Invalid point value. (0 ≤ point ≤ 10,000)`)
         }
       }
-
       updatePoints(boardUid, points as AdminBoardPointList)
-
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,

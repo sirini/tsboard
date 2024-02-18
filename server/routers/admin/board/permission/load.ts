@@ -39,7 +39,6 @@ export const load = new Elysia()
       if (permission.uid < 1) {
         return fail(`Invalid board ID.`)
       }
-
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         permission,
@@ -47,12 +46,7 @@ export const load = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
-      cookie: t.Cookie({
-        refresh: t.String(),
-      }),
+      ...defaultTypeCheck,
       query: t.Object({
         id: t.String(),
       }),
@@ -68,7 +62,6 @@ export const load = new Elysia()
         return fail(`Invalid a limit.`)
       }
       const candidates = await getAdminCandidates(name, limit)
-
       return success({
         candidates,
       })

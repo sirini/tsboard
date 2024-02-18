@@ -10,8 +10,10 @@ import {
   CommentLikeParams,
   CommentParams,
   RelatedParams,
+  SaveCommentParams,
+  SaveReplyParams,
 } from "../../../src/interface/board"
-import { select, table, update } from "../common"
+import { insert, select, table, update } from "../common"
 import { COMMENT_RELATED, CommentRelated, INVALID_VIEW_LEVEL } from "./const"
 
 // 댓글에 연관된 정보 가져오기
@@ -49,14 +51,14 @@ async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> 
   return result
 }
 
-// 댓글들 가져오기 (주의: 클라이언트에서 댓글 순서를 뒤집어야 함)
+// 댓글들 가져오기
 export async function getComments(param: CommentParams): Promise<Comment[]> {
   let result: Comment[] = []
   const last = 1 + param.maxUid - (param.page - 1) * param.bunch
   const comments = await select(
     `SELECT uid, reply_uid, user_uid, content, submitted, modified, status 
   FROM ${table}comment WHERE post_uid = ? AND status != ? AND uid < ? 
-  ORDER BY reply_uid DESC LIMIT ?`,
+  ORDER BY reply_uid ASC LIMIT ?`,
     [param.postUid, CONTENT_STATUS.REMOVED, last, param.bunch],
   )
   for (const comment of comments) {
@@ -133,4 +135,41 @@ export async function likeComment(param: CommentLikeParams): Promise<void> {
       [param.liked, Date.now(), param.commentUid, param.accessUserUid],
     )
   }
+}
+
+// 새 댓글 추가하기
+export async function saveNewComment(param: SaveCommentParams): Promise<number> {
+  let insertId = 0
+  insertId = await insert(
+    `INSERT INTO ${table}comment 
+    (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [0, param.boardUid, param.postUid, param.accessUserUid, param.content, Date.now(), 0, 0],
+  )
+  if (insertId > 0) {
+    await update(`UPDATE ${table}comment SET reply_uid = ? WHERE uid = ? LIMIT 1`, [
+      insertId,
+      insertId,
+    ])
+  }
+  return insertId
+}
+
+// 답글 추가하기
+export async function saveReplyComment(param: SaveReplyParams): Promise<number> {
+  let insertId = await insert(
+    `INSERT INTO ${table}comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      param.replyTargetUid,
+      param.boardUid,
+      param.postUid,
+      param.accessUserUid,
+      param.content,
+      Date.now(),
+      0,
+      0,
+    ],
+  )
+  return insertId
 }

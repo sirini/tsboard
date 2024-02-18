@@ -27,13 +27,32 @@ export const myInfo = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        accessUserUid = access.uid as number
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
+      }
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
+  })
   .get(
     "/load",
-    async ({ jwt, cookie: { refresh }, headers, query: { userUid } }) => {
+    async ({ query: { userUid }, newAccessToken }) => {
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const user = await getUser(userUid)
       return success({
         newAccessToken,
@@ -49,15 +68,14 @@ export const myInfo = new Elysia()
   )
   .patch(
     "/update",
-    async ({ jwt, cookie: { refresh }, headers, body: { name, password, signature, profile } }) => {
+    async ({ body: { name, password, signature, profile }, newAccessToken, accessUserUid }) => {
       if (name.length < 2) {
         return fail(`Name is too short.`)
       }
-      const access = await jwt.verify(headers.authorization ?? "")
-      if (access === false) {
+      if (accessUserUid < 1) {
         return fail(`Invalid authorization, please login in again.`)
       }
-      const userUid = access.uid as number
+      const userUid = accessUserUid
       if ((await isDuplicatedName(userUid, name)) === true) {
         return fail(`Duplicated name.`)
       }
@@ -71,7 +89,6 @@ export const myInfo = new Elysia()
         password,
         profile,
       })
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

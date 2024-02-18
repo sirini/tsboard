@@ -10,6 +10,7 @@ import { Token } from "../../src/interface/auth"
 import { saveTokens } from "../database/auth/authorization"
 import { exists, mkdir } from "node:fs/promises"
 import { nanoid, customAlphabet } from "nanoid"
+import sharp from "sharp"
 
 // 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다
 export function generateRandomCode() {
@@ -126,4 +127,26 @@ export async function makeDirectory(recursivePath: string): Promise<void> {
   if ((await exists(recursivePath)) === false) {
     await mkdir(recursivePath, { recursive: true })
   }
+}
+
+// 파일 저장 경로 만들기
+export async function makeSavePath(target: string): Promise<string> {
+  const date = generateDate()
+  const savePath = `./upload/${target}/${date.year}/${date.month}/${date.day}`
+  await makeDirectory(savePath)
+  return savePath
+}
+
+// 이미지 리사이즈하기
+export async function resizeImage(
+  inputPath: string,
+  outputPath: string,
+  size: number,
+): Promise<void> {
+  await sharp(inputPath)
+    .resize(size, size)
+    .rotate()
+    .withMetadata()
+    .toFormat("webp")
+    .toFile(outputPath)
 }

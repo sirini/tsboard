@@ -14,15 +14,6 @@ import {
   getExistBoardIds,
 } from "../../../../database/admin/group/general/load"
 
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
-
 export const load = new Elysia()
   .use(
     jwt({
@@ -38,7 +29,6 @@ export const load = new Elysia()
         return fail(`Invalid group ID.`)
       }
       const boards = await getGroupBoards(config.uid)
-
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
@@ -47,7 +37,12 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      headers: t.Object({
+        authorization: t.String(),
+      }),
+      cookie: t.Cookie({
+        refresh: t.String(),
+      }),
       query: t.Object({
         id: t.String(),
       }),
@@ -63,7 +58,6 @@ export const load = new Elysia()
         return fail(`Invalid a limit.`)
       }
       const candidates = await getGroupAdminCandidates(name, limit)
-
       return success({
         candidates,
       })
@@ -82,7 +76,6 @@ export const load = new Elysia()
         return fail(`ID is too short.`)
       }
       const ids = await getExistBoardIds(id, limit)
-
       return success({
         ids,
       })

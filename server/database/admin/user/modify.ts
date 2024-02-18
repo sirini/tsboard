@@ -10,7 +10,9 @@ import {
   generateDate,
   generateRandomID,
   makeDirectory,
+  makeSavePath,
   removeFile,
+  resizeImage,
   saveUploadedFile,
 } from "../../../util/tools"
 import { table, select, update } from "../../common"
@@ -47,14 +49,6 @@ export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
   return result
 }
 
-// 프로필 사진 저장 경로 만들기
-async function makeSavePath(): Promise<string> {
-  const date = generateDate()
-  const savePath = `./upload/profile/${date.year}/${date.month}/${date.day}`
-  await makeDirectory(savePath)
-  return savePath
-}
-
 // 기존 프로필이 있을 경우 삭제하기
 async function removeOldProfile(userUid: number): Promise<void> {
   const [old] = await select(`SELECT profile FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
@@ -71,18 +65,12 @@ async function removeOldProfile(userUid: number): Promise<void> {
 // 새 프로필 사진이 있을 경우 업데이트
 async function updateUserProfile(userUid: number, newProfile: File): Promise<string> {
   removeOldProfile(userUid)
-  const savePath = await makeSavePath()
-  let newSavePath = `${savePath}/${generateRandomID()}.webp`
+  const savePath = await makeSavePath("profile")
+  const newSavePath = `${savePath}/${generateRandomID()}.webp`
   const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
   const profileSize = parseInt(process.env.PROFILE_SIZE || "256")
 
-  await sharp(tempFilePath)
-    .resize(profileSize, profileSize)
-    .rotate()
-    .withMetadata()
-    .toFormat("webp")
-    .toFile(newSavePath)
-
+  await resizeImage(tempFilePath, newSavePath, profileSize)
   removeFile(tempFilePath)
 
   if ((await exists(newSavePath)) === false) {

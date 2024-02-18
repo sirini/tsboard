@@ -63,7 +63,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-card elevation="0" rounded="0" class="pa-0 comment">
+      <v-card elevation="0" rounded="0" class="pa-0 tiptap">
         <v-card-text v-html="reply.content" class="content"></v-card-text>
       </v-card>
     </v-list-item>
@@ -77,6 +77,7 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
+import "../../../assets/board/editor.scss"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
@@ -86,11 +87,11 @@ onMounted(() => comment.loadCommentList())
 
 <style scoped type="scss">
 .comment {
-  line-height: 1.8em;
   min-height: 70px;
 
   .content {
     font-size: 1em;
+    line-height: 1.8em;
   }
 
   .heart {

@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="write.addVideoURLDialog" persistent>
+  <v-dialog v-model="editor.addVideoURLDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>YouTube URL 추가</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="dialogBody">
+      <v-card-text>
         <alert-bar></alert-bar>
         <v-row no-gutters>
           <v-col>
@@ -39,9 +39,9 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="write.addVideoURLDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="editor.addVideoURLDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
+        <v-btn @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -49,13 +49,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useWriteStore } from "../../../store/write"
+import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import { VideoURL } from "../../../interface/board"
 import AlertBar from "../../util/AlertBar.vue"
 
-const write = useWriteStore()
+const editor = useBoardEditorStore()
 const home = useHomeStore()
 const util = useUtilStore()
 const emits = defineEmits<{
@@ -86,7 +86,18 @@ function add(): void {
 </script>
 
 <style scoped>
-.dialogBody {
-  background-color: white;
+/** 다이얼로그 배경 조정 */
+.v-overlay--active {
+  animation: tsboardCustomOverlay 0.5s ease-in forwards;
+}
+@keyframes tsboardCustomOverlay {
+  from {
+    backdrop-filter: blur(0px);
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.2);
+  }
 }
 </style>

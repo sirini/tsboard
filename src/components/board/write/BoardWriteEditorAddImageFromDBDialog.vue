@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="write.addImageFromDBDialog" persistent>
+  <v-dialog v-model="editor.addImageFromDBDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>기존 이미지를 본문에 추가/관리</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="dialogBody">
+      <v-card-text>
         <v-card v-show="showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">
           <v-card-text class="pa-3">
             정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만
@@ -11,9 +11,7 @@
             나타나지 않게 됩니다. 계속 진행하시겠습니까?
           </v-card-text>
           <v-card-actions>
-            <v-btn prepend-icon="mdi-check" color="primary" @click="clear"
-              >아니요, 삭제하지 않겠습니다</v-btn
-            >
+            <v-btn prepend-icon="mdi-check" @click="clear">아니요, 삭제하지 않겠습니다</v-btn>
             <v-spacer></v-spacer>
             <v-btn prepend-icon="mdi-trash-can" @click="remove">
               삭제
@@ -64,7 +62,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="write.addImageFromDBDialog = false"
+        <v-btn block prepend-icon="mdi-close" @click="editor.addImageFromDBDialog = false"
           >닫기</v-btn
         >
       </v-card-actions>
@@ -74,7 +72,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useWriteStore } from "../../../store/write"
+import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 
 const home = useHomeStore()
@@ -88,7 +86,7 @@ const emits = defineEmits<{
   addImageURL: [src: string]
   removeImage: [src: string]
 }>()
-const write = useWriteStore()
+const editor = useBoardEditorStore()
 const PREFIX = process.env.PREFIX || ""
 const showRemoveImageInfo = ref<boolean>(false)
 const removeImageTarget = ref<Image>({
@@ -143,13 +141,24 @@ function clear(): void {
 </script>
 
 <style scoped>
-.dialogBody {
-  background-color: white;
-  overflow-y: scroll;
-}
 .action {
   position: absolute;
   bottom: 5px;
   left: 5px;
+}
+
+/** 다이얼로그 배경 조정 */
+.v-overlay--active {
+  animation: tsboardCustomOverlay 0.5s ease-in forwards;
+}
+@keyframes tsboardCustomOverlay {
+  from {
+    backdrop-filter: blur(0px);
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.2);
+  }
 }
 </style>

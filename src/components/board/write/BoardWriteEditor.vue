@@ -117,19 +117,22 @@
       >
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
-          <v-list-item prepend-icon="mdi-image-plus" @click="write.uploadImageDialog = true">
+          <v-list-item prepend-icon="mdi-image-plus" @click="writeEditor.uploadImageDialog = true">
             이미지 파일 직접 업로드
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-image-search-outline"
-            @click="write.addImageFromDBDialog = true"
+            @click="writeEditor.addImageFromDBDialog = true"
           >
             기존 이미지 추가/관리
           </v-list-item>
-          <v-list-item prepend-icon="mdi-link-variant-plus" @click="write.addImageURLDialog = true">
+          <v-list-item
+            prepend-icon="mdi-link-variant-plus"
+            @click="writeEditor.addImageURLDialog = true"
+          >
             외부 이미지 URL 추가
           </v-list-item>
-          <v-list-item prepend-icon="mdi-youtube" @click="write.addVideoURLDialog = true">
+          <v-list-item prepend-icon="mdi-youtube" @click="writeEditor.addVideoURLDialog = true">
             YouTube URL 추가
           </v-list-item>
         </v-list>
@@ -141,7 +144,7 @@
       <v-tooltip activator="parent" location="top">표 (Table) 작업</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
-          <v-list-item prepend-icon="mdi-table-plus" @click="write.addTableDialog = true"
+          <v-list-item prepend-icon="mdi-table-plus" @click="writeEditor.addTableDialog = true"
             >표 추가하기</v-list-item
           >
           <v-list-item
@@ -269,7 +272,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onBeforeUnmount } from "vue"
+import { watch, onMounted, onBeforeUnmount } from "vue"
 import { useEditor, EditorContent } from "@tiptap/vue-3"
 import StarterKit from "@tiptap/starter-kit"
 import Highlight from "@tiptap/extension-highlight"
@@ -293,7 +296,7 @@ import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
 import { useBoardListStore } from "../../../store/board/list"
-import { useWriteStore } from "../../../store/write"
+import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 import { VideoURL, TableOption } from "../../../interface/board"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
@@ -303,13 +306,20 @@ import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../../assets/board/editor.scss"
 
-const write = useWriteStore()
+const writeEditor = useBoardEditorStore()
 const list = useBoardListStore()
 const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
+
+onMounted(() => writeEditor.loadBoardConfig())
+watch(
+  () => writeEditor.id,
+  () => writeEditor.loadBoardConfig(),
+)
+
 const lowlight = createLowlight(all)
 lowlight.register("css", css)
 lowlight.register("js", js)

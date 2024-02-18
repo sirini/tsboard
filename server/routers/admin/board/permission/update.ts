@@ -29,22 +29,39 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        accessUserUid = access.uid as number
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
+      }
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
+  })
   .patch(
     "/changeadmin",
-    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, userUid } }) => {
+    async ({ body: { boardUid, userUid }, newAccessToken }) => {
       if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
-
       const result = await changeBoardAdmin(boardUid, userUid)
       if (result === false) {
         return fail(`User not found.`)
       }
-
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -59,7 +76,7 @@ export const update = new Elysia()
   )
   .patch(
     "/updatelevels",
-    async ({ jwt, cookie: { refresh }, headers, body: { boardUid, levels } }) => {
+    async ({ body: { boardUid, levels }, newAccessToken }) => {
       if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -69,9 +86,7 @@ export const update = new Elysia()
           return fail(`Invalid level. (0 ≤ level ≤ 9)`)
         }
       }
-
       updatePermissionLevels(boardUid, levels as AdminPermissionLevel)
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

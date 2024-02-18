@@ -6,6 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import {
   getBoardUid,
@@ -13,8 +14,19 @@ import {
   getMaxCommentUid,
   getViewPostLevel,
   likeComment,
+  saveNewComment,
+  saveReplyComment,
 } from "../../database/board/comment"
-import { fail, success } from "../../util/tools"
+import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+
+const htmlFilter = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+  allowedAttributes: {
+    code: ["class"],
+    img: ["src", "alt", "class"],
+    span: ["class"],
+  },
+}
 
 export const comment = new Elysia()
   .use(
@@ -26,17 +38,24 @@ export const comment = new Elysia()
   .resolve(async ({ jwt, headers, cookie }) => {
     let accessUserUid = 0
     let userLevel = 0
+    let newAccessToken = ""
 
     if (headers.authorization !== undefined && cookie && cookie.refresh) {
       const access = await jwt.verify(headers.authorization)
       if (access !== false) {
         accessUserUid = access.uid as number
         userLevel = await getUserLevel(accessUserUid)
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
       }
     }
     return {
       accessUserUid,
       userLevel,
+      newAccessToken,
     }
   })
   .get(
@@ -103,6 +122,73 @@ export const comment = new Elysia()
         boardUid: t.Numeric(),
         commentUid: t.Numeric(),
         liked: t.Numeric(),
+      }),
+    },
+  )
+  .post(
+    "/newcomment",
+    async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`)
+      }
+      content = sanitizeHtml(content, htmlFilter)
+      const newCommentUid = await saveNewComment({
+        boardUid,
+        postUid,
+        accessUserUid,
+        content,
+      })
+      return success({
+        newCommentUid,
+        newAccessToken,
+      })
+    },
+    {
+      headers: t.Object({
+        authorization: t.String(),
+      }),
+      body: t.Object({
+        boardUid: t.Numeric(),
+        postUid: t.Numeric(),
+        content: t.String(),
+      }),
+    },
+  )
+  .post(
+    "/replycomment",
+    async ({
+      body: { boardUid, postUid, replyTargetUid, content },
+      accessUserUid,
+      newAccessToken,
+    }) => {
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`)
+      }
+      if (replyTargetUid < 1) {
+        return fail(`Invalid target uid.`)
+      }
+      content = sanitizeHtml(content, htmlFilter)
+      const newCommentUid = await saveReplyComment({
+        boardUid,
+        postUid,
+        replyTargetUid,
+        accessUserUid,
+        content,
+      })
+      return success({
+        newCommentUid,
+        newAccessToken,
+      })
+    },
+    {
+      headers: t.Object({
+        authorization: t.String(),
+      }),
+      body: t.Object({
+        boardUid: t.Numeric(),
+        postUid: t.Numeric(),
+        replyTargetUid: t.Numeric(),
+        content: t.String(),
       }),
     },
   )

@@ -26,13 +26,32 @@ export const modify = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        accessUserUid = access.uid as number
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
+      }
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
+  })
   .get(
     "/load",
-    async ({ jwt, cookie: { refresh }, headers, query: { userUid } }) => {
+    async ({ query: { userUid }, newAccessToken }) => {
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const user = await getUserInfo(userUid)
       return success({
         newAccessToken,
@@ -49,10 +68,8 @@ export const modify = new Elysia()
   .patch(
     "/modify",
     async ({
-      jwt,
-      cookie: { refresh },
-      headers,
       body: { userUid, name, level, point, signature, password, profile },
+      newAccessToken,
     }) => {
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
@@ -66,7 +83,6 @@ export const modify = new Elysia()
       if ((await isDuplicatedName(userUid, name)) === true) {
         return fail(`Duplicated name.`)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       await modifyUserInfo({
         userUid,
         name,

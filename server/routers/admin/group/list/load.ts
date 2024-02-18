@@ -32,7 +32,6 @@ export const load = new Elysia()
       if (groups.length < 1) {
         return fail(`Unable to get group list.`)
       }
-
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,

@@ -27,7 +27,7 @@ export const useCommentStore = defineStore("comment", () => {
   const removeTarget = ref<number>(0)
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
-  const button = ref<string>("새 댓글 작성하기")
+  const button = ref<string>(COMMENT.BUTTON_NEW)
   const confirmRemoveCommentDialog = ref<boolean>(false)
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -63,8 +63,7 @@ export const useCommentStore = defineStore("comment", () => {
       return
     }
     boardUid.value = response.data.result.boardUid as number
-    const commentList = response.data.result.comments as Comment[]
-    comments.value = commentList.reverse()
+    comments.value = response.data.result.comments as Comment[]
     pageLength.value = Math.ceil((response.data.result.maxCommentUid as number) / bunch.value)
   }
 
@@ -84,17 +83,17 @@ export const useCommentStore = defineStore("comment", () => {
   function setModifyComment(uid: number, comment: string): void {
     modifyTarget.value = uid
     content.value = comment
-    button.value = "내 댓글 내용 수정하기"
-    util.snack("내가 작성한 댓글 내용을 수정합니다. 기존에 작성된 댓글이 작성란에 복사 되었습니다.")
+    button.value = COMMENT.BUTTON_MODIFY
+    util.snack(COMMENT.SET_MODIFY_TARGET)
   }
 
   // 댓글 작성 모드를 새 댓글로 초기화 (답글, 수정 취소)
   function resetCommentMode(): void {
     replyTarget.value = 0
     modifyTarget.value = 0
-    button.value = "새 댓글 작성하기"
+    button.value = COMMENT.BUTTON_NEW
     content.value = ""
-    util.snack("새로운 댓글 작성으로 작성란을 초기화합니다.")
+    util.snack(COMMENT.RESET_COMMENT_MODE)
   }
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
@@ -130,14 +129,20 @@ export const useCommentStore = defineStore("comment", () => {
   // 댓글 작성하기
   async function save(): Promise<void> {
     if (content.value.length < 2) {
-      util.snack("댓글 내용이 너무 짧습니다. 최소 2글자 이상 입력해 주세요.")
+      util.snack(COMMENT.TOO_SHORT_COMMENT)
+      return
+    }
+    if (auth.user.uid < 1) {
+      util.snack(COMMENT.NEED_LOGIN)
       return
     }
 
     if (replyTarget.value > 0) {
       await saveReplyComment()
+      replyTarget.value = 0
     } else if (modifyTarget.value > 0) {
       await modifyComment()
+      modifyTarget.value = 0
     } else {
       await saveNewComment()
     }
@@ -147,20 +152,104 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 새 댓글 작성하기
   async function saveNewComment(): Promise<void> {
-    // do something
-    util.snack("새 댓글을 남겼습니다.")
+    const response = await server.api.board.newcomment.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: boardUid.value,
+      postUid: postUid.value,
+      content: contentWithSyntax.value,
+    })
+    if (!response.data) {
+      util.snack(COMMENT.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.snack(COMMENT.FAILED_SAVE_COMMENT)
+      return
+    }
+
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    const newUid = response.data.result.newCommentUid as number
+    comments.value.push({
+      uid: newUid,
+      writer: {
+        uid: auth.user.uid,
+        name: auth.user.name,
+        profile: auth.user.profile,
+      },
+      content: content.value,
+      like: 0,
+      liked: false,
+      submitted: Date.now(),
+      modified: 0,
+      status: 0,
+      replyUid: newUid,
+      postUid: postUid.value,
+    })
+    util.snack(COMMENT.SAVED_NEW_COMMENT)
   }
 
   // 답글 작성하기
   async function saveReplyComment(): Promise<void> {
-    // do something
-    util.snack("답글을 남겼습니다.")
+    const response = await server.api.board.replycomment.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      replyTargetUid: replyTarget.value,
+      boardUid: boardUid.value,
+      postUid: postUid.value,
+      content: contentWithSyntax.value,
+    })
+    if (!response.data) {
+      util.snack(COMMENT.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.snack(COMMENT.FAILED_SAVE_COMMENT)
+      return
+    }
+
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    const newUid = response.data.result.newCommentUid as number
+    let targetIndex = 0
+    comments.value.map((comment, index) => {
+      if (comment.uid === replyTarget.value) {
+        targetIndex = index
+        return
+      }
+    })
+    comments.value.splice(targetIndex + 1, 0, {
+      uid: newUid,
+      writer: {
+        uid: auth.user.uid,
+        name: auth.user.name,
+        profile: auth.user.profile,
+      },
+      content: content.value,
+      like: 0,
+      liked: false,
+      submitted: Date.now(),
+      modified: 0,
+      status: 0,
+      replyUid: replyTarget.value,
+      postUid: postUid.value,
+    })
+    util.snack(COMMENT.REPLIED_NEW_COMMENT)
   }
 
   // 기존 댓글 수정하기
   async function modifyComment(): Promise<void> {
     // do something
-    util.snack("기존 댓글을 수정하였습니다.")
+    util.snack(COMMENT.MODIFIED_COMMENT)
   }
 
   // 댓글 삭제 확인용 다이얼로그 열기
@@ -178,14 +267,14 @@ export const useCommentStore = defineStore("comment", () => {
   // 댓글 삭제하기
   async function removeComment(): Promise<void> {
     if (removeTarget.value < 1) {
-      util.snack("삭제할 대상이 지정되지 않았습니다.")
+      util.snack(COMMENT.INVALID_REMOVE_TARGET)
       return
     }
     // do something with removeTarget
     comments.value = comments.value.filter((comment: Comment) => {
       return removeTarget.value !== comment.uid
     })
-    util.snack("댓글이 정상적으로 삭제(혹은 비공개) 되었습니다.")
+    util.snack(COMMENT.REMOVED_COMMENT)
     closeRemoveCommentDialog()
   }
 

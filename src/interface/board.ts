@@ -113,9 +113,12 @@ export type PostRelatedParams = RelatedParams & {
   categoryUid: number
 }
 
-type LikeParams = {
+type CommonPairParam = {
   boardUid: number
   accessUserUid: number
+}
+
+type LikeParams = CommonPairParam & {
   liked: number
 }
 
@@ -125,6 +128,20 @@ export type PostLikeParams = LikeParams & {
 
 export type CommentLikeParams = LikeParams & {
   commentUid: number
+}
+
+export type SaveCommentParams = CommonPairParam & {
+  postUid: number
+  content: string
+}
+
+export type SaveReplyParams = SaveCommentParams & {
+  replyTargetUid: number
+}
+
+export type UploadImageParams = CommonPairParam & {
+  sizeLimit: number
+  images: File[]
 }
 
 export type VideoURL = {

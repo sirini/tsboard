@@ -29,22 +29,39 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        accessUserUid = access.uid as number
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
+      }
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
+  })
   .patch(
     "/changeadmin",
-    async ({ jwt, cookie: { refresh }, headers, body: { groupUid, userUid } }) => {
+    async ({ body: { groupUid, userUid }, newAccessToken }) => {
       if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
-
       const result = await changeGroupAdmin(groupUid, userUid)
       if (result === false) {
         return fail(`User not found.`)
       }
-
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -59,7 +76,7 @@ export const update = new Elysia()
   )
   .delete(
     "/removeboard",
-    async ({ jwt, cookie: { refresh }, headers, body: { boardUid } }) => {
+    async ({ body: { boardUid }, newAccessToken }) => {
       if (boardUid < 1) {
         return fail(`Invalid board uid.`)
       }
@@ -68,8 +85,6 @@ export const update = new Elysia()
       if (result === false) {
         return fail(`Board not found.`)
       }
-
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })
@@ -83,20 +98,17 @@ export const update = new Elysia()
   )
   .post(
     "/createboard",
-    async ({ jwt, cookie: { refresh }, headers, body: { groupUid, newId } }) => {
+    async ({ body: { groupUid, newId }, newAccessToken }) => {
       if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
       if (newId.length < 2) {
         return fail(`Board ID is too short.`)
       }
-
       const newBoardUid = await createBoard(newId, groupUid)
       if (newBoardUid < 1) {
         return fail(`Failed to create a new board, try another ID.`)
       }
-
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         uid: newBoardUid,

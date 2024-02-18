@@ -29,9 +29,29 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
+    if (headers.authorization !== undefined && cookie && cookie.refresh) {
+      const access = await jwt.verify(headers.authorization)
+      if (access !== false) {
+        accessUserUid = access.uid as number
+        newAccessToken = await getUpdatedAccessToken(
+          jwt,
+          headers.authorization,
+          cookie.refresh.value,
+        )
+      }
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
+  })
   .post(
     "/creategroup",
-    async ({ jwt, cookie: { refresh }, headers, body: { newId } }) => {
+    async ({ body: { newId }, newAccessToken }) => {
       if (newId.length < 2) {
         return fail(`Group id is too short.`)
       }
@@ -43,8 +63,6 @@ export const update = new Elysia()
       if (admin.uid < 1) {
         return fail(`Unable to get a default admin information.`)
       }
-
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         uid: newGroupUid,
@@ -61,7 +79,7 @@ export const update = new Elysia()
   )
   .delete(
     "/removegroup",
-    async ({ jwt, cookie: { refresh }, headers, body: { groupUid } }) => {
+    async ({ body: { groupUid }, newAccessToken }) => {
       if (groupUid < 1) {
         return fail(`Invalid group uid.`)
       }
@@ -69,7 +87,6 @@ export const update = new Elysia()
       if (result === false) {
         return fail(`Failed to remove a group, it might be a last one.`)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
       })

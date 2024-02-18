@@ -58,7 +58,7 @@ export const post = new Elysia()
   )
   .get(
     "/search/post",
-    async ({ jwt, cookie: { refresh }, headers, query: { option, keyword, page, bunch } }) => {
+    async ({ query: { option, keyword, page, bunch } }) => {
       if (option.length < 2) {
         return fail(`Unknown option.`)
       }

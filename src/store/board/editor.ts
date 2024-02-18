@@ -5,18 +5,34 @@
  */
 
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { useUtilStore } from "../store/util"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../server/index"
+import { useAuthStore } from "../user/auth"
+import { useUtilStore } from "../util"
+import { EDITOR } from "../../messages/store/board/editor"
+import { useBoardViewStore } from "./view"
+import { INIT_CONFIG } from "./const"
+import { BoardConfig } from "../../interface/board"
 
-export const useWriteStore = defineStore("write", () => {
+export const useBoardEditorStore = defineStore("boardEditor", () => {
+  const server = edenTreaty<App>(process.env.API!)
+  const route = useRoute()
+  const auth = useAuthStore()
   const util = useUtilStore()
+  const view = useBoardViewStore()
   const confirmWriteCancelDialog = ref<boolean>(false)
   const uploadImageDialog = ref<boolean>(false)
   const addImageFromDBDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
   const addVideoURLDialog = ref<boolean>(false)
   const addTableDialog = ref<boolean>(false)
+  const id = ref<string>("")
+  const postUid = ref<number>(0)
+  const config = ref<BoardConfig>(INIT_CONFIG)
   const files = ref<File[]>([])
+  const uploadedImages = ref<string[]>([])
   const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "10247680"))
   const subject = ref<string>("")
   const content = ref<string>("")
@@ -40,8 +56,46 @@ export const useWriteStore = defineStore("write", () => {
     },
   ]
 
-  // 선택한 파일들을 파일 목록에 담기
-  function readSelectedFiles(event: MouseEvent): void {
+  // 게시판 설정 가져오기
+  async function loadBoardConfig(): Promise<void> {
+    if (view.config.uid > 0) {
+      config.value = view.config
+      postUid.value = view.postUid
+      return
+    }
+
+    id.value = route.params.id as string
+    if (id.value.length < 2) {
+      util.snack(EDITOR.NO_BOARD_ID)
+      return
+    }
+
+    const response = await server.api.board.config.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: id.value,
+      },
+    })
+    if (!response.data) {
+      util.snack(EDITOR.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${EDITOR.FAILED_LOAD_CONFIG} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.snack(EDITOR.FAILED_LOAD_CONFIG)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    config.value = response.data.result.config as BoardConfig
+  }
+
+  // 본문에 삽입할 이미지들 선택 및 업로드
+  async function uploadImageFiles(event: MouseEvent): Promise<void> {
     files.value = []
     const targets = (event?.target as HTMLInputElement).files
     if (targets) {
@@ -50,6 +104,29 @@ export const useWriteStore = defineStore("write", () => {
         files.value.push(file)
       }
     }
+
+    const response = await server.api.board.uploadimages.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: config.value.uid,
+      sizeLimit: config.value.width,
+      images: files.value,
+    })
+    if (!response.data) {
+      util.snack(EDITOR.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${EDITOR.FAILED_UPLOAD_IMAGE} (${response.data.error})`)
+      return
+    }
+    if (!response.data.result) {
+      util.snack(EDITOR.FAILED_UPLOAD_IMAGE)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken!)
+    uploadedImages.value = response.data.result.uploadedImages as string[]
   }
 
   // 태그 자동 완성하기
@@ -129,6 +206,9 @@ export const useWriteStore = defineStore("write", () => {
   }
 
   return {
+    id,
+    config,
+    postUid,
     confirmWriteCancelDialog,
     uploadImageDialog,
     addImageFromDBDialog,
@@ -137,6 +217,7 @@ export const useWriteStore = defineStore("write", () => {
     addTableDialog,
     limit,
     files,
+    uploadedImages,
     subject,
     content,
     tag,
@@ -144,7 +225,8 @@ export const useWriteStore = defineStore("write", () => {
     uploadRule,
     textRule,
     tagSuggestions,
-    readSelectedFiles,
+    loadBoardConfig,
+    uploadImageFiles,
     updateTagSuggestion,
     addTag,
     removeTag,
