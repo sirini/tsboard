@@ -29,33 +29,46 @@ export const manageUser = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .state("accessUserUid", 0)
-  .state("newAccessToken", "")
-  .onBeforeHandle(async ({ cookie: { refresh }, jwt, headers, store }) => {
+  .resolve(async ({ jwt, headers, cookie }) => {
+    let accessUserUid = 0
+    let newAccessToken = ""
+
     const access = await jwt.verify(headers.authorization ?? "")
     if (access === false) {
-      return fail(`Invalid authorization.`)
+      return {
+        accessUserUid,
+        newAccessToken,
+      }
     }
-    const accessUserUid = access.uid as number
+    accessUserUid = access.uid as number
     if ((await hasPermission(accessUserUid)) === false) {
-      return fail(`Access denied.`)
+      return {
+        accessUserUid,
+        newAccessToken,
+      }
     }
-    store.accessUserUid = accessUserUid
-    store.newAccessToken = await getUpdatedAccessToken(
-      jwt,
-      headers.authorization as string,
-      refresh.value,
-    )
+    accessUserUid = accessUserUid
+    if (cookie && cookie.refresh) {
+      newAccessToken = await getUpdatedAccessToken(
+        jwt,
+        headers.authorization as string,
+        cookie.refresh.value,
+      )
+    }
+    return {
+      accessUserUid,
+      newAccessToken,
+    }
   })
   .get(
     "/loadpermission",
-    async ({ jwt, cookie: { refresh }, headers, query: { userUid }, store }) => {
+    async ({ newAccessToken, query: { userUid } }) => {
       if (userUid < 1) {
         return fail(`Invalid user uid.`)
       }
       const permission = await getUserPermission(userUid)
       return success({
-        newAccessToken: store.newAccessToken,
+        newAccessToken,
         permission,
       })
     },
@@ -69,11 +82,9 @@ export const manageUser = new Elysia()
   .post(
     "/manageuser",
     async ({
-      jwt,
-      cookie: { refresh },
-      headers,
       body: { userUid, writePost, writeComment, sendNote, sendReport, login, response },
-      store,
+      accessUserUid,
+      newAccessToken,
     }) => {
       if (userUid < 1) {
         return fail(`Invalid target user.`)
@@ -91,10 +102,10 @@ export const manageUser = new Elysia()
           userUid,
           response,
         },
-        store.accessUserUid,
+        accessUserUid,
       )
       return success({
-        newAccessToken: store.newAccessToken,
+        newAccessToken,
       })
     },
     {

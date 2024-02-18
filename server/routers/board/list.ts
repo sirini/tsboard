@@ -41,15 +41,7 @@ export const list = new Elysia()
   })
   .get(
     "/list",
-    async ({
-      jwt,
-      headers,
-      cookie,
-      query: { id, page },
-      accessUserUid,
-      userLevel,
-      newAccessToken,
-    }) => {
+    async ({ query: { id, page }, accessUserUid, userLevel, newAccessToken }) => {
       if (id.length < 2) {
         return fail(`Invalid board ID.`)
       }
