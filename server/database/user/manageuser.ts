@@ -5,7 +5,8 @@
  */
 
 import { table, select, update, insert } from "../common"
-import { UserPermission, UserPermissionParams } from "../../../src/interface/user"
+import { UserPermissionParams } from "../../../src/interface/user"
+import { USER_PERMISSION_PARAMS } from "./const"
 
 // 주어진 회원 번호가 관리 권한이 있는지 반환 (그룹 관리자 이상만 true)
 export async function hasPermission(userUid: number): Promise<boolean> {
@@ -19,15 +20,9 @@ export async function hasPermission(userUid: number): Promise<boolean> {
 
 // 회원 권한 조회하기
 export async function getUserPermission(userUid: number): Promise<UserPermissionParams> {
-  let result: UserPermissionParams = {
-    writePost: true,
-    writeComment: true,
-    sendNote: true,
-    sendReport: true,
-    login: true,
-    userUid,
-    response: "",
-  }
+  let result: UserPermissionParams = USER_PERMISSION_PARAMS
+  result.userUid = userUid
+
   const [perm] = await select(
     `SELECT write_post, write_comment, send_note, send_report FROM ${table}user_permission 
   WHERE user_uid = ? LIMIT 1`,
@@ -40,6 +35,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
   const [report] = await select(`SELECT response FROM ${table}report WHERE to_uid = ? LIMIT 1`, [
     userUid,
   ])
+
   result = {
     writePost: perm.write_post > 0 ? true : false,
     writeComment: perm.write_comment > 0 ? true : false,

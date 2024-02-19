@@ -6,6 +6,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { clearUserToken } from "../../database/auth/logout"
+import { success } from "../../util/tools"
 
 export const logout = new Elysia()
   .use(
@@ -23,9 +24,7 @@ export const logout = new Elysia()
       }
       refresh.remove()
 
-      return {
-        success: true,
-      }
+      return success("")
     },
     {
       headers: t.Object({

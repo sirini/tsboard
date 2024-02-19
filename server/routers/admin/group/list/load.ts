@@ -28,9 +28,14 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers }) => {
+      const response = {
+        newAccessToken: "",
+        groups: [],
+      }
+
       const groups = await getGroupList()
       if (groups.length < 1) {
-        return fail(`Unable to get group list.`)
+        return fail(`Unable to get group list.`, response)
       }
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -45,8 +50,12 @@ export const load = new Elysia()
   .get(
     "/groupids",
     async ({ jwt, cookie: { refresh }, headers, query: { id, limit } }) => {
+      const response = {
+        ids: [],
+      }
+
       if (id.length < 2) {
-        return fail(`Group id is too short.`)
+        return fail(`Group id is too short.`, response)
       }
       const ids = await getExistGroupIds(id, limit)
       return success({

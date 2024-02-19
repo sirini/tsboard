@@ -31,7 +31,11 @@ export const useSignupStore = defineStore("signup", () => {
     const response = await server.api.auth.checkemail.post({
       email: auth.user.id.trim(),
     })
-    if (response.data!.success === false) {
+    if (!response.data) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
       util.error(AUTH.EXIST_EMAIL)
       auth.user.id = ""
       return
@@ -49,7 +53,11 @@ export const useSignupStore = defineStore("signup", () => {
       name: auth.user.name.trim(),
       userUid: auth.user.uid,
     })
-    if (response.data!.success === false) {
+    if (!response.data) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
       util.error(AUTH.EXIST_NAME)
       auth.user.name = ""
       return
@@ -143,7 +151,7 @@ export const useSignupStore = defineStore("signup", () => {
       util.error(AUTH.NO_RESPONSE)
       return
     }
-    if (response.data!.success === false) {
+    if (response.data.success === false) {
       util.error(`인증 코드가 잘못되었습니다. 대소문자 등 다시 확인해 주세요.`)
       return
     }

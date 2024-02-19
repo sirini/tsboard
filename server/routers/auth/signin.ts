@@ -10,6 +10,7 @@ import { userSignIn } from "../../database/auth/signin"
 import { saveTokens } from "../../database/auth/authorization"
 import { Token } from "../../../src/interface/auth"
 import { fail, success } from "../../util/tools"
+import { INIT_USER } from "../../database/auth/const"
 
 export const signIn = new Elysia()
   .use(
@@ -21,12 +22,15 @@ export const signIn = new Elysia()
   .post(
     "/signin",
     async ({ jwt, cookie: { refresh }, body: { id, password } }) => {
+      const response = {
+        user: INIT_USER,
+      }
       if (id.length < 4 || password.length !== 64) {
-        return fail(`Invalid id or password`)
+        return fail(`Invalid id or password`, response)
       }
       const user = await userSignIn(id, password)
       if (user.uid < 1) {
-        return fail(`Unable to get an user information`)
+        return fail(`Unable to get an user information`, response)
       }
 
       // 토큰 만료 시간까지 추가해서 입력

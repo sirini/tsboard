@@ -30,12 +30,16 @@ export const usePasswordStore = defineStore("password", () => {
     const response = await server.api.auth.resetpassword.post({
       email: auth.user.id,
     })
-    if (response.data!.success === false) {
+    if (!response.data) {
+      util.error(AUTH.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
       util.error(AUTH.INVALID_EMAIL)
       loading.value = false
       return
     }
-    if (response.data!.sendmail === false) {
+    if (response.data.result.sendmail === false) {
       util.success(AUTH.ASKED_RESET_PASSWORD)
       loading.value = false
       return

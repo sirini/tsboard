@@ -47,12 +47,8 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(GENERAL.UNKNOWN_INFO)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    board.value = response.data.result.config as AdminBoardConfig
+    auth.updateUserToken(response.data.result.newAccessToken)
+    board.value = response.data.result.config
     boardRows.value = board.value.row.toString()
     boardWidth.value = board.value.width.toString()
     admin.success(GENERAL.LOADED_CONFIG)
@@ -84,7 +80,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     board.value.groupUid = group.uid
     admin.success(
       `${board.value.id} ${GENERAL.CHANGED_GROUP1} ${group.name} ${GENERAL.CHANGED_GROUP2}`,
@@ -113,7 +109,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_NAME} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_NAME1} ${newName} ${GENERAL.CHANGED_NAME2}`)
   }
 
@@ -139,7 +135,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_INFO} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(GENERAL.UPDATED_INFO)
   }
 
@@ -164,7 +160,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_TYPE1} ${board.value.type} ${GENERAL.CHANGED_TYPE2}`)
   }
 
@@ -191,7 +187,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_UPDATE_ROWS} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${newRows} ${GENERAL.UPDATED_ROWS}`)
   }
 
@@ -218,7 +214,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_UPDATE_WIDTH} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_WIDTH1} ${newWidth} ${GENERAL.CHANGED_WIDTH2}`)
   }
 
@@ -245,9 +241,9 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_ADD_CATEGORY} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     board.value.categories.push({
-      uid: response.data.result.categoryUid as number,
+      uid: response.data.result.categoryUid,
       name: newCategory,
     })
     admin.success(`${newCategory} ${GENERAL.ADDED_CATEGORY}`)
@@ -285,7 +281,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(`${GENERAL.UNABLE_REMOVE_CATEGORY} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     board.value.categories = board.value.categories.filter((cat: AdminPair) => {
       return cat.uid !== boardRemoveCategory.value.uid
     })

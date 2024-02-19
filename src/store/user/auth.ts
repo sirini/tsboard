@@ -70,11 +70,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(`${AUTH.FAILED_LOAD_MYINFO} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.error(AUTH.FAILED_LOAD_MYINFO)
-      return
-    }
-    updateUserToken(response.data.result.newAccessToken!)
+    updateUserToken(response.data.result.newAccessToken)
     user.value = response.data.result.user as User
     user.value.signature = util.unescape(user.value.signature)
   }
@@ -97,7 +93,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(AUTH.INVALID_ID_PW)
       return
     }
-    user.value = response.data.result.user as User
+    user.value = response.data.result.user
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
@@ -158,6 +154,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(AUTH.INVALID_PASSWORD)
       return
     }
+
     const response = await server.api.auth.update.patch({
       $headers: {
         authorization: user.value.token,
@@ -175,11 +172,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(`${AUTH.FAILED_UPDATE_MYINFO} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.error(AUTH.FAILED_UPDATE_MYINFO)
-      return
-    }
-    updateUserToken(response.data.result.newAccessToken!)
+    updateUserToken(response.data.result.newAccessToken)
     loadUserInfo()
     password.value = ""
     checkedPassword.value = ""

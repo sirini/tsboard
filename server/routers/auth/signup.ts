@@ -20,23 +20,28 @@ export const signUp = new Elysia()
   .post(
     "/signup",
     async ({ body: { email, password, name } }) => {
+      const response = {
+        sendmail: false,
+        target: 0,
+      }
+
       if ((await isDuplicatedEmail(email)) === true) {
-        return fail(`Duplicated email address.`)
+        return fail(`Duplicated email address.`, response)
       }
       if (password.length !== 64) {
-        return fail(`Invalid password, it needs a sha256 hash code.`)
+        return fail(`Invalid password, it needs a sha256 hash code.`, response)
       }
       if ((await isDuplicatedName(0, name)) === true) {
-        return fail(`Duplicated name.`)
+        return fail(`Duplicated name.`, response)
       }
 
       // .env 에서 GMAIL 설정이 안되어 있을 경우 바로 추가
       if (process.env.GMAIL_OAUTH_USER === "") {
         const result = await addNewUser({ email, password, name })
         if (result === false) {
-          return fail(`Unable to add a new user. (${email}, ${password}, ${name})`)
+          return fail(`Unable to add a new user. (${email}, ${password}, ${name})`, response)
         }
-        return success({ sendmail: false })
+        return success(response)
       }
       // GMAIL 설정이 되어 있다면 인증 메일을 발송한다
       const target = await sendVerificationMail(email, name)
@@ -53,10 +58,11 @@ export const signUp = new Elysia()
   .post(
     "/checkemail",
     async ({ body: { email } }) => {
+      const response = ""
       if ((await isDuplicatedEmail(email.trim())) === true) {
-        return fail(`Duplicated email address.`)
+        return fail(`Duplicated email address.`, response)
       }
-      return success()
+      return success(response)
     },
     {
       body: t.Object({
@@ -67,10 +73,11 @@ export const signUp = new Elysia()
   .post(
     "/checkname",
     async ({ body: { name, userUid } }) => {
+      const response = ""
       if ((await isDuplicatedName(userUid, name.trim())) === true) {
-        return fail(`Duplicated name.`)
+        return fail(`Duplicated name.`, response)
       }
-      return success()
+      return success(response)
     },
     {
       body: t.Object({
@@ -82,14 +89,15 @@ export const signUp = new Elysia()
   .post(
     "/verify",
     async ({ body: { target, code, user } }) => {
+      const response = ""
       const result = await verify(target, code, user)
       if (result) {
         const subject = WELCOME.SUBJECT.replaceAll("#name#", user.name)
         const html = WELCOME.HTML.replaceAll("#name#", user.name)
         sendMail(user.email, subject, html)
-        return success()
+        return success(response)
       }
-      return fail(`Invalid code.`)
+      return fail(`Invalid code.`, response)
     },
     {
       body: t.Object({

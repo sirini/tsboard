@@ -13,6 +13,7 @@ import {
   getGroupAdminCandidates,
   getExistBoardIds,
 } from "../../../../database/admin/group/general/load"
+import { INIT_CONFIG, INIT_GROUP_CONFIG } from "../../../../database/admin/group/general/const"
 
 export const load = new Elysia()
   .use(
@@ -24,9 +25,14 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
+      const response = {
+        newAccessToken: "",
+        config: INIT_GROUP_CONFIG,
+        boards: [],
+      }
       const config = await getGroupConfig(id)
       if (config.uid < 1) {
-        return fail(`Invalid group ID.`)
+        return fail(`Invalid group ID.`, response)
       }
       const boards = await getGroupBoards(config.uid)
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
@@ -51,11 +57,15 @@ export const load = new Elysia()
   .get(
     "/candidates",
     async ({ query: { name, limit } }) => {
+      const response = {
+        candidates: [],
+      }
+
       if (name.length < 2) {
-        return fail(`name is too short.`)
+        return fail(`name is too short.`, response)
       }
       if (limit < 1) {
-        return fail(`Invalid a limit.`)
+        return fail(`Invalid a limit.`, response)
       }
       const candidates = await getGroupAdminCandidates(name, limit)
       return success({
@@ -72,8 +82,12 @@ export const load = new Elysia()
   .get(
     "/boardids",
     async ({ query: { id, limit } }) => {
+      const response = {
+        ids: [],
+      }
+
       if (id.length < 2) {
-        return fail(`ID is too short.`)
+        return fail(`ID is too short.`, response)
       }
       const ids = await getExistBoardIds(id, limit)
       return success({

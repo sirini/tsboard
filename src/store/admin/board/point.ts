@@ -45,12 +45,8 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(POINT.UNKNOWN_INFO)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    board.value = response.data.result.point as AdminPoint
+    auth.updateUserToken(response.data.result.newAccessToken)
+    board.value = response.data.result.point
     boardView.value = board.value.view.amount.toString()
     boardWrite.value = board.value.write.amount.toString()
     boardComment.value = board.value.comment.amount.toString()
@@ -137,7 +133,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       admin.error(`${POINT.UNABLE_UPDATE_POINT} (${response.data.error})`)
       return false
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     return true
   }
 

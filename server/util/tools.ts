@@ -46,14 +46,14 @@ export function generateDate(): Date {
   return result
 }
 
-type Result = {
+interface Result<T> {
   success: boolean
   error: string
-  result: any
+  result: T
 }
 
 // Elysia 실패 메시지 리턴
-export function fail(error: string, result: any = null): Result {
+export function fail<T>(error: string, result: T): Result<T> {
   return {
     success: false,
     error,
@@ -62,7 +62,7 @@ export function fail(error: string, result: any = null): Result {
 }
 
 // Elysia 성공 메시지 리턴
-export function success(result: any = null): Result {
+export function success<T>(result: T): Result<T> {
   return {
     success: true,
     error: "",

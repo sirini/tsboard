@@ -66,12 +66,8 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       admin.error(`${MODIFY.FAILED_LOAD} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(MODIFY.FAILED_LOAD)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    user.value = response.data.result.user as UserModifyResult
+    auth.updateUserToken(response.data.result.newAccessToken)
+    user.value = response.data.result.user
     admin.success(MODIFY.LOADED_USER)
   }
 
@@ -116,11 +112,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       admin.error(`${MODIFY.FAILED_UPDATE} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(MODIFY.FAILED_UPDATE)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     password.value = ""
     checkedPassword.value = ""
     newProfile.value = undefined

@@ -25,14 +25,15 @@ export const admin = new Elysia().group("/admin", (app) => {
       }),
     )
     .onBeforeHandle(async ({ cookie: { refresh }, jwt, headers }) => {
+      const response = null
       const access = await jwt.verify(headers.authorization ?? "")
       if (access === false) {
-        return fail(`Invalid authorization.`)
+        return fail(`Invalid authorization.`, response)
       }
 
       const userUid = access.uid as number
       if ((await hasPermission(userUid)) === false) {
-        return fail(`Access denied.`)
+        return fail(`Access denied.`, response)
       }
 
       const now = Date.now()
@@ -40,7 +41,7 @@ export const admin = new Elysia().group("/admin", (app) => {
 
       if (accessTokenTime < now) {
         if ((await isValidRefreshToken(userUid, refresh.value)) === false) {
-          return fail(`Invalid refresh token.`)
+          return fail(`Invalid refresh token.`, response)
         }
       }
     })

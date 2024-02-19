@@ -6,25 +6,12 @@
 
 import { table, select } from "../../../common"
 import { AdminBoardPermission, AdminPair } from "../../../../../src/interface/admin"
+import { INIT_PERMISSION_CONFIG } from "./const"
 
 // 게시판 관리 권한 부분 필요 정보들 가져오기
 export async function getBoardPermission(id: string): Promise<AdminBoardPermission> {
-  let result: AdminBoardPermission = {
-    uid: 0,
-    id,
-    admin: {
-      uid: 0,
-      name: "",
-      profile: "",
-    },
-    level: {
-      list: 0,
-      view: 0,
-      write: 0,
-      comment: 0,
-      download: 0,
-    },
-  }
+  let result = INIT_PERMISSION_CONFIG
+  result.id = id
 
   const [board] = await select(
     `SELECT uid, admin_uid, level_list, level_view, level_write, level_comment, level_download 

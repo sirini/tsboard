@@ -2,6 +2,7 @@
  * store/user/const
  *
  * 로그인, 인증 사용자 관리 등에 필요한 상수 기본값들 정의
+ * 주의) 백엔드에서 동일하거나 비슷한 이름으로 정의된 객체는 클라이언트에서 사용금지
  */
 
 import { User } from "../../interface/auth"

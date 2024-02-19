@@ -42,29 +42,27 @@ export const useBoardListStore = defineStore("boardList", () => {
         page: page.value,
       },
     })
+
     if (!response.data) {
       util.snack(LIST.NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      config.value = response.data.result.config as BoardConfig
+      config.value = response.data.result.config
       util.snack(`${LIST.FAILED_LOAD_LIST} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(LIST.FAILED_LOAD_LIST)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    config.value = response.data.result.config as BoardConfig
+
+    auth.updateUserToken(response.data.result.newAccessToken)
+    config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
       util.go(TYPE_MATCH[config.value.type].name)
       return
     }
 
-    posts.value = response.data.result.posts as Post[]
-    pageLength.value = Math.ceil((response.data.result.maxUid as number) / config.value.row)
+    posts.value = response.data.result.posts
+    pageLength.value = Math.ceil(response.data.result.maxUid / config.value.row)
   }
 
   return {

@@ -12,6 +12,7 @@ import {
   hasPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
+import { USER_PERMISSION_PARAMS } from "../../database/user/const"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -63,8 +64,12 @@ export const manageUser = new Elysia()
   .get(
     "/loadpermission",
     async ({ newAccessToken, query: { userUid } }) => {
+      let response = {
+        newAccessToken: "",
+        permission: USER_PERMISSION_PARAMS,
+      }
       if (userUid < 1) {
-        return fail(`Invalid user uid.`)
+        return fail(`Invalid user uid.`, response)
       }
       const permission = await getUserPermission(userUid)
       return success({
@@ -86,11 +91,14 @@ export const manageUser = new Elysia()
       accessUserUid,
       newAccessToken,
     }) => {
+      const res = {
+        newAccessToken: "",
+      }
       if (userUid < 1) {
-        return fail(`Invalid target user.`)
+        return fail(`Invalid target user.`, res)
       }
       if (response.length < 3) {
-        return fail(`Invalid content.`)
+        return fail(`Invalid content.`, res)
       }
       await updateUserPermission(
         {

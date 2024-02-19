@@ -60,16 +60,12 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      admin.error(GENERAL.FAILED_LOAD)
-      return
-    }
-    visit.value = response.data.result.visit as AdminDashboardStat
-    member.value = response.data.result.member as AdminDashboardStat
-    post.value = response.data.result.post as AdminDashboardStat
-    reply.value = response.data.result.reply as AdminDashboardStat
-    file.value = response.data.result.file as AdminDashboardStat
-    image.value = response.data.result.image as AdminDashboardStat
+    visit.value = response.data.result.visit
+    member.value = response.data.result.member
+    post.value = response.data.result.post
+    reply.value = response.data.result.reply
+    file.value = response.data.result.file
+    image.value = response.data.result.image
   }
 
   // 최신 글/댓글/신고 가져오기
@@ -86,13 +82,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      admin.error(GENERAL.FAILED_LOAD)
-      return
-    }
-    posts.value = response.data.result.posts as AdminLatest[]
-    comments.value = response.data.result.comments as AdminLatest[]
-    reports.value = response.data.result.reports as AdminLatest[]
+    posts.value = response.data.result.posts
+    comments.value = response.data.result.comments
+    reports.value = response.data.result.reports
   }
 
   // 그룹/게시판/회원 최신 목록 가져오기
@@ -109,13 +101,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       admin.error(GENERAL.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      admin.error(GENERAL.FAILED_LOAD)
-      return
-    }
-    groups.value = response.data.result.groups as string[]
-    boards.value = response.data.result.boards as string[]
-    members.value = response.data.result.members as AdminUserInfo[]
+    groups.value = response.data.result.groups
+    boards.value = response.data.result.boards
+    members.value = response.data.result.members
   }
 
   return {

@@ -11,29 +11,27 @@ import {
   sendResetPassword,
   changePassword,
 } from "../../database/auth/resetpassword"
+import { fail, success } from "../../util/tools"
 
 export const resetPassword = new Elysia()
   .post(
     "/resetpassword",
     async ({ body: { email } }) => {
+      const response = {
+        sendmail: false,
+      }
+
       if ((await isValidEmail(email)) === false) {
-        return {
-          success: false,
-          error: `Invalid email address.`,
-        }
+        return fail(`Invalid email address.`, response)
       }
       if (process.env.GMAIL_OAUTH_USER === "") {
         await askResetPassword(email)
-        return {
-          success: true,
-          sendmail: false,
-        }
+        return success(response)
       }
       await sendResetPassword(email)
-      return {
-        success: true,
+      return success({
         sendmail: true,
-      }
+      })
     },
     {
       body: t.Object({
@@ -44,11 +42,9 @@ export const resetPassword = new Elysia()
   .post(
     "/changepassword",
     async ({ body: { target, code, password } }) => {
+      const response = ""
       if (target < 1 || code.length !== 6 || password.length !== 64) {
-        return {
-          success: false,
-          error: `Invalid parameters.`,
-        }
+        return fail(`Invalid parameters.`, response)
       }
       const result = await changePassword({
         target,
@@ -56,14 +52,9 @@ export const resetPassword = new Elysia()
         password,
       })
       if (result === false) {
-        return {
-          success: false,
-          error: `Unable to change password.`,
-        }
+        return fail(`Unable to change password.`, response)
       }
-      return {
-        success: true,
-      }
+      return success(response)
     },
     {
       body: t.Object({

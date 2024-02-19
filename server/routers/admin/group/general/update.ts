@@ -12,6 +12,7 @@ import {
   removeBoard,
   createBoard,
 } from "../../../../database/admin/group/general/update"
+import { CREATE_BOARD_RESULT } from "../../../../database/admin/group/general/const"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -52,15 +53,19 @@ export const update = new Elysia()
   .patch(
     "/changeadmin",
     async ({ body: { groupUid, userUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (groupUid < 1) {
-        return fail(`Invalid group uid.`)
+        return fail(`Invalid group uid.`, response)
       }
       if (userUid < 1) {
-        return fail(`Invalid user uid.`)
+        return fail(`Invalid user uid.`, response)
       }
       const result = await changeGroupAdmin(groupUid, userUid)
       if (result === false) {
-        return fail(`User not found.`)
+        return fail(`User not found.`, response)
       }
       return success({
         newAccessToken,
@@ -77,13 +82,17 @@ export const update = new Elysia()
   .delete(
     "/removeboard",
     async ({ body: { boardUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
 
       const result = await removeBoard(boardUid)
       if (result === false) {
-        return fail(`Board not found.`)
+        return fail(`Board not found.`, response)
       }
       return success({
         newAccessToken,
@@ -99,15 +108,17 @@ export const update = new Elysia()
   .post(
     "/createboard",
     async ({ body: { groupUid, newId }, newAccessToken }) => {
+      const response = CREATE_BOARD_RESULT
+
       if (groupUid < 1) {
-        return fail(`Invalid group uid.`)
+        return fail(`Invalid group uid.`, response)
       }
       if (newId.length < 2) {
-        return fail(`Board ID is too short.`)
+        return fail(`Board ID is too short.`, response)
       }
       const newBoardUid = await createBoard(newId, groupUid)
       if (newBoardUid < 1) {
-        return fail(`Failed to create a new board, try another ID.`)
+        return fail(`Failed to create a new board, try another ID.`, response)
       }
       return success({
         newAccessToken,

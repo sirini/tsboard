@@ -2,6 +2,7 @@
  * store/board/const
  *
  * 게시판 스토어들에 사용되는 상수 기본값들 정의
+ * 주의) 백엔드에서 정의된 동일 이름의 값들은 클라이언트에서 사용금지
  */
 
 import { BoardConfig, Post } from "../../interface/board"

@@ -47,13 +47,9 @@ export const useAdminReportStore = defineStore("adminReport", () => {
       admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(COMMON.FAILED_LOAD)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    pageLength.value = Math.ceil((response.data.result.totalReportCount as number) / bunch.value)
-    reports.value = response.data.result.reports as AdminReport[]
+    auth.updateUserToken(response.data.result.newAccessToken)
+    pageLength.value = Math.ceil(response.data.result.totalReportCount / bunch.value)
+    reports.value = response.data.result.reports
     admin.success(COMMON.LOADED_REPORT)
   }
 
@@ -84,11 +80,8 @@ export const useAdminReportStore = defineStore("adminReport", () => {
       admin.error(COMMON.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      return
-    }
-    pageLength.value = Math.ceil((response.data.result.totalReportCount as number) / bunch.value)
-    reports.value = response.data.result.reports as AdminReport[]
+    pageLength.value = Math.ceil(response.data.result.totalReportCount / bunch.value)
+    reports.value = response.data.result.reports
   }
   const updateReports = util.debounce(_updateReports, 250)
 

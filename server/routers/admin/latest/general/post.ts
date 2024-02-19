@@ -32,11 +32,17 @@ export const post = new Elysia()
   .get(
     "/post",
     async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+      const response = {
+        newAccessToken: "",
+        posts: [],
+        totalPostCount: 0,
+      }
+
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
 
       const totalPostCount = await getTotalPostCount()
@@ -59,17 +65,22 @@ export const post = new Elysia()
   .get(
     "/search/post",
     async ({ query: { option, keyword, page, bunch } }) => {
+      const response = {
+        posts: [],
+        totalPostCount: 0,
+      }
+
       if (option.length < 2) {
-        return fail(`Unknown option.`)
+        return fail(`Unknown option.`, response)
       }
       if (keyword.length < 2) {
-        return fail(`Keyword is too short.`)
+        return fail(`Keyword is too short.`, response)
       }
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
 
       const totalPostCount = await getTotalPostCount()

@@ -53,10 +53,6 @@ export const useManageUserStore = defineStore("manageuser", () => {
       util.error(`${USER.FAILED_LOAD_PERMISSION} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.error(USER.FAILED_LOAD_PERMISSION)
-      return
-    }
     permission.value = response.data.result.permission as UserPermissionParams
     util.success(USER.LOADED_PERMISSION)
   }
@@ -87,11 +83,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
       util.error(`${USER.FAILED_MANAGE_USER} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.error(USER.FAILED_MANAGE_USER)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     util.success(`${targetUserInfo.value.name} ${USER.ACTION_TAKEN}`)
     setTimeout(() => closeManageUser(), 3000)
   }

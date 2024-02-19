@@ -45,12 +45,8 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       admin.error(POST.FAILED_LOAD)
       return
     }
-    if (!response.data.result) {
-      admin.error(POST.FAILED_LOAD)
-      return
-    }
-    pageLength.value = Math.ceil((response.data.result.totalPostCount as number) / bunch.value)
-    posts.value = response.data.result.posts as AdminLatestPost[]
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / bunch.value)
+    posts.value = response.data.result.posts
     admin.success(POST.LOADED_POST)
   }
 
@@ -80,11 +76,8 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
       admin.error(POST.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      return
-    }
-    pageLength.value = Math.ceil((response.data.result.totalPostCount as number) / bunch.value)
-    posts.value = response.data.result.posts as AdminLatestPost[]
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / bunch.value)
+    posts.value = response.data.result.posts
   }
   const updateLatestPosts = util.debounce(_updateLatestPosts, 250)
 

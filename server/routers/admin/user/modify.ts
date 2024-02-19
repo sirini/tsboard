@@ -9,6 +9,7 @@ import { jwt } from "@elysiajs/jwt"
 import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 import { getUserInfo, modifyUserInfo } from "../../../database/admin/user/modify"
 import { isDuplicatedName } from "../../../database/auth/signup"
+import { INIT_USER } from "../../../database/auth/const"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -49,8 +50,13 @@ export const modify = new Elysia()
   .get(
     "/load",
     async ({ query: { userUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+        user: INIT_USER,
+      }
+
       if (userUid < 1) {
-        return fail(`Invalid user uid.`)
+        return fail(`Invalid user uid.`, response)
       }
       const user = await getUserInfo(userUid)
       return success({
@@ -71,17 +77,21 @@ export const modify = new Elysia()
       body: { userUid, name, level, point, signature, password, profile },
       newAccessToken,
     }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (userUid < 1) {
-        return fail(`Invalid user uid.`)
+        return fail(`Invalid user uid.`, response)
       }
       if (name.length < 2) {
-        return fail(`Name is too short.`)
+        return fail(`Name is too short.`, response)
       }
       if (level < 0 || point < 0) {
-        return fail(`Minus value is not allowed.`)
+        return fail(`Minus value is not allowed.`, response)
       }
       if ((await isDuplicatedName(userUid, name)) === true) {
-        return fail(`Duplicated name.`)
+        return fail(`Duplicated name.`, response)
       }
       await modifyUserInfo({
         userUid,

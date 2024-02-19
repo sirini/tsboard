@@ -10,6 +10,8 @@ import { getBoardConfig, getUserLevel } from "../../database/board/list"
 import { getFiles, getPost, likePost } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { PostFile } from "../../../src/interface/board"
+import { INIT_CONFIG } from "../../../src/store/board/const"
+import { INIT_POST } from "../../database/board/const"
 
 export const view = new Elysia()
   .use(
@@ -44,19 +46,26 @@ export const view = new Elysia()
   .get(
     "/view",
     async ({ query: { id, postUid }, accessUserUid, userLevel, newAccessToken }) => {
+      let response = {
+        config: INIT_CONFIG,
+        post: INIT_POST,
+        files: [],
+        newAccessToken: "",
+      }
       if (id.length < 2) {
-        return fail(`Invalid board ID.`)
+        return fail(`Invalid board ID.`, response)
       }
       if (postUid < 1) {
-        return fail(`Invalid post uid.`)
+        return fail(`Invalid post uid.`, response)
       }
       const config = await getBoardConfig(id)
       if (config.uid < 1) {
-        return fail(`Board not found.`)
+        return fail(`Board not found.`, response)
       }
 
       if (config.level.view > userLevel) {
-        return fail(`Level restriction.`, JSON.stringify(config))
+        response.config = config
+        return fail(`Level restriction.`, response)
       }
 
       let files: PostFile[] = []
@@ -69,7 +78,7 @@ export const view = new Elysia()
         config,
         post,
         files,
-        newAccessToken: newAccessToken,
+        newAccessToken,
       })
     },
     {
@@ -85,8 +94,9 @@ export const view = new Elysia()
   .patch(
     "/likepost",
     async ({ body: { boardUid, postUid, liked }, accessUserUid }) => {
+      const response = ""
       if (accessUserUid < 1) {
-        return fail(`Please log in.`)
+        return fail(`Please log in.`, response)
       }
       likePost({
         boardUid,
@@ -94,7 +104,7 @@ export const view = new Elysia()
         accessUserUid,
         liked,
       })
-      return success({})
+      return success(response)
     },
     {
       headers: t.Object({

@@ -57,8 +57,12 @@ export const update = new Elysia()
   .patch(
     "/changegroup",
     async ({ body: { groupUid, boardUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (groupUid < 1 || boardUid < 1) {
-        return fail(`Invalid target.`)
+        return fail(`Invalid target.`, response)
       }
       await changeGroup(boardUid, groupUid)
       return success({
@@ -76,11 +80,15 @@ export const update = new Elysia()
   .patch(
     "/updatename",
     async ({ body: { boardUid, newName }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       if (newName.length < 2) {
-        return fail(`Board name is too short.`)
+        return fail(`Board name is too short.`, response)
       }
       await updateName(boardUid, Bun.escapeHTML(newName))
       return success({
@@ -98,11 +106,15 @@ export const update = new Elysia()
   .patch(
     "/updateinfo",
     async ({ body: { boardUid, newInfo }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       if (newInfo.length < 2) {
-        return fail(`Board info is too short.`)
+        return fail(`Board info is too short.`, response)
       }
       await updateInfo(boardUid, Bun.escapeHTML(newInfo))
       return success({
@@ -120,8 +132,12 @@ export const update = new Elysia()
   .patch(
     "/changetype",
     async ({ body: { boardUid, newType }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       await changeType(boardUid, newType)
       return success({
@@ -139,8 +155,12 @@ export const update = new Elysia()
   .patch(
     "/updaterows",
     async ({ body: { boardUid, newRows }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       await updateRows(boardUid, newRows)
       return success({
@@ -158,8 +178,12 @@ export const update = new Elysia()
   .patch(
     "/updatewidth",
     async ({ body: { boardUid, newWidth }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       await updateWidth(boardUid, newWidth)
       return success({
@@ -177,15 +201,20 @@ export const update = new Elysia()
   .post(
     "/addcategory",
     async ({ body: { boardUid, newCategory }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+        categoryUid: 0,
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       if (newCategory.length < 2) {
-        return fail(`Category name is too short.`)
+        return fail(`Category name is too short.`, response)
       }
       const categoryUid = await addCategory(boardUid, Bun.escapeHTML(newCategory))
       if (categoryUid < 1) {
-        return fail(`Already added.`)
+        return fail(`Already added.`, response)
       }
       return success({
         newAccessToken,
@@ -203,15 +232,19 @@ export const update = new Elysia()
   .delete(
     "/removecategory",
     async ({ body: { boardUid, categoryUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       if (categoryUid < 1) {
-        return fail(`Invalid category uid.`)
+        return fail(`Invalid category uid.`, response)
       }
       const result = await removeCategory(boardUid, categoryUid)
       if (result === false) {
-        return fail(`Unable to remove last category.`)
+        return fail(`Unable to remove last category.`, response)
       }
       return success({
         newAccessToken,

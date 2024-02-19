@@ -52,15 +52,19 @@ export const update = new Elysia()
   .patch(
     "/changeadmin",
     async ({ body: { boardUid, userUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       if (userUid < 1) {
-        return fail(`Invalid user uid.`)
+        return fail(`Invalid user uid.`, response)
       }
       const result = await changeBoardAdmin(boardUid, userUid)
       if (result === false) {
-        return fail(`User not found.`)
+        return fail(`User not found.`, response)
       }
       return success({
         newAccessToken,
@@ -77,13 +81,17 @@ export const update = new Elysia()
   .patch(
     "/updatelevels",
     async ({ body: { boardUid, levels }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (boardUid < 1) {
-        return fail(`Invalid board uid.`)
+        return fail(`Invalid board uid.`, response)
       }
       const levelKeys = Object.values(levels)
       for (const level of levelKeys) {
         if (level < 0 || level > 9) {
-          return fail(`Invalid level. (0 ≤ level ≤ 9)`)
+          return fail(`Invalid level. (0 ≤ level ≤ 9)`, response)
         }
       }
       updatePermissionLevels(boardUid, levels as AdminPermissionLevel)

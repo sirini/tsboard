@@ -46,13 +46,9 @@ export const useAdminUserStore = defineStore("adminUser", () => {
       admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(COMMON.FAILED_LOAD)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    pageLength.value = Math.ceil((response.data.result.totalUserCount as number) / bunch.value)
-    users.value = response.data.result.users as AdminUser[]
+    auth.updateUserToken(response.data.result.newAccessToken)
+    pageLength.value = Math.ceil(response.data.result.totalUserCount / bunch.value)
+    users.value = response.data.result.users
     admin.success(COMMON.LOADED_USER)
   }
 

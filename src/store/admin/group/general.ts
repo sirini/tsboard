@@ -54,13 +54,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(GENERAL.UNKNOWN_INFO)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    group.value = response.data.result.config as AdminGroupConfig
-    boards.value = response.data.result.boards as AdminGroupList[]
+    auth.updateUserToken(response.data.result.newAccessToken)
+    group.value = response.data.result.config
+    boards.value = response.data.result.boards
     admin.success(GENERAL.LOADED_CONFIG)
   }
 
@@ -89,7 +85,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES, profile: "" }]
       return
     }
-    suggestions.value = response.data.result.candidates as AdminUserInfo[]
+    suggestions.value = response.data.result.candidates
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 
@@ -118,7 +114,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       existBoardIds.value = [{ uid: 0, name: GENERAL.NO_DUPLICATE_ID }]
       return
     }
-    existBoardIds.value = response.data.result.ids as AdminPair[]
+    existBoardIds.value = response.data.result.ids
   }
   const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)
 
@@ -149,7 +145,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
 
     boards.value.push({
       uid: response.data.result.uid as number,
@@ -189,7 +185,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
 
     group.value.manager.uid = user.uid
     group.value.manager.name = user.name

@@ -8,6 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getBoardConfig } from "../../../../database/admin/board/general/load"
 import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { INIT_BOARD_CONFIG } from "../../../../database/admin/board/general/const"
 
 export const load = new Elysia()
   .use(
@@ -19,9 +20,14 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
+      const response = {
+        newAccessToken: "",
+        config: INIT_BOARD_CONFIG,
+      }
+
       const config = await getBoardConfig(id)
       if (config.uid < 1) {
-        return fail(`Invalid board ID.`)
+        return fail(`Invalid board ID.`, response)
       }
 
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)

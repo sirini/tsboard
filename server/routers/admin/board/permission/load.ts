@@ -11,6 +11,7 @@ import {
   getBoardPermission,
 } from "../../../../database/admin/board/permission/load"
 import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { INIT_PERMISSION_CONFIG } from "../../../../database/admin/board/permission/const"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -31,13 +32,18 @@ export const load = new Elysia()
   .get(
     "/load",
     async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
+      const response = {
+        permission: INIT_PERMISSION_CONFIG,
+        newAccessToken: "",
+      }
+
       if (id.length < 2) {
-        return fail(`Board ID is too short.`)
+        return fail(`Board ID is too short.`, response)
       }
 
       const permission = await getBoardPermission(id)
       if (permission.uid < 1) {
-        return fail(`Invalid board ID.`)
+        return fail(`Invalid board ID.`, response)
       }
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
@@ -55,11 +61,15 @@ export const load = new Elysia()
   .get(
     "/candidates",
     async ({ jwt, cookie: { refresh }, headers, query: { name, limit } }) => {
+      const response = {
+        candidates: [],
+      }
+
       if (name.length < 2) {
-        return fail(`name is too short.`)
+        return fail(`name is too short.`, response)
       }
       if (limit < 1) {
-        return fail(`Invalid a limit.`)
+        return fail(`Invalid a limit.`, response)
       }
       const candidates = await getAdminCandidates(name, limit)
       return success({

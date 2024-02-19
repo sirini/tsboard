@@ -58,13 +58,9 @@ export const useCommentStore = defineStore("comment", () => {
     if (response.data.success === false) {
       util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
-    if (!response.data.result) {
-      util.snack(COMMENT.FAILED_LOAD_COMMENT)
-      return
-    }
-    boardUid.value = response.data.result.boardUid as number
-    comments.value = response.data.result.comments as Comment[]
-    pageLength.value = Math.ceil((response.data.result.maxCommentUid as number) / bunch.value)
+    boardUid.value = response.data.result.boardUid
+    comments.value = response.data.result.comments
+    pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
   }
 
   // 댓글에 답글달기 시 대상 지정
@@ -168,13 +164,9 @@ export const useCommentStore = defineStore("comment", () => {
       util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(COMMENT.FAILED_SAVE_COMMENT)
-      return
-    }
 
     auth.updateUserToken(response.data.result.newAccessToken!)
-    const newUid = response.data.result.newCommentUid as number
+    const newUid = response.data.result.newCommentUid
     comments.value.push({
       uid: newUid,
       writer: {
@@ -213,13 +205,9 @@ export const useCommentStore = defineStore("comment", () => {
       util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(COMMENT.FAILED_SAVE_COMMENT)
-      return
-    }
 
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    const newUid = response.data.result.newCommentUid as number
+    auth.updateUserToken(response.data.result.newAccessToken)
+    const newUid = response.data.result.newCommentUid
     let targetIndex = 0
     comments.value.map((comment, index) => {
       if (comment.uid === replyTarget.value) {

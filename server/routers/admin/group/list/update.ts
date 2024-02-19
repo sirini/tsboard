@@ -52,16 +52,27 @@ export const update = new Elysia()
   .post(
     "/creategroup",
     async ({ body: { newId }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+        uid: 0,
+        id: "",
+        manager: {
+          uid: 0,
+          name: "",
+          profile: "",
+        },
+      }
+
       if (newId.length < 2) {
-        return fail(`Group id is too short.`)
+        return fail(`Group id is too short.`, response)
       }
       const newGroupUid = await createGroup(newId)
       if (newGroupUid < 1) {
-        return fail(`Failed to create a new group, try another ID.`)
+        return fail(`Failed to create a new group, try another ID.`, response)
       }
       const admin = await getAdminInfo()
       if (admin.uid < 1) {
-        return fail(`Unable to get a default admin information.`)
+        return fail(`Unable to get a default admin information.`, response)
       }
       return success({
         newAccessToken,
@@ -80,12 +91,16 @@ export const update = new Elysia()
   .delete(
     "/removegroup",
     async ({ body: { groupUid }, newAccessToken }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
       if (groupUid < 1) {
-        return fail(`Invalid group uid.`)
+        return fail(`Invalid group uid.`, response)
       }
       const result = await removeGroup(groupUid)
       if (result === false) {
-        return fail(`Failed to remove a group, it might be a last one.`)
+        return fail(`Failed to remove a group, it might be a last one.`, response)
       }
       return success({
         newAccessToken,

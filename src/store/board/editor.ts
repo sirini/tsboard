@@ -86,12 +86,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       util.snack(`${EDITOR.FAILED_LOAD_CONFIG} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(EDITOR.FAILED_LOAD_CONFIG)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    config.value = response.data.result.config as BoardConfig
+    auth.updateUserToken(response.data.result.newAccessToken)
+    config.value = response.data.result.config
   }
 
   // 본문에 삽입할 이미지들 선택 및 업로드
@@ -121,12 +117,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       util.snack(`${EDITOR.FAILED_UPLOAD_IMAGE} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(EDITOR.FAILED_UPLOAD_IMAGE)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    uploadedImages.value = response.data.result.uploadedImages as string[]
+    auth.updateUserToken(response.data.result.newAccessToken)
+    uploadedImages.value = response.data.result.uploadedImages
   }
 
   // 태그 자동 완성하기

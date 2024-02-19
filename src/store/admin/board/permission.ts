@@ -44,12 +44,8 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(PERMISSION.UNKNOWN_INFO)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    board.value = response.data.result.permission as AdminBoardPermission
+    auth.updateUserToken(response.data.result.newAccessToken)
+    board.value = response.data.result.permission
     admin.success(PERMISSION.LOADED_PERMISSION)
   }
 
@@ -75,7 +71,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
       return
     }
-    suggestions.value = response.data.result.candidates as AdminPair[]
+    suggestions.value = response.data.result.candidates
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
@@ -96,7 +92,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     board.value.admin = {
       uid: user.uid,
       name: user.name,
@@ -162,7 +158,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       admin.error(`${PERMISSION.UNABLE_UPDATE_LEVEL} (${response.data.error})`)
       return false
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     return true
   }
 

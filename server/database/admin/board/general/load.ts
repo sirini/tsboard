@@ -6,6 +6,7 @@
 
 import { table, select } from "../../../common"
 import { AdminBoardConfig, AdminPair, BoardType } from "../../../../../src/interface/admin"
+import { INIT_BOARD_CONFIG } from "./const"
 
 // 게시판 형태 반영
 function convertBoardType(type: number): BoardType {
@@ -16,18 +17,8 @@ function convertBoardType(type: number): BoardType {
 
 // 주어진 아이디에 해당하는 게시판 설정 가져오기
 export async function getBoardConfig(id: string): Promise<AdminBoardConfig> {
-  let result: AdminBoardConfig = {
-    uid: 0,
-    id,
-    type: "board",
-    groups: [],
-    groupUid: 0,
-    name: "",
-    info: "",
-    row: 0,
-    width: 0,
-    categories: [],
-  }
+  let result = INIT_BOARD_CONFIG
+  result.id = id
 
   const [board] = await select(
     `SELECT uid, group_uid, admin_uid, type, name, info, row, width 

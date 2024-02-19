@@ -28,11 +28,17 @@ export const list = new Elysia()
   .get(
     "/list",
     async ({ jwt, cookie: { refresh }, headers, query: { page, bunch, isBlocked } }) => {
+      const response = {
+        newAccessToken: "",
+        users: [],
+        totalUserCount: 0,
+      }
+
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
       const blocked = isBlocked > 0 ? true : false
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)

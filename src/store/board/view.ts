@@ -48,16 +48,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
       return
     }
     if (response.data.success === false) {
-      config.value = response.data.result.config as BoardConfig
+      config.value = response.data.result.config
       util.snack(`${VIEW.FAILED_LOAD_POST} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      util.snack(VIEW.FAILED_LOAD_POST)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    config.value = response.data.result.config as BoardConfig
+    auth.updateUserToken(response.data.result.newAccessToken)
+    config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
       util.go(TYPE_MATCH[config.value.type].name)

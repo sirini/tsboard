@@ -45,12 +45,8 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       admin.error(COMMENT.FAILED_LOAD)
       return
     }
-    if (!response.data.result) {
-      admin.error(COMMENT.FAILED_LOAD)
-      return
-    }
-    pageLength.value = Math.ceil((response.data.result.totalCommentCount as number) / bunch.value)
-    comments.value = response.data.result.comments as AdminLatestComment[]
+    pageLength.value = Math.ceil(response.data.result.totalCommentCount / bunch.value)
+    comments.value = response.data.result.comments
     admin.success(COMMENT.LOADED_COMMENT)
   }
 
@@ -80,11 +76,8 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       admin.error(COMMENT.NO_RESPONSE)
       return
     }
-    if (!response.data.result) {
-      return
-    }
-    pageLength.value = Math.ceil((response.data.result.totalCommentCount as number) / bunch.value)
-    comments.value = response.data.result.comments as AdminLatestComment[]
+    pageLength.value = Math.ceil(response.data.result.totalCommentCount / bunch.value)
+    comments.value = response.data.result.comments
   }
   const updateLatestComments = util.debounce(_updateLatestComments, 250)
 

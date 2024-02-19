@@ -8,6 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getBoardConfig, getMaxPostUid, getPosts, getUserLevel } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { INIT_CONFIG } from "../../../src/store/board/const"
 
 export const list = new Elysia()
   .use(
@@ -42,15 +43,23 @@ export const list = new Elysia()
   .get(
     "/list",
     async ({ query: { id, page }, accessUserUid, userLevel, newAccessToken }) => {
+      let response = {
+        maxUid: 0,
+        config: INIT_CONFIG,
+        posts: [],
+        newAccessToken: "",
+      }
+
       if (id.length < 2) {
-        return fail(`Invalid board ID.`)
+        return fail(`Invalid board ID.`, response)
       }
       const config = await getBoardConfig(id)
       if (config.uid < 1) {
-        return fail(`Board not found.`)
+        return fail(`Board not found.`, response)
       }
       if (config.level.list > userLevel) {
-        return fail(`Level restriction.`, config)
+        response.config = config
+        return fail(`Level restriction.`, response)
       }
 
       const maxUid = await getMaxPostUid(config.uid)

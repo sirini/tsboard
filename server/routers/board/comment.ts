@@ -61,17 +61,23 @@ export const comment = new Elysia()
   .get(
     "/comment",
     async ({ query: { postUid, id, page, bunch }, accessUserUid, userLevel }) => {
+      const response = {
+        boardUid: 0,
+        comments: [],
+        maxCommentUid: 0,
+      }
+
       if (id.length < 2) {
-        return fail(`Invalid board ID.`)
+        return fail(`Invalid board ID.`, response)
       }
       if (postUid < 1) {
-        return fail(`Invalid post uid.`)
+        return fail(`Invalid post uid.`, response)
       }
 
       const boardUid = await getBoardUid(id)
       const configViewLevel = await getViewPostLevel(boardUid)
       if (configViewLevel > userLevel) {
-        return fail(`Level restriction.`)
+        return fail(`Level restriction.`, response)
       }
 
       const maxCommentUid = await getMaxCommentUid(postUid)
@@ -103,8 +109,9 @@ export const comment = new Elysia()
   .patch(
     "/likecomment",
     async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
+      const response = ""
       if (accessUserUid < 1) {
-        return fail(`Please log in.`)
+        return fail(`Please log in.`, response)
       }
       likeComment({
         boardUid,
@@ -112,7 +119,7 @@ export const comment = new Elysia()
         accessUserUid,
         liked,
       })
-      return success({})
+      return success(response)
     },
     {
       headers: t.Object({
@@ -128,8 +135,12 @@ export const comment = new Elysia()
   .post(
     "/newcomment",
     async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
+      const response = {
+        newCommentUid: 0,
+        newAccessToken: "",
+      }
       if (accessUserUid < 1) {
-        return fail(`Please log in.`)
+        return fail(`Please log in.`, response)
       }
       content = sanitizeHtml(content, htmlFilter)
       const newCommentUid = await saveNewComment({
@@ -161,11 +172,15 @@ export const comment = new Elysia()
       accessUserUid,
       newAccessToken,
     }) => {
+      const response = {
+        newCommentUid: 0,
+        newAccessToken: "",
+      }
       if (accessUserUid < 1) {
-        return fail(`Please log in.`)
+        return fail(`Please log in.`, response)
       }
       if (replyTargetUid < 1) {
-        return fail(`Invalid target uid.`)
+        return fail(`Invalid target uid.`, response)
       }
       content = sanitizeHtml(content, htmlFilter)
       const newCommentUid = await saveReplyComment({

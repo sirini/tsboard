@@ -32,11 +32,17 @@ export const common = new Elysia()
   .get(
     "/list",
     async ({ jwt, cookie: { refresh }, headers, query: { page, bunch, isSolved } }) => {
+      const response = {
+        newAccessToken: "",
+        reports: [],
+        totalReportCount: 0,
+      }
+
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
       const solved = isSolved > 0 ? true : false
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
@@ -68,17 +74,22 @@ export const common = new Elysia()
   .get(
     "/search/list",
     async ({ query: { option, keyword, page, bunch, isSolved } }) => {
+      const response = {
+        reports: [],
+        totalReportCount: 0,
+      }
+
       if (option.length < 2) {
-        return fail(`Unknown option.`)
+        return fail(`Unknown option.`, response)
       }
       if (keyword.length < 2) {
-        return fail(`Keyword is too short.`)
+        return fail(`Keyword is too short.`, response)
       }
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
       const solved = isSolved > 0 ? true : false
       const totalReportCount = await getTotalReportCount(solved)

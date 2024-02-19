@@ -43,12 +43,8 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
       return
     }
-    if (!response.data.result) {
-      admin.error(LIST.FAILED_LOAD)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    groups.value = response.data.result.groups as AdminGroupConfig[]
+    auth.updateUserToken(response.data.result.newAccessToken)
+    groups.value = response.data.result.groups
   }
 
   // 새 그룹 생성을 위해 아이디를 입력할 때 기존 그룹 아이디를 보여주기
@@ -72,11 +68,11 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return
     }
-    if (!response.data.result) {
+    if (response.data.result.ids.length < 1) {
       existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
       return
     }
-    existGroupIds.value = response.data.result.ids as AdminPair[]
+    existGroupIds.value = response.data.result.ids
   }
   const updateExistGroupIds = util.debounce(_updateExistGroupIds, 250)
 
@@ -106,12 +102,12 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
     groups.value.push({
-      uid: response.data.result.uid as number,
+      uid: response.data.result.uid,
       id: newId,
       count: 0,
-      manager: response.data.result.manager as AdminUserInfo,
+      manager: response.data.result.manager,
     })
     admin.success(LIST.ADDED_NEW_GROUP)
     newGroupId.value = ""
@@ -153,7 +149,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
       return
     }
-    auth.updateUserToken(response.data.result.newAccessToken!)
+    auth.updateUserToken(response.data.result.newAccessToken)
 
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
       return group.uid !== removeGroupTarget.value.uid

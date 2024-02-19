@@ -32,11 +32,17 @@ export const comment = new Elysia()
   .get(
     "/comment",
     async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+      const response = {
+        newAccessToken: "",
+        comments: [],
+        totalCommentCount: 0,
+      }
+
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
 
       const totalCommentCount = await getTotalCommentCount()
@@ -58,18 +64,23 @@ export const comment = new Elysia()
   )
   .get(
     "/search/comment",
-    async ({ jwt, cookie: { refresh }, headers, query: { option, keyword, page, bunch } }) => {
+    async ({ query: { option, keyword, page, bunch } }) => {
+      const response = {
+        comments: [],
+        totalCommentCount: 0,
+      }
+
       if (option.length < 2) {
-        return fail(`Unknown option.`)
+        return fail(`Unknown option.`, response)
       }
       if (keyword.length < 2) {
-        return fail(`Keyword is too short.`)
+        return fail(`Keyword is too short.`, response)
       }
       if (page < 1) {
-        return fail(`Invalid page.`)
+        return fail(`Invalid page.`, response)
       }
       if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`)
+        return fail(`Invalid bunch.`, response)
       }
 
       const totalCommentCount = await getTotalCommentCount()
