@@ -150,11 +150,18 @@ export type UploadImageParams = CommonPairParam & {
   images: File[]
 }
 
-export type CheckUserPermissionParams = {
+type UserParams = {
   boardUid: number
+  userUid: number
+}
+
+export type CheckUserPermissionParams = UserParams & {
   targetTable: "post" | "comment"
   targetUid: number
-  userUid: number
+}
+
+export type UpdateUserPointParams = UserParams & {
+  action: "comment" | "write"
 }
 
 export type VideoURL = {

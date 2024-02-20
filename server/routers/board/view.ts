@@ -51,11 +51,8 @@ export const view = new Elysia()
         files: [],
         newAccessToken: "",
       }
-      if (id.length < 2) {
-        return fail(`Invalid board ID.`, response)
-      }
-      if (postUid < 1) {
-        return fail(`Invalid post uid.`, response)
+      if (id.length < 2 || postUid < 1) {
+        return fail(`Invalid parameters.`, response)
       }
       const config = await getBoardConfig(id)
       if (config.uid < 1) {

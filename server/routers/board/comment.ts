@@ -19,7 +19,7 @@ import {
   saveReplyComment,
 } from "../../database/board/comment"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { checkUserPermission } from "../../database/board/common"
+import { checkUserPermission, updateUserPoint } from "../../database/board/common"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -153,6 +153,16 @@ export const comment = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
+      if (
+        (await updateUserPoint({
+          boardUid,
+          userUid: accessUserUid,
+          action: "comment",
+        })) === false
+      ) {
+        return fail(`Not enough point.`, response)
+      }
+
       content = sanitizeHtml(content, htmlFilter)
       const newCommentUid = await saveNewComment({
         boardUid,
@@ -191,6 +201,16 @@ export const comment = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
+      if (
+        (await updateUserPoint({
+          boardUid,
+          userUid: accessUserUid,
+          action: "comment",
+        })) === false
+      ) {
+        return fail(`Not enough point.`, response)
+      }
+
       content = sanitizeHtml(content, htmlFilter)
       const newCommentUid = await saveReplyComment({
         boardUid,

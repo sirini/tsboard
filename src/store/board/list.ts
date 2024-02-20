@@ -52,7 +52,6 @@ export const useBoardListStore = defineStore("boardList", () => {
       util.snack(`${LIST.FAILED_LOAD_LIST} (${response.data.error})`)
       return
     }
-
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 

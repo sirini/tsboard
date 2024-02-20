@@ -110,11 +110,13 @@ export async function getPostRelated(param: PostRelatedParams): Promise<PostRela
   }
 
   const [isLiked] = await select(
-    `SELECT liked FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? LIMIT 1`,
-    [param.uid, param.user.viewerUid],
+    `SELECT liked FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? AND liked = ? LIMIT 1`,
+    [param.uid, param.user.viewerUid, 1],
   )
   if (isLiked) {
-    result.liked = isLiked.liked > 0 ? true : false
+    result.liked = true
+  } else {
+    result.liked = false
   }
 
   const [category] = await select(

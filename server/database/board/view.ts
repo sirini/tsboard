@@ -6,7 +6,8 @@
 
 import { CONTENT_STATUS, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
 import { select, table, update } from "../common"
-import { INIT_POST } from "./const"
+import { addNotice } from "./common"
+import { INIT_POST, NOTICE_TYPE, NoticeType } from "./const"
 import { getPostRelated } from "./list"
 
 // 게시글 가져오기
@@ -84,5 +85,18 @@ export async function likePost(param: PostLikeParams): Promise<void> {
       `UPDATE ${table}post_like SET liked = ?, timestamp = ? WHERE post_uid = ? AND user_uid = ? LIMIT 1`,
       [param.liked, Date.now(), param.postUid, param.accessUserUid],
     )
+  }
+
+  if (param.liked > 0) {
+    const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
+      param.postUid,
+    ])
+    addNotice({
+      toUid: post.user_uid,
+      fromUid: param.accessUserUid,
+      type: NOTICE_TYPE.LIKE_POST as NoticeType,
+      postUid: param.postUid,
+      commentUid: 0,
+    })
   }
 }

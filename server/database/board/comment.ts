@@ -184,7 +184,6 @@ export async function saveNewComment(param: SaveCommentParams): Promise<number> 
         postUid: param.postUid,
         commentUid: insertId,
       })
-      
     }
   }
   return insertId
@@ -223,7 +222,8 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
 
 // 댓글 수정하기
 export async function saveModifyComment(param: SaveModifyParams): Promise<void> {
-  await update(`UPDATE ${table}comment SET content = '${param.content}' WHERE = ? LIMIT 1`, [
+  await update(`UPDATE ${table}comment SET content = ? WHERE uid = ? LIMIT 1`, [
+    param.content,
     param.modifyTargetUid,
   ])
 }

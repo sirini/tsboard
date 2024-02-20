@@ -124,6 +124,54 @@ export const useCommentStore = defineStore("comment", () => {
     contentWithSyntax.value = html
   }
 
+  // 새 댓글 추가하기
+  async function saveNewComment(): Promise<void> {
+    const comment = await save.newComment({
+      boardUid: boardUid.value,
+      postUid: postUid.value,
+      content: contentWithSyntax.value,
+    })
+    if (comment.uid > 0) {
+      comments.value.push(comment)
+    }
+  }
+
+  // 기존 댓글 수정하기
+  async function modifyExistComment(): Promise<void> {
+    await save.modifyComment({
+      modifyTargetUid: modifyTarget.value,
+      boardUid: boardUid.value,
+      postUid: postUid.value,
+      content: contentWithSyntax.value,
+    })
+    comments.value.map((comment) => {
+      if (comment.uid === modifyTarget.value) {
+        comment.content = contentWithSyntax.value
+        return
+      }
+    })
+  }
+
+  // 기존 댓글에 답글달기
+  async function saveReplyComment(): Promise<void> {
+    let targetIndex = 0
+    const comment = await save.replyComment({
+      replyTargetUid: replyTarget.value,
+      boardUid: boardUid.value,
+      postUid: postUid.value,
+      content: contentWithSyntax.value,
+    })
+    if (comment.uid > 0) {
+      comments.value.map((comment, index) => {
+        if (comment.uid === replyTarget.value) {
+          targetIndex = index
+          return
+        }
+      })
+      comments.value.splice(targetIndex + 1, 0, comment)
+    }
+  }
+
   // 댓글 작성하기
   async function saveComment(): Promise<void> {
     if (content.value.length < 2) {
@@ -136,40 +184,11 @@ export const useCommentStore = defineStore("comment", () => {
     }
 
     if (replyTarget.value > 0) {
-      let targetIndex = 0
-      const comment = await save.replyComment({
-        replyTargetUid: replyTarget.value,
-        boardUid: boardUid.value,
-        postUid: postUid.value,
-        content: contentWithSyntax.value,
-      })
-      comments.value.map((comment, index) => {
-        if (comment.uid === replyTarget.value) {
-          targetIndex = index
-          return
-        }
-      })
-      comments.value.splice(targetIndex + 1, 0, comment)
+      await saveReplyComment()
     } else if (modifyTarget.value > 0) {
-      await save.modifyComment({
-        modifyTargetUid: modifyTarget.value,
-        boardUid: boardUid.value,
-        postUid: postUid.value,
-        content: contentWithSyntax.value,
-      })
-      comments.value.map((comment) => {
-        if (comment.uid === modifyTarget.value) {
-          comment.content = contentWithSyntax.value
-          return
-        }
-      })
+      await modifyExistComment()
     } else {
-      const comment = await save.newComment({
-        boardUid: boardUid.value,
-        postUid: postUid.value,
-        content: contentWithSyntax.value,
-      })
-      comments.value.push(comment)
+      await saveNewComment()
     }
     content.value = ""
     contentWithSyntax.value = ""

@@ -12,7 +12,7 @@ import { useUtilStore } from "../../util"
 import { useAuthStore } from "../../user/auth"
 import { COMMENT } from "../../../messages/store/board/comment"
 import { INIT_COMMENT } from "../../../../server/database/board/const"
-import { Comment, SaveModifyParams } from "../../../interface/board"
+import { Comment } from "../../../interface/board"
 
 type SaveNewCommentParams = {
   boardUid: number
@@ -107,7 +107,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
         name: auth.user.name,
         profile: auth.user.profile,
       },
-      content: content.value,
+      content: param.content,
       like: 0,
       liked: false,
       submitted: Date.now(),
