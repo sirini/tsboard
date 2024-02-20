@@ -13,14 +13,14 @@ import { AdminPoint } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { POINT } from "../../../messages/store/admin/board/point"
-import { BOARD_POINT } from "./const"
+import { INIT_POINT_CONFIG } from "../../../../server/database/admin/board/point/const"
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
   const admin = useAdminStore()
   const auth = useAuthStore()
   const server = edenTreaty<App>(process.env.API!)
-  const board = ref<AdminPoint>(BOARD_POINT)
+  const board = ref<AdminPoint>(INIT_POINT_CONFIG)
   const boardView = ref<string>("0")
   const boardWrite = ref<string>("0")
   const boardComment = ref<string>("0")
