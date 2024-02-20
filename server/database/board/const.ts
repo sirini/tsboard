@@ -4,7 +4,13 @@
  * 게시판 작업에 필요한 상수 기본값들, 타입들 정의
  */
 
-import { BoardConfig, Pair, Post, Writer } from "../../../src/interface/board"
+import { BoardConfig, Comment, Pair, Post, Writer } from "../../../src/interface/board"
+
+export const TYPE_MATCH = [
+  { path: "/board/", name: "boardList" },
+  { path: "/gallery/", name: "galleryList" },
+  { path: "/blog/", name: "blogList" },
+]
 
 export const BOARD_CONFIG: BoardConfig = {
   uid: 0,
@@ -54,6 +60,19 @@ export const INIT_POST: Post = {
   hit: 0,
 }
 
+export const INIT_COMMENT: Comment = {
+  uid: 0,
+  writer: { uid: 0, name: "", profile: "", signature: "" },
+  content: "",
+  like: 0,
+  liked: false,
+  submitted: 0,
+  modified: 0,
+  status: 0,
+  replyUid: 0,
+  postUid: 0,
+}
+
 export const COMMENT_RELATED: CommentRelated = {
   writer: { uid: 0, name: "", profile: "" },
   like: 0,
@@ -61,3 +80,21 @@ export const COMMENT_RELATED: CommentRelated = {
 }
 
 export const INVALID_VIEW_LEVEL = 99
+
+export const NOTICE_TYPE = {
+  LIKE_POST: 0,
+  LIKE_COMMENT: 1,
+  LEAVE_COMMENT: 2,
+  REPLY_COMMENT: 3,
+  GOT_NOTE: 4,
+}
+
+export type NoticeType = 0 | 1 | 2 | 3 | 4
+
+export type AddNoticeParams = {
+  toUid: number
+  fromUid: number
+  type: NoticeType
+  postUid: number
+  commentUid: number
+}

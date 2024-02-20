@@ -11,7 +11,7 @@ import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { uploadImages } from "../../database/board/editor"
-import { INIT_CONFIG } from "../../../src/store/board/const"
+import { BOARD_CONFIG } from "../../database/board/const"
 
 export const editor = new Elysia()
   .use(
@@ -48,7 +48,7 @@ export const editor = new Elysia()
     async ({ query: { id }, newAccessToken }) => {
       const response = {
         newAccessToken: "",
-        config: INIT_CONFIG,
+        config: BOARD_CONFIG,
       }
       if (id.length < 2) {
         return fail(`Invalid board ID.`, response)

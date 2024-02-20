@@ -259,7 +259,8 @@ tables.push(`${create} #db#image (
   KEY (user_uid)
 ) ${engineEncode}`)
 
-// 알림 정보 저장용 테이블, type = 0 like post / 1 like comment / 2 leave comment / 3 got a new note
+// 알림 정보 저장용 테이블
+// type 정보는 server/database/board/const.ts NOTICE_TYPE 참조
 tables.push(`${create} #db#notice (
   ${uid},
   to_uid INT ${unnd0},

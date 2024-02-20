@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAdminStore } from "../admin/common"
-import { TargetUserInfo, ChatHistory, UserPermissionParams } from "../../interface/user"
+import { TargetUserInfo, ChatHistory } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { USER } from "../../messages/store/user/user"
 

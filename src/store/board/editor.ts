@@ -13,8 +13,8 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { EDITOR } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
-import { INIT_CONFIG } from "./const"
 import { BoardConfig } from "../../interface/board"
+import { BOARD_CONFIG } from "../../../server/database/board/const"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -30,7 +30,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const addTableDialog = ref<boolean>(false)
   const id = ref<string>("")
   const postUid = ref<number>(0)
-  const config = ref<BoardConfig>(INIT_CONFIG)
+  const config = ref<BoardConfig>(BOARD_CONFIG)
   const files = ref<File[]>([])
   const uploadedImages = ref<string[]>([])
   const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "10247680"))

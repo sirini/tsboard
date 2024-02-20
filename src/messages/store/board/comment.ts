@@ -21,6 +21,7 @@ export const COMMENT = {
   FAILED_SAVE_COMMENT: "새 댓글을 남길 수 없었습니다.",
   REPLIED_NEW_COMMENT: "답글을 남겼습니다.",
   MODIFIED_COMMENT: "기존 댓글을 수정하였습니다.",
+  FAILED_MODIFY_COMMENT: "기존 댓글을 수정할 수 없었습니다.",
   INVALID_REMOVE_TARGET: "삭제할 대상이 지정되지 않았습니다.",
   REMOVED_COMMENT: "댓글이 정상적으로 삭제 되었습니다.",
 }

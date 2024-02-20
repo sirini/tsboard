@@ -14,10 +14,12 @@ import {
   getMaxCommentUid,
   getViewPostLevel,
   likeComment,
+  saveModifyComment,
   saveNewComment,
   saveReplyComment,
 } from "../../database/board/comment"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { checkUserPermission } from "../../database/board/common"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -26,6 +28,15 @@ const htmlFilter = {
     img: ["src", "alt", "class"],
     span: ["class"],
   },
+}
+
+const defaultTypeCheck = {
+  headers: t.Object({
+    authorization: t.String(),
+  }),
+  cookie: t.Cookie({
+    refresh: t.String(),
+  }),
 }
 
 export const comment = new Elysia()
@@ -67,11 +78,8 @@ export const comment = new Elysia()
         maxCommentUid: 0,
       }
 
-      if (id.length < 2) {
-        return fail(`Invalid board ID.`, response)
-      }
-      if (postUid < 1) {
-        return fail(`Invalid post uid.`, response)
+      if (id.length < 2 || postUid < 1 || page < 1 || bunch < 1) {
+        return fail(`Invalid parameters.`, response)
       }
 
       const boardUid = await getBoardUid(id)
@@ -95,9 +103,6 @@ export const comment = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
       query: t.Object({
         id: t.String(),
         postUid: t.Numeric(),
@@ -110,6 +115,10 @@ export const comment = new Elysia()
     "/likecomment",
     async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
       const response = ""
+
+      if (boardUid < 1 || commentUid < 1 || liked > 1 || liked < 0) {
+        return fail(`Invalid parameters.`, response)
+      }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
@@ -122,9 +131,7 @@ export const comment = new Elysia()
       return success(response)
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...defaultTypeCheck,
       body: t.Object({
         boardUid: t.Numeric(),
         commentUid: t.Numeric(),
@@ -138,6 +145,10 @@ export const comment = new Elysia()
       const response = {
         newCommentUid: 0,
         newAccessToken: "",
+      }
+
+      if (boardUid < 1 || postUid < 1 || content.length < 3) {
+        return fail(`Invalid parameters.`, response)
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
@@ -155,9 +166,7 @@ export const comment = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...defaultTypeCheck,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -176,11 +185,11 @@ export const comment = new Elysia()
         newCommentUid: 0,
         newAccessToken: "",
       }
+      if (boardUid < 1 || postUid < 1 || replyTargetUid < 1 || content.length < 3) {
+        return fail(`Invalid parameters.`, response)
+      }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
-      }
-      if (replyTargetUid < 1) {
-        return fail(`Invalid target uid.`, response)
       }
       content = sanitizeHtml(content, htmlFilter)
       const newCommentUid = await saveReplyComment({
@@ -196,13 +205,61 @@ export const comment = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...defaultTypeCheck,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
         replyTargetUid: t.Numeric(),
+        content: t.String(),
+      }),
+    },
+  )
+  .patch(
+    "/modifycomment",
+    async ({
+      body: { boardUid, postUid, modifyTargetUid, content },
+      accessUserUid,
+      newAccessToken,
+    }) => {
+      const response = {
+        newAccessToken,
+      }
+
+      if (boardUid < 1 || postUid < 1 || modifyTargetUid < 1 || content.length < 3) {
+        return fail(`Invalid parameters.`, response)
+      }
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
+      }
+      if (
+        (await checkUserPermission({
+          boardUid,
+          targetTable: "comment",
+          targetUid: modifyTargetUid,
+          userUid: accessUserUid,
+        })) === false
+      ) {
+        return fail(`No permission.`, response)
+      }
+
+      content = sanitizeHtml(content, htmlFilter)
+      await saveModifyComment({
+        boardUid,
+        postUid,
+        modifyTargetUid,
+        accessUserUid,
+        content,
+      })
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Numeric(),
+        postUid: t.Numeric(),
+        modifyTargetUid: t.Numeric(),
         content: t.String(),
       }),
     },

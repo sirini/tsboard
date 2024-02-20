@@ -63,7 +63,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-card elevation="0" rounded="0" class="pa-0 tiptap">
+      <v-card elevation="0" rounded="0" class="pa-0 tiptap comment">
         <v-card-text v-html="reply.content" class="content"></v-card-text>
       </v-card>
     </v-list-item>
@@ -85,19 +85,20 @@ const comment = useCommentStore()
 onMounted(() => comment.loadCommentList())
 </script>
 
-<style scoped type="scss">
+<style scoped>
 .comment {
-  min-height: 70px;
+  border: none;
+  min-height: 0px;
+}
 
-  .content {
-    font-size: 1em;
-    line-height: 1.8em;
-  }
+.content {
+  font-size: 1em;
+  line-height: 1.8em;
+}
 
-  .heart {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-  }
+.heart {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 </style>

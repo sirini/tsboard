@@ -13,7 +13,7 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { BoardConfig, Pair, Post } from "../../interface/board"
 import { LIST } from "../../messages/store/board/list"
-import { TYPE_MATCH, INIT_CONFIG } from "./const"
+import { TYPE_MATCH, BOARD_CONFIG } from "../../../server/database/board/const"
 
 export const useBoardListStore = defineStore("boardList", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -21,7 +21,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const id = ref<string>("")
-  const config = ref<BoardConfig>(INIT_CONFIG)
+  const config = ref<BoardConfig>(BOARD_CONFIG)
   const posts = ref<Post[]>([])
   const categories = ref<Pair[]>([])
   const page = ref<number>(1)

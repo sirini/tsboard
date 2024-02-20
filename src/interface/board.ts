@@ -4,6 +4,8 @@
  * 게시판에서 사용되는 각종 인터페이스 모음
  */
 
+export const SUPER_ADMIN = 1
+
 export const BOARD_TYPE = {
   BOARD: 0,
   GALLERY: 1,
@@ -139,9 +141,20 @@ export type SaveReplyParams = SaveCommentParams & {
   replyTargetUid: number
 }
 
+export type SaveModifyParams = SaveCommentParams & {
+  modifyTargetUid: number
+}
+
 export type UploadImageParams = CommonPairParam & {
   sizeLimit: number
   images: File[]
+}
+
+export type CheckUserPermissionParams = {
+  boardUid: number
+  targetTable: "post" | "comment"
+  targetUid: number
+  userUid: number
 }
 
 export type VideoURL = {

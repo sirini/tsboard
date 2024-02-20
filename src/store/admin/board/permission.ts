@@ -14,7 +14,7 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { PERMISSION } from "../../../messages/store/admin/board/permission"
-import { BOARD_PERMISSION } from "./const"
+import { BOARD_PERMISSION } from "../../../../server/database/admin/group/general/const"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()

@@ -11,6 +11,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import { useCommentSaveStore } from "./comment/save"
 import { Comment } from "../../interface/board"
 import { COMMENT } from "../../messages/store/board/comment"
 
@@ -19,6 +20,7 @@ export const useCommentStore = defineStore("comment", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const save = useCommentSaveStore()
   const id = ref<string>("")
   const boardUid = ref<number>(0)
   const postUid = ref<number>(0)
@@ -123,7 +125,7 @@ export const useCommentStore = defineStore("comment", () => {
   }
 
   // 댓글 작성하기
-  async function save(): Promise<void> {
+  async function saveComment(): Promise<void> {
     if (content.value.length < 2) {
       util.snack(COMMENT.TOO_SHORT_COMMENT)
       return
@@ -134,110 +136,45 @@ export const useCommentStore = defineStore("comment", () => {
     }
 
     if (replyTarget.value > 0) {
-      await saveReplyComment()
-      replyTarget.value = 0
+      let targetIndex = 0
+      const comment = await save.replyComment({
+        replyTargetUid: replyTarget.value,
+        boardUid: boardUid.value,
+        postUid: postUid.value,
+        content: contentWithSyntax.value,
+      })
+      comments.value.map((comment, index) => {
+        if (comment.uid === replyTarget.value) {
+          targetIndex = index
+          return
+        }
+      })
+      comments.value.splice(targetIndex + 1, 0, comment)
     } else if (modifyTarget.value > 0) {
-      await modifyComment()
-      modifyTarget.value = 0
+      await save.modifyComment({
+        modifyTargetUid: modifyTarget.value,
+        boardUid: boardUid.value,
+        postUid: postUid.value,
+        content: contentWithSyntax.value,
+      })
+      comments.value.map((comment) => {
+        if (comment.uid === modifyTarget.value) {
+          comment.content = contentWithSyntax.value
+          return
+        }
+      })
     } else {
-      await saveNewComment()
+      const comment = await save.newComment({
+        boardUid: boardUid.value,
+        postUid: postUid.value,
+        content: contentWithSyntax.value,
+      })
+      comments.value.push(comment)
     }
     content.value = ""
     contentWithSyntax.value = ""
-  }
-
-  // 새 댓글 작성하기
-  async function saveNewComment(): Promise<void> {
-    const response = await server.api.board.newcomment.post({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      boardUid: boardUid.value,
-      postUid: postUid.value,
-      content: contentWithSyntax.value,
-    })
-    if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
-      return
-    }
-
-    auth.updateUserToken(response.data.result.newAccessToken!)
-    const newUid = response.data.result.newCommentUid
-    comments.value.push({
-      uid: newUid,
-      writer: {
-        uid: auth.user.uid,
-        name: auth.user.name,
-        profile: auth.user.profile,
-      },
-      content: content.value,
-      like: 0,
-      liked: false,
-      submitted: Date.now(),
-      modified: 0,
-      status: 0,
-      replyUid: newUid,
-      postUid: postUid.value,
-    })
-    util.snack(COMMENT.SAVED_NEW_COMMENT)
-  }
-
-  // 답글 작성하기
-  async function saveReplyComment(): Promise<void> {
-    const response = await server.api.board.replycomment.post({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      replyTargetUid: replyTarget.value,
-      boardUid: boardUid.value,
-      postUid: postUid.value,
-      content: contentWithSyntax.value,
-    })
-    if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
-      return
-    }
-
-    auth.updateUserToken(response.data.result.newAccessToken)
-    const newUid = response.data.result.newCommentUid
-    let targetIndex = 0
-    comments.value.map((comment, index) => {
-      if (comment.uid === replyTarget.value) {
-        targetIndex = index
-        return
-      }
-    })
-    comments.value.splice(targetIndex + 1, 0, {
-      uid: newUid,
-      writer: {
-        uid: auth.user.uid,
-        name: auth.user.name,
-        profile: auth.user.profile,
-      },
-      content: content.value,
-      like: 0,
-      liked: false,
-      submitted: Date.now(),
-      modified: 0,
-      status: 0,
-      replyUid: replyTarget.value,
-      postUid: postUid.value,
-    })
-    util.snack(COMMENT.REPLIED_NEW_COMMENT)
-  }
-
-  // 기존 댓글 수정하기
-  async function modifyComment(): Promise<void> {
-    // do something
-    util.snack(COMMENT.MODIFIED_COMMENT)
+    replyTarget.value = 0
+    modifyTarget.value = 0
   }
 
   // 댓글 삭제 확인용 다이얼로그 열기
@@ -282,7 +219,7 @@ export const useCommentStore = defineStore("comment", () => {
     setModifyComment,
     resetCommentMode,
     like,
-    save,
+    saveComment,
     updateRealHtml,
     openRemoveCommentDialog,
     closeRemoveCommentDialog,

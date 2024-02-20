@@ -10,8 +10,7 @@ import { getBoardConfig, getUserLevel } from "../../database/board/list"
 import { getFiles, getPost, likePost } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { PostFile } from "../../../src/interface/board"
-import { INIT_CONFIG } from "../../../src/store/board/const"
-import { INIT_POST } from "../../database/board/const"
+import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
 
 export const view = new Elysia()
   .use(
@@ -47,7 +46,7 @@ export const view = new Elysia()
     "/view",
     async ({ query: { id, postUid }, accessUserUid, userLevel, newAccessToken }) => {
       let response = {
-        config: INIT_CONFIG,
+        config: BOARD_CONFIG,
         post: INIT_POST,
         files: [],
         newAccessToken: "",

@@ -4,8 +4,11 @@
  * 관리화면 그룹 관리에 필요한 상수 기본값들 정의
  */
 
-import { AdminGroupConfig } from "../../../../../src/interface/admin"
-import { BoardConfig } from "../../../../../src/interface/board"
+import {
+  AdminBoardPermission,
+  AdminGroupConfig,
+  AdminPoint,
+} from "../../../../../src/interface/admin"
 
 export const CREATE_BOARD_RESULT = {
   newAccessToken: "",
@@ -18,20 +21,6 @@ export const CREATE_BOARD_RESULT = {
   },
 }
 
-export const INIT_CONFIG: BoardConfig = {
-  uid: 0,
-  admin: { group: 0, board: 0 },
-  type: 0,
-  name: "",
-  info: "",
-  row: 0,
-  width: 0,
-  useCategory: false,
-  category: [],
-  level: { list: 0, view: 0, comment: 0, write: 0, download: 0 },
-  point: { view: 0, comment: 0, write: 0, download: 0 },
-}
-
 export const INIT_GROUP_CONFIG: AdminGroupConfig = {
   uid: 0,
   id: "",
@@ -41,4 +30,29 @@ export const INIT_GROUP_CONFIG: AdminGroupConfig = {
     name: "",
     profile: "",
   },
+}
+
+export const BOARD_PERMISSION: AdminBoardPermission = {
+  uid: 0,
+  id: "",
+  admin: {
+    uid: 0,
+    name: "",
+    profile: "/no-profile.svg",
+  },
+  level: {
+    list: 0,
+    view: 0,
+    write: 0,
+    comment: 0,
+    download: 0,
+  },
+}
+
+export const BOARD_POINT: AdminPoint = {
+  uid: 0,
+  view: { isPayment: true, amount: 0 },
+  write: { isPayment: false, amount: 0 },
+  comment: { isPayment: false, amount: 0 },
+  download: { isPayment: true, amount: 0 },
 }

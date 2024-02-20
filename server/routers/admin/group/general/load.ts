@@ -13,7 +13,7 @@ import {
   getGroupAdminCandidates,
   getExistBoardIds,
 } from "../../../../database/admin/group/general/load"
-import { INIT_CONFIG, INIT_GROUP_CONFIG } from "../../../../database/admin/group/general/const"
+import { INIT_GROUP_CONFIG } from "../../../../database/admin/group/general/const"
 
 export const load = new Elysia()
   .use(

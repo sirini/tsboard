@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getBoardConfig, getMaxPostUid, getPosts, getUserLevel } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { INIT_CONFIG } from "../../../src/store/board/const"
+import { BOARD_CONFIG } from "../../database/board/const"
 
 export const list = new Elysia()
   .use(
@@ -45,7 +45,7 @@ export const list = new Elysia()
     async ({ query: { id, page }, accessUserUid, userLevel, newAccessToken }) => {
       let response = {
         maxUid: 0,
-        config: INIT_CONFIG,
+        config: BOARD_CONFIG,
         posts: [],
         newAccessToken: "",
       }

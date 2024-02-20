@@ -17,7 +17,7 @@
         </v-tooltip>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn append-icon="mdi-chevron-right" color="primary" @click="comment.save">{{
+      <v-btn append-icon="mdi-chevron-right" color="primary" @click="comment.saveComment">{{
         comment.button
       }}</v-btn>
     </v-card-actions>

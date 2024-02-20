@@ -13,7 +13,7 @@ import { AdminBoardConfig, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
-import { BOARD_CONFIG } from "./const"
+import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -21,7 +21,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const admin = useAdminStore()
   const auth = useAuthStore()
   const confirmRemoveCategoryDialog = ref<boolean>(false)
-  const board = ref<AdminBoardConfig>(BOARD_CONFIG)
+  const board = ref<AdminBoardConfig>(INIT_BOARD_CONFIG)
   const boardGroupName = ref<string>("")
   const boardRows = ref<string>("20")
   const boardWidth = ref<string>("1000")

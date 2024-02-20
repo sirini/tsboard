@@ -12,8 +12,8 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { BoardConfig, Post, PostFile } from "../../interface/board"
-import { INIT_CONFIG, INIT_POST, TYPE_MATCH } from "./const"
 import { VIEW } from "../../messages/store/board/view"
+import { INIT_POST, BOARD_CONFIG, TYPE_MATCH } from "../../../server/database/board/const"
 
 export const useBoardViewStore = defineStore("boardView", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -22,7 +22,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const util = useUtilStore()
   const id = ref<string>("")
   const postUid = ref<number>(0)
-  const config = ref<BoardConfig>(INIT_CONFIG)
+  const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<Post>(INIT_POST)
   const files = ref<PostFile[]>([])
 

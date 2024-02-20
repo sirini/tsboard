@@ -11,10 +11,18 @@ import {
   CommentParams,
   RelatedParams,
   SaveCommentParams,
+  SaveModifyParams,
   SaveReplyParams,
 } from "../../../src/interface/board"
 import { insert, select, table, update } from "../common"
-import { COMMENT_RELATED, CommentRelated, INVALID_VIEW_LEVEL } from "./const"
+import { addNotice } from "./common"
+import {
+  COMMENT_RELATED,
+  CommentRelated,
+  INVALID_VIEW_LEVEL,
+  NOTICE_TYPE,
+  NoticeType,
+} from "./const"
 
 // 댓글에 연관된 정보 가져오기
 async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> {
@@ -129,6 +137,20 @@ export async function likeComment(param: CommentLikeParams): Promise<void> {
     VALUES (?, ?, ?, ? ,?)`,
       [param.boardUid, param.commentUid, param.accessUserUid, param.liked, Date.now()],
     )
+
+    const [comment] = await select(
+      `SELECT post_uid, user_uid FROM ${table}comment WHERE uid = ? LIMIT 1`,
+      [param.commentUid],
+    )
+    if (comment) {
+      addNotice({
+        toUid: comment.user_uid,
+        fromUid: param.accessUserUid,
+        type: NOTICE_TYPE.LIKE_COMMENT as NoticeType,
+        postUid: comment.post_uid,
+        commentUid: param.commentUid,
+      })
+    }
   } else {
     await update(
       `UPDATE ${table}comment_like SET liked = ?, timestamp = ? WHERE comment_uid = ? AND user_uid = ? LIMIT 1`,
@@ -151,6 +173,19 @@ export async function saveNewComment(param: SaveCommentParams): Promise<number> 
       insertId,
       insertId,
     ])
+    const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
+      param.postUid,
+    ])
+    if (post) {
+      addNotice({
+        toUid: post.user_uid,
+        fromUid: param.accessUserUid,
+        type: NOTICE_TYPE.LEAVE_COMMENT as NoticeType,
+        postUid: param.postUid,
+        commentUid: insertId,
+      })
+      
+    }
   }
   return insertId
 }
@@ -171,5 +206,24 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
       0,
     ],
   )
+  const [comment] = await select(`SELECT user_uid FROM ${table}comment WHERE uid = ? LIMIT 1`, [
+    param.replyTargetUid,
+  ])
+  if (comment) {
+    addNotice({
+      toUid: comment.user_uid,
+      fromUid: param.accessUserUid,
+      type: NOTICE_TYPE.REPLY_COMMENT as NoticeType,
+      postUid: param.postUid,
+      commentUid: insertId,
+    })
+  }
   return insertId
+}
+
+// 댓글 수정하기
+export async function saveModifyComment(param: SaveModifyParams): Promise<void> {
+  await update(`UPDATE ${table}comment SET content = '${param.content}' WHERE = ? LIMIT 1`, [
+    param.modifyTargetUid,
+  ])
 }
