@@ -8,17 +8,15 @@ import { RowDataPacket } from "mysql2"
 import { AdminReport, AdminReportParams } from "../../../../src/interface/admin"
 import { select, table } from "../../common"
 
-// 총 신고 개수 반환하기
-export async function getTotalReportCount(isSolved: boolean): Promise<number> {
-  const [total] = await select(
-    `SELECT uid FROM ${table}report WHERE solved ${
-      isSolved ? "=" : "<"
-    } 1 ORDER BY uid DESC LIMIT 1`,
+// 유효한 최대 uid 값 반환
+export async function getMaxReportUid(isSolved: boolean): Promise<number> {
+  const [max] = await select(
+    `SELECT MAX(uid) AS uid FROM ${table}report WHERE solved ${isSolved ? "=" : "<"} 1`,
   )
-  if (!total) {
+  if (!max) {
     return 0
   }
-  return total.uid
+  return max.uid
 }
 
 // (검색된) 신고들 결과로 정리하여 반환하기
@@ -55,7 +53,7 @@ async function makeReportResult(reports: RowDataPacket[]): Promise<AdminReport[]
 // 신고 목록들 가져오기
 export async function getReports(param: AdminReportParams): Promise<AdminReport[]> {
   let result: AdminReport[] = []
-  const last = 1 + param.total - (param.page - 1) * param.bunch
+  const last = 1 + param.maxUid - (param.page - 1) * param.bunch
   const reports = await select(
     `SELECT uid, to_uid, from_uid, request, response, timestamp FROM ${table}report WHERE uid < ${last} AND solved ${
       param.isSolved ? "=" : "<"
@@ -84,7 +82,7 @@ async function getUserUid(target: string, name: string): Promise<string> {
 // 검색 결과 가져오기
 export async function getSearchedReports(search: AdminReportParams): Promise<AdminReport[]> {
   let result: AdminReport[] = []
-  const last = 1 + search.total - (search.page - 1) * search.bunch
+  const last = 1 + search.maxUid - (search.page - 1) * search.bunch
   const whereUser = await getUserUid(search.option, search.keyword)
   let whereRequest = ""
   if (search.option === "request") {

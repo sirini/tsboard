@@ -131,6 +131,7 @@ export type AdminLatest = {
   uid: number
   id?: string
   content: string
+  writer: AdminUserInfo
 }
 
 type AdminLatestCommon = {
@@ -156,7 +157,7 @@ export type AdminLatestComment = AdminLatestCommon & {
 type AdminList = {
   page: number
   bunch: number
-  total: number
+  maxUid: number
 }
 
 export type AdminSearchCommon = AdminList & {

@@ -109,7 +109,7 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="primary"
-                @click="editor.save(gallery.id)"
+                @click="editor.savePost(gallery.id)"
                 append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >

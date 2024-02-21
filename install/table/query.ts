@@ -248,7 +248,7 @@ tables.push(`${create} #db#file (
   KEY (post_uid)
 ) ${engineEncode}`)
 
-// 본문 작성 시 이미지 첨부하기 기능으로 추가한 이미지 정보 보관하는 테이블, 이미지는 1000px 이하로 리사이즈 후 저장됨
+// 본문 작성 시 이미지 첨부하기 기능으로 추가한 이미지 정보 보관하는 테이블, 이미지는 리사이즈 후 저장됨
 tables.push(`${create} #db#image (
   ${uid},
   board_uid INT ${unnd0},

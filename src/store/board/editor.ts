@@ -13,7 +13,7 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { EDITOR } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
-import { BoardConfig } from "../../interface/board"
+import { BoardConfig, Pair } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
@@ -33,7 +33,10 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const files = ref<File[]>([])
   const uploadedImages = ref<string[]>([])
-  const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "10247680"))
+  const loadImages = ref<Pair[]>([])
+  const lastUid = ref<number>(0)
+  const bunch = ref<number>(20)
+  const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "102476800"))
   const subject = ref<string>("")
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
@@ -45,7 +48,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         !value ||
         !value.length ||
         value[0].size < limit.value ||
-        `파일 크기는 ${limit.value / 1024}MB 이하여야 합니다.`
+        `파일 크기는 ${(limit.value / 1024768).toFixed(1)}MB 이하여야 합니다.`
       )
     },
   ]
@@ -121,6 +124,32 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     uploadedImages.value = response.data.result.uploadedImages
   }
 
+  // 기존에 업로드한 이미지들 가져오기
+  async function loadUploadedImages(): Promise<void> {
+    const response = await server.api.board.loadimages.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        boardUid: config.value.uid,
+        lastUid: lastUid.value,
+        bunch: bunch.value,
+      },
+    })
+    if (!response.data) {
+      util.snack(EDITOR.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${EDITOR.FAILED_LOAD_IMAGE} (${response.data.error})`)
+      return
+    }
+    for (const image of response.data.result.images) {
+      loadImages.value.push(image)
+      lastUid.value = image.uid
+    }
+  }
+
   // 태그 자동 완성하기
   const tagSuggestions = ref<string[]>(["photography", "tagSample", "example", "test", "nowar"])
   let tagTimer: any = null
@@ -174,7 +203,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   }
 
   // 작성된 글 저장하기
-  async function save(id: string): Promise<void> {
+  async function savePost(id: string): Promise<void> {
     const result = false
     if (subject.value.length < 2) {
       util.error(`제목은 2글자 이상 입력해 주세요.`)
@@ -210,6 +239,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     limit,
     files,
     uploadedImages,
+    loadImages,
+    lastUid,
     subject,
     content,
     tag,
@@ -218,6 +249,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     textRule,
     tagSuggestions,
     loadBoardConfig,
+    loadUploadedImages,
     uploadImageFiles,
     updateTagSuggestion,
     addTag,
@@ -225,6 +257,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     updateRealHtml,
     openWriteCancelDialog,
     closeWriteCancelDialog,
-    save,
+    savePost,
   }
 })

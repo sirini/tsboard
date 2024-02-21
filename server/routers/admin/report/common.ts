@@ -7,9 +7,9 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import {
-  getTotalReportCount,
   getReports,
   getSearchedReports,
+  getMaxReportUid,
 } from "../../../database/admin/report/common"
 import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 
@@ -35,22 +35,19 @@ export const common = new Elysia()
       const response = {
         newAccessToken: "",
         reports: [],
-        totalReportCount: 0,
+        maxReportUid: 0,
       }
 
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
+      if (page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
       const solved = isSolved > 0 ? true : false
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
-      const totalReportCount = await getTotalReportCount(solved)
+      const maxReportUid = await getMaxReportUid(solved)
       const reports = await getReports({
         page,
         bunch,
-        total: totalReportCount,
+        maxUid: maxReportUid,
         option: "",
         keyword: "",
         isSolved: solved,
@@ -59,7 +56,7 @@ export const common = new Elysia()
       return success({
         newAccessToken,
         reports,
-        totalReportCount,
+        maxReportUid,
       })
     },
     {
@@ -76,35 +73,26 @@ export const common = new Elysia()
     async ({ query: { option, keyword, page, bunch, isSolved } }) => {
       const response = {
         reports: [],
-        totalReportCount: 0,
+        maxReportUid: 0,
       }
 
-      if (option.length < 2) {
-        return fail(`Unknown option.`, response)
-      }
-      if (keyword.length < 2) {
-        return fail(`Keyword is too short.`, response)
-      }
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
+      if (option.length < 2 || keyword.length < 2 || page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
       const solved = isSolved > 0 ? true : false
-      const totalReportCount = await getTotalReportCount(solved)
+      const maxReportUid = await getMaxReportUid(solved)
       const reports = await getSearchedReports({
         option,
         keyword,
         page,
         bunch,
-        total: totalReportCount,
+        maxUid: maxReportUid,
         isSolved: solved,
       })
 
       return success({
         reports,
-        totalReportCount,
+        maxReportUid,
       })
     },
     {

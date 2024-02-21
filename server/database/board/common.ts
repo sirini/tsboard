@@ -6,7 +6,9 @@
 
 import {
   CheckUserPermissionParams,
+  POINT_HISTORY_TYPE,
   SUPER_ADMIN,
+  UpdatePointHistoryParams,
   UpdateUserPointParams,
 } from "../../../src/interface/board"
 import { insert, select, table, update } from "../common"
@@ -32,7 +34,7 @@ export async function addNotice(param: AddNoticeParams): Promise<void> {
 
 // 사용자의 권한 확인하기 (권한 소유: 작성자, 게시판 관리자, 그룹 관리자, 최고 관리자)
 export async function checkUserPermission(param: CheckUserPermissionParams): Promise<boolean> {
-  if (param.userUid === SUPER_ADMIN) {
+  if (param.accessUserUid === SUPER_ADMIN) {
     return true
   }
 
@@ -41,7 +43,7 @@ export async function checkUserPermission(param: CheckUserPermissionParams): Pro
   WHERE uid = ? LIMIT 1`,
     [param.targetUid],
   )
-  if (target && param.userUid === target.user_uid) {
+  if (target && param.accessUserUid === target.user_uid) {
     return true
   }
 
@@ -49,21 +51,43 @@ export async function checkUserPermission(param: CheckUserPermissionParams): Pro
     `SELECT group_uid, admin_uid FROM ${table}board WHERE uid = ? LIMIT 1`,
     [param.boardUid],
   )
-  if (board && param.userUid === board.admin_uid) {
+  if (board && param.accessUserUid === board.admin_uid) {
     return true
   }
 
   const [group] = await select(`SELECT admin_uid FROM ${table}group WHERE uid = ? LIMIT 1`, [
     board.group_uid,
   ])
-  if (group && param.userUid === group.admin_uid) {
+  if (group && param.accessUserUid === group.admin_uid) {
     return true
   }
   return false
 }
 
+// 포인트 이력 업데이트하기
+async function updatePointHistory(param: UpdatePointHistoryParams): Promise<void> {
+  let action = POINT_HISTORY_TYPE.VIEW
+  if (param.action === "comment") {
+    action = POINT_HISTORY_TYPE.WRITE_COMMENT
+  } else if (param.action === "write") {
+    action = POINT_HISTORY_TYPE.WRITE_POST
+  } else if (param.action === "download") {
+    action = POINT_HISTORY_TYPE.DOWNLOAD
+  }
+
+  insert(
+    `INSERT INTO ${table}point_history (user_uid, board_uid, action, point) VALUES 
+  (?, ?, ?, ?)`,
+    [param.accessUserUid, param.boardUid, action, param.point],
+  )
+}
+
 // 포인트 업데이트하기, 포인트 부족 시 false
 export async function updateUserPoint(param: UpdateUserPointParams): Promise<boolean> {
+  if (param.accessUserUid < 1) {
+    return false
+  }
+
   const [board] = await select(
     `SELECT point_${param.action} AS point FROM ${table}board WHERE uid = ? LIMIT 1`,
     [param.boardUid],
@@ -73,7 +97,7 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
   }
 
   const [user] = await select(`SELECT point FROM ${table}user WHERE uid = ? LIMIT 1`, [
-    param.userUid,
+    param.accessUserUid,
   ])
   if (!user) {
     return false
@@ -84,7 +108,13 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
   }
 
   const newPoint = user.point + board.point
-  update(`UPDATE ${table}user SET point = ? WHERE uid = ? LIMIT 1`, [newPoint, param.userUid])
+  update(`UPDATE ${table}user SET point = ? WHERE uid = ? LIMIT 1`, [newPoint, param.accessUserUid])
+  updatePointHistory({
+    accessUserUid: param.accessUserUid,
+    boardUid: param.boardUid,
+    action: param.action,
+    point: board.point,
+  })
 
   return true
 }

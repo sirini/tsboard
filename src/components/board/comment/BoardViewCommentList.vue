@@ -65,6 +65,12 @@
 
       <v-card elevation="0" rounded="0" class="pa-0 tiptap comment">
         <v-card-text v-html="reply.content" class="content"></v-card-text>
+        <v-card-text v-if="reply.modified > 0" class="pa-0 modified"
+          >{{ util.date(reply.modified, true, true) }} 에 수정되었습니다.</v-card-text
+        >
+        <v-card-text v-if="reply.content.length < 1" class="pa-0 removed"
+          >삭제된 댓글입니다.</v-card-text
+        >
       </v-card>
     </v-list-item>
   </v-list>
@@ -75,12 +81,14 @@
 import { onMounted } from "vue"
 import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
+import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 import "../../../assets/board/editor.scss"
 
 const auth = useAuthStore()
 const comment = useCommentStore()
+const util = useUtilStore()
 
 onMounted(() => comment.loadCommentList())
 </script>
@@ -100,5 +108,15 @@ onMounted(() => comment.loadCommentList())
   position: absolute;
   right: 10px;
   bottom: 10px;
+}
+
+.modified {
+  font-size: 0.8em;
+  color: #607d8b;
+}
+
+.removed {
+  font-size: 0.8em;
+  color: #f44336;
 }
 </style>

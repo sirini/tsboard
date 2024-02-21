@@ -222,8 +222,31 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
 
 // 댓글 수정하기
 export async function saveModifyComment(param: SaveModifyParams): Promise<void> {
-  await update(`UPDATE ${table}comment SET content = ? WHERE uid = ? LIMIT 1`, [
+  await update(`UPDATE ${table}comment SET content = ?, modified = ? WHERE uid = ? LIMIT 1`, [
     param.content,
+    Date.now(),
     param.modifyTargetUid,
   ])
+}
+
+// 댓글 삭제하기, 답글이 달려져 있을 경우 내용만 지우고 삭제 처리 하지 않음
+export async function removeComment(removeTargetUid: number): Promise<boolean> {
+  const [comment] = await select(`SELECT uid FROM ${table}comment WHERE reply_uid = ? LIMIT 1`, [
+    removeTargetUid,
+  ])
+  if (!comment) {
+    update(`UPDATE ${table}comment SET status = ?, modified = ? WHERE uid = ? LIMIT 1`, [
+      CONTENT_STATUS.REMOVED,
+      Date.now(),
+      removeTargetUid,
+    ])
+    return true
+  }
+
+  update(`UPDATE ${table}comment SET content = ?, modified = ? WHERE uid = ? LIMIT 1`, [
+    "",
+    Date.now(),
+    removeTargetUid,
+  ])
+  return false
 }

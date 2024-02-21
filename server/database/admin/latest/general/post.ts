@@ -9,12 +9,12 @@ import { AdminLatestPost, AdminSearchCommon } from "../../../../../src/interface
 import { select, table } from "../../../common"
 
 // 전체 글 개수 반환하기
-export async function getTotalPostCount(): Promise<number> {
-  const [total] = await select(`SELECT COUNT(*) AS post_count FROM ${table}post`)
-  if (!total) {
+export async function getMaxPostUid(): Promise<number> {
+  const [max] = await select(`SELECT MAX(uid) AS uid FROM ${table}post`)
+  if (!max) {
     return 0
   }
-  return total.post_count
+  return max.uid
 }
 
 type RelatedResults = {
@@ -87,10 +87,10 @@ async function makePostResult(posts: RowDataPacket[]): Promise<AdminLatestPost[]
 export async function getPosts(
   page: number,
   bunch: number,
-  total: number,
+  maxUid: number,
 ): Promise<AdminLatestPost[]> {
   let result: AdminLatestPost[] = []
-  const last = 1 + total - (page - 1) * bunch
+  const last = 1 + maxUid - (page - 1) * bunch
   const posts = await select(
     `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit, status FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
     [last, bunch],
@@ -105,7 +105,7 @@ export async function getPosts(
 // 검색 결과 가져오기
 export async function getSearchedPosts(search: AdminSearchCommon): Promise<AdminLatestPost[]> {
   let result: AdminLatestPost[] = []
-  const last = 1 + search.total - (search.page - 1) * search.bunch
+  const last = 1 + search.maxUid - (search.page - 1) * search.bunch
   const posts = await select(
     `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit 
     FROM ${table}post WHERE uid < ${last} AND ${search.option} LIKE '%${search.keyword}%' 

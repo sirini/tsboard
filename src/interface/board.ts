@@ -19,6 +19,13 @@ export const CONTENT_STATUS = {
   NOTICE: 1,
 }
 
+export const POINT_HISTORY_TYPE = {
+  VIEW: 0,
+  WRITE_POST: 1,
+  WRITE_COMMENT: 2,
+  DOWNLOAD: 3,
+}
+
 export type Pair = {
   uid: number
   name: string
@@ -40,13 +47,14 @@ export type BoardAccessLevel = BoardAccessPoint & {
   list: number
 }
 
+export type BoardType = 0 | 1 | 2 | 3
 export type BoardConfig = {
   uid: number
   admin: {
     group: number
     board: number
   }
-  type: 0 | 1 | 2 | 3 /* BOARD_TYPE */
+  type: BoardType
   name: string
   info: string
   row: number
@@ -141,7 +149,8 @@ export type SaveReplyParams = SaveCommentParams & {
   replyTargetUid: number
 }
 
-export type SaveModifyParams = SaveCommentParams & {
+export type SaveModifyParams = {
+  content: string
   modifyTargetUid: number
 }
 
@@ -150,18 +159,25 @@ export type UploadImageParams = CommonPairParam & {
   images: File[]
 }
 
-type UserParams = {
-  boardUid: number
-  userUid: number
+export type LoadImageParams = CommonPairParam & {
+  lastUid: number
+  bunch: number
 }
 
-export type CheckUserPermissionParams = UserParams & {
-  targetTable: "post" | "comment"
+export type TargetTable = "post" | "comment"
+export type CheckUserPermissionParams = CommonPairParam & {
+  targetTable: TargetTable
   targetUid: number
 }
 
-export type UpdateUserPointParams = UserParams & {
-  action: "comment" | "write"
+export type PointAction = "view" | "comment" | "write" | "download"
+export type UpdateUserPointParams = CommonPairParam & {
+  action: PointAction
+}
+
+export type UpdatePointHistoryParams = CommonPairParam & {
+  action: PointAction
+  point: number
 }
 
 export type VideoURL = {

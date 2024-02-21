@@ -95,7 +95,10 @@
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="editor.save(list.id)" append-icon="mdi-chevron-right"
+              <v-btn
+                color="primary"
+                @click="editor.savePost(list.id)"
+                append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >
             </v-card-actions>

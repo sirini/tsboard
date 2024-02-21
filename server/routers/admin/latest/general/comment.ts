@@ -9,7 +9,7 @@ import { jwt } from "@elysiajs/jwt"
 import {
   getComments,
   getSearchedComments,
-  getTotalCommentCount,
+  getMaxCommentUid,
 } from "../../../../database/admin/latest/general/comment"
 import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
 
@@ -35,23 +35,20 @@ export const comment = new Elysia()
       const response = {
         newAccessToken: "",
         comments: [],
-        totalCommentCount: 0,
+        maxCommentUid: 0,
+      }
+      if (page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
 
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
-      }
-
-      const totalCommentCount = await getTotalCommentCount()
-      const comments = await getComments(page, bunch, totalCommentCount)
+      const maxCommentUid = await getMaxCommentUid()
+      const comments = await getComments(page, bunch, maxCommentUid)
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
+
       return success({
         newAccessToken,
         comments,
-        totalCommentCount,
+        maxCommentUid,
       })
     },
     {
@@ -67,33 +64,24 @@ export const comment = new Elysia()
     async ({ query: { option, keyword, page, bunch } }) => {
       const response = {
         comments: [],
-        totalCommentCount: 0,
+        maxCommentUid: 0,
       }
 
-      if (option.length < 2) {
-        return fail(`Unknown option.`, response)
-      }
-      if (keyword.length < 2) {
-        return fail(`Keyword is too short.`, response)
-      }
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
+      if (option.length < 2 || keyword.length < 2 || page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
 
-      const totalCommentCount = await getTotalCommentCount()
+      const maxCommentUid = await getMaxCommentUid()
       const comments = await getSearchedComments({
         option,
         keyword,
         page,
         bunch,
-        total: totalCommentCount,
+        maxUid: maxCommentUid,
       })
       return success({
         comments,
-        totalCommentCount,
+        maxCommentUid,
       })
     },
     {

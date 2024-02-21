@@ -14,6 +14,7 @@ import {
   getMaxCommentUid,
   getViewPostLevel,
   likeComment,
+  removeComment,
   saveModifyComment,
   saveNewComment,
   saveReplyComment,
@@ -142,10 +143,7 @@ export const comment = new Elysia()
   .post(
     "/newcomment",
     async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
-      const response = {
-        newCommentUid: 0,
-        newAccessToken: "",
-      }
+      const response = { newCommentUid: 0, newAccessToken: "" }
 
       if (boardUid < 1 || postUid < 1 || content.length < 3) {
         return fail(`Invalid parameters.`, response)
@@ -153,13 +151,13 @@ export const comment = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
-      if (
-        (await updateUserPoint({
-          boardUid,
-          userUid: accessUserUid,
-          action: "comment",
-        })) === false
-      ) {
+
+      const updatePointResult = await updateUserPoint({
+        boardUid,
+        accessUserUid,
+        action: "comment",
+      })
+      if (updatePointResult === false) {
         return fail(`Not enough point.`, response)
       }
 
@@ -170,10 +168,7 @@ export const comment = new Elysia()
         accessUserUid,
         content,
       })
-      return success({
-        newCommentUid,
-        newAccessToken,
-      })
+      return success({ newCommentUid, newAccessToken })
     },
     {
       ...defaultTypeCheck,
@@ -191,23 +186,20 @@ export const comment = new Elysia()
       accessUserUid,
       newAccessToken,
     }) => {
-      const response = {
-        newCommentUid: 0,
-        newAccessToken: "",
-      }
+      const response = { newCommentUid: 0, newAccessToken: "" }
       if (boardUid < 1 || postUid < 1 || replyTargetUid < 1 || content.length < 3) {
         return fail(`Invalid parameters.`, response)
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
-      if (
-        (await updateUserPoint({
-          boardUid,
-          userUid: accessUserUid,
-          action: "comment",
-        })) === false
-      ) {
+
+      const updatePointResult = await updateUserPoint({
+        boardUid,
+        accessUserUid,
+        action: "comment",
+      })
+      if (updatePointResult === false) {
         return fail(`Not enough point.`, response)
       }
 
@@ -219,10 +211,7 @@ export const comment = new Elysia()
         accessUserUid,
         content,
       })
-      return success({
-        newCommentUid,
-        newAccessToken,
-      })
+      return success({ newCommentUid, newAccessToken })
     },
     {
       ...defaultTypeCheck,
@@ -241,9 +230,7 @@ export const comment = new Elysia()
       accessUserUid,
       newAccessToken,
     }) => {
-      const response = {
-        newAccessToken,
-      }
+      const response = { newAccessToken }
 
       if (boardUid < 1 || postUid < 1 || modifyTargetUid < 1 || content.length < 3) {
         return fail(`Invalid parameters.`, response)
@@ -251,28 +238,20 @@ export const comment = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
-      if (
-        (await checkUserPermission({
-          boardUid,
-          targetTable: "comment",
-          targetUid: modifyTargetUid,
-          userUid: accessUserUid,
-        })) === false
-      ) {
+
+      const checkPermissionResult = await checkUserPermission({
+        boardUid,
+        targetTable: "comment",
+        targetUid: modifyTargetUid,
+        accessUserUid,
+      })
+      if (checkPermissionResult === false) {
         return fail(`No permission.`, response)
       }
 
       content = sanitizeHtml(content, htmlFilter)
-      await saveModifyComment({
-        boardUid,
-        postUid,
-        modifyTargetUid,
-        accessUserUid,
-        content,
-      })
-      return success({
-        newAccessToken,
-      })
+      await saveModifyComment({ modifyTargetUid, content })
+      return success(response)
     },
     {
       ...defaultTypeCheck,
@@ -281,6 +260,39 @@ export const comment = new Elysia()
         postUid: t.Numeric(),
         modifyTargetUid: t.Numeric(),
         content: t.String(),
+      }),
+    },
+  )
+  .delete(
+    "/removecomment",
+    async ({ query: { boardUid, removeTargetUid }, accessUserUid, newAccessToken }) => {
+      const response = { newAccessToken, isChangeStatus: false }
+
+      if (boardUid < 1 || removeTargetUid < 1) {
+        return fail(`Invalid parameters.`, response)
+      }
+
+      const checkPermissionResult = await checkUserPermission({
+        boardUid,
+        targetTable: "comment",
+        targetUid: removeTargetUid,
+        accessUserUid,
+      })
+      if (checkPermissionResult === false) {
+        return fail(`No permission.`, response)
+      }
+
+      const isChangeStatus = removeComment(removeTargetUid)
+      return success({
+        newAccessToken,
+        isChangeStatus,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        boardUid: t.Numeric(),
+        removeTargetUid: t.Numeric(),
       }),
     },
   )

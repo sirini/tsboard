@@ -23,6 +23,9 @@
             v-for="(post, index) in dashboard.posts"
             :key="index"
             @click="util.go('boardView', post.id, post.uid)"
+            :prepend-avatar="
+              PREFIX + (post.writer.profile.length < 1 ? '/no-profile.svg' : post.writer.profile)
+            "
           >
             <v-list-item-title>{{ post.content }}</v-list-item-title>
             <v-tooltip activator="parent">게시글을 확인하러 갑니다.</v-tooltip>
@@ -51,6 +54,10 @@
             v-for="(comment, index) in dashboard.comments"
             :key="index"
             @click="util.go('boardView', comment.id, comment.uid)"
+            :prepend-avatar="
+              PREFIX +
+              (comment.writer.profile.length < 1 ? '/no-profile.svg' : comment.writer.profile)
+            "
           >
             <v-list-item-title>{{ comment.content }}</v-list-item-title>
             <v-tooltip activator="parent">댓글을 확인하러 갑니다.</v-tooltip>
@@ -79,6 +86,10 @@
             v-for="(report, index) in dashboard.reports"
             :key="index"
             @click="util.go('adminReportView', '', report.uid)"
+            :prepend-avatar="
+              PREFIX +
+              (report.writer.profile.length < 1 ? '/no-profile.svg' : report.writer.profile)
+            "
           >
             <v-list-item-title>{{ report.content }}</v-list-item-title>
             <v-tooltip activator="parent">신고 내역을 확인하러 갑니다.</v-tooltip>
@@ -95,6 +106,7 @@ import { useUtilStore } from "../../../store/util"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
+const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

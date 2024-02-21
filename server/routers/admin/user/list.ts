@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { getTotalUserCount, getUsers, getSearchedUsers } from "../../../database/admin/user/list"
+import { getMaxUserUid, getUsers, getSearchedUsers } from "../../../database/admin/user/list"
 import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
 
 const defaultTypeCheck = {
@@ -31,7 +31,7 @@ export const list = new Elysia()
       const response = {
         newAccessToken: "",
         users: [],
-        totalUserCount: 0,
+        maxUserUid: 0,
       }
 
       if (page < 1) {
@@ -42,11 +42,11 @@ export const list = new Elysia()
       }
       const blocked = isBlocked > 0 ? true : false
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
-      const totalUserCount = await getTotalUserCount(blocked)
+      const maxUserUid = await getMaxUserUid(blocked)
       const users = await getUsers({
         page,
         bunch,
-        total: totalUserCount,
+        maxUid: maxUserUid,
         option: "",
         keyword: "",
         isBlocked: blocked,
@@ -55,7 +55,7 @@ export const list = new Elysia()
       return success({
         newAccessToken,
         users,
-        totalUserCount,
+        maxUserUid,
       })
     },
     {

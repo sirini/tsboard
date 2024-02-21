@@ -48,7 +48,7 @@ export const useAdminReportStore = defineStore("adminReport", () => {
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    pageLength.value = Math.ceil(response.data.result.totalReportCount / bunch.value)
+    pageLength.value = Math.ceil(response.data.result.maxReportUid / bunch.value)
     reports.value = response.data.result.reports
     admin.success(COMMON.LOADED_REPORT)
   }
@@ -80,7 +80,7 @@ export const useAdminReportStore = defineStore("adminReport", () => {
       admin.error(COMMON.NO_RESPONSE)
       return
     }
-    pageLength.value = Math.ceil(response.data.result.totalReportCount / bunch.value)
+    pageLength.value = Math.ceil(response.data.result.maxReportUid / bunch.value)
     reports.value = response.data.result.reports
   }
   const updateReports = util.debounce(_updateReports, 250)

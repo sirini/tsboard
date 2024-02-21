@@ -47,7 +47,7 @@ export const useAdminUserStore = defineStore("adminUser", () => {
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    pageLength.value = Math.ceil(response.data.result.totalUserCount / bunch.value)
+    pageLength.value = Math.ceil(response.data.result.maxUserUid / bunch.value)
     users.value = response.data.result.users
     admin.success(COMMON.LOADED_USER)
   }

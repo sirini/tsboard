@@ -10,8 +10,17 @@ import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { uploadImages } from "../../database/board/editor"
+import { loadUploadedImages, uploadImages } from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
+
+const defaultTypeCheck = {
+  headers: t.Object({
+    authorization: t.String(),
+  }),
+  cookie: t.Cookie({
+    refresh: t.String(),
+  }),
+}
 
 export const editor = new Elysia()
   .use(
@@ -81,6 +90,7 @@ export const editor = new Elysia()
       if (images === undefined) {
         return fail(`Invalid image files.`, response)
       }
+
       const uploadedImages = await uploadImages({
         boardUid,
         sizeLimit,
@@ -93,9 +103,7 @@ export const editor = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...defaultTypeCheck,
       body: t.Object({
         boardUid: t.Numeric(),
         sizeLimit: t.Numeric(),
@@ -105,6 +113,35 @@ export const editor = new Elysia()
             error: "Invalid images.",
           }),
         ),
+      }),
+    },
+  )
+  .get(
+    "/loadimages",
+    async ({ query: { boardUid, lastUid, bunch }, accessUserUid }) => {
+      const response = {
+        images: [],
+      }
+      if (boardUid < 1 || lastUid < 0 || bunch < 1 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
+      }
+
+      const images = await loadUploadedImages({
+        boardUid,
+        lastUid,
+        accessUserUid,
+        bunch,
+      })
+      return success({
+        images,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        boardUid: t.Numeric(),
+        lastUid: t.Numeric(),
+        bunch: t.Numeric(),
       }),
     },
   )

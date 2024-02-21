@@ -93,7 +93,6 @@ import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => latest.loadLatestComments())
 watch(

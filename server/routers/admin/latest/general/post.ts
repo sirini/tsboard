@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import {
   getPosts,
-  getTotalPostCount,
+  getMaxPostUid,
   getSearchedPosts,
 } from "../../../../database/admin/latest/general/post"
 import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
@@ -35,23 +35,20 @@ export const post = new Elysia()
       const response = {
         newAccessToken: "",
         posts: [],
-        totalPostCount: 0,
+        maxPostUid: 0,
       }
 
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
+      if (page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
 
-      const totalPostCount = await getTotalPostCount()
-      const posts = await getPosts(page, bunch, totalPostCount)
+      const maxPostUid = await getMaxPostUid()
+      const posts = await getPosts(page, bunch, maxPostUid)
       const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       return success({
         newAccessToken,
         posts,
-        totalPostCount,
+        maxPostUid,
       })
     },
     {
@@ -67,33 +64,24 @@ export const post = new Elysia()
     async ({ query: { option, keyword, page, bunch } }) => {
       const response = {
         posts: [],
-        totalPostCount: 0,
+        maxPostUid: 0,
       }
 
-      if (option.length < 2) {
-        return fail(`Unknown option.`, response)
-      }
-      if (keyword.length < 2) {
-        return fail(`Keyword is too short.`, response)
-      }
-      if (page < 1) {
-        return fail(`Invalid page.`, response)
-      }
-      if (bunch < 5 || bunch > 100) {
-        return fail(`Invalid bunch.`, response)
+      if (option.length < 2 || keyword.length < 2 || page < 1 || bunch < 5 || bunch > 100) {
+        return fail(`Invalid parameters.`, response)
       }
 
-      const totalPostCount = await getTotalPostCount()
+      const maxPostUid = await getMaxPostUid()
       const posts = await getSearchedPosts({
         option,
         keyword,
         page,
         bunch,
-        total: totalPostCount,
+        maxUid: maxPostUid,
       })
       return success({
         posts,
-        totalPostCount,
+        maxPostUid,
       })
     },
     {

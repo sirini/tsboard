@@ -11,6 +11,7 @@ import { getFiles, getPost, likePost } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { PostFile } from "../../../src/interface/board"
 import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
+import { updateUserPoint } from "../../database/board/common"
 
 export const view = new Elysia()
   .use(
@@ -62,6 +63,15 @@ export const view = new Elysia()
       if (config.level.view > userLevel) {
         response.config = config
         return fail(`Level restriction.`, response)
+      }
+
+      const updatePointResult = await updateUserPoint({
+        boardUid: config.uid,
+        accessUserUid,
+        action: "view",
+      })
+      if (updatePointResult === false && config.point.view < 0) {
+        return fail(`Not enough point.`, response)
       }
 
       let files: PostFile[] = []

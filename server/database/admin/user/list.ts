@@ -8,17 +8,15 @@ import { RowDataPacket } from "mysql2"
 import { AdminUser, AdminUserParams } from "../../../../src/interface/admin"
 import { select, table } from "../../common"
 
-// 총 회원수 반환하기
-export async function getTotalUserCount(isBlocked: boolean): Promise<number> {
-  const [total] = await select(
-    `SELECT uid FROM ${table}user WHERE blocked ${
-      isBlocked ? "=" : "<"
-    } 1 ORDER BY uid DESC LIMIT 1`,
+// 유효한 최대 회원 고유번호 반환
+export async function getMaxUserUid(isBlocked: boolean): Promise<number> {
+  const [max] = await select(
+    `SELECT MAX(uid) AS uid FROM ${table}user WHERE blocked ${isBlocked ? "=" : "<"} 1`,
   )
-  if (!total) {
+  if (!max) {
     return 0
   }
-  return total.uid
+  return max.uid
 }
 
 // (검색된) 유저들을 정리하여 반환하기
@@ -41,7 +39,7 @@ async function makeUserResult(users: RowDataPacket[]): Promise<AdminUser[]> {
 // 회원 목록 가져오기
 export async function getUsers(param: AdminUserParams): Promise<AdminUser[]> {
   let result: AdminUser[] = []
-  const last = 1 + param.total - (param.page - 1) * param.bunch
+  const last = 1 + param.maxUid - (param.page - 1) * param.bunch
   const users = await select(
     `SELECT uid, id, name, profile, level, point, signup FROM ${table}user WHERE uid < ${last} AND blocked ${
       param.isBlocked ? "=" : "<"
@@ -57,7 +55,7 @@ export async function getUsers(param: AdminUserParams): Promise<AdminUser[]> {
 // 회원 검색 결과 가져오기
 export async function getSearchedUsers(search: AdminUserParams): Promise<AdminUser[]> {
   let result: AdminUser[] = []
-  const last = 1 + search.total - (search.page - 1) * search.bunch
+  const last = 1 + search.maxUid - (search.page - 1) * search.bunch
   let where = ""
   if (search.option === "level") {
     where = `level = ${search.keyword}`

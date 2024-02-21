@@ -208,16 +208,42 @@ export const useCommentStore = defineStore("comment", () => {
     confirmRemoveCommentDialog.value = false
   }
 
-  // 댓글 삭제하기
+  // 댓글 삭제하기, 답글이 달려려있는 댓글은 내용만 제거됨 (isChangeStatus = false)
   async function removeComment(): Promise<void> {
     if (removeTarget.value < 1) {
       util.snack(COMMENT.INVALID_REMOVE_TARGET)
       return
     }
-    // do something with removeTarget
-    comments.value = comments.value.filter((comment: Comment) => {
-      return removeTarget.value !== comment.uid
+    const response = await server.api.board.removecomment.delete({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        boardUid: boardUid.value,
+        removeTargetUid: removeTarget.value,
+      },
     })
+    if (!response.data) {
+      util.snack(COMMENT.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${COMMENT.FAILED_REMOVE_COMMENT} (${response.data.error})`)
+      return
+    }
+    if (response.data.result.isChangeStatus === true) {
+      comments.value = comments.value.filter((comment) => {
+        return removeTarget.value !== comment.uid
+      })
+    } else {
+      comments.value.map((comment) => {
+        if (removeTarget.value === comment.uid) {
+          comment.content = COMMENT.NOTE_REMOVED_COMMENT
+          return
+        }
+      })
+    }
+
     util.snack(COMMENT.REMOVED_COMMENT)
     closeRemoveCommentDialog()
   }

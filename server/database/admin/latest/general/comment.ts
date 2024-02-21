@@ -8,13 +8,13 @@ import { RowDataPacket } from "mysql2"
 import { AdminLatestComment, AdminSearchCommon } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 
-// 전체 댓글 개수 반환하기
-export async function getTotalCommentCount(): Promise<number> {
-  const [total] = await select(`SELECT COUNT(*) AS comment_count FROM ${table}comment`)
-  if (!total) {
+// 최근 uid 값 반환하기
+export async function getMaxCommentUid(): Promise<number> {
+  const [max] = await select(`SELECT MAX(uid) AS uid FROM ${table}comment`)
+  if (!max) {
     return 0
   }
-  return total.comment_count
+  return max.uid
 }
 
 type RelatedResults = {
@@ -82,10 +82,10 @@ async function makeCommentResult(comments: RowDataPacket[]): Promise<AdminLatest
 export async function getComments(
   page: number,
   bunch: number,
-  total: number,
+  maxUid: number,
 ): Promise<AdminLatestComment[]> {
   let result: AdminLatestComment[] = []
-  const last = 1 + total - (page - 1) * bunch
+  const last = 1 + maxUid - (page - 1) * bunch
   const comments = await select(
     `SELECT uid, post_uid, user_uid, content, submitted, status FROM ${table}comment WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
     [last, bunch],
@@ -93,6 +93,7 @@ export async function getComments(
   if (!comments[0]) {
     return result
   }
+
   result = await makeCommentResult(comments)
   return result
 }
@@ -102,13 +103,14 @@ export async function getSearchedComments(
   search: AdminSearchCommon,
 ): Promise<AdminLatestComment[]> {
   let result: AdminLatestComment[] = []
-  const last = 1 + search.total - (search.page - 1) * search.bunch
+  const last = 1 + search.maxUid - (search.page - 1) * search.bunch
   const comments = await select(`SELECT uid, post_uid, user_uid, content, submitted, status 
   FROM ${table}comment WHERE uid < ${last} AND ${search.option} LIKE '%${search.keyword}%'
   ORDER BY uid DESC LIMIT ${search.bunch}`)
   if (!comments[0]) {
     return result
   }
+
   result = await makeCommentResult(comments)
   return result
 }

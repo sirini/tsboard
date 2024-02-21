@@ -114,9 +114,7 @@
             </v-list>
 
             <v-card-actions class="mt-3">
-              <v-btn prepend-icon="mdi-chevron-left" @click="util.back"
-                >변경 취소하고 뒤로가기</v-btn
-              >
+              <v-btn prepend-icon="mdi-chevron-left" @click="util.back">뒤로가기</v-btn>
               <v-spacer></v-spacer>
               <v-btn color="primary" append-icon="mdi-chevron-right" @click="auth.updateMyInfo"
                 >변경 사항 저장하기</v-btn
