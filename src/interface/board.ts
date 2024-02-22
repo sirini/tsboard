@@ -87,11 +87,13 @@ type PostCommentParams = {
   page: number
   bunch: number
   maxUid: number
+  minUid: number
   accessUserUid: number
 }
 
 export type PostParams = PostCommentParams & {
   boardUid: number
+  pagingDirection: number
 }
 
 export type PostFile = {
@@ -162,6 +164,7 @@ export type UploadImageParams = CommonPairParam & {
 export type LoadImageParams = CommonPairParam & {
   lastUid: number
   bunch: number
+  maxUid: number
 }
 
 export type TargetTable = "post" | "comment"

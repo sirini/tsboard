@@ -1,5 +1,5 @@
 /**
- * store/write
+ * store/editor
  *
  * 게시판, 갤러리 등에서 공통으로 사용하는 글쓰기의 상태 및 함수들
  */
@@ -23,8 +23,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const util = useUtilStore()
   const view = useBoardViewStore()
   const confirmWriteCancelDialog = ref<boolean>(false)
-  const uploadImageDialog = ref<boolean>(false)
-  const addImageFromDBDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
   const addVideoURLDialog = ref<boolean>(false)
   const addTableDialog = ref<boolean>(false)
@@ -32,26 +30,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const files = ref<File[]>([])
-  const uploadedImages = ref<string[]>([])
-  const loadImages = ref<Pair[]>([])
-  const lastUid = ref<number>(0)
-  const bunch = ref<number>(20)
-  const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "102476800"))
   const subject = ref<string>("")
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
-  const uploadRule = [
-    (value: any) => {
-      return (
-        !value ||
-        !value.length ||
-        value[0].size < limit.value ||
-        `파일 크기는 ${(limit.value / 1024768).toFixed(1)}MB 이하여야 합니다.`
-      )
-    },
-  ]
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
@@ -92,64 +75,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
   }
-
-  // 본문에 삽입할 이미지들 선택 및 업로드
-  async function uploadImageFiles(event: MouseEvent): Promise<void> {
-    files.value = []
-    const targets = (event?.target as HTMLInputElement).files
-    if (targets) {
-      const fileArray = Array.from(targets)
-      for (const file of fileArray) {
-        files.value.push(file)
-      }
-    }
-
-    const response = await server.api.board.uploadimages.post({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      boardUid: config.value.uid,
-      sizeLimit: config.value.width,
-      images: files.value,
-    })
-    if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_UPLOAD_IMAGE} (${response.data.error})`)
-      return
-    }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    uploadedImages.value = response.data.result.uploadedImages
-  }
-
-  // 기존에 업로드한 이미지들 가져오기
-  async function loadUploadedImages(): Promise<void> {
-    const response = await server.api.board.loadimages.get({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        boardUid: config.value.uid,
-        lastUid: lastUid.value,
-        bunch: bunch.value,
-      },
-    })
-    if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
-      return
-    }
-    if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_LOAD_IMAGE} (${response.data.error})`)
-      return
-    }
-    for (const image of response.data.result.images) {
-      loadImages.value.push(image)
-      lastUid.value = image.uid
-    }
-  }
-
   // 태그 자동 완성하기
   const tagSuggestions = ref<string[]>(["photography", "tagSample", "example", "test", "nowar"])
   let tagTimer: any = null
@@ -231,26 +156,17 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     config,
     postUid,
     confirmWriteCancelDialog,
-    uploadImageDialog,
-    addImageFromDBDialog,
     addImageURLDialog,
     addVideoURLDialog,
     addTableDialog,
-    limit,
     files,
-    uploadedImages,
-    loadImages,
-    lastUid,
     subject,
     content,
     tag,
     tags,
-    uploadRule,
     textRule,
     tagSuggestions,
     loadBoardConfig,
-    loadUploadedImages,
-    uploadImageFiles,
     updateTagSuggestion,
     addTag,
     removeTag,

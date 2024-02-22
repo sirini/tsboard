@@ -4,15 +4,15 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
+          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
             <v-card-title class="signup_title">
               인증 코드 입력
-              <span class="info ml-3 pl-3">메일에 적혀 있던 6자리 인증 코드를 입력해주세요</span>
+              <span class="info ml-3">메일에 적혀 있던 6자리 인증 코드를 입력해주세요</span>
             </v-card-title>
+            <v-divider></v-divider>
 
-            <alert-bar></alert-bar>
-
-            <div class="text-center pt-3">
+            <v-list><alert-bar></alert-bar></v-list>
+            <div class="text-center mt-9 mb-9">
               <v-otp-input
                 v-model="signup.verificationCode"
                 type="text"
@@ -21,6 +21,7 @@
               ></v-otp-input>
             </div>
 
+            <v-divider></v-divider>
             <v-card-actions>
               <v-btn
                 prepend-icon="mdi-email-alert-outline"
@@ -31,7 +32,6 @@
               >
               <v-spacer></v-spacer>
               <v-btn
-                color="primary"
                 append-icon="mdi-chevron-right"
                 :disabled="signup.verificationCode.length < 6"
                 @click="signup.verify(parseInt(route.params.target as string))"
@@ -51,6 +51,7 @@ import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
 import { useSignupStore } from "../../store/user/signup"
 import { useUtilStore } from "../../store/util"
+import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
@@ -59,6 +60,7 @@ const route = useRoute()
 const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 // 메일 재발송하기
 function retrySendMail(): void {
@@ -74,12 +76,8 @@ function retrySendMail(): void {
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.signup_title {
-  border-bottom: 1px #828282 solid;
-}
 .info {
-  color: #828282;
-  font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  color: #cfd8dc;
+  font-size: 0.7em;
 }
 </style>

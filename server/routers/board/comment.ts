@@ -12,6 +12,7 @@ import {
   getBoardUid,
   getComments,
   getMaxCommentUid,
+  getTotalCommentCount,
   getViewPostLevel,
   likeComment,
   removeComment,
@@ -21,6 +22,7 @@ import {
 } from "../../database/board/comment"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { checkUserPermission, updateUserPoint } from "../../database/board/common"
+import { Comment } from "../../../src/interface/board"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -72,14 +74,20 @@ export const comment = new Elysia()
   })
   .get(
     "/comment",
-    async ({ query: { postUid, id, page, bunch }, accessUserUid, userLevel }) => {
+    async ({
+      query: { postUid, id, page, bunch, pagingDirection, maxUid, minUid },
+      accessUserUid,
+      userLevel,
+    }) => {
       const response = {
         boardUid: 0,
-        comments: [],
-        maxCommentUid: 0,
+        maxUid: 0,
+        minUid: 0,
+        comments: [] as Comment[],
+        totalCommentCount: 0,
       }
 
-      if (id.length < 2 || postUid < 1 || page < 1 || bunch < 1) {
+      if (id.length < 2 || postUid < 1 || page < 1 || bunch < 1 || maxUid < 0 || minUid < 0) {
         return fail(`Invalid parameters.`, response)
       }
 
@@ -89,25 +97,29 @@ export const comment = new Elysia()
         return fail(`Level restriction.`, response)
       }
 
-      const maxCommentUid = await getMaxCommentUid(postUid)
-      const comments = await getComments({
+      if (maxUid < 1) {
+        response.maxUid = await getMaxCommentUid(postUid)
+      }
+      response.totalCommentCount = await getTotalCommentCount(postUid)
+      response.comments = await getComments({
         postUid,
         page,
         bunch,
-        maxUid: maxCommentUid,
+        maxUid,
+        minUid,
         accessUserUid,
       })
-      return success({
-        boardUid,
-        comments,
-        maxCommentUid,
-      })
+
+      return success(response)
     },
     {
       query: t.Object({
         id: t.String(),
         postUid: t.Numeric(),
         page: t.Numeric(),
+        pagingDirection: t.Numeric(),
+        maxUid: t.Numeric(),
+        minUid: t.Numeric(),
         bunch: t.Numeric(),
       }),
     },
@@ -282,7 +294,7 @@ export const comment = new Elysia()
         return fail(`No permission.`, response)
       }
 
-      const isChangeStatus = removeComment(removeTargetUid)
+      const isChangeStatus = await removeComment(removeTargetUid)
       return success({
         newAccessToken,
         isChangeStatus,

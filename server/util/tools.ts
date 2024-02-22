@@ -114,9 +114,7 @@ export async function removeFile(path: string): Promise<boolean> {
 
 // 업로드된 파일을 임시 경로에 잠깐 저장하기
 export async function saveUploadedFile(file: File, dirPath: string): Promise<string> {
-  if ((await exists(dirPath)) === false) {
-    await mkdir(dirPath)
-  }
+  await makeDirectory(dirPath)
   const savedPath = `${dirPath}/${file.name}`
   await Bun.write(savedPath, file)
   return savedPath

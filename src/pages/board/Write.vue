@@ -21,7 +21,7 @@
                 </v-list-item>
                 <v-list-item class="pa-0">
                   <v-file-input
-                    @change="editor.uploadImageFiles"
+                    @change="image.uploadImageFiles"
                     show-size
                     counter
                     class="pt-3"
@@ -115,6 +115,7 @@
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
+import { useEditorImageStore } from "../../store/board/image"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
@@ -125,6 +126,7 @@ import AlertBar from "../../components/util/AlertBar.vue"
 const list = useBoardListStore()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
+const image = useEditorImageStore()
 </script>
 
 <style scoped>

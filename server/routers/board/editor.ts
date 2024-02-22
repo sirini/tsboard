@@ -10,7 +10,13 @@ import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { loadUploadedImages, uploadImages } from "../../database/board/editor"
+import {
+  getMaxImageUid,
+  getTotalImageCount,
+  loadUploadedImages,
+  removeUploadedImage,
+  uploadImages,
+} from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
 
 const defaultTypeCheck = {
@@ -118,22 +124,31 @@ export const editor = new Elysia()
   )
   .get(
     "/loadimages",
-    async ({ query: { boardUid, lastUid, bunch }, accessUserUid }) => {
+    async ({ query: { boardUid, lastUid, bunch }, accessUserUid, newAccessToken }) => {
       const response = {
         images: [],
+        newAccessToken,
+        maxImageUid: 0,
+        totalImageCount: 0,
       }
       if (boardUid < 1 || lastUid < 0 || bunch < 1 || bunch > 100) {
         return fail(`Invalid parameters.`, response)
       }
 
+      const maxImageUid = await getMaxImageUid(boardUid, accessUserUid)
+      const totalImageCount = await getTotalImageCount(boardUid, accessUserUid)
       const images = await loadUploadedImages({
         boardUid,
         lastUid,
         accessUserUid,
+        maxUid: maxImageUid,
         bunch,
       })
       return success({
         images,
+        newAccessToken,
+        maxImageUid,
+        totalImageCount,
       })
     },
     {
@@ -142,6 +157,31 @@ export const editor = new Elysia()
         boardUid: t.Numeric(),
         lastUid: t.Numeric(),
         bunch: t.Numeric(),
+      }),
+    },
+  )
+  .delete(
+    "/removeimage",
+    async ({ query: { imageUid }, accessUserUid, newAccessToken }) => {
+      const response = {
+        newAccessToken,
+      }
+      if (imageUid < 1) {
+        return fail(`Invalid image uid.`, response)
+      }
+
+      const removeImageResult = await removeUploadedImage(imageUid, accessUserUid)
+      if (removeImageResult === false) {
+        return fail(`Unable to remove image (${imageUid})`, response)
+      }
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        imageUid: t.Numeric(),
       }),
     },
   )

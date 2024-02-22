@@ -60,6 +60,8 @@ async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> 
 }
 
 // 댓글들 가져오기
+// TODO
+// 이전 | 다음 관련 처리하기
 export async function getComments(param: CommentParams): Promise<Comment[]> {
   let result: Comment[] = []
   const last = 1 + param.maxUid - (param.page - 1) * param.bunch
@@ -103,6 +105,18 @@ export async function getMaxCommentUid(postUid: number): Promise<number> {
     return 0
   }
   return comment.max_uid
+}
+
+// 총 댓글 개수 반환하기
+export async function getTotalCommentCount(postUid: number): Promise<number> {
+  const [total] = await select(
+    `SELECT COUNT(*) AS count FROM ${table}comment WHERE post_uid = ? AND status != ?`,
+    [postUid, CONTENT_STATUS.REMOVED],
+  )
+  if (!total) {
+    return 0
+  }
+  return total.count
 }
 
 // 게시판 ID에 해당하는 uid 반환하기
@@ -229,24 +243,46 @@ export async function saveModifyComment(param: SaveModifyParams): Promise<void> 
   ])
 }
 
-// 댓글 삭제하기, 답글이 달려져 있을 경우 내용만 지우고 삭제 처리 하지 않음
-export async function removeComment(removeTargetUid: number): Promise<boolean> {
-  const [comment] = await select(`SELECT uid FROM ${table}comment WHERE reply_uid = ? LIMIT 1`, [
-    removeTargetUid,
-  ])
-  if (!comment) {
-    update(`UPDATE ${table}comment SET status = ?, modified = ? WHERE uid = ? LIMIT 1`, [
-      CONTENT_STATUS.REMOVED,
-      Date.now(),
-      removeTargetUid,
-    ])
-    return true
-  }
-
+// 댓글 내용만 비우기
+async function cleanupComment(commentUid: number): Promise<boolean> {
   update(`UPDATE ${table}comment SET content = ?, modified = ? WHERE uid = ? LIMIT 1`, [
     "",
     Date.now(),
-    removeTargetUid,
+    commentUid,
   ])
   return false
+}
+
+// 댓글 내용은 보존하고 삭제 상태로 변경하기
+async function setRemoveStatus(commentUid: number): Promise<boolean> {
+  update(`UPDATE ${table}comment SET status = ?, modified = ? WHERE uid = ? LIMIT 1`, [
+    CONTENT_STATUS.REMOVED,
+    Date.now(),
+    commentUid,
+  ])
+  return true
+}
+
+// 댓글 삭제하기, 답글이 달려져 있을 경우 내용만 지우고 삭제 처리 하지 않음
+export async function removeComment(removeTargetUid: number): Promise<boolean> {
+  const [comment] = await select(
+    `SELECT uid, reply_uid FROM ${table}comment WHERE uid = ? LIMIT 1`,
+    [removeTargetUid],
+  )
+  if (!comment) {
+    return false
+  }
+
+  if (comment.uid === comment.reply_uid) {
+    const [reply] = await select(
+      `SELECT uid FROM ${table}comment WHERE reply_uid = ? AND uid != ? LIMIT 1`,
+      [removeTargetUid, removeTargetUid],
+    )
+    if (reply) {
+      return cleanupComment(removeTargetUid)
+    } else {
+      return setRemoveStatus(removeTargetUid)
+    }
+  }
+  return setRemoveStatus(removeTargetUid)
 }

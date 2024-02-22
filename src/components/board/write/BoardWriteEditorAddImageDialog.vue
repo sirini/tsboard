@@ -1,10 +1,11 @@
 <template>
   <v-dialog v-model="editor.addImageURLDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color.header">
+    <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
       <v-card-title>외부 이미지 URL 추가</v-card-title>
       <v-divider></v-divider>
+
+      <alert-bar></alert-bar>
       <v-card-text>
-        <alert-bar></alert-bar>
         <v-text-field
           v-model="link"
           variant="solo"

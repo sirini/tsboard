@@ -4,20 +4,20 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
+          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
             <v-card-title class="login_title"
               >로그인
-              <span class="info ml-3 pl-3">아이디(이메일) 및 비밀번호를 입력해 주세요</span>
+              <span class="info ml-3">아이디(이메일) 및 비밀번호를 입력해 주세요</span>
             </v-card-title>
+            <v-divider></v-divider>
 
-            <alert-bar></alert-bar>
-
-            <v-list>
+            <v-list><alert-bar></alert-bar></v-list>
+            <v-list class="pl-6 pr-6">
               <v-list-item class="pa-0">
                 <v-text-field
                   v-model="auth.user.id"
                   variant="outlined"
-                  class="mt-3"
+                  class="mt-6"
                   prepend-inner-icon="mdi-email-outline"
                   label="아이디(이메일 주소)를 입력해 주세요"
                   @keyup.enter="auth.login"
@@ -37,7 +37,7 @@
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-3" color="surface-variant" variant="tonal">
+              <v-card class="mt-2 mb-6" variant="tonal">
                 <v-card-text class="text-medium-emphasis text-caption">
                   게시글 및 댓글 작성, 좋아요/쪽지 기능 등은 모두 로그인 후 이용 가능합니다. 로그인
                   후 세션 관련 문제가 발생할 시 로그아웃 이후 다시 로그인을 부탁드립니다. 혹시
@@ -45,19 +45,19 @@
                   비밀번호를 전해드리겠습니다.
                 </v-card-text>
               </v-card>
-              <v-card-actions>
-                <v-btn prepend-icon="mdi-lock-question" @click="util.go('resetpassword')"
-                  >비밀번호 초기화</v-btn
-                >
-                <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')"
-                  >회원가입 하기</v-btn
-                >
-                <v-spacer></v-spacer>
-                <v-btn color="primary" append-icon="mdi-chevron-right" @click="auth.login"
-                  >로그인 완료하기</v-btn
-                >
-              </v-card-actions>
             </v-list>
+
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-btn prepend-icon="mdi-lock-question" @click="util.go('resetpassword')"
+                >비밀번호 초기화</v-btn
+              >
+              <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')"
+                >회원가입 하기</v-btn
+              >
+              <v-spacer></v-spacer>
+              <v-btn append-icon="mdi-chevron-right" @click="auth.login">로그인 완료하기</v-btn>
+            </v-card-actions>
           </v-card>
         </v-container>
         <home-footer></home-footer>
@@ -88,12 +88,8 @@ const visible = ref<boolean>(false)
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.login_title {
-  border-bottom: 1px #828282 solid;
-}
 .info {
-  color: #828282;
-  font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  color: #cfd8dc;
+  font-size: 0.7em;
 }
 </style>

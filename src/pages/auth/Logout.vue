@@ -4,31 +4,28 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
-            <v-card-title class="logout_title"
+          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
+            <v-card-title
               >로그아웃
-              <span class="info ml-3 pl-3">안전하게 로그아웃 합니다</span>
+              <span class="info ml-3">안전하게 로그아웃 합니다</span>
             </v-card-title>
+            <v-divider></v-divider>
 
-            <v-card-text v-if="auth.user.uid < 1" class="mt-6">
-              안전하게 로그아웃 되셨습니다. 첫화면으로 곧 이동합니다...!
-            </v-card-text>
+            <div class="mt-6 mb-6 ml-6 message">
+              <span v-if="auth.user.uid < 1"> 안전하게 로그아웃 되셨습니다. </span>
 
-            <v-card-text v-else class="mt-6">
-              아래에 로그아웃하기 버튼 클릭 시 안전하게 로그아웃 하실 수 있습니다.
-            </v-card-text>
+              <span v-else>
+                아래에 로그아웃하기 버튼 클릭 시 안전하게 로그아웃 하실 수 있습니다.
+              </span>
+            </div>
 
+            <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                @click="auth.logout"
-                color="primary"
-                append-icon="mdi-chevron-right"
-                v-if="auth.user.uid > 0"
+              <v-btn @click="auth.logout" append-icon="mdi-chevron-right" v-if="auth.user.uid > 0">
+                로그아웃하기</v-btn
               >
-                여기를 클릭하여 안전하게 로그아웃하기</v-btn
-              >
-              <v-btn @click="util.go('home')" color="primary" append-icon="mdi-chevron-right" v-else
+              <v-btn @click="util.go('home')" append-icon="mdi-chevron-right" v-else
                 >첫 화면으로 이동하기</v-btn
               >
             </v-card-actions>
@@ -41,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -51,13 +47,6 @@ import HomeFooter from "../home/HomeFooter.vue"
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
-
-// 이미 로그아웃 상태이면 알려주고 홈 화면으로 이동
-onMounted(() => {
-  setTimeout(() => {
-    util.go("home")
-  }, 2000)
-})
 </script>
 
 <style scoped>
@@ -67,12 +56,11 @@ onMounted(() => {
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.logout_title {
-  border-bottom: 1px #828282 solid;
+.message {
+  font-size: 1.2em;
 }
 .info {
-  color: #828282;
-  font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  color: #cfd8dc;
+  font-size: 0.7em;
 }
 </style>

@@ -99,6 +99,7 @@ export const myInfo = new Elysia()
         password,
         profile,
       })
+
       return success({
         newAccessToken,
       })

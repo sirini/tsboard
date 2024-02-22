@@ -1,23 +1,23 @@
 <template>
-  <v-dialog v-model="editor.uploadImageDialog" persistent>
+  <v-dialog v-model="image.uploadImageDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color.header">
       <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
       <v-divider></v-divider>
 
+      <alert-bar></alert-bar>
       <v-card-text>
-        <alert-bar></alert-bar>
         <v-card variant="tonal" class="mt-2 mb-5">
           <v-card-text class="pa-3">
-            본문에 삽입되는 이미지는 자동으로 크기를 줄여서 저장합니다. 원본 크기로 첨부가
-            필요할 경우 파일 첨부 기능을 이용하세요!</v-card-text
+            본문에 삽입되는 이미지는 자동으로 크기를 줄여서 저장합니다. 원본 크기로 첨부가 필요할
+            경우 파일 첨부 기능을 이용하세요!</v-card-text
           >
         </v-card>
         <v-file-input
-          @change="editor.uploadImageFiles"
+          @change="image.uploadImageFiles"
           class="mb-3"
           show-size
           counter
-          :rules="editor.uploadRule"
+          :rules="image.uploadRule"
           accept="image/*"
           prepend-icon="mdi-image-search-outline"
           multiple
@@ -40,9 +40,9 @@
         </v-file-input>
 
         <v-row class="mb-1">
-          <v-col v-for="(image, index) in uploadImages" :key="index" cols="3">
-            <v-card>
-              <v-img cover height="100" aspect-ratio="1/1" :src="image"></v-img>
+          <v-col v-for="(img, index) in image.uploadingImages" :key="index" cols="3">
+            <v-card elevation="0" rounded="lg">
+              <v-img cover height="100" aspect-ratio="1/1" :src="img"></v-img>
             </v-card>
           </v-col>
         </v-row>
@@ -50,7 +50,7 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.uploadImageDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="image.uploadImageDialog = false">닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn @click="add"
           >위 사진들을 업로드 하고 본문에 추가하기
@@ -62,19 +62,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { watch } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
+import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
 
 const util = useUtilStore()
 const home = useHomeStore()
+const image = useEditorImageStore()
 const emits = defineEmits<{
   addImageURL: [src: string]
 }>()
 const editor = useBoardEditorStore()
-const uploadImages = ref<string[]>([])
 
 // 선택한 이미지 파일들을 읽어오기
 watch(
@@ -82,16 +83,17 @@ watch(
   (value: File[]) => {
     for (const v of value) {
       const src = URL.createObjectURL(v)
-      uploadImages.value.push(src)
+      image.uploadingImages.push(src)
     }
   },
 )
 
 // 업로드한 이미지들 본문에 추가하기
 function add(): void {
-  for (const src of editor.uploadedImages) {
+  for (const src of image.uploadedImages) {
     emits("addImageURL", src)
   }
+  image.uploadingImages = []
   util.success("사진을 작성중인 본문에 추가 하였습니다")
 }
 </script>

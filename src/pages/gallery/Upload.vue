@@ -23,11 +23,11 @@
 
                 <v-list-item class="pa-0">
                   <v-file-input
-                    @change="editor.uploadImageFiles"
+                    @change="image.uploadImageFiles"
                     show-size
                     counter
                     class="pt-3"
-                    :rules="editor.uploadRule"
+                    :rules="image.uploadRule"
                     prepend-icon="mdi-image-plus"
                     accept="image/png, image/jpeg, image/gif, image/bmp, image/heif, image/heic"
                     multiple
@@ -129,6 +129,7 @@
 import { useGalleryStore } from "../../store/gallery"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
+import { useEditorImageStore } from "../../store/board/image"
 import { useHomeStore } from "../../store/home"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryUploadCancelDialog from "../../components/gallery/write/GalleryUploadCancelDialog.vue"
@@ -139,6 +140,7 @@ import AlertBar from "../../components/util/AlertBar.vue"
 const gallery = useGalleryStore()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
+const image = useEditorImageStore()
 const home = useHomeStore()
 </script>
 

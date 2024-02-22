@@ -14,6 +14,7 @@ import { useUtilStore } from "../util"
 import { useCommentSaveStore } from "./comment/save"
 import { Comment } from "../../interface/board"
 import { COMMENT } from "../../messages/store/board/comment"
+import { PAGING_DIRECTION } from "../../../server/database/board/const"
 
 export const useCommentStore = defineStore("comment", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -24,6 +25,8 @@ export const useCommentStore = defineStore("comment", () => {
   const id = ref<string>("")
   const boardUid = ref<number>(0)
   const postUid = ref<number>(0)
+  const maxUid = ref<number>(0)
+  const minUid = ref<number>(0)
   const modifyTarget = ref<number>(0)
   const replyTarget = ref<number>(0)
   const removeTarget = ref<number>(0)
@@ -34,9 +37,12 @@ export const useCommentStore = defineStore("comment", () => {
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
   const pageLength = ref<number>(1)
+  const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
   const bunch = ref<number>(100)
 
   // 기존 댓글 불러오기
+  // TODO
+  // 이전 | 다음 처리 관련 추가하기
   async function loadCommentList(): Promise<void> {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
@@ -49,7 +55,10 @@ export const useCommentStore = defineStore("comment", () => {
         id: id.value,
         postUid: postUid.value,
         page: page.value,
+        pagingDirection: pagingDirection.value,
         bunch: bunch.value,
+        maxUid: maxUid.value,
+        minUid: minUid.value,
       },
     })
 
@@ -62,7 +71,7 @@ export const useCommentStore = defineStore("comment", () => {
     }
     boardUid.value = response.data.result.boardUid
     comments.value = response.data.result.comments
-    pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
+    pageLength.value = Math.ceil(response.data.result.totalCommentCount / bunch.value)
   }
 
   // 댓글에 답글달기 시 대상 지정

@@ -1,66 +1,79 @@
 <template>
-  <v-dialog v-model="editor.addImageFromDBDialog" persistent>
-    <v-card width="700" class="mx-auto" :color="home.color.header">
-      <v-card-title>기존 이미지를 본문에 추가/관리</v-card-title>
+  <v-dialog v-model="image.addImageFromDBDialog" persistent>
+    <v-card width="700" class="mx-auto" rounded="lg" :color="home.color.header">
+      <v-card-title>기존 이미지를 본문에 추가/관리 ({{ image.totalImageCount }}개)</v-card-title>
       <v-divider></v-divider>
+      <alert-bar></alert-bar>
+
       <v-card-text>
-        <v-card v-show="showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">
+        <v-card v-show="image.showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">
           <v-card-text class="pa-3">
             정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만
             삭제해 주세요! 만약 이전 게시글들에 이미 사용하셨다면, 해당 게시글들은 더 이상 이미지가
             나타나지 않게 됩니다. 계속 진행하시겠습니까?
           </v-card-text>
           <v-card-actions>
-            <v-btn prepend-icon="mdi-check" @click="clear">아니요, 삭제하지 않겠습니다</v-btn>
+            <v-btn prepend-icon="mdi-check" @click="image.clearRemoveTarget"
+              >아니요, 삭제하지 않겠습니다</v-btn
+            >
             <v-spacer></v-spacer>
             <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제하기</v-btn>
           </v-card-actions>
         </v-card>
 
         <v-row no-gutters>
-          <v-col v-for="(image, index) in editor.loadImages" :key="index" cols="2">
-            <v-img
-              cover
-              height="100"
-              aspect-ratio="1/1"
-              :src="PREFIX + image.name"
-              class="mr-2 mb-2"
-            >
-              <div class="action">
-                <v-btn
-                  @click="add(image.name)"
-                  size="small"
-                  elevation="0"
-                  variant="tonal"
-                  color="white"
-                  icon
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
+          <v-col v-for="(img, index) in image.loadImages" :key="index" cols="2" class="mb-3">
+            <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
+              <v-img cover width="105" aspect-ratio="1/1" :src="PREFIX + img.name">
+                <div class="action">
+                  <v-btn
+                    @click="add(img.name)"
+                    size="small"
+                    elevation="0"
+                    variant="tonal"
+                    color="white"
+                    icon
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
 
-                <v-btn
-                  @click="check(image.uid, image.name)"
-                  size="small"
-                  elevation="0"
-                  variant="tonal"
-                  color="white"
-                  class="ml-1"
-                  icon
-                >
-                  <v-icon>mdi-trash-can</v-icon>
-                </v-btn>
-              </div>
-            </v-img>
+                  <v-btn
+                    @click="image.setRemoveTarget(img.uid, img.name)"
+                    size="small"
+                    elevation="0"
+                    variant="tonal"
+                    color="white"
+                    class="ml-1"
+                    icon
+                  >
+                    <v-icon>mdi-trash-can</v-icon>
+                  </v-btn>
+                </div>
+              </v-img>
+            </v-card>
           </v-col>
 
-          <v-col v-if="editor.loadImages.length < 1" cols="12">
+          <v-col v-if="image.loadImages.length < 1" cols="12">
             이 게시판에서 아직 업로드하신 이미지가 없습니다.
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="text-center">
+            <v-btn
+              prepend-icon="mdi-refresh"
+              variant="tonal"
+              block
+              class="mb-3"
+              :disabled="image.disableReloadButton"
+              @click="image.loadUploadedImages(true, editor.config.uid)"
+              >이전 이미지들 가져오기</v-btn
+            >
           </v-col>
         </v-row>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="editor.addImageFromDBDialog = false"
+        <v-btn block prepend-icon="mdi-close" @click="image.addImageFromDBDialog = false"
           >닫기</v-btn
         >
       </v-card-actions>
@@ -69,59 +82,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, watch } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
+import { useEditorImageStore } from "../../../store/board/image"
+import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { Pair } from "../../../interface/board"
+import { EDITOR } from "../../../messages/store/board/editor"
+import AlertBar from "../../util/AlertBar.vue"
 
 const editor = useBoardEditorStore()
+const image = useEditorImageStore()
+const util = useUtilStore()
 const home = useHomeStore()
 const emits = defineEmits<{
   addImageURL: [src: string]
   removeImage: [src: string]
 }>()
 const PREFIX = process.env.PREFIX || ""
-const showRemoveImageInfo = ref<boolean>(false)
-const removeImageTarget = ref<Pair>({
-  uid: 0,
-  name: "",
-})
 
-onMounted(() => editor.loadUploadedImages())
+watch(
+  () => image.addImageFromDBDialog,
+  () => image.loadUploadedImages(false, editor.config.uid),
+)
 
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
   emits("addImageURL", PREFIX + src)
 }
 
-// 이미지 삭제하기 전에 확인하기
-function check(uid: number, src: string): void {
-  showRemoveImageInfo.value = true
-  removeImageTarget.value = { uid, name: PREFIX + src }
-}
-
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)
 function remove(): void {
-  emits("removeImage", removeImageTarget.value.name)
-  // TODO 서버에 올려진 사진 파일 / DB 레코드 제거
-  editor.loadImages = editor.loadImages.filter((value) => {
-    return value.uid !== removeImageTarget.value.uid
+  emits("removeImage", image.removeImageTarget.name)
+  image.removeUploadedImage(image.removeImageTarget.uid)
+  image.loadImages = image.loadImages.filter((value) => {
+    return value.uid !== image.removeImageTarget.uid
   })
-  clear()
-}
-
-// 삭제하지 않기
-function clear(): void {
-  showRemoveImageInfo.value = false
-  removeImageTarget.value = { uid: 0, name: "" }
+  util.snack(EDITOR.REMOVED_IMAGE)
+  image.clearRemoveTarget()
 }
 </script>
 
 <style scoped>
 .action {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
+  display: flex;
+  width: 100px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
 }
 
 /** 다이얼로그 배경 조정 */

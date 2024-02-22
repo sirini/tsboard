@@ -4,21 +4,21 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto" max-width="500">
+          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
             <v-card-title class="change_password_title">
               비밀번호 변경
-              <span class="info ml-3 pl-3">이곳에서 비밀번호를 변경하세요</span>
+              <span class="info ml-3">이곳에서 비밀번호를 변경하세요</span>
             </v-card-title>
+            <v-divider></v-divider>
 
-            <alert-bar></alert-bar>
-
-            <v-list>
+            <v-list><alert-bar></alert-bar></v-list>
+            <v-list class="pl-6 pr-6">
               <v-list-item class="pa-0">
                 <v-text-field
                   v-model="auth.password"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
-                  class="mt-2"
+                  class="mt-6"
                   label="비밀번호를 입력해 주세요"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
@@ -31,7 +31,7 @@
                   v-model="auth.checkedPassword"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
-                  class="mt-2"
+                  class="mt-2 mb-6"
                   label="비밀번호를 한 번 더 입력해 주세요"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
@@ -41,6 +41,7 @@
               </v-list-item>
             </v-list>
 
+            <v-divider></v-divider>
             <v-card-actions>
               <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')"
                 >로그인 하러가기</v-btn
@@ -90,12 +91,8 @@ function change(): void {
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.change_password_title {
-  border-bottom: 1px #828282 solid;
-}
 .info {
-  color: #828282;
-  font-size: 0.65em;
-  border-left: 1px #dddddd solid;
+  color: #cfd8dc;
+  font-size: 0.7em;
 }
 </style>

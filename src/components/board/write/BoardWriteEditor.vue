@@ -117,12 +117,12 @@
       >
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
-          <v-list-item prepend-icon="mdi-image-plus" @click="writeEditor.uploadImageDialog = true">
+          <v-list-item prepend-icon="mdi-image-plus" @click="editorImage.uploadImageDialog = true">
             이미지 파일 직접 업로드
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-image-search-outline"
-            @click="writeEditor.addImageFromDBDialog = true"
+            @click="editorImage.addImageFromDBDialog = true"
           >
             기존 이미지 추가/관리
           </v-list-item>
@@ -296,6 +296,7 @@ import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
 import { useBoardEditorStore } from "../../../store/board/editor"
+import { useEditorImageStore } from "../../../store/board/image"
 import { useHomeStore } from "../../../store/home"
 import { VideoURL, TableOption } from "../../../interface/board"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
@@ -306,6 +307,7 @@ import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue
 import "../../../assets/board/editor.scss"
 
 const writeEditor = useBoardEditorStore()
+const editorImage = useEditorImageStore()
 const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
@@ -373,6 +375,7 @@ watch(
 
 // 기존 or 외부 이미지 추가하기
 function addImageURL(src: string): void {
+  editor.value?.commands.focus("end")
   editor.value?.commands.setImage({ src })
   editor.value?.commands.enter()
   editor.value?.commands.focus("end")
@@ -405,6 +408,7 @@ function removeImage(src: string): void {
 // YouTube 동영상 추가하기
 function addVideoURL(link: VideoURL): void {
   const { src, width, height } = link
+  editor.value?.commands.focus("end")
   editor.value?.commands.setYoutubeVideo({
     src,
     width,
@@ -417,6 +421,7 @@ function addVideoURL(link: VideoURL): void {
 // 표 추가하기
 function addTable(option: TableOption): void {
   const { rows, cols, withHeaderRow } = option
+  editor.value?.commands.focus("end")
   editor.value?.chain().focus().insertTable({ rows, cols, withHeaderRow }).run()
   editor.value?.commands.enter()
   editor.value?.commands.focus("end")

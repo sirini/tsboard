@@ -26,6 +26,11 @@ export const BOARD_CONFIG: BoardConfig = {
   point: { view: 0, write: 0, comment: 0, download: 0 },
 }
 
+export const PAGING_DIRECTION = {
+  PREV: -1,
+  NEXT: 1,
+}
+
 export type CommentRelated = {
   writer: Writer
   like: number

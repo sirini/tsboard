@@ -134,7 +134,9 @@ export const useAuthStore = defineStore("auth", () => {
   // 변경할 프로필 사진 받기
   function selectProfileImage(event: Event): void {
     const input = event.target as HTMLInputElement
-    if (!input.files?.length) return
+    if (!input.files) {
+      return
+    }
     newProfile.value = input.files[0] as File
     user.value.profile = URL.createObjectURL(newProfile.value)
   }
@@ -164,6 +166,7 @@ export const useAuthStore = defineStore("auth", () => {
       signature: user.value.signature,
       profile: newProfile.value,
     })
+
     if (!response.data) {
       util.error(AUTH.NO_RESPONSE)
       return

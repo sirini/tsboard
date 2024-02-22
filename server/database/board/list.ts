@@ -14,7 +14,7 @@ import {
   PostRelatedParams,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
-import { BOARD_CONFIG, POST_RELATED, PostRelated } from "./const"
+import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED, PostRelated } from "./const"
 
 // 게시판 기본 설정 가져오기
 export async function getBoardConfig(id: string): Promise<BoardConfig> {
@@ -82,6 +82,18 @@ export async function getMaxPostUid(boardUid: number): Promise<number> {
     return 0
   }
   return post.max_uid
+}
+
+// 총 게시글 개수 반환하기
+export async function getTotalPostCount(boardUid: number): Promise<number> {
+  const [total] = await select(
+    `SELECT COUNT(*) AS count FROM ${table}post WHERE board_uid = ? AND status != ?`,
+    [boardUid, CONTENT_STATUS.REMOVED],
+  )
+  if (!total) {
+    return 0
+  }
+  return total.count
 }
 
 // 게시글에 연관된 정보 가져오기
@@ -171,24 +183,52 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
   return result
 }
 
+// 공지글 가져오기
+async function getNotices(boardUid: number, accessUserUid: number): Promise<Post[]> {
+  let result: Post[] = []
+  const notices = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post 
+  WHERE board_uid = ? AND status = ?`,
+    [boardUid, CONTENT_STATUS.NOTICE],
+  )
+  result.push(...(await makePostResult(notices, accessUserUid)))
+  return result
+}
+
+// 이전 게시글 목록 가져오기
+async function getPrevPosts(param: PostParams): Promise<RowDataPacket[]> {
+  const prevs = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid > ? ORDER BY uid ASC LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.maxUid, param.bunch],
+  )
+  return prevs
+}
+
+// 다음 게시글 목록 가져오기
+async function getNextPosts(param: PostParams): Promise<RowDataPacket[]> {
+  const nexts = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.minUid, param.bunch],
+  )
+  return nexts
+}
+
 // 글 목록 가져오기
 export async function getPosts(param: PostParams): Promise<Post[]> {
   let result: Post[] = []
-  const last = 1 + param.maxUid - (param.page - 1) * param.bunch
-  const notices = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status FROM ${table}post 
-  WHERE board_uid = ? AND status > ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL],
-  )
-  result.push(...(await makePostResult(notices, param.accessUserUid)))
+  const notices = await getNotices(param.boardUid, param.accessUserUid)
+  result.push(...notices)
 
-  const posts = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status FROM ${table}post 
-    WHERE board_uid = ? AND status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, last, param.bunch - result.length],
-  )
+  let posts: RowDataPacket[] = []
+  if (param.pagingDirection === PAGING_DIRECTION.NEXT) {
+    posts = await getNextPosts(param)
+  } else {
+    posts = await getPrevPosts(param)
+  }
   result.push(...(await makePostResult(posts, param.accessUserUid)))
-
   return result
 }
 

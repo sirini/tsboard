@@ -1,10 +1,11 @@
 <template>
   <v-dialog v-model="editor.addVideoURLDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color.header">
+    <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
       <v-card-title>YouTube URL 추가</v-card-title>
       <v-divider></v-divider>
+
+      <alert-bar></alert-bar>
       <v-card-text>
-        <alert-bar></alert-bar>
         <v-row no-gutters>
           <v-col>
             <v-text-field
