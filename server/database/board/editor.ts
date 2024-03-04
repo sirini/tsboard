@@ -120,3 +120,22 @@ export async function getSuggestionTags(hashtag: string, limit: number): Promise
   }
   return result
 }
+
+// 카테고리 목록 반환하기
+export async function getCategories(boardUid: number): Promise<Pair[]> {
+  let result: Pair[] = []
+  const cats = await select(`SELECT uid, name FROM ${table}board_category WHERE board_uid = ?`, [
+    boardUid,
+  ])
+  if (!cats[0]) {
+    return result
+  }
+
+  for (const cat of cats) {
+    result.push({
+      uid: cat.uid,
+      name: cat.name,
+    })
+  }
+  return result
+}

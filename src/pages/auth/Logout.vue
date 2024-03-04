@@ -12,7 +12,9 @@
             <v-divider></v-divider>
 
             <div class="mt-6 mb-6 ml-6 message">
-              <span v-if="auth.user.uid < 1"> 안전하게 로그아웃 되셨습니다. </span>
+              <span v-if="auth.user.uid < 1">
+                안전하게 로그아웃 되셨습니다. 곧 다시 만나요! 👋</span
+              >
 
               <span v-else>
                 아래에 로그아웃하기 버튼 클릭 시 안전하게 로그아웃 하실 수 있습니다.
@@ -55,9 +57,6 @@ const home = useHomeStore()
 }
 .wrap {
   min-height: calc(100vh - 118px);
-}
-.message {
-  font-size: 1.2em;
 }
 .info {
   color: #cfd8dc;

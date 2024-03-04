@@ -7,7 +7,6 @@
         본문 작성란 내부에서 이미 업로드하신 이미지들을 제외하고 나머지 입력 항목들은 모두
         삭제됩니다. 계속 진행하시겠습니까?
       </v-card-text>
-      <v-divider></v-divider>
 
       <v-card-actions>
         <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog"

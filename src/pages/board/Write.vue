@@ -8,17 +8,33 @@
             <v-form fast-fail @submit.prevent>
               <board-header :name="editor.config.name" :info="editor.config.info"></board-header>
               <alert-bar></alert-bar>
+
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
-                    v-model="editor.subject"
-                    :rules="editor.textRule"
-                    class="mt-2"
-                    prepend-icon="mdi-pencil-outline"
+                    v-model="editor.category.name"
                     variant="outlined"
-                    label="글 제목을 입력해 주세요"
-                  ></v-text-field>
+                    hide-details
+                    class="mt-2"
+                    readonly
+                    prepend-icon="mdi-filter"
+                    append-inner-icon="mdi-chevron-down"
+                    placeholder="카테고리를 선택해주세요."
+                  >
+                    <v-menu activator="parent" open-on-hover>
+                      <v-list>
+                        <v-list-item
+                          v-for="(cat, index) in editor.categories"
+                          :key="index"
+                          @click="editor.selectCategory(cat)"
+                        >
+                          {{ cat.name }}
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-text-field>
                 </v-list-item>
+
                 <v-list-item class="pa-0">
                   <v-file-input
                     @change="image.uploadImageFiles"
@@ -26,6 +42,7 @@
                     counter
                     class="pt-3"
                     accept="*/*"
+                    hide-details
                     multiple
                     variant="outlined"
                     label="첨부할 파일들을 선택해 주세요"
@@ -45,6 +62,18 @@
                     </template>
                   </v-file-input>
                 </v-list-item>
+
+                <v-list-item class="pa-0">
+                  <v-text-field
+                    v-model="editor.subject"
+                    :rules="editor.textRule"
+                    class="pt-3 pb-2"
+                    prepend-icon="mdi-pencil-outline"
+                    variant="outlined"
+                    label="글 제목을 입력해 주세요"
+                  ></v-text-field>
+                </v-list-item>
+
                 <v-list-item class="pa-0">
                   <board-write-editor
                     v-model="editor.content"
@@ -57,7 +86,7 @@
                     :rules="editor.textRule"
                     class="mt-2"
                     prepend-inner-icon="mdi-tag-multiple"
-                    label="게시글 내용에 적합한 해시태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
+                    label="게시글과 어울리는 태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
                     @keyup="editor.updateTagSuggestion"
                     @keyup.space="editor.addTag(editor.tag)"
                     @keyup.,="editor.addTag(editor.tag)"
@@ -79,7 +108,7 @@
                         <v-list-item
                           v-show="editor.suggestionTags.length < 1 && editor.tag.length > 2"
                         >
-                          [{{ editor.tag }}] 와 유사한 해시태그가 아직 없습니다.
+                          <strong>{{ editor.tag }}</strong> 새로운 태그입니다! 😉
                         </v-list-item>
                       </v-list>
                     </v-menu>
@@ -92,8 +121,9 @@
                       closable
                       @click.close="editor.removeTag(tag)"
                       class="mt-1 ml-1"
-                      >{{ tag }}</v-chip
-                    >
+                      >{{ tag }}
+                      <v-tooltip activator="parent">클릭하시면 삭제합니다!</v-tooltip>
+                    </v-chip>
                   </v-card>
                 </v-list-item>
               </v-list>

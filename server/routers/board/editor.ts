@@ -11,6 +11,7 @@ import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import {
+  getCategories,
   getMaxImageUid,
   getSuggestionTags,
   getTotalImageCount,
@@ -66,14 +67,17 @@ export const editor = new Elysia()
       const response = {
         newAccessToken: "",
         config: BOARD_CONFIG,
+        categories: [] as Pair[],
       }
       if (id.length < 2) {
         return fail(`Invalid board ID.`, response)
       }
       const config = await getBoardConfig(id)
+      const categories = await getCategories(config.uid)
       return success({
         newAccessToken,
         config,
+        categories,
       })
     },
     {
@@ -189,7 +193,7 @@ export const editor = new Elysia()
   )
   .get(
     "/tagsuggestion",
-    async ({ query: { tag, limit }, accessUserUid }) => {
+    async ({ query: { tag, limit } }) => {
       const response = {
         suggestions: [] as Pair[],
       }

@@ -29,6 +29,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
+  const category = ref<Pair>({ uid: 0, name: "" })
+  const categories = ref<Pair[]>([])
   const files = ref<File[]>([])
   const subject = ref<string>("")
   const content = ref<string>("")
@@ -75,6 +77,12 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
+    categories.value = response.data.result.categories
+  }
+
+  // 카테고리 선택하기
+  function selectCategory(cat: Pair): void {
+    category.value = cat
   }
 
   // 태그 자동 완성하기
@@ -106,7 +114,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
   // 추천 태그를 클릭하거나 스페이스/콤마 키 입력시 추가하기
   function addTag(value: string): void {
-    const target = value.replaceAll(util.filters.nospace, "")
+    const target = value.replaceAll(util.filters.nospace, "").toLowerCase()
     const duplicate = tags.value.filter((tag: string) => {
       return tag === target
     })
@@ -172,6 +180,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     id,
     config,
     postUid,
+    category,
+    categories,
     confirmWriteCancelDialog,
     addImageURLDialog,
     addVideoURLDialog,
@@ -184,6 +194,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     textRule,
     suggestionTags,
     loadBoardConfig,
+    selectCategory,
     updateTagSuggestion,
     addTag,
     removeTag,
