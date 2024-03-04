@@ -14,6 +14,10 @@
             >{{ action }} 시 {{ amount }} 만큼 포인트를 차감합니다.</v-tooltip
           >
         </v-btn>
+        <v-btn :value="true" @click="setToZero">
+          리셋
+          <v-tooltip activator="parent">충전 혹은 차감 없음을 선택합니다.</v-tooltip>
+        </v-btn>
       </v-btn-toggle>
     </v-col>
 
@@ -54,6 +58,12 @@ const point = useAdminBoardPointStore()
 const isPayment = ref<boolean>(false)
 const amount = ref<string>("0")
 const action = ref<string>("")
+
+// 충전 혹은 차감 모두 해당없음으로 설정
+function setToZero(): void {
+  emit("update", true, "0")
+  amount.value = "0"
+}
 
 watch(
   () => point.board,

@@ -101,3 +101,22 @@ export async function removeUploadedImage(
   removeFile(`.${image.path}`)
   return true
 }
+
+// 태그 추천하기
+export async function getSuggestionTags(hashtag: string, limit: number): Promise<Pair[]> {
+  let result: Pair[] = []
+  const tags = await select(
+    `SELECT uid, name FROM ${table}hashtag WHERE name LIKE '%${hashtag}%' LIMIT ${limit}`,
+  )
+  if (!tags[0]) {
+    return result
+  }
+
+  for (const tag of tags) {
+    result.push({
+      uid: tag.uid,
+      name: tag.name,
+    })
+  }
+  return result
+}

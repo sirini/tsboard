@@ -13,4 +13,5 @@ export const EDITOR = {
   FAILED_REMOVE_IMAGE: "이미지를 삭제하지 못했습니다.",
   REMOVED_IMAGE: "이미지를 삭제하였습니다.",
   EMPTY_IMAGES: "이전 이미지가 더 이상 없습니다.",
+  FAILED_LOAD_TAGS: "추천 태그목록을 가져올 수 없었습니다.",
 }

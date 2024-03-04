@@ -35,6 +35,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const contentWithSyntax = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
+  const suggestionTags = ref<Pair[]>([])
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
@@ -75,17 +76,33 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
   }
+
   // 태그 자동 완성하기
-  const tagSuggestions = ref<string[]>(["photography", "tagSample", "example", "test", "nowar"])
-  let tagTimer: any = null
-  function updateTagSuggestion(): void {
-    clearTimeout(tagTimer)
-    tagTimer = setTimeout(async () => {
-      tagSuggestions.value = tagSuggestions.value.filter((keyword: string) => {
-        return keyword.indexOf(tag.value) > -1
-      })
-    }, 200)
+  async function _updateTagSuggestion(): Promise<void> {
+    if (tag.value.length < 3) {
+      return
+    }
+
+    const response = await server.api.board.tagsuggestion.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        tag: tag.value,
+        limit: 5,
+      },
+    })
+    if (!response.data) {
+      util.snack(EDITOR.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${EDITOR.FAILED_LOAD_TAGS} (${response.data.error})`)
+      return
+    }
+    suggestionTags.value = response.data.result.suggestions
   }
+  const updateTagSuggestion = util.debounce(_updateTagSuggestion, 250)
 
   // 추천 태그를 클릭하거나 스페이스/콤마 키 입력시 추가하기
   function addTag(value: string): void {
@@ -165,7 +182,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     tag,
     tags,
     textRule,
-    tagSuggestions,
+    suggestionTags,
     loadBoardConfig,
     updateTagSuggestion,
     addTag,

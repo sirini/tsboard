@@ -12,12 +12,14 @@ import { getBoardConfig } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import {
   getMaxImageUid,
+  getSuggestionTags,
   getTotalImageCount,
   loadUploadedImages,
   removeUploadedImage,
   uploadImages,
 } from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
+import { Pair } from "../../../src/interface/board"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -182,6 +184,28 @@ export const editor = new Elysia()
       ...defaultTypeCheck,
       query: t.Object({
         imageUid: t.Numeric(),
+      }),
+    },
+  )
+  .get(
+    "/tagsuggestion",
+    async ({ query: { tag, limit }, accessUserUid }) => {
+      const response = {
+        suggestions: [] as Pair[],
+      }
+      if (tag.length < 3) {
+        return fail(`Tag is too short.`, response)
+      }
+      const suggestions = await getSuggestionTags(tag, limit)
+      return success({
+        suggestions,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      query: t.Object({
+        tag: t.String(),
+        limit: t.Numeric(),
       }),
     },
   )
