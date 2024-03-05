@@ -13,7 +13,7 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { EDITOR } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
-import { BoardConfig, Pair } from "../../interface/board"
+import { BoardConfig, CountPair, Pair } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
@@ -26,22 +26,23 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const addImageURLDialog = ref<boolean>(false)
   const addVideoURLDialog = ref<boolean>(false)
   const addTableDialog = ref<boolean>(false)
+  const loading = ref<boolean>(false)
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const category = ref<Pair>({ uid: 0, name: "" })
   const categories = ref<Pair[]>([])
   const files = ref<File[]>([])
-  const subject = ref<string>("")
+  const title = ref<string>("")
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
-  const suggestionTags = ref<Pair[]>([])
+  const suggestionTags = ref<CountPair[]>([])
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
-      return `2글자 이상 입력해 주세요.`
+      return EDITOR.TOO_SHORT_TEXT
     },
   ]
 
@@ -78,6 +79,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
     categories.value = response.data.result.categories
+    category.value = categories.value[0]
   }
 
   // 카테고리 선택하기
@@ -119,7 +121,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return tag === target
     })
     if (duplicate.length > 0) {
-      util.snack(`이미 추가된 태그입니다.`)
+      util.snack(EDITOR.ALREADY_ADDED_TAG)
       tag.value = ""
       return
     }
@@ -152,24 +154,55 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     confirmWriteCancelDialog.value = false
   }
 
+  // 선택한 파일들 목록 보관하기
+  function selectAttachmentFiles(event: MouseEvent): void {
+    files.value = util.attachments(event)
+  }
+
   // 작성된 글 저장하기
-  async function savePost(id: string): Promise<void> {
-    const result = false
-    if (subject.value.length < 2) {
-      util.error(`제목은 2글자 이상 입력해 주세요.`)
+  async function write(): Promise<void> {
+    if (title.value.length < 2) {
+      util.error(EDITOR.TOO_SHORT_TITLE)
       return
     }
     if (content.value.length < 3) {
-      util.error(`글 내용은 3글자 이상 입력해 주세요.`)
+      util.error(EDITOR.TOO_SHORT_CONTENT)
       return
     }
 
-    // do something
-    // content.value 대신 contentWithSyntax.value 사용할 것
-    util.success(`글 작성에 성공 하였습니다.`)
+    loading.value = true
+    const response = await server.api.board.write.post({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: config.value.uid,
+      categoryUid: category.value.uid,
+      title: title.value,
+      content: contentWithSyntax.value,
+      attachments: files.value,
+      tags: tags.value,
+    })
+
+    if (!response.data) {
+      util.error(EDITOR.NO_RESPONSE)
+      loading.value = false
+      return
+    }
+    if (response.data.success === false) {
+      util.error(`${EDITOR.FAILED_WRITE_POST} (${response.data.error})`)
+      loading.value = false
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken)
+    util.success(EDITOR.WRITTEN_NEW_POST)
+
+    setTimeout(() => {
+      loading.value = false
+      util.go("boardView", id.value, response.data.result.postUid)
+    }, 3000)
 
     files.value = []
-    subject.value = ""
+    title.value = ""
     content.value = ""
     contentWithSyntax.value = ""
     tag.value = ""
@@ -186,8 +219,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     addImageURLDialog,
     addVideoURLDialog,
     addTableDialog,
+    loading,
     files,
-    subject,
+    title,
     content,
     tag,
     tags,
@@ -195,12 +229,13 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     suggestionTags,
     loadBoardConfig,
     selectCategory,
+    selectAttachmentFiles,
     updateTagSuggestion,
     addTag,
     removeTag,
     updateRealHtml,
     openWriteCancelDialog,
     closeWriteCancelDialog,
-    savePost,
+    write,
   }
 })

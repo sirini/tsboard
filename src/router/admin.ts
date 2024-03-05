@@ -4,9 +4,11 @@
  * 관리자 전용 라우팅(경로 지정) 설정
  */
 
+import { RouteRecordRaw } from "vue-router"
+
 const PREFIX = process.env.PREFIX || ""
 
-export const adminRoutes = [
+export const adminRoutes: Array<RouteRecordRaw> = [
   {
     path: PREFIX + "/admin",
     name: "admin",

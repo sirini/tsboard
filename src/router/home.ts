@@ -4,9 +4,11 @@
  * 메인 페이지 등 일반 페이지 관련 라우팅(경로 지정) 설정
  */
 
+import { RouteRecordRaw } from "vue-router"
+
 const PREFIX = process.env.PREFIX || ""
 
-export const homeRoutes = [
+export const homeRoutes: Array<RouteRecordRaw> = [
   {
     path: PREFIX + "/",
     name: "home",

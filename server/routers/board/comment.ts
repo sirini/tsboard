@@ -157,7 +157,7 @@ export const comment = new Elysia()
     async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
       const response = { newCommentUid: 0, newAccessToken: "" }
 
-      if (boardUid < 1 || postUid < 1 || content.length < 3) {
+      if (boardUid < 1 || postUid < 1 || content.trim().length < 3) {
         return fail(`Invalid parameters.`, response)
       }
       if (accessUserUid < 1) {

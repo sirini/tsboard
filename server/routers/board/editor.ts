@@ -9,7 +9,7 @@ import { jwt } from "@elysiajs/jwt"
 import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { fail, getUpdatedAccessToken, refineText, success } from "../../util/tools"
 import {
   getCategories,
   getMaxImageUid,
@@ -17,10 +17,13 @@ import {
   getTotalImageCount,
   loadUploadedImages,
   removeUploadedImage,
+  saveAttachments,
+  saveTags,
   uploadImages,
+  writeNewPost,
 } from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
-import { Pair } from "../../../src/interface/board"
+import { CountPair, Pair } from "../../../src/interface/board"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -29,6 +32,15 @@ const defaultTypeCheck = {
   cookie: t.Cookie({
     refresh: t.String(),
   }),
+}
+
+const htmlFilter = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+  allowedAttributes: {
+    code: ["class"],
+    img: ["src", "alt", "class"],
+    span: ["class"],
+  },
 }
 
 export const editor = new Elysia()
@@ -140,6 +152,9 @@ export const editor = new Elysia()
       if (boardUid < 1 || lastUid < 0 || bunch < 1 || bunch > 100) {
         return fail(`Invalid parameters.`, response)
       }
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
+      }
 
       const maxImageUid = await getMaxImageUid(boardUid, accessUserUid)
       const totalImageCount = await getTotalImageCount(boardUid, accessUserUid)
@@ -172,6 +187,9 @@ export const editor = new Elysia()
       const response = {
         newAccessToken,
       }
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
+      }
       if (imageUid < 1) {
         return fail(`Invalid image uid.`, response)
       }
@@ -193,9 +211,12 @@ export const editor = new Elysia()
   )
   .get(
     "/tagsuggestion",
-    async ({ query: { tag, limit } }) => {
+    async ({ query: { tag, limit }, accessUserUid }) => {
       const response = {
-        suggestions: [] as Pair[],
+        suggestions: [] as CountPair[],
+      }
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
       }
       if (tag.length < 3) {
         return fail(`Tag is too short.`, response)
@@ -210,6 +231,66 @@ export const editor = new Elysia()
       query: t.Object({
         tag: t.String(),
         limit: t.Numeric(),
+      }),
+    },
+  )
+  .post(
+    "/write",
+    async ({
+      body: { boardUid, categoryUid, title, content, attachments, tags },
+      accessUserUid,
+      newAccessToken,
+    }) => {
+      const response = {
+        newAccessToken: "",
+        postUid: 0,
+      }
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
+      }
+      if (categoryUid < 1 || title.trim().length < 2 || content.trim().length < 3) {
+        return fail(`Invalid parameters.`, response)
+      }
+
+      title = Bun.escapeHTML(title)
+      content = sanitizeHtml(content, htmlFilter)
+
+      const postUid = await writeNewPost({
+        boardUid,
+        accessUserUid,
+        categoryUid,
+        title,
+        content,
+      })
+
+      if (tags.length > 0) {
+        tags = tags.map((tag) => refineText(tag))
+        await saveTags(boardUid, postUid, tags)
+      }
+
+      if (attachments) {
+        await saveAttachments(boardUid, postUid, attachments)
+      }
+
+      return success({
+        newAccessToken,
+        postUid,
+      })
+    },
+    {
+      ...defaultTypeCheck,
+      body: t.Object({
+        boardUid: t.Numeric(),
+        categoryUid: t.Numeric(),
+        title: t.String(),
+        content: t.String(),
+        attachments: t.Optional(
+          t.Files({
+            type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
+            maxSize: parseInt(process.env.MAX_FILE_SIZE ?? "102476800"),
+          }),
+        ),
+        tags: t.Array(t.String()),
       }),
     },
   )

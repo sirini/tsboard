@@ -14,4 +14,10 @@ export const EDITOR = {
   REMOVED_IMAGE: "이미지를 삭제하였습니다.",
   EMPTY_IMAGES: "이전 이미지가 더 이상 없습니다.",
   FAILED_LOAD_TAGS: "추천 태그목록을 가져올 수 없었습니다.",
+  TOO_SHORT_TEXT: "2글자 이상 입력해 주세요.",
+  ALREADY_ADDED_TAG: "이미 추가된 태그입니다.",
+  TOO_SHORT_TITLE: "제목은 2글자 이상 입력해 주세요.",
+  TOO_SHORT_CONTENT: "글 내용은 3글자 이상 입력해 주세요.",
+  WRITTEN_NEW_POST: "글 작성에 성공하였습니다.",
+  FAILED_WRITE_POST: "글 작성에 실패하였습니다.",
 }

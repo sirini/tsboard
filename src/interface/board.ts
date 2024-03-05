@@ -31,6 +31,10 @@ export type Pair = {
   name: string
 }
 
+export type CountPair = Pair & {
+  count: number
+}
+
 export type Writer = Pair & {
   profile: string
   signature?: string
@@ -181,6 +185,12 @@ export type UpdateUserPointParams = CommonPairParam & {
 export type UpdatePointHistoryParams = CommonPairParam & {
   action: PointAction
   point: number
+}
+
+export type WritePostParams = CommonPairParam & {
+  categoryUid: number
+  title: string
+  content: string
 }
 
 export type VideoURL = {

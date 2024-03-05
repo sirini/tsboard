@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue"
+import { onMounted } from "vue"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
@@ -99,10 +99,6 @@ const list = useBoardListStore()
 const util = useUtilStore()
 
 onMounted(() => list.loadPostList())
-watch(
-  () => [list.page, list.id],
-  () => list.loadPostList(),
-)
 </script>
 
 <style type="scss" scoped>

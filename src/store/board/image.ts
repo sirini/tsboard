@@ -48,15 +48,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     boardUid: number,
     sizeLimit: number,
   ): Promise<void> {
-    files.value = []
-    const targets = (event?.target as HTMLInputElement).files
-    if (targets) {
-      const fileArray = Array.from(targets)
-      for (const file of fileArray) {
-        files.value.push(file)
-      }
-    }
-
+    files.value = util.attachments(event)
     const response = await server.api.board.uploadimages.post({
       $headers: {
         authorization: auth.user.token,

@@ -136,6 +136,19 @@ export const useUtilStore = defineStore("util", () => {
     }
   }
 
+  // 선택된 파일들의 배열 반환
+  function attachments(event: MouseEvent): File[] {
+    let result: File[] = []
+    const targets = (event?.target as HTMLInputElement).files
+    if (targets) {
+      const arr = Array.from(targets)
+      for (const f of arr) {
+        result.push(f)
+      }
+    }
+    return result
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -157,5 +170,6 @@ export const useUtilStore = defineStore("util", () => {
     date,
     unescape,
     num,
+    attachments,
   }
 })

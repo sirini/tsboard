@@ -4,8 +4,15 @@
  * 글작성용 에디터와 관련된 처리
  */
 
-import { table, insert, select, remove } from "../common"
-import { LoadImageParams, Pair, UploadImageParams } from "../../../src/interface/board"
+import { table, insert, select, remove, update } from "../common"
+import {
+  CONTENT_STATUS,
+  CountPair,
+  LoadImageParams,
+  Pair,
+  UploadImageParams,
+  WritePostParams,
+} from "../../../src/interface/board"
 import {
   generateRandomID,
   makeSavePath,
@@ -103,10 +110,10 @@ export async function removeUploadedImage(
 }
 
 // 태그 추천하기
-export async function getSuggestionTags(hashtag: string, limit: number): Promise<Pair[]> {
-  let result: Pair[] = []
+export async function getSuggestionTags(hashtag: string, limit: number): Promise<CountPair[]> {
+  let result: CountPair[] = []
   const tags = await select(
-    `SELECT uid, name FROM ${table}hashtag WHERE name LIKE '%${hashtag}%' LIMIT ${limit}`,
+    `SELECT uid, name, used FROM ${table}hashtag WHERE name LIKE '%${hashtag}%' LIMIT ${limit}`,
   )
   if (!tags[0]) {
     return result
@@ -116,9 +123,75 @@ export async function getSuggestionTags(hashtag: string, limit: number): Promise
     result.push({
       uid: tag.uid,
       name: tag.name,
+      count: tag.used,
     })
   }
   return result
+}
+
+// 입력받은 태그들 저장하기
+export async function saveTags(boardUid: number, postUid: number, tags: string[]): Promise<void> {
+  for (const tag of tags) {
+    let hashtagUid = 0
+    const [exist] = await select(`SELECT uid FROM ${table}hashtag WHERE name = ? LIMIT 1`, [tag])
+    if (exist) {
+      hashtagUid = exist.uid
+      await update(`UPDATE ${table}hashtag SET used = used + 1 WHERE uid = ? LIMIT 1`, [hashtagUid])
+    } else {
+      hashtagUid = await insert(
+        `INSERT INTO ${table}hashtag (name, used, timestamp) VALUES (?, ?, ?)`,
+        [tag, 1, Date.now()],
+      )
+    }
+    insert(`INSERT INTO ${table}post_hashtag (board_uid, post_uid, hashtag_uid) VALUES (?, ?, ?)`, [
+      boardUid,
+      postUid,
+      hashtagUid,
+    ])
+  }
+}
+
+// 입력받은 첨부파일들을 저장하기
+export async function saveAttachments(
+  boardUid: number,
+  postUid: number,
+  files: File[],
+): Promise<void> {
+  const savePath = await makeSavePath("attachments")
+  for (const file of files) {
+    const ext = file.name.split(".").pop() || ""
+    const newSavePath = `${savePath}/${generateRandomID()}.${ext}`
+    await Bun.write(newSavePath, file)
+
+    if ((await exists(newSavePath)) === true) {
+      const pathForAttachment = newSavePath.slice(1)
+      insert(
+        `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) VALUES (?, ?, ?, ?, ?)`,
+        [boardUid, postUid, file.name, pathForAttachment, Date.now()],
+      )
+    }
+  }
+}
+
+// 새 게시글 작성하기
+export async function writeNewPost(param: WritePostParams): Promise<number> {
+  const insertId = await insert(
+    `INSERT INTO ${table}post 
+  (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      param.boardUid,
+      param.accessUserUid,
+      param.categoryUid,
+      param.title,
+      param.content,
+      Date.now(),
+      0,
+      0,
+      CONTENT_STATUS.NORMAL,
+    ],
+  )
+  return insertId
 }
 
 // 카테고리 목록 반환하기

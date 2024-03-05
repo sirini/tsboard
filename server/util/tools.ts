@@ -148,3 +148,10 @@ export async function resizeImage(
     .toFormat("webp")
     .toFile(outputPath)
 }
+
+// 순수한 (소문자) 텍스트만 남기기
+export function refineText(text: string): string {
+  let result = text.trim().toLowerCase()
+  result = result.replaceAll(/[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/ ]/gim, "")
+  return result
+}

@@ -49,6 +49,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         minUid: minUid.value,
       },
     })
+
     if (!response.data) {
       util.snack(LIST.NO_RESPONSE)
       return
