@@ -22,6 +22,28 @@ import {
 } from "../../util/tools"
 import { exists } from "node:fs/promises"
 
+// 글작성 레벨 제한 가져오기
+export async function getWriteLevel(boardUid: number): Promise<number> {
+  const [board] = await select(`SELECT level_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    boardUid,
+  ])
+  if (!board) {
+    return 0
+  }
+  return board.level_write
+}
+
+// 글작성 포인트 가져오기
+export async function getWritePoint(boardUid: number): Promise<number> {
+  const [board] = await select(`SELECT point_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    boardUid,
+  ])
+  if (!board) {
+    return 0
+  }
+  return board.point_write
+}
+
 // 본문 내 삽입용 이미지 업로드
 export async function uploadImages(param: UploadImageParams): Promise<string[]> {
   let result: string[] = []

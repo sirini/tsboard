@@ -188,20 +188,19 @@ async function getNotices(boardUid: number, accessUserUid: number): Promise<Post
   let result: Post[] = []
   const notices = await select(
     `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
-    FROM ${table}post 
-  WHERE board_uid = ? AND status = ?`,
+    FROM ${table}post WHERE board_uid = ? AND status = ?`,
     [boardUid, CONTENT_STATUS.NOTICE],
   )
   result.push(...(await makePostResult(notices, accessUserUid)))
   return result
 }
 
-// 이전 게시글 목록 가져오기
+// 이전 게시글 목록 가져오기 (참고: 순서는 클라이언트에서 반대로 뒤집는다)
 async function getPrevPosts(param: PostParams): Promise<RowDataPacket[]> {
   const prevs = await select(
     `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND uid > ? ORDER BY uid ASC LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.maxUid, param.bunch],
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
   )
   return prevs
 }
@@ -211,7 +210,7 @@ async function getNextPosts(param: PostParams): Promise<RowDataPacket[]> {
   const nexts = await select(
     `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.minUid, param.bunch],
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
   )
   return nexts
 }
@@ -228,7 +227,9 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
   } else {
     posts = await getPrevPosts(param)
   }
-  result.push(...(await makePostResult(posts, param.accessUserUid)))
+
+  const normals = await makePostResult(posts, param.accessUserUid)
+  result.push(...normals)
   return result
 }
 

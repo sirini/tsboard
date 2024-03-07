@@ -90,8 +90,7 @@ export type Post = ContentCommon & {
 type PostCommentParams = {
   page: number
   bunch: number
-  maxUid: number
-  minUid: number
+  sinceUid: number
   accessUserUid: number
 }
 

@@ -196,10 +196,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(EDITOR.WRITTEN_NEW_POST)
 
-    setTimeout(() => {
-      loading.value = false
-      util.go("boardView", id.value, response.data.result.postUid)
-    }, 3000)
+    loading.value = false
+    util.go("boardView", id.value, response.data.result.postUid)
 
     files.value = []
     title.value = ""

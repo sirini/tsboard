@@ -1,12 +1,12 @@
 <template>
   <v-card-actions class="mt-3 mb-3">
-    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.page -= 1"
+    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.loadPrevPosts"
       >이전</v-btn
     >
     <v-btn
       append-icon="mdi-chevron-right"
       :disabled="list.page >= list.pageLength"
-      @click="list.page += 1"
+      @click="list.loadNextPosts"
       >다음</v-btn
     >
     <v-spacer></v-spacer>

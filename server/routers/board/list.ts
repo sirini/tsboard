@@ -50,14 +50,12 @@ export const list = new Elysia()
   .get(
     "/list",
     async ({
-      query: { id, page, pagingDirection, maxUid, minUid },
+      query: { id, page, pagingDirection, sinceUid },
       accessUserUid,
       userLevel,
       newAccessToken,
     }) => {
       let response = {
-        maxUid: 0,
-        minUid: 0,
         totalPostCount: 0,
         config: BOARD_CONFIG,
         posts: [] as Post[],
@@ -76,29 +74,25 @@ export const list = new Elysia()
         return fail(`Level restriction.`, response)
       }
 
-      if (maxUid < 1) {
-        response.maxUid = await getMaxPostUid(config.uid)
+      if (sinceUid < 1) {
+        sinceUid = (await getMaxPostUid(config.uid)) + 1
       }
-      response.totalPostCount = await getTotalPostCount(config.uid)
-      response.posts = await getPosts({
+      const totalPostCount = await getTotalPostCount(config.uid)
+      const posts = await getPosts({
         boardUid: config.uid,
         page,
         bunch: config.row,
-        maxUid,
-        minUid,
+        sinceUid,
         accessUserUid,
         pagingDirection,
       })
 
-      let maxUidIndex = 0
-      let minUidIndex = -1
-      if (pagingDirection === PAGING_DIRECTION.PREV) {
-        maxUidIndex = -1
-        minUidIndex = 0
-      }
-      response.maxUid = response.posts.at(maxUidIndex)?.uid ?? 0
-      response.minUid = response.posts.at(minUidIndex)?.uid ?? 0
-      return success(response)
+      return success({
+        totalPostCount,
+        config,
+        posts,
+        newAccessToken,
+      })
     },
     {
       headers: t.Object({
@@ -108,8 +102,7 @@ export const list = new Elysia()
         id: t.String(),
         page: t.Numeric(),
         pagingDirection: t.Numeric(),
-        maxUid: t.Numeric(),
-        minUid: t.Numeric(),
+        sinceUid: t.Numeric(),
       }),
     },
   )

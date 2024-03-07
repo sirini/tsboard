@@ -15,6 +15,8 @@ import {
   getMaxImageUid,
   getSuggestionTags,
   getTotalImageCount,
+  getWriteLevel,
+  getWritePoint,
   loadUploadedImages,
   removeUploadedImage,
   saveAttachments,
@@ -24,6 +26,7 @@ import {
 } from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
 import { CountPair, Pair } from "../../../src/interface/board"
+import { updateUserPoint } from "../../database/board/common"
 
 const defaultTypeCheck = {
   headers: t.Object({
@@ -103,7 +106,7 @@ export const editor = new Elysia()
   )
   .post(
     "/uploadimages",
-    async ({ body: { boardUid, sizeLimit, images }, newAccessToken, accessUserUid }) => {
+    async ({ body: { boardUid, sizeLimit, images }, newAccessToken, accessUserUid, userLevel }) => {
       const response = {
         newAccessToken: "",
         uploadedImages: [],
@@ -113,6 +116,10 @@ export const editor = new Elysia()
       }
       if (images === undefined) {
         return fail(`Invalid image files.`, response)
+      }
+      const writeLevel = await getWriteLevel(boardUid)
+      if (writeLevel > userLevel) {
+        return fail(`Level restriction.`, response)
       }
 
       const uploadedImages = await uploadImages({
@@ -142,7 +149,7 @@ export const editor = new Elysia()
   )
   .get(
     "/loadimages",
-    async ({ query: { boardUid, lastUid, bunch }, accessUserUid, newAccessToken }) => {
+    async ({ query: { boardUid, lastUid, bunch }, accessUserUid, newAccessToken, userLevel }) => {
       const response = {
         images: [],
         newAccessToken,
@@ -154,6 +161,10 @@ export const editor = new Elysia()
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
+      }
+      const writeLevel = await getWriteLevel(boardUid)
+      if (writeLevel > userLevel) {
+        return fail(`Level restriction.`, response)
       }
 
       const maxImageUid = await getMaxImageUid(boardUid, accessUserUid)
@@ -240,6 +251,7 @@ export const editor = new Elysia()
       body: { boardUid, categoryUid, title, content, attachments, tags },
       accessUserUid,
       newAccessToken,
+      userLevel,
     }) => {
       const response = {
         newAccessToken: "",
@@ -250,6 +262,20 @@ export const editor = new Elysia()
       }
       if (categoryUid < 1 || title.trim().length < 2 || content.trim().length < 3) {
         return fail(`Invalid parameters.`, response)
+      }
+      const writeLevel = await getWriteLevel(boardUid)
+      if (writeLevel > userLevel) {
+        return fail(`Level restriction.`, response)
+      }
+
+      const updatePointResult = await updateUserPoint({
+        boardUid,
+        accessUserUid,
+        action: "write",
+      })
+      const writePoint = await getWritePoint(boardUid)
+      if (updatePointResult === false && writePoint < 0) {
+        return fail(`Not enough point.`, response)
       }
 
       title = Bun.escapeHTML(title)

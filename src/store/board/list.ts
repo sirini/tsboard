@@ -26,8 +26,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const categories = ref<Pair[]>([])
   const page = ref<number>(1)
   const pageLength = ref<number>(1)
-  const maxUid = ref<number>(0)
-  const minUid = ref<number>(0)
+  const sinceUid = ref<number>(0)
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
 
   // 게시글 목록 가져오기
@@ -45,8 +44,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         id: id.value,
         page: page.value,
         pagingDirection: pagingDirection.value,
-        maxUid: maxUid.value,
-        minUid: minUid.value,
+        sinceUid: sinceUid.value,
       },
     })
 
@@ -61,8 +59,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
-    maxUid.value = response.data.result.maxUid
-    minUid.value = response.data.result.minUid
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
       util.go(TYPE_MATCH[config.value.type].name)
@@ -70,17 +66,19 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
 
     posts.value = response.data.result.posts
-    pageLength.value = Math.ceil(response.data.result.maxUid / config.value.row)
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
   }
 
   // 이전 페이지 가져오기
   async function loadPrevPosts(): Promise<void> {
-    if (page.value < 2) {
-      util.snack(LIST.FIRST_PAGE)
-      return
-    }
     page.value -= 1
     pagingDirection.value = PAGING_DIRECTION.PREV
+    sinceUid.value = posts.value.at(0)?.uid ?? 0
+
+    if (page.value < 2) {
+      util.snack(LIST.FIRST_PAGE)
+    }
+
     await loadPostList()
     posts.value = posts.value.reverse()
   }
@@ -89,9 +87,10 @@ export const useBoardListStore = defineStore("boardList", () => {
   async function loadNextPosts(): Promise<void> {
     page.value += 1
     pagingDirection.value = PAGING_DIRECTION.NEXT
+    sinceUid.value = posts.value.at(-1)?.uid ?? 0
+
     await loadPostList()
     if (posts.value.length < config.value.row) {
-      page.value -= 1
       util.snack(LIST.LAST_PAGE)
     }
   }
