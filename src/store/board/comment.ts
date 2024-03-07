@@ -25,8 +25,7 @@ export const useCommentStore = defineStore("comment", () => {
   const id = ref<string>("")
   const boardUid = ref<number>(0)
   const postUid = ref<number>(0)
-  const maxUid = ref<number>(0)
-  const minUid = ref<number>(0)
+  const sinceUid = ref<number>(0)
   const modifyTarget = ref<number>(0)
   const replyTarget = ref<number>(0)
   const removeTarget = ref<number>(0)
@@ -57,8 +56,7 @@ export const useCommentStore = defineStore("comment", () => {
         page: page.value,
         pagingDirection: pagingDirection.value,
         bunch: bunch.value,
-        maxUid: maxUid.value,
-        minUid: minUid.value,
+        sinceUid: sinceUid.value,
       },
     })
 

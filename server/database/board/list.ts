@@ -195,38 +195,24 @@ async function getNotices(boardUid: number, accessUserUid: number): Promise<Post
   return result
 }
 
-// 이전 게시글 목록 가져오기 (참고: 순서는 클라이언트에서 반대로 뒤집는다)
-async function getPrevPosts(param: PostParams): Promise<RowDataPacket[]> {
-  const prevs = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid > ? ORDER BY uid ASC LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
-  )
-  return prevs
-}
-
-// 다음 게시글 목록 가져오기
-async function getNextPosts(param: PostParams): Promise<RowDataPacket[]> {
-  const nexts = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
-  )
-  return nexts
-}
-
 // 글 목록 가져오기
 export async function getPosts(param: PostParams): Promise<Post[]> {
   let result: Post[] = []
   const notices = await getNotices(param.boardUid, param.accessUserUid)
   result.push(...notices)
 
-  let posts: RowDataPacket[] = []
+  let direction = ">"
+  let ordering = "ASC"
   if (param.pagingDirection === PAGING_DIRECTION.NEXT) {
-    posts = await getNextPosts(param)
-  } else {
-    posts = await getPrevPosts(param)
+    direction = "<"
+    ordering = "DESC"
   }
+
+  const posts = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+  )
 
   const normals = await makePostResult(posts, param.accessUserUid)
   result.push(...normals)

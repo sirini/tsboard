@@ -75,19 +75,18 @@ export const comment = new Elysia()
   .get(
     "/comment",
     async ({
-      query: { postUid, id, page, bunch, pagingDirection, maxUid, minUid },
+      query: { postUid, id, page, bunch, pagingDirection, sinceUid },
       accessUserUid,
       userLevel,
     }) => {
       const response = {
         boardUid: 0,
-        maxUid: 0,
-        minUid: 0,
+        sinceUid: 0,
         comments: [] as Comment[],
         totalCommentCount: 0,
       }
 
-      if (id.length < 2 || postUid < 1 || page < 1 || bunch < 1 || maxUid < 0 || minUid < 0) {
+      if (id.length < 2 || postUid < 1 || page < 1 || bunch < 1 || sinceUid < 0) {
         return fail(`Invalid parameters.`, response)
       }
 
@@ -97,17 +96,17 @@ export const comment = new Elysia()
         return fail(`Level restriction.`, response)
       }
 
-      if (maxUid < 1) {
-        response.maxUid = await getMaxCommentUid(postUid)
+      if (sinceUid < 1) {
+        sinceUid = (await getMaxCommentUid(postUid)) + 1
       }
       response.totalCommentCount = await getTotalCommentCount(postUid)
       response.comments = await getComments({
         postUid,
         page,
         bunch,
-        maxUid,
-        minUid,
+        sinceUid,
         accessUserUid,
+        pagingDirection,
       })
 
       return success(response)
@@ -118,8 +117,7 @@ export const comment = new Elysia()
         postUid: t.Numeric(),
         page: t.Numeric(),
         pagingDirection: t.Numeric(),
-        maxUid: t.Numeric(),
-        minUid: t.Numeric(),
+        sinceUid: t.Numeric(),
         bunch: t.Numeric(),
       }),
     },

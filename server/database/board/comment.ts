@@ -22,6 +22,7 @@ import {
   INVALID_VIEW_LEVEL,
   NOTICE_TYPE,
   NoticeType,
+  PAGING_DIRECTION,
 } from "./const"
 
 // 댓글에 연관된 정보 가져오기
@@ -64,12 +65,13 @@ async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> 
 // 이전 | 다음 관련 처리하기
 export async function getComments(param: CommentParams): Promise<Comment[]> {
   let result: Comment[] = []
-  const last = 1 + param.maxUid - (param.page - 1) * param.bunch
   const comments = await select(
     `SELECT uid, reply_uid, user_uid, content, submitted, modified, status 
-  FROM ${table}comment WHERE post_uid = ? AND status != ? AND uid < ? 
+  FROM ${table}comment WHERE post_uid = ? AND status != ? AND uid ${
+    param.pagingDirection === PAGING_DIRECTION.NEXT ? "<" : ">"
+  } ? 
   ORDER BY reply_uid ASC LIMIT ?`,
-    [param.postUid, CONTENT_STATUS.REMOVED, last, param.bunch],
+    [param.postUid, CONTENT_STATUS.REMOVED, param.sinceUid, param.bunch],
   )
   for (const comment of comments) {
     const info = await getCommentRelated({

@@ -12,7 +12,7 @@
               <v-list class="pa-0">
                 <v-list-item class="pa-0 mt-3">
                   <v-text-field
-                    v-model="editor.subject"
+                    v-model="editor.title"
                     :rules="editor.textRule"
                     class="mt-2"
                     prepend-icon="mdi-pencil"
@@ -77,10 +77,10 @@
                     <v-menu activator="parent">
                       <v-list>
                         <v-list-item
-                          v-for="(tag, index) in editor.tagSuggestions"
+                          v-for="(tag, index) in editor.suggestionTags"
                           :key="index"
                           prepend-icon="mdi-tag-plus"
-                          @click="editor.addTag(tag)"
+                          @click="editor.addTag(tag.name)"
                           >{{ tag }}
                           <v-tooltip activator="parent"> {{ tag }} 태그를 추가합니다 </v-tooltip>
                         </v-list-item>
@@ -107,10 +107,7 @@
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                @click="editor.savePost(gallery.id)"
-                append-icon="mdi-chevron-right"
+              <v-btn color="primary" @click="editor.write" append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
               >
             </v-card-actions>

@@ -92,11 +92,11 @@ type PostCommentParams = {
   bunch: number
   sinceUid: number
   accessUserUid: number
+  pagingDirection: number
 }
 
 export type PostParams = PostCommentParams & {
   boardUid: number
-  pagingDirection: number
 }
 
 export type PostFile = {
