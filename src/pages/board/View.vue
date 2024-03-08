@@ -25,7 +25,7 @@
                     >작성: {{ util.date(view.post.submitted, true, true) }}</span
                   >
 
-                  <v-divider vertical></v-divider>
+                  <v-divider vertical v-if="view.post.modified > 0"></v-divider>
                   <span class="ml-4 mr-4 text-caption" v-if="view.post.modified > 0"
                     >수정: {{ util.date(view.post.modified, true, true) }}</span
                   >

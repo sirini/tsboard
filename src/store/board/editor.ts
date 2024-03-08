@@ -68,6 +68,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         id: id.value,
       },
     })
+
     if (!response.data) {
       util.snack(EDITOR.NO_RESPONSE)
       return
@@ -156,7 +157,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
   // 선택한 파일들 목록 보관하기
   function selectAttachmentFiles(event: MouseEvent): void {
-    files.value = util.attachments(event)
+    files.value = []
+    files.value.push(...util.attachments(event))
   }
 
   // 작성된 글 저장하기

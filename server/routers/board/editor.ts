@@ -289,7 +289,7 @@ export const editor = new Elysia()
         content,
       })
 
-      if (tags.length > 0) {
+      if (tags !== undefined && tags.length > 0) {
         tags = tags.map((tag) => refineText(tag))
         await saveTags(boardUid, postUid, tags)
       }
@@ -314,9 +314,10 @@ export const editor = new Elysia()
           t.Files({
             type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
             maxSize: parseInt(process.env.MAX_FILE_SIZE ?? "102476800"),
+            error: "Invalid file type.",
           }),
         ),
-        tags: t.Array(t.String()),
+        tags: t.Optional(t.Array(t.String())),
       }),
     },
   )
