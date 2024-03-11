@@ -84,7 +84,7 @@
       <v-list-item class="mt-2 mb-1">
         <board-manager-permission-item
           :type="ACTION_TYPE.DOWNLOAD"
-          :auth-user-only="false"
+          :auth-user-only="true"
           @update="(level: number) => permission.updateDownloadPermission(level)"
         ></board-manager-permission-item>
       </v-list-item>

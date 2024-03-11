@@ -4,11 +4,12 @@
  * 게시글 보기에 필요한 함수들
  */
 
-import { CONTENT_STATUS, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
+import { CONTENT_STATUS, Pair, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
 import { select, table, update } from "../common"
 import { addNotice } from "./common"
 import { INIT_POST, NOTICE_TYPE, NoticeType } from "./const"
 import { getPostRelated } from "./list"
+import { statSync } from "fs"
 
 // 게시글 가져오기
 export async function getPost(postUid: number, accessUserUid: number): Promise<Post> {
@@ -59,10 +60,29 @@ export async function getFiles(postUid: number): Promise<PostFile[]> {
     postUid,
   ])
   for (const file of files) {
+    const stat = statSync(`.${file.path}`)
     result.push({
       uid: file.uid,
       name: file.name,
-      path: file.path,
+      size: stat.size,
+    })
+  }
+  return result
+}
+
+// 해시태그들 가져오기
+export async function getTags(postUid: number): Promise<Pair[]> {
+  let result: Pair[] = []
+  const tagUids = await select(`SELECT hashtag_uid FROM ${table}post_hashtag WHERE post_uid = ?`, [
+    postUid,
+  ])
+  for (const uid of tagUids) {
+    const [tag] = await select(`SELECT name FROM ${table}hashtag WHERE uid = ? LIMIT 1`, [
+      uid.hashtag_uid,
+    ])
+    result.push({
+      uid: uid.hashtag_uid,
+      name: tag.name,
     })
   }
   return result
@@ -98,5 +118,45 @@ export async function likePost(param: PostLikeParams): Promise<void> {
       postUid: param.postUid,
       commentUid: 0,
     })
+  }
+}
+
+// 게시판 다운로드 레벨, 다운로드 포인트 확인
+export async function getDownloadPermission(
+  boardUid: number,
+): Promise<{ level: number; point: number }> {
+  let result = {
+    level: 0,
+    point: 0,
+  }
+  const [config] = await select(
+    `SELECT level_download, point_download FROM ${table}board WHERE uid = ? LIMIT 1`,
+    [boardUid],
+  )
+  if (!config) {
+    return result
+  }
+  result = {
+    level: config.level_download,
+    point: config.point_download,
+  }
+  return result
+}
+
+// 다운로드할 파일 경로 반환하기
+export async function getDownloadPath(fileUid: number): Promise<{ path: string; name: string }> {
+  let result = {
+    path: "",
+    name: "",
+  }
+  const [file] = await select(`SELECT name, path FROM ${table}file WHERE uid = ? LIMIT 1`, [
+    fileUid,
+  ])
+  if (!file) {
+    return result
+  }
+  return {
+    path: `.${file.path}`,
+    name: file.name,
   }
 }

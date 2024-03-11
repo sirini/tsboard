@@ -13,7 +13,7 @@
                   util.unescape(view.post.title)
                 }}</v-list-item-title>
               </v-list-item>
-              <v-list-item class="view_info">
+              <v-list-item class="view_info underline">
                 <template v-slot:prepend>
                   <span class="mr-4 text-caption" v-if="view.config.useCategory"
                     ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
@@ -43,7 +43,30 @@
                 </template>
               </v-list-item>
 
-              <v-list-item class="view_content pa-3 mt-3 mb-16" v-html="view.post.content">
+              <v-list-item class="pa-0 underline" v-if="view.files.length > 0">
+                <v-list density="compact">
+                  <v-list-item
+                    prepend-icon="mdi-download"
+                    v-for="(file, index) in view.files"
+                    :key="index"
+                    @click="view.download(file.uid)"
+                    >{{ file.name }} ({{ util.num(file.size) }}B)</v-list-item
+                  >
+                </v-list>
+              </v-list-item>
+
+              <v-list-item class="view_content pa-3 mb-16" v-html="view.post.content">
+              </v-list-item>
+
+              <v-list-item class="pa-3">
+                <v-chip
+                  label
+                  prepend-icon="mdi-tag-outline"
+                  class="mr-2 mb-2"
+                  v-for="(tag, index) in view.tags"
+                  :key="index"
+                  >{{ tag.name }}</v-chip
+                >
               </v-list-item>
 
               <v-list-item class="pa-3 text-caption signature" v-if="view.post.writer.signature">
@@ -152,8 +175,10 @@ onMounted(() => view.loadPostView())
     font-weight: bold;
     font-size: 1.2em;
   }
-  .view_info {
+  .underline {
     border-bottom: 1px #dddddd solid;
+  }
+  .view_info {
     color: #828282;
     font-size: 0.85em;
   }

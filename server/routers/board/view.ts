@@ -7,9 +7,16 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getBoardConfig, getUserLevel } from "../../database/board/list"
-import { getFiles, getPost, likePost } from "../../database/board/view"
+import {
+  getDownloadPath,
+  getDownloadPermission,
+  getFiles,
+  getPost,
+  getTags,
+  likePost,
+} from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { PostFile } from "../../../src/interface/board"
+import { Pair, PostFile } from "../../../src/interface/board"
 import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 
@@ -49,7 +56,8 @@ export const view = new Elysia()
       let response = {
         config: BOARD_CONFIG,
         post: INIT_POST,
-        files: [],
+        files: [] as PostFile[],
+        tags: [] as Pair[],
         newAccessToken: "",
       }
       if (id.length < 2 || postUid < 1) {
@@ -80,10 +88,12 @@ export const view = new Elysia()
       }
 
       const post = await getPost(postUid, accessUserUid)
+      const tags = await getTags(postUid)
       return success({
         config,
         post,
         files,
+        tags,
         newAccessToken,
       })
     },
@@ -120,6 +130,45 @@ export const view = new Elysia()
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
         liked: t.Numeric(),
+      }),
+    },
+  )
+  .get(
+    "/download",
+    async ({ query: { boardUid, fileUid }, accessUserUid, userLevel }) => {
+      const response = {
+        name: "",
+        path: "",
+      }
+      const permission = await getDownloadPermission(boardUid)
+      if (permission.level > userLevel) {
+        return fail(`Level restriction.`, response)
+      }
+
+      const download = await getDownloadPath(fileUid)
+      const file = Bun.file(download.path)
+      if ((await file.exists()) === false) {
+        return fail(`File not found.`, response)
+      }
+
+      const updatePointResult = await updateUserPoint({
+        boardUid,
+        accessUserUid,
+        action: "download",
+      })
+      if (updatePointResult === false && permission.point < 0) {
+        return fail(`Not enough point.`, response)
+      }
+
+      return success({
+        name: download.name,
+        path: download.path,
+      })
+    },
+    {
+      query: t.Object({
+        boardUid: t.Numeric(),
+        fileUid: t.Numeric(),
       }),
     },
   )

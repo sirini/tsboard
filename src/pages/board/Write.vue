@@ -140,6 +140,7 @@
               </v-list>
             </v-form>
 
+            <v-divider class="mt-12"></v-divider>
             <v-card-actions>
               <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close"
                 >글 작성 취소</v-btn

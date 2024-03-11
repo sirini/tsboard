@@ -35,6 +35,10 @@ export type CountPair = Pair & {
   count: number
 }
 
+export type PostFile = Pair & {
+  size: number
+}
+
 export type Writer = Pair & {
   profile: string
   signature?: string
@@ -97,12 +101,6 @@ type PostCommentParams = {
 
 export type PostParams = PostCommentParams & {
   boardUid: number
-}
-
-export type PostFile = {
-  uid: number
-  name: string
-  path: string
 }
 
 export type CommentParams = PostCommentParams & {
