@@ -7,7 +7,16 @@
 
     <v-menu activator="parent">
       <v-list density="compact">
-        <v-list-item prepend-icon="mdi-card-account-details-outline" @click="user.openDialog(uid)">
+        <v-list-item
+          prepend-icon="mdi-card-account-details-outline"
+          @click="
+            user.openDialog({
+              uid,
+              name,
+              profile,
+            })
+          "
+        >
           정보 보기
         </v-list-item>
         <v-list-item
@@ -24,14 +33,26 @@
         >
         <v-list-item
           prepend-icon="mdi-account-tie-hat-outline"
-          @click="user.openSendReport(uid)"
+          @click="
+            user.openSendReport({
+              uid,
+              name,
+              profile,
+            })
+          "
           v-if="auth.user.uid > 0 && auth.user.uid !== uid"
           >신고하기</v-list-item
         >
         <v-list-item
           prepend-icon="mdi-account-cog"
           :disabled="!auth.user.admin"
-          @click="manage.openManageUser(uid)"
+          @click="
+            manage.openManageUser({
+              uid,
+              name,
+              profile,
+            })
+          "
           v-if="auth.user.uid === 1"
           >회원 관리</v-list-item
         >

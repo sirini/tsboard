@@ -15,12 +15,10 @@
           class="mt-2 mb-2"
           :prepend-avatar="
             PREFIX +
-            (manage.targetUserInfo.profile.length < 1
-              ? '/no-profile.svg'
-              : manage.targetUserInfo.profile)
+            (manage.targetUser.profile.length < 1 ? '/no-profile.svg' : manage.targetUser.profile)
           "
         >
-          <v-list-item-title>{{ manage.targetUserInfo.name }}</v-list-item-title>
+          <v-list-item-title>{{ manage.targetUser.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>조치 항목 (체크 해제는 기능을 쓸 수 없음을 의미)</v-list-subheader>
         <v-divider></v-divider>
@@ -50,11 +48,11 @@
 
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
-            v-model="manage.permission.sendNote"
+            v-model="manage.permission.sendChatMessage"
             density="compact"
             hide-details
             :label="
-              manage.permission.sendNote
+              manage.permission.sendChatMessage
                 ? '쪽지를 다른 회원에게 보낼 수 있습니다'
                 : '쪽지 기능을 쓸 수 없습니다'
             "

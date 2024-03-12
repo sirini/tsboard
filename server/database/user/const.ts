@@ -9,7 +9,7 @@ import { UserOpenInfo, UserPermissionParams } from "../../../src/interface/user"
 export const USER_PERMISSION_PARAMS: UserPermissionParams = {
   writePost: true,
   writeComment: true,
-  sendNote: true,
+  sendChatMessage: true,
   sendReport: true,
   login: true,
   userUid: 0,

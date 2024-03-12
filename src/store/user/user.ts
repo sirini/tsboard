@@ -11,7 +11,7 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { USER } from "../../messages/store/user/user"
-import { UserOpenInfo } from "../../interface/user"
+import { UserBasicInfo, UserOpenInfo } from "../../interface/user"
 import { USER_OPEN_INFO } from "../../../server/database/user/const"
 
 export const useUserStore = defineStore("user", () => {
@@ -20,12 +20,12 @@ export const useUserStore = defineStore("user", () => {
   const util = useUtilStore()
   const userInfoDialog = ref<boolean>(false)
   const sendReportDialog = ref<boolean>(false)
-  const targetUserUid = ref<number>(0)
+  const targetUser = ref<UserBasicInfo>({ uid: 0, name: "", profile: "" })
   const info = ref<UserOpenInfo>(USER_OPEN_INFO)
 
   // 사용자 정보 보기 다이얼로그 열기
-  function openDialog(userUid: number): void {
-    targetUserUid.value = userUid
+  function openDialog(user: UserBasicInfo): void {
+    targetUser.value = user
     userInfoDialog.value = true
 
     loadUserInfo()
@@ -33,25 +33,25 @@ export const useUserStore = defineStore("user", () => {
 
   // 사용자 정보 보기 다이얼로그 닫기
   function closeDialog(): void {
-    targetUserUid.value = 0
+    targetUser.value = { uid: 0, name: "", profile: "" }
     userInfoDialog.value = false
   }
 
   // 사용자 신고하기 다이얼로그 열기
-  function openSendReport(userUid: number): void {
-    targetUserUid.value = userUid
+  function openSendReport(user: UserBasicInfo): void {
+    targetUser.value = user
     sendReportDialog.value = true
   }
 
   // 사용자 신고하기 다이얼로그 닫기
   function closeSendReport(): void {
-    targetUserUid.value = 0
+    targetUser.value = { uid: 0, name: "", profile: "" }
     sendReportDialog.value = false
   }
 
   // 운영진에게 특정 사용자 신고하기
   async function sendReport(report: string, blockNode: boolean, blockPost: boolean): Promise<void> {
-    if (targetUserUid.value < 1) {
+    if (targetUser.value.uid < 1) {
       util.error(USER.UNKNOWN_REPORT_TARGET)
       return
     }
@@ -68,7 +68,7 @@ export const useUserStore = defineStore("user", () => {
   async function loadUserInfo(): Promise<void> {
     const response = await server.api.user.loaduserinfo.get({
       $query: {
-        userUid: targetUserUid.value,
+        userUid: targetUser.value.uid,
       },
     })
 
@@ -85,6 +85,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   return {
+    targetUser,
     userInfoDialog,
     sendReportDialog,
     info,

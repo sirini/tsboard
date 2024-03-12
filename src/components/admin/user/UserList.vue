@@ -76,8 +76,8 @@
             @click="
               manage.openManageUser({
                 uid: user.uid,
-                profile: PREFIX + user.profile,
                 name: user.name,
+                profile: user.profile,
               })
             "
           >

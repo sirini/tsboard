@@ -81,8 +81,8 @@
             @click="
               manage.openManageUser({
                 uid: list.to.uid,
-                profile: PREFIX + (list.to.profile || ''),
                 name: list.to.name,
+                profile: list.to.profile,
               })
             "
             class="ml-2"

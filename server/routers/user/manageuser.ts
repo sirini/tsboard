@@ -12,7 +12,8 @@ import {
   hasPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
-import { USER_PERMISSION_PARAMS } from "../../database/user/const"
+import { USER_OPEN_INFO, USER_PERMISSION_PARAMS } from "../../database/user/const"
+import { getUserOpenInfo } from "../../database/user/userinfo"
 
 export const manageUser = new Elysia()
   .use(
@@ -78,7 +79,7 @@ export const manageUser = new Elysia()
   .post(
     "/manageuser",
     async ({
-      body: { userUid, writePost, writeComment, sendNote, sendReport, login, response },
+      body: { userUid, writePost, writeComment, sendChatMessage, sendReport, login, response },
       accessUserUid,
       newAccessToken,
     }) => {
@@ -95,7 +96,7 @@ export const manageUser = new Elysia()
         {
           writePost,
           writeComment,
-          sendNote,
+          sendChatMessage,
           sendReport,
           login,
           userUid,
@@ -113,7 +114,7 @@ export const manageUser = new Elysia()
         userUid: t.Number(),
         writePost: t.Boolean(),
         writeComment: t.Boolean(),
-        sendNote: t.Boolean(),
+        sendChatMessage: t.Boolean(),
         sendReport: t.Boolean(),
         login: t.Boolean(),
         response: t.String(),

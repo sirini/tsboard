@@ -25,7 +25,7 @@ export const INIT_USER: User = {
 export const INIT_PERMISSION: UserPermissionParams = {
   writePost: false,
   writeComment: false,
-  sendNote: false,
+  sendChatMessage: false,
   sendReport: false,
   login: false,
   userUid: 0,

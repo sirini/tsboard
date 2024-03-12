@@ -39,7 +39,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
   result = {
     writePost: perm.write_post > 0 ? true : false,
     writeComment: perm.write_comment > 0 ? true : false,
-    sendNote: perm.send_note > 0 ? true : false,
+    sendChatMessage: perm.send_note > 0 ? true : false,
     sendReport: perm.send_report > 0 ? true : false,
     login: user.blocked < 1 ? true : false,
     userUid,
@@ -64,7 +64,7 @@ export async function updateUserPermission(
       [
         param.writePost ? 1 : 0,
         param.writeComment ? 1 : 0,
-        param.sendNote ? 1 : 0,
+        param.sendChatMessage ? 1 : 0,
         param.sendReport ? 1 : 0,
         param.userUid,
       ],
@@ -77,7 +77,7 @@ export async function updateUserPermission(
         param.userUid,
         param.writePost ? 1 : 0,
         param.writeComment ? 1 : 0,
-        param.sendNote ? 1 : 0,
+        param.sendChatMessage ? 1 : 0,
         param.sendReport ? 1 : 0,
       ],
     )

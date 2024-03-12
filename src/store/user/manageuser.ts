@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
-import { UserPermissionParams } from "../../interface/user"
+import { UserBasicInfo, UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { USER } from "../../messages/store/user/user"
 import { INIT_PERMISSION } from "./const"
@@ -19,19 +19,19 @@ export const useManageUserStore = defineStore("manageuser", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const manageUserDialog = ref<boolean>(false)
-  const targetUserUid = ref<number>(0)
+  const targetUser = ref<UserBasicInfo>({ uid: 0, name: "", profile: "" })
   const permission = ref<UserPermissionParams>(INIT_PERMISSION)
 
   // 사용자 관리하기 다이얼로그 열기
-  function openManageUser(userUid: number): void {
-    targetUserUid.value = userUid
+  function openManageUser(user: UserBasicInfo): void {
+    targetUser.value = user
     manageUserDialog.value = true
     loadUserPermission()
   }
 
   // 사용자 관리하기 다이얼로그 닫기
   function closeManageUser(): void {
-    targetUserUid.value = 0
+    targetUser.value = { uid: 0, name: "", profile: "" }
     manageUserDialog.value = false
   }
 
@@ -42,7 +42,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
         authorization: auth.user.token,
       },
       $query: {
-        userUid: targetUserUid.value,
+        userUid: targetUser.value.uid,
       },
     })
     if (!response.data) {
@@ -53,7 +53,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
       util.error(`${USER.FAILED_LOAD_PERMISSION} (${response.data.error})`)
       return
     }
-    permission.value = response.data.result.permission as UserPermissionParams
+    permission.value = response.data.result.permission
     util.success(USER.LOADED_PERMISSION)
   }
 
@@ -67,10 +67,10 @@ export const useManageUserStore = defineStore("manageuser", () => {
       $headers: {
         authorization: auth.user.token,
       },
-      userUid: targetUserUid.value,
+      userUid: targetUser.value.uid,
       writePost: permission.value.writePost,
       writeComment: permission.value.writeComment,
-      sendNote: permission.value.sendNote,
+      sendChatMessage: permission.value.sendChatMessage,
       sendReport: permission.value.sendReport,
       login: permission.value.login,
       response: permission.value.response,
@@ -89,6 +89,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
   }
 
   return {
+    targetUser,
     manageUserDialog,
     permission,
     openManageUser,

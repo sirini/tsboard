@@ -75,7 +75,7 @@
     ></paging>
   </v-card>
   <user-info-dialog></user-info-dialog>
-  <send-note-dialog></send-note-dialog>
+  <chat-dialog></chat-dialog>
   <send-report-dialog></send-report-dialog>
   <manage-user-dialog></manage-user-dialog>
 </template>
@@ -86,7 +86,7 @@ import { useAdminLatestCommentStore } from "../../../store/admin/latest/comment"
 import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 import UserInfoDialog from "../../user/UserInfoDialog.vue"
-import SendNoteDialog from "../../user/SendNoteDialog.vue"
+import ChatDialog from "../../user/ChatDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"

@@ -10,8 +10,8 @@
       <v-list>
         <alert-bar></alert-bar>
         <v-list-subheader>신고 대상자</v-list-subheader>
-        <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
-          <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>
+        <v-list-item :prepend-avatar="PREFIX + user.targetUser.profile">
+          <v-list-item-title>{{ user.targetUser.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>차단</v-list-subheader>
 
@@ -21,7 +21,7 @@
             v-model="blockNote"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님이 보내는 쪽지를 차단 합니다'"
+            :label="user.targetUser.name + '님이 보내는 쪽지를 차단 합니다'"
           ></v-checkbox>
         </v-list-item>
 
@@ -30,7 +30,7 @@
             v-model="blockPost"
             density="compact"
             hide-details
-            :label="user.targetUserInfo.name + '님의 게시글이 보이지 않도록 차단 합니다'"
+            :label="user.targetUser.name + '님의 게시글이 보이지 않도록 차단 합니다'"
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>

@@ -13,7 +13,7 @@ export type UserBasicInfo = Pair & {
 export type UserPermission = {
   writePost: boolean
   writeComment: boolean
-  sendNote: boolean
+  sendChatMessage: boolean
   sendReport: boolean
   login: boolean
 }
