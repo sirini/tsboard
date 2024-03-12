@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
-import { TargetUserInfo, UserPermissionParams } from "../../interface/user"
+import { UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { USER } from "../../messages/store/user/user"
 import { INIT_PERMISSION } from "./const"
@@ -19,19 +19,19 @@ export const useManageUserStore = defineStore("manageuser", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const manageUserDialog = ref<boolean>(false)
-  const targetUserInfo = ref<TargetUserInfo>({ uid: 0, profile: "", name: "" })
+  const targetUserUid = ref<number>(0)
   const permission = ref<UserPermissionParams>(INIT_PERMISSION)
 
   // 사용자 관리하기 다이얼로그 열기
-  function openManageUser(user: TargetUserInfo): void {
-    targetUserInfo.value = user
+  function openManageUser(userUid: number): void {
+    targetUserUid.value = userUid
     manageUserDialog.value = true
     loadUserPermission()
   }
 
   // 사용자 관리하기 다이얼로그 닫기
   function closeManageUser(): void {
-    targetUserInfo.value = { uid: 0, profile: "", name: "" }
+    targetUserUid.value = 0
     manageUserDialog.value = false
   }
 
@@ -42,7 +42,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
         authorization: auth.user.token,
       },
       $query: {
-        userUid: targetUserInfo.value.uid,
+        userUid: targetUserUid.value,
       },
     })
     if (!response.data) {
@@ -67,7 +67,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
       $headers: {
         authorization: auth.user.token,
       },
-      userUid: targetUserInfo.value.uid,
+      userUid: targetUserUid.value,
       writePost: permission.value.writePost,
       writeComment: permission.value.writeComment,
       sendNote: permission.value.sendNote,
@@ -84,13 +84,12 @@ export const useManageUserStore = defineStore("manageuser", () => {
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.success(`${targetUserInfo.value.name} ${USER.ACTION_TAKEN}`)
+    util.success(USER.ACTION_TAKEN)
     setTimeout(() => closeManageUser(), 3000)
   }
 
   return {
     manageUserDialog,
-    targetUserInfo,
     permission,
     openManageUser,
     closeManageUser,

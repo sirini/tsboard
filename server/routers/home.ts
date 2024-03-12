@@ -6,7 +6,8 @@
 
 import { Elysia } from "elysia"
 import { visit } from "./home/visit"
+import { notification } from "./home/notification"
 
 export const home = new Elysia().group("/home", (app) => {
-  return app.use(visit)
+  return app.use(visit).use(notification)
 })

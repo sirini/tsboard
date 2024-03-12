@@ -6,7 +6,9 @@
 
 import { Elysia } from "elysia"
 import { manageUser } from "./user/manageuser"
+import { userInfo } from "./user/userinfo"
+import { chat } from "./user/chat"
 
 export const user = new Elysia().group("/user", (app) => {
-  return app.use(manageUser)
+  return app.use(manageUser).use(userInfo).use(chat)
 })

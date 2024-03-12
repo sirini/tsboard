@@ -91,7 +91,7 @@ export const NOTICE_TYPE = {
   LIKE_COMMENT: 1,
   LEAVE_COMMENT: 2,
   REPLY_COMMENT: 3,
-  GOT_NOTE: 4,
+  CHAT_MESSAGE: 4,
 }
 
 export type NoticeType = 0 | 1 | 2 | 3 | 4

@@ -20,7 +20,7 @@ import {
   saveNewComment,
   saveReplyComment,
 } from "../../database/board/comment"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { fail, getUpdatedAccessToken, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
 import { checkUserPermission, updateUserPoint } from "../../database/board/common"
 import { Comment } from "../../../src/interface/board"
 
@@ -31,15 +31,6 @@ const htmlFilter = {
     img: ["src", "alt", "class"],
     span: ["class"],
   },
-}
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
 }
 
 export const comment = new Elysia()
@@ -90,8 +81,8 @@ export const comment = new Elysia()
         return fail(`Invalid parameters.`, response)
       }
 
-      const boardUid = await getBoardUid(id)
-      const configViewLevel = await getViewPostLevel(boardUid)
+      response.boardUid = await getBoardUid(id)
+      const configViewLevel = await getViewPostLevel(response.boardUid)
       if (configViewLevel > userLevel) {
         return fail(`Level restriction.`, response)
       }
@@ -108,7 +99,6 @@ export const comment = new Elysia()
         accessUserUid,
         pagingDirection,
       })
-
       return success(response)
     },
     {
@@ -142,7 +132,7 @@ export const comment = new Elysia()
       return success(response)
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         commentUid: t.Numeric(),
@@ -181,7 +171,7 @@ export const comment = new Elysia()
       return success({ newCommentUid, newAccessToken })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -224,7 +214,7 @@ export const comment = new Elysia()
       return success({ newCommentUid, newAccessToken })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -264,7 +254,7 @@ export const comment = new Elysia()
       return success(response)
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -299,7 +289,7 @@ export const comment = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         boardUid: t.Numeric(),
         removeTargetUid: t.Numeric(),

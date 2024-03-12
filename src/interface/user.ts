@@ -1,13 +1,13 @@
 /**
  * interface/user.ts
  *
- * 쪽지, 신고, 정보 보기, 관리 하기 (관리자용) 관련 인터페이스
+ * 채팅, 신고, 정보 보기, 관리 하기 (관리자용) 관련 인터페이스
  */
 
-export type TargetUserInfo = {
-  uid: number
+import { Pair } from "./board"
+
+export type UserBasicInfo = Pair & {
   profile: string
-  name: string
 }
 
 export type UserPermission = {
@@ -24,6 +24,17 @@ export type UserPermissionParams = UserPermission & {
 }
 
 export type ChatHistory = {
+  uid: number
   userUid: number
   message: string
+  timestamp: number
+}
+
+export type UserOpenInfo = UserBasicInfo & {
+  level: number
+  signature: string
+  signup: number
+  signin: number
+  admin: boolean
+  blocked: boolean
 }

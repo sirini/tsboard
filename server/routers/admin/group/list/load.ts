@@ -7,16 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getGroupList, getExistGroupIds } from "../../../../database/admin/group/list/load"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const load = new Elysia()
   .use(
@@ -44,7 +35,7 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
     },
   )
   .get(
@@ -63,7 +54,7 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         id: t.String(),
         limit: t.Numeric(),

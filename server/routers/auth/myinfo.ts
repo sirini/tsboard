@@ -7,19 +7,10 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { isDuplicatedName } from "../../database/auth/signup"
-import { fail, success, getUpdatedAccessToken } from "../../util/tools"
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../util/tools"
 import { getUser } from "../../database/auth/myinfo"
 import { getUserInfo, modifyUserInfo } from "../../database/admin/user/modify"
 import { INIT_USER } from "../../database/auth/const"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
 
 export const myInfo = new Elysia()
   .use(
@@ -66,7 +57,7 @@ export const myInfo = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         userUid: t.Numeric(),
       }),
@@ -105,7 +96,7 @@ export const myInfo = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         name: t.String(),
         password: t.String(),

@@ -9,7 +9,13 @@ import { jwt } from "@elysiajs/jwt"
 import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
-import { fail, getUpdatedAccessToken, refineText, success } from "../../util/tools"
+import {
+  fail,
+  getUpdatedAccessToken,
+  refineText,
+  success,
+  DEFAULT_TYPE_CHECK,
+} from "../../util/tools"
 import {
   getCategories,
   getMaxImageUid,
@@ -27,15 +33,6 @@ import {
 import { BOARD_CONFIG } from "../../database/board/const"
 import { CountPair, Pair } from "../../../src/interface/board"
 import { updateUserPoint } from "../../database/board/common"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -134,7 +131,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         sizeLimit: t.Numeric(),
@@ -184,7 +181,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         boardUid: t.Numeric(),
         lastUid: t.Numeric(),
@@ -214,7 +211,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         imageUid: t.Numeric(),
       }),
@@ -238,7 +235,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         tag: t.String(),
         limit: t.Numeric(),
@@ -304,7 +301,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         categoryUid: t.Numeric(),

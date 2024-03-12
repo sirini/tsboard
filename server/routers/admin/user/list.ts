@@ -7,16 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getMaxUserUid, getUsers, getSearchedUsers } from "../../../database/admin/user/list"
-import { fail, success, getUpdatedAccessToken } from "../../../util/tools"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../util/tools"
 
 export const list = new Elysia()
   .use(
@@ -59,7 +50,7 @@ export const list = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         page: t.Numeric(),
         bunch: t.Numeric(),

@@ -16,16 +16,7 @@ import {
   addCategory,
   removeCategory,
 } from "../../../../database/admin/board/general/update"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const update = new Elysia()
   .use(
@@ -70,7 +61,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
         boardUid: t.Number(),
@@ -96,7 +87,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newName: t.String(),
@@ -122,7 +113,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newInfo: t.String(),
@@ -145,7 +136,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newType: t.Number(),
@@ -168,7 +159,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newRows: t.Number(),
@@ -191,7 +182,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newWidth: t.Number(),
@@ -222,7 +213,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         newCategory: t.String(),
@@ -251,7 +242,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         categoryUid: t.Number(),

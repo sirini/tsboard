@@ -3,30 +3,35 @@
     <v-avatar start>
       <v-img :src="PREFIX + (profile.length < 1 ? '/no-profile.svg' : profile)"></v-img>
     </v-avatar>
-    {{ name }}
+    {{ util.unescape(name) }}
 
     <v-menu activator="parent">
       <v-list density="compact">
-        <v-list-item
-          prepend-icon="mdi-card-account-details-outline"
-          @click="user.openUserInfo(targetUser)"
-        >
+        <v-list-item prepend-icon="mdi-card-account-details-outline" @click="user.openDialog(uid)">
           정보 보기
         </v-list-item>
         <v-list-item
           prepend-icon="mdi-card-account-mail-outline"
-          @click="user.openSendNote(targetUser)"
-          >쪽지 보내기</v-list-item
+          v-if="auth.user.uid > 0 && auth.user.uid !== uid"
+          @click="
+            chat.openDialog({
+              uid,
+              name,
+              profile,
+            })
+          "
+          >채팅 보내기</v-list-item
         >
         <v-list-item
           prepend-icon="mdi-account-tie-hat-outline"
-          @click="user.openSendReport(targetUser)"
+          @click="user.openSendReport(uid)"
+          v-if="auth.user.uid > 0 && auth.user.uid !== uid"
           >신고하기</v-list-item
         >
         <v-list-item
           prepend-icon="mdi-account-cog"
           :disabled="!auth.user.admin"
-          @click="manage.openManageUser(targetUser)"
+          @click="manage.openManageUser(uid)"
           v-if="auth.user.uid === 1"
           >회원 관리</v-list-item
         >
@@ -36,26 +41,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUserStore } from "../../store/user/user"
+import { useChatStore } from "../../store/user/chat"
 import { useManageUserStore } from "../../store/user/manageuser"
-import { TargetUserInfo } from "../../interface/user"
+import { useUtilStore } from "../../store/util"
 
 const auth = useAuthStore()
 const user = useUserStore()
+const chat = useChatStore()
 const manage = useManageUserStore()
+const util = useUtilStore()
 const props = defineProps<{
   uid: number
   profile: string
   name: string
   size?: string
 }>()
-const targetUser = ref<TargetUserInfo>({
-  uid: props.uid,
-  profile: props.profile,
-  name: props.name,
-})
 const PREFIX = process.env.PREFIX || ""
 </script>
 

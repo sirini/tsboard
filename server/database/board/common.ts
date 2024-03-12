@@ -12,25 +12,6 @@ import {
   UpdateUserPointParams,
 } from "../../../src/interface/board"
 import { insert, select, table, update } from "../common"
-import { AddNoticeParams } from "./const"
-
-// 알림 정보 추가하기
-export async function addNotice(param: AddNoticeParams): Promise<void> {
-  const [exist] = await select(
-    `SELECT uid FROM ${table}notice WHERE 
-    to_uid = ? AND from_uid = ? AND type = ? AND post_uid = ? AND comment_uid = ? LIMIT 1`,
-    [param.toUid, param.fromUid, param.type, param.postUid, param.commentUid],
-  )
-  if (exist) {
-    return
-  }
-
-  insert(
-    `INSERT INTO ${table}notice (to_uid, from_uid, type, post_uid, comment_uid, checked, timestamp) 
-  VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [param.toUid, param.fromUid, param.type, param.postUid, param.commentUid, 0, Date.now()],
-  )
-}
 
 // 사용자의 권한 확인하기 (권한 소유: 작성자, 게시판 관리자, 그룹 관리자, 최고 관리자)
 export async function checkUserPermission(param: CheckUserPermissionParams): Promise<boolean> {

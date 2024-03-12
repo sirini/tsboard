@@ -11,6 +11,17 @@ import { saveTokens } from "../database/auth/authorization"
 import { exists, mkdir } from "node:fs/promises"
 import { nanoid, customAlphabet } from "nanoid"
 import sharp from "sharp"
+import { t } from "elysia"
+
+// 헤더 쿠키 유효성 체크하는 코드
+export const DEFAULT_TYPE_CHECK = {
+  headers: t.Object({
+    authorization: t.String(),
+  }),
+  cookie: t.Cookie({
+    refresh: t.String(),
+  }),
+}
 
 // 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다
 export function generateRandomCode() {

@@ -73,7 +73,7 @@
       </v-main>
     </v-layout>
     <user-info-dialog></user-info-dialog>
-    <send-note-dialog></send-note-dialog>
+    <chat-dialog></chat-dialog>
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
   </v-app>
@@ -87,7 +87,7 @@ import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import SendNoteDialog from "../../components/user/SendNoteDialog.vue"
+import ChatDialog from "../../components/user/ChatDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"

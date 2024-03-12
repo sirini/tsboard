@@ -6,7 +6,7 @@
 
 import { CONTENT_STATUS, Pair, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
 import { select, table, update } from "../common"
-import { addNotice } from "./common"
+import { addNotification } from "../home/notification"
 import { INIT_POST, NOTICE_TYPE, NoticeType } from "./const"
 import { getPostRelated } from "./list"
 import { statSync } from "fs"
@@ -111,7 +111,7 @@ export async function likePost(param: PostLikeParams): Promise<void> {
     const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
       param.postUid,
     ])
-    addNotice({
+    addNotification({
       toUid: post.user_uid,
       fromUid: param.accessUserUid,
       type: NOTICE_TYPE.LIKE_POST as NoticeType,

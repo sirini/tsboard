@@ -15,7 +15,7 @@ import {
   SaveReplyParams,
 } from "../../../src/interface/board"
 import { insert, select, table, update } from "../common"
-import { addNotice } from "./common"
+import { addNotification } from "../home/notification"
 import {
   COMMENT_RELATED,
   CommentRelated,
@@ -159,7 +159,7 @@ export async function likeComment(param: CommentLikeParams): Promise<void> {
       [param.commentUid],
     )
     if (comment) {
-      addNotice({
+      addNotification({
         toUid: comment.user_uid,
         fromUid: param.accessUserUid,
         type: NOTICE_TYPE.LIKE_COMMENT as NoticeType,
@@ -193,7 +193,7 @@ export async function saveNewComment(param: SaveCommentParams): Promise<number> 
       param.postUid,
     ])
     if (post) {
-      addNotice({
+      addNotification({
         toUid: post.user_uid,
         fromUid: param.accessUserUid,
         type: NOTICE_TYPE.LEAVE_COMMENT as NoticeType,
@@ -225,7 +225,7 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
     param.replyTargetUid,
   ])
   if (comment) {
-    addNotice({
+    addNotification({
       toUid: comment.user_uid,
       fromUid: param.accessUserUid,
       type: NOTICE_TYPE.REPLY_COMMENT as NoticeType,

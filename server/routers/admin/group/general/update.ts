@@ -6,22 +6,13 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 import {
   changeGroupAdmin,
   removeBoard,
   createBoard,
 } from "../../../../database/admin/group/general/update"
 import { CREATE_BOARD_RESULT } from "../../../../database/admin/group/general/const"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
 
 export const update = new Elysia()
   .use(
@@ -72,7 +63,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
         userUid: t.Number(),
@@ -99,7 +90,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
       }),
@@ -132,7 +123,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
         newId: t.String(),

@@ -11,16 +11,7 @@ import {
   getMaxPostUid,
   getSearchedPosts,
 } from "../../../../database/admin/latest/general/post"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const post = new Elysia()
   .use(
@@ -52,7 +43,7 @@ export const post = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         page: t.Numeric(),
         bunch: t.Numeric(),
@@ -85,7 +76,7 @@ export const post = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         option: t.String(),
         keyword: t.String(),

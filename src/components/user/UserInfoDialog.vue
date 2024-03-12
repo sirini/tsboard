@@ -2,30 +2,49 @@
   <v-dialog v-model="user.userInfoDialog" persistent>
     <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
-        <span class="title">사용자 정보</span>
+        <span>사용자 정보</span>
         <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
       </v-card-title>
       <v-divider></v-divider>
 
       <v-list>
+        <alert-bar></alert-bar>
+
         <v-list-item class="text-center">
           <v-avatar size="large">
-            <v-img :src="PREFIX + userInfo?.profile"></v-img>
+            <v-img :src="PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
         </v-list-item>
 
         <v-list-item>
           <v-row>
             <v-col cols="4">닉네임</v-col>
-            <v-col>{{ userInfo?.name || "" }}</v-col>
+            <v-col>{{ util.unescape(user.info.name) }}</v-col>
           </v-row>
+
+          <template v-slot:append>
+            <v-chip
+              size="small"
+              color="warning"
+              prepend-icon="mdi-account-cancel"
+              v-if="user.info.blocked"
+              >차단된 사용자</v-chip
+            >
+            <v-chip
+              size="small"
+              color="blue-grey"
+              prepend-icon="mdi-check-decagram"
+              v-if="user.info.admin"
+              >관리자</v-chip
+            >
+          </template>
         </v-list-item>
         <v-divider></v-divider>
 
         <v-list-item>
           <v-row>
             <v-col cols="4">레벨</v-col>
-            <v-col>{{ userInfo?.level }}</v-col>
+            <v-col>{{ user.info.level }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -33,7 +52,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">서명</v-col>
-            <v-col>{{ userInfo?.signature || "작성된 서명이 없습니다." }}</v-col>
+            <v-col>{{ util.unescape(user.info.signature) || "작성된 서명이 없습니다." }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -41,7 +60,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">가입일</v-col>
-            <v-col>{{ userInfo?.signup }}</v-col>
+            <v-col>{{ util.date(user.info.signup, true, true) }}</v-col>
           </v-row>
         </v-list-item>
         <v-divider></v-divider>
@@ -49,55 +68,35 @@
         <v-list-item>
           <v-row>
             <v-col cols="4">마지막 로그인</v-col>
-            <v-col>{{ userInfo?.signin }}</v-col>
+            <v-col>{{ util.date(user.info.signin, true, true) }}</v-col>
           </v-row>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="user.closeUserInfo">닫기</v-btn>
+        <v-btn block prepend-icon="mdi-close" @click="user.closeDialog">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
 import { useUserStore } from "../../store/user/user"
 import { useHomeStore } from "../../store/home"
-import { User } from "../../interface/auth"
+import { useUtilStore } from "../../store/util"
+import AlertBar from "../util/AlertBar.vue"
 
 const user = useUserStore()
 const home = useHomeStore()
-const userInfo = ref<User>()
+const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
-
-onMounted(() => {
-  userInfo.value = {
-    uid: user.targetUserInfo.uid,
-    id: "",
-    name: user.targetUserInfo.name,
-    profile: user.targetUserInfo.profile,
-    level: 1,
-    point: 123,
-    signature: "",
-    signup: 0,
-    signin: 0,
-    admin: false,
-    token: "",
-  }
-})
 </script>
 
 <style scoped>
-.title {
-  color: #37474f;
-}
 .info {
   color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #cfd8dc solid;
 }
 
 /** 다이얼로그 배경 조정 */

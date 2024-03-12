@@ -9,11 +9,15 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
+import { Notification } from "../interface/home"
+import { NOTICE_TYPE, NoticeType } from "../../server/database/board/const"
+import { HOME } from "../messages/store/home"
 
 export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const drawer = ref<boolean>(false)
+  const notifications = ref<Notification[]>([])
   const color = {
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -43,9 +47,54 @@ export const useHomeStore = defineStore("home", () => {
     })
   }
 
+  // 알림 정보 가져오기
+  async function loadNotification(): Promise<void> {
+    if (auth.user.uid < 1) {
+      return
+    }
+
+    const response = await server.api.home.load.notification.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        limit: 10,
+      },
+    })
+
+    if (response.data && response.data.success === true && response.data.result.length > 0) {
+      notifications.value = response.data.result
+    }
+  }
+
+  // 알림 내용 해석하기
+  function translateNotification(type: NoticeType): string {
+    let result = ""
+    switch (type) {
+      case NOTICE_TYPE.LIKE_POST as NoticeType:
+        result = HOME.LIKE_POST
+        break
+      case NOTICE_TYPE.LIKE_COMMENT as NoticeType:
+        result = HOME.LIKE_COMMENT
+        break
+      case NOTICE_TYPE.LEAVE_COMMENT as NoticeType:
+        result = HOME.LEAVE_COMMENT
+        break
+      case NOTICE_TYPE.REPLY_COMMENT as NoticeType:
+        result = HOME.REPLY_COMMENT
+        break
+      default:
+        result = HOME.CHAT_MESSAGE
+    }
+    return result
+  }
+
   return {
     drawer,
+    notifications,
     color,
     visit,
+    loadNotification,
+    translateNotification,
   }
 })

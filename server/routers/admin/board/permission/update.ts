@@ -10,17 +10,8 @@ import {
   changeBoardAdmin,
   updatePermissionLevels,
 } from "../../../../database/admin/board/permission/update"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 import { AdminPermissionLevel } from "../../../../../src/interface/admin"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
 
 export const update = new Elysia()
   .use(
@@ -71,7 +62,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         userUid: t.Number(),
@@ -100,7 +91,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         levels: t.Object({

@@ -11,16 +11,7 @@ import {
   getAdminInfo,
   removeGroup,
 } from "../../../../database/admin/group/list/update"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const update = new Elysia()
   .use(
@@ -82,7 +73,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         newId: t.String(),
       }),
@@ -107,7 +98,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
       }),

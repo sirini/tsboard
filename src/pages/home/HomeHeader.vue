@@ -18,23 +18,35 @@
         <v-tooltip activator="parent">로그아웃 페이지로 이동합니다.</v-tooltip>
       </v-btn>
 
-      <v-btn icon>
-        <v-badge color="error" dot>
-          <v-icon @click=""
+      <v-btn icon @click="home.loadNotification">
+        <v-badge color="error" v-if="home.notifications.length > 0" dot>
+          <v-icon
             >mdi-bell
             <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
           </v-icon>
         </v-badge>
-        <v-menu activator="parent" open-on-hover>
+
+        <v-icon v-else
+          >mdi-bell-outline
+          <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
+        </v-icon>
+
+        <v-menu activator="parent">
           <v-list>
-            <v-list-item :prepend-avatar="PREFIX + '/no-profile.svg'" @click="">
-              일지매님이 내 댓글을 좋아합니다.
+            <v-list-item
+              v-for="(noti, index) in home.notifications"
+              :key="index"
+              :prepend-avatar="PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
+              @click="noti.id.length > 0 ? util.go('boardView', noti.id, noti.postUid) : ''"
+            >
+              {{ noti.fromUser.name }}님이 {{ home.translateNotification(noti.type) }}
+
+              <template v-slot:append v-if="noti.type !== (NOTICE_TYPE.CHAT_MESSAGE as NoticeType)">
+                <v-icon>mdi-chevron-right</v-icon>
+              </template>
             </v-list-item>
-            <v-list-item :prepend-avatar="PREFIX + '/no-profile.svg'" @click="">
-              홍길동님이 내 글을 좋아합니다.
-            </v-list-item>
-            <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/lists/5.jpg" @click="">
-              테스터님이 내 글에 댓글을 남겼습니다.
+            <v-list-item v-if="home.notifications.length < 1" prepend-icon="mdi-check-circle">
+              확인이 필요한 알림이 없습니다.
             </v-list-item>
           </v-list>
         </v-menu>
@@ -44,14 +56,18 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
+import { NOTICE_TYPE, NoticeType } from "../../../server/database/board/const"
 
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
+
+onMounted(() => home.loadNotification())
 </script>
 
 <style scoped type="scss">

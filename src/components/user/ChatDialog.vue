@@ -1,39 +1,40 @@
 <template>
-  <v-dialog v-model="user.sendNoteDialog" persistent>
+  <v-dialog v-model="chat.dialog" persistent>
     <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
-        <span class="title">쪽지 보내기</span>
-        <span class="note ml-3 pl-3">다른 사용자에게 쪽지를 보냅니다</span>
+        <span>채팅</span>
+        <span class="note ml-3 pl-3">다른 사용자에게 채팅 메시지를 보냅니다</span>
       </v-card-title>
       <v-divider></v-divider>
 
       <v-card-text class="wrap pa-0" id="tsboardChatHistory">
-        <alert-bar></alert-bar>
-
         <v-list>
+          <alert-bar></alert-bar>
           <v-list-subheader>받는 사람</v-list-subheader>
-          <v-list-item :prepend-avatar="PREFIX + user.targetUserInfo.profile">
-            <v-list-item-title>{{ user.targetUserInfo.name }}</v-list-item-title>
+          <v-list-item :prepend-avatar="PREFIX + (chat.targetUser.profile || '/no-profile.svg')">
+            <v-list-item-title>{{ chat.targetUser.name }}</v-list-item-title>
           </v-list-item>
 
           <v-list-subheader>이전 쪽지 내역</v-list-subheader>
           <v-divider></v-divider>
 
-          <v-list-item v-for="(chat, index) in user.chatHistory" :key="index" class="mt-2 mb-2">
-            <template v-slot:prepend v-if="chat.userUid === user.targetUserInfo.uid">
+          <v-list-item v-for="(msg, index) in chat.history" :key="index" class="mt-2 mb-2">
+            <template v-slot:prepend v-if="msg.userUid === chat.targetUser.uid">
               <v-avatar>
-                <v-img :src="PREFIX + user.targetUserInfo.profile"></v-img>
+                <v-img :src="PREFIX + (chat.targetUser.profile || '/no-profile.svg')"></v-img>
               </v-avatar>
             </template>
+
             <v-card
               variant="tonal"
-              :color="chat.userUid === auth.user.uid ? 'primary' : 'blue-grey'"
+              :color="msg.userUid === auth.user.uid ? 'primary' : 'blue-grey'"
             >
-              <v-card-text>{{ chat.message }}</v-card-text>
+              <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
             </v-card>
-            <template v-slot:append v-if="chat.userUid === auth.user.uid">
+
+            <template v-slot:append v-if="msg.userUid === auth.user.uid">
               <v-avatar>
-                <v-img :src="PREFIX + auth.user.profile"></v-img>
+                <v-img :src="PREFIX + (auth.user.profile || '/no-profile.svg')"></v-img>
               </v-avatar>
             </template>
           </v-list-item>
@@ -43,43 +44,40 @@
 
       <v-divider></v-divider>
       <v-card-actions>
+        <v-btn prepend-icon="mdi-close" class="mr-2" @click="chat.closeDialog">닫기</v-btn>
         <v-text-field
-          v-model="user.chatMessage"
-          :rules="rules"
-          hide-details
+          v-model="chat.message"
           density="compact"
           append-inner-icon="mdi-send"
           variant="outlined"
-          @keyup.enter="user.sendNote"
-          @click:append-inner="user.sendNote"
+          hide-details
+          @keyup.enter="chat.send"
+          @click:append-inner="chat.send"
         >
         </v-text-field>
-        <v-btn prepend-icon="mdi-close" class="ml-2" @click="user.closeSendNote">닫기 </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, watch } from "vue"
+import { watch } from "vue"
 import { useAuthStore } from "../../store/user/auth"
-import { useUserStore } from "../../store/user/user"
+import { useChatStore } from "../../store/user/chat"
 import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 import AlertBar from "../util/AlertBar.vue"
 
 const auth = useAuthStore()
-const user = useUserStore()
+const chat = useChatStore()
 const home = useHomeStore()
+const util = useUtilStore()
 const PREFIX = process.env.PREFIX || ""
-const rules: any = [
-  (value: string) =>
-    (value && value.length > 1 && value.length < 100) || "2글자 이상, 100자 미만으로 입력해주세요.",
-]
 
 // 채팅 히스토리가 업데이트 될 때마다 스크롤을 밑으로 이동
 const delayForScroll = 250
 watch(
-  () => user.chatHistory.length,
+  () => chat.history.length,
   () => {
     setTimeout(() => {
       const eos = document.querySelector("#tsboardEndOfChat") as HTMLDivElement
@@ -87,23 +85,6 @@ watch(
     }, delayForScroll)
   },
 )
-
-// for test
-onBeforeMount(() => {
-  user.chatHistory = []
-  user.chatHistory.push({
-    userUid: 11,
-    message: "이 글은 예시용 쪽지 내용입니다. 상대방의 쪽지를 가정합니다.",
-  })
-  user.chatHistory.push({
-    userUid: 1,
-    message: "상대방의 쪽지 내용에 내가 답글을 남긴 모습입니다.",
-  })
-  user.chatHistory.push({
-    userUid: 11,
-    message: "상대방의 쪽지 내용으로 마무리 됩니다.",
-  })
-})
 </script>
 
 <style scoped>
@@ -127,13 +108,9 @@ onBeforeMount(() => {
   background: var(--sb-thumb-color);
   border-radius: 5px;
 }
-.title {
-  color: #37474f;
-}
 .note {
   color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #cfd8dc solid;
 }
 .wrap {
   overflow-y: scroll;

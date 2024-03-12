@@ -55,7 +55,8 @@
                 </v-list>
               </v-list-item>
 
-              <v-list-item class="view_content pa-3 mb-16" v-html="view.post.content">
+              <v-list-item class="pa-3 mb-16">
+                <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
               </v-list-item>
 
               <v-list-item class="pa-3">
@@ -132,7 +133,7 @@
       </v-main>
     </v-layout>
     <user-info-dialog></user-info-dialog>
-    <send-note-dialog></send-note-dialog>
+    <chat-dialog></chat-dialog>
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
   </v-app>
@@ -148,7 +149,7 @@ import BoardViewCommentWrite from "../../components/board/comment/BoardViewComme
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import SendNoteDialog from "../../components/user/SendNoteDialog.vue"
+import ChatDialog from "../../components/user/ChatDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
@@ -170,23 +171,18 @@ onMounted(() => view.loadPostView())
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.board {
-  .view_title {
-    font-weight: bold;
-    font-size: 1.2em;
-  }
-  .underline {
-    border-bottom: 1px #dddddd solid;
-  }
-  .view_info {
-    color: #828282;
-    font-size: 0.85em;
-  }
-  .view_content {
-    line-height: 1.8em;
-  }
-  .signature {
-    color: #90a4ae;
-  }
+.view_title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.underline {
+  border-bottom: 1px #dddddd solid;
+}
+.view_info {
+  color: #828282;
+  font-size: 0.85em;
+}
+.signature {
+  color: #90a4ae;
 }
 </style>

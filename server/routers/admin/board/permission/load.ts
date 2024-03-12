@@ -10,17 +10,8 @@ import {
   getAdminCandidates,
   getBoardPermission,
 } from "../../../../database/admin/board/permission/load"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 import { INIT_PERMISSION_CONFIG } from "../../../../database/admin/board/permission/const"
-
-const defaultTypeCheck = {
-  headers: t.Object({
-    authorization: t.String(),
-  }),
-  cookie: t.Cookie({
-    refresh: t.String(),
-  }),
-}
 
 export const load = new Elysia()
   .use(
@@ -52,7 +43,7 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         id: t.String(),
       }),
@@ -77,7 +68,7 @@ export const load = new Elysia()
       })
     },
     {
-      ...defaultTypeCheck,
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         name: t.String(),
         limit: t.Numeric(),
