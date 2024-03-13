@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
-import { UserBasicInfo, UserPermissionParams } from "../../interface/user"
+import { INIT_USER_BASIC, UserBasicInfo, UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { USER } from "../../messages/store/user/user"
 import { INIT_PERMISSION } from "./const"
@@ -19,7 +19,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const manageUserDialog = ref<boolean>(false)
-  const targetUser = ref<UserBasicInfo>({ uid: 0, name: "", profile: "" })
+  const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
   const permission = ref<UserPermissionParams>(INIT_PERMISSION)
 
   // 사용자 관리하기 다이얼로그 열기
@@ -31,7 +31,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
 
   // 사용자 관리하기 다이얼로그 닫기
   function closeManageUser(): void {
-    targetUser.value = { uid: 0, name: "", profile: "" }
+    targetUser.value = INIT_USER_BASIC
     manageUserDialog.value = false
   }
 
@@ -85,7 +85,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(USER.ACTION_TAKEN)
-    setTimeout(() => closeManageUser(), 3000)
+    closeManageUser()
   }
 
   return {

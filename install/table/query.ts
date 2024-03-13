@@ -51,7 +51,7 @@ tables.push(`${create} #db#user_permission (
   user_uid INT ${unnd0},
   write_post TINYINT UNSIGNED ${nnd} '1',
   write_comment TINYINT UNSIGNED ${nnd} '1',
-  send_note TINYINT UNSIGNED ${nnd} '1',
+  send_chat TINYINT UNSIGNED ${nnd} '1',
   send_report TINYINT UNSIGNED ${nnd} '1',
   ${primary},
   KEY (user_uid)
@@ -72,6 +72,13 @@ tables.push(`${create} #db#user_access_log (
   user_uid INT ${unnd0},
   timestamp BIGINT ${unnd0},
   ${primary}
+) ${engineEncode}`)
+
+// 사용자 블랙 리스트 저장용 테이블
+tables.push(`${create} #db#user_black_list (
+  user_uid INT ${unnd0},
+  black_uid INT ${unnd0},
+  KEY (user_uid)
 ) ${engineEncode}`)
 
 // 신고 내역

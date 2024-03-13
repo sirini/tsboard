@@ -9,11 +9,10 @@ import { jwt } from "@elysiajs/jwt"
 import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../util/tools"
 import {
   getUserPermission,
-  hasPermission,
+  haveAdminPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
-import { USER_OPEN_INFO, USER_PERMISSION_PARAMS } from "../../database/user/const"
-import { getUserOpenInfo } from "../../database/user/userinfo"
+import { USER_PERMISSION_PARAMS } from "../../database/user/const"
 
 export const manageUser = new Elysia()
   .use(
@@ -34,13 +33,12 @@ export const manageUser = new Elysia()
       }
     }
     accessUserUid = access.uid as number
-    if ((await hasPermission(accessUserUid)) === false) {
+    if ((await haveAdminPermission(accessUserUid)) === false) {
       return {
         accessUserUid,
         newAccessToken,
       }
     }
-    accessUserUid = accessUserUid
     if (cookie && cookie.refresh) {
       newAccessToken = await getUpdatedAccessToken(
         jwt,

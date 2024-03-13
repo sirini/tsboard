@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -52,6 +52,9 @@ const home = useHomeStore()
 </script>
 
 <style scoped>
+.app {
+  background-color: #eceff1;
+}
 .layout {
   margin-top: 64px;
 }

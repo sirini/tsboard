@@ -9,7 +9,7 @@ import { UserPermissionParams } from "../../../src/interface/user"
 import { USER_PERMISSION_PARAMS } from "./const"
 
 // 주어진 회원 번호가 관리 권한이 있는지 반환 (그룹 관리자 이상만 true)
-export async function hasPermission(userUid: number): Promise<boolean> {
+export async function haveAdminPermission(userUid: number): Promise<boolean> {
   let admins = [1]
   const uids = await select(`SELECT admin_uid FROM ${table}group`)
   for (const uid of uids) {
@@ -24,7 +24,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
   result.userUid = userUid
 
   const [perm] = await select(
-    `SELECT write_post, write_comment, send_note, send_report FROM ${table}user_permission 
+    `SELECT write_post, write_comment, send_chat, send_report FROM ${table}user_permission 
   WHERE user_uid = ? LIMIT 1`,
     [userUid],
   )
@@ -39,7 +39,7 @@ export async function getUserPermission(userUid: number): Promise<UserPermission
   result = {
     writePost: perm.write_post > 0 ? true : false,
     writeComment: perm.write_comment > 0 ? true : false,
-    sendChatMessage: perm.send_note > 0 ? true : false,
+    sendChatMessage: perm.send_chat > 0 ? true : false,
     sendReport: perm.send_report > 0 ? true : false,
     login: user.blocked < 1 ? true : false,
     userUid,
@@ -59,7 +59,7 @@ export async function updateUserPermission(
   )
   if (perm) {
     await update(
-      `UPDATE ${table}user_permission SET write_post = ?, write_comment = ?, send_note = ?, send_report = ?
+      `UPDATE ${table}user_permission SET write_post = ?, write_comment = ?, send_chat = ?, send_report = ?
     WHERE user_uid = ? LIMIT 1`,
       [
         param.writePost ? 1 : 0,
@@ -71,7 +71,7 @@ export async function updateUserPermission(
     )
   } else {
     await insert(
-      `INSERT INTO ${table}user_permission (user_uid, write_post, write_comment, send_note, send_report) 
+      `INSERT INTO ${table}user_permission (user_uid, write_post, write_comment, send_chat, send_report) 
     VALUES (?, ?, ?, ?, ?)`,
       [
         param.userUid,
@@ -105,10 +105,8 @@ export async function updateUserPermission(
     param.login ? 0 : 1,
     param.userUid,
   ])
-  await insert(`INSERT INTO ${table}note (to_uid, from_uid, note, timestamp) VALUES (?, ?, ?, ?)`, [
-    param.userUid,
-    accessUserUid,
-    param.response,
-    Date.now(),
-  ])
+  await insert(
+    `INSERT INTO ${table}chat (to_uid, from_uid, message, timestamp) VALUES (?, ?, ?, ?)`,
+    [param.userUid, accessUserUid, param.response, Date.now()],
+  )
 }

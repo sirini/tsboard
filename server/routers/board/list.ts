@@ -14,7 +14,7 @@ import {
   getUserLevel,
 } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { BOARD_CONFIG, PAGING_DIRECTION } from "../../database/board/const"
+import { BOARD_CONFIG } from "../../database/board/const"
 import { Post } from "../../../src/interface/board"
 
 export const list = new Elysia()

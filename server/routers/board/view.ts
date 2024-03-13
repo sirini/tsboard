@@ -13,6 +13,7 @@ import {
   getFiles,
   getPost,
   getTags,
+  isBannedByWriter,
   likePost,
 } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
@@ -58,44 +59,40 @@ export const view = new Elysia()
         post: INIT_POST,
         files: [] as PostFile[],
         tags: [] as Pair[],
-        newAccessToken: "",
+        newAccessToken,
       }
       if (id.length < 2 || postUid < 1) {
         return fail(`Invalid parameters.`, response)
       }
-      const config = await getBoardConfig(id)
-      if (config.uid < 1) {
+      response.config = await getBoardConfig(id)
+      if (response.config.uid < 1) {
         return fail(`Board not found.`, response)
       }
 
-      if (config.level.view > userLevel) {
-        response.config = config
+      if (response.config.level.view > userLevel) {
         return fail(`Level restriction.`, response)
       }
 
+      if ((await isBannedByWriter(postUid, accessUserUid)) === true) {
+        return fail(`You have been blocked.`, response)
+      }
+
       const updatePointResult = await updateUserPoint({
-        boardUid: config.uid,
+        boardUid: response.config.uid,
         accessUserUid,
         action: "view",
       })
-      if (updatePointResult === false && config.point.view < 0) {
+      if (updatePointResult === false && response.config.point.view < 0) {
         return fail(`Not enough point.`, response)
       }
 
-      let files: PostFile[] = []
-      if (config.level.download <= userLevel) {
-        files = await getFiles(postUid)
+      if (response.config.level.download <= userLevel) {
+        response.files = await getFiles(postUid)
       }
 
-      const post = await getPost(postUid, accessUserUid)
-      const tags = await getTags(postUid)
-      return success({
-        config,
-        post,
-        files,
-        tags,
-        newAccessToken,
-      })
+      response.post = await getPost(postUid, accessUserUid)
+      response.tags = await getTags(postUid)
+      return success(response)
     },
     {
       headers: t.Object({

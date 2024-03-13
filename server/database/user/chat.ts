@@ -57,3 +57,15 @@ export async function saveNewChat(
 
   return insertId
 }
+
+// 상대방의 블랙리스트에 내가 등록되었는지 확인하기
+export async function isBannedByOther(myUserUid: number, otherUserUid: number): Promise<boolean> {
+  const [banned] = await select(
+    `SELECT user_uid FROM ${table}user_black_list WHERE user_uid = ? AND black_uid = ? LIMIT 1`,
+    [otherUserUid, myUserUid],
+  )
+  if (!banned) {
+    return false
+  }
+  return true
+}

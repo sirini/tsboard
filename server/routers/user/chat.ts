@@ -8,7 +8,8 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
 import { ChatHistory } from "../../../src/interface/user"
-import { getChatHistory, saveNewChat } from "../../database/user/chat"
+import { getChatHistory, isBannedByOther, saveNewChat } from "../../database/user/chat"
+import { havePermission } from "../../database/board/common"
 
 export const chat = new Elysia()
   .use(
@@ -56,6 +57,13 @@ export const chat = new Elysia()
       if (userUid < 1 || message.length < 1) {
         return fail(`Invalid parameters.`, response)
       }
+      if ((await isBannedByOther(accessUserUid, userUid)) === true) {
+        return fail(`You have been blocked.`, response)
+      }
+      if ((await havePermission(accessUserUid, "send_chat")) === false) {
+        return fail(`You have no permission.`, response)
+      }
+
       message = Bun.escapeHTML(message)
       response = await saveNewChat(accessUserUid, userUid, message)
       return success(response)

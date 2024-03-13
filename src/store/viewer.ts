@@ -8,6 +8,7 @@ import { ref } from "vue"
 import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
 import { Position, GridItem, Photo } from "../interface/gallery"
+import { INIT_USER_BASIC } from "../interface/user"
 
 export const useViewerStore = defineStore("viewer", () => {
   const auth = useAuthStore()
@@ -26,7 +27,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const images = ref<GridItem[]>([])
   const photo = ref<Photo>({
     uid: 0,
-    writer: { uid: 0, name: "", profile: "" },
+    writer: INIT_USER_BASIC,
     files: [],
     like: 0,
     liked: false,

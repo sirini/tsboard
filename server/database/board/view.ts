@@ -160,3 +160,19 @@ export async function getDownloadPath(fileUid: number): Promise<{ path: string; 
     name: file.name,
   }
 }
+
+// 글작성자의 블랙리스트 대상자인지 확인
+export async function isBannedByWriter(postUid: number, accessUserUid: number): Promise<boolean> {
+  const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [postUid])
+  if (!post) {
+    return false
+  }
+  const [blacklist] = await select(
+    `SELECT black_uid FROM ${table}user_black_list WHERE user_uid = ? AND black_uid = ? LIMIT 1`,
+    [post.user_uid, accessUserUid],
+  )
+  if (!blacklist) {
+    return false
+  }
+  return true
+}

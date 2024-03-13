@@ -7,7 +7,7 @@
 import { table, select } from "../common"
 import { UserOpenInfo } from "../../../src/interface/user"
 import { USER_OPEN_INFO } from "./const"
-import { hasPermission } from "./manageuser"
+import { haveAdminPermission } from "./manageuser"
 
 // 주어진 회원 번호에 해당하는 회원의 기본 정보들 가져오기
 export async function getUserOpenInfo(userUid: number): Promise<UserOpenInfo> {
@@ -21,7 +21,7 @@ export async function getUserOpenInfo(userUid: number): Promise<UserOpenInfo> {
     return result
   }
 
-  const admin = await hasPermission(userUid)
+  const admin = await haveAdminPermission(userUid)
   result = {
     uid: userUid,
     name: user.name,

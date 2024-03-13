@@ -16,7 +16,7 @@ export const useUtilStore = defineStore("util", () => {
   const alertbar = ref<boolean>(false)
   const alertType = ref<"success" | "error" | "info">("error")
   const alertText = ref<string>("")
-  const alertTimeout = ref<number>(5000)
+  const alertTimeout = ref<number>(3000)
   const searchOption = ref<string>("subject")
   const searchValue = ref<string>("")
   const filters = {

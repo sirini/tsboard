@@ -8,7 +8,7 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
-import { ChatHistory, UserBasicInfo } from "../../interface/user"
+import { ChatHistory, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { CHAT } from "../../messages/store/user/chat"
@@ -20,7 +20,7 @@ export const useChatStore = defineStore("chat", () => {
   const dialog = ref<boolean>(false)
   const history = ref<ChatHistory[]>([])
   const message = ref<string>("")
-  const targetUser = ref<UserBasicInfo>({ uid: 0, name: "", profile: "" })
+  const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
 
   // 채팅방 열기
   function openDialog(user: UserBasicInfo): void {
@@ -32,7 +32,7 @@ export const useChatStore = defineStore("chat", () => {
 
   // 채팅창 닫기
   function closeDialog(): void {
-    targetUser.value = { uid: 0, name: "", profile: "" }
+    targetUser.value = INIT_USER_BASIC
     dialog.value = false
   }
 

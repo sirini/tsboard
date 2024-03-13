@@ -10,6 +10,12 @@ export type UserBasicInfo = Pair & {
   profile: string
 }
 
+export const INIT_USER_BASIC = {
+  uid: 0,
+  name: "",
+  profile: "",
+}
+
 export type UserPermission = {
   writePost: boolean
   writeComment: boolean

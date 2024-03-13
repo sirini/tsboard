@@ -8,7 +8,8 @@ import { Elysia } from "elysia"
 import { manageUser } from "./user/manageuser"
 import { userInfo } from "./user/userinfo"
 import { chat } from "./user/chat"
+import { report } from "./user/report"
 
 export const user = new Elysia().group("/user", (app) => {
-  return app.use(manageUser).use(userInfo).use(chat)
+  return app.use(manageUser).use(userInfo).use(chat).use(report)
 })

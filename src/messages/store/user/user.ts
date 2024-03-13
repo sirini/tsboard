@@ -8,6 +8,7 @@ export const USER = {
   NO_RESPONSE: "서버로부터 응답을 받을 수 없습니다. 관리자에게 문의해 주세요.",
   INVALID_TEXT_LENGTH: "3글자 이상, 1000자 미만으로 입력해주세요.",
   UNKNOWN_REPORT_TARGET: "신고할 대상이 제대로 지정되지 않았습니다.",
+  FAILED_REPORT: "신고를 전송하지 못했습니다.",
   REPORTED_USER: "님을 운영진에게 신고 하였습니다.",
   ACTION_TAKEN: "님에 대한 조치를 완료 하였습니다. 곧 창을 닫습니다...",
   FAILED_MANAGE_USER: "회원에 대한 조치사항을 반영하지 못했습니다.",

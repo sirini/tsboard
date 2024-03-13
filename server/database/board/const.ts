@@ -5,6 +5,7 @@
  */
 
 import { BoardConfig, Comment, Pair, Post, Writer } from "../../../src/interface/board"
+import { INIT_USER_BASIC } from "../../../src/interface/user"
 
 export const TYPE_MATCH = [
   { path: "/board/", name: "boardList" },
@@ -43,7 +44,7 @@ export type PostRelated = CommentRelated & {
 }
 
 export const POST_RELATED: PostRelated = {
-  writer: { uid: 0, name: "", profile: "" },
+  writer: INIT_USER_BASIC,
   like: 0,
   liked: false,
   category: { uid: 0, name: "" },
@@ -79,7 +80,7 @@ export const INIT_COMMENT: Comment = {
 }
 
 export const COMMENT_RELATED: CommentRelated = {
-  writer: { uid: 0, name: "", profile: "" },
+  writer: INIT_USER_BASIC,
   like: 0,
   liked: false,
 }

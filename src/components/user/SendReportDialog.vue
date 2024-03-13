@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="user.sendReportDialog" persistent>
+  <v-dialog v-model="report.dialog" persistent>
     <v-card class="mx-auto" width="500" :color="home.color.header">
       <v-card-title>
-        <span class="title">신고하기</span>
+        <span>신고하기</span>
         <span class="report ml-3 pl-3">운영진에게 신고 및 차단 기능을 사용합니다</span>
       </v-card-title>
       <v-divider></v-divider>
@@ -10,27 +10,26 @@
       <v-list>
         <alert-bar></alert-bar>
         <v-list-subheader>신고 대상자</v-list-subheader>
-        <v-list-item :prepend-avatar="PREFIX + user.targetUser.profile">
-          <v-list-item-title>{{ user.targetUser.name }}</v-list-item-title>
+        <v-list-item :prepend-avatar="PREFIX + (report.targetUser.profile || '/no-profile.svg')">
+          <v-list-item-title>{{ report.targetUser.name }}</v-list-item-title>
         </v-list-item>
-        <v-list-subheader>차단</v-list-subheader>
+        <v-list-subheader>블랙리스트</v-list-subheader>
 
         <v-divider></v-divider>
-        <v-list-item class="pa-0 pl-3">
-          <v-checkbox
-            v-model="blockNote"
-            density="compact"
-            hide-details
-            :label="user.targetUser.name + '님이 보내는 쪽지를 차단 합니다'"
-          ></v-checkbox>
+        <v-list-item class="pa-0">
+          <v-alert
+            variant="tonal"
+            color="blue-grey"
+            icon="mdi-information"
+            text="내 블랙리스트에 추가된 회원은 나에게 채팅 메시지를 보낼 수 없으며, 내가 작성한 게시글을 열람할 수 없습니다."
+          ></v-alert>
         </v-list-item>
-
         <v-list-item class="pa-0 pl-3">
           <v-checkbox
-            v-model="blockPost"
+            v-model="report.checkedBlackList"
             density="compact"
             hide-details
-            :label="user.targetUser.name + '님의 게시글이 보이지 않도록 차단 합니다'"
+            :label="report.targetUser.name + '님을 나의 블랙랙리스트에 추가합니다.'"
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>
@@ -38,7 +37,7 @@
         <v-list-subheader>신고 내용 (1000자 이내)</v-list-subheader>
         <v-list-item>
           <v-textarea
-            v-model="report"
+            v-model="report.content"
             :rules="rules"
             variant="outlined"
             counter
@@ -50,13 +49,9 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="user.closeSendReport">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="report.closeDialog">닫기</v-btn>
         <v-spacer></v-spacer>
-        <v-btn
-          color="primary"
-          variant="text"
-          append-icon="mdi-chevron-right"
-          @click="user.sendReport(report, blockNote, blockPost)"
+        <v-btn append-icon="mdi-chevron-right" @click="report.sendReport"
           >운영진에게 신고하기</v-btn
         >
       </v-card-actions>
@@ -65,32 +60,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { useUserStore } from "../../store/user/user"
+import { useReportStore } from "../../store/user/report"
 import { useHomeStore } from "../../store/home"
 import AlertBar from "../util/AlertBar.vue"
 
-const user = useUserStore()
+const report = useReportStore()
 const home = useHomeStore()
 const PREFIX = process.env.PREFIX || ""
-const report = ref<string>("")
 const rules: any = [
   (value: string) =>
     (value && value.length > 2 && value.length < 1000) ||
     "3글자 이상, 1000자 미만으로 입력해주세요.",
 ]
-const blockNote = ref<boolean>(false)
-const blockPost = ref<boolean>(false)
 </script>
 
 <style scoped>
-.title {
-  color: #37474f;
-}
 .report {
   color: #78909c;
   font-size: 0.65em;
-  border-left: 1px #cfd8dc solid;
 }
 
 /** 다이얼로그 배경 조정 */

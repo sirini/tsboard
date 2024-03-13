@@ -99,3 +99,21 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
 
   return true
 }
+
+// 사용자가 권한이 있는지 확인하기
+export async function havePermission(
+  userUid: number,
+  action: "write_post" | "write_comment" | "send_chat" | "send_report",
+): Promise<boolean> {
+  const [perm] = await select(
+    `SELECT ${action} AS action FROM ${table}user_permission WHERE user_uid = ? LIMIT 1`,
+    [userUid],
+  )
+  if (!perm) {
+    return true
+  }
+  if (perm.action > 0) {
+    return true
+  }
+  return false
+}

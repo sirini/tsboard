@@ -34,7 +34,7 @@
         <v-list-item
           prepend-icon="mdi-account-tie-hat-outline"
           @click="
-            user.openSendReport({
+            report.openDialog({
               uid,
               name,
               profile,
@@ -64,12 +64,14 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../store/user/auth"
 import { useUserStore } from "../../store/user/user"
+import { useReportStore } from "../../store/user/report"
 import { useChatStore } from "../../store/user/chat"
 import { useManageUserStore } from "../../store/user/manageuser"
 import { useUtilStore } from "../../store/util"
 
 const auth = useAuthStore()
 const user = useUserStore()
+const report = useReportStore()
 const chat = useChatStore()
 const manage = useManageUserStore()
 const util = useUtilStore()

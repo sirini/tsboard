@@ -21,8 +21,9 @@ import {
   saveReplyComment,
 } from "../../database/board/comment"
 import { fail, getUpdatedAccessToken, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
-import { checkUserPermission, updateUserPoint } from "../../database/board/common"
+import { checkUserPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { Comment } from "../../../src/interface/board"
+import { isBannedByWriter } from "../../database/board/view"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -151,6 +152,12 @@ export const comment = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
+      if ((await havePermission(accessUserUid, "write_comment")) === false) {
+        return fail(`You have no permission.`, response)
+      }
+      if ((await isBannedByWriter(postUid, accessUserUid)) === true) {
+        return fail(`You have been blocked.`, response)
+      }
 
       const updatePointResult = await updateUserPoint({
         boardUid,
@@ -192,6 +199,12 @@ export const comment = new Elysia()
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
+      }
+      if ((await havePermission(accessUserUid, "write_comment")) === false) {
+        return fail(`You have no permission.`, response)
+      }
+      if ((await isBannedByWriter(postUid, accessUserUid)) === true) {
+        return fail(`You have been blocked.`, response)
       }
 
       const updatePointResult = await updateUserPoint({
@@ -237,6 +250,12 @@ export const comment = new Elysia()
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
+      }
+      if ((await havePermission(accessUserUid, "write_comment")) === false) {
+        return fail(`You have no permission.`, response)
+      }
+      if ((await isBannedByWriter(postUid, accessUserUid)) === true) {
+        return fail(`You have been blocked.`, response)
       }
 
       const checkPermissionResult = await checkUserPermission({

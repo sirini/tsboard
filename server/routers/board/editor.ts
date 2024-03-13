@@ -32,7 +32,7 @@ import {
 } from "../../database/board/editor"
 import { BOARD_CONFIG } from "../../database/board/const"
 import { CountPair, Pair } from "../../../src/interface/board"
-import { updateUserPoint } from "../../database/board/common"
+import { havePermission, updateUserPoint } from "../../database/board/common"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -117,6 +117,9 @@ export const editor = new Elysia()
       const writeLevel = await getWriteLevel(boardUid)
       if (writeLevel > userLevel) {
         return fail(`Level restriction.`, response)
+      }
+      if ((await havePermission(accessUserUid, "write_post")) === false) {
+        return fail(`You have no permission.`, response)
       }
 
       const uploadedImages = await uploadImages({
@@ -263,6 +266,9 @@ export const editor = new Elysia()
       const writeLevel = await getWriteLevel(boardUid)
       if (writeLevel > userLevel) {
         return fail(`Level restriction.`, response)
+      }
+      if ((await havePermission(accessUserUid, "write_post")) === false) {
+        return fail(`You have no permission.`, response)
       }
 
       const updatePointResult = await updateUserPoint({
