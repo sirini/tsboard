@@ -5,13 +5,17 @@
  */
 
 import {
+  CheckPermissionParams,
   CheckUserPermissionParams,
   POINT_HISTORY_TYPE,
+  PermissionAction,
   SUPER_ADMIN,
   UpdatePointHistoryParams,
   UpdateUserPointParams,
 } from "../../../src/interface/board"
 import { insert, select, table, update } from "../common"
+import { haveAdminPermission } from "../user/manageuser"
+import { isAuthor } from "./editor"
 
 // 사용자의 권한 확인하기 (권한 소유: 작성자, 게시판 관리자, 그룹 관리자, 최고 관리자)
 export async function checkUserPermission(param: CheckUserPermissionParams): Promise<boolean> {
@@ -101,10 +105,7 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
 }
 
 // 사용자가 권한이 있는지 확인하기
-export async function havePermission(
-  userUid: number,
-  action: "write_post" | "write_comment" | "send_chat" | "send_report",
-): Promise<boolean> {
+export async function havePermission(userUid: number, action: PermissionAction): Promise<boolean> {
   const [perm] = await select(
     `SELECT ${action} AS action FROM ${table}user_permission WHERE user_uid = ? LIMIT 1`,
     [userUid],
@@ -116,4 +117,20 @@ export async function havePermission(
     return true
   }
   return false
+}
+
+// 관리자인지, 작성자인지, 권한은 있는지 확인 후 (이상 있을 시) 리턴 메시지 반환
+export async function checkPermission(
+  param: CheckPermissionParams,
+): Promise<{ result: boolean; error: string }> {
+  const isAdmin = await haveAdminPermission(param.accessUserUid)
+  const isWriter = await isAuthor(param.postUid, param.accessUserUid, param.target)
+  const hasPerm = await havePermission(param.accessUserUid, param.action)
+  if (isAdmin === false && isWriter === false) {
+    return { result: false, error: `You are neither the author nor the administrator.` }
+  }
+  if (isAdmin === false && hasPerm === false) {
+    return { result: false, error: `You have no permission.` }
+  }
+  return { result: true, error: "" }
 }

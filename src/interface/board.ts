@@ -190,6 +190,10 @@ export type WritePostParams = CommonPairParam & {
   content: string
 }
 
+export type ModifyPostParams = WritePostParams & {
+  postUid: number
+}
+
 export type VideoURL = {
   src: string
   width: number
@@ -200,4 +204,12 @@ export type TableOption = {
   rows: number
   cols: number
   withHeaderRow: boolean
+}
+
+export type PermissionAction = "write_post" | "write_comment" | "send_chat" | "send_report"
+export type CheckPermissionParams = {
+  accessUserUid: number
+  postUid: number
+  action: PermissionAction
+  target: TargetTable
 }

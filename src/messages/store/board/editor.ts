@@ -20,4 +20,10 @@ export const EDITOR = {
   TOO_SHORT_CONTENT: "글 내용은 3글자 이상 입력해 주세요.",
   WRITTEN_NEW_POST: "글 작성에 성공하였습니다.",
   FAILED_WRITE_POST: "글 작성에 실패하였습니다.",
+  LOADED_ORIGINAL_POST: "작성했던 게시글을 불러들였습니다.",
+  FAILED_LOAD_POST: "기존 게시글을 가져오지 못했습니다.",
+  FAILED_REMOVE_FILE: "기존에 첨부된 파일을 삭제하지 못했습니다.",
+  REMOVED_FILE: "기존에 첨부된 파일의 삭제에 성공하였습니다.",
+  FAILED_MODIFY_POST: "기존 게시글을 수정하지 못했습니다.",
+  MODIFIED_POST: "기존 게시글 수정에 성공하였습니다.",
 }

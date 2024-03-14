@@ -24,15 +24,19 @@ import {
   getWriteLevel,
   getWritePoint,
   loadUploadedImages,
+  modifyOriginalPost,
+  removeAttachedFile,
+  removeOriginalTags,
   removeUploadedImage,
   saveAttachments,
   saveTags,
   uploadImages,
   writeNewPost,
 } from "../../database/board/editor"
-import { BOARD_CONFIG } from "../../database/board/const"
-import { CountPair, Pair } from "../../../src/interface/board"
-import { havePermission, updateUserPoint } from "../../database/board/common"
+import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
+import { CountPair, Pair, PostFile } from "../../../src/interface/board"
+import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
+import { getFiles, getPost, getTags } from "../../database/board/view"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -41,6 +45,21 @@ const htmlFilter = {
     img: ["src", "alt", "class"],
     span: ["class"],
   },
+}
+
+const writeBody = {
+  boardUid: t.Numeric(),
+  categoryUid: t.Numeric(),
+  title: t.String(),
+  content: t.String(),
+  tags: t.Array(t.String()),
+  attachments: t.Optional(
+    t.Files({
+      type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
+      maxSize: parseInt(process.env.MAX_FILE_SIZE ?? "1024768000"),
+      error: "Invalid file type.",
+    }),
+  ),
 }
 
 export const editor = new Elysia()
@@ -257,9 +276,6 @@ export const editor = new Elysia()
         newAccessToken: "",
         postUid: 0,
       }
-      if (accessUserUid < 1) {
-        return fail(`Please log in.`, response)
-      }
       if (categoryUid < 1 || title.trim().length < 2 || content.trim().length < 3) {
         return fail(`Invalid parameters.`, response)
       }
@@ -294,11 +310,11 @@ export const editor = new Elysia()
 
       if (tags !== undefined && tags.length > 0) {
         tags = tags.map((tag) => refineText(tag))
-        await saveTags(boardUid, postUid, tags)
+        saveTags(boardUid, postUid, tags)
       }
 
       if (attachments) {
-        await saveAttachments(boardUid, postUid, attachments)
+        saveAttachments(boardUid, postUid, attachments)
       }
 
       return success({
@@ -308,19 +324,130 @@ export const editor = new Elysia()
     },
     {
       ...DEFAULT_TYPE_CHECK,
+      body: t.Object(writeBody),
+    },
+  )
+  .get(
+    "/loadpost",
+    async ({ query: { postUid }, accessUserUid, newAccessToken }) => {
+      let response = {
+        post: INIT_POST,
+        files: [] as PostFile[],
+        tags: [] as Pair[],
+        newAccessToken,
+      }
+      if (postUid < 1) {
+        return fail(`Invalid parameters.`, response)
+      }
+      const checked = await checkPermission({
+        accessUserUid,
+        postUid,
+        action: "write_post",
+        target: "post",
+      })
+      if (checked.result === false) {
+        return fail(checked.error, response)
+      }
+
+      response.post = await getPost(postUid, accessUserUid)
+      response.files = await getFiles(postUid)
+      response.tags = await getTags(postUid)
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        postUid: t.Numeric(),
+      }),
+    },
+  )
+  .delete(
+    "/removeattached",
+    async ({ query: { postUid, fileUid }, accessUserUid }) => {
+      let response = ""
+      if (fileUid < 1) {
+        return fail(`Invalid parameter.`, response)
+      }
+      const checked = await checkPermission({
+        accessUserUid,
+        postUid,
+        action: "write_post",
+        target: "post",
+      })
+      if (checked.result === false) {
+        return fail(checked.error, response)
+      }
+      removeAttachedFile(fileUid)
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        postUid: t.Numeric(),
+        fileUid: t.Numeric(),
+      }),
+    },
+  )
+  .patch(
+    "/modify",
+    async ({
+      body: { boardUid, categoryUid, postUid, title, content, attachments, tags },
+      accessUserUid,
+      newAccessToken,
+    }) => {
+      const response = {
+        newAccessToken,
+      }
+      if (
+        boardUid < 1 ||
+        categoryUid < 1 ||
+        postUid < 1 ||
+        title.trim().length < 2 ||
+        content.trim().length < 3
+      ) {
+        return fail(`Invalid parameters.`, response)
+      }
+      const checked = await checkPermission({
+        accessUserUid,
+        postUid,
+        action: "write_post",
+        target: "post",
+      })
+      if (checked.result === false) {
+        return fail(checked.error, response)
+      }
+
+      await removeOriginalTags(postUid)
+
+      title = Bun.escapeHTML(title)
+      content = sanitizeHtml(content, htmlFilter)
+      await modifyOriginalPost({
+        boardUid,
+        accessUserUid,
+        categoryUid,
+        title,
+        content,
+        postUid,
+      })
+
+      if (tags !== undefined && tags.length > 0) {
+        tags = tags.map((tag) => refineText(tag))
+        saveTags(boardUid, postUid, tags)
+      }
+
+      if (attachments) {
+        saveAttachments(boardUid, postUid, attachments)
+      }
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
       body: t.Object({
-        boardUid: t.Numeric(),
-        categoryUid: t.Numeric(),
-        title: t.String(),
-        content: t.String(),
-        attachments: t.Optional(
-          t.Files({
-            type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
-            maxSize: parseInt(process.env.MAX_FILE_SIZE ?? "102476800"),
-            error: "Invalid file type.",
-          }),
-        ),
-        tags: t.Optional(t.Array(t.String())),
+        ...writeBody,
+        postUid: t.Numeric(),
       }),
     },
   )

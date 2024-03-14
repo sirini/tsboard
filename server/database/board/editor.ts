@@ -9,7 +9,9 @@ import {
   CONTENT_STATUS,
   CountPair,
   LoadImageParams,
+  ModifyPostParams,
   Pair,
+  TargetTable,
   UploadImageParams,
   WritePostParams,
 } from "../../../src/interface/board"
@@ -216,6 +218,14 @@ export async function writeNewPost(param: WritePostParams): Promise<number> {
   return insertId
 }
 
+// 기존 게시글 수정하기
+export async function modifyOriginalPost(param: ModifyPostParams): Promise<void> {
+  await update(
+    `UPDATE ${table}post SET category_uid = ?, title = ?, content = ?, modified = ? WHERE uid = ? LIMIT 1`,
+    [param.categoryUid, param.title, param.content, Date.now(), param.postUid],
+  )
+}
+
 // 카테고리 목록 반환하기
 export async function getCategories(boardUid: number): Promise<Pair[]> {
   let result: Pair[] = []
@@ -233,4 +243,40 @@ export async function getCategories(boardUid: number): Promise<Pair[]> {
     })
   }
   return result
+}
+
+// 작성자인지 확인하기
+export async function isAuthor(
+  targetUid: number,
+  accessUserUid: number,
+  target: TargetTable,
+): Promise<boolean> {
+  const [content] = await select(`SELECT user_uid FROM ${table}${target} WHERE uid = ? LIMIT 1`, [
+    targetUid,
+  ])
+  if (!content) {
+    return false
+  }
+  return content.user_uid === accessUserUid
+}
+
+// 첨부되어 있던 파일 삭제
+export async function removeAttachedFile(fileUid: number): Promise<void> {
+  const [file] = await select(`SELECT path FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
+  if (!file) {
+    return
+  }
+  removeFile(`.${file.path}`)
+  remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
+}
+
+// 기존에 등록했던 태그들 제거 (글수정 시)
+export async function removeOriginalTags(postUid: number): Promise<void> {
+  const tags = await select(`SELECT hashtag_uid FROM ${table}post_hashtag WHERE post_uid = ?`, [
+    postUid,
+  ])
+  for (const tag of tags) {
+    update(`UPDATE ${table}hashtag SET used = used - 1 WHERE uid = ? LIMIT 1`, [tag.hashtag_uid])
+  }
+  remove(`DELETE FROM ${table}post_hashtag WHERE post_uid = ?`, [postUid])
 }

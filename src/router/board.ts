@@ -29,4 +29,9 @@ export const boardRoutes: Array<RouteRecordRaw> = [
     name: "boardWrite",
     component: () => import("@/pages/board/Write.vue"),
   },
+  {
+    path: PREFIX + "/board/:id/write/:no(\\d+)",
+    name: "boardModify",
+    component: () => import("@/pages/board/Write.vue"),
+  },
 ]

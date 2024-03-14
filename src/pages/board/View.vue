@@ -55,7 +55,7 @@
                 </v-list>
               </v-list-item>
 
-              <v-list-item class="pa-3 mb-16">
+              <v-list-item class="pa-3 mb-16 tiptap">
                 <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
               </v-list-item>
 
@@ -99,6 +99,7 @@
                   <v-btn
                     prepend-icon="mdi-pencil"
                     variant="text"
+                    @click="util.go('boardModify', view.id, view.postUid)"
                     :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
                     >수정</v-btn
                   >
@@ -155,6 +156,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import "../../assets/board/editor.scss"
 
 const auth = useAuthStore()
 const view = useBoardViewStore()

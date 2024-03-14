@@ -58,8 +58,8 @@
                         <v-chip
                           size="small"
                           label
-                          color="primary"
-                          prepend-icon="mdi-image"
+                          color="blue-grey"
+                          prepend-icon="mdi-upload"
                           class="mt-1 mr-1 mb-1"
                         >
                           {{ fileName }}
@@ -67,6 +67,27 @@
                       </template>
                     </template>
                   </v-file-input>
+                </v-list-item>
+
+                <v-list-item
+                  v-if="editor.postUid > 0 && editor.attachedFiles.length > 0"
+                  class="pa-0 pl-10"
+                >
+                  <v-chip
+                    size="small"
+                    label
+                    color="warning"
+                    prepend-icon="mdi-file-minus"
+                    class="mt-1 mr-1 mb-1"
+                    closable
+                    @click="editor.removeAttachedFile(file.uid)"
+                    v-for="(file, index) in editor.attachedFiles"
+                    :key="index"
+                    >{{ file.name }} ({{ util.num(file.size) }})
+                    <v-tooltip activator="parent"
+                      >클릭하시면 첨부된 이 파일을 삭제합니다.</v-tooltip
+                    >
+                  </v-chip>
                 </v-list-item>
 
                 <v-list-item class="pa-0">
@@ -146,8 +167,15 @@
                 >글 작성 취소</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="editor.write" append-icon="mdi-chevron-right"
+              <v-btn
+                v-if="editor.postUid < 1"
+                color="primary"
+                @click="editor.write"
+                append-icon="mdi-chevron-right"
                 >작성 완료하고 보러 가기</v-btn
+              >
+              <v-btn v-else color="primary" @click="editor.modify" append-icon="mdi-chevron-right"
+                >수정 완료하고 보러 가기</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -162,9 +190,10 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
+import { useRoute } from "vue-router"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
-import { useEditorImageStore } from "../../store/board/image"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
@@ -172,9 +201,16 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
+const route = useRoute()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
-const image = useEditorImageStore()
+
+onMounted(() => {
+  if (route.params.no) {
+    editor.postUid = parseInt(route.params.no as string)
+    editor.loadOriginalPost()
+  }
+})
 </script>
 
 <style scoped>
