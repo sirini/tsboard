@@ -53,7 +53,7 @@ import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
-import { VideoURL } from "../../../interface/board"
+import { VideoURL } from "../../../interface/editor"
 import AlertBar from "../../util/AlertBar.vue"
 
 const editor = useBoardEditorStore()

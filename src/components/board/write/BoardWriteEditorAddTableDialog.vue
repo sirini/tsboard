@@ -42,7 +42,7 @@
 import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
-import { TableOption } from "../../../interface/board"
+import { TableOption } from "../../../interface/editor"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()
