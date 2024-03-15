@@ -22,6 +22,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const showRemoveImageInfo = ref<boolean>(false)
   const disableReloadButton = ref<boolean>(false)
   const removeImageTarget = ref<Pair>({ uid: 0, name: "" })
+  const boardUid = ref<number>(0)
   const files = ref<File[]>([])
   const uploadingImages = ref<string[]>([])
   const uploadedImages = ref<string[]>([])
@@ -43,20 +44,17 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   ]
 
   // 본문에 삽입할 이미지들 선택 및 업로드
-  async function uploadImageFiles(
-    event: MouseEvent,
-    boardUid: number,
-    sizeLimit: number,
-  ): Promise<void> {
+  async function uploadImageFiles(event: MouseEvent): Promise<void> {
     files.value = util.attachments(event)
     const response = await server.api.board.uploadimages.post({
       $headers: {
         authorization: auth.user.token,
       },
-      boardUid,
-      sizeLimit,
+      boardUid: boardUid.value,
+      sizeLimit: parseInt(process.env.MAX_FILE_SIZE ?? "10247680"),
       images: files.value,
     })
+
     if (!response.data) {
       util.snack(EDITOR.NO_RESPONSE)
       return
@@ -70,17 +68,18 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   }
 
   // 기존에 업로드한 이미지들 가져오기
-  async function loadUploadedImages(isAppend: boolean, boardUid: number): Promise<void> {
+  async function loadUploadedImages(isAppend: boolean): Promise<void> {
     const response = await server.api.board.loadimages.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
-        boardUid,
-        lastUid: lastImageUid.value,
+        boardUid: boardUid.value,
+        lastUid: isAppend ? lastImageUid.value : 0,
         bunch: bunch.value,
       },
     })
+
     if (!response.data) {
       util.snack(EDITOR.NO_RESPONSE)
       return
@@ -150,6 +149,8 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     showRemoveImageInfo,
     disableReloadButton,
     removeImageTarget,
+    boardUid,
+    files,
     uploadingImages,
     uploadedImages,
     loadImages,

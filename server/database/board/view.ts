@@ -5,7 +5,8 @@
  */
 
 import { CONTENT_STATUS, Pair, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
-import { select, table, update } from "../common"
+import { removeFile } from "../../util/tools"
+import { remove, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
 import { INIT_POST, NOTICE_TYPE, NoticeType } from "./const"
 import { getPostRelated } from "./list"
@@ -178,4 +179,13 @@ export async function isBannedByWriter(postUid: number, accessUserUid: number): 
 }
 
 // 게시글 삭제 표기하고 소속된 댓글들도 삭제 표기 및 첨부 파일은 삭제
-// TODO
+export async function removePost(postUid: number): Promise<void> {
+  update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, [-1, postUid])
+  update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, [-1, postUid])
+
+  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [postUid])
+  for (const file of files) {
+    await removeFile(`.${file}`)
+  }
+  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid])
+}

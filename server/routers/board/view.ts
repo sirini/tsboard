@@ -15,6 +15,7 @@ import {
   getTags,
   isBannedByWriter,
   likePost,
+  removePost,
 } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
@@ -185,7 +186,9 @@ export const view = new Elysia()
       if (isAdmin === false && isWriter === false) {
         return fail(`You are neither the author nor the administrator.`, response)
       }
-      
+
+      removePost(postUid)
+      return success(response)
     },
     {
       headers: t.Object({

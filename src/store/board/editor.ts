@@ -51,7 +51,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   async function loadBoardConfig(): Promise<void> {
     if (view.config.uid > 0) {
       config.value = view.config
-      postUid.value = view.postUid
       return
     }
 

@@ -124,9 +124,10 @@ export const editor = new Elysia()
     "/uploadimages",
     async ({ body: { boardUid, sizeLimit, images }, newAccessToken, accessUserUid, userLevel }) => {
       const response = {
-        newAccessToken: "",
+        newAccessToken,
         uploadedImages: [],
       }
+
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
@@ -147,6 +148,7 @@ export const editor = new Elysia()
         accessUserUid,
         images,
       })
+
       return success({
         newAccessToken,
         uploadedImages,
@@ -195,6 +197,7 @@ export const editor = new Elysia()
         maxUid: maxImageUid,
         bunch,
       })
+
       return success({
         images,
         newAccessToken,

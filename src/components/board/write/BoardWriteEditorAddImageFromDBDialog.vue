@@ -26,28 +26,25 @@
             <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
               <v-img cover width="105" aspect-ratio="1/1" :src="PREFIX + img.name">
                 <div class="action">
-                  <v-btn
-                    @click="add(img.name)"
-                    size="small"
-                    elevation="0"
-                    variant="tonal"
-                    color="white"
-                    icon
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-
-                  <v-btn
-                    @click="image.setRemoveTarget(img.uid, img.name)"
-                    size="small"
-                    elevation="0"
-                    variant="tonal"
-                    color="white"
-                    class="ml-1"
-                    icon
-                  >
-                    <v-icon>mdi-trash-can</v-icon>
-                  </v-btn>
+                  <v-row no-gutters>
+                    <v-col
+                      ><v-btn block @click="add(img.name)" size="small" elevation="0" rounded="0">
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col>
+                      <v-btn
+                        block
+                        @click="image.setRemoveTarget(img.uid, img.name)"
+                        size="small"
+                        elevation="0"
+                        rounded="0"
+                        color="red"
+                      >
+                        <v-icon>mdi-trash-can</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </div>
               </v-img>
             </v-card>
@@ -65,7 +62,7 @@
               block
               class="mb-3"
               :disabled="image.disableReloadButton"
-              @click="image.loadUploadedImages(true, editor.config.uid)"
+              @click="image.loadUploadedImages(true)"
               >이전 이미지들 가져오기</v-btn
             >
           </v-col>
@@ -82,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { watch } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
@@ -102,7 +99,12 @@ const PREFIX = process.env.PREFIX || ""
 
 watch(
   () => image.addImageFromDBDialog,
-  () => image.loadUploadedImages(false, editor.config.uid),
+  (value) => {
+    if (value) {
+      image.boardUid = editor.config.uid
+      image.loadUploadedImages(false)
+    }
+  },
 )
 
 // 기존에 업로드한 이미지 추가하기
@@ -125,10 +127,10 @@ function remove(): void {
 <style scoped>
 .action {
   display: flex;
-  width: 100px;
-  height: 100px;
+  width: 101px;
+  height: 101px;
   justify-content: center;
-  align-items: center;
+  align-items: end;
 }
 
 /** 다이얼로그 배경 조정 */

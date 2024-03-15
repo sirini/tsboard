@@ -109,11 +109,13 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
 
     const link = document.createElement("a")
-    link.href = response.data.result.path
+    link.href = `${process.env.API!}/${response.data.result.path}`
     link.download = response.data.result.name
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    util.snack(VIEW.DOWNLOADED_FILE)
   }
 
   // 게시글을 삭제할지 확인하는 다이얼로그 띄우기
@@ -131,6 +133,26 @@ export const useBoardViewStore = defineStore("boardView", () => {
     if (postUid.value < 1) {
       return
     }
+    const response = await server.api.board.removepost.delete({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        postUid: postUid.value,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(VIEW.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${VIEW.FAILED_REMOVE_POST} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken)
+    util.snack(VIEW.REMOVED_POST)
+    util.go("boardList", id.value)
   }
 
   return {

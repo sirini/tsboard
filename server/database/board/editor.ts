@@ -5,16 +5,13 @@
  */
 
 import { table, insert, select, remove, update } from "../common"
+import { CONTENT_STATUS, CountPair, Pair, TargetTable } from "../../../src/interface/board"
 import {
-  CONTENT_STATUS,
-  CountPair,
-  LoadImageParams,
-  ModifyPostParams,
-  Pair,
-  TargetTable,
   UploadImageParams,
   WritePostParams,
-} from "../../../src/interface/board"
+  LoadImageParams,
+  ModifyPostParams,
+} from "../../../src/interface/editor"
 import {
   generateRandomID,
   makeSavePath,

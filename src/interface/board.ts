@@ -126,7 +126,7 @@ export type PostRelatedParams = RelatedParams & {
   categoryUid: number
 }
 
-type CommonPairParam = {
+export type CommonPairParam = {
   boardUid: number
   accessUserUid: number
 }
@@ -157,17 +157,6 @@ export type SaveModifyParams = {
   modifyTargetUid: number
 }
 
-export type UploadImageParams = CommonPairParam & {
-  sizeLimit: number
-  images: File[]
-}
-
-export type LoadImageParams = CommonPairParam & {
-  lastUid: number
-  bunch: number
-  maxUid: number
-}
-
 export type TargetTable = "post" | "comment"
 export type CheckUserPermissionParams = CommonPairParam & {
   targetTable: TargetTable
@@ -182,28 +171,6 @@ export type UpdateUserPointParams = CommonPairParam & {
 export type UpdatePointHistoryParams = CommonPairParam & {
   action: PointAction
   point: number
-}
-
-export type WritePostParams = CommonPairParam & {
-  categoryUid: number
-  title: string
-  content: string
-}
-
-export type ModifyPostParams = WritePostParams & {
-  postUid: number
-}
-
-export type VideoURL = {
-  src: string
-  width: number
-  height: number
-}
-
-export type TableOption = {
-  rows: number
-  cols: number
-  withHeaderRow: boolean
 }
 
 export type PermissionAction = "write_post" | "write_comment" | "send_chat" | "send_report"

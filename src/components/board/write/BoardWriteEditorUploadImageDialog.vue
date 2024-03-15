@@ -71,20 +71,21 @@ import AlertBar from "../../util/AlertBar.vue"
 
 const util = useUtilStore()
 const home = useHomeStore()
+const editor = useBoardEditorStore()
 const image = useEditorImageStore()
 const emits = defineEmits<{
   addImageURL: [src: string]
 }>()
-const editor = useBoardEditorStore()
 
 // 선택한 이미지 파일들을 읽어오기
 watch(
-  () => editor.files,
+  () => image.files,
   (value: File[]) => {
     for (const v of value) {
       const src = URL.createObjectURL(v)
       image.uploadingImages.push(src)
     }
+    image.boardUid = editor.config.uid
   },
 )
 
