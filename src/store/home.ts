@@ -26,6 +26,7 @@ export const useHomeStore = defineStore("home", () => {
       footer: "blue-grey-lighten-5",
     },
   }
+  const DEBUG = ref<string>("")
 
   // 방문 기록 저장하기
   async function visit(): Promise<void> {
@@ -90,6 +91,7 @@ export const useHomeStore = defineStore("home", () => {
   }
 
   return {
+    DEBUG,
     drawer,
     notifications,
     color,

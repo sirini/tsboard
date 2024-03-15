@@ -230,7 +230,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       title: title.value,
       content: contentWithSyntax.value,
       attachments: files.value,
-      tags: tags.value,
+      tags: tags.value.join(","),
     })
 
     if (!response.data) {
@@ -272,7 +272,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       title: title.value,
       content: contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"),
       attachments: files.value,
-      tags: tags.value,
+      tags: tags.value.join(","),
     })
 
     if (!response.data) {

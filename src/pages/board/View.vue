@@ -55,7 +55,7 @@
                 </v-list>
               </v-list-item>
 
-              <v-list-item class="pa-3 mb-16 tiptap">
+              <v-list-item class="pa-3 mb-16 tsboard">
                 <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
               </v-list-item>
 
@@ -106,12 +106,14 @@
                   <v-btn
                     prepend-icon="mdi-trash-can"
                     variant="text"
+                    @click="view.openConfirmRemoveDialog"
                     :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
                     >삭제
                   </v-btn>
                 </template>
               </v-list-item>
             </v-list>
+
             <board-view-comment-write></board-view-comment-write>
             <board-view-comment-list></board-view-comment-list>
 
@@ -133,6 +135,8 @@
         <home-footer></home-footer>
       </v-main>
     </v-layout>
+
+    <board-view-remove-post-dialog></board-view-remove-post-dialog>
     <user-info-dialog></user-info-dialog>
     <chat-dialog></chat-dialog>
     <send-report-dialog></send-report-dialog>
@@ -148,6 +152,7 @@ import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
+import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import ChatDialog from "../../components/user/ChatDialog.vue"

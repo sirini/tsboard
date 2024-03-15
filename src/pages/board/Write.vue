@@ -77,9 +77,8 @@
                     size="small"
                     label
                     color="warning"
-                    prepend-icon="mdi-file-minus"
+                    prepend-icon="mdi-file-remove-outline"
                     class="mt-1 mr-1 mb-1"
-                    closable
                     @click="editor.removeAttachedFile(file.uid)"
                     v-for="(file, index) in editor.attachedFiles"
                     :key="index"
@@ -150,9 +149,9 @@
                       v-for="(tag, index) in editor.tags"
                       :key="index"
                       color="blue-grey"
-                      closable
-                      @click.close="editor.removeTag(tag)"
+                      @click="editor.removeTag(tag)"
                       class="mt-1 ml-1"
+                      prepend-icon="mdi-tag-remove-outline"
                       >{{ tag }}
                       <v-tooltip activator="parent">클릭하시면 삭제합니다!</v-tooltip>
                     </v-chip>

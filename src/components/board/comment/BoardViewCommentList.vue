@@ -63,7 +63,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-card elevation="0" rounded="0" class="pa-0 tiptap comment">
+      <v-card elevation="0" rounded="0" class="pa-0 tsboard comment">
         <v-card-text v-html="reply.content" class="content"></v-card-text>
         <v-card-text v-if="reply.modified > 0" class="pa-0 modified"
           >{{ util.date(reply.modified, true, true) }} 에 수정되었습니다.</v-card-text

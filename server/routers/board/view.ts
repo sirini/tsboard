@@ -20,6 +20,8 @@ import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
 import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
+import { haveAdminPermission } from "../../database/user/manageuser"
+import { isAuthor } from "../../database/board/editor"
 
 export const view = new Elysia()
   .use(
@@ -166,6 +168,31 @@ export const view = new Elysia()
       query: t.Object({
         boardUid: t.Numeric(),
         fileUid: t.Numeric(),
+      }),
+    },
+  )
+  .delete(
+    "/removepost",
+    async ({ query: { postUid }, accessUserUid, newAccessToken }) => {
+      let response = {
+        newAccessToken,
+      }
+      if (postUid < 1) {
+        return fail(`Invalid parameter.`, response)
+      }
+      const isAdmin = await haveAdminPermission(accessUserUid)
+      const isWriter = await isAuthor(postUid, accessUserUid, "post")
+      if (isAdmin === false && isWriter === false) {
+        return fail(`You are neither the author nor the administrator.`, response)
+      }
+      
+    },
+    {
+      headers: t.Object({
+        authorization: t.String(),
+      }),
+      query: t.Object({
+        postUid: t.Numeric(),
       }),
     },
   )

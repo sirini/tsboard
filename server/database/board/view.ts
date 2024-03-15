@@ -176,3 +176,6 @@ export async function isBannedByWriter(postUid: number, accessUserUid: number): 
   }
   return true
 }
+
+// 게시글 삭제 표기하고 소속된 댓글들도 삭제 표기 및 첨부 파일은 삭제
+// TODO

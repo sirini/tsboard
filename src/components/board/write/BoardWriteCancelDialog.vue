@@ -8,6 +8,7 @@
         초기화됩니다. 계속 진행하시겠습니까?
       </v-card-text>
 
+      <v-divider></v-divider>
       <v-card-actions>
         <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog"
           >아니요, 계속 작성하겠습니다</v-btn

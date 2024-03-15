@@ -20,6 +20,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const confirmRemovePostDialog = ref<boolean>(false)
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
@@ -115,7 +116,25 @@ export const useBoardViewStore = defineStore("boardView", () => {
     document.body.removeChild(link)
   }
 
+  // 게시글을 삭제할지 확인하는 다이얼로그 띄우기
+  function openConfirmRemoveDialog(): void {
+    confirmRemovePostDialog.value = true
+  }
+
+  // 삭제 여부 확인하는 다이얼로그 닫기
+  function closeConfirmRemoveDialog(): void {
+    confirmRemovePostDialog.value = false
+  }
+
+  // 게시글 삭제하기
+  async function removePost(): Promise<void> {
+    if (postUid.value < 1) {
+      return
+    }
+  }
+
   return {
+    confirmRemovePostDialog,
     id,
     postUid,
     config,
@@ -125,5 +144,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     loadPostView,
     like,
     download,
+    openConfirmRemoveDialog,
+    closeConfirmRemoveDialog,
+    removePost,
   }
 })

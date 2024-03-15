@@ -52,7 +52,7 @@ const writeBody = {
   categoryUid: t.Numeric(),
   title: t.String(),
   content: t.String(),
-  tags: t.Array(t.String()),
+  tags: t.String(),
   attachments: t.Optional(
     t.Files({
       type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
@@ -308,9 +308,10 @@ export const editor = new Elysia()
         content,
       })
 
-      if (tags !== undefined && tags.length > 0) {
-        tags = tags.map((tag) => refineText(tag))
-        saveTags(boardUid, postUid, tags)
+      if (tags.length > 0) {
+        const inputTags = tags.split(",")
+        const refinedTags = inputTags.map((tag) => refineText(tag))
+        saveTags(boardUid, postUid, refinedTags)
       }
 
       if (attachments) {
@@ -430,9 +431,10 @@ export const editor = new Elysia()
         postUid,
       })
 
-      if (tags !== undefined && tags.length > 0) {
-        tags = tags.map((tag) => refineText(tag))
-        saveTags(boardUid, postUid, tags)
+      if (tags.length > 0) {
+        const inputTags = tags.split(",")
+        const refinedTags = inputTags.map((tag) => refineText(tag))
+        saveTags(boardUid, postUid, refinedTags)
       }
 
       if (attachments) {
