@@ -18,8 +18,8 @@
         <v-tooltip activator="parent">로그아웃 페이지로 이동합니다.</v-tooltip>
       </v-btn>
 
-      <v-btn icon @click="home.loadNotification">
-        <v-badge color="error" v-if="home.notifications.length > 0" dot>
+      <v-btn icon @click="home.checkedAllNotifications">
+        <v-badge color="error" v-if="home.haveNewNotification" dot>
           <v-icon
             >mdi-bell
             <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>

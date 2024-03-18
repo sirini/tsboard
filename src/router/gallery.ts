@@ -15,18 +15,18 @@ export const galleryRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/gallery/List.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/list/:page(\\d+)",
-    name: "galleryListPage",
-    component: () => import("@/pages/gallery/List.vue"),
-  },
-  {
     path: PREFIX + "/gallery/:id/:no(\\d+)",
     name: "galleryOpen",
     component: () => import("@/pages/gallery/List.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/upload",
-    name: "galleryUpload",
-    component: () => import("@/pages/gallery/Upload.vue"),
+    path: PREFIX + "/gallery/:id/write",
+    name: "galleryWrite",
+    component: () => import("@/pages/board/Write.vue"),
+  },
+  {
+    path: PREFIX + "/gallery/:id/write/:no(\\d+)",
+    name: "galleryModify",
+    component: () => import("@/pages/board/Write.vue"),
   },
 ]

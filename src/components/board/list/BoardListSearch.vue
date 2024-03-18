@@ -2,23 +2,26 @@
   <v-card width="500">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="util.searchOption" size="small" group>
-          <v-btn value="subject">제목</v-btn>
+        <v-btn-toggle v-model="list.option" size="small" group color="blue-grey">
+          <v-btn value="title">제목</v-btn>
           <v-btn value="content">내용</v-btn>
           <v-btn value="writer">작성자</v-btn>
+          <v-btn value="tag">태그</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
       <v-list-item>
         <v-text-field
-          v-model="util.searchValue"
+          v-model="list.keyword"
           class="mt-2"
           variant="outlined"
           placeholder="검색할 내용을 입력하세요"
-          :rules="editor.textRule"
+          :rules="textRule"
           append-inner-icon="mdi-magnify"
-          @click:append-inner="refine"
-          @keyup.enter="refine"
+          prepend-inner-icon="mdi-restore"
+          @click:prepend-inner="list.resetSearchKeyword"
+          @click:append-inner="list.loadPostList"
+          @keyup.enter="list.loadPostList"
         ></v-text-field>
       </v-list-item>
     </v-list>
@@ -26,14 +29,13 @@
 </template>
 
 <script setup lang="ts">
-import { useUtilStore } from "../../../store/util"
-import { useBoardEditorStore } from "../../../store/board/editor"
+import { useBoardListStore } from "../../../store/board/list"
 
-const util = useUtilStore()
-const editor = useBoardEditorStore()
-
-// 검색어를 정제해서 업데이트하기
-function refine(): void {
-  util.searchValue = util.searchValue.replaceAll(util.filters.basic, "")
-}
+const list = useBoardListStore()
+const textRule = [
+  (value: any) => {
+    if (value?.length > 1) return true
+    return "검색어가 너무 짧습니다."
+  },
+]
 </script>

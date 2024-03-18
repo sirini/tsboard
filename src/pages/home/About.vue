@@ -5,46 +5,61 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto mt-12" max-width="1000">
+          <v-card class="mx-auto mt-12" max-width="800">
             <v-card-title>사이트 소개</v-card-title>
             <v-divider></v-divider>
             <v-card-text class="about">
               <p>TSBOARD.DEV 웹사이트에 오신 것을 환영합니다.</p>
               <p>&nbsp;</p>
               <p>
-                이 사이트는 TSBOARD라고 이름 지은 오픈소스 게시판 프로그램의 사용자 분들을 위해
-                제작되었습니다. TSBOARD는 Github를 통해 코드를 공개하고 있으며, 23년 12월 첫 Beta
-                출시를 목표로 하고 있습니다. 아직 개발 초기 단계이므로, 테스트 목적으로 먼저 사용을
-                권장해 드립니다.
+                이 사이트는 <strong>TSBOARD</strong>라고 이름 지은 오픈소스 게시판(갤러리, 블로그,
+                ...) 사용자 분들을 위해 제작되었습니다. TSBOARD는 Github를 통해 코드를 공개하고
+                있으며, 24년 3월 첫 Beta 출시를 목표로 하고 있습니다. 아직 개발 초기 단계이므로,
+                테스트 목적으로 먼저 사용을 권장해 드립니다. (발견하신 버그는 하단
+                <a
+                  href="https://github.com/sirini/tsboard/issues"
+                  target="_blank"
+                  style="text-decoration: none"
+                  >버그 신고</a
+                >
+                버튼을 클릭해주세요!)
               </p>
               <p>&nbsp;</p>
               <p>
-                TSBOARD는 우리나라 PHP 게시판의 근본이라 할 수 있는 그누보드처럼 DBMS는
-                Maria(MySQL)를 그대로 사용합니다. 그 대신, 서버쪽은 Bun + Elysia 기반으로 작성되며
-                모두 TypeScript 단일 언어로 작성됩니다. 클라이언트쪽은 Vue3 (Composition API) +
-                Vuetify3 으로 작성되며, 마찬가지로 TypeScript로 작성됩니다.
+                TSBOARD는 <strong>Type Safety BOARD</strong>에서 이름을 따왔습니다. JavaScript의
+                슈퍼셋 언어인 TypeScript에 푹 빠져 이 언어만으로 프론트엔드에서 백엔드까지 모두
+                동작하는 게시판을 만들어보고 싶어 제작하였습니다. 현재는 게시판과 갤러리 기능 일부만
+                제공지만, 궁극적으로는 블로그 및 쇼핑몰 형태도 오픈소스로 제공할 예정입니다.
               </p>
               <p>&nbsp;</p>
               <p>
-                클라이언트의 경우 개발자의 개인적인 선호에 의해, JSX 문법 보다는 SFC (Single File
-                Component) 기반인 Vue 3을 선택했습니다. 가장 범용적인 React, 혹은 가장 빠른 Svelte
-                모두 고려했었지만, Vue 3의 개발 생산성도 괜찮다고 생각합니다. TSBOARD를 사용해보고
-                싶으신 분들 중에서 Vue 가 처음이시라면 너무 걱정하지 마시고 차근 차근 같이 배워보면
+                TSBOARD는 우리나라 게시판의 근본이라 할 수 있는 그누보드처럼 DBMS는 Maria(MySQL)를
+                그대로 사용합니다. 대신, 서버쪽은 Bun + Elysia 기반으로 작성되며
+                <strong>모두 TypeScript 단일 언어로 작성</strong>됩니다. 클라이언트쪽은 Vue3
+                (Composition API) + Vuetify3 으로 작성되며, 마찬가지로 TypeScript로 작성됩니다.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                백엔드는 23년 9월 v1.0 이 공개된 Bun, 그리고 Bun 기반의 Elysia 웹 프레임워크를
+                선택했습니다. Bun은 TSBOARD 개발 편의성과 속도 측면에서 선택한 것으로, 올인원
+                툴킷이자 JS/TS 런타임입니다. 아직 Node.js 대비 범용적인 활용에는 문제가 있지만, 점차
+                나아지리라 생각합니다.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                기존에 TypeScript 언어 및 Node.js 생태계에 이미 익숙하신 개발자 분들이 보시기엔
+                부족해 보일 수 있습니다. 반면 흔히 게시판 하면 생각나는
+                <strong>PHP 언어에 익숙하신 분들에겐 무척 생소한 게시판</strong>이 될 수도
+                있겠습니다. (저도 그랬거든요... 😅) 제가 놓치거나 부족한 부분엔 따뜻한 도움의 손길을
+                부탁드리며, 혹시 저처럼 PHP에만 익숙하여 TypeScript 나 Vue와 같은 프레임워크 활용에
+                어려움이 있으신 분들께는 이번 기회에 TSBOARD를 통해서 함께 배우고 활용해보면
                 좋겠습니다.
               </p>
               <p>&nbsp;</p>
               <p>
-                백엔드는 23년 9월 v1.0 이 공개된 Bun, 그리고 Bun 기반의 Elysia 프레임워크를
-                선택했습니다. Bun은 TSBOARD 개발 편의성과 속도 측면에서 선택한 것으로, 올인원
-                툴킷이자 JS/TS 런타임입니다. 아직 안정성 개선이 진행중이지만, TSBOARD가 Beta 출시될
-                쯤에는 충분히 안정화 될 것으로 보입니다.
+                TSBOARD.DEV 웹사이트는 방구석 미니PC 위에서 현재 힘겹게 유지되고 있습니다. 간혹
+                접속이 안되더라도 너른 양해 부탁드립니다. 🥲
               </p>
-              <p>&nbsp;</p>
-              <p>
-                더 나은 아키텍쳐 제안, 버그 신고, 새로운 모듈 공유 등 많은 도움 부탁드리겠습니다.
-              </p>
-              <p>&nbsp;</p>
-              <p>감사합니다.</p>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>

@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from "../../../store/gallery"
+import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { GridItem } from "../../../interface/gallery"
 
 const gallery = useGalleryStore()

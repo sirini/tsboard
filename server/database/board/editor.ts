@@ -209,7 +209,7 @@ export async function writeNewPost(param: WritePostParams): Promise<number> {
       Date.now(),
       0,
       0,
-      CONTENT_STATUS.NORMAL,
+      param.isNoticePost ? CONTENT_STATUS.NOTICE : CONTENT_STATUS.NORMAL,
     ],
   )
   return insertId
@@ -218,8 +218,15 @@ export async function writeNewPost(param: WritePostParams): Promise<number> {
 // 기존 게시글 수정하기
 export async function modifyOriginalPost(param: ModifyPostParams): Promise<void> {
   await update(
-    `UPDATE ${table}post SET category_uid = ?, title = ?, content = ?, modified = ? WHERE uid = ? LIMIT 1`,
-    [param.categoryUid, param.title, param.content, Date.now(), param.postUid],
+    `UPDATE ${table}post SET category_uid = ?, title = ?, content = ?, modified = ?, status = ? WHERE uid = ? LIMIT 1`,
+    [
+      param.categoryUid,
+      param.title,
+      param.content,
+      Date.now(),
+      param.isNoticePost ? CONTENT_STATUS.NOTICE : CONTENT_STATUS.NORMAL,
+      param.postUid,
+    ],
   )
 }
 

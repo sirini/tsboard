@@ -13,5 +13,17 @@ export type Notification = {
   type: NoticeType
   id: string
   postUid: number
+  checked: boolean
   timestamp: number
+}
+
+export type BoardItem = {
+  id: string
+  name: string
+  info: string
+}
+
+export type GroupItem = {
+  group: string
+  boards: BoardItem[]
 }

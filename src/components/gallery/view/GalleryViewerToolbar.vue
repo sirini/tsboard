@@ -15,7 +15,7 @@
     <v-chip
       pill
       prepend-icon="mdi-heart"
-      @click="gallery.like(postUid)"
+      @click="gallery.like(!gallery.post.liked)"
       :color="liked ? 'red' : 'surface-variant'"
     >
       {{ postLike }}
@@ -55,8 +55,8 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/user/auth"
-import { useGalleryStore } from "../../../store/gallery"
-import { useViewerStore } from "../../../store/viewer"
+import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useViewerStore } from "../../../store/board/gallery/viewer"
 
 const auth = useAuthStore()
 const gallery = useGalleryStore()

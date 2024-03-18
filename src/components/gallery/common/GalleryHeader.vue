@@ -1,7 +1,7 @@
 <template>
   <v-card-title class="pt-3 pb-3"
-    >테스트 갤러리
-    <span class="info ml-3 pl-3">인스타그램 느낌이 1g 정도 담긴 사진 갤러리 구성중입니다.</span>
+    >{{ gallery.config.name }}
+    <span class="info ml-3 pl-3">{{ gallery.config.info }}</span>
     <div class="login">
       <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
       <v-btn
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../../store/user/auth"
-import { useGalleryStore } from "../../../store/gallery"
+import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useUtilStore } from "../../../store/util"
 
 const auth = useAuthStore()
@@ -36,7 +36,6 @@ const util = useUtilStore()
 .info {
   color: #828282;
   font-size: 0.65em;
-  border-left: 1px #dddddd solid;
 }
 .login {
   position: absolute;

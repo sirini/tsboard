@@ -37,6 +37,7 @@ import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
 import { CountPair, Pair, PostFile } from "../../../src/interface/board"
 import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { getFiles, getPost, getTags } from "../../database/board/view"
+import { haveAdminPermission } from "../../database/user/manageuser"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -49,6 +50,7 @@ const htmlFilter = {
 
 const writeBody = {
   boardUid: t.Numeric(),
+  isNotice: t.Numeric(),
   categoryUid: t.Numeric(),
   title: t.String(),
   content: t.String(),
@@ -270,7 +272,7 @@ export const editor = new Elysia()
   .post(
     "/write",
     async ({
-      body: { boardUid, categoryUid, title, content, attachments, tags },
+      body: { boardUid, categoryUid, title, content, attachments, tags, isNotice },
       accessUserUid,
       newAccessToken,
       userLevel,
@@ -303,12 +305,20 @@ export const editor = new Elysia()
       title = Bun.escapeHTML(title)
       content = sanitizeHtml(content, htmlFilter)
 
+      let isNoticePost = false
+      if ((await haveAdminPermission(accessUserUid)) === true) {
+        if (isNotice > 0) {
+          isNoticePost = true
+        }
+      }
+
       const postUid = await writeNewPost({
         boardUid,
         accessUserUid,
         categoryUid,
         title,
         content,
+        isNoticePost,
       })
 
       if (tags.length > 0) {
@@ -395,7 +405,7 @@ export const editor = new Elysia()
   .patch(
     "/modify",
     async ({
-      body: { boardUid, categoryUid, postUid, title, content, attachments, tags },
+      body: { boardUid, categoryUid, postUid, title, content, attachments, tags, isNotice },
       accessUserUid,
       newAccessToken,
     }) => {
@@ -425,6 +435,14 @@ export const editor = new Elysia()
 
       title = Bun.escapeHTML(title)
       content = sanitizeHtml(content, htmlFilter)
+
+      let isNoticePost = false
+      if ((await haveAdminPermission(accessUserUid)) === true) {
+        if (isNotice > 0) {
+          isNoticePost = true
+        }
+      }
+
       await modifyOriginalPost({
         boardUid,
         accessUserUid,
@@ -432,6 +450,7 @@ export const editor = new Elysia()
         title,
         content,
         postUid,
+        isNoticePost,
       })
 
       if (tags.length > 0) {

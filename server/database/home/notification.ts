@@ -34,10 +34,11 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
 export async function getNotifications(userUid: number, limit: number): Promise<Notification[]> {
   let result: Notification[] = []
   const notifications = await select(
-    `SELECT uid, from_uid, type, post_uid, timestamp FROM ${table}notification 
-    WHERE to_uid = ? AND checked = 0 ORDER BY uid DESC LIMIT ?`,
+    `SELECT uid, from_uid, type, post_uid, checked, timestamp FROM ${table}notification 
+    WHERE to_uid = ? ORDER BY uid DESC LIMIT ?`,
     [userUid, limit],
   )
+
   if (!notifications[0]) {
     return result
   }
@@ -46,22 +47,16 @@ export async function getNotifications(userUid: number, limit: number): Promise<
     const [post] = await select(`SELECT board_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
       noti.post_uid,
     ])
-    if (!post) {
-      continue
+    let boardId = ""
+    if (post) {
+      const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+        post.board_uid,
+      ])
+      boardId = board.id
     }
-    const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
-      post.board_uid,
-    ])
-    if (!board) {
-      continue
-    }
-
     const [user] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
       noti.from_uid,
     ])
-    if (!user) {
-      continue
-    }
 
     result.push({
       uid: noti.uid,
@@ -71,13 +66,16 @@ export async function getNotifications(userUid: number, limit: number): Promise<
         profile: user.profile,
       },
       type: noti.type,
-      id: board.id,
+      id: boardId,
       postUid: noti.post_uid,
+      checked: noti.checked > 0 ? true : false,
       timestamp: noti.timestamp,
     })
-
-    update(`UPDATE ${table}notification SET checked = 1 WHERE uid = ? LIMIT 1`, [noti.uid])
   }
-
   return result
+}
+
+// 확인안한 알림들 확인 체크 하기
+export async function checkedAllNotifications(userUid: number): Promise<void> {
+  update(`UPDATE ${table}notification SET checked = 1 WHERE to_uid = ?`, [userUid])
 }

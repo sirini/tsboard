@@ -1,23 +1,23 @@
 /**
- * server/routers/board/list
+ * server/routers/board/gallery
  *
- * 게시판 목록보기 처리
+ * 갤러리 목록보기와 관련된 라우팅 처리
  */
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { BOARD_CONFIG } from "../../database/board/const"
+import { GridItem } from "../../../src/interface/gallery"
 import {
   getBoardConfig,
   getMaxPostUid,
-  getPosts,
   getTotalPostCount,
   getUserLevel,
 } from "../../database/board/list"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
-import { BOARD_CONFIG } from "../../database/board/const"
-import { Post } from "../../../src/interface/board"
+import { getPhotos } from "../../database/board/gallery"
 
-export const list = new Elysia()
+export const gallery = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -48,9 +48,9 @@ export const list = new Elysia()
     }
   })
   .get(
-    "/list",
+    "/photolist",
     async ({
-      query: { id, page, pagingDirection, sinceUid, option, keyword },
+      query: { id, sinceUid, option, keyword, page, pagingDirection },
       accessUserUid,
       userLevel,
       newAccessToken,
@@ -58,16 +58,16 @@ export const list = new Elysia()
       let response = {
         totalPostCount: 0,
         config: BOARD_CONFIG,
-        posts: [] as Post[],
+        images: [] as GridItem[],
         newAccessToken,
       }
 
       if (id.length < 2) {
-        return fail(`Invalid board ID.`, response)
+        return fail(`Invalid gallery ID.`, response)
       }
       const config = await getBoardConfig(id)
       if (config.uid < 1) {
-        return fail(`Board not found.`, response)
+        return fail(`Gallery not found.`, response)
       }
       response.config = config
       if (config.level.list > userLevel) {
@@ -79,7 +79,7 @@ export const list = new Elysia()
       }
 
       const totalPostCount = await getTotalPostCount(config.uid)
-      const posts = await getPosts({
+      const images = await getPhotos({
         boardUid: config.uid,
         page,
         bunch: config.row,
@@ -93,7 +93,7 @@ export const list = new Elysia()
       return success({
         totalPostCount,
         config,
-        posts,
+        images,
         newAccessToken,
       })
     },

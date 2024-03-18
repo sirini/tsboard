@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
 import { Notification } from "../../../src/interface/home"
-import { getNotifications } from "../../database/home/notification"
+import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
 
 export const notification = new Elysia()
   .use(
@@ -33,7 +33,7 @@ export const notification = new Elysia()
   .get(
     "/load/notification",
     async ({ accessUserUid, query: { limit } }) => {
-      let response: Notification[] = []
+      let response = [] as Notification[]
       if (accessUserUid < 1 || limit < 1) {
         return fail(`Invalid parameters.`, response)
       }
@@ -48,3 +48,12 @@ export const notification = new Elysia()
       }),
     },
   )
+  .patch("/checked/notification", async ({ accessUserUid }) => {
+    const response = ""
+    if (accessUserUid < 1) {
+      return fail(`Invalid parameter.`, response)
+    }
+
+    checkedAllNotifications(accessUserUid)
+    return success(response)
+  })

@@ -19,8 +19,12 @@
         {{ auth.user.point }}
       </v-chip>
     </v-list-item>
-    <v-list-item v-if="auth.user.admin" class="message">환영합니다, 관리자님! </v-list-item>
-    <v-list-item v-else>환영합니다, {{ auth.user.name }}님!</v-list-item>
+    <v-list-item v-if="auth.user.admin" class="message text-center"
+      ><strong>환영합니다, 관리자님!</strong>
+    </v-list-item>
+    <v-list-item v-else class="message text-center"
+      >환영합니다, {{ auth.user.name }}님!</v-list-item
+    >
     <v-divider></v-divider>
   </v-list>
 </template>

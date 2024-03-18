@@ -5,10 +5,10 @@
  */
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useAuthStore } from "./user/auth"
-import { useUtilStore } from "./util"
-import { Position, GridItem, Photo } from "../interface/gallery"
-import { INIT_USER_BASIC } from "../interface/user"
+import { useAuthStore } from "../../user/auth"
+import { useUtilStore } from "../../util"
+import { Position, GridItem, Photo } from "../../../interface/gallery"
+import { INIT_USER_BASIC } from "../../../interface/user"
 
 export const useViewerStore = defineStore("viewer", () => {
   const auth = useAuthStore()
@@ -32,7 +32,7 @@ export const useViewerStore = defineStore("viewer", () => {
     like: 0,
     liked: false,
     reply: 0,
-    subject: "",
+    title: "",
     content: "",
     hit: 0,
     submitted: 0,
@@ -141,7 +141,7 @@ export const useViewerStore = defineStore("viewer", () => {
         `https://cdn.vuetifyjs.com/images/cards/hotel.jpg`,
         `https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`,
       ],
-      subject: "사진 제목입니다",
+      title: "사진 제목입니다",
       content: "사진 내용입니다",
       like: 5,
       reply: 10,

@@ -16,12 +16,20 @@
               <alert-bar></alert-bar>
 
               <v-list class="pa-0">
-                <v-list-item class="pa-0 mt-3">
+                <v-list-item class="pa-0">
+                  <v-checkbox
+                    v-model="editor.isNotice"
+                    class="ml-8"
+                    label="공지글로 등록 (관리자만 가능)"
+                    hide-details
+                  ></v-checkbox>
+                </v-list-item>
+
+                <v-list-item class="pa-0">
                   <v-text-field
                     v-model="editor.category.name"
                     variant="outlined"
                     hide-details
-                    class="mt-2"
                     readonly
                     prepend-icon="mdi-filter"
                     append-inner-icon="mdi-chevron-down"

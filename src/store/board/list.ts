@@ -28,6 +28,8 @@ export const useBoardListStore = defineStore("boardList", () => {
   const pageLength = ref<number>(1)
   const sinceUid = ref<number>(0)
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
+  const option = ref<string>("title")
+  const keyword = ref<string>("")
 
   // 게시글 목록 가져오기
   async function loadPostList(): Promise<void> {
@@ -45,6 +47,8 @@ export const useBoardListStore = defineStore("boardList", () => {
         page: page.value,
         pagingDirection: pagingDirection.value,
         sinceUid: sinceUid.value,
+        option: option.value,
+        keyword: keyword.value,
       },
     })
 
@@ -95,6 +99,13 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
   }
 
+  // 검색 옵션 초기화하기
+  function resetSearchKeyword(): void {
+    option.value = "title"
+    keyword.value = ""
+    loadPostList()
+  }
+
   return {
     id,
     config,
@@ -102,8 +113,11 @@ export const useBoardListStore = defineStore("boardList", () => {
     page,
     pageLength,
     categories,
+    option,
+    keyword,
     loadPostList,
     loadPrevPosts,
     loadNextPosts,
+    resetSearchKeyword,
   }
 })

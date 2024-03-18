@@ -101,6 +101,8 @@ type PostCommentParams = {
 
 export type PostParams = PostCommentParams & {
   boardUid: number
+  option: string
+  keyword: string
 }
 
 export type CommentParams = PostCommentParams & {

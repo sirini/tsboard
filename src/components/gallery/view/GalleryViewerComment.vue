@@ -13,7 +13,7 @@
         class="ml-2 mr-2"
         :disabled="auth.user.uid < 1"
         :color="liked ? 'red' : 'surface-variant'"
-        @click="comment.like(commentUid, liked)"
+        @click="comment.like(commentUid, !liked)"
       >
         {{ commentLike }}
         <v-tooltip activator="parent" location="top"> 이 댓글에 좋아요를 표시합니다 </v-tooltip>

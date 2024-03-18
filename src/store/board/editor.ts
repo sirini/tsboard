@@ -13,7 +13,7 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { EDITOR } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
-import { BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
+import { BOARD_TYPE, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
@@ -30,6 +30,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
+  const isNotice = ref<boolean>(false)
   const category = ref<Pair>({ uid: 0, name: "" })
   const categories = ref<Pair[]>([])
   const files = ref<File[]>([])
@@ -40,6 +41,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const tag = ref<string>("")
   const tags = ref<string[]>([])
   const suggestionTags = ref<CountPair[]>([])
+  const viewRouteName = ref<string>("boardView")
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
@@ -81,6 +83,10 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     config.value = response.data.result.config
     categories.value = response.data.result.categories
     category.value = categories.value[0]
+
+    if (config.value.type === BOARD_TYPE.GALLERY) {
+      viewRouteName.value = "galleryOpen"
+    }
   }
 
   // 기존에 작성한 게시글 내용 가져오기 (수정 시)
@@ -225,6 +231,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         authorization: auth.user.token,
       },
       boardUid: config.value.uid,
+      isNotice: isNotice.value ? 1 : 0,
       categoryUid: category.value.uid,
       title: title.value,
       content: contentWithSyntax.value,
@@ -244,7 +251,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(EDITOR.WRITTEN_NEW_POST)
-    util.go("boardView", id.value, response.data.result.postUid)
+    util.go(viewRouteName.value, id.value, response.data.result.postUid)
 
     clearVariables()
   }
@@ -267,6 +274,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       },
       postUid: postUid.value,
       boardUid: config.value.uid,
+      isNotice: isNotice.value ? 1 : 0,
       categoryUid: category.value.uid,
       title: title.value,
       content: contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"),
@@ -286,7 +294,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(EDITOR.MODIFIED_POST)
-    util.go("boardView", id.value, postUid.value)
+    util.go(viewRouteName.value, id.value, postUid.value)
 
     clearVariables()
   }
@@ -322,6 +330,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     id,
     config,
     postUid,
+    isNotice,
     category,
     categories,
     confirmWriteCancelDialog,

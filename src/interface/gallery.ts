@@ -25,7 +25,7 @@ export type GridItem = {
 }
 
 export type Photo = GridItem & {
-  subject: string
+  title: string
   content: string
   hit: number
   submitted: number

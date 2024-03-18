@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="list.confirmRemoveGroupDialog" persistent>
-    <v-card width="500" class="mx-auto">
-      <v-card-title><v-icon>mdi-check</v-icon> 확인</v-card-title>
+    <v-card width="500" class="mx-auto" :color="home.color.header">
+      <v-card-title>정말로 삭제하시겠습니까?</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="text mb-2">
+      <v-card-text class="text mb-3">
         <p>
           <strong>{{ list.removeGroupTarget.name }}</strong> 그룹을 정말로 삭제하시겠습니까? 삭제된
           그룹 소속 게시판들은 모두 기본 그룹 소속으로 변경됩니다. 선택하신 그룹을 삭제를
@@ -11,12 +11,10 @@
         </p>
         <p class="mt-3">(안심하세요! 데이터는 그대로 유지됩니다.)</p>
       </v-card-text>
-      <v-card-actions class="pa-4">
-        <v-btn
-          prepend-icon="mdi-close"
-          rounded="xl"
-          @click="list.closeRemoveGroupDialog"
-          color="primary"
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-btn prepend-icon="mdi-close" rounded="xl" @click="list.closeRemoveGroupDialog"
           >아니요, 삭제하지 않겠습니다 (권장)</v-btn
         >
         <v-spacer></v-spacer>
@@ -27,8 +25,10 @@
 </template>
 
 <script setup lang="ts">
+import { useHomeStore } from "../../../store/home"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 
+const home = useHomeStore()
 const list = useAdminGroupListStore()
 </script>
 

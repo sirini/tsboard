@@ -1,17 +1,17 @@
 <template>
   <v-dialog v-model="general.confirmRemoveCategoryDialog" persistent>
-    <v-card width="500" class="mx-auto">
-      <v-card-title><v-icon>mdi-check</v-icon> 확인</v-card-title>
+    <v-card width="500" class="mx-auto" :color="home.color.header">
+      <v-card-title>카테고리를 삭제할까요?</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="text mb-2">
+      <v-card-text class="text mb-3">
         <strong>{{ route.params?.id }}</strong> 게시판의
         <strong>{{ general.boardRemoveCategory.name }}</strong> 카테고리를 정말로 삭제하시겠습니까?
-        해당하는 게시글들은 모두 기본 카테고리로 재설정되며 글은 삭제되지 않습니다.<br /><br />정말로
-        삭제할까요?
+        해당하는 게시글들은 모두 기본 카테고리로 재설정되며 글은 삭제되지 않습니다. 계속 진행할까요?
       </v-card-text>
+      <v-divider></v-divider>
 
-      <v-card-actions class="pa-4">
-        <v-btn prepend-icon="mdi-close" rounded="xl" color="primary" @click="close"
+      <v-card-actions>
+        <v-btn prepend-icon="mdi-close" rounded="xl" @click="close"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
@@ -23,9 +23,11 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router"
+import { useHomeStore } from "../../../store/home"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 
 const route = useRoute()
+const home = useHomeStore()
 const general = useAdminBoardGeneralStore()
 
 // 아무것도 변경하지 않기

@@ -9,7 +9,10 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-pencil" color="primary" @click="gallery.closeCancelUploadDialog"
+        <v-btn
+          prepend-icon="mdi-pencil"
+          color="primary"
+          @click="gallery.confirmCancelDialog = false"
           >아니요, 계속 작성하겠습니다</v-btn
         >
         <v-spacer></v-spacer>
@@ -20,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from "../../../store/gallery"
+import { useGalleryStore } from "../../../store/board/gallery/gallery"
 
 const gallery = useGalleryStore()
 const emits = defineEmits<{
@@ -30,6 +33,6 @@ const emits = defineEmits<{
 // 글 작성 취소하기
 function confirmCancel(): void {
   emits("cancel")
-  gallery.closeCancelUploadDialog()
+  gallery.confirmCancelDialog = false
 }
 </script>

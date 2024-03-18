@@ -25,7 +25,7 @@
         >
           <v-list>
             <v-list-item class="pb-2">
-              {{ viewer.photo?.subject }}
+              {{ viewer.photo?.title }}
               <template v-slot:append>
                 <v-btn icon @click="viewer.dialog = false" elevation="0" color="grey-darken-4"
                   ><v-icon>mdi-close</v-icon>
@@ -123,7 +123,7 @@
 <script setup lang="ts">
 import { watch } from "vue"
 import { useCommentStore } from "../../../store/board/comment"
-import { useViewerStore } from "../../../store/viewer"
+import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useUtilStore } from "../../../store/util"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"

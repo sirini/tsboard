@@ -9,7 +9,8 @@ import { list } from "./board/list"
 import { view } from "./board/view"
 import { comment } from "./board/comment"
 import { editor } from "./board/editor"
+import { gallery } from "./board/gallery"
 
 export const board = new Elysia().group("/board", (app) => {
-  return app.use(list).use(view).use(comment).use(editor)
+  return app.use(list).use(view).use(comment).use(editor).use(gallery)
 })

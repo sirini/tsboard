@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
-import { Notification } from "../interface/home"
+import { GroupItem, Notification } from "../interface/home"
 import { NOTICE_TYPE, NoticeType } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
 
@@ -18,6 +18,8 @@ export const useHomeStore = defineStore("home", () => {
   const auth = useAuthStore()
   const drawer = ref<boolean>(false)
   const notifications = ref<Notification[]>([])
+  const haveNewNotification = ref<boolean>(false)
+  const sidebarLinks = ref<GroupItem[]>([])
   const color = {
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -53,7 +55,6 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-
     const response = await server.api.home.load.notification.get({
       $headers: {
         authorization: auth.user.token,
@@ -65,7 +66,25 @@ export const useHomeStore = defineStore("home", () => {
 
     if (response.data && response.data.success === true && response.data.result.length > 0) {
       notifications.value = response.data.result
+      notifications.value.map((noti) => {
+        if (noti.checked === false) {
+          haveNewNotification.value = true
+          return
+        }
+      })
     }
+  }
+
+  // 알림 확인 처리하기
+  async function checkedAllNotifications(): Promise<void> {
+    if (auth.user.uid < 1) {
+      return
+    }
+    const response = await server.api.home.checked.notification.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+    })
   }
 
   // 알림 내용 해석하기
@@ -90,13 +109,25 @@ export const useHomeStore = defineStore("home", () => {
     return result
   }
 
+  // 사이드바 링크들 가져오기
+  async function loadSidebarLinks(): Promise<void> {
+    const response = await server.api.home.sidebar.links.get()
+    if (response.data && response.data.success === true) {
+      sidebarLinks.value = response.data.result
+    }
+  }
+
   return {
     DEBUG,
     drawer,
     notifications,
+    haveNewNotification,
+    sidebarLinks,
     color,
     visit,
     loadNotification,
     translateNotification,
+    checkedAllNotifications,
+    loadSidebarLinks,
   }
 })

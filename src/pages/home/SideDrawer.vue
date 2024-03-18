@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="home.drawer" width="250">
+  <v-navigation-drawer v-model="home.drawer" width="250" class="sidebar">
     <side-drawer-login v-if="auth.user.uid < 1"></side-drawer-login>
     <side-drawer-myinfo v-else></side-drawer-myinfo>
     <side-drawer-board-list></side-drawer-board-list>
@@ -16,3 +16,9 @@ import SideDrawerBoardList from "./SideDrawerBoardList.vue"
 const auth = useAuthStore()
 const home = useHomeStore()
 </script>
+
+<style scoped>
+.sidebar {
+  opacity: 0.8;
+}
+</style>

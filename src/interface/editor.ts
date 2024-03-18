@@ -10,6 +10,7 @@ export type WritePostParams = CommonPairParam & {
   categoryUid: number
   title: string
   content: string
+  isNoticePost: boolean
 }
 
 export type ModifyPostParams = WritePostParams & {

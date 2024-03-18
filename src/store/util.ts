@@ -17,8 +17,6 @@ export const useUtilStore = defineStore("util", () => {
   const alertType = ref<"success" | "error" | "info">("error")
   const alertText = ref<string>("")
   const alertTimeout = ref<number>(3000)
-  const searchOption = ref<string>("subject")
-  const searchValue = ref<string>("")
   const filters = {
     basic: /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/]/gim,
     nospace: /[`~!#$%^&*()|+\-=?;:'",<>\{\}\[\]\\\/ ]/gim,
@@ -157,8 +155,6 @@ export const useUtilStore = defineStore("util", () => {
     alertType,
     alertText,
     alertTimeout,
-    searchOption,
-    searchValue,
     filters,
     snack,
     success,

@@ -195,24 +195,85 @@ async function getNotices(boardUid: number, accessUserUid: number): Promise<Post
   return result
 }
 
+// 주어진 해시태그들의 고유 번호를 문자열로 반환
+export async function getHashtagUids(tags: string[]): Promise<string> {
+  let result: string[] = []
+  for (const tag of tags) {
+    const [hashtag] = await select(
+      `SELECT uid FROM ${table}hashtag WHERE name LIKE '%${tag}%' LIMIT 1`,
+    )
+    if (hashtag) {
+      result.push(hashtag.uid)
+    }
+  }
+  return result.join("', '")
+}
+
+// 검색어가 있을 경우의 글 목록 가져오기
+export async function getSearchedPosts(
+  param: PostParams,
+  direction: ">" | "<",
+  ordering: "ASC" | "DESC",
+): Promise<RowDataPacket[]> {
+  let result: RowDataPacket[] = []
+
+  if (param.option === "title" || param.option === "content") {
+    result = await select(
+      `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND ${param.option} LIKE '%${param.keyword}%' AND uid ${direction} ? 
+    ORDER BY uid ${ordering} LIMIT ?`,
+      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+    )
+  } else if (param.option === "writer") {
+    const [writer] = await select(`SELECT uid FROM ${table}user WHERE name = ? LIMIT 1`, [
+      param.keyword,
+    ])
+    if (writer) {
+      result = await select(
+        `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
+    ORDER BY uid ${ordering} LIMIT ?`,
+        [param.boardUid, CONTENT_STATUS.NORMAL, writer.uid, param.sinceUid, param.bunch],
+      )
+    }
+  } else if (param.option === "tag") {
+    const tags = param.keyword.split(" ")
+    const tagUidStr = await getHashtagUids(tags)
+    result = await select(
+      `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post JOIN ${table}post_hashtag ON ${table}post.uid = ${table}post_hashtag.post_uid 
+    WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
+    GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
+    ORDER BY ${table}post.uid ${ordering} LIMIT ?`,
+      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, tags.length, param.bunch],
+    )
+  }
+  return result
+}
+
 // 글 목록 가져오기
 export async function getPosts(param: PostParams): Promise<Post[]> {
   let result: Post[] = []
   const notices = await getNotices(param.boardUid, param.accessUserUid)
   result.push(...notices)
 
-  let direction = ">"
-  let ordering = "ASC"
+  let direction: ">" | "<" = ">"
+  let ordering: "ASC" | "DESC" = "ASC"
   if (param.pagingDirection === PAGING_DIRECTION.NEXT) {
     direction = "<"
     ordering = "DESC"
   }
 
-  const posts = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+  let posts: RowDataPacket[] = []
+  if (param.keyword.length > 1) {
+    posts = await getSearchedPosts(param, direction, ordering)
+  } else {
+    posts = await select(
+      `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
-  )
+      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+    )
+  }
 
   const normals = await makePostResult(posts, param.accessUserUid)
   result.push(...normals)
