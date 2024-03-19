@@ -4,17 +4,25 @@
  * 게시글 보기에 필요한 함수들
  */
 
-import { CONTENT_STATUS, Pair, Post, PostFile, PostLikeParams } from "../../../src/interface/board"
+import {
+  CONTENT_STATUS,
+  Pair,
+  Post,
+  PostFile,
+  PostLikeParams,
+  PostView,
+} from "../../../src/interface/board"
+import { NoticeType } from "../../../src/interface/home"
 import { removeFile } from "../../util/tools"
 import { remove, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
-import { INIT_POST, NOTICE_TYPE, NoticeType } from "./const"
+import { INIT_POST_VIEW, NOTICE_TYPE } from "./const"
 import { getPostRelated } from "./list"
 import { statSync } from "fs"
 
 // 게시글 가져오기
-export async function getPost(postUid: number, accessUserUid: number): Promise<Post> {
-  let result: Post = INIT_POST
+export async function getPost(postUid: number, accessUserUid: number): Promise<PostView> {
+  let result: PostView = INIT_POST_VIEW
   const [post] = await select(
     `SELECT user_uid, category_uid, title, content, submitted, modified, hit, status 
   FROM ${table}post WHERE uid = ? AND status != ? LIMIT 1`,
@@ -112,6 +120,7 @@ export async function likePost(param: PostLikeParams): Promise<void> {
     const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
       param.postUid,
     ])
+
     addNotification({
       toUid: post.user_uid,
       fromUid: param.accessUserUid,

@@ -6,8 +6,9 @@
 
 import { table, select, insert } from "../common"
 import { ChatHistory } from "../../../src/interface/user"
-import { NOTICE_TYPE, NoticeType } from "../board/const"
+import { NOTICE_TYPE } from "../board/const"
 import { addNotification } from "../home/notification"
+import { NoticeType } from "../../../src/interface/home"
 
 // 상대방과의 이전 채팅 내역 가져오기, 클라이언트에서 순서를 다시 뒤집어야 함
 export async function getChatHistory(

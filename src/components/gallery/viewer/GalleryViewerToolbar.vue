@@ -1,11 +1,10 @@
 <template>
-  <v-divider></v-divider>
-  <v-toolbar density="compact" color="grey-darken-4">
+  <v-toolbar density="compact" :color="home.color.header">
     <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0"
       ><v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top"> 이전 사진을 봅니다 </v-tooltip>
     </v-btn>
-    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.photo?.files.length"
+    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.files.length"
       ><v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top"> 다음 사진을 봅니다 </v-tooltip>
     </v-btn>
@@ -15,8 +14,8 @@
     <v-chip
       pill
       prepend-icon="mdi-heart"
-      @click="gallery.like(!gallery.post.liked)"
-      :color="liked ? 'red' : 'surface-variant'"
+      @click="viewer.like(!viewer.post.liked)"
+      :color="liked ? 'red' : ''"
     >
       {{ postLike }}
       <v-tooltip activator="parent" location="top">이 사진첩에 좋아요 표시하기</v-tooltip>
@@ -34,6 +33,7 @@
             <v-btn
               prepend-icon="mdi-pencil"
               variant="text"
+              @click="util.go('galleryModify', viewer.id, viewer.postUid)"
               :disabled="auth.user.uid !== writerUid && !auth.user.admin"
               >이 글 수정하기</v-btn
             >
@@ -42,6 +42,7 @@
             <v-btn
               prepend-icon="mdi-trash-can"
               variant="text"
+              @click="remove"
               :disabled="auth.user.uid !== writerUid && !auth.user.admin"
             >
               이 글 삭제하기
@@ -54,17 +55,27 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../../store/user/auth"
-import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useBoardViewStore } from "../../../store/board/view"
+import { useAuthStore } from "../../../store/user/auth"
+import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
 
-const auth = useAuthStore()
-const gallery = useGalleryStore()
 const viewer = useViewerStore()
+const view = useBoardViewStore()
+const util = useUtilStore()
+const auth = useAuthStore()
+const home = useHomeStore()
 const props = defineProps<{
   postLike: number
   postUid: number
   writerUid: number
   liked: boolean
 }>()
+
+// 사진 삭제하기
+function remove(): void {
+  view.postUid = viewer.postUid
+  view.openConfirmRemoveDialog()
+}
 </script>

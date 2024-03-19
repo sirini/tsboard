@@ -11,9 +11,14 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { BoardConfig, Pair, Post, PostFile } from "../../interface/board"
+import { BoardConfig, Pair, Post, PostFile, PostView } from "../../interface/board"
 import { VIEW } from "../../messages/store/board/view"
-import { INIT_POST, BOARD_CONFIG, TYPE_MATCH } from "../../../server/database/board/const"
+import {
+  INIT_POST,
+  BOARD_CONFIG,
+  TYPE_MATCH,
+  INIT_POST_VIEW,
+} from "../../../server/database/board/const"
 
 export const useBoardViewStore = defineStore("boardView", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -24,7 +29,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
-  const post = ref<Post>(INIT_POST)
+  const post = ref<PostView>(INIT_POST_VIEW)
   const files = ref<PostFile[]>([])
   const tags = ref<Pair[]>([])
 
@@ -45,6 +50,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
         postUid: postUid.value,
       },
     })
+
     if (!response.data) {
       util.snack(VIEW.NO_RESPONSE)
       return

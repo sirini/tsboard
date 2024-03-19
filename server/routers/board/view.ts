@@ -19,7 +19,7 @@ import {
 } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
-import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
+import { BOARD_CONFIG, INIT_POST, INIT_POST_VIEW } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { isAuthor } from "../../database/board/editor"
@@ -59,7 +59,7 @@ export const view = new Elysia()
     async ({ query: { id, postUid }, accessUserUid, userLevel, newAccessToken }) => {
       let response = {
         config: BOARD_CONFIG,
-        post: INIT_POST,
+        post: INIT_POST_VIEW,
         files: [] as PostFile[],
         tags: [] as Pair[],
         newAccessToken,

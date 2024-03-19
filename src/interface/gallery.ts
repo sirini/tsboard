@@ -23,10 +23,3 @@ export type GridItem = {
   liked: boolean
   reply: number
 }
-
-export type Photo = GridItem & {
-  title: string
-  content: string
-  hit: number
-  submitted: number
-}

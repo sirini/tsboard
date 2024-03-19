@@ -33,7 +33,7 @@ import {
   uploadImages,
   writeNewPost,
 } from "../../database/board/editor"
-import { BOARD_CONFIG, INIT_POST } from "../../database/board/const"
+import { BOARD_CONFIG, INIT_POST_VIEW } from "../../database/board/const"
 import { CountPair, Pair, PostFile } from "../../../src/interface/board"
 import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { getFiles, getPost, getTags } from "../../database/board/view"
@@ -345,7 +345,7 @@ export const editor = new Elysia()
     "/loadpost",
     async ({ query: { postUid }, accessUserUid, newAccessToken }) => {
       let response = {
-        post: INIT_POST,
+        post: INIT_POST_VIEW,
         files: [] as PostFile[],
         tags: [] as Pair[],
         newAccessToken,

@@ -5,12 +5,25 @@
  */
 import { defineStore } from "pinia"
 import { ref } from "vue"
+import { useRoute } from "vue-router"
+import { edenTreaty } from "@elysiajs/eden"
+import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
-import { Position, GridItem, Photo } from "../../../interface/gallery"
-import { INIT_USER_BASIC } from "../../../interface/user"
+import { Position } from "../../../interface/gallery"
+import {
+  BOARD_CONFIG,
+  INIT_POST_VIEW,
+  PAGING_DIRECTION,
+  TYPE_MATCH,
+} from "../../../../server/database/board/const"
+import { GALLERY } from "../../../messages/store/board/gallery"
+import { BoardConfig, Comment, Pair, PostView } from "../../../interface/board"
+import { COMMENT } from "../../../messages/store/board/comment"
 
 export const useViewerStore = defineStore("viewer", () => {
+  const server = edenTreaty<App>(process.env.API!)
+  const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
   const dialog = ref<boolean>(false)
@@ -24,19 +37,17 @@ export const useViewerStore = defineStore("viewer", () => {
   const zoomSpeed = 0.25
   const zoomMax = 20.0
   const zoomMin = 0.5
-  const images = ref<GridItem[]>([])
-  const photo = ref<Photo>({
-    uid: 0,
-    writer: INIT_USER_BASIC,
-    files: [],
-    like: 0,
-    liked: false,
-    reply: 0,
-    title: "",
-    content: "",
-    hit: 0,
-    submitted: 0,
-  })
+  const id = ref<string>("")
+  const config = ref<BoardConfig>(BOARD_CONFIG)
+  const postUid = ref<number>(0)
+  const sinceUid = ref<number>(0)
+  const post = ref<PostView>(INIT_POST_VIEW)
+  const files = ref<string[]>([])
+  const tags = ref<Pair[]>([])
+  const comments = ref<Comment[]>([])
+  const page = ref<number>(1)
+  const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
+  const bunch = ref<number>(100)
   const position = ref<number>(0)
   const textRule = [
     (value: any) => {
@@ -44,6 +55,95 @@ export const useViewerStore = defineStore("viewer", () => {
       return "3글자 이상 입력해 주세요"
     },
   ]
+
+  // 사진들 불러오기
+  async function loadPost(): Promise<void> {
+    id.value = route.params.id as string
+    postUid.value = parseInt(route.params.no as string)
+
+    if (id.value.length < 2) {
+      util.snack(GALLERY.NO_BOARD_ID)
+      return
+    }
+
+    const response = await server.api.board.view.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: id.value,
+        postUid: postUid.value,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(GALLERY.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      config.value = response.data.result.config
+      util.snack(`${GALLERY.FAILED_LOAD_PHOTO} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken)
+    config.value = response.data.result.config
+
+    if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
+      util.go(TYPE_MATCH[config.value.type].name)
+      return
+    }
+
+    post.value = response.data.result.post
+    tags.value = response.data.result.tags
+    position.value = 0
+  }
+
+  // 댓글 불러오기
+  async function loadComments(): Promise<void> {
+    const response = await server.api.board.comment.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: id.value,
+        postUid: postUid.value,
+        page: page.value,
+        pagingDirection: pagingDirection.value,
+        bunch: bunch.value,
+        sinceUid: sinceUid.value,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(COMMENT.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
+    }
+    comments.value = response.data.result.comments
+  }
+
+  // 사진에 좋아요 추가 (혹은 취소) 하기
+  async function like(isLike: boolean): Promise<void> {
+    const response = await server.api.board.likepost.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: config.value.uid,
+      postUid: postUid.value,
+      liked: isLike ? 1 : 0,
+    })
+
+    if (response.data && response.data.success === true) {
+      post.value.liked = isLike
+      if (isLike) {
+        post.value.like += 1
+      } else {
+        post.value.like -= 1
+      }
+    }
+  }
 
   // 사진을 클릭할 때
   function mouseDown(event: MouseEvent): void {
@@ -103,7 +203,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 이전 사진 보기
   function prev(): void {
-    if (images.value.length === 1) {
+    if (files.value.length === 1) {
       util.snack("사진이 한 장만 있습니다")
       return
     }
@@ -116,48 +216,33 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 다음 사진 보기
   function next(): void {
-    if (images.value.length === 1) {
+    if (files.value.length === 1) {
       util.snack("사진이 한 장만 있습니다")
       return
     }
-    if (position.value + 1 === images.value.length) {
+    if (position.value + 1 === files.value.length) {
       util.snack("마지막 사진입니다")
       return
     }
     position.value += 1
   }
 
-  // 사진들 불러오기
-  function load(): void {
-    photo.value = {
-      uid: 1,
-      writer: {
-        uid: 11,
-        name: "일지매",
-        profile: "/no-profile.svg",
-      },
-      files: [
-        `https://cdn.vuetifyjs.com/images/cards/docks.jpg`,
-        `https://cdn.vuetifyjs.com/images/cards/hotel.jpg`,
-        `https://cdn.vuetifyjs.com/images/cards/sunshine.jpg`,
-      ],
-      title: "사진 제목입니다",
-      content: "사진 내용입니다",
-      like: 5,
-      reply: 10,
-      hit: 1429,
-      submitted: 0,
-      liked: false,
-    }
-    position.value = 0
-  }
-
-  // 댓글 저장하기
-  async function save(comment: string): Promise<void> {
-    // do something
-  }
-
   return {
+    id,
+    dialog,
+    drawerWidth,
+    drawerPosition,
+    config,
+    postUid,
+    post,
+    comments,
+    files,
+    tags,
+    position,
+    textRule,
+    loadPost,
+    loadComments,
+    like,
     mouseDown,
     mouseMove,
     mouseUp,
@@ -166,14 +251,5 @@ export const useViewerStore = defineStore("viewer", () => {
     reset,
     prev,
     next,
-    load,
-    save,
-    dialog,
-    drawerWidth,
-    drawerPosition,
-    images,
-    photo,
-    position,
-    textRule,
   }
 })

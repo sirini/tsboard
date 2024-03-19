@@ -5,24 +5,25 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap" id="galleryContainer">
-          <v-card elevation="0" class="mx-auto">
+          <v-card elevation="0" class="mx-auto" :width="gallery.config.width">
             <gallery-header></gallery-header>
+            <v-divider class="mb-6"></v-divider>
             <v-row no-gutters>
               <v-col
                 v-for="(image, index) in gallery.images"
                 :key="index"
-                class="d-flex child-flex pr-2"
+                class="d-flex child-flex pl-1 pr-1"
                 :cols="gallery.cols"
               >
                 <gallery-grid-item :item="image"></gallery-grid-item>
               </v-col>
               <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-6">
-                <v-icon>mdi-information</v-icon> 아직 올려진 사진이 없거나 목록을 볼 수 있는 권한이
+                <v-icon>mdi-information</v-icon> 아직 올려진 사진이 없거나, 목록을 볼 수 있는 권한이
                 없습니다.
               </v-col>
             </v-row>
 
-            <v-divider class="mt-12"></v-divider>
+            <v-divider class="mt-6"></v-divider>
             <v-row no-gutters>
               <v-col class="pt-1 pl-2 pr-2 pb-4 mb-2 text-center">
                 <v-card-actions class="pa-0">
@@ -45,6 +46,7 @@
                     prepend-icon="mdi-upload"
                     variant="text"
                     @click="util.go('boardWrite', gallery.id)"
+                    :disabled="auth.user.uid < 1"
                     >업로드</v-btn
                   >
                 </v-card-actions>
@@ -56,43 +58,63 @@
       </v-main>
     </v-layout>
     <gallery-viewer-dialog></gallery-viewer-dialog>
+    <board-view-remove-post-dialog></board-view-remove-post-dialog>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { watch, onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/board/gallery/gallery"
+import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useViewerStore } from "../../store/board/gallery/viewer"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListSearch from "../../components/gallery/list/GalleryListSearch.vue"
-import GalleryViewerDialog from "../../components/gallery/view/GalleryViewerDialog.vue"
+import GalleryViewerDialog from "../../components/gallery/viewer/GalleryViewerDialog.vue"
+import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 
 const route = useRoute()
 const gallery = useGalleryStore()
+const auth = useAuthStore()
 const util = useUtilStore()
 const viewer = useViewerStore()
-const PREFIX = process.env.PREFIX || ""
+const DEBUG = ref<string>("")
 
-onMounted(() => {
-  gallery.loadPhotoList()
-  gallery.setGalleryItemWidth()
-  window.addEventListener("resize", gallery.setGalleryItemWidth)
+// 뷰어 띄우기
+function openViewerDialog(): void {
+  const no = parseInt(route.params?.no as string)
+  if (no > 0) {
+    viewer.postUid = no
+    viewer.dialog = true
+    gallery.images.map((image) => {
+      if (image.uid === no) {
+        viewer.files = image.files
+        return
+      }
+    })
+  }
+}
+
+onMounted(async () => {
+  await gallery.loadPhotoList()
+  openViewerDialog()
+
+  window.addEventListener("resize", (event) => {
+    gallery.gridSize = Math.floor(gallery.config.width / (12 / gallery.cols))
+  })
 })
 
-// 뷰어가 필요할 때 열어주기
+// 뷰어가 필요할 때 열어주고, 이미지 목록도 이때 전달하기
 watch(
   () => route.params?.no,
-  (value) => {
-    const no = parseInt(value as string)
-    if (no > 0) {
-      viewer.dialog = true
-    }
+  async () => {
+    await gallery.loadPhotoList()
+    openViewerDialog()
   },
 )
 </script>

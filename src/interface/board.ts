@@ -76,11 +76,9 @@ export type BoardConfig = {
 type ContentCommon = {
   uid: number
   writer: Writer
-  content: string
   like: number
   liked: boolean
   submitted: number
-  modified: number
   status: -1 | 0 | 1 /* CONTENT_STATUS */
 }
 
@@ -89,6 +87,11 @@ export type Post = ContentCommon & {
   reply: number
   title: string
   hit: number
+}
+
+export type PostView = Post & {
+  content: string
+  modified: number
 }
 
 type PostCommentParams = {
@@ -112,6 +115,8 @@ export type CommentParams = PostCommentParams & {
 export type Comment = ContentCommon & {
   replyUid: number
   postUid: number
+  content: string
+  modified: number
 }
 
 type UserUid = {
@@ -181,4 +186,15 @@ export type CheckPermissionParams = {
   postUid: number
   action: PermissionAction
   target: TargetTable
+}
+
+export type CommentRelated = {
+  writer: Writer
+  like: number
+  liked: boolean
+}
+
+export type PostRelated = CommentRelated & {
+  category: Pair
+  reply: number
 }

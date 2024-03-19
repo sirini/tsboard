@@ -40,8 +40,6 @@ export const useCommentStore = defineStore("comment", () => {
   const bunch = ref<number>(100)
 
   // 기존 댓글 불러오기
-  // TODO
-  // 이전 | 다음 처리 관련 추가하기
   async function loadCommentList(): Promise<void> {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
@@ -257,10 +255,13 @@ export const useCommentStore = defineStore("comment", () => {
 
   return {
     id,
+    boardUid,
+    postUid,
     modifyTarget,
     replyTarget,
     removeTarget,
     content,
+    contentWithSyntax,
     button,
     confirmRemoveCommentDialog,
     comments,

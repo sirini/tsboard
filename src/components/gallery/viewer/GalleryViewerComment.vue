@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="0" variant="tonal">
-    <v-card-text class="pa-0 pt-3 pl-3 pr-3">{{ commentContent }}</v-card-text>
+    <v-card-text class="pa-0 pt-3 pl-3 pr-3" v-html="commentContent"></v-card-text>
     <v-card-actions class="pa-0 pl-3 pr-3">
       <user-nametag :profile="writerProfile" :uid="writerUid" :name="writerName"></user-nametag>
 
@@ -12,8 +12,8 @@
         size="small"
         class="ml-2 mr-2"
         :disabled="auth.user.uid < 1"
-        :color="liked ? 'red' : 'surface-variant'"
-        @click="comment.like(commentUid, !liked)"
+        :color="liked ? 'red' : ''"
+        @click="like"
       >
         {{ commentLike }}
         <v-tooltip activator="parent" location="top"> 이 댓글에 좋아요를 표시합니다 </v-tooltip>
@@ -51,10 +51,12 @@
 </template>
 
 <script setup lang="ts">
+import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
 import UserNametag from "../../user/UserNametag.vue"
 
+const viewer = useViewerStore()
 const auth = useAuthStore()
 const comment = useCommentStore()
 const props = defineProps<{
@@ -66,4 +68,11 @@ const props = defineProps<{
   writerName: string
   liked: boolean
 }>()
+
+// 댓글 좋아요 누르기
+async function like(): Promise<void> {
+  comment.boardUid = viewer.config.uid
+  await comment.like(props.commentUid, !props.liked)
+  await viewer.loadComments()
+}
 </script>

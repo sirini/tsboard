@@ -93,10 +93,13 @@ export const useBoardListStore = defineStore("boardList", () => {
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = posts.value.at(-1)?.uid ?? 0
 
-    await loadPostList()
     if (posts.value.length < config.value.row) {
       util.snack(LIST.LAST_PAGE)
+      sinceUid.value = 0
+      return
     }
+
+    await loadPostList()
   }
 
   // 검색 옵션 초기화하기

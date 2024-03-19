@@ -3,12 +3,15 @@
     <v-card width="500" class="mx-auto" color="error">
       <v-card-title><v-icon>mdi-alert</v-icon> 주의가 필요합니다 !</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="text">
+
+      <v-card-text class="text mb-3">
         <strong>{{ general.removeBoardTarget.name }}</strong> 게시판을 정말로 삭제하시겠습니까? 해당
         게시판에 기록된 게시글과 댓글, 사진을 포함한 첨부파일들이 모두 완전히 삭제되며 이후 접근할
-        수 없습니다. 작업을 시작하면 되돌릴 수 없습니다. <br /><br />정말로 삭제하시겠습니까?
+        수 없습니다. 작업을 시작하면 되돌릴 수 없습니다. 계속 진행할까요?
       </v-card-text>
-      <v-card-actions class="pa-4">
+
+      <v-divider></v-divider>
+      <v-card-actions>
         <v-btn
           prepend-icon="mdi-close"
           rounded="xl"
@@ -17,7 +20,7 @@
           >아니요, 삭제하지 않겠습니다 (권장)</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="general.removeBoard">그래도 삭제할께요 </v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="general.removeBoard">삭제</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -72,7 +72,7 @@ export const update = new Elysia()
   )
   .delete(
     "/removeboard",
-    async ({ body: { boardUid }, newAccessToken }) => {
+    async ({ query: { boardUid }, newAccessToken }) => {
       const response = {
         newAccessToken: "",
       }
@@ -91,8 +91,8 @@ export const update = new Elysia()
     },
     {
       ...DEFAULT_TYPE_CHECK,
-      body: t.Object({
-        boardUid: t.Number(),
+      query: t.Object({
+        boardUid: t.Numeric(),
       }),
     },
   )

@@ -4,13 +4,23 @@
  * 게시판 작업에 필요한 상수 기본값들, 타입들 정의
  */
 
-import { BoardConfig, Comment, Pair, Post, Writer } from "../../../src/interface/board"
+import {
+  BoardConfig,
+  Comment,
+  CommentRelated,
+  Pair,
+  Post,
+  PostRelated,
+  PostView,
+  Writer,
+} from "../../../src/interface/board"
 import { INIT_USER_BASIC } from "../../../src/interface/user"
 
 export const TYPE_MATCH = [
   { path: "/board/", name: "boardList" },
   { path: "/gallery/", name: "galleryList" },
   { path: "/blog/", name: "blogList" },
+  { path: "/shop/", name: "shopList" },
 ]
 
 export const BOARD_CONFIG: BoardConfig = {
@@ -32,17 +42,6 @@ export const PAGING_DIRECTION = {
   NEXT: 1,
 }
 
-export type CommentRelated = {
-  writer: Writer
-  like: number
-  liked: boolean
-}
-
-export type PostRelated = CommentRelated & {
-  category: Pair
-  reply: number
-}
-
 export const POST_RELATED: PostRelated = {
   writer: INIT_USER_BASIC,
   like: 0,
@@ -54,16 +53,20 @@ export const POST_RELATED: PostRelated = {
 export const INIT_POST: Post = {
   uid: 0,
   writer: { uid: 0, name: "", profile: "", signature: "" },
-  content: "",
   like: 0,
   liked: false,
   submitted: 0,
-  modified: 0,
   status: 0,
   category: { uid: 0, name: "" },
   reply: 0,
   title: "",
   hit: 0,
+}
+
+export const INIT_POST_VIEW: PostView = {
+  ...INIT_POST,
+  content: "",
+  modified: 0,
 }
 
 export const INIT_COMMENT: Comment = {
@@ -93,14 +96,4 @@ export const NOTICE_TYPE = {
   LEAVE_COMMENT: 2,
   REPLY_COMMENT: 3,
   CHAT_MESSAGE: 4,
-}
-
-export type NoticeType = 0 | 1 | 2 | 3 | 4
-
-export type AddNoticeParams = {
-  toUid: number
-  fromUid: number
-  type: NoticeType
-  postUid: number
-  commentUid: number
 }

@@ -208,7 +208,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
 
   // 게시판을 정말로 삭제할 때 처리
   async function removeBoard(): Promise<void> {
-    if (removeBoardTarget.value.uid < 1 || removeBoardTarget.value.name.length < 1) {
+    if (removeBoardTarget.value.uid < 1) {
       admin.error(GENERAL.INVALID_REMOVE_TARGET)
       return
     }
@@ -217,8 +217,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       $headers: {
         authorization: auth.user.token,
       },
-      boardUid: removeBoardTarget.value.uid,
+      $query: {
+        boardUid: removeBoardTarget.value.uid,
+      },
     })
+
     if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
@@ -231,8 +234,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     boards.value = boards.value.filter((board) => {
       return board.uid !== removeBoardTarget.value.uid
     })
+
     closeRemoveBoardDialog()
-    admin.success(GENERAL.status_BOARD)
+    admin.success(GENERAL.REMOVED_BOARD)
   }
 
   return {

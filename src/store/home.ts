@@ -9,8 +9,8 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
-import { GroupItem, Notification } from "../interface/home"
-import { NOTICE_TYPE, NoticeType } from "../../server/database/board/const"
+import { GroupItem, NoticeType, Notification } from "../interface/home"
+import { NOTICE_TYPE } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
 
 export const useHomeStore = defineStore("home", () => {

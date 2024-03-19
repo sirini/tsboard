@@ -42,7 +42,7 @@ export async function removeBoard(boardUid: number): Promise<boolean> {
   await update(`UPDATE ${table}comment SET status = ? WHERE board_uid = ?`, [-1, boardUid])
   await update(`UPDATE ${table}board_category SET name = '' WHERE board_uid = ?`, [boardUid])
   await update(`UPDATE ${table}post SET status = ? WHERE board_uid = ?`, [-1, boardUid])
-  await update(`UPDATE ${table}board SET id = '' WHERE uid = ? LIMIT 1`, [boardUid])
+  await remove(`DELETE FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUid])
   return true
 }
 

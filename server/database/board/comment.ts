@@ -9,21 +9,16 @@ import {
   Comment,
   CommentLikeParams,
   CommentParams,
+  CommentRelated,
   RelatedParams,
   SaveCommentParams,
   SaveModifyParams,
   SaveReplyParams,
 } from "../../../src/interface/board"
+import { NoticeType } from "../../../src/interface/home"
 import { insert, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
-import {
-  COMMENT_RELATED,
-  CommentRelated,
-  INVALID_VIEW_LEVEL,
-  NOTICE_TYPE,
-  NoticeType,
-  PAGING_DIRECTION,
-} from "./const"
+import { COMMENT_RELATED, INVALID_VIEW_LEVEL, NOTICE_TYPE, PAGING_DIRECTION } from "./const"
 
 // 댓글에 연관된 정보 가져오기
 async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> {

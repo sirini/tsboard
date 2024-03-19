@@ -11,16 +11,17 @@ import {
   Pair,
   Post,
   PostParams,
+  PostRelated,
   PostRelatedParams,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
-import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED, PostRelated } from "./const"
+import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED } from "./const"
 
 // 게시판 기본 설정 가져오기
 export async function getBoardConfig(id: string): Promise<BoardConfig> {
   let result: BoardConfig = BOARD_CONFIG
-  const [board] = await select(`SELECT uid, group_uid, admin_uid, type, name, 
-    info, row, width, use_category, 
+  const [board] =
+    await select(`SELECT uid, group_uid, admin_uid, type, name, info, row, width, use_category, 
   level_list, level_view, level_write, level_comment, level_download, 
   point_view, point_write, point_comment, point_download
   FROM ${table}board WHERE id = '${id}' LIMIT 1`)
@@ -143,8 +144,8 @@ export async function getPostRelated(param: PostRelatedParams): Promise<PostRela
   }
 
   const [reply] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE post_uid = ?`,
-    [param.uid],
+    `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE post_uid = ? AND status = ?`,
+    [param.uid, CONTENT_STATUS.NORMAL],
   )
   if (reply) {
     result.reply = reply.total_count
@@ -168,11 +169,9 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
     result.push({
       uid: post.uid,
       writer: info.writer,
-      content: post.content,
       like: info.like,
       liked: info.liked,
       submitted: post.submitted,
-      modified: post.modified,
       status: post.status,
       category: info.category,
       reply: info.reply,
@@ -187,7 +186,7 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
 async function getNotices(boardUid: number, accessUserUid: number): Promise<Post[]> {
   let result: Post[] = []
   const notices = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ?`,
     [boardUid, CONTENT_STATUS.NOTICE],
   )
@@ -219,7 +218,7 @@ export async function getSearchedPosts(
 
   if (param.option === "title" || param.option === "content") {
     result = await select(
-      `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+      `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND ${param.option} LIKE '%${param.keyword}%' AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
       [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
@@ -230,7 +229,7 @@ export async function getSearchedPosts(
     ])
     if (writer) {
       result = await select(
-        `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+        `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
         [param.boardUid, CONTENT_STATUS.NORMAL, writer.uid, param.sinceUid, param.bunch],
@@ -240,7 +239,7 @@ export async function getSearchedPosts(
     const tags = param.keyword.split(" ")
     const tagUidStr = await getHashtagUids(tags)
     result = await select(
-      `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+      `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post JOIN ${table}post_hashtag ON ${table}post.uid = ${table}post_hashtag.post_uid 
     WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
     GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)

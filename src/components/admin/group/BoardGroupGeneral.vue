@@ -58,7 +58,6 @@
               append-inner-icon="mdi-plus-circle-outline"
               @keyup="general.updateExistBoardIds"
               @click:append-inner="general.createNewBoard"
-              @keyup.enter="general.createNewBoard"
             >
               <v-menu activator="parent">
                 <v-list>

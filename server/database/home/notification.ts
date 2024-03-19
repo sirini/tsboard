@@ -4,8 +4,7 @@
  * 알림 관련 필요한 함수들
  */
 
-import { Notification } from "../../../src/interface/home"
-import { AddNoticeParams } from "../board/const"
+import { AddNoticeParams, Notification } from "../../../src/interface/home"
 import { table, select, insert, update } from "../common"
 
 // 알림 정보 추가하기

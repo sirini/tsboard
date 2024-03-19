@@ -11,7 +11,6 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
-import { useViewerStore } from "./viewer"
 import { GridItem } from "../../../interface/gallery"
 import { GALLERY } from "../../../messages/store/board/gallery"
 import {
@@ -27,13 +26,11 @@ export const useGalleryStore = defineStore("gallery", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const viewer = useViewerStore()
   const confirmCancelDialog = ref<boolean>(false)
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<Post>(INIT_POST)
   const images = ref<GridItem[]>([])
-  const postUid = ref<number>(0)
   const cols = ref<number>(3)
   const gridSize = ref<number>(250)
   const page = ref<number>(1)
@@ -89,38 +86,18 @@ export const useGalleryStore = defineStore("gallery", () => {
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = images.value.at(-1)?.uid ?? 0
 
-    await loadPhotoList()
     if (images.value.length < config.value.row) {
       util.snack(GALLERY.LAST_PAGE)
+      sinceUid.value = 0
+      return
     }
-  }
 
-  // 사진에 좋아요 추가 (혹은 취소) 하기
-  async function like(isLike: boolean): Promise<void> {
-    const response = await server.api.board.likepost.patch({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      boardUid: config.value.uid,
-      postUid: postUid.value,
-      liked: isLike ? 1 : 0,
-    })
-
-    if (response.data && response.data.success === true) {
-      post.value.liked = isLike
-      if (isLike) {
-        post.value.like += 1
-      } else {
-        post.value.like -= 1
-      }
-    }
+    await loadPhotoList()
   }
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(no: number): void {
     util.go("galleryOpen", id.value, no)
-    postUid.value = no
-    viewer.dialog = true
   }
 
   // 검색 옵션 초기화하기
@@ -129,21 +106,10 @@ export const useGalleryStore = defineStore("gallery", () => {
     keyword.value = ""
   }
 
-  // 이미지 미리보기 크기를 컨테이너에 맞춰서 조정해주기
-  function setGalleryItemWidth(): void {
-    const div = document.querySelector<HTMLDivElement>("#galleryContainer")
-    if (!div) {
-      return
-    }
-    const rect = div.getBoundingClientRect()
-    gridSize.value = rect.width / (12 / cols.value)
-  }
-
   return {
     id,
     config,
     post,
-    postUid,
     confirmCancelDialog,
     images,
     cols,
@@ -152,9 +118,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     keyword,
     loadPhotoList,
     loadOldPhotos,
-    like,
     open,
     resetSearchKeyword,
-    setGalleryItemWidth,
   }
 })

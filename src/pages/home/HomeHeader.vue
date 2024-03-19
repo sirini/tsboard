@@ -60,7 +60,8 @@ import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
-import { NOTICE_TYPE, NoticeType } from "../../../server/database/board/const"
+import { NOTICE_TYPE } from "../../../server/database/board/const"
+import { NoticeType } from "../../interface/home"
 
 const auth = useAuthStore()
 const util = useUtilStore()

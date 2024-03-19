@@ -3,12 +3,18 @@
     >{{ gallery.config.name }}
     <span class="info ml-3 pl-3">{{ gallery.config.info }}</span>
     <div class="login">
-      <v-btn prepend-icon="mdi-login-variant" variant="text" @click="auth.login">로그인 </v-btn>
+      <v-btn
+        prepend-icon="mdi-login-variant"
+        variant="text"
+        @click="auth.login"
+        v-if="auth.user.uid < 1"
+        >로그인</v-btn
+      >
       <v-btn
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', gallery.id)"
-        :disabled="!auth.user.admin"
+        v-if="auth.user.admin"
         >관리</v-btn
       >
     </div>

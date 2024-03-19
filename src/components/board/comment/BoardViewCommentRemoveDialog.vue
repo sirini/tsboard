@@ -10,22 +10,35 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-check-bold" @click="comment.closeRemoveCommentDialog"
+        <v-btn prepend-icon="mdi-cancel" @click="comment.closeRemoveCommentDialog"
           >아니요, 그대로 두겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="comment.removeComment">삭제하기</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
+import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
+import { BOARD_TYPE } from "../../../interface/board"
 
+const viewer = useViewerStore()
 const comment = useCommentStore()
 const home = useHomeStore()
+
+// 댓글 삭제하기
+async function remove(): Promise<void> {
+  if (viewer.config.type === BOARD_TYPE.BOARD) {
+    comment.removeComment()
+  } else {
+    await comment.removeComment()
+    await viewer.loadComments()
+  }
+}
 </script>
 
 <style scoped>
