@@ -6,6 +6,7 @@
         <v-spacer></v-spacer>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('home')">첫화면</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">사이트 소개</v-btn>
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">라이선스</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('bugReport')"
           >버그 신고</v-btn
         >

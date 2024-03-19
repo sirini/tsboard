@@ -9,7 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
-import { GroupItem, NoticeType, Notification } from "../interface/home"
+import { GroupItem, NoticeType, Notification, PostItem } from "../interface/home"
 import { NOTICE_TYPE } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
 
@@ -20,6 +20,9 @@ export const useHomeStore = defineStore("home", () => {
   const notifications = ref<Notification[]>([])
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
+  const sinceUid = ref<number>(0)
+  const bunch = ref<number>(12)
+  const latestPosts = ref<PostItem[]>([])
   const color = {
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -48,6 +51,25 @@ export const useHomeStore = defineStore("home", () => {
         userUid: auth.user.uid,
       },
     })
+  }
+
+  // 최신글 목록 가져오기
+  async function loadLatestPosts(): Promise<void> {
+    const response = await server.api.home.latest.get({
+      $query: {
+        sinceUid: sinceUid.value,
+        bunch: bunch.value,
+      },
+    })
+
+    if (response.data && response.data.success === true) {
+      if (sinceUid.value < 1) {
+        latestPosts.value = response.data.result
+      } else {
+        latestPosts.value.push(...response.data.result)
+      }
+      sinceUid.value = latestPosts.value.at(-1)?.uid ?? 0
+    }
   }
 
   // 알림 정보 가져오기
@@ -123,8 +145,10 @@ export const useHomeStore = defineStore("home", () => {
     notifications,
     haveNewNotification,
     sidebarLinks,
+    latestPosts,
     color,
     visit,
+    loadLatestPosts,
     loadNotification,
     translateNotification,
     checkedAllNotifications,

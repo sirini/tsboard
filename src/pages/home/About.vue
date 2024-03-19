@@ -5,11 +5,12 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto mt-12" max-width="800">
+          <v-card class="mx-auto mt-12 mb-12" max-width="800">
             <v-card-title>사이트 소개</v-card-title>
             <v-divider></v-divider>
             <v-card-text class="about">
-              <p>TSBOARD.DEV 웹사이트에 오신 것을 환영합니다.</p>
+              <p>&nbsp;</p>
+              <h2>찾아와 주신 여러분, 환영합니다!</h2>
               <p>&nbsp;</p>
               <p>
                 이 사이트는 <strong>TSBOARD</strong>라고 이름 지은 오픈소스 게시판(갤러리, 블로그,
@@ -62,17 +63,37 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')">Github</v-btn>
+              <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')"
+                >Github
+                <v-tooltip activator="parent"
+                  >깃허브에 공개된 TSBOARD 프로젝트 보러가기 (★ 도 눌러주기 😄)</v-tooltip
+                >
+              </v-btn>
               <v-spacer></v-spacer>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('typescript')">TS</v-btn>
+              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('typescript')"
+                >TS
+                <v-tooltip activator="parent">타입스크립트(TypeScript) 언어 배우러 가기!</v-tooltip>
+              </v-btn>
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.go('vue')">Vue</v-btn>
+              <v-btn prepend-icon="mdi-link" @click="util.go('vue')"
+                >Vue
+                <v-tooltip activator="parent">Vue 프레임워크 배우러 가기!</v-tooltip>
+              </v-btn>
               <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('vuetify')"
-                >Vuetify</v-btn
-              >
+                >Vuetify
+                <v-tooltip activator="parent">Vuetify 라이브러리 배우러 가기!</v-tooltip>
+              </v-btn>
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.go('bun')">Bun</v-btn>
-              <v-btn prepend-icon="mdi-link" @click="util.go('elysia')">Elysia</v-btn>
+              <v-btn prepend-icon="mdi-link" @click="util.go('bun')"
+                >Bun
+                <v-tooltip activator="parent">JS/TS 런타임 겸 툴킷 Bun 보러가기!</v-tooltip>
+              </v-btn>
+              <v-btn prepend-icon="mdi-link" @click="util.go('elysia')"
+                >Elysia
+                <v-tooltip activator="parent"
+                  >Bun 기반 빠른 웹프레임워크 Elysia 배우러 가기!</v-tooltip
+                >
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-container>

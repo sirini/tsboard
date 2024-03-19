@@ -20,6 +20,11 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/About.vue"),
   },
   {
+    path: PREFIX + "/license",
+    name: "license",
+    component: () => import("@/pages/home/License.vue"),
+  },
+  {
     path: PREFIX + "/bugreport",
     name: "bugReport",
     beforeEnter: () => {

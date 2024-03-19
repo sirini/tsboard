@@ -5,7 +5,8 @@
  */
 
 import { Elysia, t } from "elysia"
-import { getMaxUid } from "../../database/home/list"
+import { getLatestPost, getMaxUid } from "../../database/home/list"
+import { success } from "../../util/tools"
 
 export const list = new Elysia().get(
   "/latest",
@@ -13,7 +14,9 @@ export const list = new Elysia().get(
     if (sinceUid < 1) {
       sinceUid = (await getMaxUid()) + 1
     }
-    
+
+    const posts = await getLatestPost(sinceUid, bunch)
+    return success(posts)
   },
   {
     query: t.Object({
