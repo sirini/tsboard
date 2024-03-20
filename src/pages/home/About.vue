@@ -83,6 +83,10 @@
                 >Vuetify
                 <v-tooltip activator="parent">Vuetify 라이브러리 배우러 가기!</v-tooltip>
               </v-btn>
+              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('tiptap')"
+                >Tiptap
+                <v-tooltip activator="parent">Tiptap 에디터 배우러 가기!</v-tooltip>
+              </v-btn>
               <v-divider vertical></v-divider>
               <v-btn prepend-icon="mdi-link" @click="util.go('bun')"
                 >Bun

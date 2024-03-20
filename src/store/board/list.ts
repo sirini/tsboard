@@ -64,7 +64,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 
-    if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
+    if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
       util.go(TYPE_MATCH[config.value.type].name)
       return
     }
@@ -104,9 +104,25 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 검색 옵션 초기화하기
   function resetSearchKeyword(): void {
+    clearVariables()
+    loadPostList()
+  }
+
+  // 카테고리 번호에 해당하는 게시글들 가져오기
+  function loadPostsByCategory(categoryUid: number): void {
+    clearVariables()
+    option.value = "category"
+    keyword.value = categoryUid.toString()
+    loadPostList()
+  }
+
+  // 게시글 목록 가져오는 옵션 초기화하기
+  function clearVariables(): void {
+    sinceUid.value = 0
+    page.value = 1
+    pageLength.value = 1
     option.value = "title"
     keyword.value = ""
-    loadPostList()
   }
 
   return {
@@ -122,5 +138,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     loadPrevPosts,
     loadNextPosts,
     resetSearchKeyword,
+    loadPostsByCategory,
   }
 })

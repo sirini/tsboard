@@ -4,7 +4,7 @@
       <v-card-text v-show="home.DEBUG.length > 0">{{ home.DEBUG }}</v-card-text>
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('home')">첫화면</v-btn>
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">첫화면</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">사이트 소개</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">라이선스</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('bugReport')"

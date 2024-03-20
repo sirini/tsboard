@@ -208,6 +208,77 @@ export async function getHashtagUids(tags: string[]): Promise<string> {
   return result.join("', '")
 }
 
+// 제목 혹은 본문 검색
+async function searchTitleContent(
+  param: PostParams,
+  direction: ">" | "<",
+  ordering: "ASC" | "DESC",
+): Promise<RowDataPacket[]> {
+  const result = await select(
+    `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND ${param.option} LIKE '%${param.keyword}%' AND uid ${direction} ? 
+    ORDER BY uid ${ordering} LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+  )
+  return result
+}
+
+// 글 작성자 이름으로 검색
+async function searchWriterName(
+  param: PostParams,
+  direction: ">" | "<",
+  ordering: "ASC" | "DESC",
+): Promise<RowDataPacket[]> {
+  let result: RowDataPacket[] = []
+  const [writer] = await select(`SELECT uid FROM ${table}user WHERE name = ? LIMIT 1`, [
+    param.keyword,
+  ])
+  if (writer) {
+    result = await select(
+      `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
+    ORDER BY uid ${ordering} LIMIT ?`,
+      [param.boardUid, CONTENT_STATUS.NORMAL, writer.uid, param.sinceUid, param.bunch],
+    )
+  }
+  return result
+}
+
+// 카테고리 번호로 검색
+async function searchCategoryUid(
+  param: PostParams,
+  direction: ">" | "<",
+  ordering: "ASC" | "DESC",
+): Promise<RowDataPacket[]> {
+  const categoryUid = parseInt(param.keyword)
+  const result = await select(
+    `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND category_uid = ? AND status = ? AND uid ${direction} ? 
+    ORDER BY uid ${ordering} LIMIT ?`,
+    [param.boardUid, categoryUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+  )
+  return result
+}
+
+// 태그명으로 검색
+async function searchTagName(
+  param: PostParams,
+  direction: ">" | "<",
+  ordering: "ASC" | "DESC",
+): Promise<RowDataPacket[]> {
+  const tags = param.keyword.split(" ")
+  const tagUidStr = await getHashtagUids(tags)
+  const result = await select(
+    `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
+    FROM ${table}post JOIN ${table}post_hashtag ON ${table}post.uid = ${table}post_hashtag.post_uid 
+    WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
+    GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
+    ORDER BY ${table}post.uid ${ordering} LIMIT ?`,
+    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, tags.length, param.bunch],
+  )
+  return result
+}
+
 // 검색어가 있을 경우의 글 목록 가져오기
 export async function getSearchedPosts(
   param: PostParams,
@@ -217,35 +288,13 @@ export async function getSearchedPosts(
   let result: RowDataPacket[] = []
 
   if (param.option === "title" || param.option === "content") {
-    result = await select(
-      `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND ${param.option} LIKE '%${param.keyword}%' AND uid ${direction} ? 
-    ORDER BY uid ${ordering} LIMIT ?`,
-      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
-    )
+    result = await searchTitleContent(param, direction, ordering)
   } else if (param.option === "writer") {
-    const [writer] = await select(`SELECT uid FROM ${table}user WHERE name = ? LIMIT 1`, [
-      param.keyword,
-    ])
-    if (writer) {
-      result = await select(
-        `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
-    ORDER BY uid ${ordering} LIMIT ?`,
-        [param.boardUid, CONTENT_STATUS.NORMAL, writer.uid, param.sinceUid, param.bunch],
-      )
-    }
+    result = await searchWriterName(param, direction, ordering)
+  } else if (param.option === "category") {
+    result = await searchCategoryUid(param, direction, ordering)
   } else if (param.option === "tag") {
-    const tags = param.keyword.split(" ")
-    const tagUidStr = await getHashtagUids(tags)
-    result = await select(
-      `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post JOIN ${table}post_hashtag ON ${table}post.uid = ${table}post_hashtag.post_uid 
-    WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
-    GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
-    ORDER BY ${table}post.uid ${ordering} LIMIT ?`,
-      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, tags.length, param.bunch],
-    )
+    result = await searchTagName(param, direction, ordering)
   }
   return result
 }
@@ -264,7 +313,7 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
   }
 
   let posts: RowDataPacket[] = []
-  if (param.keyword.length > 1) {
+  if (param.keyword.length > 0) {
     posts = await getSearchedPosts(param, direction, ordering)
   } else {
     posts = await select(

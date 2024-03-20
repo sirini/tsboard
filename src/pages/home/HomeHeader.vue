@@ -2,7 +2,7 @@
   <v-app-bar rounded="0" flat :color="home.color.header" class="appbar">
     <v-toolbar :color="home.color.header">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title @click="util.go('home')" class="title">
+      <v-app-bar-title @click="home.coming" class="title">
         TSBOARD<span>.dev</span>
       </v-app-bar-title>
 
@@ -61,7 +61,7 @@ import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import { NOTICE_TYPE } from "../../../server/database/board/const"
-import { NoticeType } from "../../interface/home"
+import { NoticeType, PostItem } from "../../interface/home"
 
 const auth = useAuthStore()
 const util = useUtilStore()

@@ -27,10 +27,20 @@
                       ><v-icon size="small" v-else>mdi-heart-outline</v-icon>
                       {{ util.num(post.like) }}</span
                     >
+                    <v-divider vertical></v-divider>
+                    <span class="col no text-center"
+                      ><v-icon size="small">mdi-comment-outline</v-icon>
+                      {{ util.num(post.reply) }}</span
+                    >
 
-                    <v-divider vertical></v-divider>
-                    <span class="col cat text-center">{{ post.category.name }}</span>
-                    <v-divider vertical></v-divider>
+                    <span class="col cat text-center">
+                      <v-chip
+                        size="small"
+                        color="blue-grey"
+                        @click="list.loadPostsByCategory(post.category.uid)"
+                        >{{ post.category.name }}</v-chip
+                      >
+                    </span>
                   </template>
 
                   <v-list-item-title
@@ -45,9 +55,7 @@
                       v-if="post.status === CONTENT_STATUS.NOTICE"
                       >공지</v-chip
                     >
-                    {{ post.title }}
-
-                    <v-chip class="ml-2" size="small" color="blue-grey">{{ post.reply }}</v-chip>
+                    {{ util.unescape(post.title) }}
                   </v-list-item-title>
 
                   <template v-slot:append>

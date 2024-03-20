@@ -4,6 +4,8 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
+import { BoardType } from "./board"
+
 export type AdminBreadcrumb = {
   title: string
   href: string
@@ -23,8 +25,6 @@ export type AdminBoardConfigGroup = {
   selected: string
   list: AdminPair[]
 }
-
-export type BoardType = "board" | "gallery" | "blog"
 
 export type AdminBoardConfig = AdminPair & {
   id: string

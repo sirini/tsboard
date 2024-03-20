@@ -14,6 +14,7 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
+import { BOARD_TYPE, BoardType } from "../../../interface/board"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -141,16 +142,12 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 게시판 타입 변경하기
   async function changeType(): Promise<void> {
-    let newType = 0
-    if (board.value.type === "gallery") newType = 1
-    else if (board.value.type === "blog") newType = 2
-
     const response = await server.api.admin.board.general.changetype.patch({
       $headers: {
         authorization: auth.user.token,
       },
       boardUid: board.value.uid,
-      newType,
+      newType: board.value.type as number,
     })
     if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)

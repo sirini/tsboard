@@ -301,8 +301,8 @@ inserts.push(`INSERT INTO #db#board (
   point_view, point_write, point_comment, point_download
 ) VALUES (
   'free', 1, 1, 0, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1000, 1,
-  0, 0, 0, 0, 0,
-  0, 0, 0, 0
+  0, 0, 1, 1, 1,
+  0, 5, 2, -5
 )`)
 
 // 자유 게시판의 기본 카테고리

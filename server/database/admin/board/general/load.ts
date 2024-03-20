@@ -5,15 +5,9 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminBoardConfig, AdminPair, BoardType } from "../../../../../src/interface/admin"
+import { AdminBoardConfig, AdminPair } from "../../../../../src/interface/admin"
 import { INIT_BOARD_CONFIG } from "./const"
-
-// 게시판 형태 반영
-function convertBoardType(type: number): BoardType {
-  if (type === 1) return "gallery"
-  if (type === 2) return "blog"
-  return "board"
-}
+import { BoardType } from "../../../../../src/interface/board"
 
 // 주어진 아이디에 해당하는 게시판 설정 가져오기
 export async function getBoardConfig(id: string): Promise<AdminBoardConfig> {
@@ -56,7 +50,7 @@ WHERE board_uid = ? ORDER BY uid ASC`,
   result = {
     uid: board.uid,
     id,
-    type: convertBoardType(board.type as number),
+    type: board.type as BoardType,
     groups: grps,
     groupUid: board.group_uid,
     name: board.name,

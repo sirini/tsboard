@@ -106,7 +106,7 @@
           <v-col cols="4">
             <v-btn-toggle v-model="general.board.type" mandatory>
               <v-btn
-                value="board"
+                :value="BOARD_TYPE.BOARD"
                 prepend-icon="mdi-table-large"
                 @click="general.changeType"
                 color="primary"
@@ -114,7 +114,7 @@
                 <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
               </v-btn>
               <v-btn
-                value="gallery"
+                :value="BOARD_TYPE.GALLERY"
                 prepend-icon="mdi-view-gallery-outline"
                 @click="general.changeType"
                 color="primary"
@@ -235,6 +235,7 @@ import { useAdminStore } from "../../../store/admin/common"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
+import { BOARD_TYPE } from "../../../interface/board"
 
 const admin = useAdminStore()
 const util = useUtilStore()

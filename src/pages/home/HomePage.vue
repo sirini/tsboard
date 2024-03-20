@@ -4,11 +4,13 @@
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
-        <v-container class="wrap">
+        <v-card class="mx-auto wrap app" elevation="0" rounded="0" :width="home.width">
           <v-row class="mt-6">
-            <v-col>
+            <v-col :cols="home.cols">
               <v-card rounded="xl" class="box">
-                <v-card-title class="title">TSBOARD는 무엇인가요?</v-card-title>
+                <v-card-title class="title"
+                  ><v-icon class="mr-2">mdi-pin</v-icon> TSBOARD는 무엇인가요?</v-card-title
+                >
                 <v-divider></v-divider>
                 <v-card-text class="pa-0 list">
                   <v-list>
@@ -29,9 +31,12 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            <v-col>
+
+            <v-col :cols="home.cols">
               <v-card rounded="xl" class="box">
-                <v-card-title class="title">왜 개발했나요?</v-card-title>
+                <v-card-title class="title"
+                  ><v-icon class="mr-2">mdi-pin</v-icon> 왜 개발했나요?</v-card-title
+                >
                 <v-divider></v-divider>
                 <v-card-text class="pa-0 list">
                   <v-list>
@@ -45,14 +50,20 @@
                       확장해 보려고 시작했습니다.
                     </v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item><strong>그냥 재밌어서</strong> 만들었어요. 😙</v-list-item>
+                    <v-list-item
+                      >개발하다보니 마음에 들어서 여러분들과 함께 쓰려고 공개하게
+                      되었습니다.</v-list-item
+                    >
                   </v-list>
                 </v-card-text>
               </v-card>
             </v-col>
-            <v-col>
+
+            <v-col :cols="home.cols">
               <v-card rounded="xl" class="box">
-                <v-card-title class="title">어디서 받나요?</v-card-title>
+                <v-card-title class="title"
+                  ><v-icon class="mr-2">mdi-pin</v-icon> 어디서 받나요?</v-card-title
+                >
                 <v-divider></v-divider>
                 <v-card-text class="pa-0 list">
                   <v-list>
@@ -61,7 +72,7 @@
                       운영하실 사이트의 목적에 맞게 수정하여 활용하실 수 있습니다.</v-list-item
                     >
                     <v-list-item>
-                      설치 안내는 Github 페이지에서 확인 하실 수 있습니다. (준비중)
+                      설치 안내는 Github 페이지에서 확인 하실 수 있습니다. (작성중입니다 T_T)
                     </v-list-item>
                   </v-list>
                 </v-card-text>
@@ -69,16 +80,15 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn prepend-icon="mdi-download" append-icon="mdi-github" color="blue-grey"
-                    >Download from Github</v-btn
-                  >
+                    >Download from Github
+                    <v-tooltip activator="parent">TSBOARD 깃허브 페이지로 이동합니다!</v-tooltip>
+                  </v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-col>
-          </v-row>
 
-          <v-row class="mb-12">
-            <v-col v-for="(post, index) in home.latestPosts" :key="index" cols="4">
+            <v-col v-for="(post, index) in home.latestPosts" :key="index" :cols="home.cols">
               <v-card
                 rounded="xl"
                 class="box"
@@ -132,16 +142,23 @@
                 </v-card-actions>
               </v-card>
             </v-col>
-            <v-col cols="4">
-              <v-card rounded="xl" class="box" :color="home.color.header">
-                <v-card-title class="title load">이전 게시글 불러오기</v-card-title>
+
+            <v-col :cols="home.cols">
+              <v-card
+                rounded="xl"
+                class="box"
+                :color="home.color.header"
+                @click="home.loadLatestPosts"
+                variant="outlined"
+              >
+                <v-card-title class="title">이전 게시글 불러오기</v-card-title>
                 <v-card-text class="text-center mt-6">
-                  <v-icon size="150" @click="home.loadLatestPosts">mdi-restore</v-icon>
+                  <v-icon size="150">mdi-restore</v-icon>
                 </v-card-text>
               </v-card>
             </v-col>
           </v-row>
-        </v-container>
+        </v-card>
         <home-footer></home-footer>
       </v-main>
     </v-layout>
@@ -184,9 +201,6 @@ onMounted(() => home.loadLatestPosts())
   height: 50px;
   font-weight: bold;
   overflow: hidden;
-}
-.box .load {
-  color: white;
 }
 .box .list {
   line-height: 1.8em;

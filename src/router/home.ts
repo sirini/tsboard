@@ -80,4 +80,12 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     },
     component: () => import("@/pages/home/HomePage.vue"),
   },
+  {
+    path: PREFIX + "/learn/tiptap",
+    name: "tiptap",
+    beforeEnter: () => {
+      location.href = "https://tiptap.dev"
+    },
+    component: () => import("@/pages/home/HomePage.vue"),
+  },
 ]

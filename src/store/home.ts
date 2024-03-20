@@ -9,6 +9,7 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
+import { useUtilStore } from "./util"
 import { GroupItem, NoticeType, Notification, PostItem } from "../interface/home"
 import { NOTICE_TYPE } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
@@ -16,10 +17,14 @@ import { HOME } from "../messages/store/home"
 export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
+  const util = useUtilStore()
   const drawer = ref<boolean>(false)
   const notifications = ref<Notification[]>([])
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
+  const sidebarWidth = ref<number>(300)
+  const width = ref<number>(1200)
+  const cols = ref<number>(4)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])
@@ -32,6 +37,14 @@ export const useHomeStore = defineStore("home", () => {
     },
   }
   const DEBUG = ref<string>("")
+
+  // 첫화면 갱신하기
+  function coming(): void {
+    sinceUid.value = 0
+    latestPosts.value = [] as PostItem[]
+    loadLatestPosts()
+    util.go("home")
+  }
 
   // 방문 기록 저장하기
   async function visit(): Promise<void> {
@@ -53,8 +66,29 @@ export const useHomeStore = defineStore("home", () => {
     })
   }
 
+  // 최신글 그리드 개수 및 최대 너버 지정
+  function setGridLayout(): void {
+    if (window.innerWidth < 500) {
+      width.value = 500
+      cols.value = 12
+    } else if (window.innerWidth > 499 && window.innerWidth < 1000) {
+      width.value = 900
+      cols.value = 6
+    } else if (window.innerWidth > 999 && window.innerWidth < 1500) {
+      width.value = 1300
+      cols.value = 4
+    } else if (window.innerWidth > 1499 && window.innerWidth < 2000) {
+      width.value = 1700
+      cols.value = 3
+    } else {
+      width.value = 2500
+      cols.value = 2
+    }
+  }
+
   // 최신글 목록 가져오기
   async function loadLatestPosts(): Promise<void> {
+    setGridLayout()
     const response = await server.api.home.latest.get({
       $query: {
         sinceUid: sinceUid.value,
@@ -144,10 +178,16 @@ export const useHomeStore = defineStore("home", () => {
     drawer,
     notifications,
     haveNewNotification,
+    width,
+    cols,
     sidebarLinks,
+    sidebarWidth,
+    sinceUid,
     latestPosts,
     color,
+    coming,
     visit,
+    setGridLayout,
     loadLatestPosts,
     loadNotification,
     translateNotification,
