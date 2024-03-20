@@ -73,7 +73,18 @@ export async function addNewUser(user: Signup): Promise<boolean> {
     `INSERT INTO ${table}user 
   (id, name, password, profile, level, point, signature, signup, signin, blocked) 
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [user.email, user.name, user.password, "", 0, 0, "", Date.now(), 0, 0],
+    [
+      user.email,
+      user.name,
+      user.password,
+      "",
+      process.env.NEW_MEMBER_LEVEL ?? 1,
+      process.env.NEW_MEMBER_POINT ?? 100,
+      "",
+      Date.now(),
+      0,
+      0,
+    ],
   )
   if (insertId > 1) {
     return true
