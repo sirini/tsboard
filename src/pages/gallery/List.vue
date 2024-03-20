@@ -17,7 +17,7 @@
               >
                 <gallery-grid-item :item="image"></gallery-grid-item>
               </v-col>
-              <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-6">
+              <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-12">
                 <v-icon>mdi-information</v-icon> 아직 올려진 사진이 없거나, 목록을 볼 수 있는 권한이
                 없습니다.
               </v-col>
