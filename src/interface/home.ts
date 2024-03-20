@@ -29,6 +29,7 @@ export type Notification = {
 
 export type BoardItem = {
   id: string
+  type: BoardType
   name: string
   info: string
 }
