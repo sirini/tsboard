@@ -11,7 +11,7 @@
             </v-card-title>
             <v-divider></v-divider>
 
-            <v-list><alert-bar></alert-bar></v-list>
+            <alert-bar></alert-bar>
             <div class="text-center mt-9 mb-9">
               <v-otp-input
                 v-model="signup.verificationCode"
