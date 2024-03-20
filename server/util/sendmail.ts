@@ -8,6 +8,11 @@ import { createTransport } from "nodemailer"
 import { MailOptions } from "nodemailer/lib/json-transport"
 
 export async function sendMail(to: string, subject: string, html: string): Promise<void> {
+  if (process.env.GMAIL_APP_PASSWORD === undefined || process.env.GMAIL_APP_PASSWORD === "") {
+    console.log(`[util/sendMail] requires app password from your google account.`)
+    return
+  }
+
   try {
     const transporter = createTransport({
       service: "gmail",
@@ -15,11 +20,8 @@ export async function sendMail(to: string, subject: string, html: string): Promi
       port: 587,
       secure: true,
       auth: {
-        type: "OAuth2",
-        user: process.env.GMAIL_OAUTH_USER,
-        clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
-        clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
+        user: process.env.GMAIL_ID ?? "",
+        pass: process.env.GMAIL_APP_PASSWORD ?? "",
       },
     })
 

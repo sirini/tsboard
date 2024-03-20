@@ -46,12 +46,10 @@ SITE_NAME=tsboard.dev
 SITE_URL=https://tsboard.dev
 SITE_TSBOARD_PATH=/
 
-# GMAIL OAUTH (이메일 발송 기능에 사용되며, 빈 값으로 둘 경우 해당 기능을 쓸 수 없습니다.)
-# 참고) https://velog.io/@13circle/Nodemailer-X-Gmail-OAuth-2.0
-GMAIL_OAUTH_USER=                # Oauth Client에서 테스트 사용자로 등록된 이메일 주소
-GMAIL_OAUTH_CLIENT_ID=           # OAuth Client의 아이디
-GAMIL_OAUTH_CLIENT_SECRET=       # OAuth Client의 보안 비밀번호
-GAMIL_OAUTH_REFRESH_TOKEN=       # playground에서 발급받은 리프레쉬 토큰
+# 구글 앱비밀번호 for GMAIL 발송
+# 참고) https://velog.io/@seul06/nodemailer
+GMAIL_ID=yourgmailaddress@gmail.com
+GMAIL_APP_PASSWORD=
 
 # 게시판 기본 생성 시 초기값 지정
 BOARD_ADMIN=1
@@ -101,10 +99,8 @@ v0.8.0 | tsboard.dev | ${chalk.gray("Currently only available in Korean.")}
 
 ✓ 추가로, 설치 후에 아래 항목들도 꼭 ${chalk.yellow.bold(".env")} 파일에서 수정해 주세요!
 
-  ${chalk.gray("GMAIL_OAUTH_USER")}
-  ${chalk.gray("GMAIL_OAUTH_CLIENT_ID")}
-  ${chalk.gray("GAMIL_OAUTH_CLIENT_SECRET")}
-  ${chalk.gray("GAMIL_OAUTH_REFRESH_TOKEN")}
+  ${chalk.gray("GMAIL_ID")}
+  ${chalk.gray("GMAIL_APP_PASSWORD")}
 `
 
 const installTitle = `

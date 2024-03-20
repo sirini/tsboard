@@ -24,7 +24,7 @@ export const resetPassword = new Elysia()
       if ((await isValidEmail(email)) === false) {
         return fail(`Invalid email address.`, response)
       }
-      if (process.env.GMAIL_OAUTH_USER === "") {
+      if (process.env.GMAIL_APP_PASSWORD === undefined || process.env.GMAIL_APP_PASSWORD === "") {
         await askResetPassword(email)
         return success(response)
       }

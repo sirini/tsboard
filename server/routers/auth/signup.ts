@@ -36,7 +36,7 @@ export const signUp = new Elysia()
       }
 
       // .env 에서 GMAIL 설정이 안되어 있을 경우 바로 추가
-      if (process.env.GMAIL_OAUTH_USER === "") {
+      if (process.env.GMAIL_APP_PASSWORD === undefined || process.env.GMAIL_APP_PASSWORD === "") {
         const result = await addNewUser({ email, password, name })
         if (result === false) {
           return fail(`Unable to add a new user. (${email}, ${password}, ${name})`, response)
