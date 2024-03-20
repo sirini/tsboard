@@ -36,7 +36,6 @@ export const useHomeStore = defineStore("home", () => {
       footer: "blue-grey-lighten-5",
     },
   }
-  const DEBUG = ref<string>("")
 
   // 첫화면 갱신하기
   function coming(): void {
@@ -69,21 +68,17 @@ export const useHomeStore = defineStore("home", () => {
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
     if (window.innerWidth < 500) {
-      width.value = 500
       cols.value = 12
     } else if (window.innerWidth > 499 && window.innerWidth < 1000) {
-      width.value = 900
       cols.value = 6
     } else if (window.innerWidth > 999 && window.innerWidth < 1500) {
-      width.value = 1300
       cols.value = 4
     } else if (window.innerWidth > 1499 && window.innerWidth < 2000) {
-      width.value = 1700
       cols.value = 3
     } else {
-      width.value = 2500
       cols.value = 2
     }
+    width.value = window.innerWidth - 200
   }
 
   // 최신글 목록 가져오기
@@ -174,7 +169,6 @@ export const useHomeStore = defineStore("home", () => {
   }
 
   return {
-    DEBUG,
     drawer,
     notifications,
     haveNewNotification,

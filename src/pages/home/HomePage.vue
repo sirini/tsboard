@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-card class="mx-auto wrap app" elevation="0" rounded="0" :width="home.width">
-          <v-row class="mt-6">
+          <v-row class="mt-6 mb-12">
             <v-col :cols="home.cols">
               <v-card rounded="xl" class="box">
                 <v-card-title class="title"
@@ -15,17 +15,16 @@
                 <v-card-text class="pa-0 list">
                   <v-list>
                     <v-list-item prepend-icon="mdi-language-typescript">
-                      TSBOARD는 <strong>타입스크립트</strong>로 작성된 오픈소스 게시판입니다. (MIT
-                      license)
+                      TSBOARD는 <strong>타입스크립트</strong>로 작성된 오픈소스 게시판입니다.
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item prepend-icon="mdi-vuejs">
-                      프론트엔드는 Vue 3 / Vuetify / Vue Router / Pinia 로 구성되어 있습니다.
+                      프론트엔드는 Vue 3 / Vuetify / Vue Router / Pinia / Tiptap 으로 구성되어
+                      있습니다.
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item prepend-icon="mdi-database-sync-outline">
-                      백엔드는 Bun / ElysiaJS / MySQL(MariaDB) 로 구성되며, 웹서버는 Nginx를
-                      권장합니다.
+                      백엔드는 Bun / ElysiaJS / MySQL(MariaDB) 로 구성됩니다.
                     </v-list-item>
                   </v-list>
                 </v-card-text>
@@ -40,19 +39,14 @@
                 <v-divider></v-divider>
                 <v-card-text class="pa-0 list">
                   <v-list>
-                    <v-list-item>
+                    <v-list-item prepend-icon="mdi-check">
                       타입스크립트 언어가 마음에 들어서 이 언어로 풀스택 게시판을 만들어보고자
                       시작한 프로젝트입니다.
                     </v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item>
-                      중소형 커뮤니티 사이트 제작에도 활용하고, 추후 블로그나 쇼핑몰까지 기능을
-                      확장해 보려고 시작했습니다.
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-list-item
-                      >개발하다보니 마음에 들어서 여러분들과 함께 쓰려고 공개하게
-                      되었습니다.</v-list-item
+                    <v-list-item prepend-icon="mdi-check"
+                      >개발하다보니 생각보다 쓸만해서 다른 분들과 함께 쓰고 개선해 나가면 좋겠다
+                      싶어 공개하게 되었습니다.</v-list-item
                     >
                   </v-list>
                 </v-card-text>
@@ -68,15 +62,16 @@
                 <v-card-text class="pa-0 list">
                   <v-list>
                     <v-list-item
-                      >TSBOARD는 깃허브(Github)를 통해 소스코드 전체를 내려받으실 수 있으며,
-                      운영하실 사이트의 목적에 맞게 수정하여 활용하실 수 있습니다.</v-list-item
+                      >TSBOARD는 깃허브를 통해 소스코드 전체를 내려받으실 수 있으며, 사이트의 목적에
+                      맞게 수정하여 활용하실 수 있습니다.</v-list-item
                     >
+                    <v-divider></v-divider>
                     <v-list-item>
                       설치 안내는 Github 페이지에서 확인 하실 수 있습니다. (작성중입니다 T_T)
                     </v-list-item>
                   </v-list>
                 </v-card-text>
-                <v-divider class="mt-4"></v-divider>
+                <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn prepend-icon="mdi-download" append-icon="mdi-github" color="blue-grey"

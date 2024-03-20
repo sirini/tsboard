@@ -1,7 +1,6 @@
 <template>
   <v-footer class="footer" :color="home.color.footer">
     <v-card elevation="0" rounded="0" class="mx-auto" :color="home.color.footer">
-      <v-card-text v-show="home.DEBUG.length > 0">{{ home.DEBUG }}</v-card-text>
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">첫화면</v-btn>
