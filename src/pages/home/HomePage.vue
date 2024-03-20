@@ -199,7 +199,7 @@ onMounted(() => home.loadLatestPosts())
 }
 .box .list {
   line-height: 1.8em;
-  font-size: 1em;
+  font-size: 0.9em;
   color: #263238;
 }
 .box .content {

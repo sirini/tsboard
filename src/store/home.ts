@@ -41,7 +41,6 @@ export const useHomeStore = defineStore("home", () => {
   function coming(): void {
     sinceUid.value = 0
     latestPosts.value = [] as PostItem[]
-    loadLatestPosts()
     util.go("home")
   }
 
