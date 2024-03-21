@@ -7,8 +7,8 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
-import { ChatHistory } from "../../../src/interface/user"
-import { getChatHistory, isBannedByOther, saveNewChat } from "../../database/user/chat"
+import { ChatHistory, ChatItem } from "../../../src/interface/user"
+import { getChatHistory, getChatList, isBannedByOther, saveNewChat } from "../../database/user/chat"
 import { havePermission } from "../../database/board/common"
 
 export const chat = new Elysia()
@@ -31,6 +31,23 @@ export const chat = new Elysia()
       accessUserUid,
     }
   })
+  .get(
+    "/load/chatlist",
+    async ({ query: { limit }, accessUserUid }) => {
+      let response: ChatItem[] = []
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
+      }
+      const list = await getChatList(accessUserUid, limit)
+      return success(list)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        limit: t.Numeric(),
+      }),
+    },
+  )
   .get(
     "/load/chathistory",
     async ({ query: { userUid, limit }, accessUserUid }) => {

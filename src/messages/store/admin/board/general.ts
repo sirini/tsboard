@@ -35,4 +35,6 @@ export const GENERAL = {
   REMOVED_CATEGORY:
     "선택하신 카테고리를 성공적으로 삭제하고, 대상 글들의 카테고리를 기본으로 변경 하였습니다.",
   UNABLE_REMOVE_CATEGORY: "선택하신 카테고리를 삭제할 수 없었습니다.",
+  FAILED_CHANGE_USE_CATEGORY: "카테고리 사용 여부를 변경하지 못했습니다.",
+  CHANGED_USE_CATEGORY: "카테고리 사용 여부 업데이트에 성공하였습니다.",
 }

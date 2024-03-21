@@ -34,6 +34,7 @@ export type AdminBoardConfig = AdminPair & {
   info: string
   row: number
   width: number
+  useCategory: boolean
   categories: AdminPair[]
 }
 

@@ -24,7 +24,8 @@
             :key="index"
             @click="util.go('boardView', post.id, post.uid)"
             :prepend-avatar="
-              PREFIX + (post.writer.profile.length < 1 ? '/no-profile.svg' : post.writer.profile)
+              TSBOARD.PREFIX +
+              (post.writer.profile.length < 1 ? '/no-profile.svg' : post.writer.profile)
             "
           >
             <v-list-item-title>{{ post.content }}</v-list-item-title>
@@ -55,7 +56,7 @@
             :key="index"
             @click="util.go('boardView', comment.id, comment.uid)"
             :prepend-avatar="
-              PREFIX +
+              TSBOARD.PREFIX +
               (comment.writer.profile.length < 1 ? '/no-profile.svg' : comment.writer.profile)
             "
           >
@@ -87,7 +88,7 @@
             :key="index"
             @click="util.go('adminReportView', '', report.uid)"
             :prepend-avatar="
-              PREFIX +
+              TSBOARD.PREFIX +
               (report.writer.profile.length < 1 ? '/no-profile.svg' : report.writer.profile)
             "
           >
@@ -103,10 +104,10 @@
 <script setup lang="ts">
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

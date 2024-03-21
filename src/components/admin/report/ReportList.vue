@@ -45,7 +45,7 @@
         <template v-slot:prepend>
           <v-chip
             :prepend-avatar="
-              PREFIX + (list.to.profile.length < 1 ? '/no-profile.svg' : list.to.profile)
+              TSBOARD.PREFIX + (list.to.profile.length < 1 ? '/no-profile.svg' : list.to.profile)
             "
             color="red"
             class="mt-1"
@@ -68,7 +68,8 @@
         <template v-slot:append
           ><v-chip
             :prepend-avatar="
-              PREFIX + (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
+              TSBOARD.PREFIX +
+              (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
             "
             color="blue-grey"
             class="mt-1"
@@ -109,12 +110,12 @@ import { watch, onMounted } from "vue"
 import { useAdminReportStore } from "../../../store/admin/report/common"
 import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
+import { TSBOARD } from "../../../../tsboard.config"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const report = useAdminReportStore()
 const manage = useManageUserStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => report.loadReports())
 watch(

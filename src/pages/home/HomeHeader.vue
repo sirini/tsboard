@@ -18,25 +18,48 @@
         <v-tooltip activator="parent">로그아웃 페이지로 이동합니다.</v-tooltip>
       </v-btn>
 
-      <v-btn icon @click="home.checkedAllNotifications">
+      <v-btn icon :disabled="auth.user.uid < 1">
+        <v-icon>mdi-chat-outline </v-icon>
+        <v-menu activator="parent">
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in chat.list"
+              :key="index"
+              :prepend-avatar="
+                TSBOARD.PREFIX +
+                (item.sender.profile.length > 0 ? item.sender.profile : '/no-profile.svg')
+              "
+              :title="util.unescape(item.sender.name)"
+              :subtitle="util.unescape(item.message)"
+              @click="chat.openDialog(item.sender)"
+            >
+              <template v-slot:append>
+                <v-chip :color="home.color.header" class="ml-3" size="small">{{
+                  util.date(item.timestamp)
+                }}</v-chip>
+              </template>
+            </v-list-item>
+            <v-list-item v-if="chat.list.length < 1" prepend-icon="mdi-check-circle">
+              아직 생성된 채팅방이 없습니다.
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-tooltip activator="parent">나에게 온 채팅들 확인하기</v-tooltip>
+      </v-btn>
+
+      <v-btn icon @click="home.checkedAllNotifications" :disabled="auth.user.uid < 1">
         <v-badge color="error" v-if="home.haveNewNotification" dot>
-          <v-icon
-            >mdi-bell
-            <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
-          </v-icon>
+          <v-icon>mdi-bell </v-icon>
         </v-badge>
 
-        <v-icon v-else
-          >mdi-bell-outline
-          <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
-        </v-icon>
+        <v-icon v-else>mdi-bell-outline</v-icon>
 
         <v-menu activator="parent">
           <v-list>
             <v-list-item
               v-for="(noti, index) in home.notifications"
               :key="index"
-              :prepend-avatar="PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
+              :prepend-avatar="TSBOARD.PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
               @click="noti.id.length > 0 ? util.go('boardView', noti.id, noti.postUid) : ''"
             >
               {{ noti.fromUser.name }}님이 {{ home.translateNotification(noti.type) }}
@@ -50,8 +73,11 @@
             </v-list-item>
           </v-list>
         </v-menu>
+        <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
       </v-btn>
     </v-toolbar>
+
+    <chat-dialog></chat-dialog>
   </v-app-bar>
 </template>
 
@@ -60,15 +86,21 @@ import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
+import { useChatStore } from "../../store/user/chat"
 import { NOTICE_TYPE } from "../../../server/database/board/const"
-import { NoticeType, PostItem } from "../../interface/home"
+import { NoticeType } from "../../interface/home"
+import { TSBOARD } from "../../../tsboard.config"
+import ChatDialog from "../../components/user/ChatDialog.vue"
 
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const PREFIX = process.env.PREFIX || ""
+const chat = useChatStore()
 
-onMounted(() => home.loadNotification())
+onMounted(() => {
+  home.loadNotification()
+  chat.loadChatList()
+})
 </script>
 
 <style scoped type="scss">

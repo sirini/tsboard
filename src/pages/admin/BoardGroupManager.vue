@@ -2,11 +2,11 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
         <v-card-title>{{ general.group.id }} 그룹 관리</v-card-title>
         <v-divider></v-divider>
         <v-layout>
-          <v-navigation-drawer permanent location="left" width="200">
+          <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
               <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right" @click="">
                 <strong>일반</strong>
@@ -29,6 +29,7 @@ import { onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminGroupGeneralStore } from "../../store/admin/group/general"
+import { TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardGroupGeneral from "../../components/admin/group/BoardGroupGeneral.vue"
@@ -38,14 +39,14 @@ const admin = useAdminStore()
 const general = useAdminGroupGeneralStore()
 
 admin.clearBreadcrumbs()
-admin.addBreadcrumbs("게시판 그룹 목록", `${process.env.PREFIX}/admin/board`)
+admin.addBreadcrumbs("게시판 그룹 목록", `${TSBOARD.PREFIX}/admin/board`)
 
 onMounted(() => {
   if (route.params?.id.length > 1) {
     general.group.id = route.params.id as string
     admin.addBreadcrumbs(
       `${general.group.id} 그룹`,
-      `${process.env.PREFIX}/admin/board/group/${general.group.id}`,
+      `${TSBOARD.PREFIX}/admin/board/group/${general.group.id}`,
     )
   }
 })

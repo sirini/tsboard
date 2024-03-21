@@ -19,7 +19,8 @@
                   color="blue-grey"
                   class="mt-9 mb-9"
                   :prepend-avatar="
-                    PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
+                    TSBOARD.PREFIX +
+                    (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
                   "
                 >
                   {{ auth.user.id }}
@@ -131,6 +132,7 @@ import { useAuthStore } from "../../store/user/auth"
 import { useSignupStore } from "../../store/user/signup"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
+import { TSBOARD } from "../../../tsboard.config"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
@@ -139,7 +141,6 @@ const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const PREFIX = process.env.PREFIX || ""
 
 const visible = ref<boolean>(false)
 </script>

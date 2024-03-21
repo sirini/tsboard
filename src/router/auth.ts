@@ -5,42 +5,41 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const authRoutes: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/login",
+    path: TSBOARD.PREFIX + "/login",
     name: "login",
     component: () => import("@/pages/auth/Login.vue"),
   },
   {
-    path: PREFIX + "/logout",
+    path: TSBOARD.PREFIX + "/logout",
     name: "logout",
     component: () => import("@/pages/auth/Logout.vue"),
   },
   {
-    path: PREFIX + "/resetpassword",
+    path: TSBOARD.PREFIX + "/resetpassword",
     name: "resetpassword",
     component: () => import("@/pages/auth/ResetPassword.vue"),
   },
   {
-    path: PREFIX + "/changepassword/:target(\\d+)/:code",
+    path: TSBOARD.PREFIX + "/changepassword/:target(\\d+)/:code",
     name: "changepassword",
     component: () => import("@/pages/auth/ChangePassword.vue"),
   },
   {
-    path: PREFIX + "/signup",
+    path: TSBOARD.PREFIX + "/signup",
     name: "signup",
     component: () => import("@/pages/auth/Signup.vue"),
   },
   {
-    path: PREFIX + "/myinfo",
+    path: TSBOARD.PREFIX + "/myinfo",
     name: "myinfo",
     component: () => import("@/pages/auth/MyInfo.vue"),
   },
   {
-    path: PREFIX + "/verify/:target(\\d+)",
+    path: TSBOARD.PREFIX + "/verify/:target(\\d+)",
     name: "verify",
     component: () => import("@/pages/auth/Verify.vue"),
   },

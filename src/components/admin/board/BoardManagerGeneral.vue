@@ -217,12 +217,19 @@
                 </v-list>
               </v-menu>
               <v-tooltip activator="parent" location="top">
-                기본 카테고리는 삭제가 불가능하며, 기본 카테고리만 남아 있으면 자동으로 비활성화
-                됩니다.
+                기본 카테고리는 삭제가 불가능하며, 비활성화를 위해선 체크박스 해제가 필요합니다.
               </v-tooltip>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> 카테고리를 추가하거나 삭제하실 수 있습니다. </v-col>
+          <v-col>
+            <v-checkbox
+              v-model="general.boardUseCategory"
+              label="카테고리 사용하기"
+              @click="general.useCategory"
+              class="pa-0 checkbox"
+              hide-details
+            ></v-checkbox>
+          </v-col>
         </v-row>
       </v-list-item>
     </v-list>
@@ -250,3 +257,9 @@ onMounted(() => {
   general.loadGeneralConfig()
 })
 </script>
+
+<style scoped>
+.checkbox {
+  margin-top: -8px;
+}
+</style>

@@ -5,32 +5,31 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const boardRoutes: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/board/:id",
+    path: TSBOARD.PREFIX + "/board/:id",
     name: "boardList",
     component: () => import("@/pages/board/List.vue"),
   },
   {
-    path: PREFIX + "/board/:id/list/:page(\\d+)",
+    path: TSBOARD.PREFIX + "/board/:id/list/:page(\\d+)",
     name: "boardListPage",
     component: () => import("@/pages/board/List.vue"),
   },
   {
-    path: PREFIX + "/board/:id/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/board/:id/:no(\\d+)",
     name: "boardView",
     component: () => import("@/pages/board/View.vue"),
   },
   {
-    path: PREFIX + "/board/:id/write",
+    path: TSBOARD.PREFIX + "/board/:id/write",
     name: "boardWrite",
     component: () => import("@/pages/board/Write.vue"),
   },
   {
-    path: PREFIX + "/board/:id/write/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/board/:id/write/:no(\\d+)",
     name: "boardModify",
     component: () => import("@/pages/board/Write.vue"),
   },

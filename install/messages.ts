@@ -7,19 +7,7 @@ import chalk from "chalk"
 
 export const env = `#
 # TSBOARD 서버쪽 설정 파일
-# 클라이언트쪽 설정은 vite.config.ts 참조
-# 
-# 참조1 - 서버쪽 mysqld.sock 파일 경로는 시스템마다 상이하므로 따로 확인 필요 (DB_SOCK_PATH)
-# 참조2 - 메일 자동 발송을 위해 구글 메일 계정 필요하며, 맨 아래 참고) 부분을 꼭 따라해야 함
 #
-# 하다가 어려움이 있을 땐? tsboard.dev 방문!
-#
-
-# 기본 설정들
-SERVER_PORT=3100
-MAX_FILE_SIZE=102476800
-PROFILE_SIZE=256
-IMAGE_SIZE=512
 
 # 데이터베이스 세팅 (각 서버 설정에 맞게 변경 필요)
 DB_HOST=#dbhost#
@@ -29,49 +17,16 @@ DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
 
 # JWT 설정
-JWT_ACCESS_TIMEOUT=30   # min
-JWT_REFRESH_TIMEOUT=14  # day
 JWT_SECRET_KEY=#jwtsecret#
 
 # 관리자 아이디(이메일) 및 비밀번호
 ADMIN_ID=#adminid#
 ADMIN_PW=#adminpw#
 
-# 쿠키 설정
-COOKIE_HTTP_ONLY=true
-COOKIE_SECURE=false
-
-# 웹사이트 정보 설정 (메일 발송 시 링크 생성 등에 활용)
-SITE_NAME=tsboard.dev
-SITE_URL=https://tsboard.dev
-SITE_TSBOARD_PATH=/
-
 # 구글 앱비밀번호 for GMAIL 발송
 # 참고) https://velog.io/@seul06/nodemailer
 GMAIL_ID=yourgmailaddress@gmail.com
 GMAIL_APP_PASSWORD=
-
-# 게시판 기본 생성 시 초기값 지정
-BOARD_ADMIN=1
-BOARD_TYPE=0  # 0 = 게시판 / 1 = 갤러리 / 2 = 블로그(TBD)
-BOARD_NAME=please_update_name
-BOARD_INFO=please_update_info
-BOARD_ROW=20
-BOARD_WIDTH=1000
-BOARD_USE_CATEGORY=1
-BOARD_LEVEL_LIST=0
-BOARD_LEVEL_VIEW=0
-BOARD_LEVEL_WRITE=1
-BOARD_LEVEL_COMMENT=1
-BOARD_LEVEL_DOWNLOAD=1
-BOARD_POINT_VIEW=0
-BOARD_POINT_WRITE=10
-BOARD_POINT_COMMENT=5
-BOARD_POINT_DOWNLOAD=-10
-
-# 회원 가입 시 초기값
-NEW_MEMBER_LEVEL=1
-NEW_MEMBER_POINT=100
 `
 
 const foundEnvTitle = `

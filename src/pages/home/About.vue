@@ -5,11 +5,15 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto mt-12 mb-12" max-width="800">
+          <v-card
+            class="mx-auto mt-12 mb-12"
+            :max-width="home.staticWidth"
+            :color="home.color.header"
+          >
             <v-card-title>사이트 소개</v-card-title>
             <v-divider></v-divider>
-            <v-card-text class="about">
-              <p>&nbsp;</p>
+
+            <v-list class="about pa-6">
               <h2>찾아와 주신 여러분, 환영합니다!</h2>
               <p>&nbsp;</p>
               <p>
@@ -60,7 +64,8 @@
                 TSBOARD.DEV 웹사이트는 방구석 미니PC 위에서 현재 힘겹게 유지되고 있습니다. 간혹
                 접속이 안되더라도 너른 양해 부탁드립니다. 🥲
               </p>
-            </v-card-text>
+            </v-list>
+
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')"

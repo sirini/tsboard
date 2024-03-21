@@ -5,27 +5,26 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const homeRoutes: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/",
+    path: TSBOARD.PREFIX + "/",
     name: "home",
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/about",
+    path: TSBOARD.PREFIX + "/about",
     name: "about",
     component: () => import("@/pages/home/About.vue"),
   },
   {
-    path: PREFIX + "/license",
+    path: TSBOARD.PREFIX + "/license",
     name: "license",
     component: () => import("@/pages/home/License.vue"),
   },
   {
-    path: PREFIX + "/bugreport",
+    path: TSBOARD.PREFIX + "/bugreport",
     name: "bugReport",
     beforeEnter: () => {
       location.href = "https://github.com/sirini/tsboard/issues"
@@ -33,7 +32,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/tsboard",
+    path: TSBOARD.PREFIX + "/tsboard",
     name: "tsboard",
     beforeEnter: () => {
       location.href = "https://tsboard.dev"
@@ -41,7 +40,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/typescript",
+    path: TSBOARD.PREFIX + "/learn/typescript",
     name: "typescript",
     beforeEnter: () => {
       location.href = "https://www.typescriptlang.org/ko/"
@@ -49,7 +48,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/vue",
+    path: TSBOARD.PREFIX + "/learn/vue",
     name: "vue",
     beforeEnter: () => {
       location.href = "https://ko.vuejs.org/"
@@ -57,7 +56,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/vuetify",
+    path: TSBOARD.PREFIX + "/learn/vuetify",
     name: "vuetify",
     beforeEnter: () => {
       location.href = "https://vuetifyjs.com/en/introduction/why-vuetify/#what-is-vuetify3f"
@@ -65,7 +64,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/bun",
+    path: TSBOARD.PREFIX + "/learn/bun",
     name: "bun",
     beforeEnter: () => {
       location.href = "https://bun.sh/"
@@ -73,7 +72,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/elysia",
+    path: TSBOARD.PREFIX + "/learn/elysia",
     name: "elysia",
     beforeEnter: () => {
       location.href = "https://elysiajs.com/"
@@ -81,7 +80,7 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/HomePage.vue"),
   },
   {
-    path: PREFIX + "/learn/tiptap",
+    path: TSBOARD.PREFIX + "/learn/tiptap",
     name: "tiptap",
     beforeEnter: () => {
       location.href = "https://tiptap.dev"

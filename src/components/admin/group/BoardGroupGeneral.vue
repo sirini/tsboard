@@ -17,7 +17,7 @@
                   <v-list-item
                     v-for="(user, index) in general.suggestions"
                     :key="index"
-                    :prepend-avatar="PREFIX + (user.profile || '/no-profile.svg')"
+                    :prepend-avatar="TSBOARD.PREFIX + (user.profile || '/no-profile.svg')"
                     @click="general.updateGroupManager(user)"
                   >
                     {{ user.name }}
@@ -35,7 +35,7 @@
           <v-col class="mt-1">
             <v-chip
               color="blue-grey"
-              :prepend-avatar="PREFIX + (general.group.manager.profile || '/no-profile.svg')"
+              :prepend-avatar="TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')"
               variant="tonal"
               >{{ general.group.manager.name }}
               <v-tooltip activator="parent"
@@ -138,12 +138,12 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const admin = useAdminStore()
 const auth = useAuthStore()
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => {
   if (auth.user.uid !== 1) {

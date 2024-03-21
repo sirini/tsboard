@@ -2,10 +2,10 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
         <v-card-title>신고 목록</v-card-title>
         <v-layout>
-          <v-navigation-drawer permanent location="left" width="200">
+          <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
               <v-list-item
                 prepend-icon="mdi-clipboard-text-clock-outline"
@@ -41,6 +41,7 @@
 import { ref } from "vue"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminReportStore } from "../../store/admin/report/common"
+import { TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import ReportList from "../../components/admin/report/ReportList.vue"
@@ -51,7 +52,7 @@ const report = useAdminReportStore()
 const menu = ref<string>("waiting")
 
 admin.clearBreadcrumbs()
-admin.addBreadcrumbs("신고 내역", `${process.env.PREFIX}/admin/report`)
+admin.addBreadcrumbs("신고 내역", `${TSBOARD.PREFIX}/admin/report`)
 
 // 해결된 신고 건인지 아닌지 구분하기
 function setSolvedOption(isSolved: boolean): void {

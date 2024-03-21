@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board" :width="list.config.width">
+          <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="list.config.width">
             <board-header :name="list.config.name" :info="list.config.info"></board-header>
 
             <v-card-text class="pa-0">
@@ -32,15 +32,6 @@
                       ><v-icon size="small">mdi-comment-outline</v-icon>
                       {{ util.num(post.reply) }}</span
                     >
-
-                    <span class="col cat text-center">
-                      <v-chip
-                        size="small"
-                        color="blue-grey"
-                        @click="list.loadPostsByCategory(post.category.uid)"
-                        >{{ post.category.name }}</v-chip
-                      >
-                    </span>
                   </template>
 
                   <v-list-item-title
@@ -55,6 +46,16 @@
                       v-if="post.status === CONTENT_STATUS.NOTICE"
                       >공지</v-chip
                     >
+
+                    <v-chip
+                      v-if="list.config.useCategory && post.status === CONTENT_STATUS.NORMAL"
+                      size="small"
+                      color="blue-grey"
+                      class="mr-2"
+                      @click="list.loadPostsByCategory(post.category.uid)"
+                      >{{ post.category.name }}</v-chip
+                    >
+
                     {{ util.unescape(post.title) }}
                   </v-list-item-title>
 
@@ -65,7 +66,7 @@
                       :profile="post.writer.profile"
                     ></user-nametag>
 
-                    <span class="col view text-center"
+                    <span class="col no text-center"
                       ><v-icon size="small">mdi-eye-outline</v-icon> {{ util.num(post.hit) }}</span
                     >
                     <v-divider vertical></v-divider>
@@ -81,7 +82,6 @@
       </v-main>
     </v-layout>
     <user-info-dialog></user-info-dialog>
-    <chat-dialog></chat-dialog>
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
   </v-app>
@@ -131,16 +131,7 @@ onMounted(() => list.loadPostList())
       cursor: pointer;
     }
     .no {
-      width: 70px;
-    }
-    .cat {
-      width: 100px;
-    }
-    .view {
-      width: 80px;
-    }
-    .heart {
-      width: 50px;
+      width: 60px;
     }
     .date {
       width: 80px;

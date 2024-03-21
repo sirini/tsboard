@@ -20,13 +20,13 @@ export async function sendMail(to: string, subject: string, html: string): Promi
       port: 587,
       secure: true,
       auth: {
-        user: process.env.GMAIL_ID ?? "",
-        pass: process.env.GMAIL_APP_PASSWORD ?? "",
+        user: process.env.GMAIL_ID!,
+        pass: process.env.GMAIL_APP_PASSWORD!,
       },
     })
 
     const options: MailOptions = {
-      from: process.env.GMAIL_OAUTH_USER,
+      from: process.env.GMAIL_ID,
       to,
       subject,
       html,

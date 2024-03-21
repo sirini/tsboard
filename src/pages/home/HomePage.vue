@@ -4,7 +4,7 @@
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
-        <v-card class="mx-auto wrap app" elevation="0" rounded="0" :width="home.width">
+        <v-card class="mx-auto wrap app" elevation="0" rounded="0" :max-width="home.width">
           <v-row class="mt-6 mb-12">
             <v-col :cols="home.cols">
               <v-card rounded="xl" class="box">
@@ -99,7 +99,7 @@
                   v-if="post.cover.length > 0"
                   height="200"
                   cover
-                  :src="PREFIX + post.cover"
+                  :src="TSBOARD.PREFIX + post.cover"
                 ></v-img>
                 <v-card-title class="title">
                   <v-chip size="small" class="mr-2" label color="blue-grey">{{
@@ -127,7 +127,7 @@
                   <v-spacer></v-spacer>
                   <v-chip
                     :prepend-avatar="
-                      PREFIX +
+                      TSBOARD.PREFIX +
                       (post.writer.profile.length > 0 ? post.writer.profile : '/no-profile.svg')
                     "
                     size="small"
@@ -168,10 +168,10 @@ import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
 import { BOARD_TYPE } from "../../interface/board"
+import { TSBOARD } from "../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => home.loadLatestPosts())
 </script>

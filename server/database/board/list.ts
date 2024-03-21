@@ -53,7 +53,7 @@ export async function getBoardConfig(id: string): Promise<BoardConfig> {
     info: board.info,
     row: board.row,
     width: board.width,
-    useCategory: board.use_category,
+    useCategory: board.use_category > 0 ? true : false,
     category,
     level: {
       list: board.level_list,

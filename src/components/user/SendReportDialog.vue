@@ -10,7 +10,9 @@
       <v-list>
         <alert-bar></alert-bar>
         <v-list-subheader>신고 대상자</v-list-subheader>
-        <v-list-item :prepend-avatar="PREFIX + (report.targetUser.profile || '/no-profile.svg')">
+        <v-list-item
+          :prepend-avatar="TSBOARD.PREFIX + (report.targetUser.profile || '/no-profile.svg')"
+        >
           <v-list-item-title>{{ report.targetUser.name }}</v-list-item-title>
         </v-list-item>
         <v-list-subheader>블랙리스트</v-list-subheader>
@@ -62,11 +64,11 @@
 <script setup lang="ts">
 import { useReportStore } from "../../store/user/report"
 import { useHomeStore } from "../../store/home"
+import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
 
 const report = useReportStore()
 const home = useHomeStore()
-const PREFIX = process.env.PREFIX || ""
 const rules: any = [
   (value: string) =>
     (value && value.length > 2 && value.length < 1000) ||

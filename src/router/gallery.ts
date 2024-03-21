@@ -5,27 +5,26 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const galleryRoutes: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/gallery/:id",
+    path: TSBOARD.PREFIX + "/gallery/:id",
     name: "galleryList",
     component: () => import("@/pages/gallery/List.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/gallery/:id/:no(\\d+)",
     name: "galleryOpen",
     component: () => import("@/pages/gallery/List.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/write",
+    path: TSBOARD.PREFIX + "/gallery/:id/write",
     name: "galleryWrite",
     component: () => import("@/pages/board/Write.vue"),
   },
   {
-    path: PREFIX + "/gallery/:id/write/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/gallery/:id/write/:no(\\d+)",
     name: "galleryModify",
     component: () => import("@/pages/board/Write.vue"),
   },

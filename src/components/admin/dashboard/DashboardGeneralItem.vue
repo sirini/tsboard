@@ -71,7 +71,7 @@
             v-for="(member, index) in dashboard.members"
             :key="index"
             :prepend-avatar="
-              PREFIX + (member.profile.length < 1 ? '/no-profile.svg' : member.profile)
+              TSBOARD.PREFIX + (member.profile.length < 1 ? '/no-profile.svg' : member.profile)
             "
             @click="util.go('adminUserManager', '', member.uid)"
             >{{ member.name }}
@@ -88,10 +88,10 @@
 <script setup lang="ts">
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

@@ -10,6 +10,7 @@ import { Signup } from "../../../src/interface/auth"
 import { generateRandomCode } from "../../util/tools"
 import { sendMail } from "../../util/sendmail"
 import { VERIFICATION } from "../../../src/messages/mail/verification"
+import { TSBOARD } from "../../../tsboard.config"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
 export async function isDuplicatedEmail(email: string): Promise<boolean> {
@@ -78,8 +79,8 @@ export async function addNewUser(user: Signup): Promise<boolean> {
       user.name,
       user.password,
       "",
-      process.env.NEW_MEMBER_LEVEL ?? 1,
-      process.env.NEW_MEMBER_POINT ?? 100,
+      TSBOARD.MEMBER.LEVEL,
+      TSBOARD.MEMBER.POINT,
       "",
       Date.now(),
       0,

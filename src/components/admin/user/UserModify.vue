@@ -4,7 +4,7 @@
       ><v-avatar size="100" class="mt-2 mb-2 mr-3"
         ><v-img
           :src="
-            PREFIX +
+            TSBOARD.PREFIX +
             (userModify.user.profile.length < 1 ? '/no-profile.svg' : userModify.user.profile)
           "
         ></v-img
@@ -171,13 +171,13 @@ import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useUtilStore } from "../../../store/util"
 import { useAdminUserModifyStore } from "../../../store/admin/user/modify"
+import { TSBOARD } from "../../../../tsboard.config"
 import AlertBar from "../../util/AlertBar.vue"
 
 const route = useRoute()
 const util = useUtilStore()
 const userModify = useAdminUserModifyStore()
 const visible = ref<boolean>(false)
-const PREFIX = process.env.PREFIX || ""
 
 // 멤버 고유 번호가 파라미터로 넘어오면 회원 정보 가져오기
 onMounted(() => {

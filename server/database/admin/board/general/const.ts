@@ -17,5 +17,6 @@ export const INIT_BOARD_CONFIG: AdminBoardConfig = {
   info: "",
   row: 0,
   width: 0,
+  useCategory: false,
   categories: [],
 }

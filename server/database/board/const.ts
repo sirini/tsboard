@@ -8,11 +8,9 @@ import {
   BoardConfig,
   Comment,
   CommentRelated,
-  Pair,
   Post,
   PostRelated,
   PostView,
-  Writer,
 } from "../../../src/interface/board"
 import { INIT_USER_BASIC } from "../../../src/interface/user"
 

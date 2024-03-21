@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board" max-width="1000">
+          <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
             <v-list>
               <v-list-item>
@@ -19,9 +19,9 @@
                     ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
                     {{ view.post.category.name }}</span
                   >
+                  <v-divider vertical v-if="view.config.useCategory" class="mr-4"></v-divider>
 
-                  <v-divider vertical></v-divider>
-                  <span class="ml-4 mr-4 text-caption"
+                  <span class="mr-4 text-caption"
                     >작성: {{ util.date(view.post.submitted, true, true) }}</span
                   >
 
@@ -30,6 +30,7 @@
                     >수정: {{ util.date(view.post.modified, true, true) }}</span
                   >
                 </template>
+
                 <template v-slot:append>
                   <span class="mr-4 text-caption"
                     ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon>
@@ -138,7 +139,6 @@
 
     <board-view-remove-post-dialog></board-view-remove-post-dialog>
     <user-info-dialog></user-info-dialog>
-    <chat-dialog></chat-dialog>
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
   </v-app>
@@ -166,7 +166,6 @@ import "../../assets/board/editor.scss"
 const auth = useAuthStore()
 const view = useBoardViewStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => view.loadPostView())
 </script>

@@ -38,6 +38,7 @@ import { CountPair, Pair, PostFile } from "../../../src/interface/board"
 import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { getFiles, getPost, getTags } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
+import { TSBOARD } from "../../../tsboard.config"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -58,7 +59,7 @@ const writeBody = {
   attachments: t.Optional(
     t.Files({
       type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
-      maxSize: parseInt(process.env.MAX_FILE_SIZE ?? "1024768000"),
+      maxSize: TSBOARD.MAX_FILE_SIZE,
       error: "Invalid file type.",
     }),
   ),

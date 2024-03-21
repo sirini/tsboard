@@ -10,6 +10,7 @@ import { prepareVerificationCode } from "./verify"
 import { sendMail } from "../../util/sendmail"
 import { ChangePassword } from "../../../src/interface/auth"
 import { RESETPASSWORD } from "../../../src/messages/mail/resetpassword"
+import { TSBOARD } from "../../../tsboard.config"
 
 // 이메일(아이디)로 회원 고유 번호 가져오기
 async function getUserUid(email: string): Promise<number> {
@@ -32,14 +33,14 @@ export async function isValidEmail(email: string): Promise<boolean> {
 // GMAIL OAUTH 등록이 안되어 있을경우 사이트 관리자에게 쪽지 보내기
 export async function askResetPassword(email: string): Promise<void> {
   const fromUid = await getUserUid(email)
-  const note = `[resetpassword] 비밀번호 초기화 요청 (회원 번호: ${fromUid} / 아이디: ${email})
-관리 화면에서 비밀번호를 임시로 초기화 해주세요. (${process.env.SITE_URL}${process.env.SITE_TSBOARD_PATH}admin/member/${fromUid})  
+  const message = `[resetpassword] 비밀번호 초기화 요청 (회원 번호: ${fromUid} / 아이디: ${email})
+관리 화면에서 비밀번호를 임시로 초기화 해주세요. (${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}admin/member/${fromUid})  
 이후 초기화한 비밀번호를 ${email} (으)로 전달해 주세요!
 `
   await insert(
-    `INSERT INTO ${table}note (to_uid, from_uid, note, timestamp) 
+    `INSERT INTO ${table}chat (to_uid, from_uid, message, timestamp) 
   VALUES (?, ?, ?, ?)`,
-    [1, fromUid, note, Date.now()],
+    [1, fromUid, message, Date.now()],
   )
 }
 
@@ -47,7 +48,6 @@ export async function askResetPassword(email: string): Promise<void> {
 export async function sendResetPassword(email: string): Promise<void> {
   const code = generateRandomCode()
   const uid = await prepareVerificationCode(code, email)
-
   let html = RESETPASSWORD.HTML.replaceAll("#uid#", uid.toString())
   html = html.replaceAll("#code#", code)
 

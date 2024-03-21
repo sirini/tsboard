@@ -32,7 +32,6 @@
     "core-js": "^3.29.0",
     "crypto-js": "^4.2.0",
     "elysia": "^0.8.17",
-    "elysia-ip": "^0.0.7",
     "highlight.js": "^11.9.0",
     "lowlight": "^3.1.0",
     "mysql2": "^3.9.2",

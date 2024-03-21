@@ -7,17 +7,15 @@
 import { AdminUserModifyParams } from "../../../../src/interface/admin"
 import { UserModifyResult } from "../../../../src/interface/auth"
 import {
-  generateDate,
   generateRandomID,
-  makeDirectory,
   makeSavePath,
   removeFile,
   resizeImage,
   saveUploadedFile,
 } from "../../../util/tools"
 import { table, select, update } from "../../common"
-import { mkdir, exists } from "node:fs/promises"
-import sharp from "sharp"
+import { exists } from "node:fs/promises"
+import { TSBOARD } from "../../../../tsboard.config"
 
 // 기존 회원 정보 가져오기
 export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
@@ -68,9 +66,8 @@ async function updateUserProfile(userUid: number, newProfile: File): Promise<str
   const savePath = await makeSavePath("profile")
   const newSavePath = `${savePath}/${generateRandomID()}.webp`
   const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
-  const profileSize = parseInt(process.env.PROFILE_SIZE || "256")
 
-  await resizeImage(tempFilePath, newSavePath, profileSize)
+  await resizeImage(tempFilePath, newSavePath, TSBOARD.IMAGE.PROFILE_SIZE)
   removeFile(tempFilePath)
 
   if ((await exists(newSavePath)) === false) {

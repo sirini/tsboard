@@ -5,7 +5,7 @@
         <v-main>
           <v-img
             class="text-center"
-            :src="PREFIX + viewer.files.at(viewer.position)"
+            :src="TSBOARD.PREFIX + viewer.files.at(viewer.position)"
             @mousedown="viewer.mouseDown"
             @mousemove="viewer.mouseMove"
             @mouseup="viewer.mouseUp"
@@ -49,7 +49,7 @@
                   <v-img
                     cover
                     height="80"
-                    :src="PREFIX + file"
+                    :src="TSBOARD.PREFIX + file"
                     :class="viewer.position === index ? 'selected' : 'deselected'"
                     @click="viewer.position = index"
                   ></v-img>
@@ -99,7 +99,7 @@
                 :commentContent="reply.content"
                 :commentLike="reply.like"
                 :writerProfile="
-                  PREFIX +
+                  TSBOARD.PREFIX +
                   (reply.writer.profile.length > 0 ? reply.writer.profile : '/no-profile.svg')
                 "
                 :writerUid="reply.writer.uid"
@@ -138,6 +138,7 @@ import { useCommentStore } from "../../../store/board/comment"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
+import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import UserNametag from "../../user/UserNametag.vue"
@@ -154,7 +155,6 @@ const viewer = useViewerStore()
 const util = useUtilStore()
 const comment = useCommentStore()
 const home = useHomeStore()
-const PREFIX = process.env.PREFIX || ""
 
 // 뷰어 다이얼로그 데이터 준비
 function prepare(): void {

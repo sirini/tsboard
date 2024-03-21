@@ -14,7 +14,6 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
-import { BOARD_TYPE, BoardType } from "../../../interface/board"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -27,6 +26,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardRows = ref<string>("20")
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
+  const boardUseCategory = ref<boolean>(true)
   const boardRemoveCategory = ref<AdminPair>({ uid: 0, name: "" })
 
   // 게시판 일반 설정 불러오기
@@ -52,6 +52,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     board.value = response.data.result.config
     boardRows.value = board.value.row.toString()
     boardWidth.value = board.value.width.toString()
+    boardUseCategory.value = board.value.useCategory
     admin.success(GENERAL.LOADED_CONFIG)
   }
 
@@ -270,6 +271,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardUid: board.value.uid,
       categoryUid: boardRemoveCategory.value.uid,
     })
+
     if (!response.data) {
       admin.error(GENERAL.NO_RESPONSE)
       return
@@ -285,12 +287,35 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     admin.success(GENERAL.REMOVED_CATEGORY)
   }
 
+  // 카테고리 사용 여부 설정하기
+  async function useCategory(): Promise<void> {
+    const response = await server.api.admin.board.general.usecategory.patch({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      boardUid: board.value.uid,
+      useCategory: boardUseCategory.value === true ? 0 : 1 /* reserved */,
+    })
+
+    if (!response.data) {
+      admin.error(GENERAL.NO_RESPONSE)
+      return
+    }
+    if (response.data.success === false) {
+      admin.error(`${GENERAL.FAILED_CHANGE_USE_CATEGORY} (${response.data.error})`)
+      return
+    }
+    auth.updateUserToken(response.data.result.newAccessToken)
+    admin.success(GENERAL.CHANGED_USE_CATEGORY)
+  }
+
   return {
     board,
     boardGroupName,
     boardRows,
     boardWidth,
     boardAddCategory,
+    boardUseCategory,
     boardRemoveCategory,
     confirmRemoveCategoryDialog,
     loadGeneralConfig,
@@ -304,5 +329,6 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     addCategory,
     confirmRemoveCategory,
     removeCategory,
+    useCategory,
   }
 })

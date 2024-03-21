@@ -12,7 +12,7 @@
 
         <v-list-item class="text-center">
           <v-avatar size="large">
-            <v-img :src="PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
+            <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
         </v-list-item>
 
@@ -85,12 +85,12 @@
 import { useUserStore } from "../../store/user/user"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
+import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
 
 const user = useUserStore()
 const home = useHomeStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

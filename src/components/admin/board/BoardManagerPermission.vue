@@ -35,7 +35,9 @@
           <v-col class="mt-1">
             <v-chip
               color="blue-grey"
-              :prepend-avatar="PREFIX + (permission.board.admin.profile || '/no-profile.svg')"
+              :prepend-avatar="
+                TSBOARD.PREFIX + (permission.board.admin.profile || '/no-profile.svg')
+              "
               variant="tonal"
               >{{ permission.board.admin.name }}
               <v-tooltip activator="parent">현재 게시판 관리자입니다.</v-tooltip>
@@ -99,10 +101,10 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
 import { ACTION_TYPE } from "../../../interface/admin"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const admin = useAdminStore()
 const auth = useAuthStore()
-const PREFIX = process.env.PREFIX || ""
 const permission = useAdminBoardPermissionStore()
 onMounted(() => {
   if (auth.user.uid !== 1) {

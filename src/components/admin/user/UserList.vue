@@ -44,7 +44,9 @@
         <template v-slot:prepend>
           <span class="date mr-3">{{ util.date(user.signup) }}</span>
           <v-chip
-            :prepend-avatar="PREFIX + (user.profile.length < 1 ? '/no-profile.svg' : user.profile)"
+            :prepend-avatar="
+              TSBOARD.PREFIX + (user.profile.length < 1 ? '/no-profile.svg' : user.profile)
+            "
             append-icon="mdi-email-outline"
             color="blue-grey"
             size="small"
@@ -106,13 +108,13 @@ import { watch, onMounted } from "vue"
 import { useAdminUserStore } from "../../../store/admin/user/common"
 import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
+import { TSBOARD } from "../../../../tsboard.config"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const adminUser = useAdminUserStore()
 const manage = useManageUserStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => adminUser.loadUsers())
 watch(

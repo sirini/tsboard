@@ -5,10 +5,37 @@
  */
 
 import { table, select, insert } from "../common"
-import { ChatHistory } from "../../../src/interface/user"
+import { ChatHistory, ChatItem } from "../../../src/interface/user"
 import { NOTICE_TYPE } from "../board/const"
 import { addNotification } from "../home/notification"
 import { NoticeType } from "../../../src/interface/home"
+
+// 나에게 온 채팅 목록들 가져오기
+export async function getChatList(accessUserUid: number, limit: number): Promise<ChatItem[]> {
+  let result: ChatItem[] = []
+
+  const chats = await select(
+    `SELECT from_uid, message, timestamp FROM ${table}chat 
+  WHERE to_uid = ? GROUP BY from_uid ORDER BY uid DESC LIMIT ?`,
+    [accessUserUid, limit],
+  )
+
+  for (const chat of chats) {
+    const [sender] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
+      chat.from_uid,
+    ])
+    result.push({
+      sender: {
+        uid: chat.from_uid,
+        name: sender.name,
+        profile: sender.profile,
+      },
+      message: chat.message,
+      timestamp: chat.timestamp,
+    })
+  }
+  return result
+}
 
 // 상대방과의 이전 채팅 내역 가져오기, 클라이언트에서 순서를 다시 뒤집어야 함
 export async function getChatHistory(

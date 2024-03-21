@@ -4,8 +4,8 @@
  * 관리화면 첫페이지 > 그룹, 게시판, 회원에 필요한 함수들
  */
 
-import { AdminLatest, AdminPair, AdminUserInfo } from "../../../../../src/interface/admin"
-import { table, update, select, remove, insert } from "../../../common"
+import { AdminUserInfo } from "../../../../../src/interface/admin"
+import { table, select } from "../../../common"
 
 // 그룹 목록을 최신 순으로 가져오기
 export async function getGroupList(limit: number): Promise<string[]> {

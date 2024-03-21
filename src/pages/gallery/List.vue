@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap" id="galleryContainer">
-          <v-card elevation="0" class="mx-auto" :width="gallery.config.width">
+          <v-card elevation="0" class="mx-auto" :max-width="gallery.config.width">
             <gallery-header></gallery-header>
             <v-divider class="mb-6"></v-divider>
             <v-row no-gutters>

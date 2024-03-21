@@ -4,7 +4,7 @@
  * 채팅, 신고, 정보 보기, 관리 하기 (관리자용) 관련 인터페이스
  */
 
-import { Pair } from "./board"
+import { Pair, Writer } from "./board"
 
 export type UserBasicInfo = Pair & {
   profile: string
@@ -27,6 +27,12 @@ export type UserPermission = {
 export type UserPermissionParams = UserPermission & {
   userUid: number
   response: string
+}
+
+export type ChatItem = {
+  sender: Writer
+  message: string
+  timestamp: number
 }
 
 export type ChatHistory = {

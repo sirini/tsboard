@@ -1,7 +1,7 @@
 <template>
   <v-chip class="pointer" :size="size || 'small'" color="blue-grey">
     <v-avatar start>
-      <v-img :src="PREFIX + (profile.length < 1 ? '/no-profile.svg' : profile)"></v-img>
+      <v-img :src="TSBOARD.PREFIX + (profile.length < 1 ? '/no-profile.svg' : profile)"></v-img>
     </v-avatar>
     {{ util.unescape(name) }}
 
@@ -68,6 +68,7 @@ import { useReportStore } from "../../store/user/report"
 import { useChatStore } from "../../store/user/chat"
 import { useManageUserStore } from "../../store/user/manageuser"
 import { useUtilStore } from "../../store/util"
+import { TSBOARD } from "../../../tsboard.config"
 
 const auth = useAuthStore()
 const user = useUserStore()
@@ -81,7 +82,6 @@ const props = defineProps<{
   name: string
   size?: string
 }>()
-const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

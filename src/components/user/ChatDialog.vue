@@ -11,7 +11,9 @@
         <v-list>
           <alert-bar></alert-bar>
           <v-list-subheader>받는 사람</v-list-subheader>
-          <v-list-item :prepend-avatar="PREFIX + (chat.targetUser.profile || '/no-profile.svg')">
+          <v-list-item
+            :prepend-avatar="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
+          >
             <v-list-item-title>{{ chat.targetUser.name }}</v-list-item-title>
           </v-list-item>
 
@@ -21,7 +23,9 @@
           <v-list-item v-for="(msg, index) in chat.history" :key="index" class="mt-2 mb-2">
             <template v-slot:prepend v-if="msg.userUid === chat.targetUser.uid">
               <v-avatar>
-                <v-img :src="PREFIX + (chat.targetUser.profile || '/no-profile.svg')"></v-img>
+                <v-img
+                  :src="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
+                ></v-img>
               </v-avatar>
             </template>
 
@@ -34,7 +38,7 @@
 
             <template v-slot:append v-if="msg.userUid === auth.user.uid">
               <v-avatar>
-                <v-img :src="PREFIX + (auth.user.profile || '/no-profile.svg')"></v-img>
+                <v-img :src="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"></v-img>
               </v-avatar>
             </template>
           </v-list-item>
@@ -66,13 +70,13 @@ import { useAuthStore } from "../../store/user/auth"
 import { useChatStore } from "../../store/user/chat"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
+import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
 
 const auth = useAuthStore()
 const chat = useChatStore()
 const home = useHomeStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 // 채팅 히스토리가 업데이트 될 때마다 스크롤을 밑으로 이동
 const delayForScroll = 250

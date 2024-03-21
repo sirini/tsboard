@@ -24,7 +24,7 @@
         <v-row no-gutters>
           <v-col v-for="(img, index) in image.loadImages" :key="index" cols="2" class="mb-3">
             <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
-              <v-img cover width="105" aspect-ratio="1/1" :src="PREFIX + img.name">
+              <v-img cover width="105" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img.name">
                 <div class="action">
                   <v-row no-gutters>
                     <v-col
@@ -85,6 +85,7 @@ import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { EDITOR } from "../../../messages/store/board/editor"
+import { TSBOARD } from "../../../../tsboard.config"
 import AlertBar from "../../util/AlertBar.vue"
 
 const editor = useBoardEditorStore()
@@ -95,7 +96,6 @@ const emits = defineEmits<{
   addImageURL: [src: string]
   removeImage: [src: string]
 }>()
-const PREFIX = process.env.PREFIX || ""
 
 watch(
   () => image.addImageFromDBDialog,
@@ -109,7 +109,7 @@ watch(
 
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
-  emits("addImageURL", PREFIX + src)
+  emits("addImageURL", TSBOARD.PREFIX + src)
 }
 
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)

@@ -6,6 +6,7 @@
 
 import { table, update, select, remove, insert } from "../../../common"
 import { removeFile } from "../../../../util/tools"
+import { TSBOARD } from "../../../../../tsboard.config"
 
 // 그룹 관리자 변경하기
 export async function changeGroupAdmin(groupUid: number, userUid: number): Promise<boolean> {
@@ -61,26 +62,26 @@ export async function createBoard(newId: string, groupUid: number): Promise<numb
     [
       newId,
       groupUid,
-      process.env.BOARD_ADMIN!,
-      process.env.BOARD_TYPE!,
-      process.env.BOARD_NAME!,
-      process.env.BOARD_INFO!,
-      process.env.BOARD_ROW!,
-      process.env.BOARD_WIDTH!,
-      process.env.BOARD_USE_CATEGORY!,
-      process.env.BOARD_LEVEL_LIST!,
-      process.env.BOARD_LEVEL_VIEW!,
-      process.env.BOARD_LEVEL_WRITE!,
-      process.env.BOARD_LEVEL_COMMENT!,
-      process.env.BOARD_LEVEL_DOWNLOAD!,
-      process.env.BOARD_POINT_VIEW!,
-      process.env.BOARD_POINT_WRITE!,
-      process.env.BOARD_POINT_COMMENT!,
-      process.env.BOARD_POINT_DOWNLOAD!,
+      TSBOARD.BOARD.ADMIN,
+      TSBOARD.BOARD.TYPE,
+      TSBOARD.BOARD.NAME,
+      TSBOARD.BOARD.INFO,
+      TSBOARD.BOARD.ROW!,
+      TSBOARD.BOARD.WIDTH,
+      TSBOARD.BOARD.USE_CATEGORY,
+      TSBOARD.BOARD.LEVEL.LIST,
+      TSBOARD.BOARD.LEVEL.VIEW,
+      TSBOARD.BOARD.LEVEL.WRITE,
+      TSBOARD.BOARD.LEVEL.COMMENT,
+      TSBOARD.BOARD.LEVEL.DOWNLOAD,
+      TSBOARD.BOARD.POINT.VIEW,
+      TSBOARD.BOARD.POINT.WRITE,
+      TSBOARD.BOARD.POINT.COMMENT,
+      TSBOARD.BOARD.POINT.DOWNLOAD,
     ],
   )
 
-  if (process.env.BOARD_USE_CATEGORY! === "1") {
+  if (TSBOARD.BOARD.USE_CATEGORY > 0) {
     await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
       boardUid,
       "lounge",

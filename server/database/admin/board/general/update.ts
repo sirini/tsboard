@@ -75,21 +75,6 @@ async function checkBoardUid(boardUid: number, categoryUid: number): Promise<boo
   return true
 }
 
-// 카테고리 삭제 전 카테고리 개수가 2개 이하인지 확인
-async function checkCategoryCount(boardUid: number): Promise<boolean> {
-  const [row] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}board_category WHERE board_uid = ?`,
-    [boardUid],
-  )
-  if (!row) {
-    return false
-  }
-  if (row.total_count < 2) {
-    return false
-  }
-  return true
-}
-
 // 카테고리 삭제 후 삭제된 카테고리 소속 게시글들은 uid가 가장 낮은 카테고리 소속으로 변경
 async function updateStatusCategory(boardUid: number, categoryUid: number): Promise<void> {
   const [cat] = await select(
@@ -111,12 +96,13 @@ export async function removeCategory(boardUid: number, categoryUid: number): Pro
   if ((await checkBoardUid(boardUid, categoryUid)) === false) {
     return false
   }
-  if ((await checkCategoryCount(boardUid)) === false) {
-    update(`UPDATE ${table}board SET use_category = ? WHERE uid = ? LIMIT 1`, [0, boardUid])
-    return false
-  }
 
   update(`UPDATE ${table}board_category SET board_uid = ? WHERE uid = ? LIMIT 1`, [0, categoryUid])
   updateStatusCategory(boardUid, categoryUid)
   return true
+}
+
+// 카테고리 사용여부 업데이트
+export async function updateUseCategory(boardUid: number, useCategory: number): Promise<void> {
+  update(`UPDATE ${table}board SET use_category = ? WHERE uid = ? LIMIT 1`, [useCategory, boardUid])
 }

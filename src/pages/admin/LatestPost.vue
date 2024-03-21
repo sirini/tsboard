@@ -2,10 +2,10 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
         <v-card-title>최신 글 톺아보기</v-card-title>
         <v-layout>
-          <v-navigation-drawer permanent location="left" wdith="200">
+          <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
               <v-list-item prepend-icon="mdi-cog-outline" append-icon="mdi-chevron-right">
                 <strong>일반</strong>
@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { useAdminStore } from "../../store/admin/common"
+import { TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import LatestPostGeneral from "../../components/admin/latest/LatestPostGeneral.vue"
@@ -32,7 +33,7 @@ import LatestPostGeneral from "../../components/admin/latest/LatestPostGeneral.v
 const admin = useAdminStore()
 
 admin.clearBreadcrumbs()
-admin.addBreadcrumbs("최신 글", `${process.env.PREFIX}/admin/latest/post`)
+admin.addBreadcrumbs("최신 글", `${TSBOARD.PREFIX}/admin/latest/post`)
 </script>
 
 <style scoped>

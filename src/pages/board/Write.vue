@@ -8,7 +8,7 @@
             elevation="0"
             rounded="0"
             class="mx-auto"
-            max-width="1000"
+            :max-width="editor.config.width"
             :loading="editor.loading"
           >
             <v-form fast-fail @submit.prevent>
@@ -25,7 +25,7 @@
                   ></v-checkbox>
                 </v-list-item>
 
-                <v-list-item class="pa-0">
+                <v-list-item class="pa-0" v-if="editor.config.useCategory">
                   <v-text-field
                     v-model="editor.category.name"
                     variant="outlined"

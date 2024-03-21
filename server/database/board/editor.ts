@@ -20,6 +20,7 @@ import {
   saveUploadedFile,
 } from "../../util/tools"
 import { exists } from "node:fs/promises"
+import { TSBOARD } from "../../../tsboard.config"
 
 // 글작성 레벨 제한 가져오기
 export async function getWriteLevel(boardUid: number): Promise<number> {
@@ -51,7 +52,7 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
   for (const image of param.images) {
     const newSavePath = `${savePath}/${generateRandomID()}.webp`
     const tempFilePath = await saveUploadedFile(image, `./upload/temp/images`)
-    const minImageSize = Math.min(parseInt(process.env.IMAGE_SIZE ?? "1024"), param.sizeLimit)
+    const minImageSize = TSBOARD.IMAGE.CONTENT_INSERT_SIZE
 
     await resizeImage(tempFilePath, newSavePath, minImageSize)
     removeFile(tempFilePath)

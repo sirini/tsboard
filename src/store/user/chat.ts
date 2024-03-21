@@ -8,7 +8,7 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
-import { ChatHistory, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
+import { ChatHistory, ChatItem, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { CHAT } from "../../messages/store/user/chat"
@@ -18,9 +18,26 @@ export const useChatStore = defineStore("chat", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const dialog = ref<boolean>(false)
+  const list = ref<ChatItem[]>([])
   const history = ref<ChatHistory[]>([])
   const message = ref<string>("")
   const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
+
+  // 채팅 목록 불러오기
+  async function loadChatList(): Promise<void> {
+    const response = await server.api.user.load.chatlist.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        limit: 10,
+      },
+    })
+
+    if (response.data && response.data.success === true) {
+      list.value = response.data.result
+    }
+  }
 
   // 채팅방 열기
   function openDialog(user: UserBasicInfo): void {
@@ -101,9 +118,11 @@ export const useChatStore = defineStore("chat", () => {
 
   return {
     dialog,
+    list,
     history,
     message,
     targetUser,
+    loadChatList,
     openDialog,
     closeDialog,
     send,

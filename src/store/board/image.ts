@@ -12,6 +12,7 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { EDITOR } from "../../messages/store/board/editor"
 import { Pair } from "../../interface/board"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -30,8 +31,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const lastImageUid = ref<number>(0)
   const totalImageCount = ref<number>(0)
   const bunch = ref<number>(20)
-  const limit = ref<number>(parseInt(process.env.MAX_FILE_SIZE || "102476800"))
-  const PREFIX = process.env.PREFIX || ""
+  const limit = ref<number>(TSBOARD.MAX_FILE_SIZE)
   const uploadRule = [
     (value: any) => {
       return (
@@ -51,7 +51,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         authorization: auth.user.token,
       },
       boardUid: boardUid.value,
-      sizeLimit: parseInt(process.env.MAX_FILE_SIZE ?? "10247680"),
+      sizeLimit: TSBOARD.IMAGE.CONTENT_INSERT_SIZE,
       images: files.value,
     })
 
@@ -112,7 +112,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   // 이미지 삭제하기 준비
   function setRemoveTarget(uid: number, src: string): void {
     showRemoveImageInfo.value = true
-    removeImageTarget.value = { uid, name: PREFIX + src }
+    removeImageTarget.value = { uid, name: TSBOARD.PREFIX + src }
   }
 
   // 이미지 삭제하기 초기화

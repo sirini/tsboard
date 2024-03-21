@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { getMaxUserUid, getUsers, getSearchedUsers } from "../../../database/admin/user/list"
+import { getMaxUserUid, getUsers } from "../../../database/admin/user/list"
 import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../util/tools"
 
 export const list = new Elysia()

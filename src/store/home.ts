@@ -24,6 +24,7 @@ export const useHomeStore = defineStore("home", () => {
   const sidebarLinks = ref<GroupItem[]>([])
   const sidebarWidth = ref<number>(300)
   const width = ref<number>(1200)
+  const staticWidth = ref<number>(800)
   const cols = ref<number>(4)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
@@ -66,18 +67,19 @@ export const useHomeStore = defineStore("home", () => {
 
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
+    width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
     if (window.innerWidth < 500) {
       cols.value = 12
-    } else if (window.innerWidth > 499 && window.innerWidth < 1000) {
+    } else if (window.innerWidth > 499 && window.innerWidth < 800) {
       cols.value = 6
-    } else if (window.innerWidth > 999 && window.innerWidth < 1500) {
+    } else if (window.innerWidth > 799 && window.innerWidth < 1200) {
       cols.value = 4
-    } else if (window.innerWidth > 1499 && window.innerWidth < 2000) {
+    } else if (window.innerWidth > 1199 && window.innerWidth < 1600) {
       cols.value = 3
     } else {
-      cols.value = 2
+      cols.value = 3
+      width.value = 1500
     }
-    width.value = window.innerWidth - 200
   }
 
   // 최신글 목록 가져오기
@@ -172,6 +174,7 @@ export const useHomeStore = defineStore("home", () => {
     notifications,
     haveNewNotification,
     width,
+    staticWidth,
     cols,
     sidebarLinks,
     sidebarWidth,

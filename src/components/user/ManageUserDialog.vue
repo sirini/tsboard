@@ -14,7 +14,7 @@
         <v-list-item
           class="mt-2 mb-2"
           :prepend-avatar="
-            PREFIX +
+            TSBOARD.PREFIX +
             (manage.targetUser.profile.length < 1 ? '/no-profile.svg' : manage.targetUser.profile)
           "
         >
@@ -124,11 +124,11 @@
 import { useHomeStore } from "../../store/home"
 import { useManageUserStore } from "../../store/user/manageuser"
 import { USER } from "../../messages/store/user/user"
+import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
 
 const home = useHomeStore()
 const manage = useManageUserStore()
-const PREFIX = process.env.PREFIX || ""
 const rules: any = [
   (value: string) => (value && value.length > 2 && value.length < 1000) || USER.INVALID_TEXT_LENGTH,
 ]

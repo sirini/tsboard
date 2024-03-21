@@ -5,17 +5,16 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const notFoundRoute: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/404",
+    path: TSBOARD.PREFIX + "/404",
     name: "notFound",
     component: () => import("@/pages/home/NotFound.vue"),
   },
   {
-    path: PREFIX + "/:pathMatch(.*)*",
-    redirect: PREFIX + "/404",
+    path: TSBOARD.PREFIX + "/:pathMatch(.*)*",
+    redirect: TSBOARD.PREFIX + "/404",
   },
 ]

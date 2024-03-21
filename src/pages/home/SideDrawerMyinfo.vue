@@ -5,7 +5,7 @@
     <v-list-item
       @click="util.go('myinfo')"
       :prepend-avatar="
-        PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
+        TSBOARD.PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
       "
     >
       <v-list-item-title>{{ auth.user.name }}</v-list-item-title>
@@ -32,10 +32,10 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
+import { TSBOARD } from "../../../tsboard.config"
 
 const auth = useAuthStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 </script>
 
 <style scoped>

@@ -13,8 +13,10 @@ export const useAdminStore = defineStore("admin", () => {
   const snackbarMessage = ref<string>("")
   const snackbarTimeout = ref<number>(3000)
   const snackbarColor = ref<string>("variant-surface")
+  const width = ref<number>(1200)
+  const sidebarWidth = ref<number>(250)
+  const color = ref<string>("blue-grey")
   const breadcrumbs = ref<AdminBreadcrumb[]>([])
-  const PREFIX = process.env.PREFIX || ""
 
   // 스낵바 메시지 보이기
   function snack(
@@ -62,6 +64,9 @@ export const useAdminStore = defineStore("admin", () => {
     snackbarMessage,
     snackbarTimeout,
     snackbarColor,
+    width,
+    sidebarWidth,
+    color,
     breadcrumbs,
     success,
     error,

@@ -5,57 +5,56 @@
  */
 
 import { RouteRecordRaw } from "vue-router"
-
-const PREFIX = process.env.PREFIX || ""
+import { TSBOARD } from "../../tsboard.config"
 
 export const adminRoutes: Array<RouteRecordRaw> = [
   {
-    path: PREFIX + "/admin",
+    path: TSBOARD.PREFIX + "/admin",
     name: "admin",
     component: () => import("@/pages/admin/Dashboard.vue"),
   },
   {
-    path: PREFIX + "/admin/board",
+    path: TSBOARD.PREFIX + "/admin/board",
     name: "adminBoardGroup",
     component: () => import("@/pages/admin/BoardGroupList.vue"),
   },
   {
-    path: PREFIX + "/admin/board/group/:id",
+    path: TSBOARD.PREFIX + "/admin/board/group/:id",
     name: "adminBoardGroupManager",
     component: () => import("@/pages/admin/BoardGroupManager.vue"),
   },
   {
-    path: PREFIX + "/admin/board/:id",
+    path: TSBOARD.PREFIX + "/admin/board/:id",
     name: "adminBoardManager",
     component: () => import("@/pages/admin/BoardManager.vue"),
   },
   {
-    path: PREFIX + "/admin/user",
+    path: TSBOARD.PREFIX + "/admin/user",
     name: "adminUser",
     component: () => import("@/pages/admin/UserList.vue"),
   },
   {
-    path: PREFIX + "/admin/user/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/admin/user/:no(\\d+)",
     name: "adminUserManager",
     component: () => import("@/pages/admin/UserModify.vue"),
   },
   {
-    path: PREFIX + "/admin/report",
+    path: TSBOARD.PREFIX + "/admin/report",
     name: "adminReport",
     component: () => import("@/pages/admin/ReportList.vue"),
   },
   {
-    path: PREFIX + "/admin/report/:no(\\d+)",
+    path: TSBOARD.PREFIX + "/admin/report/:no(\\d+)",
     name: "adminReportView",
     component: () => import("@/pages/admin/ReportList.vue"),
   },
   {
-    path: PREFIX + "/admin/latest/post",
+    path: TSBOARD.PREFIX + "/admin/latest/post",
     name: "adminLatestPost",
     component: () => import("@/pages/admin/LatestPost.vue"),
   },
   {
-    path: PREFIX + "/admin/latest/comment",
+    path: TSBOARD.PREFIX + "/admin/latest/comment",
     name: "adminLatestComment",
     component: () => import("@/pages/admin/LatestComment.vue"),
   },

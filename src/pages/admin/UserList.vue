@@ -2,10 +2,10 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
         <v-card-title>회원 목록</v-card-title>
         <v-layout>
-          <v-navigation-drawer permanent location="left" width="200">
+          <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
               <v-list-item
                 prepend-icon="mdi-cog-outline"
@@ -40,6 +40,7 @@
 import { ref } from "vue"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminUserStore } from "../../store/admin/user/common"
+import { TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import UserList from "../../components/admin/user/UserList.vue"
@@ -49,7 +50,7 @@ const user = useAdminUserStore()
 const menu = ref<string>("general")
 
 admin.clearBreadcrumbs()
-admin.addBreadcrumbs("회원 목록", `${process.env.PREFIX}/admin/member`)
+admin.addBreadcrumbs("회원 목록", `${TSBOARD.PREFIX}/admin/member`)
 
 // 차단 여부를 선택하기
 function setBlock(isBlocked: boolean): void {

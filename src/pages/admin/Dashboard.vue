@@ -2,11 +2,11 @@
   <v-app class="app">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" color="blue-grey">
+      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
         <v-card-title>대시보드</v-card-title>
         <v-divider></v-divider>
         <v-layout>
-          <v-navigation-drawer permanent location="left" width="200">
+          <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
               <v-list-item
                 prepend-icon="mdi-cog-outline"

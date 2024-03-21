@@ -5,10 +5,14 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto mt-12 mb-12" max-width="800">
+          <v-card
+            class="mx-auto mt-12 mb-12"
+            :max-width="home.staticWidth"
+            :color="home.color.header"
+          >
             <v-card-title>TSBOARD 라이선스 안내</v-card-title>
             <v-divider></v-divider>
-            <v-card-text class="license">
+            <v-list class="license pa-6">
               <h1 class="mt-6">MIT License</h1>
               <p>&nbsp;</p>
               <p>Copyright © 2024 <strong>TSBOARD.DEV</strong></p>
@@ -50,7 +54,8 @@
                 비침해성을 포함한 어떠한 보증도 없습니다. 저작자나 저작권 보유자는 소프트웨어
                 사용으로 인한 모든 청구, 손해 또는 기타 책임에 대해 책임지지 않습니다.
               </p>
-            </v-card-text>
+            </v-list>
+
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')">Github</v-btn>

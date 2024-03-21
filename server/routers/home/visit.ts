@@ -6,16 +6,52 @@
 
 import { Elysia, t } from "elysia"
 import { addAccessLog } from "../../database/home/visit"
+import { TSBOARD } from "../../../tsboard.config"
 
-export const visit = new Elysia().get(
-  "/visit",
-  async ({ query: { userUid } }) => {
-    addAccessLog(userUid)
-    return {}
-  },
-  {
-    query: t.Object({
-      userUid: t.Numeric(),
-    }),
-  },
-)
+export const visit = new Elysia()
+  .get(
+    "/visit",
+    async ({ query: { userUid } }) => {
+      addAccessLog(userUid)
+      return {}
+    },
+    {
+      query: t.Object({
+        userUid: t.Numeric(),
+      }),
+    },
+  )
+  .get("/tsboard", async () => {
+    return {
+      version: TSBOARD.VERSION,
+      mode: TSBOARD.IS_DEVELOPING ? "Development" : "Production",
+      license: "MIT license (https://tsboard.dev/license)",
+      git: "https://github.com/sirini/tsboard",
+      tsboard: "https://tsboard.dev",
+      thanksTo: {
+        vscode: "https://code.visualstudio.com",
+        eslint: "https://eslint.org",
+        prettier: "https://prettier.io",
+        typescript: "https://www.typescriptlang.org",
+        vite: "https://vitejs.dev",
+        google: "https://google.com",
+        mariadb: "https://mariadb.org",
+        mysql2: "https://www.npmjs.com/package/mysql2",
+        nginx: "https://www.nginx.com",
+        bun: "https://bun.sh",
+        chalk: "https://www.npmjs.com/package/chalk",
+        nodemailer: "https://www.nodemailer.com",
+        sharp: "https://sharp.pixelplumbing.com",
+        elysia: "https://elysiajs.com",
+        vue: "https://vuejs.org",
+        vueRouter: "https://router.vuejs.org",
+        pinia: "https://pinia.vuejs.org",
+        vuetify: "https://vuetifyjs.com",
+        tiptap: "https://tiptap.dev",
+        highlightjs: "https://highlightjs.org",
+        nanoid: "https://www.npmjs.com/package/nanoid",
+        sanitizeHtml: "https://www.npmjs.com/package/sanitize-html",
+        cryptoJs: "https://www.npmjs.com/package/crypto-js",
+      },
+    }
+  })

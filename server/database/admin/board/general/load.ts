@@ -15,7 +15,7 @@ export async function getBoardConfig(id: string): Promise<AdminBoardConfig> {
   result.id = id
 
   const [board] = await select(
-    `SELECT uid, group_uid, admin_uid, type, name, info, row, width 
+    `SELECT uid, group_uid, admin_uid, type, name, info, row, width, use_category 
 FROM ${table}board WHERE id = ? LIMIT 1`,
     [id],
   )
@@ -57,6 +57,7 @@ WHERE board_uid = ? ORDER BY uid ASC`,
     info: board.info,
     row: board.row,
     width: board.width,
+    useCategory: board.use_category > 0 ? true : false,
     categories: cats,
   }
 

@@ -46,7 +46,7 @@
           variant="tonal"
           color="blue-grey"
           class="ml-2"
-          :prepend-avatar="PREFIX + (group.manager.profile || '/no-profile.svg')"
+          :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
         >
           <strong class="ml-1">{{ group.manager.name }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
@@ -80,10 +80,10 @@
 import { onMounted } from "vue"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 import { useUtilStore } from "../../../store/util"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const list = useAdminGroupListStore()
 const util = useUtilStore()
-const PREFIX = process.env.PREFIX || ""
 
 onMounted(() => list.loadGroupList())
 </script>
