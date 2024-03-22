@@ -67,7 +67,7 @@
                     >
                     <v-divider></v-divider>
                     <v-list-item>
-                      설치 안내는 Github 페이지에서 확인 하실 수 있습니다. (작성중입니다 T_T)
+                      설치 안내는 Github 페이지에서 확인 하실 수 있습니다.
                     </v-list-item>
                   </v-list>
                 </v-card-text>
