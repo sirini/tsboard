@@ -142,7 +142,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ### 메일 발송 기능 활성화하기
 
-- TSBOARD는 구글 계정의 앱 비밀번호 기능을 이용하여 GMAIL 발송 기능이 가능합니다.
+- TSBOARD는 구글 계정의 앱 비밀번호 기능을 이용하여 GMAIL 발송이 가능합니다.
   - 메일 발송을 통해 최초 회원가입 시 이메일 인증을 진행할 수 있습니다.
   - 비밀번호 초기화도 등록된 메일로 직접 가능하므로, 가능하면 기능 활성화를 권장합니다.
   - TSBOARD 설치 경로에 `.env` 파일을 열어서 본인의 구글 계정과 앱 비밀번호를 등록해주세요.
@@ -181,6 +181,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 아래 단계에서는 Ubuntu server 에 Nginx 가 설치되어 있는 것으로 가정합니다.
   - Nginx의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
   - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
+    <br />
 
   ```
   # /etc/nginx/sites-enabled/default
@@ -190,19 +191,19 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   # 아울러, tsboard.config.ts 파일의 PORT 부분을 수정하지 않은 걸 가정합니다.
   #
   server {
-    root /var/www/tsboard.git/dist; # TSBOARD_설치_경로/dist
+    root /var/www/tsboard.git/dist; # TSBOARD설치경로/dist
 
     index index.html index.htm;
 
     server_name tsboard.dev;
 
     location /upload {
-      root /var/www/tsboard.dev; # TSBOARD_설치_경로
+      root /var/www/tsboard.dev; # TSBOARD설치경로
       try_files $uri $uri/ =404;
     }
 
     location / {
-      try_files $uri $uri/ /index.html;
+      try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
     }
 
     location /api {
@@ -229,7 +230,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 ### 대신 설치 요청하기
 
 - 먼저 설치 과정에서 어려움을 만나신 분들께 위로를 드립니다.
-  - TSBOARD는 사실 설치하기가 쉽지 않습니다. 일반적으로는 Node.js 만 있으면 되지만, CPU도 가려쓰는(...) Bun을 추가로 요구하니까요.
+  - TSBOARD는 사실 설치하기가 쉽지 않습니다. 일반적인 JavaScript/TypeScript 프로젝트라면 보통 Node.js 만 있으면 되지만, CPU도 가려쓰는(...) Bun을 추가로 요구하니까요.
   - 또한 개발 과정의 간소화 내지는 우선순위 조정으로 인해 설치 과정에서 예외 케이스들을 면밀히 검토하지 못했습니다.
   - 앞으로 더 편하게 설치하여 사용하실 수 있도록 더욱 노력하겠습니다.
 - TSBOARD 설치를 대신 도와드리겠습니다.
@@ -259,6 +260,22 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 3. 커스텀 가이드
 
 ## 전체 구조
+
+### 프론트엔드
+
+- 프론트엔드는 `Vue`, `Vuetify`, `Vue Router`, `Pinia` 그리고 에디터에 `tiptap` 이 사용됩니다.
+- `.vue` 파일에서 UI는 대부분 Vuetify 컴포넌트를 사용하는 걸로 구현되어 있습니다. 대부분 `<v-card>` 처럼 v- 접두사를 가집니다.
+- 버튼을 클릭하거나, `.vue` 파일이 브라우저에 붙는 시점에 초기화 작업들을 해야 할때는 Pinia로 정의한 스토어들을 `import` 한 후 필요한 함수들을 사용하도록 구성했습니다. 따라서 대부분의 UI쪽 로직들, 특히 서버쪽에 요청을 보내는 함수들은 `src/store/` 내 파일들을 참조하시면 됩니다.
+- 페이지 열람은 항상 Vue Router 기준입니다.
+  - 만약 기존에 게시판 목록보기 페이지인 `src/pages/board/List.vue` 을 그대로 둔 상태에서, 다른 디자인의 목록보기 페이지를 예를 들어 `src/pages/somethingNewBoard/AwesomeList.vue` 경로에 만들었다고 합시다.
+  - 방문객들이 게시판 목록을 새로 만든 디자인으로 보길 원한다면, 추가로 `src/router/board.ts` 파일을 열어서 `@/pages/board/List.vue` 로 적힌 부분을 모두 `@/pages/somethingNewBoard/AwesomeList.vue` 로 수정해야 합니다.
+  - TSBOARD는 Client Side Rendering 방식으로 동작합니다. 따라서 모든 접속 경로는 반드시 `src/router/index.ts` 를 통해 결정됩니다.
+- 어쩌면 가장 궁금하실 수 있는 부분인데, TSBOARD는 **Server Side Rendering을 지원하지 않습니다.** 이 선택에 대한 제 나름의 이유들은 아래와 같습니다.
+  - TSBOARD 개발 초기부터, 가능하면 서버의 부담을 줄이는 방향으로 개발하고자 했습니다. 브라우저 성능은 계속해서 개선되고 있고, 네트워크도 점점 빨라지면서 이제는 진짜 클라이언트가 좀 더 부담스런 작업들을 많이 해도 괜찮겠다고 생각했었거든요.
+  - Server Side Rendering이 SEO에 유리한 건 맞지만, Client Side Rendering이라고 해서 검색이 안된다거나 하진 않습니다. 크롬 브라우저를 개발하는 구글의 검색 봇들이 JavaScript를 실행하지 못할까요? 🧐
+  - 처음 방문 시 로딩 속도 관점에서는 분명히 Server Side Rendering이 장점인 건 맞습니다. 하지만 5G 시대에 처음 방문하는 웹사이트의 로딩 속도가 느리다고 해봤자 얼마나 느릴까요? 차라리 서버의 부담을 줄여서 응답속도를 개선하는 게 낫겠다는 생각이었습니다.
+  - 렌더링을 클라이언트와 서버 양쪽에 나눠서 할 경우 타이밍이라고 할까요, 즉 언제 객체가 준비되었는지 기다렸다가 작업하거나 혹은 DOM에 접근할 때 어떻게 해야 할지 등을 결정하는 비용이 너무 높았습니다. 일단 혼자서 풀스택을 개발하다보니, 가능하면 단순한 설계와 구조를 유지하고 싶었습니다.
+  - 가지고 있는 서버 자원이 거의 전무합니다. <https://tsboard.dev> 사이트는 현재 방구석 한켠에 굴러다니는 주먹만한 미니PC에서 돌아가고 있는데 더 부담을 주고 싶진 않았습니다... 🥲
 
 ## 테이블 구조
 
