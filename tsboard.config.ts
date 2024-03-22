@@ -8,15 +8,15 @@ export const TSBOARD = {
   IS_DEVELOPING: false,
   VERSION: 0.8,
   SITE: {
-    NAME: "tsboard.dev",
-    URL: "https://tsboard.dev",
+    NAME: "tsboard.dev" /* 수정 필요 */,
+    URL: "https://tsboard.dev" /* 수정 필요 */,
     TSBOARD_PATH: "/",
   },
   PREFIX: "",
   PORT: {
     VITE: 3000,
     DEVELOPING: 3200,
-    PRODUCTION: 3100,
+    PRODUCTION: 3100 /* 가급적 수정하지 마세요 */,
   },
   MAX_FILE_SIZE: 10247680 /* bytes */,
   IMAGE: {
@@ -32,8 +32,8 @@ export const TSBOARD = {
     SECURE: false,
   },
   API: {
-    DEVELOPING: "http://geunyul2.asuscomm.com",
-    PRODUCTION: "https://tsboard.dev",
+    DEVELOPING: "http://localhost",
+    PRODUCTION: "https://tsboard.dev" /* 수정 필요 */,
   },
   /* 새 게시판 생성시 기본값 */
   BOARD: {

@@ -126,15 +126,85 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 이 때 MySQL(Mariadb)의 접속 정보 및 관리자 아이디와 비밀번호를 입력하게 됩니다.
   - 접속 정보가 올바르고 DB 생성 (및 테이블 생성) 권한이 있다면, 문제없이 DB/Table들이 생성됩니다.
   - `bun setup.ts` 과정에서 문제가 발생하신 경우, 깃허브 이슈 혹은 tsboard.dev로 알려주세요!
-- 설치가 제대로 완료되면, `setup.ts` 파일이 있는 폴더에 `.env` 환경 설정 파일이 생성됩니다.
-- 재설치를 원하실 경우, 동일하게 `bun setup.ts` 를 실행하시고 화면의 안내를 따라가세요.
-  - 재설치 전 기존 데이터들은 반드시 백업하세요. `mysqldump` 명령어로 백업하실 수 있습니다.
-  - 재설치때는 이미 `.env` 파일이 생성되어 있다고 알려줍니다. `yes` 입력 후 엔터키로 계속 진행하세요.
-  - 재설치 전 업로드 된 파일/이미지들은 불필요할 경우 삭제하세요. (`upload` 폴더 삭제)
+- TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
+  - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 **대부분의 설정**들이 들어 있습니다.
+  - `SITE` 와 `API` 항목을 확인하시고, 이름 및 도메인 등을 적절하게 수정 후 저장하세요.
+  - 그 밖에 항목들도 원하시면 수정하실 수 있습니다. 단, 가급적 `PORT` 항목은 그대로 두세요.
+- 이제 TSBOARD를 `build` 합니다.
+  - 여러분이 받으신 TSBOARD는 이제 `vite` 를 통해 `build` 가 가능합니다.
+  - (Node.js 설치 시) `npm run build` 혹은 `bun run build` 를 실행하여 `build` 를 진행합니다.
+  - 이 때 TSBOARD의 프론트엔드 코드들(TypeScript)이 JavaScript로 변환되며, 파일들도 최적화됩니다.
+
+### 개발 모드로 실행하기
+
+> 이 안내는 Visual Studio Code (vscode)를 이미 사용해 보신 분들을 대상으로 합니다.
+
+- TSBOARD를 본인의 Linux PC or Mac 에 먼저 설치하여 개발 모드로 사용해 보실 수도 있습니다.
+  - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
+  - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEVELOPING` 항목을 `true` 로 수정합니다.
+  - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
+  - 다른 터미널을 열고 `npm run dev:server` 를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
+  - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
 
 ### TSBOARD 업데이트
+
+> 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다.
 
 - 설치 후 TSBOARD를 업데이트 하고자 할 땐 `git pull` 를 실행하시면 됩니다.
   - `git pull` 진행 시 여러분이 직접 수정하신 파일과, TSBOARD에서 변경된 내용이 충돌날 수 있습니다.
   - 이 때는 본인의 수정 내용과 TSBOARD 변경사항을 직접 `merge` 하셔야 합니다.
   - 변경사항이 많이 따라가기 어려울 때는, 작업하신 내용을 먼저 백업한 이후 하나씩 `merge` 해주세요.
+
+## 설치 후 서버 설정
+
+> TSBOARD는 보안을 위해 SSL 적용을 강력히 권장합니다.
+
+> Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
+
+- 축하합니다! 여러분은 `git clone` → `bun install` → `bun setup.ts` 과정까지 무사히 마쳤습니다.
+- 이제 보다 원할한 TSBOARD 활용을 위해, 아래의 추가적인 설정 단계를 진행해 봅시다.
+
+  - 아래 단계에서는 Ubuntu server 에 Nginx 가 설치되어 있는 것으로 가정합니다.
+  - Nginx의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
+  - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
+
+  ```
+  # /etc/nginx/sites-enabled/default
+  #
+  # TSBOARD가 권장 설치 경로에 설치되어 있고,
+  # 현재 운영중인 웹사이트의 도메인이 tsboard.dev 인걸 가정하고 있습니다.
+  # 아울러, tsboard.config.ts 파일의 PORT 부분을 수정하지 않은 걸 가정합니다.
+  #
+  server {
+    root /var/www/tsboard.git/dist; # TSBOARD_설치_경로/dist
+
+    index index.html index.htm;
+
+    server_name tsboard.dev;
+
+    location /upload {
+      root /var/www/tsboard.dev; # TSBOARD_설치_경로
+      try_files $uri $uri/ =404;
+    }
+
+    location / {
+      try_files $uri $uri/ /index.html;
+    }
+
+    location /api {
+      proxy_pass http://127.0.0.1:3100/api; # tsboard.config.ts 에서 PORT.PRODUCTION 값과 3100 이 동일해야 함
+      proxy_buffering off;
+      proxy_connect_timeout 300;
+      proxy_send_timeout 300;
+      proxy_read_timeout 300;
+      send_timeout 300;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+    }
+
+    # 이미 SSL 설정을 하셨다면 보통 하단에 관련 내용이 나타납니다.
+  }
+  ```
