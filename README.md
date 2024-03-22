@@ -74,7 +74,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ## TSBOARD 설치에 적합한 서버 환경
 
-- TSBOARD는 **백엔드 JS/TS 런타임으로 Bun** (<https://bun.sh>)을 요구합니다.
+- TSBOARD는 **JS/TS 런타임으로 Bun** (<https://bun.sh>)을 필요로 합니다.
 - 또한, 보다 안정적인 패키징 관리를 위해 Node.js (및 npm) 설치도 권장하고 있습니다.
   - 원래 Bun은 패키지 관리까지 올인원으로 지원하므로, **향후 Bun만 필요할 것**입니다.
   - 만약 아직 Node.js 설치가 안되어 있는 서버라면, 우선 Bun 먼저 설치하여 사용해 보세요.
@@ -181,7 +181,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 아래 단계에서는 Ubuntu server 에 Nginx 가 설치되어 있는 것으로 가정합니다.
   - Nginx의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
   - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
-    <br />
+  <p>&nbsp;</p>
 
   ```
   # /etc/nginx/sites-enabled/default
