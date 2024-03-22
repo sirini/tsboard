@@ -161,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
@@ -174,6 +174,10 @@ const home = useHomeStore()
 const util = useUtilStore()
 
 onMounted(() => home.loadLatestPosts())
+watch(
+  () => home.sinceUid,
+  () => home.loadLatestPosts(),
+)
 </script>
 
 <style scoped>

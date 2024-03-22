@@ -30,12 +30,21 @@ export async function getLatestPost(sinceUid: number, bunch: number): Promise<Po
     const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
       post.board_uid,
     ])
+    if (!board) {
+      continue
+    }
+
     const [writer] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
       post.user_uid,
     ])
+    if (!writer) {
+      continue
+    }
+
     const [cat] = await select(`SELECT name FROM ${table}board_category WHERE uid = ? LIMIT 1`, [
       post.category_uid,
     ])
+
     const [like] = await select(
       `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
       [post.uid, 1],
@@ -49,7 +58,7 @@ export async function getLatestPost(sinceUid: number, bunch: number): Promise<Po
       uid: post.uid,
       id: board.id,
       type: board.type as BoardType,
-      category: cat.name,
+      category: cat.name ?? "",
       title: post.title,
       content: post.content,
       cover,
