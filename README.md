@@ -100,9 +100,13 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 ## 설치 진행 안내
 
 > 이제부터는 여러분이 TSBOARD를 독자적인 리눅스PC (혹은 Mac) 에 설치하는 것으로 가정합니다.
+
 > 이미 Node.js 기반으로 웹프로젝트를 해보신 개발자분들은 필요한 부분만 참조하시면 됩니다.
+
 > 반면, 조금 어렵게 느껴지시는 분들은 차근차근 따라가면서 설치를 진행해 봅시다.
+
 > TSBOARD 설치 과정에 문제가 있거나, 어려움이 있으실 땐 tsboard.dev를 방문해 주세요!
+
 > 도저히 어떻게 해야할지 모르겠다면, **설치가 어려운 분들께** 항목을 읽어주세요.
 
 ### Bun 설치
@@ -111,3 +115,10 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 먼저, `curl -fsSL https://bun.sh/install | bash` 명령어로 Bun을 설치합니다.
   - 설치 시 패키지 의존성 관련 메시지들이 나올 수 있습니다. (`curl`, `zip` 등) 먼저 설치해주세요.
   - 설치 후 `source .bashrc` 등을 추가적으로 실행해 Bun 환경변수를 등록 후, `bun --help` 를 실행합니다.
+
+### TSBOARD Git clone
+
+- TSBOARD는 별도의 설치 파일들을 제공하지 않으며, Git을 통해 설치 및 업데이트를 제공합니다.
+  - 먼저, `git clone https://github.com/sirini/tsboard tsboard.git` 을 실행합니다.
+  - 권장하는 설치 경로는 `/var/www/` 하위 경로입니다. `/root/` 는 추천하지 않습니다.
+  - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `setup.ts` 파일이 존재합니다.
