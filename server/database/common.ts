@@ -1,5 +1,5 @@
 /**
- * server/database/pool
+ * server/database/common
  *
  * MySQL(Maria) DBMS CRUD용 함수들
  */

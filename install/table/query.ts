@@ -1,5 +1,5 @@
 /**
- * install/table/query.ts
+ * install/table/query
  *
  * 테이블 구조 정의 모음
  */
