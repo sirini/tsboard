@@ -3,10 +3,10 @@
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="list.option" size="small" group color="blue-grey">
-          <v-btn value="title">제목</v-btn>
-          <v-btn value="content">내용</v-btn>
-          <v-btn value="writer">작성자</v-btn>
-          <v-btn value="tag">태그</v-btn>
+          <v-btn :value="SEARCH_OPTION.TITLE as SearchOption">제목</v-btn>
+          <v-btn :value="SEARCH_OPTION.CONTENT as SearchOption">내용</v-btn>
+          <v-btn :value="SEARCH_OPTION.WRITER as SearchOption">작성자</v-btn>
+          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">태그</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import { SEARCH_OPTION, SearchOption } from "../../../interface/board"
 import { useBoardListStore } from "../../../store/board/list"
 
 const list = useBoardListStore()

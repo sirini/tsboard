@@ -5,17 +5,20 @@
  */
 
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
-import { GroupItem, NoticeType, Notification, PostItem } from "../interface/home"
+import { GroupItem, LatestPost, NoticeType, Notification, PostItem } from "../interface/home"
 import { NOTICE_TYPE } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
+import { SEARCH_OPTION, SearchOption } from "../interface/board"
 
 export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)
+  const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
   const drawer = ref<boolean>(false)
@@ -29,6 +32,9 @@ export const useHomeStore = defineStore("home", () => {
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])
+  const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
+  const keyword = ref<string>("")
+
   const color = {
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -40,9 +46,11 @@ export const useHomeStore = defineStore("home", () => {
 
   // 첫화면 갱신하기
   function coming(): void {
-    sinceUid.value = 0
-    latestPosts.value = [] as PostItem[]
     util.go("home")
+    if (route.name === "home") {
+      clearVariables()
+      loadLatestPosts()
+    }
   }
 
   // 방문 기록 저장하기
@@ -89,6 +97,8 @@ export const useHomeStore = defineStore("home", () => {
       $query: {
         sinceUid: sinceUid.value,
         bunch: bunch.value,
+        option: option.value as number,
+        keyword: keyword.value,
       },
     })
 
@@ -100,6 +110,50 @@ export const useHomeStore = defineStore("home", () => {
       }
       sinceUid.value = latestPosts.value.at(-1)?.uid ?? 0
     }
+  }
+
+  // 특정 게시판의 최신글 목록 가져오기
+  async function getBoardLatest(id: string, limit: number): Promise<LatestPost[]> {
+    let result: LatestPost[] = []
+    if (id.length < 2 || limit < 1) {
+      return result
+    }
+    const response = await server.api.home.latest.board.get({
+      $query: {
+        id,
+        limit,
+      },
+    })
+
+    if (response.data && response.data.success === true) {
+      result = response.data.result
+    }
+    return result
+  }
+
+  // 전체 게시글 검색하기
+  function _searchPosts(): void {
+    if (keyword.value.length < 2) {
+      return
+    }
+    sinceUid.value = 0
+    latestPosts.value = []
+    loadLatestPosts()
+  }
+  const searchPosts = util.debounce(_searchPosts, 250)
+
+  // 검색 옵션 초기화하기
+  function resetSearchKeyword(): void {
+    clearVariables()
+    loadLatestPosts()
+  }
+
+  // 게시글 목록 가져오는 옵션 초기화하기
+  function clearVariables(): void {
+    sinceUid.value = 0
+    latestPosts.value = []
+    option.value = SEARCH_OPTION.TITLE as SearchOption
+    keyword.value = ""
   }
 
   // 알림 정보 가져오기
@@ -180,11 +234,16 @@ export const useHomeStore = defineStore("home", () => {
     sidebarWidth,
     sinceUid,
     latestPosts,
+    option,
+    keyword,
     color,
     coming,
     visit,
     setGridLayout,
     loadLatestPosts,
+    getBoardLatest,
+    searchPosts,
+    resetSearchKeyword,
     loadNotification,
     translateNotification,
     checkedAllNotifications,

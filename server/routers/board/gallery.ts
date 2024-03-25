@@ -16,6 +16,7 @@ import {
   getUserLevel,
 } from "../../database/board/list"
 import { getPhotos } from "../../database/board/gallery"
+import { SearchOption } from "../../../src/interface/board"
 
 export const gallery = new Elysia()
   .use(
@@ -79,6 +80,7 @@ export const gallery = new Elysia()
       }
 
       const totalPostCount = await getTotalPostCount(config.uid)
+      const searchOption = option as SearchOption
       const images = await getPhotos({
         boardUid: config.uid,
         page,
@@ -86,7 +88,7 @@ export const gallery = new Elysia()
         sinceUid,
         accessUserUid,
         pagingDirection,
-        option,
+        option: searchOption,
         keyword,
       })
 
@@ -106,7 +108,7 @@ export const gallery = new Elysia()
         page: t.Numeric(),
         pagingDirection: t.Numeric(),
         sinceUid: t.Numeric(),
-        option: t.String(),
+        option: t.Numeric(),
         keyword: t.String(),
       }),
     },

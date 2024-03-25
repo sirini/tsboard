@@ -13,6 +13,8 @@ import {
   PostParams,
   PostRelated,
   PostRelatedParams,
+  SEARCH_OPTION,
+  SearchOption,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
 import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED } from "./const"
@@ -287,13 +289,16 @@ export async function getSearchedPosts(
 ): Promise<RowDataPacket[]> {
   let result: RowDataPacket[] = []
 
-  if (param.option === "title" || param.option === "content") {
+  if (
+    param.option === (SEARCH_OPTION.TITLE as SearchOption) ||
+    param.option === (SEARCH_OPTION.CONTENT as SearchOption)
+  ) {
     result = await searchTitleContent(param, direction, ordering)
-  } else if (param.option === "writer") {
+  } else if (param.option === SEARCH_OPTION.WRITER) {
     result = await searchWriterName(param, direction, ordering)
-  } else if (param.option === "category") {
+  } else if (param.option === SEARCH_OPTION.CATEGORY) {
     result = await searchCategoryUid(param, direction, ordering)
-  } else if (param.option === "tag") {
+  } else if (param.option === SEARCH_OPTION.TAG) {
     result = await searchTagName(param, direction, ordering)
   }
   return result

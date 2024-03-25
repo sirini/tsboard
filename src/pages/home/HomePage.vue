@@ -39,14 +39,17 @@
                 <v-divider></v-divider>
                 <v-card-text class="pa-0 list">
                   <v-list>
-                    <v-list-item prepend-icon="mdi-check">
-                      타입스크립트 언어가 마음에 들어서 이 언어로 풀스택 게시판을 만들어보고자
-                      시작한 프로젝트입니다.
+                    <v-list-item prepend-icon="mdi-thumb-up-outline">
+                      타입스크립트 언어가 마음에 들었습니다!
                     </v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-check"
-                      >개발하다보니 생각보다 쓸만해서 다른 분들과 함께 쓰고 개선해 나가면 좋겠다
-                      싶어 공개하게 되었습니다.</v-list-item
+                    <v-list-item prepend-icon="mdi-head-question-outline">
+                      Bun과 ElysiaJS 조합으로 어느 정도 퍼포먼스를 낼 수 있을지 궁금하기도
+                      했구요!</v-list-item
+                    >
+                    <v-divider></v-divider>
+                    <v-list-item prepend-icon="mdi-account-group">
+                      Vue & Vuetify 기반 게시판을 만들면 재밌겠다 싶어서 시작했습니다!</v-list-item
                     >
                   </v-list>
                 </v-card-text>
@@ -73,13 +76,42 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn prepend-icon="mdi-download" append-icon="mdi-github" color="blue-grey"
+                  <v-btn
+                    block
+                    size="large"
+                    prepend-icon="mdi-download"
+                    append-icon="mdi-github"
+                    color="blue-grey"
                     >Download from Github
                     <v-tooltip activator="parent">TSBOARD 깃허브 페이지로 이동합니다!</v-tooltip>
                   </v-btn>
-                  <v-spacer></v-spacer>
                 </v-card-actions>
+              </v-card>
+            </v-col>
+
+            <v-col :cols="home.cols">
+              <v-card rounded="xl" class="box">
+                <v-card-title class="title" @click="util.go('boardList', 'free')"
+                  ><v-icon class="mr-2">mdi-pin</v-icon> 자유게시판</v-card-title
+                >
+                <v-divider></v-divider>
+                <v-card-text class="pa-0 list">
+                  <v-list>
+                    <v-list-item
+                      v-for="(post, index) in freeBoardList"
+                      :key="index"
+                      @click="util.go('boardView', 'free', post.uid)"
+                    >
+                      <template v-slot:prepend>
+                        <v-chip size="small">{{ post.category }}</v-chip>
+                      </template>
+                      <v-list-item-title class="pl-2 pr-2">{{ post.title }}</v-list-item-title>
+                      <template v-slot:append>
+                        {{ util.date(post.submitted) }}
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
               </v-card>
             </v-col>
 
@@ -161,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue"
+import { onMounted, ref } from "vue"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
@@ -169,15 +201,16 @@ import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
 import { BOARD_TYPE } from "../../interface/board"
 import { TSBOARD } from "../../../tsboard.config"
+import { LatestPost } from "../../interface/home"
 
 const home = useHomeStore()
 const util = useUtilStore()
+const freeBoardList = ref<LatestPost[]>([])
 
-onMounted(() => home.loadLatestPosts())
-watch(
-  () => home.sinceUid,
-  () => home.loadLatestPosts(),
-)
+onMounted(async () => {
+  home.loadLatestPosts()
+  freeBoardList.value = await home.getBoardLatest("free", 5)
+})
 </script>
 
 <style scoped>

@@ -3,10 +3,10 @@
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="gallery.option" size="small" group>
-          <v-btn value="title">사진명</v-btn>
-          <v-btn value="content">내용</v-btn>
-          <v-btn value="writer">작가명</v-btn>
-          <v-btn value="tag">태그</v-btn>
+          <v-btn :value="SEARCH_OPTION.TITLE as SearchOption">사진명</v-btn>
+          <v-btn :value="SEARCH_OPTION.CONTENT as SearchOption">내용</v-btn>
+          <v-btn :value="SEARCH_OPTION.WRITER as SearchOption">작가명</v-btn>
+          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">태그</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import { SEARCH_OPTION, SearchOption } from "../../../interface/board"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
 
 const gallery = useGalleryStore()

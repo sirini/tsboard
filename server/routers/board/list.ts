@@ -15,7 +15,7 @@ import {
 } from "../../database/board/list"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
-import { Post } from "../../../src/interface/board"
+import { Post, SearchOption } from "../../../src/interface/board"
 
 export const list = new Elysia()
   .use(
@@ -79,6 +79,7 @@ export const list = new Elysia()
       }
 
       const totalPostCount = await getTotalPostCount(config.uid)
+      const searchOption = option as SearchOption
       const posts = await getPosts({
         boardUid: config.uid,
         page,
@@ -86,7 +87,7 @@ export const list = new Elysia()
         sinceUid,
         accessUserUid,
         pagingDirection,
-        option,
+        option: searchOption,
         keyword,
       })
 
@@ -106,7 +107,7 @@ export const list = new Elysia()
         page: t.Numeric(),
         pagingDirection: t.Numeric(),
         sinceUid: t.Numeric(),
-        option: t.String(),
+        option: t.Numeric(),
         keyword: t.String(),
       }),
     },

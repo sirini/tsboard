@@ -26,6 +26,14 @@ export const POINT_HISTORY_TYPE = {
   DOWNLOAD: 3,
 }
 
+export const SEARCH_OPTION = {
+  TITLE: 0,
+  CONTENT: 1,
+  WRITER: 2,
+  TAG: 3,
+  CATEGORY: 4,
+}
+
 export type Pair = {
   uid: number
   name: string
@@ -102,9 +110,10 @@ type PostCommentParams = {
   pagingDirection: number
 }
 
+export type SearchOption = 0 | 1 | 2 | 3 | 4
 export type PostParams = PostCommentParams & {
   boardUid: number
-  option: string
+  option: SearchOption
   keyword: string
 }
 

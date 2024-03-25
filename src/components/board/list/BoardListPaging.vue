@@ -20,17 +20,23 @@
         <board-list-search></board-list-search>
       </v-menu>
     </v-btn>
-    <v-btn prepend-icon="mdi-pencil" variant="text" @click="util.go('boardWrite', list.id)"
+    <v-btn
+      prepend-icon="mdi-pencil"
+      variant="text"
+      @click="util.go('boardWrite', list.id)"
+      :disabled="auth.user.uid < 1"
       >새글쓰기</v-btn
     >
   </v-card-actions>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useBoardListStore } from "../../../store/board/list"
 import BoardListSearch from "./BoardListSearch.vue"
 
+const auth = useAuthStore()
 const list = useBoardListStore()
 const util = useUtilStore()
 </script>

@@ -19,7 +19,7 @@ import {
   PAGING_DIRECTION,
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
-import { BoardConfig, Post } from "../../../interface/board"
+import { BoardConfig, Post, SEARCH_OPTION, SearchOption } from "../../../interface/board"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -36,7 +36,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const page = ref<number>(1)
   const sinceUid = ref<number>(0)
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
-  const option = ref<string>("title")
+  const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
 
   // 갤러리 사진들 불러오기
@@ -55,7 +55,7 @@ export const useGalleryStore = defineStore("gallery", () => {
         page: page.value,
         pagingDirection: pagingDirection.value,
         sinceUid: sinceUid.value,
-        option: option.value,
+        option: option.value as number,
         keyword: keyword.value,
       },
     })
@@ -102,7 +102,7 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   // 검색 옵션 초기화하기
   function resetSearchKeyword(): void {
-    option.value = "title"
+    option.value = SEARCH_OPTION.TITLE as SearchOption
     keyword.value = ""
   }
 

@@ -128,6 +128,7 @@
                 prepend-icon="mdi-pencil"
                 variant="text"
                 @click="util.go('boardWrite', view.id)"
+                :disabled="auth.user.uid < 1"
                 >새글쓰기</v-btn
               >
             </v-card-actions>
@@ -155,7 +156,6 @@ import BoardViewCommentList from "../../components/board/comment/BoardViewCommen
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import ChatDialog from "../../components/user/ChatDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"

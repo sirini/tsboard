@@ -179,9 +179,15 @@
                 color="primary"
                 @click="editor.write"
                 append-icon="mdi-chevron-right"
+                :disabled="auth.user.uid < 1"
                 >작성 완료하고 보러 가기</v-btn
               >
-              <v-btn v-else color="primary" @click="editor.modify" append-icon="mdi-chevron-right"
+              <v-btn
+                v-else
+                color="primary"
+                @click="editor.modify"
+                append-icon="mdi-chevron-right"
+                :disabled="auth.user.uid < 1"
                 >수정 완료하고 보러 가기</v-btn
               >
             </v-card-actions>
@@ -199,6 +205,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useRoute } from "vue-router"
+import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
@@ -209,6 +216,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 
 const route = useRoute()
+const auth = useAuthStore()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
 

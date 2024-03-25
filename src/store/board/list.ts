@@ -11,7 +11,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { BoardConfig, Pair, Post } from "../../interface/board"
+import { BoardConfig, Pair, Post, SEARCH_OPTION, SearchOption } from "../../interface/board"
 import { LIST } from "../../messages/store/board/list"
 import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/database/board/const"
 
@@ -28,7 +28,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const pageLength = ref<number>(1)
   const sinceUid = ref<number>(0)
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
-  const option = ref<string>("title")
+  const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
 
   // 게시글 목록 가져오기
@@ -47,7 +47,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         page: page.value,
         pagingDirection: pagingDirection.value,
         sinceUid: sinceUid.value,
-        option: option.value,
+        option: option.value as number,
         keyword: keyword.value,
       },
     })
@@ -111,7 +111,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   // 카테고리 번호에 해당하는 게시글들 가져오기
   function loadPostsByCategory(categoryUid: number): void {
     clearVariables()
-    option.value = "category"
+    option.value = SEARCH_OPTION.CATEGORY as SearchOption
     keyword.value = categoryUid.toString()
     loadPostList()
   }
@@ -121,7 +121,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     sinceUid.value = 0
     page.value = 1
     pageLength.value = 1
-    option.value = "title"
+    option.value = SEARCH_OPTION.TITLE as SearchOption
     keyword.value = ""
   }
 

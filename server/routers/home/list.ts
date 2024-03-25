@@ -5,23 +5,52 @@
  */
 
 import { Elysia, t } from "elysia"
-import { getLatestPost, getMaxUid } from "../../database/home/list"
-import { success } from "../../util/tools"
+import { getBoardLatests, getLatestPost, getMaxUid } from "../../database/home/list"
+import { fail, success } from "../../util/tools"
+import { LatestPost } from "../../../src/interface/home"
+import { SearchOption } from "../../../src/interface/board"
 
-export const list = new Elysia().get(
-  "/latest",
-  async ({ query: { sinceUid, bunch } }) => {
-    if (sinceUid < 1) {
-      sinceUid = (await getMaxUid()) + 1
-    }
+export const list = new Elysia()
+  .get(
+    "/latest",
+    async ({ query: { sinceUid, bunch, option, keyword } }) => {
+      if (sinceUid < 1) {
+        sinceUid = (await getMaxUid()) + 1
+      }
 
-    const posts = await getLatestPost(sinceUid, bunch)
-    return success(posts)
-  },
-  {
-    query: t.Object({
-      sinceUid: t.Numeric(),
-      bunch: t.Numeric(),
-    }),
-  },
-)
+      const searchOption = option as SearchOption
+      const posts = await getLatestPost({
+        sinceUid,
+        bunch,
+        option: searchOption,
+        keyword,
+      })
+      return success(posts)
+    },
+    {
+      query: t.Object({
+        sinceUid: t.Numeric(),
+        bunch: t.Numeric(),
+        option: t.Numeric(),
+        keyword: t.String(),
+      }),
+    },
+  )
+  .get(
+    "/latest/board",
+    async ({ query: { id, limit } }) => {
+      let response: LatestPost[] = []
+      if (id.length < 2 || limit < 1) {
+        return fail(`Invalid parameters.`, response)
+      }
+
+      response = await getBoardLatests(id, limit)
+      return success(response)
+    },
+    {
+      query: t.Object({
+        id: t.String(),
+        limit: t.Numeric(),
+      }),
+    },
+  )

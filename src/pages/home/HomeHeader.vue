@@ -3,10 +3,11 @@
     <v-toolbar :color="home.color.header">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title @click="home.coming" class="title">
-        TSBOARD<span>.dev</span>
+        <div>TSBOARD<span>.dev</span></div>
       </v-app-bar-title>
 
-      <v-spacer></v-spacer>
+      <v-spacer v-if="home.width < 1000"></v-spacer>
+      <home-header-search v-else-if="route.name === 'home'"></home-header-search>
 
       <v-btn icon @click="util.go('login')" v-if="auth.user.uid < 1">
         <v-icon>mdi-login-variant</v-icon>
@@ -83,6 +84,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -91,7 +93,9 @@ import { NOTICE_TYPE } from "../../../server/database/board/const"
 import { NoticeType } from "../../interface/home"
 import { TSBOARD } from "../../../tsboard.config"
 import ChatDialog from "../../components/user/ChatDialog.vue"
+import HomeHeaderSearch from "./HomeHeaderSearch.vue"
 
+const route = useRoute()
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
