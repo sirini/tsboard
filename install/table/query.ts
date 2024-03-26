@@ -18,7 +18,6 @@ export const inserts: string[] = []
 export const tests: string[] = []
 
 //////////
-// v0.8.0
 // 사용자 기본 정보 테이블, blocked = 1 일 경우 차단된 사용자
 tables.push(`${create} #db#user (
   ${uid},
@@ -252,6 +251,17 @@ tables.push(`${create} #db#file (
   path VARCHAR(300) ${nnde},
   timestamp BIGINT ${unnd0},
   ${primary},
+  KEY (post_uid)
+) ${engineEncode}`)
+
+// 첨부된 파일이 이미지일 때 썸네일 경로 보관하는 테이블
+tables.push(`${create} #db#file_thumbnail (
+  ${uid},
+  file_uid INT ${unnd0},
+  post_uid INT ${unnd0},
+  path VARCHAR(300) ${nnde},
+  ${primary},
+  KEY (file_uid),
   KEY (post_uid)
 ) ${engineEncode}`)
 

@@ -28,7 +28,7 @@ export const useHomeStore = defineStore("home", () => {
   const sidebarWidth = ref<number>(300)
   const width = ref<number>(1200)
   const staticWidth = ref<number>(800)
-  const cols = ref<number>(4)
+  const cols = ref<number>(3)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])

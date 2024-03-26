@@ -187,14 +187,22 @@ export async function isBannedByWriter(postUid: number, accessUserUid: number): 
   return true
 }
 
-// 게시글 삭제 표기하고 소속된 댓글들도 삭제 표기 및 첨부 파일은 삭제
+// 게시글 삭제 표기하고 소속된 댓글들도 삭제 표기 및 첨부 파일, 썸네일은 삭제
 export async function removePost(postUid: number): Promise<void> {
   update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, [-1, postUid])
   update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, [-1, postUid])
 
   const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [postUid])
   for (const file of files) {
-    await removeFile(`.${file}`)
+    removeFile(`.${file.path}`)
   }
   remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid])
+
+  const thumbs = await select(`SELECT path FROM ${table}file_thumbnail WHERE post_uid = ?`, [
+    postUid,
+  ])
+  for (const thumb of thumbs) {
+    removeFile(`.${thumb.path}`)
+  }
+  remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid])
 }

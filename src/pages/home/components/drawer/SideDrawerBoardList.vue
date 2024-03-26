@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useHomeStore } from "../../store/home"
-import { useUtilStore } from "../../store/util"
-import { BOARD_TYPE, BoardType } from "../../interface/board"
+import { useHomeStore } from "../../../../store/home"
+import { useUtilStore } from "../../../../store/util"
+import { BOARD_TYPE, BoardType } from "../../../../interface/board"
 
 const home = useHomeStore()
 const util = useUtilStore()

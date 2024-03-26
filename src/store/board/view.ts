@@ -158,7 +158,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(VIEW.REMOVED_POST)
-    util.go("boardList", id.value)
+    closeConfirmRemoveDialog()
+    util.go(route.name === "galleryOpen" ? "galleryList" : "boardList", id.value)
   }
 
   return {

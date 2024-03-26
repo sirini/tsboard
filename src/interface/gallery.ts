@@ -19,6 +19,7 @@ export type GridItem = {
   uid: number
   writer: Writer
   files: string[]
+  thumbnails: string[]
   like: number
   liked: boolean
   reply: number

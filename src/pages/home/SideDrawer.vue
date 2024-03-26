@@ -9,9 +9,9 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../store/user/auth"
 import { useHomeStore } from "../../store/home"
-import SideDrawerLogin from "./SideDrawerLogin.vue"
-import SideDrawerMyinfo from "./SideDrawerMyinfo.vue"
-import SideDrawerBoardList from "./SideDrawerBoardList.vue"
+import SideDrawerLogin from "./components/drawer/SideDrawerLogin.vue"
+import SideDrawerMyinfo from "./components/drawer/SideDrawerMyinfo.vue"
+import SideDrawerBoardList from "./components/drawer/SideDrawerBoardList.vue"
 
 const auth = useAuthStore()
 const home = useHomeStore()

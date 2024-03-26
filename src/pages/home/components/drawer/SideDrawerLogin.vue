@@ -37,10 +37,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useAuthStore } from "../../store/user/auth"
-import { useHomeStore } from "../../store/home"
-import { useUtilStore } from "../../store/util"
-import AlertBar from "../../components/util/AlertBar.vue"
+import { useAuthStore } from "../../../../store/user/auth"
+import { useHomeStore } from "../../../../store/home"
+import { useUtilStore } from "../../../../store/util"
+import AlertBar from "../../../../components/util/AlertBar.vue"
 
 const auth = useAuthStore()
 const home = useHomeStore()

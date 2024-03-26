@@ -39,7 +39,7 @@ export async function select(
     }
     result = rows
   } catch (e: any) {
-    console.log(`[error/select] ${query} (${values.toString()})`)
+    console.log(`[error/select] ${query}\n\n(${values.toString()})`)
   } finally {
     db.release()
   }
@@ -52,7 +52,7 @@ export async function update(query: string, values: (string | number)[]): Promis
   try {
     await db.execute(query, values)
   } catch (e: any) {
-    console.log(`[error/update] ${query} (${values.toString()})`)
+    console.log(`[error/update] ${query}\n\n(${values.toString()})`)
   } finally {
     db.release()
   }
@@ -66,7 +66,7 @@ export async function insert(query: string, values: (string | number)[]): Promis
     const [rows] = await db.execute<ResultSetHeader>(query, values)
     insertId = rows.insertId
   } catch (e: any) {
-    console.log(`[error/insert] ${query} (${values.toString()})`)
+    console.log(`[error/insert] ${query}\n\n(${values.toString()})`)
   } finally {
     db.release()
   }
@@ -79,7 +79,19 @@ export async function remove(query: string, values: (string | number)[]): Promis
   try {
     await db.execute(query, values)
   } catch (e: any) {
-    console.log(`[error/delete] ${query} (${values.toString()})`)
+    console.log(`[error/delete] ${query}\n\n(${values.toString()})`)
+  } finally {
+    db.release()
+  }
+}
+
+// 기타 쿼리 실행
+export async function execute(query: string): Promise<void> {
+  const db = await pool.getConnection()
+  try {
+    await db.execute(query)
+  } catch (e: any) {
+    console.log(`[error/execute] ${query}`)
   } finally {
     db.release()
   }

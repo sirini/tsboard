@@ -31,9 +31,9 @@ export const useGalleryStore = defineStore("gallery", () => {
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<Post>(INIT_POST)
   const images = ref<GridItem[]>([])
-  const cols = ref<number>(3)
   const gridSize = ref<number>(250)
   const page = ref<number>(1)
+  const pageLength = ref<number>(1)
   const sinceUid = ref<number>(0)
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
@@ -46,6 +46,7 @@ export const useGalleryStore = defineStore("gallery", () => {
       util.snack(GALLERY.NO_BOARD_ID)
       return
     }
+
     const response = await server.api.board.photolist.get({
       $headers: {
         authorization: auth.user.token,
@@ -77,7 +78,12 @@ export const useGalleryStore = defineStore("gallery", () => {
       return
     }
 
-    images.value = response.data.result.images
+    if (sinceUid.value < 1) {
+      images.value = response.data.result.images
+    } else {
+      images.value.push(...response.data.result.images)
+    }
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
   }
 
   // 다음 페이지 가져오기
@@ -112,8 +118,9 @@ export const useGalleryStore = defineStore("gallery", () => {
     post,
     confirmCancelDialog,
     images,
-    cols,
     gridSize,
+    page,
+    pageLength,
     option,
     keyword,
     loadPhotoList,

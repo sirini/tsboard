@@ -1,12 +1,11 @@
 /**
- * setup.ts
+ * setup
  *
  * 이 파일은 최초 설치 시 단 한 번 실행 필요, 실행 시 bun 런타임 사용
  *
  * bun setup.ts
  */
 
-const fs = require("fs")
 import { checkEnvFile, getSetupInformation, saveEnvFile, initDatabase } from "./install/functions"
 import { welcome, install, complete } from "./install/messages"
 import chalk from "chalk"

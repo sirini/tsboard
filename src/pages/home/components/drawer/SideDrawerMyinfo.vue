@@ -30,9 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../store/user/auth"
-import { useUtilStore } from "../../store/util"
-import { TSBOARD } from "../../../tsboard.config"
+import { useAuthStore } from "../../../../store/user/auth"
+import { useUtilStore } from "../../../../store/util"
+import { TSBOARD } from "../../../../../tsboard.config"
 
 const auth = useAuthStore()
 const util = useUtilStore()

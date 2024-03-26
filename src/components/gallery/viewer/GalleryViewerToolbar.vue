@@ -76,6 +76,7 @@ const props = defineProps<{
 // 사진 삭제하기
 function remove(): void {
   view.postUid = viewer.postUid
+  viewer.dialog = false
   view.openConfirmRemoveDialog()
 }
 </script>

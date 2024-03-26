@@ -10,7 +10,7 @@
         cover
         :height="gallery.gridSize"
         aspect-ratio="1/1"
-        :src="TSBOARD.PREFIX + item.files[0]"
+        :src="TSBOARD.PREFIX + item.thumbnails[0]"
         class="text-center vimg"
         :class="{ onHover: isHovering }"
         @click="gallery.open(item.uid)"
@@ -23,7 +23,7 @@
         class="status text-center"
         width="180"
       >
-        <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ item.files.length }}</span>
+        <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ item.thumbnails.length }}</span>
         <span class="icon"><v-icon>mdi-heart</v-icon> {{ item.like }}</span>
         <span class="icon"><v-icon>mdi-comment-multiple-outline</v-icon> {{ item.reply }}</span>
       </v-card>

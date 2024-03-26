@@ -123,9 +123,10 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
       [post.uid, 1],
     )
-    const [file] = await select(`SELECT path FROM ${table}file WHERE post_uid = ? LIMIT 1`, [
-      post.uid,
-    ])
+    const [file] = await select(
+      `SELECT path FROM ${table}file_thumbnail WHERE post_uid = ? LIMIT 1`,
+      [post.uid],
+    )
     const cover = (file?.path as string) ?? ""
 
     result.push({

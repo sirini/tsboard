@@ -46,11 +46,19 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
     for (const path of paths) {
       files.push(path.path)
     }
+    const thumbnails: string[] = []
+    const thumbs = await select(`SELECT path FROM ${table}file_thumbnail WHERE post_uid = ?`, [
+      post.uid,
+    ])
+    for (const thumb of thumbs) {
+      thumbnails.push(thumb.path)
+    }
 
     result.push({
       uid: post.uid,
       writer: info.writer,
       files,
+      thumbnails,
       like: info.like,
       liked: info.liked,
       reply: info.reply,

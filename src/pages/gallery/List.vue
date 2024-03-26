@@ -8,15 +8,17 @@
           <v-card elevation="0" class="mx-auto" :max-width="gallery.config.width">
             <gallery-header></gallery-header>
             <v-divider class="mb-6"></v-divider>
+
             <v-row no-gutters>
               <v-col
                 v-for="(image, index) in gallery.images"
                 :key="index"
                 class="d-flex child-flex pl-1 pr-1"
-                :cols="gallery.cols"
+                :cols="home.cols"
               >
                 <gallery-grid-item :item="image"></gallery-grid-item>
               </v-col>
+
               <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-12">
                 <v-icon>mdi-information</v-icon> 아직 올려진 사진이 없거나, 목록을 볼 수 있는 권한이
                 없습니다.
@@ -41,7 +43,20 @@
                   >
                     이전 사진들 불러오기
                   </v-btn>
+
                   <v-spacer></v-spacer>
+                  <v-chip variant="tonal" color="blue-grey-lighten-3">
+                    {{ gallery.page }} / {{ gallery.pageLength }}
+                  </v-chip>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    prepend-icon="mdi-list-box-outline"
+                    class="ml-3 mr-3"
+                    variant="text"
+                    @click="util.go('galleryList', gallery.id)"
+                    >목록보기</v-btn
+                  >
                   <v-btn
                     prepend-icon="mdi-upload"
                     variant="text"
@@ -63,12 +78,13 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted, ref } from "vue"
+import { watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/board/gallery/gallery"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useViewerStore } from "../../store/board/gallery/viewer"
+import { useHomeStore } from "../../store/home"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListSearch from "../../components/gallery/list/GalleryListSearch.vue"
@@ -83,7 +99,7 @@ const gallery = useGalleryStore()
 const auth = useAuthStore()
 const util = useUtilStore()
 const viewer = useViewerStore()
-const DEBUG = ref<string>("")
+const home = useHomeStore()
 
 // 뷰어 띄우기
 function openViewerDialog(): void {
@@ -94,6 +110,7 @@ function openViewerDialog(): void {
     gallery.images.map((image) => {
       if (image.uid === no) {
         viewer.files = image.files
+        viewer.thumbnails = image.thumbnails
         return
       }
     })
@@ -103,10 +120,7 @@ function openViewerDialog(): void {
 onMounted(async () => {
   await gallery.loadPhotoList()
   openViewerDialog()
-
-  window.addEventListener("resize", (event) => {
-    gallery.gridSize = Math.floor(gallery.config.width / (12 / gallery.cols))
-  })
+  gallery.gridSize = Math.floor(gallery.config.width / (12 / home.cols))
 })
 
 // 뷰어가 필요할 때 열어주고, 이미지 목록도 이때 전달하기

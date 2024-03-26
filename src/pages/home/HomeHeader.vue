@@ -93,7 +93,7 @@ import { NOTICE_TYPE } from "../../../server/database/board/const"
 import { NoticeType } from "../../interface/home"
 import { TSBOARD } from "../../../tsboard.config"
 import ChatDialog from "../../components/user/ChatDialog.vue"
-import HomeHeaderSearch from "./HomeHeaderSearch.vue"
+import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 
 const route = useRoute()
 const auth = useAuthStore()

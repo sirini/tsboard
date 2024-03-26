@@ -173,6 +173,27 @@ export async function saveTags(boardUid: number, postUid: number, tags: string[]
   }
 }
 
+// 첨부파일이 이미지 파일이면 썸네일도 생성하여 저장하기
+async function saveThumbnailImage(
+  fileUid: number,
+  postUid: number,
+  inputFilePath: string,
+  randID: string,
+): Promise<void> {
+  const thumbPath = await makeSavePath("thumbnails")
+  const thumbSavePath = `${thumbPath}/${randID}.webp`
+  await resizeImage(inputFilePath, thumbSavePath, 512)
+
+  if ((await exists(thumbSavePath)) === true) {
+    const pathForThumbnail = thumbSavePath.slice(1)
+    insert(`INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path) VALUES (?, ?, ?)`, [
+      fileUid,
+      postUid,
+      pathForThumbnail,
+    ])
+  }
+}
+
 // 입력받은 첨부파일들을 저장하기
 export async function saveAttachments(
   boardUid: number,
@@ -182,15 +203,20 @@ export async function saveAttachments(
   const savePath = await makeSavePath("attachments")
   for (const file of files) {
     const ext = file.name.split(".").pop() || ""
-    const newSavePath = `${savePath}/${generateRandomID()}.${ext}`
+    const randID = generateRandomID()
+    const newSavePath = `${savePath}/${randID}.${ext}`
     await Bun.write(newSavePath, file)
 
     if ((await exists(newSavePath)) === true) {
       const pathForAttachment = newSavePath.slice(1)
-      insert(
+      const fileUid = await insert(
         `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) VALUES (?, ?, ?, ?, ?)`,
         [boardUid, postUid, file.name, pathForAttachment, Date.now()],
       )
+
+      if (/(jpg|jpeg|png|bmp|webp|gif)/i.test(ext) === true) {
+        await saveThumbnailImage(fileUid, postUid, newSavePath, randID)
+      }
     }
   }
 }
@@ -265,12 +291,29 @@ export async function isAuthor(
   return content.user_uid === accessUserUid
 }
 
+// 첨부파일이 이미지라면 썸네일도 삭제하기
+async function removeThumbnailFile(fileUid: number): Promise<void> {
+  const [thumb] = await select(
+    `SELECT uid, path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
+    [fileUid],
+  )
+  if (!thumb) {
+    return
+  }
+  removeFile(`.${thumb.path}`)
+  remove(`DELETE FROM ${table}file_thumbnail WHERE uid = ? LIMIT 1`, [thumb.uid])
+}
+
 // 첨부되어 있던 파일 삭제
 export async function removeAttachedFile(fileUid: number): Promise<void> {
   const [file] = await select(`SELECT path FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
   if (!file) {
     return
   }
+  if (/\.(jpg|jpeg|png|bmp|webp|gif)$/i.test(file.path) === true) {
+    removeThumbnailFile(fileUid)
+  }
+
   removeFile(`.${file.path}`)
   remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
 }

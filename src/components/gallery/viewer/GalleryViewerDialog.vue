@@ -45,11 +45,11 @@
 
             <v-list-item class="pt-2 pb-2">
               <v-row no-gutters>
-                <v-col v-for="(file, index) in viewer.files" :key="index" cols="2">
+                <v-col v-for="(thumb, index) in viewer.thumbnails" :key="index" cols="2">
                   <v-img
                     cover
                     height="80"
-                    :src="TSBOARD.PREFIX + file"
+                    :src="TSBOARD.PREFIX + thumb"
                     :class="viewer.position === index ? 'selected' : 'deselected'"
                     @click="viewer.position = index"
                   ></v-img>

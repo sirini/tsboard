@@ -43,6 +43,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const sinceUid = ref<number>(0)
   const post = ref<PostView>(INIT_POST_VIEW)
   const files = ref<string[]>([])
+  const thumbnails = ref<string[]>([])
   const tags = ref<Pair[]>([])
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -78,11 +79,13 @@ export const useViewerStore = defineStore("viewer", () => {
 
     if (!response.data) {
       util.snack(GALLERY.NO_RESPONSE)
+      dialog.value = false
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
       util.snack(`${GALLERY.FAILED_LOAD_PHOTO} (${response.data.error})`)
+      dialog.value = false
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -237,6 +240,7 @@ export const useViewerStore = defineStore("viewer", () => {
     post,
     comments,
     files,
+    thumbnails,
     tags,
     position,
     textRule,

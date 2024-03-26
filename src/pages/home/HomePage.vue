@@ -7,112 +7,19 @@
         <v-card class="mx-auto wrap app" elevation="0" rounded="0" :max-width="home.width">
           <v-row class="mt-6 mb-12">
             <v-col :cols="home.cols">
-              <v-card rounded="xl" class="box">
-                <v-card-title class="title"
-                  ><v-icon class="mr-2">mdi-pin</v-icon> TSBOARD는 무엇인가요?</v-card-title
-                >
-                <v-divider></v-divider>
-                <v-card-text class="pa-0 list">
-                  <v-list>
-                    <v-list-item prepend-icon="mdi-language-typescript">
-                      TSBOARD는 <strong>타입스크립트</strong>로 작성된 오픈소스 게시판입니다.
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-vuejs">
-                      프론트엔드는 Vue 3 / Vuetify / Vue Router / Pinia / Tiptap 으로 구성되어
-                      있습니다.
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-database-sync-outline">
-                      백엔드는 Bun / ElysiaJS / MySQL(MariaDB) 로 구성됩니다.
-                    </v-list-item>
-                  </v-list>
-                </v-card-text>
-              </v-card>
+              <what-is-tsboard></what-is-tsboard>
             </v-col>
 
             <v-col :cols="home.cols">
-              <v-card rounded="xl" class="box">
-                <v-card-title class="title"
-                  ><v-icon class="mr-2">mdi-pin</v-icon> 왜 개발했나요?</v-card-title
-                >
-                <v-divider></v-divider>
-                <v-card-text class="pa-0 list">
-                  <v-list>
-                    <v-list-item prepend-icon="mdi-thumb-up-outline">
-                      타입스크립트 언어가 마음에 들었습니다!
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-head-question-outline">
-                      Bun과 ElysiaJS 조합으로 어느 정도 퍼포먼스를 낼 수 있을지 궁금하기도
-                      했구요!</v-list-item
-                    >
-                    <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-account-group">
-                      Vue & Vuetify 기반 게시판을 만들면 재밌겠다 싶어서 시작했습니다!</v-list-item
-                    >
-                  </v-list>
-                </v-card-text>
-              </v-card>
+              <why-developing-tsboard></why-developing-tsboard>
             </v-col>
 
             <v-col :cols="home.cols">
-              <v-card rounded="xl" class="box">
-                <v-card-title class="title"
-                  ><v-icon class="mr-2">mdi-pin</v-icon> 어디서 받나요?</v-card-title
-                >
-                <v-divider></v-divider>
-                <v-card-text class="pa-0 list">
-                  <v-list>
-                    <v-list-item
-                      >TSBOARD는 깃허브를 통해 소스코드 전체를 내려받으실 수 있으며, 사이트의 목적에
-                      맞게 수정하여 활용하실 수 있습니다.</v-list-item
-                    >
-                    <v-divider></v-divider>
-                    <v-list-item>
-                      설치 안내는 Github 페이지에서 확인 하실 수 있습니다.
-                    </v-list-item>
-                  </v-list>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-btn
-                    block
-                    size="large"
-                    prepend-icon="mdi-download"
-                    append-icon="mdi-github"
-                    color="blue-grey"
-                    >Download from Github
-                    <v-tooltip activator="parent">TSBOARD 깃허브 페이지로 이동합니다!</v-tooltip>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
+              <how-to-get-tsboard></how-to-get-tsboard>
             </v-col>
 
             <v-col :cols="home.cols">
-              <v-card rounded="xl" class="box">
-                <v-card-title class="title" @click="util.go('boardList', 'free')"
-                  ><v-icon class="mr-2">mdi-pin</v-icon> 자유게시판</v-card-title
-                >
-                <v-divider></v-divider>
-                <v-card-text class="pa-0 list">
-                  <v-list>
-                    <v-list-item
-                      v-for="(post, index) in freeBoardList"
-                      :key="index"
-                      @click="util.go('boardView', 'free', post.uid)"
-                    >
-                      <template v-slot:prepend>
-                        <v-chip size="small">{{ post.category }}</v-chip>
-                      </template>
-                      <v-list-item-title class="pl-2 pr-2">{{ post.title }}</v-list-item-title>
-                      <template v-slot:append>
-                        {{ util.date(post.submitted) }}
-                      </template>
-                    </v-list-item>
-                  </v-list>
-                </v-card-text>
-              </v-card>
+              <home-page-grid-board id="free" :limit="5"></home-page-grid-board>
             </v-col>
 
             <v-col v-for="(post, index) in home.latestPosts" :key="index" :cols="home.cols">
@@ -196,12 +103,16 @@
 import { onMounted, ref } from "vue"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import HomeHeader from "./HomeHeader.vue"
-import HomeFooter from "./HomeFooter.vue"
-import SideDrawer from "./SideDrawer.vue"
 import { BOARD_TYPE } from "../../interface/board"
 import { TSBOARD } from "../../../tsboard.config"
 import { LatestPost } from "../../interface/home"
+import HomeHeader from "./HomeHeader.vue"
+import HomeFooter from "./HomeFooter.vue"
+import SideDrawer from "./SideDrawer.vue"
+import WhatIsTsboard from "./components/static/WhatIsTsboard.vue"
+import WhyDevelopingTsboard from "./components/static/WhyDevelopingTsboard.vue"
+import HowToGetTsboard from "./components/static/HowToGetTsboard.vue"
+import HomePageGridBoard from "./components/list/HomePageGridBoard.vue"
 
 const home = useHomeStore()
 const util = useUtilStore()

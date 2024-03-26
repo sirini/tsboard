@@ -53,8 +53,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useHomeStore } from "../../store/home"
-import { SEARCH_OPTION, SearchOption } from "../../interface/board"
+import { useHomeStore } from "../../../../store/home"
+import { SEARCH_OPTION, SearchOption } from "../../../../interface/board"
 
 const home = useHomeStore()
 const optionTitle = ref<string>("제목")

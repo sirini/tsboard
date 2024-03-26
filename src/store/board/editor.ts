@@ -15,6 +15,7 @@ import { EDITOR } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
 import { BOARD_TYPE, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -214,14 +215,33 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     postUid.value = 0
   }
 
-  // 작성된 글 저장하기
-  async function write(): Promise<void> {
+  // 글 작성 or 수정 전에 체크 로직
+  function checkBeforeSend(): boolean {
     if (title.value.length < 2) {
       util.error(EDITOR.TOO_SHORT_TITLE)
-      return
+      return false
     }
     if (content.value.length < 3) {
       util.error(EDITOR.TOO_SHORT_CONTENT)
+      return false
+    }
+
+    if (files.value.length > 0) {
+      let totalSize = 0
+      files.value.map((file) => {
+        totalSize += file.size
+      })
+      if (TSBOARD.MAX_FILE_SIZE < totalSize) {
+        util.error(`${EDITOR.EXCEED_FILESIZE_LIMIT} (limit: ${util.num(TSBOARD.MAX_FILE_SIZE)})`)
+        return false
+      }
+    }
+    return true
+  }
+
+  // 작성된 글 저장하기
+  async function write(): Promise<void> {
+    if (checkBeforeSend() === false) {
       return
     }
 
@@ -258,12 +278,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
   // 글 수정하기
   async function modify(): Promise<void> {
-    if (title.value.length < 2) {
-      util.error(EDITOR.TOO_SHORT_TITLE)
-      return
-    }
-    if (content.value.length < 3) {
-      util.error(EDITOR.TOO_SHORT_CONTENT)
+    if (checkBeforeSend() === false) {
       return
     }
 

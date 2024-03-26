@@ -60,7 +60,7 @@ const writeBody = {
     t.Files({
       type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
       maxSize: TSBOARD.MAX_FILE_SIZE,
-      error: "Invalid file type.",
+      error: "Invalid file type or exceed file size.",
     }),
   ),
 }
