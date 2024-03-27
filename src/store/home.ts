@@ -79,11 +79,13 @@ export const useHomeStore = defineStore("home", () => {
     width.value = window.innerWidth - Math.floor(window.innerWidth / 20)
     if (window.innerWidth < TSBOARD.SCREEN.MOBILE) {
       cols.value = 12
+      width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
     } else if (
       window.innerWidth >= TSBOARD.SCREEN.MOBILE &&
       window.innerWidth < TSBOARD.SCREEN.TABLET
     ) {
       cols.value = 6
+      width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
     } else if (
       window.innerWidth >= TSBOARD.SCREEN.TABLET &&
       window.innerWidth < TSBOARD.SCREEN.PC
@@ -93,7 +95,7 @@ export const useHomeStore = defineStore("home", () => {
       cols.value = 3
     } else {
       cols.value = 3
-      width.value = TSBOARD.SCREEN.LARGE
+      width.value = TSBOARD.SCREEN.LARGE - 50
     }
   }
 

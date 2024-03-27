@@ -19,7 +19,11 @@
       >{{ util.unescape(post.title) }}</v-card-title
     >
     <v-divider></v-divider>
-    <v-card-text v-if="post.cover.length < 1" class="content" v-html="post.content"></v-card-text>
+    <v-card-text
+      v-if="post.cover.length < 1"
+      class="post-content"
+      v-html="post.content"
+    ></v-card-text>
     <v-divider v-if="post.cover.length < 1"></v-divider>
     <v-card-actions class="pl-3 pr-3">
       <v-chip
@@ -61,5 +65,10 @@ const props = defineProps<{
 .post-title {
   font-size: 1em;
   font-weight: bold;
+}
+.post-content {
+  line-height: 1.8em;
+  height: 199px;
+  overflow: hidden;
 }
 </style>

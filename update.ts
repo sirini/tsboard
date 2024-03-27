@@ -18,3 +18,7 @@ await execute(`CREATE TABLE IF NOT EXISTS ${table}file_thumbnail (
   KEY (file_uid),
   KEY (post_uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`)
+
+console.log(`v0.8.2 >>> v0.8.4 update.`)
+
+process.exit(0)

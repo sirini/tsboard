@@ -4,7 +4,7 @@
       ><v-icon class="mr-2">mdi-pin</v-icon> 어디서 받나요?</v-card-title
     >
     <v-divider></v-divider>
-    <v-card-text class="pa-0 list">
+    <v-card-text class="pa-0 post-content">
       <v-list>
         <v-list-item
           >TSBOARD는 깃허브를 통해 소스코드 전체를 내려받으실 수 있으며, 사이트의 목적에 맞게
@@ -18,7 +18,6 @@
     <v-card-actions>
       <v-btn
         block
-        size="large"
         prepend-icon="mdi-download"
         append-icon="mdi-chevron-right"
         color="blue-grey"
@@ -46,5 +45,10 @@ const util = useUtilStore()
 .post-title {
   font-size: 1em;
   font-weight: bold;
+}
+.post-content {
+  line-height: 1.8em;
+  height: 199px;
+  overflow: hidden;
 }
 </style>
