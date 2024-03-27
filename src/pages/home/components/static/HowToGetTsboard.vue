@@ -1,6 +1,8 @@
 <template>
   <v-card rounded="xl" class="box">
-    <v-card-title class="title"><v-icon class="mr-2">mdi-pin</v-icon> 어디서 받나요?</v-card-title>
+    <v-card-title class="post-title"
+      ><v-icon class="mr-2">mdi-pin</v-icon> 어디서 받나요?</v-card-title
+    >
     <v-divider></v-divider>
     <v-card-text class="pa-0 list">
       <v-list>
@@ -18,11 +20,31 @@
         block
         size="large"
         prepend-icon="mdi-download"
-        append-icon="mdi-github"
+        append-icon="mdi-chevron-right"
         color="blue-grey"
+        @click="
+          util.open(
+            'https://github.com/sirini/tsboard?tab=readme-ov-file#tsboard-%EC%84%A4%EC%B9%98',
+          )
+        "
         >Download from Github
-        <v-tooltip activator="parent">TSBOARD 깃허브 페이지로 이동합니다!</v-tooltip>
+        <v-tooltip activator="parent"
+          >TSBOARD 깃허브 페이지에서 설치 방법을 먼저 확인해봅시다!</v-tooltip
+        >
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
+
+<script setup lang="ts">
+import { useUtilStore } from "../../../../store/util"
+
+const util = useUtilStore()
+</script>
+
+<style scoped>
+.post-title {
+  font-size: 1em;
+  font-weight: bold;
+}
+</style>

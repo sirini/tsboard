@@ -216,9 +216,11 @@ async function searchTitleContent(
   direction: ">" | "<",
   ordering: "ASC" | "DESC",
 ): Promise<RowDataPacket[]> {
+  const option = param.option === (SEARCH_OPTION.TITLE as SearchOption) ? "title" : "content"
   const result = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND ${param.option} LIKE '%${param.keyword}%' AND uid ${direction} ? 
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND ${option} 
+    LIKE '%${param.keyword}%' AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
     [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
   )
@@ -294,11 +296,11 @@ export async function getSearchedPosts(
     param.option === (SEARCH_OPTION.CONTENT as SearchOption)
   ) {
     result = await searchTitleContent(param, direction, ordering)
-  } else if (param.option === SEARCH_OPTION.WRITER) {
+  } else if (param.option === (SEARCH_OPTION.WRITER as SearchOption)) {
     result = await searchWriterName(param, direction, ordering)
-  } else if (param.option === SEARCH_OPTION.CATEGORY) {
+  } else if (param.option === (SEARCH_OPTION.CATEGORY as SearchOption)) {
     result = await searchCategoryUid(param, direction, ordering)
-  } else if (param.option === SEARCH_OPTION.TAG) {
+  } else if (param.option === (SEARCH_OPTION.TAG as SearchOption)) {
     result = await searchTagName(param, direction, ordering)
   }
   return result

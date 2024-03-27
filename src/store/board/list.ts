@@ -104,8 +104,15 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 검색 옵션 초기화하기
   function resetSearchKeyword(): void {
-    clearVariables()
-    loadPostList()
+    option.value = SEARCH_OPTION.TITLE as SearchOption
+    keyword.value = ""
+  }
+
+  // 게시글 목록 가져오는 옵션 초기화하기
+  function clearVariables(): void {
+    sinceUid.value = 0
+    page.value = 1
+    pageLength.value = 1
   }
 
   // 카테고리 번호에 해당하는 게시글들 가져오기
@@ -116,13 +123,20 @@ export const useBoardListStore = defineStore("boardList", () => {
     loadPostList()
   }
 
-  // 게시글 목록 가져오는 옵션 초기화하기
-  function clearVariables(): void {
-    sinceUid.value = 0
-    page.value = 1
-    pageLength.value = 1
-    option.value = SEARCH_OPTION.TITLE as SearchOption
-    keyword.value = ""
+  // 검색하기
+  function search(): void {
+    if (keyword.value.length < 2) {
+      return
+    }
+    clearVariables()
+    loadPostList()
+  }
+
+  // 갤러리 목록보기 초기화
+  function init(): void {
+    clearVariables()
+    resetSearchKeyword()
+    loadPostList()
   }
 
   return {
@@ -139,5 +153,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     loadNextPosts,
     resetSearchKeyword,
     loadPostsByCategory,
+    search,
+    init,
   }
 })

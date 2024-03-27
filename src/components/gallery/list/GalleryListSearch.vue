@@ -1,5 +1,5 @@
 <template>
-  <v-card width="500">
+  <v-card max-width="500">
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="gallery.option" size="small" group>
@@ -20,8 +20,8 @@
           append-inner-icon="mdi-magnify"
           prepend-inner-icon="mdi-restore"
           @click:prepend-inner="gallery.resetSearchKeyword"
-          @click:append-inner="gallery.loadPhotoList"
-          @keyup.enter="gallery.loadPhotoList"
+          @click:append-inner="gallery.search"
+          @keyup.enter="gallery.search"
         ></v-text-field>
       </v-list-item>
     </v-list>

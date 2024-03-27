@@ -58,7 +58,7 @@ const props = defineProps<{
 
 .info {
   color: #828282;
-  font-size: 0.65em;
+  font-size: 0.7em;
 }
 .login {
   position: absolute;

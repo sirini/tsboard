@@ -17,10 +17,10 @@
               <h2>찾아와 주신 여러분, 환영합니다!</h2>
               <p>&nbsp;</p>
               <p>
-                이 사이트는 <strong>TSBOARD</strong>라고 이름 지은 오픈소스 게시판(갤러리, 블로그,
-                ...) 사용자 분들을 위해 제작되었습니다. TSBOARD는 Github를 통해 코드를 공개하고
-                있으며, 24년 3월 첫 Beta 출시를 목표로 하고 있습니다. 아직 개발 초기 단계이므로,
-                테스트 목적으로 먼저 사용을 권장해 드립니다. (발견하신 버그는 하단
+                이 사이트는 <strong>TSBOARD</strong>라고 이름 지은 커뮤니티 빌더 사용자 분들을 위해
+                제작되었습니다. TSBOARD는 Github를 통해 코드를 공개하고 있으며, 24년 4월 첫 Beta
+                출시를 목표로 하고 있습니다. 아직 개발 초기 단계이므로, 테스트 목적으로 먼저 사용을
+                권장해 드립니다. (발견하신 버그는 하단
                 <a
                   href="https://github.com/sirini/tsboard/issues"
                   target="_blank"
@@ -68,36 +68,44 @@
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-link-variant" @click="util.go('bugReport')"
+              <v-btn
+                prepend-icon="mdi-link-variant"
+                @click="util.open('https://github.com/sirini/tsboard')"
                 >Github
                 <v-tooltip activator="parent"
                   >깃허브에 공개된 TSBOARD 프로젝트 보러가기 (★ 도 눌러주기 😄)</v-tooltip
                 >
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('typescript')"
+              <v-btn
+                prepend-icon="mdi-link"
+                class="mr-2"
+                @click="util.open('https://www.typescriptlang.org/ko/')"
                 >TS
                 <v-tooltip activator="parent">타입스크립트(TypeScript) 언어 배우러 가기!</v-tooltip>
               </v-btn>
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.go('vue')"
+              <v-btn prepend-icon="mdi-link" @click="util.open('https://ko.vuejs.org')"
                 >Vue
                 <v-tooltip activator="parent">Vue 프레임워크 배우러 가기!</v-tooltip>
               </v-btn>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('vuetify')"
+              <v-btn
+                prepend-icon="mdi-link"
+                class="mr-2"
+                @click="util.open('https://vuetifyjs.com')"
                 >Vuetify
                 <v-tooltip activator="parent">Vuetify 라이브러리 배우러 가기!</v-tooltip>
               </v-btn>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.go('tiptap')"
+              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.open('https://tiptap.dev')"
                 >Tiptap
                 <v-tooltip activator="parent">Tiptap 에디터 배우러 가기!</v-tooltip>
               </v-btn>
               <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.go('bun')"
+              <v-btn prepend-icon="mdi-link" @click="util.open('https://bun.sh')"
                 >Bun
                 <v-tooltip activator="parent">JS/TS 런타임 겸 툴킷 Bun 보러가기!</v-tooltip>
               </v-btn>
-              <v-btn prepend-icon="mdi-link" @click="util.go('elysia')"
+              <v-btn prepend-icon="mdi-link" @click="util.open('https://elysiajs.com')"
                 >Elysia
                 <v-tooltip activator="parent"
                   >Bun 기반 빠른 웹프레임워크 Elysia 배우러 가기!</v-tooltip

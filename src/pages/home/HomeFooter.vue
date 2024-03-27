@@ -6,7 +6,11 @@
         <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">첫화면</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">사이트 소개</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">라이선스</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('bugReport')"
+        <v-btn
+          color="grey"
+          class="mx-2"
+          rounded="xl"
+          @click="util.open('https://github.com/sirini/tsboard/issues')"
           >버그 신고</v-btn
         >
         <v-spacer></v-spacer>

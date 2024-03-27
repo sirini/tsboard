@@ -86,7 +86,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
   }
 
-  // 다음 페이지 가져오기
+  // 이전 사진들 가져오기
   async function loadOldPhotos(): Promise<void> {
     page.value += 1
     pagingDirection.value = PAGING_DIRECTION.NEXT
@@ -112,6 +112,29 @@ export const useGalleryStore = defineStore("gallery", () => {
     keyword.value = ""
   }
 
+  // 목록보기 변수 초기화
+  function clearVariables(): void {
+    sinceUid.value = 0
+    page.value = 1
+    pageLength.value = 1
+  }
+
+  // 검색하기
+  function search(): void {
+    if (keyword.value.length < 2) {
+      return
+    }
+    clearVariables()
+    loadPhotoList()
+  }
+
+  // 갤러리 목록보기
+  function list(): void {
+    clearVariables()
+    resetSearchKeyword()
+    loadPhotoList()
+  }
+
   return {
     id,
     config,
@@ -127,5 +150,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     loadOldPhotos,
     open,
     resetSearchKeyword,
+    search,
+    list,
   }
 })

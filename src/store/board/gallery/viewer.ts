@@ -5,7 +5,7 @@
  */
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
@@ -24,6 +24,7 @@ import { COMMENT } from "../../../messages/store/board/comment"
 export const useViewerStore = defineStore("viewer", () => {
   const server = edenTreaty<App>(process.env.API!)
   const route = useRoute()
+  const router = useRouter()
   const auth = useAuthStore()
   const util = useUtilStore()
   const dialog = ref<boolean>(false)
@@ -32,7 +33,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const transPos = ref<Position>({ x: 0, y: 0 })
   const scale = ref<number>(1.0)
   const drawerWidth = ref<number>(400)
-  const drawerPosition = ref<"left" | "right">("right")
+  const drawerPosition = ref<"left" | "right" | "bottom">("right")
   const targetDom = "#tsboardViewerPreview"
   const zoomSpeed = 0.25
   const zoomMax = 20.0
@@ -230,6 +231,12 @@ export const useViewerStore = defineStore("viewer", () => {
     position.value += 1
   }
 
+  // 이미지 뷰어 다이얼로그 닫기
+  function close(): void {
+    dialog.value = false
+    router.push({ name: "galleryList", params: { id: id.value } })
+  }
+
   return {
     id,
     dialog,
@@ -255,5 +262,6 @@ export const useViewerStore = defineStore("viewer", () => {
     reset,
     prev,
     next,
+    close,
   }
 })

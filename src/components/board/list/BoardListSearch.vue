@@ -1,5 +1,5 @@
 <template>
-  <v-card width="500">
+  <v-card max-width="500">
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="list.option" size="small" group color="blue-grey">
@@ -20,8 +20,8 @@
           append-inner-icon="mdi-magnify"
           prepend-inner-icon="mdi-restore"
           @click:prepend-inner="list.resetSearchKeyword"
-          @click:append-inner="list.loadPostList"
-          @keyup.enter="list.loadPostList"
+          @click:append-inner="list.search"
+          @keyup.enter="list.search"
         ></v-text-field>
       </v-list-item>
     </v-list>

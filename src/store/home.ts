@@ -15,6 +15,7 @@ import { GroupItem, LatestPost, NoticeType, Notification, PostItem } from "../in
 import { NOTICE_TYPE } from "../../server/database/board/const"
 import { HOME } from "../messages/store/home"
 import { SEARCH_OPTION, SearchOption } from "../interface/board"
+import { TSBOARD } from "../../tsboard.config"
 
 export const useHomeStore = defineStore("home", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -26,31 +27,31 @@ export const useHomeStore = defineStore("home", () => {
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
   const sidebarWidth = ref<number>(300)
-  const width = ref<number>(1200)
-  const staticWidth = ref<number>(800)
+  const width = ref<number>(TSBOARD.SCREEN.PC)
+  const staticWidth = ref<number>(TSBOARD.SCREEN.TABLET)
   const cols = ref<number>(3)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
-
-  const color = {
+  const color = ref({
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
     admin: {
       header: "blue-grey-lighten-5",
       footer: "blue-grey-lighten-5",
     },
-  }
+  })
 
   // 첫화면 갱신하기
   function coming(): void {
-    util.go("home")
+    clearVariables()
     if (route.name === "home") {
-      clearVariables()
       loadLatestPosts()
+      return
     }
+    util.go("home")
   }
 
   // 방문 기록 저장하기
@@ -75,18 +76,24 @@ export const useHomeStore = defineStore("home", () => {
 
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
-    width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
-    if (window.innerWidth < 500) {
+    width.value = window.innerWidth - Math.floor(window.innerWidth / 20)
+    if (window.innerWidth < TSBOARD.SCREEN.MOBILE) {
       cols.value = 12
-    } else if (window.innerWidth > 499 && window.innerWidth < 800) {
+    } else if (
+      window.innerWidth >= TSBOARD.SCREEN.MOBILE &&
+      window.innerWidth < TSBOARD.SCREEN.TABLET
+    ) {
       cols.value = 6
-    } else if (window.innerWidth > 799 && window.innerWidth < 1200) {
+    } else if (
+      window.innerWidth >= TSBOARD.SCREEN.TABLET &&
+      window.innerWidth < TSBOARD.SCREEN.PC
+    ) {
       cols.value = 4
-    } else if (window.innerWidth > 1199 && window.innerWidth < 1600) {
+    } else if (window.innerWidth >= TSBOARD.SCREEN.PC && window.innerWidth < TSBOARD.SCREEN.LARGE) {
       cols.value = 3
     } else {
       cols.value = 3
-      width.value = 1500
+      width.value = TSBOARD.SCREEN.LARGE
     }
   }
 

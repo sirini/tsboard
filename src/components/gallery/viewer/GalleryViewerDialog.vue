@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="viewer.dialog" persistent>
-    <v-card :color="home.color.header">
+    <v-card>
       <v-layout>
         <v-main>
           <v-img
@@ -21,13 +21,21 @@
           nav
           :width="viewer.drawerWidth"
           :location="viewer.drawerPosition"
-          :color="home.color.header"
         >
           <v-list>
-            <v-list-item class="pb-2">
-              {{ util.unescape(viewer.post.title) }}
+            <v-list-item
+              class="pb-2"
+              :prepend-avatar="
+                TSBOARD.PREFIX +
+                (viewer.post.writer.profile.length > 0
+                  ? viewer.post.writer.profile
+                  : '/no-profile.svg')
+              "
+              :title="util.unescape(viewer.post.title)"
+              :subtitle="util.unescape(viewer.post.writer.name)"
+            >
               <template v-slot:append>
-                <v-btn icon @click="viewer.dialog = false" elevation="0" :color="home.color.header"
+                <v-btn icon @click="viewer.close" elevation="0"
                   ><v-icon>mdi-close</v-icon>
                   <v-tooltip activator="parent" location="top">
                     클릭하시면 이 창을 닫습니다
@@ -38,7 +46,7 @@
             <v-divider></v-divider>
 
             <v-list-item class="pt-2 pb-2">
-              <v-card elevation="0" rounded="0" :color="home.color.header">
+              <v-card elevation="0" rounded="0">
                 <v-card-text class="pa-0 pt-2 tsboard" v-html="viewer.post.content"></v-card-text>
               </v-card>
             </v-list-item>
@@ -120,6 +128,12 @@
           </v-list>
 
           <board-view-comment-write-button></board-view-comment-write-button>
+
+          <v-list>
+            <v-list-item class="pa-0 ml-2 mr-2">
+              <v-btn block @click="viewer.close" variant="tonal">닫기</v-btn>
+            </v-list-item>
+          </v-list>
         </v-navigation-drawer>
       </v-layout>
     </v-card>
@@ -162,6 +176,12 @@ function prepare(): void {
     viewer.postUid = parseInt(route.params.no as string)
     viewer.loadPost()
     viewer.loadComments()
+    home.setGridLayout()
+    if (home.cols > 4) {
+      viewer.drawerPosition = "bottom"
+    } else {
+      viewer.drawerPosition = "right"
+    }
   }
 }
 

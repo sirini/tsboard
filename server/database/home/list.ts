@@ -93,17 +93,18 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
   if (param.keyword.length < 1) {
     posts = await select(
       `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
-    WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
-      [param.sinceUid, param.bunch],
+    WHERE status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
+      [CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
     )
   } else {
     posts = await getSearchedPosts(param)
   }
 
   for (const post of posts) {
-    const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
-      post.board_uid,
-    ])
+    const [board] = await select(
+      `SELECT id, type, use_category FROM ${table}board WHERE uid = ? LIMIT 1`,
+      [post.board_uid],
+    )
     if (!board) {
       continue
     }
@@ -115,9 +116,13 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       continue
     }
 
-    const [cat] = await select(`SELECT name FROM ${table}board_category WHERE uid = ? LIMIT 1`, [
-      post.category_uid,
-    ])
+    let category = ""
+    if (board.use_category) {
+      const [cat] = await select(`SELECT name FROM ${table}board_category WHERE uid = ? LIMIT 1`, [
+        post.category_uid,
+      ])
+      category = cat.name
+    }
 
     const [like] = await select(
       `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
@@ -133,7 +138,8 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       uid: post.uid,
       id: board.id,
       type: board.type as BoardType,
-      category: cat.name ?? "",
+      useCategory: board.use_category > 0 ? true : false,
+      category,
       title: post.title,
       content: post.content,
       cover,

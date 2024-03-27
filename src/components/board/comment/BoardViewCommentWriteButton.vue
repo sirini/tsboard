@@ -4,6 +4,7 @@
       prepend-icon="mdi-new-box"
       @click="comment.resetCommentMode"
       v-show="comment.modifyTarget > 0 || comment.replyTarget > 0"
+      :color="home.color.header"
       >새 댓글 작성으로 설정
       <v-tooltip activator="parent">
         작성중인 본문 내용을 모두 삭제하고, 새 댓글 작성 모드로 변경합니다. (답글달기, 수정하기에서
@@ -11,17 +12,21 @@
       </v-tooltip>
     </v-btn>
     <v-spacer></v-spacer>
-    <v-btn append-icon="mdi-chevron-right" @click="save">{{ comment.button }}</v-btn>
+    <v-btn append-icon="mdi-chevron-right" @click="save" :color="home.color.header">{{
+      comment.button
+    }}</v-btn>
   </v-card-actions>
 </template>
 
 <script setup lang="ts">
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useCommentStore } from "../../../store/board/comment"
+import { useHomeStore } from "../../../store/home"
 import { BOARD_TYPE } from "../../../interface/board"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()
+const home = useHomeStore()
 
 // 댓글 저장하기
 async function save(): Promise<void> {

@@ -77,6 +77,11 @@ export const useUtilStore = defineStore("util", () => {
     router.push({ name, params: { id, no } })
   }
 
+  // 외부 페이지를 새창으로 열기
+  function open(url: string): void {
+    window.open(url, "_blank")
+  }
+
   // 페이지 뒤로가기
   function back(): void {
     router.back()
@@ -161,6 +166,7 @@ export const useUtilStore = defineStore("util", () => {
     error,
     info,
     go,
+    open,
     back,
     debounce,
     date,

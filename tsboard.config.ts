@@ -6,7 +6,7 @@
 
 export const TSBOARD = {
   IS_DEVELOPING: false /* 개발중일 때 true */,
-  VERSION: 0.84,
+  VERSION: 0.86,
   SITE: {
     NAME: "tsboard.dev" /* 수정 필요 */,
     URL: "https://tsboard.dev" /* 수정 필요 */,
@@ -62,6 +62,13 @@ export const TSBOARD = {
   MEMBER: {
     LEVEL: 1,
     POINT: 100,
+  },
+  /* 기기별 스크린 가로폭 기준값 정의 (px) */
+  SCREEN: {
+    MOBILE: 480,
+    TABLET: 768,
+    PC: 1024,
+    LARGE: 1440,
   },
 }
 Object.freeze(TSBOARD)

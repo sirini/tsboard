@@ -51,6 +51,7 @@ export type LatestPost = {
 
 export type PostItem = LatestPost & {
   id: string
+  useCategory: boolean
   content: string
   cover: string
   like: number

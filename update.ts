@@ -10,9 +10,9 @@ import { table, execute } from "./server/database/common"
 
 // 0.8.2 >>> 0.8.4, file_thumbnail 테이블 생성
 await execute(`CREATE TABLE IF NOT EXISTS ${table}file_thumbnail (
-  uid INT NOT NULL AUTO_INCREMENT,
-  file_uid INT NOT NULL DEFAULT '0',
-  post_uid INT NOT NULL DEFAULT '0',
+  uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  file_uid INT UNSIGNED NOT NULL DEFAULT '0',
+  post_uid INT UNSIGNED NOT NULL DEFAULT '0',
   path VARCHAR(300) NOT NULL DEFAULT '',
   PRIMARY KEY (uid),
   KEY (file_uid),

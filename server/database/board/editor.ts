@@ -186,7 +186,7 @@ async function saveThumbnailImage(
 
   if ((await exists(thumbSavePath)) === true) {
     const pathForThumbnail = thumbSavePath.slice(1)
-    insert(`INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path) VALUES (?, ?, ?)`, [
+    await insert(`INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path) VALUES (?, ?, ?)`, [
       fileUid,
       postUid,
       pathForThumbnail,

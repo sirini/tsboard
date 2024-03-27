@@ -325,11 +325,11 @@ export const editor = new Elysia()
       if (tags.length > 0) {
         const inputTags = tags.split(",")
         const refinedTags = inputTags.map((tag) => refineText(tag))
-        saveTags(boardUid, postUid, refinedTags)
+        await saveTags(boardUid, postUid, refinedTags)
       }
 
       if (attachments) {
-        saveAttachments(boardUid, postUid, attachments)
+        await saveAttachments(boardUid, postUid, attachments)
       }
 
       return success({
