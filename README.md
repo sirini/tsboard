@@ -184,7 +184,10 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
     index index.html index.htm;
 
-    server_name tsboard.dev;
+    server_name tsboard.dev; # 사용하시는 도메인 이름으로 변경 필요
+
+    # 최대 업로드 허용 크기, tsboard.config.ts 파일의 MAX_FILE_SIZE 주석 참조
+    client_max_body_size 20M;
 
     location /upload {
       root /var/www/tsboard.dev; # TSBOARD설치경로
