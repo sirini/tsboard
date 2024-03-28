@@ -53,7 +53,7 @@
 
                     {{ util.unescape(post.title) }}
 
-                    <v-chip size="small" color="blue-grey" class="ml-2">{{
+                    <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.reply > 0">{{
                       util.num(post.reply)
                     }}</v-chip>
                   </v-list-item-title>

@@ -16,7 +16,7 @@
           </template>
           <v-list-item-title class="pl-2 pr-2 post-title"
             >{{ post.title }}
-            <v-chip size="small" color="blue-grey" class="ml-2">{{
+            <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.comment > 0">{{
               util.num(post.comment)
             }}</v-chip></v-list-item-title
           >
