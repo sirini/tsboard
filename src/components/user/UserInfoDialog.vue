@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="user.userInfoDialog" persistent>
-    <v-card class="mx-auto" width="500" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
         <span>사용자 정보</span>
-        <span class="info ml-3 pl-3">다른 사용자의 정보를 확인해 볼 수 있습니다</span>
+        <span class="info ml-3 pl-3">사용자의 기본 정보를 확인합니다.</span>
       </v-card-title>
       <v-divider></v-divider>
 
@@ -11,16 +11,16 @@
         <alert-bar></alert-bar>
 
         <v-list-item class="text-center">
-          <v-avatar size="large">
+          <v-avatar :size="TSBOARD.IMAGE.PROFILE_SIZE">
             <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
         </v-list-item>
 
         <v-list-item>
-          <v-row>
-            <v-col cols="4">닉네임</v-col>
-            <v-col>{{ util.unescape(user.info.name) }}</v-col>
-          </v-row>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey" class="mr-3">닉네임</v-chip>
+            <span class="text-caption">{{ util.unescape(user.info.name) }}</span>
+          </template>
 
           <template v-slot:append>
             <v-chip
@@ -39,37 +39,50 @@
             >
           </template>
         </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list-item>
-          <v-row>
-            <v-col cols="4">레벨</v-col>
-            <v-col>{{ user.info.level }}</v-col>
-          </v-row>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey">레벨</v-chip>
+          </template>
+          <template v-slot:append> Lv. {{ user.info.level }} </template>
         </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list-item>
-          <v-row>
-            <v-col cols="4">서명</v-col>
-            <v-col>{{ util.unescape(user.info.signature) || "작성된 서명이 없습니다." }}</v-col>
-          </v-row>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey" class="mr-3">서명</v-chip>
+          </template>
+
+          <template v-slot:append>
+            <span class="text-caption">{{
+              util.unescape(user.info.signature) || "작성된 서명이 없습니다."
+            }}</span>
+          </template>
         </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list-item>
-          <v-row>
-            <v-col cols="4">가입일</v-col>
-            <v-col>{{ util.date(user.info.signup, true, true) }}</v-col>
-          </v-row>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey">가입일</v-chip></template
+          >
+          <template v-slot:append>
+            <span class="text-caption">{{ util.date(user.info.signup, true, true) }}</span>
+          </template>
         </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list-item>
-          <v-row>
-            <v-col cols="4">마지막 로그인</v-col>
-            <v-col>{{ util.date(user.info.signin, true, true) }}</v-col>
-          </v-row>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey">마지막 로그인</v-chip></template
+          >
+          <template v-slot:append>
+            <span class="text-caption">{{ util.date(user.info.signin, true, true) }}</span>
+          </template>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>

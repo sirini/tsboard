@@ -5,7 +5,7 @@
       :rules="editor.textRule"
       class="mt-2"
       prepend-icon="mdi-tag-multiple"
-      label="게시글과 어울리는 태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
+      label="태그를 입력해 보세요! (space/enter 혹은 , 로 추가)"
       @keyup="editor.updateTagSuggestion"
       @keyup.space="editor.addTag(editor.tag)"
       @keyup.,="editor.addTag(editor.tag)"

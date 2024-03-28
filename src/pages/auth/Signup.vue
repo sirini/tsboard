@@ -6,14 +6,14 @@
         <v-container class="wrap">
           <v-card
             rounded="lg"
-            class="mt-12 mx-auto"
-            max-width="600"
+            class="mx-auto"
+            :max-width="home.dialogWidth"
             :color="home.color.header"
             :loading="signup.loading"
           >
             <v-card-title
               >회원가입
-              <span class="info ml-3 pl-3">사이트에서 활용할 최소한의 정보를 요청 드립니다</span>
+              <span class="info ml-3 pl-3">환영합니다!</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -72,7 +72,7 @@
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-6" variant="tonal">
+              <v-card class="mt-2 mb-6" variant="tonal" color="blue-grey">
                 <v-card-text class="text-medium-emphasis text-caption">
                   아이디로 사용되는 이메일 주소의 경우 로그인 뿐만 아니라 비밀번호 찾기에도
                   사용됩니다. 자주 사용하는 이메일 주소를 입력해 주시고, 노출되지 않도록
@@ -125,6 +125,9 @@ const visible = ref<boolean>(false)
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

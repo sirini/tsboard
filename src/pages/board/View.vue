@@ -64,6 +64,7 @@
 import { onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useBoardViewStore } from "../../store/board/view"
+import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
@@ -84,8 +85,12 @@ import "../../assets/board/editor.scss"
 const auth = useAuthStore()
 const view = useBoardViewStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
-onMounted(() => view.loadPostView())
+onMounted(() => {
+  view.loadPostView()
+  home.setGridLayout()
+})
 </script>
 
 <style scoped>

@@ -1,21 +1,23 @@
 <template>
   <v-dialog v-model="report.dialog" persistent>
-    <v-card class="mx-auto" width="500" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
         <span>신고하기</span>
-        <span class="report ml-3 pl-3">운영진에게 신고 및 차단 기능을 사용합니다</span>
+        <span class="report ml-3 pl-3">신고 및 차단 기능을 사용합니다</span>
       </v-card-title>
       <v-divider></v-divider>
 
       <v-list>
         <alert-bar></alert-bar>
         <v-list-subheader>신고 대상자</v-list-subheader>
+        <v-divider></v-divider>
         <v-list-item
           :prepend-avatar="TSBOARD.PREFIX + (report.targetUser.profile || '/no-profile.svg')"
         >
           <v-list-item-title>{{ report.targetUser.name }}</v-list-item-title>
         </v-list-item>
-        <v-list-subheader>블랙리스트</v-list-subheader>
+
+        <v-list-subheader class="mt-3">블랙리스트</v-list-subheader>
 
         <v-divider></v-divider>
         <v-list-item class="pa-0">
@@ -23,6 +25,7 @@
             variant="tonal"
             color="blue-grey"
             icon="mdi-information"
+            class="text-caption"
             text="내 블랙리스트에 추가된 회원은 나에게 채팅 메시지를 보낼 수 없으며, 내가 작성한 게시글을 열람할 수 없습니다."
           ></v-alert>
         </v-list-item>

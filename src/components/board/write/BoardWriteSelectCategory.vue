@@ -8,8 +8,9 @@
       prepend-icon="mdi-filter"
       append-inner-icon="mdi-chevron-down"
       placeholder="카테고리를 선택해주세요."
+      @click="isOpenMenu = !isOpenMenu"
     >
-      <v-menu activator="parent" open-on-hover>
+      <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
         <v-list>
           <v-list-item
             v-for="(cat, index) in editor.categories"
@@ -25,7 +26,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 
 const editor = useBoardEditorStore()
+const isOpenMenu = ref<boolean>(false)
 </script>

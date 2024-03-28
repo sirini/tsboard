@@ -4,7 +4,12 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card class="mt-12 mx-auto" rounded="lg" max-width="600" :color="home.color.header">
+          <v-card
+            class="mx-auto"
+            rounded="lg"
+            :max-width="home.dialogWidth"
+            :color="home.color.header"
+          >
             <v-card-title>
               내 정보
               <span class="info ml-3">내 정보를 확인하고 필요시 수정합니다</span>
@@ -66,11 +71,12 @@
                   class="mt-3"
                   label="나의 서명입니다 (~250자)"
                   counter
+                  rows="2"
                   auto-grow
                 ></v-textarea>
               </v-list-item>
 
-              <v-list-item class="pa-0">
+              <v-list-item class="pa-0 text-caption">
                 <template v-slot:prepend>
                   <v-icon class="mr-2">mdi-account-check-outline</v-icon>
                   {{ util.date(auth.user.signup) }} 가입
@@ -101,7 +107,7 @@
                   class="mt-3"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
-                  placeholder="수정할 비밀번호를 한 번 더 입력해 주세요"
+                  placeholder="수정할 비밀번호를 한 번 더 입력"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -155,6 +161,9 @@ const visible = ref<boolean>(false)
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

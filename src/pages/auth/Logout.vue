@@ -4,17 +4,20 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
+          <v-card
+            rounded="lg"
+            class="mx-auto"
+            :max-width="home.dialogWidth"
+            :color="home.color.header"
+          >
             <v-card-title
               >로그아웃
               <span class="info ml-3">안전하게 로그아웃 합니다</span>
             </v-card-title>
             <v-divider></v-divider>
 
-            <div class="mt-6 mb-6 ml-6 message">
-              <span v-if="auth.user.uid < 1">
-                안전하게 로그아웃 되셨습니다. 곧 다시 만나요! 👋</span
-              >
+            <div class="pa-6 message">
+              <span v-if="auth.user.uid < 1"> 안전하게 로그아웃 되셨습니다. 다시 만나요! 👋</span>
 
               <span v-else>
                 아래에 로그아웃하기 버튼 클릭 시 안전하게 로그아웃 하실 수 있습니다.
@@ -60,6 +63,9 @@ const home = useHomeStore()
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

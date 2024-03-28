@@ -64,7 +64,7 @@
               >
 
               <v-spacer></v-spacer>
-              
+
               <v-btn
                 v-if="editor.postUid < 1"
                 color="primary"
@@ -99,6 +99,7 @@ import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
+import { useHomeStore } from "../../store/home"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardWriteSelectCategory from "../../components/board/write/BoardWriteSelectCategory.vue"
 import BoardWriteSelectAttachments from "../../components/board/write/BoardWriteSelectAttachments.vue"
@@ -114,12 +115,14 @@ const route = useRoute()
 const auth = useAuthStore()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
+const home = useHomeStore()
 
 onMounted(() => {
   if (route.params.no) {
     editor.postUid = parseInt(route.params.no as string)
     editor.loadOriginalPost()
   }
+  home.setGridLayout()
 })
 </script>
 

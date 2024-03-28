@@ -25,6 +25,9 @@ export const useChatStore = defineStore("chat", () => {
 
   // 채팅 목록 불러오기
   async function loadChatList(): Promise<void> {
+    if (auth.user.uid < 1) {
+      return
+    }
     const response = await server.api.user.load.chatlist.get({
       $headers: {
         authorization: auth.user.token,

@@ -83,7 +83,6 @@ onMounted(async () => {
   gallery.gridSize = Math.floor(Math.min(gallery.config.width, home.width) / (12 / home.cols))
 })
 
-// 뷰어가 필요할 때 열어주고, 이미지 목록도 이때 전달하기
 watch(
   () => route.params?.no,
   async () => {

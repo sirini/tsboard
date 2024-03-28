@@ -4,7 +4,12 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
+          <v-card
+            rounded="lg"
+            class="mx-auto"
+            :max-width="home.dialogWidth"
+            :color="home.color.header"
+          >
             <v-card-title class="signup_title">
               인증 코드 입력
               <span class="info ml-3">메일에 적혀 있던 6자리 인증 코드를 입력해주세요</span>
@@ -78,6 +83,9 @@ function retrySendMail(): void {
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

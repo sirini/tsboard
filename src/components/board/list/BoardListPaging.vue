@@ -25,7 +25,12 @@
     </v-chip>
     <v-spacer v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-spacer>
 
-    <v-btn prepend-icon="mdi-list-box-outline" @click="list.init">목록</v-btn>
+    <v-btn
+      prepend-icon="mdi-list-box-outline"
+      @click="list.init"
+      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+      >목록</v-btn
+    >
     <v-btn
       prepend-icon="mdi-pencil"
       variant="text"

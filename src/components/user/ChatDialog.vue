@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="chat.dialog" persistent>
-    <v-card class="mx-auto" width="500" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
-        <span>채팅</span>
-        <span class="note ml-3 pl-3">다른 사용자에게 채팅 메시지를 보냅니다</span>
+        <span>메시지</span>
+        <span class="note ml-3 pl-3">다른 사용자에게 메시지를 보냅니다</span>
       </v-card-title>
       <v-divider></v-divider>
 
@@ -11,13 +11,14 @@
         <v-list>
           <alert-bar></alert-bar>
           <v-list-subheader>받는 사람</v-list-subheader>
+          <v-divider></v-divider>
           <v-list-item
             :prepend-avatar="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
           >
             <v-list-item-title>{{ chat.targetUser.name }}</v-list-item-title>
           </v-list-item>
 
-          <v-list-subheader>이전 쪽지 내역</v-list-subheader>
+          <v-list-subheader class="mt-3">이전 쪽지 내역</v-list-subheader>
           <v-divider></v-divider>
 
           <v-list-item v-for="(msg, index) in chat.history" :key="index" class="mt-2 mb-2">

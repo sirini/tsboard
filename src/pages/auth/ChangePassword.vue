@@ -4,7 +4,12 @@
     <v-layout class="layout">
       <v-main>
         <v-container class="wrap">
-          <v-card rounded="lg" class="mt-12 mx-auto" max-width="600" :color="home.color.header">
+          <v-card
+            rounded="lg"
+            class="mx-auto"
+            :max-width="home.dialogWidth"
+            :color="home.color.header"
+          >
             <v-card-title class="change_password_title">
               비밀번호 변경
               <span class="info ml-3">이곳에서 비밀번호를 변경하세요</span>
@@ -93,6 +98,9 @@ function change(): void {
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

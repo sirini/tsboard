@@ -29,6 +29,7 @@ export const useHomeStore = defineStore("home", () => {
   const sidebarWidth = ref<number>(300)
   const width = ref<number>(TSBOARD.SCREEN.PC.WIDTH)
   const staticWidth = ref<number>(TSBOARD.SCREEN.TABLET.WIDTH)
+  const dialogWidth = ref<number>(600)
   const cols = ref<number>(TSBOARD.SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
@@ -242,6 +243,7 @@ export const useHomeStore = defineStore("home", () => {
     haveNewNotification,
     width,
     staticWidth,
+    dialogWidth,
     cols,
     sidebarLinks,
     sidebarWidth,

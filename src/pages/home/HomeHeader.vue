@@ -6,10 +6,10 @@
         <div>TSBOARD<span>.dev</span></div>
       </v-app-bar-title>
 
-      <v-spacer v-if="home.cols <= TSBOARD.SCREEN.TABLET.COLS"></v-spacer>
+      <v-spacer v-if="home.cols >= TSBOARD.SCREEN.TABLET.COLS"></v-spacer>
       <home-header-search v-else-if="route.name === 'home'"></home-header-search>
 
-      <home-header-login v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></home-header-login>
+      <home-header-login></home-header-login>
       <home-header-chat v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></home-header-chat>
       <home-header-notification></home-header-notification>
     </v-toolbar>

@@ -6,8 +6,8 @@
         <v-container class="wrap">
           <v-card
             rounded="lg"
-            class="mt-12 mx-auto"
-            max-width="600"
+            class="mx-auto"
+            :max-width="home.dialogWidth"
             :color="home.color.header"
             :loading="password.loading"
           >
@@ -81,6 +81,9 @@ const home = useHomeStore()
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;

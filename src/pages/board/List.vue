@@ -10,7 +10,7 @@
 
             <v-card-text class="pa-0">
               <v-list class="pa-0">
-                <v-list-item v-if="list.posts.length < 1" class="text-center">
+                <v-list-item v-if="list.posts.length < 1" class="text-center pa-6">
                   <v-icon>mdi-alert-circle</v-icon> 게시글이 존재하지 않습니다. 아직 글이 없거나,
                   목록을 볼 수 있는 레벨이 아닙니다.
                 </v-list-item>
@@ -112,7 +112,10 @@ const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
 
-onMounted(() => list.loadPostList())
+onMounted(() => {
+  list.loadPostList()
+  home.setGridLayout()
+})
 </script>
 
 <style type="scss" scoped>

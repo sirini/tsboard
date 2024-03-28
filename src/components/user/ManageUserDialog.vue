@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="manage.manageUserDialog" persistent>
-    <v-card class="mx-auto" width="500" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title
         ><span>회원 관리</span>
         <span class="manage ml-3">회원 정보를 관리합니다 (관리자 전용)</span>
@@ -20,12 +20,14 @@
         >
           <v-list-item-title>{{ manage.targetUser.name }}</v-list-item-title>
         </v-list-item>
-        <v-list-subheader>조치 항목</v-list-subheader>
+
+        <v-list-subheader class="mt-3">조치 항목</v-list-subheader>
         <v-divider></v-divider>
         <v-alert
           color="blue-grey"
           variant="tonal"
           icon="mdi-information"
+          class="text-caption"
           text="체크 해제된 항목은 해당 기능을 사용할 수 없음을 의미합니다."
         ></v-alert>
 
@@ -110,9 +112,7 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="manage.closeManageUser"
-          >아무것도 하지 않고 닫기</v-btn
-        >
+        <v-btn prepend-icon="mdi-close" @click="manage.closeManageUser">그냥 닫기</v-btn>
         <v-spacer></v-spacer>
         <v-btn append-icon="mdi-chevron-right" @click="manage.manageUser">조치 완료하기</v-btn>
       </v-card-actions>
