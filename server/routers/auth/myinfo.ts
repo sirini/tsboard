@@ -43,7 +43,7 @@ export const myInfo = new Elysia()
     "/load",
     async ({ query: { userUid }, newAccessToken }) => {
       const response = {
-        newAccessToken: "",
+        newAccessToken,
         user: INIT_USER,
       }
 

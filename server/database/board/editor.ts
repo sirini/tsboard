@@ -59,7 +59,7 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
 
     if ((await exists(newSavePath)) === true) {
       const pathForImage = newSavePath.slice(1)
-      insert(
+      await insert(
         `INSERT INTO ${table}image (board_uid, user_uid, path, timestamp) VALUES 
       (?, ?, ?, ?)`,
         [param.boardUid, param.accessUserUid, pathForImage, Date.now()],

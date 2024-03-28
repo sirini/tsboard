@@ -25,77 +25,15 @@
                   ></v-checkbox>
                 </v-list-item>
 
-                <v-list-item class="pa-0" v-if="editor.config.useCategory">
-                  <v-text-field
-                    v-model="editor.category.name"
-                    variant="outlined"
-                    hide-details
-                    readonly
-                    prepend-icon="mdi-filter"
-                    append-inner-icon="mdi-chevron-down"
-                    placeholder="카테고리를 선택해주세요."
-                  >
-                    <v-menu activator="parent" open-on-hover>
-                      <v-list>
-                        <v-list-item
-                          v-for="(cat, index) in editor.categories"
-                          :key="index"
-                          @click="editor.selectCategory(cat)"
-                        >
-                          {{ cat.name }}
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-text-field>
-                </v-list-item>
+                <board-write-select-category
+                  v-if="editor.config.useCategory"
+                ></board-write-select-category>
 
-                <v-list-item class="pa-0">
-                  <v-file-input
-                    @change="editor.selectAttachmentFiles"
-                    show-size
-                    counter
-                    class="pt-3"
-                    accept="image/*, application/pdf, application/zip, audio/*, video/*"
-                    hide-details
-                    multiple
-                    variant="outlined"
-                    label="첨부할 파일들을 선택해 주세요"
-                  >
-                    <template v-slot:selection="{ fileNames }">
-                      <template v-for="fileName in fileNames" :key="fileName">
-                        <v-chip
-                          size="small"
-                          label
-                          color="blue-grey"
-                          prepend-icon="mdi-upload"
-                          class="mt-1 mr-1 mb-1"
-                        >
-                          {{ fileName }}
-                        </v-chip>
-                      </template>
-                    </template>
-                  </v-file-input>
-                </v-list-item>
+                <board-write-select-attachments></board-write-select-attachments>
 
-                <v-list-item
+                <board-write-attachments
                   v-if="editor.postUid > 0 && editor.attachedFiles.length > 0"
-                  class="pa-0 pl-10"
-                >
-                  <v-chip
-                    size="small"
-                    label
-                    color="warning"
-                    prepend-icon="mdi-file-remove-outline"
-                    class="mt-1 mr-1 mb-1"
-                    @click="editor.removeAttachedFile(file.uid)"
-                    v-for="(file, index) in editor.attachedFiles"
-                    :key="index"
-                    >{{ file.name }} ({{ util.num(file.size) }})
-                    <v-tooltip activator="parent"
-                      >클릭하시면 첨부된 이 파일을 삭제합니다.</v-tooltip
-                    >
-                  </v-chip>
-                </v-list-item>
+                ></board-write-attachments>
 
                 <v-list-item class="pa-0">
                   <v-text-field
@@ -115,56 +53,7 @@
                   ></board-write-editor>
                 </v-list-item>
 
-                <v-list-item class="pa-0 mt-3">
-                  <v-text-field
-                    v-model="editor.tag"
-                    :rules="editor.textRule"
-                    class="mt-2"
-                    prepend-icon="mdi-tag-multiple"
-                    label="게시글과 어울리는 태그를 입력해 주세요 (스페이스/엔터 키 혹은 콤마 키로 추가)"
-                    @keyup="editor.updateTagSuggestion"
-                    @keyup.space="editor.addTag(editor.tag)"
-                    @keyup.,="editor.addTag(editor.tag)"
-                    @keyup.enter="editor.addTag(editor.tag)"
-                    variant="outlined"
-                  >
-                    <v-menu activator="parent">
-                      <v-list v-show="editor.tag.length > 2">
-                        <v-list-item
-                          v-for="(tag, index) in editor.suggestionTags"
-                          :key="index"
-                          prepend-icon="mdi-tag-plus"
-                          @click="editor.addTag(tag.name)"
-                          >{{ tag.name }}
-                          <v-tooltip activator="parent">
-                            {{ tag.name }} 태그를 추가합니다
-                          </v-tooltip>
-
-                          <template v-slot:append>
-                            <v-chip color="blue-grey">{{ util.num(tag.count) }}</v-chip>
-                          </template>
-                        </v-list-item>
-                        <v-list-item
-                          v-show="editor.suggestionTags.length < 1 && editor.tag.length > 2"
-                        >
-                          <strong>{{ editor.tag }}</strong> 새로운 태그입니다! 😉
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-text-field>
-                  <v-card elevation="0" class="mt-2 mb-2">
-                    <v-chip
-                      v-for="(tag, index) in editor.tags"
-                      :key="index"
-                      color="blue-grey"
-                      @click="editor.removeTag(tag)"
-                      class="mt-1 ml-1"
-                      prepend-icon="mdi-tag-remove-outline"
-                      >{{ tag }}
-                      <v-tooltip activator="parent">클릭하시면 삭제합니다!</v-tooltip>
-                    </v-chip>
-                  </v-card>
-                </v-list-item>
+                <board-write-add-tags></board-write-add-tags>
               </v-list>
             </v-form>
 
@@ -173,7 +62,9 @@
               <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close"
                 >글 작성 취소</v-btn
               >
+
               <v-spacer></v-spacer>
+              
               <v-btn
                 v-if="editor.postUid < 1"
                 color="primary"
@@ -209,7 +100,11 @@ import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
+import BoardWriteSelectCategory from "../../components/board/write/BoardWriteSelectCategory.vue"
+import BoardWriteSelectAttachments from "../../components/board/write/BoardWriteSelectAttachments.vue"
+import BoardWriteAttachments from "../../components/board/write/BoardWriteAttachments.vue"
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
+import BoardWriteAddTags from "../../components/board/write/BoardWriteAddTags.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"

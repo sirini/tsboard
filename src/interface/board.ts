@@ -128,14 +128,10 @@ export type Comment = ContentCommon & {
   modified: number
 }
 
-type UserUid = {
-  writerUid: number
-  viewerUid: number
-}
-
 export type RelatedParams = {
   uid: number
-  user: UserUid
+  writerUid: number
+  viewerUid: number
 }
 
 export type PostRelatedParams = RelatedParams & {

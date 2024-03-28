@@ -15,9 +15,12 @@ import {
   PostRelatedParams,
   SEARCH_OPTION,
   SearchOption,
+  Writer,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
 import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED } from "./const"
+import { getTotalCommentCount } from "./comment"
+import { getCategories } from "./editor"
 
 // 게시판 기본 설정 가져오기
 export async function getBoardConfig(id: string): Promise<BoardConfig> {
@@ -31,15 +34,7 @@ export async function getBoardConfig(id: string): Promise<BoardConfig> {
     return result
   }
 
-  const categories = await select(
-    `SELECT uid, name FROM ${table}board_category WHERE board_uid = ?`,
-    [board.uid],
-  )
-  let category: Pair[] = []
-  for (const cat of categories) {
-    category.push({ uid: cat.uid, name: cat.name })
-  }
-
+  const category = await getCategories(board.uid)
   const [group] = await select(`SELECT admin_uid FROM ${table}group WHERE uid = ? LIMIT 1`, [
     board.group_uid,
   ])
@@ -99,59 +94,87 @@ export async function getTotalPostCount(boardUid: number): Promise<number> {
   return total.count
 }
 
-// 게시글에 연관된 정보 가져오기
-export async function getPostRelated(param: PostRelatedParams): Promise<PostRelated> {
-  let result: PostRelated = POST_RELATED
+// 작성자 정보 가져오기
+export async function getUserBasic(userUid: number): Promise<Writer> {
+  let result: Writer = {
+    uid: 0,
+    name: "",
+    profile: "",
+    signature: "",
+  }
+
   const [user] = await select(
     `SELECT name, profile, signature FROM ${table}user WHERE uid = ? LIMIT 1`,
-    [param.user.writerUid],
+    [userUid],
   )
   if (!user) {
     return result
   }
-  result.writer = {
-    uid: param.user.writerUid,
+
+  return {
+    uid: userUid,
     name: user.name,
     profile: user.profile,
     signature: user.signature,
   }
+}
 
+// 게시글의 좋아요 수 반환하기
+export async function getPostLikeCount(postUid: number): Promise<number> {
   const [like] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
-    [param.uid, 1],
+    [postUid, 1],
   )
-  if (like) {
-    result.like = like.total_count
+  if (!like) {
+    return 0
+  }
+  return like.total_count
+}
+
+// 게시글을 보고 있는 회원이 이 글을 좋아하는지 여부 반환하기
+export async function isPostViewerLiked(postUid: number, accessUserUid: number): Promise<boolean> {
+  if (accessUserUid < 1) {
+    return false
   }
 
   const [isLiked] = await select(
     `SELECT liked FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? AND liked = ? LIMIT 1`,
-    [param.uid, param.user.viewerUid, 1],
+    [postUid, accessUserUid, 1],
   )
-  if (isLiked) {
-    result.liked = true
-  } else {
-    result.liked = false
+  if (!isLiked) {
+    return false
   }
+  return true
+}
 
+// 카테고리 정보 가져오기
+export async function getCategoryInfo(categoryUid: number): Promise<Pair> {
+  let result: Pair = {
+    uid: 0,
+    name: "",
+  }
   const [category] = await select(
     `SELECT uid, name FROM ${table}board_category WHERE uid = ? LIMIT 1`,
-    [param.categoryUid],
+    [categoryUid],
   )
-  if (category) {
-    result.category = {
-      uid: category.uid,
-      name: category.name,
-    }
+  if (!category) {
+    return result
   }
+  return {
+    uid: category.uid,
+    name: category.name,
+  }
+}
 
-  const [reply] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE post_uid = ? AND status = ?`,
-    [param.uid, CONTENT_STATUS.NORMAL],
-  )
-  if (reply) {
-    result.reply = reply.total_count
-  }
+// 게시글에 연관된 정보 가져오기
+export async function getPostRelated(param: PostRelatedParams): Promise<PostRelated> {
+  let result: PostRelated = POST_RELATED
+  const writer = await getUserBasic(param.writerUid)
+  result.writer = writer
+  result.like = await getPostLikeCount(param.uid)
+  result.liked = await isPostViewerLiked(param.uid, param.viewerUid)
+  result.category = await getCategoryInfo(param.categoryUid)
+  result.reply = await getTotalCommentCount(param.uid)
   return result
 }
 
@@ -161,10 +184,8 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
   for (const post of posts) {
     const info = await getPostRelated({
       uid: post.uid,
-      user: {
-        writerUid: post.user_uid,
-        viewerUid: accessUserUid,
-      },
+      writerUid: post.user_uid,
+      viewerUid: accessUserUid,
       categoryUid: post.category_uid,
     })
 

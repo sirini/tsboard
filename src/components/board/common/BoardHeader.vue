@@ -1,8 +1,8 @@
 <template>
   <v-card-title class="list_title"
     >{{ util.unescape(name) }}
-    <span class="info ml-3 pl-3"
-      ><v-icon>mdi-information-outline</v-icon> {{ util.unescape(info) }}</span
+    <span class="info ml-3 pl-3" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS">
+      {{ util.unescape(info) }}</span
     >
     <div class="login">
       <v-btn
@@ -41,10 +41,13 @@
 import { useAuthStore } from "../../../store/user/auth"
 import { useBoardListStore } from "../../../store/board/list"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const auth = useAuthStore()
 const list = useBoardListStore()
 const util = useUtilStore()
+const home = useHomeStore()
 const props = defineProps<{
   name: string
   info: string

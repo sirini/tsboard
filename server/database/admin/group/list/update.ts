@@ -4,7 +4,6 @@
  * 게시판 그룹 관리에 필요한 함수들
  */
 
-import { AdminPair, AdminUserInfo } from "../../../../../src/interface/admin"
 import { table, update, insert, select, remove } from "../../../common"
 
 // 새 그룹 만들기
@@ -15,25 +14,6 @@ export async function createGroup(id: string): Promise<number> {
     [id, 1, Date.now()],
   )
   return newGroupUid
-}
-
-// 기본 관리자 정보 가져오기
-export async function getAdminInfo(): Promise<AdminUserInfo> {
-  let result: AdminUserInfo = {
-    uid: 0,
-    name: "",
-    profile: "",
-  }
-  const [admin] = await select(`SELECT id, name, profile FROM ${table}user WHERE uid = 1 LIMIT 1`)
-  if (!admin) {
-    return result
-  }
-  result = {
-    uid: 1,
-    name: admin.name,
-    profile: admin.profile,
-  }
-  return result
 }
 
 // 지정된 게시판 그룹 삭제하고 소속 게시판들의 그룹을 기본 그룹으로 변경

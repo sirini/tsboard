@@ -5,7 +5,7 @@
  */
 
 import { AdminDashboardStat, AdminDate } from "../../../../../src/interface/admin"
-import { table, update, select, remove, insert } from "../../../common"
+import { table, select } from "../../../common"
 
 // 방문자수 통계 반환하기
 export async function getVisitStat(date: AdminDate): Promise<AdminDashboardStat> {

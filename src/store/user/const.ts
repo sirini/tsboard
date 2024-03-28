@@ -10,7 +10,7 @@ import { UserPermissionParams } from "../../interface/user"
 
 export const INIT_USER: User = {
   uid: 0,
-  id: "sirini@gmail.com",
+  id: "",
   name: "",
   profile: "/no-profile.svg",
   level: 0,

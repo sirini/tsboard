@@ -3,7 +3,8 @@
     <v-list-subheader>로그인</v-list-subheader>
     <v-list-item>
       <alert-bar class="mb-2"></alert-bar>
-      <v-card elevation="0">
+
+      <v-card elevation="0" rounded="0">
         <v-text-field
           v-model="auth.user.id"
           variant="outlined"
@@ -11,6 +12,7 @@
           hide-details
           prepend-inner-icon="mdi-card-account-details-outline"
         ></v-text-field>
+
         <v-text-field
           v-model="auth.password"
           variant="outlined"
@@ -23,6 +25,7 @@
           @click:append-inner="visible = !visible"
           @keyup.enter="auth.login"
         ></v-text-field>
+
         <v-card-actions>
           <v-btn rounded="xl" @click="util.go('resetpassword')">비번 찾기</v-btn>
           <v-spacer></v-spacer>

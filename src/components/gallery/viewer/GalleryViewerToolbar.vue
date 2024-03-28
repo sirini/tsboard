@@ -12,6 +12,14 @@
       <v-icon>mdi-reload</v-icon>
       <v-tooltip activator="parent" location="top">사진 위치/크기 초기화하기</v-tooltip>
     </v-btn>
+    <v-btn icon @click="viewer.zoomIn">
+      <v-icon>mdi-magnify-expand</v-icon>
+      <v-tooltip activator="parent" location="top">사진을 확대해서 보기</v-tooltip>
+    </v-btn>
+    <v-btn icon @click="viewer.zoomOut">
+      <v-icon>mdi-arrow-collapse</v-icon>
+      <v-tooltip activator="parent" location="top">사진을 축소해서 보기</v-tooltip>
+    </v-btn>
 
     <v-spacer></v-spacer>
 

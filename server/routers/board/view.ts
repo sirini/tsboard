@@ -19,7 +19,7 @@ import {
 } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
-import { BOARD_CONFIG, INIT_POST, INIT_POST_VIEW } from "../../database/board/const"
+import { BOARD_CONFIG, INIT_POST_VIEW } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { isAuthor } from "../../database/board/editor"
@@ -94,6 +94,10 @@ export const view = new Elysia()
       }
 
       response.post = await getPost(postUid, accessUserUid)
+      if (response.post.submitted < 1) {
+        return fail(`Post not found.`, response)
+      }
+
       response.tags = await getTags(postUid)
       return success(response)
     },

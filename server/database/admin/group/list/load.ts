@@ -5,16 +5,15 @@
  */
 
 import { table, select } from "../../../common"
-import { AdminGroupConfig, AdminPair } from "../../../../../src/interface/admin"
+import { AdminGroupConfig, AdminPair, AdminUserInfo } from "../../../../../src/interface/admin"
+import { getUserBasic } from "../../../board/list"
 
 // 게시판 그룹 목록 가져오기
 export async function getGroupList(): Promise<AdminGroupConfig[]> {
   let result: AdminGroupConfig[] = []
   const groups = await select(`SELECT uid, id, admin_uid FROM ${table}group`)
   for (const group of groups) {
-    const [admin] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-      group.admin_uid,
-    ])
+    const manager = await getUserBasic(group.admin_uid)
     const [bc] = await select(
       `SELECT COUNT(*) AS board_count FROM ${table}board WHERE group_uid = ?`,
       [group.uid],
@@ -23,11 +22,7 @@ export async function getGroupList(): Promise<AdminGroupConfig[]> {
       uid: group.uid,
       id: group.id,
       count: bc.board_count,
-      manager: {
-        uid: group.admin_uid,
-        name: admin.name,
-        profile: admin.profile,
-      },
+      manager: manager as AdminUserInfo,
     })
   }
 

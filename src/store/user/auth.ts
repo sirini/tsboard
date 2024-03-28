@@ -53,6 +53,7 @@ export const useAuthStore = defineStore("auth", () => {
     if (!savedUserInfo) {
       return
     }
+
     user.value = JSON.parse(savedUserInfo) as User
     const response = await server.api.auth.load.get({
       $headers: {
@@ -62,6 +63,7 @@ export const useAuthStore = defineStore("auth", () => {
         userUid: user.value.uid,
       },
     })
+
     if (!response.data) {
       util.error(AUTH.NO_RESPONSE)
       return

@@ -11,20 +11,11 @@ import {
   AdminPair,
   AdminUserInfo,
 } from "../../../../../src/interface/admin"
+import { INIT_GROUP_CONFIG } from "./const"
 
 // 주어진 아이디에 해당하는 그룹 설정 가져오기
 export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
-  let result: AdminGroupConfig = {
-    uid: 0,
-    id: "",
-    count: 0,
-    manager: {
-      uid: 0,
-      name: "",
-      profile: "",
-    },
-  }
-
+  let result: AdminGroupConfig = INIT_GROUP_CONFIG
   const [group] = await select(`SELECT uid, admin_uid FROM ${table}group WHERE id = ? LIMIT 1`, [
     id,
   ])

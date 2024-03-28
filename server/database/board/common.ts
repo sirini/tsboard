@@ -24,8 +24,7 @@ export async function checkUserPermission(param: CheckUserPermissionParams): Pro
   }
 
   const [target] = await select(
-    `SELECT user_uid FROM ${table}${param.targetTable} 
-  WHERE uid = ? LIMIT 1`,
+    `SELECT user_uid FROM ${table}${param.targetTable} WHERE uid = ? LIMIT 1`,
     [param.targetUid],
   )
   if (target && param.accessUserUid === target.user_uid) {

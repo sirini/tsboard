@@ -13,7 +13,14 @@ import {
 } from "../../../src/interface/board"
 import { LatestPost, LatestPostParams, PostItem } from "../../../src/interface/home"
 import { table, select } from "../common"
-import { getHashtagUids } from "../board/list"
+import {
+  getCategoryInfo,
+  getHashtagUids,
+  getPostLikeCount,
+  getUserBasic,
+  isPostViewerLiked,
+} from "../board/list"
+import { getTotalCommentCount } from "../board/comment"
 
 // 가장 최신글의 고유 번호 가져오기
 export async function getMaxUid(): Promise<number> {
@@ -109,25 +116,11 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       continue
     }
 
-    const [writer] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-      post.user_uid,
-    ])
-    if (!writer) {
-      continue
-    }
-
-    let category = ""
-    if (board.use_category) {
-      const [cat] = await select(`SELECT name FROM ${table}board_category WHERE uid = ? LIMIT 1`, [
-        post.category_uid,
-      ])
-      category = cat.name
-    }
-
-    const [like] = await select(
-      `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
-      [post.uid, 1],
-    )
+    const writer = await getUserBasic(post.user_uid)
+    const cat = await getCategoryInfo(post.category_uid)
+    const commentCount = await getTotalCommentCount(post.uid)
+    const likeCount = await getPostLikeCount(post.uid)
+    const liked = await isPostViewerLiked(post.uid, param.accessUserUid)
     const [file] = await select(
       `SELECT path FROM ${table}file_thumbnail WHERE post_uid = ? LIMIT 1`,
       [post.uid],
@@ -139,18 +132,16 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       id: board.id,
       type: board.type as BoardType,
       useCategory: board.use_category > 0 ? true : false,
-      category,
+      category: cat.name,
       title: post.title,
       content: post.content,
       cover,
-      writer: {
-        uid: post.user_uid,
-        name: writer.name,
-        profile: writer.profile,
-      },
+      writer,
       submitted: post.submitted,
       hit: post.hit,
-      like: like.total_count,
+      like: likeCount,
+      liked,
+      comment: commentCount,
     })
   }
 
@@ -160,7 +151,10 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
 // 주어진 게시판 아이디에 해당하는 최근 게시글들 가져오기
 export async function getBoardLatests(id: string, limit: number): Promise<LatestPost[]> {
   let result: LatestPost[] = []
-  const [board] = await select(`SELECT uid, type FROM ${table}board WHERE id = ? LIMIT 1`, [id])
+  const [board] = await select(
+    `SELECT uid, type, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
+    [id],
+  )
   if (!board) {
     return result
   }
@@ -171,29 +165,22 @@ export async function getBoardLatests(id: string, limit: number): Promise<Latest
     [board.uid, limit],
   )
   for (const post of posts) {
-    const [writer] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-      post.user_uid,
-    ])
-    if (!writer) {
-      continue
-    }
-
-    const [cat] = await select(`SELECT name FROM ${table}board_category WHERE uid = ? LIMIT 1`, [
-      post.category_uid,
-    ])
+    const writer = await getUserBasic(post.user_uid)
+    const cat = await getCategoryInfo(post.category_uid)
+    const commentCount = await getTotalCommentCount(post.uid)
+    const likeCount = await getPostLikeCount(post.uid)
 
     result.push({
       uid: post.uid,
       type: board.type as BoardType,
+      useCategory: board.use_category > 0 ? true : false,
       category: cat.name,
       title: post.title,
-      writer: {
-        uid: post.user_uid,
-        name: writer.name,
-        profile: writer.profile,
-      },
+      writer,
       submitted: post.submitted,
       hit: post.hit,
+      like: likeCount,
+      comment: commentCount,
     })
   }
 

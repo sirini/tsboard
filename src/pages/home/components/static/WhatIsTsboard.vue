@@ -23,6 +23,7 @@
     <v-card-actions>
       <v-btn
         block
+        rounded="xl"
         prepend-icon="mdi-github"
         append-icon="mdi-chevron-right"
         @click="util.open('https://github.com/sirini/tsboard/blob/main/README.md')"

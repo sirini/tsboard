@@ -19,3 +19,5 @@ export const INIT_USER: User = {
   admin: false,
   token: "",
 }
+
+export const SUPER_ADMIN_UID = 1

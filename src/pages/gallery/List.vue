@@ -7,6 +7,7 @@
         <v-container class="wrap" id="galleryContainer">
           <v-card elevation="0" class="mx-auto" :max-width="gallery.config.width">
             <gallery-header></gallery-header>
+
             <v-divider class="mb-6"></v-divider>
 
             <v-row no-gutters>
@@ -26,12 +27,14 @@
             </v-row>
 
             <v-divider class="mt-6"></v-divider>
+
             <gallery-list-paging></gallery-list-paging>
           </v-card>
         </v-container>
         <home-footer></home-footer>
       </v-main>
     </v-layout>
+
     <gallery-viewer-dialog></gallery-viewer-dialog>
     <board-view-remove-post-dialog></board-view-remove-post-dialog>
   </v-app>
@@ -41,8 +44,6 @@
 import { watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useGalleryStore } from "../../store/board/gallery/gallery"
-import { useAuthStore } from "../../store/user/auth"
-import { useUtilStore } from "../../store/util"
 import { useViewerStore } from "../../store/board/gallery/viewer"
 import { useHomeStore } from "../../store/home"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
@@ -56,8 +57,6 @@ import SideDrawer from "../home/SideDrawer.vue"
 
 const route = useRoute()
 const gallery = useGalleryStore()
-const auth = useAuthStore()
-const util = useUtilStore()
 const viewer = useViewerStore()
 const home = useHomeStore()
 
@@ -80,7 +79,8 @@ function openViewerDialog(): void {
 onMounted(async () => {
   await gallery.loadPhotoList()
   openViewerDialog()
-  gallery.gridSize = Math.floor(gallery.config.width / (12 / home.cols))
+  home.setGridLayout()
+  gallery.gridSize = Math.floor(Math.min(gallery.config.width, home.width) / (12 / home.cols))
 })
 
 // 뷰어가 필요할 때 열어주고, 이미지 목록도 이때 전달하기

@@ -6,22 +6,11 @@
 
 import { table, select, update } from "../common"
 import { User } from "../../../src/interface/auth"
+import { INIT_USER } from "./const"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
 export async function userSignIn(id: string, password: string): Promise<User> {
-  let result: User = {
-    uid: 0,
-    id: "",
-    name: "",
-    profile: "",
-    level: 0,
-    point: 0,
-    signature: "",
-    signup: 0,
-    signin: 0,
-    admin: false,
-    token: "",
-  }
+  let result: User = INIT_USER
 
   const [user] = await select(
     `SELECT uid, id, name, profile, level, point, signature, signup 
@@ -47,6 +36,7 @@ export async function userSignIn(id: string, password: string): Promise<User> {
     admin: false,
     token: "",
   }
+
   await update(
     `UPDATE ${table}user 
       SET signin = ?

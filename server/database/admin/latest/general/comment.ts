@@ -5,8 +5,14 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestComment, AdminSearchCommon } from "../../../../../src/interface/admin"
+import {
+  AdminLatestComment,
+  AdminSearchCommon,
+  AdminUserInfo,
+} from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
+import { getUserBasic } from "../../../board/list"
+import { getCommentLikeCount } from "../../../board/comment"
 
 // 최근 uid 값 반환하기
 export async function getMaxCommentUid(): Promise<number> {
@@ -20,10 +26,7 @@ export async function getMaxCommentUid(): Promise<number> {
 type RelatedResults = {
   id: string
   like: number
-  writer: {
-    name: string
-    profile: string
-  }
+  writer: AdminUserInfo
 }
 
 // 댓글에 연관된 내용들 가져오기
@@ -36,21 +39,13 @@ async function getRelatedInfo(
   const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
     post.board_uid,
   ])
-  const [like] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}comment_like WHERE comment_uid = ? AND liked = 1`,
-    [commentUid],
-  )
-  const [writer] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-    userUid,
-  ])
+  const like = await getCommentLikeCount(commentUid)
+  const writer = await getUserBasic(userUid)
 
   let result: RelatedResults = {
     id: board.id,
-    like: like.total_count,
-    writer: {
-      name: writer.name,
-      profile: writer.profile,
-    },
+    like,
+    writer: writer as AdminUserInfo,
   }
 
   return result
@@ -67,11 +62,7 @@ async function makeCommentResult(comments: RowDataPacket[]): Promise<AdminLatest
       like: info.like,
       date: comment.submitted,
       content: comment.content,
-      writer: {
-        uid: comment.user_uid,
-        name: info.writer.name,
-        profile: info.writer.profile,
-      },
+      writer: info.writer,
       status: comment.status,
     })
   }

@@ -7,7 +7,6 @@
 import {
   CONTENT_STATUS,
   Pair,
-  Post,
   PostFile,
   PostLikeParams,
   PostView,
@@ -34,10 +33,8 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
 
   const info = await getPostRelated({
     uid: postUid,
-    user: {
-      writerUid: post.user_uid,
-      viewerUid: accessUserUid,
-    },
+    writerUid: post.user_uid,
+    viewerUid: accessUserUid,
     categoryUid: post.category_uid,
   })
   if (!info) {

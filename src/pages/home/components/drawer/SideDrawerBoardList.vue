@@ -8,7 +8,9 @@
   >
     <v-list>
       <v-list-subheader>{{ group.group }}</v-list-subheader>
+
       <v-divider></v-divider>
+
       <v-list-item
         v-for="(board, idx) in group.boards"
         :key="idx"
@@ -17,6 +19,7 @@
         >{{ board.name }}
         <v-tooltip activator="parent">{{ board.info }}</v-tooltip>
       </v-list-item>
+
       <v-divider></v-divider>
     </v-list>
   </v-card>

@@ -4,29 +4,9 @@
  * 관리화면 첫페이지 > 최근 게시글, 댓글, 신고글에 필요한 함수들
  */
 
-import { AdminLatest, AdminUserInfo } from "../../../../../src/interface/admin"
+import { AdminLatest } from "../../../../../src/interface/admin"
+import { getUserBasic } from "../../../board/list"
 import { table, select } from "../../../common"
-
-// 작성자 정보 가져오기
-async function getWriterInfo(userUid: number): Promise<AdminUserInfo> {
-  let result: AdminUserInfo = {
-    uid: 0,
-    name: "",
-    profile: "",
-  }
-  const [writer] = await select(
-    `SELECT uid, name, profile FROM ${table}user WHERE uid = ? LIMIT 1`,
-    [userUid],
-  )
-  if (!writer) {
-    return result
-  }
-  return {
-    uid: writer.uid,
-    name: writer.name,
-    profile: writer.profile,
-  }
-}
 
 // 대시보드에서 볼 최신 글 목록 가져오기
 export async function getLatestPosts(limit: number): Promise<AdminLatest[]> {
@@ -47,7 +27,7 @@ export async function getLatestPosts(limit: number): Promise<AdminLatest[]> {
     if (!board) {
       continue
     }
-    const writer = await getWriterInfo(post.user_uid)
+    const writer = await getUserBasic(post.user_uid)
     result.push({
       uid: post.uid,
       id: board.id,
@@ -84,7 +64,7 @@ export async function getLatestComments(limit: number): Promise<AdminLatest[]> {
     if (!bid) {
       continue
     }
-    const writer = await getWriterInfo(comment.user_uid)
+    const writer = await getUserBasic(comment.user_uid)
     result.push({
       uid: comment.post_uid,
       id: bid.id,
@@ -108,7 +88,7 @@ export async function getLatestReports(limit: number): Promise<AdminLatest[]> {
   }
 
   for (const report of reports) {
-    const writer = await getWriterInfo(report.from_uid)
+    const writer = await getUserBasic(report.from_uid)
     result.push({
       uid: report.uid,
       content: report.request,

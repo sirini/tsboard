@@ -14,12 +14,7 @@ import { TSBOARD } from "../../../tsboard.config"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
 export async function isDuplicatedEmail(email: string): Promise<boolean> {
-  const [result] = await select(
-    `SELECT uid FROM ${table}user 
-  WHERE id = ? LIMIT 1`,
-    [email],
-  )
-
+  const [result] = await select(`SELECT uid FROM ${table}user WHERE id = ? LIMIT 1`, [email])
   if (!result) {
     return false
   }
@@ -54,8 +49,7 @@ export async function sendVerificationMail(email: string, name: string): Promise
 // 인증 코드 확인하고 맞을 경우 사용자 등록 완료하기
 export async function verify(target: number, code: string, user: Signup): Promise<boolean> {
   const [result] = await select(
-    `SELECT code FROM ${table}user_verification 
-  WHERE uid = ? LIMIT 1`,
+    `SELECT code FROM ${table}user_verification WHERE uid = ? LIMIT 1`,
     [target],
   )
   if (!result) {

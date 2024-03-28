@@ -43,18 +43,20 @@ export type LatestPost = {
   uid: number
   type: BoardType
   category: string
+  useCategory: boolean
   title: string
   writer: Writer
   hit: number
+  like: number
+  comment: number
   submitted: number
 }
 
 export type PostItem = LatestPost & {
   id: string
-  useCategory: boolean
   content: string
   cover: string
-  like: number
+  liked: boolean
 }
 
 export type LatestPostParams = {
@@ -62,4 +64,5 @@ export type LatestPostParams = {
   bunch: number
   option: SearchOption
   keyword: string
+  accessUserUid: number
 }

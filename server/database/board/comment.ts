@@ -19,39 +19,41 @@ import { NoticeType } from "../../../src/interface/home"
 import { insert, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
 import { COMMENT_RELATED, INVALID_VIEW_LEVEL, NOTICE_TYPE, PAGING_DIRECTION } from "./const"
+import { getUserBasic } from "./list"
+
+// 댓글에 달린 좋아요 수 반환하기
+export async function getCommentLikeCount(commentUid: number): Promise<number> {
+  const [like] = await select(
+    `SELECT COUNT(*) AS total_count FROM ${table}comment_like WHERE comment_uid = ? AND liked = ?`,
+    [commentUid, 1],
+  )
+  if (!like) {
+    return 0
+  }
+  return like.total_count
+}
+
+// 댓글을 보는 회원이 이 댓글을 좋아하는지 여부 확인하기
+export async function isCommentViewerLiked(
+  commentUid: number,
+  accessUserUid: number,
+): Promise<boolean> {
+  const [isLiked] = await select(
+    `SELECT liked FROM ${table}comment_like WHERE comment_uid = ? AND user_uid = ? AND liked = ? LIMIT 1`,
+    [commentUid, accessUserUid, 1],
+  )
+  if (!isLiked) {
+    return false
+  }
+  return true
+}
 
 // 댓글에 연관된 정보 가져오기
 async function getCommentRelated(param: RelatedParams): Promise<CommentRelated> {
   let result: CommentRelated = COMMENT_RELATED
-  const [user] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-    param.user.writerUid,
-  ])
-  if (!user) {
-    return result
-  }
-  result.writer = {
-    uid: param.user.writerUid,
-    name: user.name,
-    profile: user.profile,
-  }
-
-  const [like] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}comment_like WHERE comment_uid = ? AND liked = ?`,
-    [param.uid, 1],
-  )
-  if (like) {
-    result.like = like.total_count
-  }
-
-  const [isLiked] = await select(
-    `SELECT liked FROM ${table}comment_like WHERE comment_uid = ? AND user_uid = ? LIMIT 1`,
-    [param.uid, param.user.viewerUid],
-  )
-  if (isLiked) {
-    result.liked = isLiked.liked > 0 ? true : false
-  } else {
-    result.liked = false
-  }
+  result.writer = await getUserBasic(param.writerUid)
+  result.like = await getCommentLikeCount(param.uid)
+  result.liked = await isCommentViewerLiked(param.uid, param.viewerUid)
   return result
 }
 
@@ -71,10 +73,8 @@ export async function getComments(param: CommentParams): Promise<Comment[]> {
   for (const comment of comments) {
     const info = await getCommentRelated({
       uid: comment.uid,
-      user: {
-        writerUid: comment.user_uid,
-        viewerUid: param.accessUserUid,
-      },
+      writerUid: comment.user_uid,
+      viewerUid: param.accessUserUid,
     })
     result.push({
       uid: comment.uid,

@@ -7,6 +7,7 @@
 import { RowDataPacket } from "mysql2"
 import { AdminReport, AdminReportParams } from "../../../../src/interface/admin"
 import { select, table } from "../../common"
+import { getUserBasic } from "../../board/list"
 
 // 유효한 최대 uid 값 반환
 export async function getMaxReportUid(isSolved: boolean): Promise<number> {
@@ -23,25 +24,12 @@ export async function getMaxReportUid(isSolved: boolean): Promise<number> {
 async function makeReportResult(reports: RowDataPacket[]): Promise<AdminReport[]> {
   let result: AdminReport[] = []
   for (const report of reports) {
-    const [to] = await select(`SELECT uid, name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-      report.to_uid,
-    ])
-    const [from] = await select(
-      `SELECT uid, name, profile FROM ${table}user WHERE uid = ? LIMIT 1`,
-      [report.from_uid],
-    )
+    const to = await getUserBasic(report.to_uid)
+    const from = await getUserBasic(report.from_uid)
 
     result.push({
-      to: {
-        uid: to.uid,
-        name: to.name,
-        profile: to.profile,
-      },
-      from: {
-        uid: from.uid,
-        name: from.name,
-        profile: from.profile,
-      },
+      to,
+      from,
       request: report.request,
       response: report.response,
       date: report.timestamp,

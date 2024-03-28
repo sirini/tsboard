@@ -6,7 +6,7 @@
 
 export const TSBOARD = {
   IS_DEVELOPING: false /* 개발중일 때 true */,
-  VERSION: 0.86,
+  VERSION: 0.88,
   SITE: {
     NAME: "tsboard.dev" /* 수정 필요 */,
     URL: "https://tsboard.dev" /* 수정 필요 */,
@@ -65,10 +65,10 @@ export const TSBOARD = {
   },
   /* 기기별 스크린 가로폭 기준값 정의 (px) */
   SCREEN: {
-    MOBILE: 480,
-    TABLET: 768,
-    PC: 1024,
-    LARGE: 1440,
+    MOBILE: { WIDTH: 480, COLS: 12 },
+    TABLET: { WIDTH: 768, COLS: 6 },
+    PC: { WIDTH: 1024, COLS: 4 },
+    LARGE: { WIDTH: 1440, COLS: 3 },
   },
 }
 Object.freeze(TSBOARD)

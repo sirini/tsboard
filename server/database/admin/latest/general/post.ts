@@ -5,8 +5,14 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { AdminLatestPost, AdminSearchCommon } from "../../../../../src/interface/admin"
+import {
+  AdminLatestPost,
+  AdminSearchCommon,
+  AdminUserInfo,
+} from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
+import { getPostLikeCount, getUserBasic } from "../../../board/list"
+import { getTotalCommentCount } from "../../../board/comment"
 
 // 전체 글 개수 반환하기
 export async function getMaxPostUid(): Promise<number> {
@@ -20,10 +26,7 @@ export async function getMaxPostUid(): Promise<number> {
 type RelatedResults = {
   id: string
   like: number
-  writer: {
-    name: string
-    profile: string
-  }
+  writer: AdminUserInfo
   comment: number
 }
 
@@ -34,26 +37,15 @@ async function getRelatedInfo(
   userUid: number,
 ): Promise<RelatedResults> {
   const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUid])
-  const [like] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = 1`,
-    [postUid],
-  )
-  const [writer] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
-    userUid,
-  ])
-  const [comment] = await select(
-    `SELECT COUNT(*) AS total_count FROM ${table}comment WHERE post_uid = ?`,
-    [postUid],
-  )
+  const likeCount = await getPostLikeCount(postUid)
+  const writer = await getUserBasic(userUid)
+  const commentCount = await getTotalCommentCount(postUid)
 
   let result: RelatedResults = {
     id: board.id,
-    like: like.total_count,
-    writer: {
-      name: writer.name,
-      profile: writer.profile,
-    },
-    comment: comment.total_count,
+    like: likeCount,
+    writer: writer as AdminUserInfo,
+    comment: commentCount,
   }
 
   return result
@@ -70,11 +62,7 @@ async function makePostResult(posts: RowDataPacket[]): Promise<AdminLatestPost[]
       like: info.like,
       date: post.submitted,
       title: post.title,
-      writer: {
-        uid: post.user_uid,
-        name: info.writer.name,
-        profile: info.writer.profile,
-      },
+      writer: info.writer,
       comment: info.comment,
       hit: post.hit,
       status: post.status,

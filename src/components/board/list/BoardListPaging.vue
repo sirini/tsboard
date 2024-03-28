@@ -17,12 +17,15 @@
     >
 
     <v-spacer></v-spacer>
-    <v-chip variant="tonal" color="blue-grey-lighten-3"
+    <v-chip
+      variant="tonal"
+      color="blue-grey-lighten-3"
+      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
       >{{ list.page }} / {{ list.pageLength }}
     </v-chip>
-    <v-spacer></v-spacer>
+    <v-spacer v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-spacer>
 
-    <v-btn prepend-icon="mdi-list-box-outline" class="ml-3 mr-3" @click="list.init">목록</v-btn>
+    <v-btn prepend-icon="mdi-list-box-outline" @click="list.init">목록</v-btn>
     <v-btn
       prepend-icon="mdi-pencil"
       variant="text"
@@ -37,9 +40,12 @@
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useBoardListStore } from "../../../store/board/list"
+import { useHomeStore } from "../../../store/home"
 import BoardListSearch from "./BoardListSearch.vue"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const auth = useAuthStore()
 const list = useBoardListStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>

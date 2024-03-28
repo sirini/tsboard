@@ -13,106 +13,21 @@
                   util.unescape(view.post.title)
                 }}</v-list-item-title>
               </v-list-item>
-              <v-list-item class="view_info underline">
-                <template v-slot:prepend>
-                  <span class="mr-4 text-caption" v-if="view.config.useCategory"
-                    ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
-                    {{ view.post.category.name }}</span
-                  >
-                  <v-divider vertical v-if="view.config.useCategory" class="mr-4"></v-divider>
 
-                  <span class="mr-4 text-caption"
-                    >작성: {{ util.date(view.post.submitted, true, true) }}</span
-                  >
-
-                  <v-divider vertical v-if="view.post.modified > 0"></v-divider>
-                  <span class="ml-4 mr-4 text-caption" v-if="view.post.modified > 0"
-                    >수정: {{ util.date(view.post.modified, true, true) }}</span
-                  >
-                </template>
-
-                <template v-slot:append>
-                  <span class="mr-4 text-caption"
-                    ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon>
-                    {{ util.num(view.post.hit) }}</span
-                  >
-                  <v-divider vertical></v-divider>
-                  <span class="ml-4 text-caption"
-                    ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon>
-                    {{ view.post.reply }}</span
-                  >
-                </template>
-              </v-list-item>
-
-              <v-list-item class="pa-0 underline" v-if="view.files.length > 0">
-                <v-list density="compact">
-                  <v-list-item
-                    prepend-icon="mdi-download"
-                    v-for="(file, index) in view.files"
-                    :key="index"
-                    @click="view.download(file.uid)"
-                    >{{ file.name }} ({{ util.num(file.size) }}B)</v-list-item
-                  >
-                </v-list>
-              </v-list-item>
+              <board-view-statistics></board-view-statistics>
+              <board-view-attachments></board-view-attachments>
 
               <v-list-item class="pa-3 mb-16 tsboard">
                 <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
               </v-list-item>
 
-              <v-list-item class="pa-3">
-                <v-chip
-                  label
-                  prepend-icon="mdi-tag-outline"
-                  class="mr-2 mb-2"
-                  v-for="(tag, index) in view.tags"
-                  :key="index"
-                  >{{ tag.name }}</v-chip
-                >
-              </v-list-item>
+              <board-view-tags :tags="view.tags"></board-view-tags>
 
               <v-list-item class="pa-3 text-caption signature" v-if="view.post.writer.signature">
                 {{ util.unescape(view.post.writer.signature) }}
               </v-list-item>
 
-              <v-list-item density="compact" class="pa-0 mt-6 mb-3">
-                <template v-slot:prepend>
-                  <v-chip
-                    class="mr-2"
-                    :disabled="auth.user.uid < 1"
-                    :prepend-icon="view.post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
-                    :color="view.post.liked ? 'red' : 'blue-grey'"
-                    @click="view.like(!view.post.liked)"
-                  >
-                    {{ util.num(view.post.like) }}
-                    <v-tooltip activator="parent">이 글에 좋아요 누르기</v-tooltip>
-                  </v-chip>
-
-                  <user-nametag
-                    :profile="view.post.writer.profile"
-                    :uid="view.post.writer.uid"
-                    :name="view.post.writer.name"
-                    :size="'default'"
-                  ></user-nametag>
-                </template>
-
-                <template v-slot:append>
-                  <v-btn
-                    prepend-icon="mdi-pencil"
-                    variant="text"
-                    @click="util.go('boardModify', view.id, view.postUid)"
-                    :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-                    >수정</v-btn
-                  >
-                  <v-btn
-                    prepend-icon="mdi-trash-can"
-                    variant="text"
-                    @click="view.openConfirmRemoveDialog"
-                    :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-                    >삭제
-                  </v-btn>
-                </template>
-              </v-list-item>
+              <board-view-buttons></board-view-buttons>
             </v-list>
 
             <board-view-comment-write></board-view-comment-write>
@@ -151,10 +66,13 @@ import { useAuthStore } from "../../store/user/auth"
 import { useBoardViewStore } from "../../store/board/view"
 import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
+import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
+import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
+import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
+import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
-import UserNametag from "../../components/user/UserNametag.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"

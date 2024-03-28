@@ -6,28 +6,11 @@
 
 import { table, select } from "../../../common"
 import { AdminPoint } from "../../../../../src/interface/admin"
+import { INIT_POINT_CONFIG } from "./const"
 
 // 포인트 정보 가져오기
 export async function getPointConfig(id: string): Promise<AdminPoint> {
-  let result: AdminPoint = {
-    uid: 0,
-    view: {
-      isPayment: true,
-      amount: 0,
-    },
-    write: {
-      isPayment: false,
-      amount: 0,
-    },
-    comment: {
-      isPayment: false,
-      amount: 0,
-    },
-    download: {
-      isPayment: true,
-      amount: 0,
-    },
-  }
+  let result: AdminPoint = INIT_POINT_CONFIG
 
   const [board] = await select(
     `SELECT uid, point_view, point_write, point_comment, point_download 

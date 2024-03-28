@@ -1,7 +1,9 @@
 <template>
   <v-card-title class="pt-3 pb-3"
     >{{ gallery.config.name }}
-    <span class="info ml-3 pl-3">{{ gallery.config.info }}</span>
+    <span class="info ml-3 pl-3" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS">{{
+      util.unescape(gallery.config.info)
+    }}</span>
     <div class="login">
       <v-btn
         prepend-icon="mdi-login-variant"
@@ -32,10 +34,13 @@
 import { useAuthStore } from "../../../store/user/auth"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const auth = useAuthStore()
 const gallery = useGalleryStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>
 
 <style scoped>

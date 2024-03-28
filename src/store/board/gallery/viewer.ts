@@ -80,13 +80,13 @@ export const useViewerStore = defineStore("viewer", () => {
 
     if (!response.data) {
       util.snack(GALLERY.NO_RESPONSE)
-      dialog.value = false
+      close()
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
       util.snack(`${GALLERY.FAILED_LOAD_PHOTO} (${response.data.error})`)
-      dialog.value = false
+      close()
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -124,6 +124,7 @@ export const useViewerStore = defineStore("viewer", () => {
     }
     if (response.data.success === false) {
       util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
+      return
     }
     comments.value = response.data.result.comments
   }
@@ -177,6 +178,13 @@ export const useViewerStore = defineStore("viewer", () => {
     isDragging.value = false
   }
 
+  // 사진 스케일 조정
+  function adjustImageScale(): void {
+    const target = document.querySelector(targetDom) as HTMLElement
+    scale.value = Math.min(zoomMax, Math.max(scale.value, zoomMin))
+    target.style.transform = `translate(${transPos.value.x}px, ${transPos.value.y}px) scale(${scale.value})`
+  }
+
   // 마우스 휠로 확대/축소
   function mouseWheel(event: WheelEvent): void {
     event.preventDefault()
@@ -186,8 +194,19 @@ export const useViewerStore = defineStore("viewer", () => {
     } else {
       scale.value += zoomSpeed
     }
-    scale.value = Math.min(zoomMax, Math.max(scale.value, zoomMin))
-    target.style.transform = `translate(${transPos.value.x}px, ${transPos.value.y}px) scale(${scale.value})`
+    adjustImageScale()
+  }
+
+  // 사진 확대하기
+  function zoomIn(): void {
+    scale.value += 1
+    adjustImageScale()
+  }
+
+  // 사진 축소하기
+  function zoomOut(): void {
+    scale.value -= 1
+    adjustImageScale()
   }
 
   // 사진에서 마우스가 떠날 때
@@ -259,6 +278,8 @@ export const useViewerStore = defineStore("viewer", () => {
     mouseUp,
     mouseWheel,
     mouseLeave,
+    zoomIn,
+    zoomOut,
     reset,
     prev,
     next,

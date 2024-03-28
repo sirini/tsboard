@@ -18,6 +18,7 @@
     <v-card-actions>
       <v-btn
         block
+        rounded="xl"
         prepend-icon="mdi-download"
         append-icon="mdi-chevron-right"
         color="blue-grey"

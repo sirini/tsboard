@@ -6,12 +6,10 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import {
-  createGroup,
-  getAdminInfo,
-  removeGroup,
-} from "../../../../database/admin/group/list/update"
+import { createGroup, removeGroup } from "../../../../database/admin/group/list/update"
 import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { getUserBasic } from "../../../../database/board/list"
+import { SUPER_ADMIN_UID } from "../../../../database/auth/const"
 
 export const update = new Elysia()
   .use(
@@ -61,7 +59,7 @@ export const update = new Elysia()
       if (newGroupUid < 1) {
         return fail(`Failed to create a new group, try another ID.`, response)
       }
-      const admin = await getAdminInfo()
+      const admin = await getUserBasic(SUPER_ADMIN_UID)
       if (admin.uid < 1) {
         return fail(`Unable to get a default admin information.`, response)
       }

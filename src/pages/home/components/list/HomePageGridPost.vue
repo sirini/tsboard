@@ -12,6 +12,7 @@
       cover
       :src="TSBOARD.PREFIX + post.cover"
     ></v-img>
+
     <v-card-title class="post-title">
       <v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
         util.unescape(post.category)
@@ -19,23 +20,30 @@
       >{{ util.unescape(post.title) }}</v-card-title
     >
     <v-divider></v-divider>
+
     <v-card-text
       v-if="post.cover.length < 1"
       class="post-content"
       v-html="post.content"
     ></v-card-text>
+
     <v-divider v-if="post.cover.length < 1"></v-divider>
+
     <v-card-actions class="pl-3 pr-3">
+      <v-chip prepend-icon="mdi-eye-outline" color="blue-grey" size="small">{{
+        util.num(post.hit)
+      }}</v-chip>
       <v-chip
-        prepend-icon="mdi-eye-outline"
-        append-icon="mdi-heart-outline"
-        color="blue-grey"
+        class="ml-2"
+        :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
+        :color="post.liked ? 'red' : 'blue-grey'"
         size="small"
-        >{{ util.num(post.hit) }}
-        <v-divider vertical class="ml-3 mr-3"></v-divider>
+      >
         {{ util.num(post.like) }}
       </v-chip>
+
       <v-spacer></v-spacer>
+
       <v-chip
         :prepend-avatar="
           TSBOARD.PREFIX +

@@ -27,11 +27,6 @@
                       ><v-icon size="small" v-else>mdi-heart-outline</v-icon>
                       {{ util.num(post.like) }}</span
                     >
-                    <v-divider vertical></v-divider>
-                    <span class="col no text-center"
-                      ><v-icon size="small">mdi-comment-outline</v-icon>
-                      {{ util.num(post.reply) }}</span
-                    >
                   </template>
 
                   <v-list-item-title
@@ -57,10 +52,15 @@
                     >
 
                     {{ util.unescape(post.title) }}
+
+                    <v-chip size="small" color="blue-grey" class="ml-2">{{
+                      util.num(post.reply)
+                    }}</v-chip>
                   </v-list-item-title>
 
                   <template v-slot:append>
                     <user-nametag
+                      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
                       :uid="post.writer.uid"
                       :name="post.writer.name"
                       :profile="post.writer.profile"
@@ -69,8 +69,12 @@
                     <span class="col no text-center"
                       ><v-icon size="small">mdi-eye-outline</v-icon> {{ util.num(post.hit) }}</span
                     >
-                    <v-divider vertical></v-divider>
-                    <span class="col date text-center">{{ util.date(post.submitted) }}</span>
+                    <v-divider vertical v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-divider>
+                    <span
+                      class="col date text-center"
+                      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+                      >{{ util.date(post.submitted) }}</span
+                    >
                   </template>
                 </v-list-item>
               </v-list>
@@ -91,6 +95,7 @@
 import { onMounted } from "vue"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
+import { useHomeStore } from "../../store/home"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
@@ -101,9 +106,11 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import { CONTENT_STATUS } from "../../interface/board"
+import { TSBOARD } from "../../../tsboard.config"
 
 const list = useBoardListStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => list.loadPostList())
 </script>

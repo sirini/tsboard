@@ -35,10 +35,8 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
   for (const post of posts) {
     const info = await getPostRelated({
       uid: post.uid,
-      user: {
-        writerUid: post.user_uid,
-        viewerUid: param.accessUserUid,
-      },
+      writerUid: post.user_uid,
+      viewerUid: param.accessUserUid,
       categoryUid: post.category_uid,
     })
     const paths = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [post.uid])

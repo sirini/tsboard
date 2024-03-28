@@ -21,4 +21,8 @@ export const RESETPASSWORD = {
 </div>
 <br />
 From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
+  CHAT: `[resetpassword] 비밀번호 초기화 요청 (회원 번호: #fromUid# / 아이디: #email#)
+관리 화면에서 비밀번호를 임시로 초기화 해주세요. (${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}admin/member/#fromUid#)  
+이후 초기화한 비밀번호를 #email# (으)로 전달해 주세요!
+`,
 }

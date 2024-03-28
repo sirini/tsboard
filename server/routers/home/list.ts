@@ -13,7 +13,7 @@ import { SearchOption } from "../../../src/interface/board"
 export const list = new Elysia()
   .get(
     "/latest",
-    async ({ query: { sinceUid, bunch, option, keyword } }) => {
+    async ({ query: { sinceUid, bunch, option, keyword, accessUserUid } }) => {
       if (sinceUid < 1) {
         sinceUid = (await getMaxUid()) + 1
       }
@@ -24,6 +24,7 @@ export const list = new Elysia()
         bunch,
         option: searchOption,
         keyword,
+        accessUserUid,
       })
       return success(posts)
     },
@@ -33,6 +34,7 @@ export const list = new Elysia()
         bunch: t.Numeric(),
         option: t.Numeric(),
         keyword: t.String(),
+        accessUserUid: t.Numeric(),
       }),
     },
   )

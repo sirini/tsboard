@@ -81,14 +81,18 @@ export const useGalleryStore = defineStore("gallery", () => {
     if (sinceUid.value < 1) {
       images.value = response.data.result.images
     } else {
-      images.value.push(...response.data.result.images)
+      if (response.data.result.images.length > 0) {
+        images.value.push(...response.data.result.images)
+        page.value += 1
+      } else {
+        util.snack(GALLERY.LAST_PAGE)
+      }
     }
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
   }
 
   // 이전 사진들 가져오기
   async function loadOldPhotos(): Promise<void> {
-    page.value += 1
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = images.value.at(-1)?.uid ?? 0
 

@@ -27,9 +27,9 @@ export const useHomeStore = defineStore("home", () => {
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
   const sidebarWidth = ref<number>(300)
-  const width = ref<number>(TSBOARD.SCREEN.PC)
-  const staticWidth = ref<number>(TSBOARD.SCREEN.TABLET)
-  const cols = ref<number>(3)
+  const width = ref<number>(TSBOARD.SCREEN.PC.WIDTH)
+  const staticWidth = ref<number>(TSBOARD.SCREEN.TABLET.WIDTH)
+  const cols = ref<number>(TSBOARD.SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])
@@ -77,25 +77,28 @@ export const useHomeStore = defineStore("home", () => {
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
     width.value = window.innerWidth - Math.floor(window.innerWidth / 20)
-    if (window.innerWidth < TSBOARD.SCREEN.MOBILE) {
-      cols.value = 12
+    if (window.innerWidth < TSBOARD.SCREEN.MOBILE.WIDTH) {
+      cols.value = TSBOARD.SCREEN.MOBILE.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
     } else if (
-      window.innerWidth >= TSBOARD.SCREEN.MOBILE &&
-      window.innerWidth < TSBOARD.SCREEN.TABLET
+      window.innerWidth >= TSBOARD.SCREEN.MOBILE.WIDTH &&
+      window.innerWidth < TSBOARD.SCREEN.TABLET.WIDTH
     ) {
-      cols.value = 6
+      cols.value = TSBOARD.SCREEN.TABLET.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
     } else if (
-      window.innerWidth >= TSBOARD.SCREEN.TABLET &&
-      window.innerWidth < TSBOARD.SCREEN.PC
+      window.innerWidth >= TSBOARD.SCREEN.TABLET.WIDTH &&
+      window.innerWidth < TSBOARD.SCREEN.PC.WIDTH
     ) {
-      cols.value = 4
-    } else if (window.innerWidth >= TSBOARD.SCREEN.PC && window.innerWidth < TSBOARD.SCREEN.LARGE) {
-      cols.value = 3
+      cols.value = TSBOARD.SCREEN.PC.COLS
+    } else if (
+      window.innerWidth >= TSBOARD.SCREEN.PC.WIDTH &&
+      window.innerWidth < TSBOARD.SCREEN.LARGE.WIDTH
+    ) {
+      cols.value = TSBOARD.SCREEN.LARGE.COLS
     } else {
-      cols.value = 3
-      width.value = TSBOARD.SCREEN.LARGE - 50
+      cols.value = TSBOARD.SCREEN.LARGE.COLS
+      width.value = TSBOARD.SCREEN.LARGE.WIDTH - 50
     }
   }
 
@@ -108,6 +111,7 @@ export const useHomeStore = defineStore("home", () => {
         bunch: bunch.value,
         option: option.value as number,
         keyword: keyword.value,
+        accessUserUid: auth.user.uid,
       },
     })
 

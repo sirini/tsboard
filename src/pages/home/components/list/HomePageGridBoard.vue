@@ -11,13 +11,15 @@
           :key="index"
           @click="util.go('boardView', id, post.uid)"
         >
-          <template v-slot:prepend v-if="post.category.length > 0">
+          <template v-slot:prepend v-if="post.useCategory">
             <v-chip size="small" color="blue-grey">{{ post.category }}</v-chip>
           </template>
-          <v-list-item-title class="pl-2 pr-2 post-title">{{ post.title }}</v-list-item-title>
-          <template v-slot:append>
-            {{ util.date(post.submitted) }}
-          </template>
+          <v-list-item-title class="pl-2 pr-2 post-title"
+            >{{ post.title }}
+            <v-chip size="small" color="blue-grey" class="ml-2">{{
+              util.num(post.comment)
+            }}</v-chip></v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-card-text>
