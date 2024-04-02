@@ -7,12 +7,16 @@
       v-for="(reply, index) in comment.comments"
       :key="index"
     >
-      <v-toolbar density="compact" class="pl-3 mt-4">
+      <v-toolbar
+        density="compact"
+        class="pl-3 mt-4"
+        :color="view.post.writer.uid === reply.writer.uid ? 'orange-lighten-5' : ''"
+      >
         <user-nametag
           :name="reply.writer.name"
           :uid="reply.writer.uid"
           :profile="reply.writer.profile"
-          :size="'default'"
+          :color="view.post.writer.uid === reply.writer.uid ? 'orange-darken-3' : ''"
         ></user-nametag>
 
         <v-spacer></v-spacer>
@@ -20,7 +24,13 @@
         <v-chip
           :prepend-icon="reply.liked ? 'mdi-heart' : 'mdi-heart-outline'"
           @click="comment.like(reply.uid, !reply.liked)"
-          :color="reply.liked ? 'red' : 'blue-grey'"
+          :color="
+            reply.liked
+              ? 'red'
+              : view.post.writer.uid === reply.writer.uid
+                ? 'orange-darken-3'
+                : 'blue-grey'
+          "
           class="mr-2"
           >{{ reply.like }}
           <v-tooltip activator="parent" location="top">이 댓글에 좋아요 누르기</v-tooltip>
@@ -65,7 +75,7 @@
 
       <v-card elevation="0" rounded="0" class="pa-0 tsboard comment">
         <v-card-text v-html="reply.content" class="content"></v-card-text>
-        <v-card-text v-if="reply.modified > 0" class="pa-0 modified"
+        <v-card-text v-if="reply.modified > 0" class="pa-0 pr-2 modified text-right"
           >{{ util.date(reply.modified, true, true) }} 에 수정되었습니다.</v-card-text
         >
         <v-card-text v-if="reply.content.length < 1" class="pa-0 removed"
@@ -80,6 +90,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useAuthStore } from "../../../store/user/auth"
+import { useBoardViewStore } from "../../../store/board/view"
 import { useCommentStore } from "../../../store/board/comment"
 import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
@@ -87,6 +98,7 @@ import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 import "../../../assets/board/editor.scss"
 
 const auth = useAuthStore()
+const view = useBoardViewStore()
 const comment = useCommentStore()
 const util = useUtilStore()
 

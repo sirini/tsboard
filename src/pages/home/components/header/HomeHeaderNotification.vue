@@ -1,7 +1,7 @@
 <template>
   <v-btn icon @click="home.checkedAllNotifications" :disabled="auth.user.uid < 1">
-    <v-badge color="error" v-if="home.haveNewNotification" dot>
-      <v-icon>mdi-bell </v-icon>
+    <v-badge color="error" v-if="auth.user.uid > 0 && home.haveNewNotification" dot>
+      <v-icon>mdi-bell</v-icon>
     </v-badge>
 
     <v-icon v-else>mdi-bell-outline</v-icon>
@@ -12,7 +12,15 @@
           v-for="(noti, index) in home.notifications"
           :key="index"
           :prepend-avatar="TSBOARD.PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
-          @click="noti.id.length > 0 ? util.go('boardView', noti.id, noti.postUid) : ''"
+          @click="
+            noti.id.length > 0
+              ? util.go(
+                  noti.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen',
+                  noti.id,
+                  noti.postUid,
+                )
+              : ''
+          "
         >
           {{ noti.fromUser.name }}님이 {{ home.translateNotification(noti.type) }}
 
@@ -37,6 +45,7 @@ import { useUtilStore } from "../../../../store/util"
 import { NOTICE_TYPE } from "../../../../../server/database/board/const"
 import { NoticeType } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
+import { BOARD_TYPE } from "../../../../interface/board"
 
 const home = useHomeStore()
 const auth = useAuthStore()

@@ -70,6 +70,10 @@ export const useBoardViewStore = defineStore("boardView", () => {
     post.value = response.data.result.post
     tags.value = response.data.result.tags
     files.value = response.data.result.files
+
+    auth.user.admin =
+      response.data.result.config.admin.group === auth.user.uid ||
+      response.data.result.config.admin.board === auth.user.uid
   }
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
@@ -144,6 +148,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
         authorization: auth.user.token,
       },
       $query: {
+        boardUid: config.value.uid,
         postUid: postUid.value,
       },
     })

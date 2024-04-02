@@ -122,7 +122,7 @@ export async function havePermission(userUid: number, action: PermissionAction):
 export async function checkPermission(
   param: CheckPermissionParams,
 ): Promise<{ result: boolean; error: string }> {
-  const isAdmin = await haveAdminPermission(param.accessUserUid)
+  const isAdmin = await haveAdminPermission(param.accessUserUid, param.boardUid)
   const isWriter = await isAuthor(param.postUid, param.accessUserUid, param.target)
   const hasPerm = await havePermission(param.accessUserUid, param.action)
   if (isAdmin === false && isWriter === false) {

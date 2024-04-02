@@ -1,5 +1,5 @@
 <template>
-  <v-card-title class="list_title"
+  <v-card-title class="list-title"
     >{{ util.unescape(name) }}
     <span class="info ml-3 pl-3" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS">
       {{ util.unescape(info) }}</span
@@ -55,7 +55,7 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.list_title {
+.list-title {
   border-bottom: 1px #828282 solid;
 }
 

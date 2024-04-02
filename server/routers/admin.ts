@@ -15,6 +15,7 @@ import { user } from "./admin/user"
 import { isValidRefreshToken } from "../database/auth/authorization"
 import { fail } from "../util/tools"
 import { haveAdminPermission } from "../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../database/user/const"
 
 export const admin = new Elysia().group("/admin", (app) => {
   return app
@@ -32,7 +33,7 @@ export const admin = new Elysia().group("/admin", (app) => {
       }
 
       const userUid = access.uid as number
-      if ((await haveAdminPermission(userUid)) === false) {
+      if ((await haveAdminPermission(userUid, NO_TABLE_TARGET)) === false) {
         return fail(`Access denied.`, response)
       }
 

@@ -307,7 +307,7 @@ export const editor = new Elysia()
       content = sanitizeHtml(content, htmlFilter)
 
       let isNoticePost = false
-      if ((await haveAdminPermission(accessUserUid)) === true) {
+      if ((await haveAdminPermission(accessUserUid, boardUid)) === true) {
         if (isNotice > 0) {
           isNoticePost = true
         }
@@ -344,7 +344,7 @@ export const editor = new Elysia()
   )
   .get(
     "/loadpost",
-    async ({ query: { postUid }, accessUserUid, newAccessToken }) => {
+    async ({ query: { boardUid, postUid }, accessUserUid, newAccessToken }) => {
       let response = {
         post: INIT_POST_VIEW,
         files: [] as PostFile[],
@@ -356,6 +356,7 @@ export const editor = new Elysia()
       }
       const checked = await checkPermission({
         accessUserUid,
+        boardUid,
         postUid,
         action: "write_post",
         target: "post",
@@ -372,19 +373,21 @@ export const editor = new Elysia()
     {
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
+        boardUid: t.Numeric(),
         postUid: t.Numeric(),
       }),
     },
   )
   .delete(
     "/removeattached",
-    async ({ query: { postUid, fileUid }, accessUserUid }) => {
+    async ({ query: { boardUid, postUid, fileUid }, accessUserUid }) => {
       let response = ""
       if (fileUid < 1) {
         return fail(`Invalid parameter.`, response)
       }
       const checked = await checkPermission({
         accessUserUid,
+        boardUid,
         postUid,
         action: "write_post",
         target: "post",
@@ -398,6 +401,7 @@ export const editor = new Elysia()
     {
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
+        boardUid: t.Numeric(),
         postUid: t.Numeric(),
         fileUid: t.Numeric(),
       }),
@@ -424,6 +428,7 @@ export const editor = new Elysia()
       }
       const checked = await checkPermission({
         accessUserUid,
+        boardUid,
         postUid,
         action: "write_post",
         target: "post",
@@ -438,7 +443,7 @@ export const editor = new Elysia()
       content = sanitizeHtml(content, htmlFilter)
 
       let isNoticePost = false
-      if ((await haveAdminPermission(accessUserUid)) === true) {
+      if ((await haveAdminPermission(accessUserUid, boardUid)) === true) {
         if (isNotice > 0) {
           isNoticePost = true
         }

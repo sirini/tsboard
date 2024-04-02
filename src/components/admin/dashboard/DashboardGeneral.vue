@@ -31,7 +31,7 @@ const general = useAdminDashboardStore()
 const auth = useAuthStore()
 onMounted(() => {
   if (auth.user.uid !== 1) {
-    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    admin.error(`그룹 관리자 이상만 사용 가능합니다.`, 10_000)
     return
   }
   general.loadStatistics()

@@ -16,7 +16,7 @@
                 </v-list-item>
 
                 <v-list-item
-                  class="list_item pa-0"
+                  class="list-item pa-0"
                   v-for="(post, index) in list.posts"
                   :key="index"
                   :class="post.status === CONTENT_STATUS.NOTICE ? 'notice' : ''"
@@ -129,7 +129,7 @@ onMounted(() => {
   .notice {
     background-color: #f9f9f9;
   }
-  .list_item {
+  .list-item {
     border-bottom: 1px #ddd solid;
 
     .col {

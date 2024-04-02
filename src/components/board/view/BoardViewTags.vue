@@ -1,7 +1,7 @@
 <template>
   <v-list-item class="pa-3">
     <v-chip
-      label
+      variant="text"
       prepend-icon="mdi-tag-outline"
       class="mr-2 mb-2"
       v-for="(tag, index) in tags"

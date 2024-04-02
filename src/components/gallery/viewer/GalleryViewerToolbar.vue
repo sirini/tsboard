@@ -37,27 +37,22 @@
       <v-icon>mdi-dots-vertical</v-icon>
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
         <v-list density="compact">
-          <v-list-item class="pa-0">
-            <v-btn
-              prepend-icon="mdi-pencil"
-              variant="text"
-              @click="util.go('galleryModify', viewer.id, viewer.postUid)"
-              :disabled="auth.user.uid !== writerUid && !auth.user.admin"
-              >이 글 수정하기</v-btn
-            >
+          <v-list-item
+            prepend-icon="mdi-pencil"
+            @click="util.go('galleryModify', viewer.id, viewer.postUid)"
+            :disabled="auth.user.uid !== writerUid && !auth.user.admin"
+          >
+            이 글 수정하기
           </v-list-item>
-          <v-list-item class="pa-0">
-            <v-btn
-              prepend-icon="mdi-trash-can"
-              variant="text"
-              @click="remove"
-              :disabled="auth.user.uid !== writerUid && !auth.user.admin"
-            >
-              이 글 삭제하기
-            </v-btn>
+          <v-list-item
+            prepend-icon="mdi-trash-can"
+            @click="remove"
+            :disabled="auth.user.uid !== writerUid && !auth.user.admin"
+          >
+            이 글 삭제하기
           </v-list-item>
-          <v-list-item class="pa-0">
-            <v-btn prepend-icon="mdi-close" variant="text" @click="viewer.close">닫기</v-btn>
+          <v-list-item @click="viewer.close" prepend-icon="mdi-close">
+            닫기
           </v-list-item>
         </v-list>
       </v-menu>

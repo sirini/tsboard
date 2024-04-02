@@ -117,10 +117,11 @@ const util = useUtilStore()
 const editor = useBoardEditorStore()
 const home = useHomeStore()
 
-onMounted(() => {
+onMounted(async () => {
+  await editor.loadBoardConfig()
   if (route.params.no) {
     editor.postUid = parseInt(route.params.no as string)
-    editor.loadOriginalPost()
+    await editor.loadOriginalPost()
   }
   home.setGridLayout()
 })

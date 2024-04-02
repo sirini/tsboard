@@ -188,6 +188,7 @@ export type UpdatePointHistoryParams = CommonPairParam & {
 export type PermissionAction = "write_post" | "write_comment" | "send_chat" | "send_report"
 export type CheckPermissionParams = {
   accessUserUid: number
+  boardUid: number
   postUid: number
   action: PermissionAction
   target: TargetTable

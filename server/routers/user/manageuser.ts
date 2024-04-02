@@ -12,7 +12,7 @@ import {
   haveAdminPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
-import { USER_PERMISSION_PARAMS } from "../../database/user/const"
+import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "../../database/user/const"
 
 export const manageUser = new Elysia()
   .use(
@@ -33,7 +33,7 @@ export const manageUser = new Elysia()
       }
     }
     accessUserUid = access.uid as number
-    if ((await haveAdminPermission(accessUserUid)) === false) {
+    if ((await haveAdminPermission(accessUserUid, NO_TABLE_TARGET)) === false) {
       return {
         accessUserUid,
         newAccessToken,

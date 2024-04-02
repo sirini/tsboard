@@ -178,14 +178,14 @@ export const view = new Elysia()
   )
   .delete(
     "/removepost",
-    async ({ query: { postUid }, accessUserUid, newAccessToken }) => {
+    async ({ query: { boardUid, postUid }, accessUserUid, newAccessToken }) => {
       let response = {
         newAccessToken,
       }
       if (postUid < 1) {
         return fail(`Invalid parameter.`, response)
       }
-      const isAdmin = await haveAdminPermission(accessUserUid)
+      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
       const isWriter = await isAuthor(postUid, accessUserUid, "post")
       if (isAdmin === false && isWriter === false) {
         return fail(`You are neither the author nor the administrator.`, response)
@@ -199,6 +199,7 @@ export const view = new Elysia()
         authorization: t.String(),
       }),
       query: t.Object({
+        boardUid: t.Numeric(),
         postUid: t.Numeric(),
       }),
     },

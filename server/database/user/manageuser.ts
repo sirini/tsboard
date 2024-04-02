@@ -6,16 +6,30 @@
 
 import { table, select, update, insert } from "../common"
 import { UserPermissionParams } from "../../../src/interface/user"
-import { USER_PERMISSION_PARAMS } from "./const"
+import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "./const"
 
-// 주어진 회원 번호가 관리 권한이 있는지 반환 (그룹 관리자 이상만 true)
-export async function haveAdminPermission(userUid: number): Promise<boolean> {
+// 주어진 회원 번호가 관리 권한이 있는지 반환 (게시판/그룹 관리자)
+export async function haveAdminPermission(
+  accessUserUid: number,
+  boardUid: number,
+): Promise<boolean> {
   let admins = [1]
   const uids = await select(`SELECT admin_uid FROM ${table}group`)
   for (const uid of uids) {
     admins.push(uid.admin_uid)
   }
-  return admins.includes(userUid)
+  if (admins.includes(accessUserUid) === true) {
+    return true
+  }
+  if (boardUid !== NO_TABLE_TARGET) {
+    const [board] = await select(`SELECT admin_uid FROM ${table}board WHERE uid = ? LIMIT 1`, [
+      boardUid,
+    ])
+    if (board && board.admin_uid === accessUserUid) {
+      return true
+    }
+  }
+  return false
 }
 
 // 회원 권한 조회하기

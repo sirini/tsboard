@@ -1,6 +1,6 @@
 <template>
   <v-btn icon :disabled="auth.user.uid < 1">
-    <v-icon>mdi-chat-outline </v-icon>
+    <v-icon>mdi-chat-outline</v-icon>
     <v-menu activator="parent">
       <v-list>
         <v-list-item

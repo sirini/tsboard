@@ -89,6 +89,10 @@ export const useGalleryStore = defineStore("gallery", () => {
       }
     }
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
+
+    auth.user.admin =
+      response.data.result.config.admin.group === auth.user.uid ||
+      response.data.result.config.admin.board === auth.user.uid
   }
 
   // 이전 사진들 가져오기

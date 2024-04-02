@@ -29,7 +29,7 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
   )
 }
 
-// 나에게 온 (아직 확인 안한) 알림들 가져오기
+// 나에게 온 최근 알림들 가져오기
 export async function getNotifications(userUid: number, limit: number): Promise<Notification[]> {
   let result: Notification[] = []
   const notifications = await select(

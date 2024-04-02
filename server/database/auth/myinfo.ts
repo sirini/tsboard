@@ -6,6 +6,7 @@
 
 import { User } from "../../../src/interface/auth"
 import { table, select } from "../common"
+import { NO_TABLE_TARGET } from "../user/const"
 import { haveAdminPermission } from "../user/manageuser"
 import { INIT_USER } from "./const"
 
@@ -27,7 +28,7 @@ export async function getUser(userUid: number): Promise<User> {
     return result
   }
 
-  const admin = await haveAdminPermission(userUid)
+  const admin = await haveAdminPermission(userUid, NO_TABLE_TARGET)
 
   return {
     uid: userUid,

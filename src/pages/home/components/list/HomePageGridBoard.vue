@@ -9,11 +9,19 @@
         <v-list-item
           v-for="(post, index) in boardList"
           :key="index"
+          class="post-list"
           @click="util.go('boardView', id, post.uid)"
         >
-          <template v-slot:prepend v-if="post.useCategory">
-            <v-chip size="small" color="blue-grey">{{ post.category }}</v-chip>
+          <template v-slot:prepend>
+            <v-chip size="small" color="blue-grey" v-if="post.useCategory">{{
+              post.category
+            }}</v-chip>
+
+            <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline" v-else>{{
+              util.num(post.like)
+            }}</v-chip>
           </template>
+
           <v-list-item-title class="pl-2 pr-2 post-title"
             >{{ post.title }}
             <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.comment > 0">{{
@@ -47,6 +55,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.post-list {
+  border-bottom: #eceff1 1px solid;
+}
 .post-title {
   font-size: 1em;
 }

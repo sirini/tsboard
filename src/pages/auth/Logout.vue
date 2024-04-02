@@ -25,13 +25,18 @@
             </div>
 
             <v-divider></v-divider>
-            <v-card-actions>
+            <v-card-actions v-if="auth.user.uid > 0">
               <v-spacer></v-spacer>
-              <v-btn @click="auth.logout" append-icon="mdi-chevron-right" v-if="auth.user.uid > 0">
-                로그아웃하기</v-btn
+              <v-btn @click="auth.logout" append-icon="mdi-chevron-right"> 로그아웃하기</v-btn>
+            </v-card-actions>
+
+            <v-card-actions v-else>
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')"
+                >다시 로그인하기</v-btn
               >
-              <v-btn @click="util.go('home')" append-icon="mdi-chevron-right" v-else
-                >첫 화면으로 이동하기</v-btn
+              <v-spacer></v-spacer>
+              <v-btn append-icon="mdi-chevron-right" @click="util.go('home')"
+                >첫화면으로 이동</v-btn
               >
             </v-card-actions>
           </v-card>

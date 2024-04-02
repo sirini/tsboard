@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar density="compact" class="write_editor_menu" :color="home.color.header">
+  <v-toolbar density="compact" class="write-editor-menu" :color="home.color.header">
     <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
       ><v-icon>mdi-format-bold</v-icon>
       <v-tooltip activator="parent" location="top">글자 굵게</v-tooltip>
@@ -434,7 +434,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.write_editor_menu {
+.write-editor-menu {
   border-left: 1px #dddddd solid;
   border-right: 1px #dddddd solid;
   border-top: 1px #dddddd solid;

@@ -100,7 +100,7 @@ export const useAuthStore = defineStore("auth", () => {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
     util.success(`${AUTH.WELCOME_USER}, ${user.value.name}!`, 2000)
-
+    password.value = ""
     setTimeout(() => {
       util.go("home")
     }, 1000)

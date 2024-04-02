@@ -8,9 +8,16 @@
       <v-btn
         prepend-icon="mdi-login-variant"
         variant="text"
-        @click="auth.login"
+        @click="util.go('login')"
         v-if="auth.user.uid < 1"
         >로그인</v-btn
+      >
+      <v-btn
+        v-else
+        prepend-icon="mdi-badge-account-outline"
+        variant="text"
+        @click="util.go('myinfo')"
+        >내정보</v-btn
       >
       <v-btn
         prepend-icon="mdi-cog-outline"

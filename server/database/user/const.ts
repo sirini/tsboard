@@ -6,6 +6,8 @@
 
 import { UserOpenInfo, UserPermissionParams } from "../../../src/interface/user"
 
+export const NO_TABLE_TARGET = 0
+
 export const USER_PERMISSION_PARAMS: UserPermissionParams = {
   writePost: true,
   writeComment: true,

@@ -35,7 +35,9 @@
           <v-col class="mt-1">
             <v-chip
               color="blue-grey"
-              :prepend-avatar="TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')"
+              :prepend-avatar="
+                TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')
+              "
               variant="tonal"
               >{{ general.group.manager.name }}
               <v-tooltip activator="parent"
@@ -147,7 +149,7 @@ const util = useUtilStore()
 
 onMounted(() => {
   if (auth.user.uid !== 1) {
-    admin.error(`관리자만 사용 가능합니다.`, 10_000)
+    admin.error(`그룹 관리자 이상만 사용 가능합니다.`, 10_000)
     return
   }
   general.loadGeneralConfig()

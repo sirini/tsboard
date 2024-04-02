@@ -9,7 +9,7 @@
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
             <v-list>
               <v-list-item>
-                <v-list-item-title class="view_title">{{
+                <v-list-item-title class="view-title">{{
                   util.unescape(view.post.title)
                 }}</v-list-item-title>
               </v-list-item>
@@ -100,16 +100,9 @@ onMounted(() => {
 .wrap {
   min-height: calc(100vh - 118px);
 }
-.view_title {
+.view-title {
   font-weight: bold;
   font-size: 1.2em;
-}
-.underline {
-  border-bottom: 1px #dddddd solid;
-}
-.view_info {
-  color: #828282;
-  font-size: 0.85em;
 }
 .signature {
   color: #90a4ae;

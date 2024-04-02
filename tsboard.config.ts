@@ -6,7 +6,7 @@
 
 export const TSBOARD = {
   IS_DEVELOPING: false /* 개발중일 때 true */,
-  VERSION: 0.88,
+  VERSION: "v0.8.10",
   SITE: {
     NAME: "tsboard.dev" /* 수정 필요 */,
     URL: "https://tsboard.dev" /* 수정 필요 */,
@@ -32,7 +32,7 @@ export const TSBOARD = {
     SECURE: false,
   },
   API: {
-    DEVELOPING: "http://localhost" /* 기본 http://localhost */,
+    DEVELOPING: "http://geunyul2.asuscomm.com" /* 기본 http://localhost */,
     PRODUCTION: "https://tsboard.dev" /* 수정 필요 */,
   },
   /* 새 게시판 생성시 기본값 */

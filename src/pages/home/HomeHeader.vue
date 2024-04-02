@@ -2,7 +2,11 @@
   <v-app-bar rounded="0" flat :color="home.color.header" class="appbar">
     <v-toolbar :color="home.color.header">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title @click="home.coming" class="title">
+      <v-app-bar-title
+        @click="home.coming"
+        class="title"
+        :class="home.cols > TSBOARD.SCREEN.TABLET.COLS ? 'mobile-title' : ''"
+      >
         <div>TSBOARD<span>.dev</span></div>
       </v-app-bar-title>
 
@@ -44,5 +48,10 @@ const home = useHomeStore()
   span {
     opacity: 0.3;
   }
+}
+.mobile-title {
+  position: absolute;
+  top: 20px;
+  left: 50px;
 }
 </style>

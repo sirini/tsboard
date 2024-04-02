@@ -100,6 +100,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         authorization: auth.user.token,
       },
       $query: {
+        boardUid: config.value.uid,
         postUid: postUid.value,
       },
     })
@@ -324,6 +325,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         authorization: auth.user.token,
       },
       $query: {
+        boardUid: config.value.uid,
         postUid: postUid.value,
         fileUid,
       },
