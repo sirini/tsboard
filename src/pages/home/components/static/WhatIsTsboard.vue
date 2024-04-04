@@ -1,21 +1,20 @@
 <template>
-  <v-card rounded="xl" class="box">
+  <v-card rounded="xl" class="box" :color="home.color.header">
     <v-card-title class="post-title"
-      ><v-icon class="mr-2">mdi-pin</v-icon> TSBOARD는 무엇인가요?</v-card-title
+      ><v-icon class="mr-2">mdi-pin</v-icon>
+      <strong>{{ TEXT[home.lang].TITLE }}</strong></v-card-title
     >
     <v-divider></v-divider>
     <v-card-text class="pa-0 post-content">
-      <v-list class="pa-0">
-        <v-list-item prepend-icon="mdi-language-typescript">
-          TSBOARD는 <strong>타입스크립트</strong>로 작성된 커뮤니티 빌더입니다.
+      <v-list class="pa-0" :bg-color="home.color.header">
+        <v-list-item prepend-icon="mdi-language-typescript"
+          >{{ TEXT[home.lang].SUMMARY }}
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item prepend-icon="mdi-vuejs">
-          프론트엔드는 Vue, Vuetify 중심으로 구성되어 있습니다.
-        </v-list-item>
+        <v-list-item prepend-icon="mdi-vuejs">{{ TEXT[home.lang].FRONT }}</v-list-item>
         <v-divider></v-divider>
         <v-list-item prepend-icon="mdi-database-sync-outline">
-          백엔드는 Bun, ElysiaJS, MySQL로 구성되어 안정적이면서도 빠른 성능을 보여줍니다.
+          {{ TEXT[home.lang].BACK }}
         </v-list-item>
       </v-list>
     </v-card-text>
@@ -26,28 +25,26 @@
         rounded="xl"
         prepend-icon="mdi-github"
         append-icon="mdi-chevron-right"
-        @click="util.open('https://github.com/sirini/tsboard/blob/main/README.md')"
-        color="blue-grey"
-        >README 보러가기
-        <v-tooltip activator="parent"
-          >깃허브에서 TSBOARD README.md 문서를 확인합니다. 이곳에서 설치 방법, 주의사항 등을 확인할
-          수 있습니다!</v-tooltip
-        >
+        @click="util.open('https://github.com/sirini/tsboard')"
+        >{{ TEXT[home.lang].GITHUB }}
+        <v-tooltip activator="parent">{{ TEXT[home.lang].GITHUB_TOOLTIP }}</v-tooltip>
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
+import { TEXT } from "../../../../messages/pages/home/components/static/what-is-tsboard"
 
+const home = useHomeStore()
 const util = useUtilStore()
 </script>
 
 <style scoped>
 .post-title {
   font-size: 1em;
-  font-weight: bold;
 }
 .post-content {
   line-height: 1.8em;

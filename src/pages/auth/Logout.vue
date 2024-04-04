@@ -11,33 +11,35 @@
             :color="home.color.header"
           >
             <v-card-title
-              >로그아웃
-              <span class="info ml-3">안전하게 로그아웃 합니다</span>
+              >{{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
             <div class="pa-6 message">
-              <span v-if="auth.user.uid < 1"> 안전하게 로그아웃 되셨습니다. 다시 만나요! 👋</span>
+              <span v-if="auth.user.uid < 1">{{ TEXT[home.lang].GOODBYE }}</span>
 
               <span v-else>
-                아래에 로그아웃하기 버튼 클릭 시 안전하게 로그아웃 하실 수 있습니다.
+                {{ TEXT[home.lang].HOWTO }}
               </span>
             </div>
 
             <v-divider></v-divider>
             <v-card-actions v-if="auth.user.uid > 0">
               <v-spacer></v-spacer>
-              <v-btn @click="auth.logout" append-icon="mdi-chevron-right"> 로그아웃하기</v-btn>
+              <v-btn @click="auth.logout" append-icon="mdi-chevron-right">{{
+                TEXT[home.lang].LOGOUT
+              }}</v-btn>
             </v-card-actions>
 
             <v-card-actions v-else>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')"
-                >다시 로그인하기</v-btn
-              >
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+                TEXT[home.lang].LOGIN
+              }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="util.go('home')"
-                >첫화면으로 이동</v-btn
-              >
+              <v-btn append-icon="mdi-chevron-right" @click="util.go('home')">{{
+                TEXT[home.lang].HOME
+              }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -53,6 +55,7 @@ import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
+import { TEXT } from "../../messages/pages/auth/logout"
 
 const auth = useAuthStore()
 const util = useUtilStore()

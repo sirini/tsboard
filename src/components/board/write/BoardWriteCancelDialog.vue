@@ -1,20 +1,21 @@
 <template>
   <v-dialog v-model="editor.confirmWriteCancelDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color.header">
-      <v-card-title>확인</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE_CONFIRM }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
-        본문 작성란 내부에서 이미 업로드하신 이미지들을 제외하고 나머지 입력 항목들은 모두
-        초기화됩니다. 계속 진행하시겠습니까?
+        {{ TEXT[home.lang].CHECK_BEFORE_REMOVE }}
       </v-card-text>
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog"
-          >아니요, 계속 작성하겠습니다</v-btn
-        >
+        <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog">{{
+          TEXT[home.lang].CANCEL_REMOVE
+        }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel">작성 취소</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel">{{
+          TEXT[home.lang].CONFIRM_REMOVE
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -23,6 +24,7 @@
 <script setup lang="ts">
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()

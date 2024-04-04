@@ -11,7 +11,8 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { EDITOR } from "../../messages/store/board/editor"
+import { useHomeStore } from "../home"
+import { TEXT } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
 import { BOARD_TYPE, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
@@ -23,6 +24,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const view = useBoardViewStore()
+  const home = useHomeStore()
   const confirmWriteCancelDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
   const addVideoURLDialog = ref<boolean>(false)
@@ -46,7 +48,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
-      return EDITOR.TOO_SHORT_TEXT
+      return TEXT[home.lang].TOO_SHORT_TEXT
     },
   ]
 
@@ -59,7 +61,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     id.value = route.params.id as string
     if (id.value.length < 2) {
-      util.snack(EDITOR.NO_BOARD_ID)
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
     }
 
@@ -73,11 +75,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_LOAD_CONFIG} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -106,11 +108,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_LOAD_POST} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -121,7 +123,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     content.value = response.data.result.post.content.replaceAll("<br />", "")
     tags.value = response.data.result.tags.map((tag) => tag.name)
 
-    util.snack(EDITOR.LOADED_ORIGINAL_POST)
+    util.snack(TEXT[home.lang].LOADED_ORIGINAL_POST)
   }
 
   // 카테고리 선택하기
@@ -146,11 +148,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_LOAD_TAGS} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
       return
     }
     suggestionTags.value = response.data.result.suggestions
@@ -164,7 +166,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return tag === target
     })
     if (duplicate.length > 0) {
-      util.snack(EDITOR.ALREADY_ADDED_TAG)
+      util.snack(TEXT[home.lang].ALREADY_ADDED_TAG)
       tag.value = ""
       return
     }
@@ -219,11 +221,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   // 글 작성 or 수정 전에 체크 로직
   function checkBeforeSend(): boolean {
     if (title.value.length < 2) {
-      util.error(EDITOR.TOO_SHORT_TITLE)
+      util.error(TEXT[home.lang].TOO_SHORT_TITLE)
       return false
     }
     if (content.value.length < 3) {
-      util.error(EDITOR.TOO_SHORT_CONTENT)
+      util.error(TEXT[home.lang].TOO_SHORT_CONTENT)
       return false
     }
 
@@ -233,7 +235,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         totalSize += file.size
       })
       if (TSBOARD.MAX_FILE_SIZE < totalSize) {
-        util.error(`${EDITOR.EXCEED_FILESIZE_LIMIT} (limit: ${util.num(TSBOARD.MAX_FILE_SIZE)})`)
+        util.error(
+          `${TEXT[home.lang].EXCEED_FILESIZE_LIMIT} (limit: ${util.num(TSBOARD.MAX_FILE_SIZE)})`,
+        )
         return false
       }
     }
@@ -261,17 +265,17 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.error(EDITOR.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       clearVariables()
       return
     }
     if (response.data.success === false) {
-      util.error(`${EDITOR.FAILED_WRITE_POST} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
       clearVariables()
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.success(EDITOR.WRITTEN_NEW_POST)
+    util.success(TEXT[home.lang].WRITTEN_NEW_POST)
     util.go(viewRouteName.value, id.value, response.data.result.postUid)
 
     clearVariables()
@@ -299,17 +303,17 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.error(EDITOR.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       clearVariables()
       return
     }
     if (response.data.success === false) {
-      util.error(`${EDITOR.FAILED_MODIFY_POST} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${response.data.error})`)
       clearVariables()
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.success(EDITOR.MODIFIED_POST)
+    util.success(TEXT[home.lang].MODIFIED_POST)
     util.go(viewRouteName.value, id.value, postUid.value)
 
     clearVariables()
@@ -332,15 +336,15 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     })
 
     if (!response.data) {
-      util.error(EDITOR.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${EDITOR.FAILED_REMOVE_FILE} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${response.data.error})`)
       return
     }
     attachedFiles.value = attachedFiles.value.filter((file) => file.uid !== fileUid)
-    util.success(EDITOR.REMOVED_FILE)
+    util.success(TEXT[home.lang].REMOVED_FILE)
   }
 
   return {

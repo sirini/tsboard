@@ -4,8 +4,6 @@
  * 게시판에서 사용되는 각종 인터페이스 모음
  */
 
-export const SUPER_ADMIN = 1
-
 export const BOARD_TYPE = {
   BOARD: 0,
   GALLERY: 1,

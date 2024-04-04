@@ -11,13 +11,14 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { BoardConfig, Pair, Post, PostFile, PostView } from "../../interface/board"
-import { VIEW } from "../../messages/store/board/view"
+import { useHomeStore } from "../home"
+import { BoardConfig, Pair, PostFile, PostView } from "../../interface/board"
+import { TEXT } from "../../messages/store/board/view"
 import {
-  INIT_POST,
   BOARD_CONFIG,
   TYPE_MATCH,
   INIT_POST_VIEW,
+  READ_POST_KEY,
 } from "../../../server/database/board/const"
 
 export const useBoardViewStore = defineStore("boardView", () => {
@@ -25,6 +26,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const confirmRemovePostDialog = ref<boolean>(false)
   const id = ref<string>("")
   const postUid = ref<number>(0)
@@ -38,9 +40,16 @@ export const useBoardViewStore = defineStore("boardView", () => {
     postUid.value = parseInt(route.params.no as string)
 
     if (id.value.length < 2) {
-      util.snack(VIEW.NO_BOARD_ID)
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
     }
+
+    let needUpdateHit = 0
+    if (util.isAlreadyRead(postUid.value) === false) {
+      util.markAsRead(postUid.value)
+      needUpdateHit = 1
+    }
+
     const response = await server.api.board.view.get({
       $headers: {
         authorization: auth.user.token,
@@ -48,16 +57,17 @@ export const useBoardViewStore = defineStore("boardView", () => {
       $query: {
         id: id.value,
         postUid: postUid.value,
+        needUpdateHit,
       },
     })
 
     if (!response.data) {
-      util.snack(VIEW.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${VIEW.FAILED_LOAD_POST} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -110,11 +120,11 @@ export const useBoardViewStore = defineStore("boardView", () => {
     })
 
     if (!response.data) {
-      util.snack(VIEW.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${VIEW.FAILED_DOWNLOAD} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${response.data.error})`)
       return
     }
 
@@ -125,7 +135,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     link.click()
     document.body.removeChild(link)
 
-    util.snack(VIEW.DOWNLOADED_FILE)
+    util.snack(TEXT[home.lang].DOWNLOADED_FILE)
   }
 
   // 게시글을 삭제할지 확인하는 다이얼로그 띄우기
@@ -154,15 +164,15 @@ export const useBoardViewStore = defineStore("boardView", () => {
     })
 
     if (!response.data) {
-      util.snack(VIEW.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${VIEW.FAILED_REMOVE_POST} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.snack(VIEW.REMOVED_POST)
+    util.snack(TEXT[home.lang].REMOVED_POST)
     closeConfirmRemoveDialog()
     util.go(route.name === "galleryOpen" ? "galleryList" : "boardList", id.value)
   }

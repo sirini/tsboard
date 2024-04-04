@@ -2,23 +2,25 @@
   <v-toolbar density="compact" :color="color ? color : ''">
     <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0">
       <v-icon>mdi-chevron-left</v-icon>
-      <v-tooltip activator="parent" location="top"> 이전 사진을 봅니다 </v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].PREV_TOOLTIP }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.files.length">
       <v-icon>mdi-chevron-right</v-icon>
-      <v-tooltip activator="parent" location="top"> 다음 사진을 봅니다 </v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="viewer.reset">
       <v-icon>mdi-reload</v-icon>
-      <v-tooltip activator="parent" location="top">사진 위치/크기 초기화하기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{
+        TEXT[home.lang].RESET_IMAGE_TOOLTIP
+      }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="viewer.zoomIn">
       <v-icon>mdi-magnify-expand</v-icon>
-      <v-tooltip activator="parent" location="top">사진을 확대해서 보기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ZOOMIN_TOOLTIP }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="viewer.zoomOut">
       <v-icon>mdi-arrow-collapse</v-icon>
-      <v-tooltip activator="parent" location="top">사진을 축소해서 보기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ZOOMOUT_TOOLTIP }}</v-tooltip>
     </v-btn>
 
     <v-spacer></v-spacer>
@@ -30,7 +32,7 @@
       :color="liked ? 'red' : ''"
     >
       {{ postLike }}
-      <v-tooltip activator="parent" location="top">이 사진첩에 좋아요 표시하기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
     </v-chip>
 
     <v-btn icon @click="isOpenMenu = !isOpenMenu">
@@ -42,18 +44,18 @@
             @click="util.go('galleryModify', viewer.id, viewer.postUid)"
             :disabled="auth.user.uid !== writerUid && !auth.user.admin"
           >
-            이 글 수정하기
+            {{ TEXT[home.lang].MODIFY }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-trash-can"
             @click="remove"
             :disabled="auth.user.uid !== writerUid && !auth.user.admin"
           >
-            이 글 삭제하기
+            {{ TEXT[home.lang].REMOVE }}
           </v-list-item>
-          <v-list-item @click="viewer.close" prepend-icon="mdi-close">
-            닫기
-          </v-list-item>
+          <v-list-item @click="viewer.close" prepend-icon="mdi-close">{{
+            TEXT[home.lang].CLOSE
+          }}</v-list-item>
         </v-list>
       </v-menu>
     </v-btn>
@@ -66,11 +68,14 @@ import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-toolbar"
 
 const viewer = useViewerStore()
 const view = useBoardViewStore()
 const util = useUtilStore()
 const auth = useAuthStore()
+const home = useHomeStore()
 const props = defineProps<{
   postLike: number
   postUid: number

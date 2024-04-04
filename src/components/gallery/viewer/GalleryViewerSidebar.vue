@@ -12,7 +12,9 @@
       <template v-slot:append>
         <v-btn icon @click="viewer.close" elevation="0"
           ><v-icon>mdi-close</v-icon>
-          <v-tooltip activator="parent" location="top"> 클릭하시면 이 창을 닫습니다 </v-tooltip>
+          <v-tooltip activator="parent" location="top">{{
+            TEXT[home.lang].CLOSE_TOOLTIP
+          }}</v-tooltip>
         </v-btn>
       </template>
     </v-list-item>
@@ -95,7 +97,7 @@
         variant="outlined"
         auto-grow
         hide-details
-        placeholder="사진이 마음에 드셨다면 댓글을 남겨주세요!"
+        :placeholder="TEXT[home.lang].LEAVE_COMMENT"
       ></v-textarea>
     </v-list-item>
   </v-list>
@@ -105,12 +107,15 @@
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useCommentStore } from "../../../store/board/comment"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import GalleryViewerComment from "./GalleryViewerComment.vue"
 import UserNametag from "../../user/UserNametag.vue"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-sidebar"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="editor.addImageURLDialog" persistent>
     <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
-      <v-card-title>외부 이미지 URL 추가</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE_EXTERNAL_IMAGE }}</v-card-title>
       <v-divider></v-divider>
 
       <alert-bar></alert-bar>
@@ -16,9 +16,13 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addImageURLDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="editor.addImageURLDialog = false">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
+        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+          TEXT[home.lang].ADD_TO_CONTENT
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -30,6 +34,7 @@ import { useBoardEditorStore } from "../../../store/board/editor"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const util = useUtilStore()
 const home = useHomeStore()
@@ -44,7 +49,7 @@ const rule = [
       !value ||
       value.length < 10 ||
       util.filters.url.test(value) === true ||
-      "올바른 이미지 URL 형식이 아닙니다."
+      TEXT[home.lang].INVALID_IMAGE_URL
     )
   },
 ]
@@ -52,7 +57,7 @@ const rule = [
 // 외부 이미지 추가 반영하기
 function add(): void {
   if (util.filters.url.test(link.value) === false) {
-    util.error("올바른 URL 형식이 아닙니다.")
+    util.error(TEXT[home.lang].INVALID_IMAGE_URL)
     return
   }
   emits("addImageURL", link.value)

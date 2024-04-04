@@ -11,9 +11,20 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../server/index"
 import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
-import { GroupItem, LatestPost, NoticeType, Notification, PostItem } from "../interface/home"
+import {
+  BoardLatest,
+  GroupItem,
+  LANG,
+  LANG_KEY,
+  LangType,
+  LatestPost,
+  NoticeType,
+  Notification,
+  PostItem,
+  VISIT_KEY,
+} from "../interface/home"
 import { NOTICE_TYPE } from "../../server/database/board/const"
-import { HOME } from "../messages/store/home"
+import { TEXT } from "../messages/store/home"
 import { SEARCH_OPTION, SearchOption } from "../interface/board"
 import { TSBOARD } from "../../tsboard.config"
 
@@ -36,6 +47,7 @@ export const useHomeStore = defineStore("home", () => {
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
+  const lang = ref<LangType>(LANG.KO as LangType)
   const color = ref({
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -44,6 +56,8 @@ export const useHomeStore = defineStore("home", () => {
       footer: "blue-grey-lighten-5",
     },
   })
+
+  loadUserLanguage()
 
   // 첫화면 갱신하기
   function coming(): void {
@@ -63,11 +77,11 @@ export const useHomeStore = defineStore("home", () => {
     const day = String(date.getDate()).padStart(2, "0")
     const today = `${year}${month}${day}`
 
-    const lastVisit = window.localStorage.getItem("tsboardVisit") ?? ""
+    const lastVisit = window.localStorage.getItem(VISIT_KEY) ?? ""
     if (lastVisit === today) {
       return
     }
-    window.localStorage.setItem("tsboardVisit", today)
+    window.localStorage.setItem(VISIT_KEY, today)
     server.api.home.visit.get({
       $query: {
         userUid: auth.user.uid,
@@ -127,8 +141,11 @@ export const useHomeStore = defineStore("home", () => {
   }
 
   // 특정 게시판의 최신글 목록 가져오기
-  async function getBoardLatest(id: string, limit: number): Promise<LatestPost[]> {
-    let result: LatestPost[] = []
+  async function getBoardLatest(id: string, limit: number): Promise<BoardLatest> {
+    let result: BoardLatest = {
+      name: "",
+      latest: [] as LatestPost[],
+    }
     if (id.length < 2 || limit < 1) {
       return result
     }
@@ -212,19 +229,19 @@ export const useHomeStore = defineStore("home", () => {
     let result = ""
     switch (type) {
       case NOTICE_TYPE.LIKE_POST as NoticeType:
-        result = HOME.LIKE_POST
+        result = TEXT[lang.value].LIKE_POST
         break
       case NOTICE_TYPE.LIKE_COMMENT as NoticeType:
-        result = HOME.LIKE_COMMENT
+        result = TEXT[lang.value].LIKE_COMMENT
         break
       case NOTICE_TYPE.LEAVE_COMMENT as NoticeType:
-        result = HOME.LEAVE_COMMENT
+        result = TEXT[lang.value].LEAVE_COMMENT
         break
       case NOTICE_TYPE.REPLY_COMMENT as NoticeType:
-        result = HOME.REPLY_COMMENT
+        result = TEXT[lang.value].REPLY_COMMENT
         break
       default:
-        result = HOME.CHAT_MESSAGE
+        result = TEXT[lang.value].CHAT_MESSAGE
     }
     return result
   }
@@ -235,6 +252,18 @@ export const useHomeStore = defineStore("home", () => {
     if (response.data && response.data.success === true) {
       sidebarLinks.value = response.data.result
     }
+  }
+
+  // 언어 변경하기
+  function changeUserLanguage(type: LangType): void {
+    lang.value = type
+    window.localStorage.setItem(LANG_KEY, lang.value.toString())
+  }
+
+  // 기존에 선택된 언어 불러오기
+  function loadUserLanguage(): void {
+    const type = window.localStorage.getItem(LANG_KEY) ?? "0"
+    lang.value = parseInt(type) as LangType
   }
 
   return {
@@ -251,6 +280,7 @@ export const useHomeStore = defineStore("home", () => {
     latestPosts,
     option,
     keyword,
+    lang,
     color,
     coming,
     visit,
@@ -263,5 +293,7 @@ export const useHomeStore = defineStore("home", () => {
     translateNotification,
     checkedAllNotifications,
     loadSidebarLinks,
+    changeUserLanguage,
+    loadUserLanguage,
   }
 })

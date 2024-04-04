@@ -1,15 +1,14 @@
 <template>
-  <v-card rounded="xl" class="box">
+  <v-card rounded="xl" class="box" :color="home.color.header">
     <v-card-title class="post-title" @click="util.go('boardList', 'free')"
-      ><v-icon class="mr-2">mdi-pin</v-icon> {{ name }}</v-card-title
+      ><v-icon class="mr-2">mdi-pin</v-icon> <strong>{{ board.name }}</strong></v-card-title
     >
     <v-divider></v-divider>
     <v-card-text class="pa-0">
-      <v-list class="pa-0">
+      <v-list class="pa-0" :bg-color="home.color.header">
         <v-list-item
-          v-for="(post, index) in boardList"
+          v-for="(post, index) in board.latest"
           :key="index"
-          class="post-list"
           @click="util.go('boardView', id, post.uid)"
         >
           <template v-slot:prepend>
@@ -38,26 +37,25 @@
 import { ref, onMounted } from "vue"
 import { useUtilStore } from "../../../../store/util"
 import { useHomeStore } from "../../../../store/home"
-import { LatestPost } from "../../../../interface/home"
+import { BoardLatest, LatestPost } from "../../../../interface/home"
 
 const util = useUtilStore()
 const home = useHomeStore()
 const props = defineProps<{
   id: string
-  name: string
   limit: number
 }>()
-const boardList = ref<LatestPost[]>([])
+const board = ref<BoardLatest>({
+  name: "",
+  latest: [] as LatestPost[],
+})
 
 onMounted(async () => {
-  boardList.value = await home.getBoardLatest(props.id, props.limit)
+  board.value = await home.getBoardLatest(props.id, props.limit)
 })
 </script>
 
 <style scoped>
-.post-list {
-  border-bottom: #eceff1 1px solid;
-}
 .post-title {
   font-size: 1em;
 }

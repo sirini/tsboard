@@ -48,7 +48,7 @@
 
           <v-list>
             <v-list-item class="pa-0 ml-2 mr-2">
-              <v-btn block @click="viewer.close" variant="tonal">닫기</v-btn>
+              <v-btn block @click="viewer.close" variant="tonal">{{ TEXT[home.lang].CLOSE }}</v-btn>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
@@ -65,9 +65,7 @@
 <script setup lang="ts">
 import { watch } from "vue"
 import { useRoute } from "vue-router"
-import { useCommentStore } from "../../../store/board/comment"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
-import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerSidebar from "./GalleryViewerSidebar.vue"
@@ -79,11 +77,10 @@ import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 import BoardViewCommentWriteButton from "../../board/comment/BoardViewCommentWriteButton.vue"
 import "../../../assets/board/editor.scss"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-toolbar"
 
 const route = useRoute()
 const viewer = useViewerStore()
-const util = useUtilStore()
-const comment = useCommentStore()
 const home = useHomeStore()
 
 // 뷰어 다이얼로그 데이터 준비

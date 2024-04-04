@@ -25,7 +25,7 @@
         @click="like"
       >
         {{ commentLike }}
-        <v-tooltip activator="parent" location="top"> 이 댓글에 좋아요를 표시합니다 </v-tooltip>
+        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
       </v-chip>
 
       <v-btn
@@ -34,7 +34,7 @@
         :disabled="auth.user.uid < 1"
         @click="comment.setReplyComment(commentUid, commentContent, false)"
         ><v-icon>mdi-reply</v-icon>
-        <v-tooltip activator="parent" location="top"> 이 댓글에 답글을 작성합니다 </v-tooltip>
+        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REPLY_TOOLTIP }}</v-tooltip>
       </v-btn>
 
       <v-btn
@@ -43,9 +43,9 @@
         :disabled="auth.user.uid !== writerUid && !auth.user.admin"
         @click="comment.setModifyComment(commentUid, commentContent)"
         ><v-icon>mdi-pencil</v-icon>
-        <v-tooltip activator="parent" location="top"
-          >댓글 내용을 수정합니다 (작성자/관리자만 가능)</v-tooltip
-        >
+        <v-tooltip activator="parent" location="top">{{
+          TEXT[home.lang].MODIFY_TOOLTIP
+        }}</v-tooltip>
       </v-btn>
 
       <v-btn
@@ -54,9 +54,9 @@
         :disabled="auth.user.uid !== writerUid && !auth.user.admin"
         @click="remove"
         ><v-icon>mdi-trash-can</v-icon>
-        <v-tooltip activator="parent" location="top"
-          >댓글을 삭제합니다 (답글이 달려있을 경우 삭제 불가, 작성자/관리자만 가능)</v-tooltip
-        >
+        <v-tooltip activator="parent" location="top">{{
+          TEXT[home.lang].REMOVE_TOOLTIP
+        }}</v-tooltip>
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -66,11 +66,14 @@
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
+import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../user/UserNametag.vue"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-comment"
 
 const viewer = useViewerStore()
 const auth = useAuthStore()
 const comment = useCommentStore()
+const home = useHomeStore()
 const props = defineProps<{
   commentUid: number
   commentContent: string

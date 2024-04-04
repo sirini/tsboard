@@ -11,8 +11,7 @@
             <v-card-text class="pa-0">
               <v-list class="pa-0">
                 <v-list-item v-if="list.posts.length < 1" class="text-center pa-6">
-                  <v-icon>mdi-alert-circle</v-icon> 게시글이 존재하지 않습니다. 아직 글이 없거나,
-                  목록을 볼 수 있는 레벨이 아닙니다.
+                  <v-icon>mdi-alert-circle</v-icon> {{ TEXT[home.lang].EMPTY }}
                 </v-list-item>
 
                 <v-list-item
@@ -36,10 +35,9 @@
                     <v-chip
                       size="small"
                       color="blue-grey"
-                      prepend-icon="mdi-bullhorn-variant-outline"
                       class="mr-2"
                       v-if="post.status === CONTENT_STATUS.NOTICE"
-                      >공지</v-chip
+                      ><v-icon>mdi-bullhorn-variant-outline</v-icon></v-chip
                     >
 
                     <v-chip
@@ -107,6 +105,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import { CONTENT_STATUS } from "../../interface/board"
 import { TSBOARD } from "../../../tsboard.config"
+import { TEXT } from "../../messages/pages/board/list"
 
 const list = useBoardListStore()
 const util = useUtilStore()

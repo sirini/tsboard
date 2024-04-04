@@ -3,15 +3,21 @@
     <v-card elevation="0" rounded="0" class="mx-auto" :color="home.color.footer">
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">첫화면</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">사이트 소개</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">라이선스</v-btn>
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">{{
+          TEXT[home.lang].HOME
+        }}</v-btn>
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">{{
+          TEXT[home.lang].ABOUT
+        }}</v-btn>
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">{{
+          TEXT[home.lang].LICENSE
+        }}</v-btn>
         <v-btn
           color="grey"
           class="mx-2"
           rounded="xl"
           @click="util.open('https://github.com/sirini/tsboard/issues')"
-          >버그 신고</v-btn
+          >{{ TEXT[home.lang].BUG_REPORT }}</v-btn
         >
         <v-spacer></v-spacer>
       </v-card-actions>
@@ -22,6 +28,7 @@
 <script setup lang="ts">
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
+import { TEXT } from "../../messages/pages/home/home-footer"
 
 const home = useHomeStore()
 const util = useUtilStore()

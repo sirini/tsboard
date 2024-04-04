@@ -15,25 +15,25 @@
           @click="
             noti.id.length > 0
               ? util.go(
-                  noti.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen',
+                  noti.boardType === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen',
                   noti.id,
                   noti.postUid,
                 )
               : ''
           "
         >
-          {{ noti.fromUser.name }}님이 {{ home.translateNotification(noti.type) }}
+          {{ noti.fromUser.name }} {{ home.translateNotification(noti.type) }}
 
           <template v-slot:append v-if="noti.type !== (NOTICE_TYPE.CHAT_MESSAGE as NoticeType)">
             <v-icon>mdi-chevron-right</v-icon>
           </template>
         </v-list-item>
         <v-list-item v-if="home.notifications.length < 1" prepend-icon="mdi-check-circle">
-          확인이 필요한 알림이 없습니다.
+          {{ TEXT[home.lang].EMPTY }}
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-tooltip activator="parent">나에게 온 알림 확인하기</v-tooltip>
+    <v-tooltip activator="parent">{{ TEXT[home.lang].TOOLTIP }}</v-tooltip>
   </v-btn>
 </template>
 
@@ -46,6 +46,7 @@ import { NOTICE_TYPE } from "../../../../../server/database/board/const"
 import { NoticeType } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import { BOARD_TYPE } from "../../../../interface/board"
+import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
 
 const home = useHomeStore()
 const auth = useAuthStore()

@@ -11,8 +11,9 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import { useHomeStore } from "../home"
 import { BoardConfig, Pair, Post, SEARCH_OPTION, SearchOption } from "../../interface/board"
-import { LIST } from "../../messages/store/board/list"
+import { TEXT } from "../../messages/store/board/list"
 import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/database/board/const"
 
 export const useBoardListStore = defineStore("boardList", () => {
@@ -20,6 +21,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const posts = ref<Post[]>([])
@@ -35,7 +37,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   async function loadPostList(): Promise<void> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
-      util.snack(LIST.NO_BOARD_ID)
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
     }
     const response = await server.api.board.list.get({
@@ -53,12 +55,12 @@ export const useBoardListStore = defineStore("boardList", () => {
     })
 
     if (!response.data) {
-      util.snack(LIST.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${LIST.FAILED_LOAD_LIST} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -80,7 +82,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     sinceUid.value = posts.value.at(0)?.uid ?? 0
 
     if (page.value < 2) {
-      util.snack(LIST.FIRST_PAGE)
+      util.snack(TEXT[home.lang].FIRST_PAGE)
     }
 
     await loadPostList()
@@ -94,7 +96,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     sinceUid.value = posts.value.at(-1)?.uid ?? 0
 
     if (posts.value.length < config.value.row) {
-      util.snack(LIST.LAST_PAGE)
+      util.snack(TEXT[home.lang].LAST_PAGE)
       sinceUid.value = 0
       return
     }

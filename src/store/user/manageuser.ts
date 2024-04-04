@@ -9,15 +9,17 @@ import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
+import { useHomeStore } from "../home"
 import { INIT_USER_BASIC, UserBasicInfo, UserPermissionParams } from "../../interface/user"
 import { useAuthStore } from "./auth"
-import { USER } from "../../messages/store/user/user"
+import { TEXT } from "../../messages/store/user/user"
 import { INIT_PERMISSION } from "./const"
 
 export const useManageUserStore = defineStore("manageuser", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const manageUserDialog = ref<boolean>(false)
   const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
   const permission = ref<UserPermissionParams>(INIT_PERMISSION)
@@ -46,21 +48,21 @@ export const useManageUserStore = defineStore("manageuser", () => {
       },
     })
     if (!response.data) {
-      util.error(USER.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${USER.FAILED_LOAD_PERMISSION} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_LOAD_PERMISSION} (${response.data.error})`)
       return
     }
     permission.value = response.data.result.permission
-    util.success(USER.LOADED_PERMISSION)
+    util.success(TEXT[home.lang].LOADED_PERMISSION)
   }
 
   // 회원 관리하기
   async function manageUser(): Promise<void> {
     if (permission.value.response.length < 3 || permission.value.response.length > 1000) {
-      util.error(USER.INVALID_TEXT_LENGTH)
+      util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
       return
     }
     const response = await server.api.user.manageuser.post({
@@ -76,15 +78,15 @@ export const useManageUserStore = defineStore("manageuser", () => {
       response: permission.value.response,
     })
     if (!response.data) {
-      util.error(USER.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${USER.FAILED_MANAGE_USER} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.success(USER.ACTION_TAKEN)
+    util.success(TEXT[home.lang].ACTION_TAKEN)
     closeManageUser()
   }
 

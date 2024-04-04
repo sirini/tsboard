@@ -11,8 +11,8 @@
             :color="home.color.header"
           >
             <v-card-title class="signup_title">
-              인증 코드 입력
-              <span class="info ml-3">메일에 적혀 있던 6자리 인증 코드를 입력해주세요</span>
+              {{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -33,14 +33,14 @@
                 v-if="auth.user.id.length > 0"
                 :disabled="signup.verificationCode.length > 5"
                 @click="retrySendMail"
-                >메일을 받지 못하셨나요?</v-btn
+                >{{ TEXT[home.lang].RETRY }}</v-btn
               >
               <v-spacer></v-spacer>
               <v-btn
                 append-icon="mdi-chevron-right"
                 :disabled="signup.verificationCode.length < 6"
                 @click="signup.verify(parseInt(route.params.target as string))"
-                >인증 완료하기</v-btn
+                >{{ TEXT[home.lang].CONFIRM }}</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -60,6 +60,7 @@ import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/verify"
 
 const route = useRoute()
 const auth = useAuthStore()

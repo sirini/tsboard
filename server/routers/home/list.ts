@@ -41,7 +41,10 @@ export const list = new Elysia()
   .get(
     "/latest/board",
     async ({ query: { id, limit } }) => {
-      let response: LatestPost[] = []
+      let response = {
+        name: "",
+        latest: [] as LatestPost[],
+      }
       if (id.length < 2 || limit < 1) {
         return fail(`Invalid parameters.`, response)
       }

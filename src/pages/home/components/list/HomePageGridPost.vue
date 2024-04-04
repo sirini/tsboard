@@ -23,7 +23,7 @@
 
     <v-card-text
       v-if="post.cover.length < 1"
-      class="post-content"
+      class="post-content tsboard"
       v-html="post.content"
     ></v-card-text>
 
@@ -62,6 +62,7 @@ import { useUtilStore } from "../../../../store/util"
 import { BOARD_TYPE } from "../../../../interface/board"
 import { PostItem } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
+import "../../../../assets/board/editor.scss"
 
 const util = useUtilStore()
 const props = defineProps<{

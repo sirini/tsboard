@@ -11,8 +11,9 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
+import { useHomeStore } from "../../home"
 import { GridItem } from "../../../interface/gallery"
-import { GALLERY } from "../../../messages/store/board/gallery"
+import { TEXT } from "../../../messages/store/board/gallery"
 import {
   BOARD_CONFIG,
   INIT_POST,
@@ -26,6 +27,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const confirmCancelDialog = ref<boolean>(false)
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
@@ -43,7 +45,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   async function loadPhotoList(): Promise<void> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
-      util.snack(GALLERY.NO_BOARD_ID)
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
     }
 
@@ -62,12 +64,12 @@ export const useGalleryStore = defineStore("gallery", () => {
     })
 
     if (!response.data) {
-      util.snack(GALLERY.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${GALLERY.FAILED_LOAD_LIST} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -85,7 +87,7 @@ export const useGalleryStore = defineStore("gallery", () => {
         images.value.push(...response.data.result.images)
         page.value += 1
       } else {
-        util.snack(GALLERY.LAST_PAGE)
+        util.snack(TEXT[home.lang].LAST_PAGE)
       }
     }
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
@@ -101,7 +103,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     sinceUid.value = images.value.at(-1)?.uid ?? 0
 
     if (images.value.length < config.value.row) {
-      util.snack(GALLERY.LAST_PAGE)
+      util.snack(TEXT[home.lang].LAST_PAGE)
       sinceUid.value = 0
       return
     }

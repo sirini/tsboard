@@ -10,21 +10,21 @@
         variant="text"
         @click="util.go('login')"
         v-if="auth.user.uid < 1"
-        >로그인</v-btn
+        >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
         v-else
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
-        >내정보</v-btn
+        >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', gallery.id)"
         v-if="auth.user.admin"
-        >관리</v-btn
+        >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>
   </v-card-title>
@@ -32,7 +32,7 @@
   <v-snackbar v-model="util.snackbar" :timeout="util.snackbarTimeout">
     {{ util.snackbarText }}
     <template v-slot:actions>
-      <v-btn color="blue" variant="text" @click="util.snackbar = false"> Close </v-btn>
+      <v-btn color="blue" variant="text" @click="util.snackbar = false">Close</v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -43,6 +43,7 @@ import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/components/gallery/common/gallery-header"
 
 const auth = useAuthStore()
 const gallery = useGalleryStore()

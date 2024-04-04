@@ -3,10 +3,18 @@
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="gallery.option" size="small" group>
-          <v-btn :value="SEARCH_OPTION.TITLE as SearchOption">사진명</v-btn>
-          <v-btn :value="SEARCH_OPTION.CONTENT as SearchOption">내용</v-btn>
-          <v-btn :value="SEARCH_OPTION.WRITER as SearchOption">작가명</v-btn>
-          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">태그</v-btn>
+          <v-btn :value="SEARCH_OPTION.TITLE as SearchOption">{{
+            TEXT[home.lang].PHOTO_TITLE
+          }}</v-btn>
+          <v-btn :value="SEARCH_OPTION.CONTENT as SearchOption">{{
+            TEXT[home.lang].CONTENT
+          }}</v-btn>
+          <v-btn :value="SEARCH_OPTION.WRITER as SearchOption">{{
+            TEXT[home.lang].PHOTOGRAPHER
+          }}</v-btn>
+          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">{{
+            TEXT[home.lang].FILL_SEARCH
+          }}</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
@@ -15,7 +23,7 @@
           v-model="gallery.keyword"
           class="mt-2"
           variant="outlined"
-          placeholder="검색할 내용을 입력하세요"
+          :placeholder="TEXT[home.lang].FILL_SEARCH"
           :rules="textRule"
           append-inner-icon="mdi-magnify"
           prepend-inner-icon="mdi-restore"
@@ -31,8 +39,11 @@
 <script setup lang="ts">
 import { SEARCH_OPTION, SearchOption } from "../../../interface/board"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 
 const gallery = useGalleryStore()
+const home = useHomeStore()
 const textRule = [
   (value: any) => {
     if (value?.length > 1) return true

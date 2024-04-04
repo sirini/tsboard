@@ -5,7 +5,7 @@
       :rules="editor.textRule"
       class="mt-2"
       prepend-icon="mdi-tag-multiple"
-      label="태그를 입력해 보세요! (space/enter 혹은 , 로 추가)"
+      :label="TEXT[home.lang].ADD_TAG"
       @keyup="editor.updateTagSuggestion"
       @keyup.space="editor.addTag(editor.tag)"
       @keyup.,="editor.addTag(editor.tag)"
@@ -20,14 +20,16 @@
             prepend-icon="mdi-tag-plus"
             @click="editor.addTag(tag.name)"
             >{{ tag.name }}
-            <v-tooltip activator="parent"> {{ tag.name }} 태그를 추가합니다 </v-tooltip>
+            <v-tooltip activator="parent"
+              >{{ TEXT[home.lang].ADD_TAG_TOOLTIP }} {{ tag.name }}</v-tooltip
+            >
 
             <template v-slot:append>
               <v-chip color="blue-grey">{{ util.num(tag.count) }}</v-chip>
             </template>
           </v-list-item>
           <v-list-item v-show="editor.suggestionTags.length < 1 && editor.tag.length > 2">
-            <strong>{{ editor.tag }}</strong> 새로운 태그입니다! 😉
+            {{ TEXT[home.lang].NEW_TAG_TOOLTIP }} <strong>{{ editor.tag }}</strong>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -41,7 +43,7 @@
         class="mt-1 ml-1"
         prepend-icon="mdi-tag-remove-outline"
         >{{ tag }}
-        <v-tooltip activator="parent">클릭하시면 삭제합니다!</v-tooltip>
+        <v-tooltip activator="parent">{{ TEXT[home.lang].REMOVE_WHEN_CLICK }}</v-tooltip>
       </v-chip>
     </v-card>
   </v-list-item>
@@ -50,7 +52,10 @@
 <script setup lang="ts">
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>

@@ -11,7 +11,7 @@ import {
   SEARCH_OPTION,
   SearchOption,
 } from "../../../src/interface/board"
-import { LatestPost, LatestPostParams, PostItem } from "../../../src/interface/home"
+import { BoardLatest, LatestPost, LatestPostParams, PostItem } from "../../../src/interface/home"
 import { table, select } from "../common"
 import {
   getCategoryInfo,
@@ -149,16 +149,20 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
 }
 
 // 주어진 게시판 아이디에 해당하는 최근 게시글들 가져오기
-export async function getBoardLatests(id: string, limit: number): Promise<LatestPost[]> {
-  let result: LatestPost[] = []
+export async function getBoardLatests(id: string, limit: number): Promise<BoardLatest> {
+  let result: BoardLatest = {
+    name: "",
+    latest: [] as LatestPost[],
+  }
   const [board] = await select(
-    `SELECT uid, type, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
+    `SELECT uid, type, name, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
     [id],
   )
   if (!board) {
     return result
   }
 
+  result.name = board.name
   const posts = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit FROM ${table}post 
   WHERE board_uid = ? AND status = ? ORDER BY uid DESC LIMIT ?`,
@@ -170,7 +174,7 @@ export async function getBoardLatests(id: string, limit: number): Promise<Latest
     const commentCount = await getTotalCommentCount(post.uid)
     const likeCount = await getPostLikeCount(post.uid)
 
-    result.push({
+    result.latest.push({
       uid: post.uid,
       type: board.type as BoardType,
       useCategory: board.use_category > 0 ? true : false,

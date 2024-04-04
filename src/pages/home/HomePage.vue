@@ -11,11 +11,7 @@
             </v-col>
 
             <v-col :cols="home.cols">
-              <how-to-get-tsboard></how-to-get-tsboard>
-            </v-col>
-
-            <v-col :cols="home.cols">
-              <home-page-grid-board id="free" name="자유게시판" :limit="5"></home-page-grid-board>
+              <home-page-grid-board id="free" :limit="5"></home-page-grid-board>
             </v-col>
 
             <v-col v-for="(post, index) in home.latestPosts" :key="index" :cols="home.cols">
@@ -34,25 +30,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
-import { LatestPost } from "../../interface/home"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
 import WhatIsTsboard from "./components/static/WhatIsTsboard.vue"
-import HowToGetTsboard from "./components/static/HowToGetTsboard.vue"
 import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
 import HomePageGridBoard from "./components/list/HomePageGridBoard.vue"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 
 const home = useHomeStore()
-const freeBoardList = ref<LatestPost[]>([])
-
-onMounted(async () => {
-  home.loadLatestPosts()
-  freeBoardList.value = await home.getBoardLatest("free", 5)
-})
+onMounted(() => home.loadLatestPosts())
 </script>
 
 <style scoped>

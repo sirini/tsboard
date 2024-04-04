@@ -41,8 +41,6 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
     return result
   }
 
-  update(`UPDATE ${table}post SET hit = hit + 1 WHERE uid = ? LIMIT 1`, [postUid])
-
   return {
     uid: postUid,
     writer: info.writer,
@@ -57,6 +55,11 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
     title: post.title,
     hit: post.hit,
   }
+}
+
+// 조회수 업데이트
+export async function updatePostHit(postUid: number): Promise<void> {
+  update(`UPDATE ${table}post SET hit = hit + 1 WHERE uid = ? LIMIT 1`, [postUid])
 }
 
 // 첨부파일들 가져오기

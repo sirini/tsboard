@@ -10,6 +10,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
+import { useHomeStore } from "../../home"
 import { Position } from "../../../interface/gallery"
 import {
   BOARD_CONFIG,
@@ -17,9 +18,9 @@ import {
   PAGING_DIRECTION,
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
-import { GALLERY } from "../../../messages/store/board/gallery"
+import { TEXT } from "../../../messages/store/board/gallery"
 import { BoardConfig, Comment, Pair, PostView } from "../../../interface/board"
-import { COMMENT } from "../../../messages/store/board/comment"
+import * as COMMENT from "../../../messages/store/board/comment"
 
 export const useViewerStore = defineStore("viewer", () => {
   const server = edenTreaty<App>(process.env.API!)
@@ -27,6 +28,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const router = useRouter()
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const dialog = ref<boolean>(false)
   const isDragging = ref<boolean>(false)
   const startPos = ref<Position>({ x: 0, y: 0 })
@@ -64,8 +66,14 @@ export const useViewerStore = defineStore("viewer", () => {
     postUid.value = parseInt(route.params.no as string)
 
     if (id.value.length < 2) {
-      util.snack(GALLERY.NO_BOARD_ID)
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
+    }
+
+    let needUpdateHit = 0
+    if (util.isAlreadyRead(postUid.value) === false) {
+      util.markAsRead(postUid.value)
+      needUpdateHit = 1
     }
 
     const response = await server.api.board.view.get({
@@ -75,17 +83,18 @@ export const useViewerStore = defineStore("viewer", () => {
       $query: {
         id: id.value,
         postUid: postUid.value,
+        needUpdateHit,
       },
     })
 
     if (!response.data) {
-      util.snack(GALLERY.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       close()
       return
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${GALLERY.FAILED_LOAD_PHOTO} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
       close()
       return
     }
@@ -119,11 +128,11 @@ export const useViewerStore = defineStore("viewer", () => {
     })
 
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(COMMENT.TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
+      util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
       return
     }
     comments.value = response.data.result.comments

@@ -20,7 +20,7 @@
                   <v-checkbox
                     v-model="editor.isNotice"
                     class="ml-8"
-                    label="공지글로 등록 (관리자만 가능)"
+                    :label="TEXT[home.lang].SET_NOTICE"
                     hide-details
                   ></v-checkbox>
                 </v-list-item>
@@ -42,7 +42,7 @@
                     class="pt-3 pb-2"
                     prepend-icon="mdi-pencil-outline"
                     variant="outlined"
-                    label="글 제목을 입력해 주세요"
+                    :label="TEXT[home.lang].FILL_TITLE"
                   ></v-text-field>
                 </v-list-item>
 
@@ -59,9 +59,9 @@
 
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
-              <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close"
-                >글 작성 취소</v-btn
-              >
+              <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close">{{
+                TEXT[home.lang].CANCEL
+              }}</v-btn>
 
               <v-spacer></v-spacer>
 
@@ -71,7 +71,7 @@
                 @click="editor.write"
                 append-icon="mdi-chevron-right"
                 :disabled="auth.user.uid < 1"
-                >작성 완료하고 보러 가기</v-btn
+                >{{ TEXT[home.lang].SUBMIT }}</v-btn
               >
               <v-btn
                 v-else
@@ -79,7 +79,7 @@
                 @click="editor.modify"
                 append-icon="mdi-chevron-right"
                 :disabled="auth.user.uid < 1"
-                >수정 완료하고 보러 가기</v-btn
+                >{{ TEXT[home.lang].MODIFY }}</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -110,6 +110,7 @@ import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCance
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/board/write"
 
 const route = useRoute()
 const auth = useAuthStore()

@@ -6,7 +6,7 @@
 
 export const TSBOARD = {
   IS_DEVELOPING: false /* 개발중일 때 true */,
-  VERSION: "v0.8.10",
+  VERSION: "v0.8.12",
   SITE: {
     NAME: "tsboard.dev" /* 수정 필요 */,
     URL: "https://tsboard.dev" /* 수정 필요 */,

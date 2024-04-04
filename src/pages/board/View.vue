@@ -35,16 +35,16 @@
 
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', view.id)"
-                >목록 보기</v-btn
-              >
+              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', view.id)">{{
+                TEXT[home.lang].LIST
+              }}</v-btn>
               <v-spacer></v-spacer>
               <v-btn
                 prepend-icon="mdi-pencil"
                 variant="text"
                 @click="util.go('boardWrite', view.id)"
                 :disabled="auth.user.uid < 1"
-                >새글쓰기</v-btn
+                >{{ TEXT[home.lang].WRITE }}</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -81,6 +81,7 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import "../../assets/board/editor.scss"
+import { TEXT } from "../../messages/pages/board/view"
 
 const auth = useAuthStore()
 const view = useBoardViewStore()

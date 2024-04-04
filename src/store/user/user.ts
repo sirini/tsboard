@@ -10,7 +10,8 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
-import { USER } from "../../messages/store/user/user"
+import { useHomeStore } from "../home"
+import { TEXT } from "../../messages/store/user/user"
 import { INIT_USER_BASIC, UserBasicInfo, UserOpenInfo } from "../../interface/user"
 import { USER_OPEN_INFO } from "../../../server/database/user/const"
 
@@ -18,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const userInfoDialog = ref<boolean>(false)
   const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
   const info = ref<UserOpenInfo>(USER_OPEN_INFO)
@@ -45,11 +47,11 @@ export const useUserStore = defineStore("user", () => {
     })
 
     if (!response.data) {
-      util.error(USER.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${USER.FAILED_LOAD_INFO} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_LOAD_INFO} (${response.data.error})`)
       return
     }
 

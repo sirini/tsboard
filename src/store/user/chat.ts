@@ -11,12 +11,14 @@ import type { App } from "../../../server/index"
 import { ChatHistory, ChatItem, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
-import { CHAT } from "../../messages/store/user/chat"
+import { useHomeStore } from "../home"
+import { TEXT } from "../../messages/store/user/chat"
 
 export const useChatStore = defineStore("chat", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const dialog = ref<boolean>(false)
   const list = ref<ChatItem[]>([])
   const history = ref<ChatHistory[]>([])
@@ -73,16 +75,16 @@ export const useChatStore = defineStore("chat", () => {
     })
 
     if (!response.data) {
-      util.error(CHAT.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${CHAT.FAILED_LOAD_HISTORY} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_LOAD_HISTORY} (${response.data.error})`)
       return
     }
 
     history.value = response.data.result.reverse()
-    util.success(CHAT.LOADED_HISTORY)
+    util.success(TEXT[home.lang].LOADED_HISTORY)
   }
 
   // 채팅 메시지 보내기
@@ -100,11 +102,11 @@ export const useChatStore = defineStore("chat", () => {
     })
 
     if (!response.data) {
-      util.error(CHAT.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${CHAT.FAILED_ADD_CHAT} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_ADD_CHAT} (${response.data.error})`)
       return
     }
 

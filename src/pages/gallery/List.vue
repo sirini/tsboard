@@ -21,8 +21,7 @@
               </v-col>
 
               <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-12">
-                <v-icon>mdi-information</v-icon> 아직 올려진 사진이 없거나, 목록을 볼 수 있는 권한이
-                없습니다.
+                <v-icon>mdi-information</v-icon> {{ TEXT[home.lang].EMPTY }}
               </v-col>
             </v-row>
 
@@ -54,6 +53,7 @@ import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemo
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import { TEXT } from "../../messages/pages/gallery/list"
 
 const route = useRoute()
 const gallery = useGalleryStore()

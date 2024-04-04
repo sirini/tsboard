@@ -9,17 +9,17 @@ import {
   CheckUserPermissionParams,
   POINT_HISTORY_TYPE,
   PermissionAction,
-  SUPER_ADMIN,
   UpdatePointHistoryParams,
   UpdateUserPointParams,
 } from "../../../src/interface/board"
+import { SUPER_ADMIN_UID } from "../auth/const"
 import { insert, select, table, update } from "../common"
 import { haveAdminPermission } from "../user/manageuser"
 import { isAuthor } from "./editor"
 
 // 사용자의 권한 확인하기 (권한 소유: 작성자, 게시판 관리자, 그룹 관리자, 최고 관리자)
 export async function checkUserPermission(param: CheckUserPermissionParams): Promise<boolean> {
-  if (param.accessUserUid === SUPER_ADMIN) {
+  if (param.accessUserUid === SUPER_ADMIN_UID) {
     return true
   }
 

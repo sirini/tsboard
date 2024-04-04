@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-subheader>로그인</v-list-subheader>
+    <v-list-subheader>{{ TEXT[home.lang].TITLE }}</v-list-subheader>
     <v-list-item>
       <alert-bar class="mb-2"></alert-bar>
 
@@ -27,11 +27,13 @@
         ></v-text-field>
 
         <v-card-actions>
-          <v-btn rounded="xl" @click="util.go('resetpassword')">비번 찾기</v-btn>
+          <v-btn rounded="xl" @click="util.go('resetpassword')">{{
+            TEXT[home.lang].FIND_PASSWORD
+          }}</v-btn>
           <v-spacer></v-spacer>
-          <v-btn rounded="xl" append-icon="mdi-chevron-right" color="primary" @click="auth.login"
-            >로그인</v-btn
-          >
+          <v-btn rounded="xl" append-icon="mdi-chevron-right" color="primary" @click="auth.login">{{
+            TEXT[home.lang].LOGIN
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-list-item>
@@ -42,9 +44,12 @@
 import { ref } from "vue"
 import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
+import { useHomeStore } from "../../../../store/home"
 import AlertBar from "../../../../components/util/AlertBar.vue"
+import { TEXT } from "../../../../messages/pages/home/components/drawer/side-drawer-login"
 
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
 const visible = ref<boolean>(false)
 </script>

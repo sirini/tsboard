@@ -12,8 +12,8 @@
             :loading="password.loading"
           >
             <v-card-title class="reset_password_title">
-              비밀번호 초기화
-              <span class="info ml-3">비밀번호를 잊어버리셨나요?</span>
+              {{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -26,28 +26,25 @@
                   class="mt-6"
                   prepend-inner-icon="mdi-email-outline"
                   :rules="auth.emailRule"
-                  label="본인 아이디(이메일 주소)를 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_EMAIL"
                 ></v-text-field>
               </v-list-item>
               <v-card class="mt-2 mb-6" variant="tonal">
                 <v-card-text class="text-medium-emphasis text-caption">
-                  최초 가입 시점에 입력하신 이메일 주소로 초기화된 비밀번호를 발송해 드립니다.
-                  사이트 내에서는 상대방의 아이디(이메일 주소)를 볼 수 없도록 되어 있지만, 혹시
-                  노출된 경우 다른 사용자가 임의로 초기화를 시도 할 수도 있으므로 주의를
-                  부탁드립니다.
+                  {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
               </v-card>
             </v-list>
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')"
-                >로그인 하러가기</v-btn
-              >
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+                TEXT[home.lang].LOGIN
+              }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="password.askResetPassword"
-                >비밀번호 초기화 요청하기</v-btn
-              >
+              <v-btn append-icon="mdi-chevron-right" @click="password.askResetPassword">{{
+                TEXT[home.lang].ASK_RESET
+              }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -59,12 +56,13 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../../store/user/auth"
-import { usePasswordStore } from "../../store/password"
+import { usePasswordStore } from "../../store/user/password"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/reset-password"
 
 const auth = useAuthStore()
 const password = usePasswordStore()
@@ -90,3 +88,4 @@ const home = useHomeStore()
   font-size: 0.7em;
 }
 </style>
+../../store/user/password

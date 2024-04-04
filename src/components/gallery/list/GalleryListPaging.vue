@@ -1,12 +1,14 @@
 <template>
   <v-card-actions class="pa-0">
     <v-btn prepend-icon="mdi-text-search-variant"
-      >검색
+      >{{ TEXT[home.lang].SEARCH }}
       <v-menu activator="parent" :close-on-content-click="false">
         <gallery-list-search></gallery-list-search>
       </v-menu>
     </v-btn>
-    <v-btn @click="gallery.loadOldPhotos" prepend-icon="mdi-download"> 이전글 </v-btn>
+    <v-btn @click="gallery.loadOldPhotos" prepend-icon="mdi-download">{{
+      TEXT[home.lang].PREV
+    }}</v-btn>
 
     <v-spacer></v-spacer>
     <v-chip
@@ -18,12 +20,14 @@
     </v-chip>
     <v-spacer v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-spacer>
 
-    <v-btn prepend-icon="mdi-list-box-outline" @click="gallery.list">목록</v-btn>
+    <v-btn prepend-icon="mdi-list-box-outline" @click="gallery.list">{{
+      TEXT[home.lang].LIST
+    }}</v-btn>
     <v-btn
       prepend-icon="mdi-upload"
       @click="util.go('boardWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
-      >업로드</v-btn
+      >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >
   </v-card-actions>
 </template>
@@ -35,6 +39,7 @@ import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import GalleryListSearch from "./GalleryListSearch.vue"
 import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 
 const gallery = useGalleryStore()
 const auth = useAuthStore()

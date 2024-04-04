@@ -12,8 +12,8 @@
             :loading="signup.loading"
           >
             <v-card-title
-              >회원가입
-              <span class="info ml-3 pl-3">환영합니다!</span>
+              >{{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -26,7 +26,7 @@
                   class="mt-6"
                   prepend-inner-icon="mdi-email-outline"
                   :rules="auth.emailRule"
-                  label="평소 사용하시는 이메일 주소를 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_EMAIL"
                   append-inner-icon="mdi-check-circle-outline"
                   @click:append-inner="signup.checkEmail"
                   @blur="signup.checkEmail"
@@ -39,7 +39,7 @@
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   class="mt-2"
-                  label="비밀번호를 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_PASSWORD"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -52,7 +52,7 @@
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   class="mt-2"
-                  label="비밀번호를 한 번 더 입력해 주세요"
+                  :label="TEXT[home.lang].AGAIN_PASSWORD"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -65,7 +65,7 @@
                   variant="outlined"
                   class="mt-2"
                   prepend-inner-icon="mdi-card-account-details-outline"
-                  label="사이트 내에서 사용하실 이름을 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_NAME"
                   append-inner-icon="mdi-check-circle-outline"
                   @click:append-inner="signup.checkName"
                   :rules="auth.nameRule"
@@ -74,22 +74,20 @@
 
               <v-card class="mt-2 mb-6" variant="tonal" color="blue-grey">
                 <v-card-text class="text-medium-emphasis text-caption">
-                  아이디로 사용되는 이메일 주소의 경우 로그인 뿐만 아니라 비밀번호 찾기에도
-                  사용됩니다. 자주 사용하는 이메일 주소를 입력해 주시고, 노출되지 않도록
-                  부탁드립니다. 닉네임은 입력란 우측의 체크 아이콘을 클릭하여 중복 여부를 먼저
-                  확인해 보세요. 양식 제출 후 입력하신 이메일에서 인증 메일을 확인해 주시고, 혹시
-                  없을 경우 스팸 처리되었는지 살펴봐주세요!
+                  {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
               </v-card>
             </v-list>
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">로그인 하기</v-btn>
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+                TEXT[home.lang].LOGIN
+              }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="signup.submit"
-                >가입 신청서 제출하기</v-btn
-              >
+              <v-btn append-icon="mdi-chevron-right" @click="signup.submit">{{
+                TEXT[home.lang].SUBMIT
+              }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -108,6 +106,7 @@ import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/signup"
 
 const auth = useAuthStore()
 const signup = useSignupStore()

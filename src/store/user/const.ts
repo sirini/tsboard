@@ -31,3 +31,5 @@ export const INIT_PERMISSION: UserPermissionParams = {
   userUid: 0,
   response: "",
 }
+
+export const USER_INFO_KEY = "tsboardUserInfo"

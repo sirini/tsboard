@@ -2,15 +2,15 @@
   <v-dialog v-model="chat.dialog" persistent>
     <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
-        <span>메시지</span>
-        <span class="note ml-3 pl-3">다른 사용자에게 메시지를 보냅니다</span>
+        <span>{{ TEXT[home.lang].TITLE }}</span>
+        <span class="note ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
       </v-card-title>
       <v-divider></v-divider>
 
       <v-card-text class="wrap pa-0" id="tsboardChatHistory">
         <v-list>
           <alert-bar></alert-bar>
-          <v-list-subheader>받는 사람</v-list-subheader>
+          <v-list-subheader>{{ TEXT[home.lang].RECEIVER }}</v-list-subheader>
           <v-divider></v-divider>
           <v-list-item
             :prepend-avatar="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
@@ -18,7 +18,7 @@
             <v-list-item-title>{{ chat.targetUser.name }}</v-list-item-title>
           </v-list-item>
 
-          <v-list-subheader class="mt-3">이전 쪽지 내역</v-list-subheader>
+          <v-list-subheader class="mt-3">{{ TEXT[home.lang].CHAT_HISTORY }}</v-list-subheader>
           <v-divider></v-divider>
 
           <v-list-item v-for="(msg, index) in chat.history" :key="index" class="mt-2 mb-2">
@@ -49,7 +49,9 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" class="mr-2" @click="chat.closeDialog">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" class="mr-2" @click="chat.closeDialog">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-text-field
           v-model="chat.message"
           density="compact"
@@ -73,6 +75,7 @@ import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
+import { TEXT } from "../../messages/components/board/user/chat-dialog"
 
 const auth = useAuthStore()
 const chat = useChatStore()

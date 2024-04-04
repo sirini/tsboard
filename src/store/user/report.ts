@@ -10,13 +10,15 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
+import { useHomeStore } from "../home"
 import { INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
-import { USER } from "../../messages/store/user/user"
+import { TEXT } from "../../messages/store/user/user"
 
 export const useReportStore = defineStore("report", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const dialog = ref<boolean>(false)
   const content = ref<string>("")
   const checkedBlackList = ref<boolean>(false)
@@ -38,11 +40,11 @@ export const useReportStore = defineStore("report", () => {
   // 운영진에게 특정 사용자 신고하기
   async function sendReport(): Promise<void> {
     if (targetUser.value.uid < 1) {
-      util.error(USER.UNKNOWN_REPORT_TARGET)
+      util.error(TEXT[home.lang].UNKNOWN_REPORT_TARGET)
       return
     }
     if (content.value.length < 3 || content.value.length > 1000) {
-      util.error(USER.INVALID_TEXT_LENGTH)
+      util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
       return
     }
 
@@ -56,15 +58,15 @@ export const useReportStore = defineStore("report", () => {
     })
 
     if (!response.data) {
-      util.error(USER.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`${USER.FAILED_REPORT} (${response.data.error})`)
+      util.error(`${TEXT[home.lang].FAILED_REPORT} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.success(USER.REPORTED_USER)
+    util.success(TEXT[home.lang].REPORTED_USER)
     closeDialog()
   }
 

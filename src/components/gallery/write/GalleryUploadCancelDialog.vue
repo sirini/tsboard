@@ -1,10 +1,10 @@
 <template>
   <v-dialog v-model="gallery.confirmCancelDialog">
     <v-card width="500" class="mx-auto">
-      <v-card-title>확인</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">
-        작성중이신 내용을 모두 잃게 됩니다. 계속 진행하시겠습니까?
+        {{ TEXT[home.lang].INFO }}
       </v-card-text>
       <v-divider></v-divider>
 
@@ -13,10 +13,12 @@
           prepend-icon="mdi-pencil"
           color="primary"
           @click="gallery.confirmCancelDialog = false"
-          >아니요, 계속 작성하겠습니다</v-btn
+          >{{ TEXT[home.lang].NO }}</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-check-bold" @click="confirmCancel">예</v-btn>
+        <v-btn prepend-icon="mdi-check-bold" @click="confirmCancel">{{
+          TEXT[home.lang].YES
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -24,8 +26,11 @@
 
 <script setup lang="ts">
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/board/write/gallery-upload-cancel-dialog"
 
 const gallery = useGalleryStore()
+const home = useHomeStore()
 const emits = defineEmits<{
   cancel: []
 }>()

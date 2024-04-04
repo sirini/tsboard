@@ -10,7 +10,8 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useUtilStore } from "../../util"
 import { useAuthStore } from "../../user/auth"
-import { COMMENT } from "../../../messages/store/board/comment"
+import { useHomeStore } from "../../home"
+import { TEXT } from "../../../messages/store/board/comment"
 import { INIT_COMMENT } from "../../../../server/database/board/const"
 import { Comment } from "../../../interface/board"
 
@@ -32,6 +33,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   const server = edenTreaty<App>(process.env.API!)
   const util = useUtilStore()
   const auth = useAuthStore()
+  const home = useHomeStore()
   const content = ref<string>("")
 
   // 새 댓글 작성하기
@@ -46,11 +48,11 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       content: param.content,
     })
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return result
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
       return result
     }
 
@@ -72,7 +74,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       replyUid: newUid,
       postUid: param.postUid,
     }
-    util.snack(COMMENT.SAVED_NEW_COMMENT)
+    util.snack(TEXT[home.lang].SAVED_NEW_COMMENT)
     return result
   }
 
@@ -90,11 +92,11 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       content: param.content,
     })
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return result
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_SAVE_COMMENT} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
       return result
     }
 
@@ -116,7 +118,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       replyUid: param.replyTargetUid,
       postUid: param.postUid,
     }
-    util.snack(COMMENT.REPLIED_NEW_COMMENT)
+    util.snack(TEXT[home.lang].REPLIED_NEW_COMMENT)
     return result
   }
 
@@ -132,15 +134,15 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       content: param.content,
     })
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_MODIFY_COMMENT} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    util.snack(COMMENT.MODIFIED_COMMENT)
+    util.snack(TEXT[home.lang].MODIFIED_COMMENT)
   }
 
   return {

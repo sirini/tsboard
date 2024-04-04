@@ -7,6 +7,13 @@
 import { BoardType, SearchOption, Writer } from "./board"
 import { UserBasicInfo } from "./user"
 
+export const VISIT_KEY = "tsboardVisit"
+export const LANG_KEY = "tsboardLanguage"
+export const LANG = {
+  KO: 0,
+  EN: 1,
+}
+export type LangType = 0 | 1
 export type NoticeType = 0 | 1 | 2 | 3 | 4
 
 export type AddNoticeParams = {
@@ -22,6 +29,7 @@ export type Notification = {
   fromUser: UserBasicInfo
   type: NoticeType
   id: string
+  boardType: BoardType
   postUid: number
   checked: boolean
   timestamp: number
@@ -50,6 +58,11 @@ export type LatestPost = {
   like: number
   comment: number
   submitted: number
+}
+
+export type BoardLatest = {
+  name: string
+  latest: LatestPost[]
 }
 
 export type PostItem = LatestPost & {

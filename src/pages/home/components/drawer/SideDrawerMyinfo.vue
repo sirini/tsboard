@@ -1,6 +1,6 @@
 <template>
   <v-list density="compact">
-    <v-list-subheader>내 정보</v-list-subheader>
+    <v-list-subheader>{{ TEXT[home.lang].TITLE }}</v-list-subheader>
     <v-divider></v-divider>
     <v-list-item
       @click="util.go('myinfo')"
@@ -10,7 +10,7 @@
     >
       <v-list-item-title>{{ auth.user.name }}</v-list-item-title>
       <v-list-item-subtitle class="email">{{ auth.user.id }}</v-list-item-subtitle>
-      <v-tooltip activator="parent"> 클릭하시면 내 정보를 수정하러 이동합니다. </v-tooltip>
+      <v-tooltip activator="parent">{{ TEXT[home.lang].MODIFY_TOOLTIP }}</v-tooltip>
     </v-list-item>
     <v-list-item class="text-center">
       <v-chip color="blue-grey" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
@@ -20,10 +20,10 @@
       </v-chip>
     </v-list-item>
     <v-list-item v-if="auth.user.admin" class="message text-center"
-      ><strong>환영합니다, 관리자님!</strong>
+      ><strong>{{ TEXT[home.lang].WELCOME_ADMIN }}</strong>
     </v-list-item>
     <v-list-item v-else class="message text-center"
-      >환영합니다, {{ auth.user.name }}님!</v-list-item
+      >{{ TEXT[home.lang].WELCOME_USER }}, {{ auth.user.name }}</v-list-item
     >
     <v-divider></v-divider>
   </v-list>
@@ -32,10 +32,13 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
+import { useHomeStore } from "../../../../store/home"
 import { TSBOARD } from "../../../../../tsboard.config"
+import { TEXT } from "../../../../messages/pages/home/components/drawer/side-drawer-myinfo"
 
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>
 
 <style scoped>

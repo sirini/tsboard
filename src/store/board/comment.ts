@@ -11,9 +11,10 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import { useHomeStore } from "../home"
 import { useCommentSaveStore } from "./comment/save"
 import { Comment } from "../../interface/board"
-import { COMMENT } from "../../messages/store/board/comment"
+import { TEXT } from "../../messages/store/board/comment"
 import { PAGING_DIRECTION } from "../../../server/database/board/const"
 
 export const useCommentStore = defineStore("comment", () => {
@@ -22,6 +23,7 @@ export const useCommentStore = defineStore("comment", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const save = useCommentSaveStore()
+  const home = useHomeStore()
   const id = ref<string>("")
   const boardUid = ref<number>(0)
   const postUid = ref<number>(0)
@@ -31,7 +33,7 @@ export const useCommentStore = defineStore("comment", () => {
   const removeTarget = ref<number>(0)
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
-  const button = ref<string>(COMMENT.BUTTON_NEW)
+  const button = ref<string>(TEXT[home.lang].BUTTON_NEW)
   const confirmRemoveCommentDialog = ref<boolean>(false)
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -59,11 +61,11 @@ export const useCommentStore = defineStore("comment", () => {
     })
 
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_LOAD_COMMENT} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
     boardUid.value = response.data.result.boardUid
     comments.value = response.data.result.comments
@@ -78,25 +80,25 @@ export const useCommentStore = defineStore("comment", () => {
     } else {
       content.value = comment
     }
-    button.value = COMMENT.BUTTON_REPLY
-    util.snack(COMMENT.INFO_REPLY)
+    button.value = TEXT[home.lang].BUTTON_REPLY
+    util.snack(TEXT[home.lang].INFO_REPLY)
   }
 
   // 댓글 수정하기 클릭 시 대상 지정
   function setModifyComment(uid: number, comment: string): void {
     modifyTarget.value = uid
     content.value = comment.replaceAll("<p><br /></p>", "<p>&nbsp;</p>")
-    button.value = COMMENT.BUTTON_MODIFY
-    util.snack(COMMENT.SET_MODIFY_TARGET)
+    button.value = TEXT[home.lang].BUTTON_MODIFY
+    util.snack(TEXT[home.lang].SET_MODIFY_TARGET)
   }
 
   // 댓글 작성 모드를 새 댓글로 초기화 (답글, 수정 취소)
   function resetCommentMode(): void {
     replyTarget.value = 0
     modifyTarget.value = 0
-    button.value = COMMENT.BUTTON_NEW
+    button.value = TEXT[home.lang].BUTTON_NEW
     content.value = ""
-    util.snack(COMMENT.RESET_COMMENT_MODE)
+    util.snack(TEXT[home.lang].RESET_COMMENT_MODE)
   }
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
@@ -180,11 +182,11 @@ export const useCommentStore = defineStore("comment", () => {
   // 댓글 작성하기
   async function saveComment(): Promise<void> {
     if (content.value.length < 2) {
-      util.snack(COMMENT.TOO_SHORT_COMMENT)
+      util.snack(TEXT[home.lang].TOO_SHORT_COMMENT)
       return
     }
     if (auth.user.uid < 1) {
-      util.snack(COMMENT.NEED_LOGIN)
+      util.snack(TEXT[home.lang].NEED_LOGIN)
       return
     }
 
@@ -216,7 +218,7 @@ export const useCommentStore = defineStore("comment", () => {
   // 댓글 삭제하기, 답글이 달려있는 댓글은 내용만 제거됨 (isChangeStatus = false)
   async function removeComment(): Promise<void> {
     if (removeTarget.value < 1) {
-      util.snack(COMMENT.INVALID_REMOVE_TARGET)
+      util.snack(TEXT[home.lang].INVALID_REMOVE_TARGET)
       return
     }
 
@@ -230,11 +232,11 @@ export const useCommentStore = defineStore("comment", () => {
       },
     })
     if (!response.data) {
-      util.snack(COMMENT.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.FAILED_REMOVE_COMMENT} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_REMOVE_COMMENT} (${response.data.error})`)
       return
     }
     if (response.data.result.isChangeStatus === true) {
@@ -244,13 +246,13 @@ export const useCommentStore = defineStore("comment", () => {
     } else {
       comments.value.map((comment) => {
         if (removeTarget.value === comment.uid) {
-          comment.content = COMMENT.NOTE_REMOVED_COMMENT
+          comment.content = TEXT[home.lang].NOTE_REMOVED_COMMENT
           return
         }
       })
     }
 
-    util.snack(COMMENT.REMOVED_COMMENT)
+    util.snack(TEXT[home.lang].REMOVED_COMMENT)
     closeRemoveCommentDialog()
   }
 

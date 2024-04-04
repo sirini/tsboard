@@ -11,8 +11,8 @@
             :color="home.color.header"
           >
             <v-card-title class="login_title"
-              >로그인
-              <span class="info ml-3">다시 오신 것을 환영합니다!</span>
+              >{{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -24,7 +24,7 @@
                   variant="outlined"
                   class="mt-6"
                   prepend-inner-icon="mdi-email-outline"
-                  label="아이디(이메일 주소)를 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_EMAIL"
                   @keyup.enter="auth.login"
                 ></v-text-field>
               </v-list-item>
@@ -33,7 +33,7 @@
                   v-model="auth.password"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
-                  placeholder="비밀번호를 입력해 주세요"
+                  :placeholder="TEXT[home.lang].FILL_PASSWORD"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -44,22 +44,23 @@
 
               <v-card class="mt-2 mb-6" variant="tonal" color="blue-grey">
                 <v-card-text class="text-medium-emphasis text-caption">
-                  게시글 및 댓글 작성, 좋아요/쪽지 기능 등은 모두 로그인 후 이용 가능합니다. 로그인
-                  후 세션 관련 문제가 발생할 시 로그아웃 이후 다시 로그인을 부탁드립니다. 혹시
-                  비밀번호를 잊으셨을 경우 최초 가입 시 작성하신 아이디(이메일)로 초기화한
-                  비밀번호를 전해드리겠습니다.
+                  {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
               </v-card>
             </v-list>
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-lock-question" @click="util.go('resetpassword')"
-                >비번 초기화</v-btn
-              >
-              <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')">회원가입</v-btn>
+              <v-btn prepend-icon="mdi-lock-question" @click="util.go('resetpassword')">{{
+                TEXT[home.lang].RESET_PASSWORD
+              }}</v-btn>
+              <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')">{{
+                TEXT[home.lang].SIGNUP
+              }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="auth.login">로그인</v-btn>
+              <v-btn append-icon="mdi-chevron-right" @click="auth.login">{{
+                TEXT[home.lang].LOGIN
+              }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -77,6 +78,7 @@ import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/login"
 
 const auth = useAuthStore()
 const util = useUtilStore()

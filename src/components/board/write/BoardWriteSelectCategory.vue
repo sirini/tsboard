@@ -7,7 +7,7 @@
       readonly
       prepend-icon="mdi-filter"
       append-inner-icon="mdi-chevron-down"
-      placeholder="카테고리를 선택해주세요."
+      :placeholder="TEXT[home.lang].CHOOSE_CATEGORY"
       @click="isOpenMenu = !isOpenMenu"
     >
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
@@ -28,7 +28,10 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
+const home = useHomeStore()
 const isOpenMenu = ref<boolean>(false)
 </script>

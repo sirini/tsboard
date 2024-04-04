@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="editor.addTableDialog" persistent>
     <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
-      <v-card-title>표 추가하기</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE_TABLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
         <v-row no-gutters>
@@ -10,7 +10,7 @@
               v-model="rows"
               class="mr-2"
               variant="solo"
-              label="행 (row) 개수"
+              :label="TEXT[home.lang].ROW_COUNT"
               prepend-inner-icon="mdi-table-row-height"
               :rules="cellRule"
             ></v-text-field>
@@ -20,19 +20,26 @@
               v-model="cols"
               class="ml-2"
               variant="solo"
-              label="열 (column) 개수"
+              :label="TEXT[home.lang].COLUMN_COUNT"
               prepend-inner-icon="mdi-table-column-width"
               :rules="cellRule"
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-checkbox v-model="withHeaderRow" label="표 상단에 헤더 영역 포함"></v-checkbox>
+        <v-checkbox
+          v-model="withHeaderRow"
+          :label="TEXT[home.lang].CHECK_INCLUDE_HEADER"
+        ></v-checkbox>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addTableDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="editor.addTableDialog = false">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
+        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+          TEXT[home.lang].ADD_TO_CONTENT
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -43,6 +50,7 @@ import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 import { TableOption } from "../../../interface/editor"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()
@@ -54,7 +62,7 @@ const cols = ref<number>(3)
 const withHeaderRow = ref<boolean>(true)
 const cellRule = [
   (value: number) => {
-    return (value > 0 && value < 100) || "잘못된 개수 지정입니다."
+    return (value > 0 && value < 100) || TEXT[home.lang].INVALID_COUNT
   },
 ]
 

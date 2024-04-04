@@ -1,16 +1,13 @@
 <template>
   <v-dialog v-model="image.uploadImageDialog" persistent>
     <v-card width="500" class="mx-auto" :color="home.color.header">
-      <v-card-title>본문 삽입용 이미지 업로드</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
       <v-divider></v-divider>
 
       <alert-bar></alert-bar>
       <v-card-text>
         <v-card variant="tonal" class="mt-2 mb-5">
-          <v-card-text class="pa-3">
-            본문에 삽입되는 이미지는 자동으로 크기를 줄여서 저장합니다. 원본 크기로 첨부가 필요할
-            경우 파일 첨부 기능을 이용하세요!</v-card-text
-          >
+          <v-card-text class="pa-3"> {{ TEXT[home.lang].INFO_INSERT_IMAGE_UPLOAD }}</v-card-text>
         </v-card>
         <v-file-input
           @change="image.uploadImageFiles"
@@ -22,7 +19,7 @@
           prepend-icon="mdi-image-search-outline"
           multiple
           variant="solo"
-          label="본문에 추가할 이미지 파일들을 선택해 주세요"
+          :label="TEXT[home.lang].SELECT_IMAGES"
         >
           <template v-slot:selection="{ fileNames }">
             <template v-for="fileName in fileNames" :key="fileName">
@@ -50,10 +47,12 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="image.uploadImageDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="image.uploadImageDialog = false">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-spacer></v-spacer>
         <v-btn @click="add"
-          >위 사진들을 업로드 하고 본문에 추가하기
+          >{{ TEXT[home.lang].UPLOAD_AND_INSERT }}
           <v-icon class="ml-2">mdi-chevron-right</v-icon></v-btn
         >
       </v-card-actions>
@@ -68,6 +67,7 @@ import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const util = useUtilStore()
 const home = useHomeStore()

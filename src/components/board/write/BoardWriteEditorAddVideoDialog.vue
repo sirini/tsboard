@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="editor.addVideoURLDialog" persistent>
     <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
-      <v-card-title>YouTube URL 추가</v-card-title>
+      <v-card-title>{{ TEXT[home.lang].TITLE_YOUTUBE }}</v-card-title>
       <v-divider></v-divider>
 
       <alert-bar></alert-bar>
@@ -21,7 +21,7 @@
           <v-col>
             <v-text-field
               v-model="width"
-              label="비디오 가로(폭) 지정"
+              :label="TEXT[home.lang].VIDEO_WIDTH"
               variant="solo"
               prepend-inner-icon="mdi-arrow-expand-horizontal"
               :rules="sizeRule"
@@ -30,7 +30,7 @@
           <v-col>
             <v-text-field
               v-model="height"
-              label="비디오 세로(높이) 지정"
+              :label="TEXT[home.lang].VIDEO_HEIGHT"
               variant="solo"
               prepend-inner-icon="mdi-arrow-expand-vertical"
               :rules="sizeRule"
@@ -40,9 +40,13 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addVideoURLDialog = false">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="editor.addVideoURLDialog = false">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">본문에 추가하기</v-btn>
+        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+          TEXT[home.lang].ADD_TO_CONTENT
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -55,6 +59,7 @@ import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import { VideoURL } from "../../../interface/editor"
 import AlertBar from "../../util/AlertBar.vue"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()

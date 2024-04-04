@@ -95,3 +95,5 @@ export const NOTICE_TYPE = {
   REPLY_COMMENT: 3,
   CHAT_MESSAGE: 4,
 }
+
+export const READ_POST_KEY = "tsboardReadPosts"

@@ -2,14 +2,14 @@
   <v-dialog v-model="report.dialog" persistent>
     <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
-        <span>신고하기</span>
-        <span class="report ml-3 pl-3">신고 및 차단 기능을 사용합니다</span>
+        <span>{{ TEXT[home.lang].TITLE }}</span>
+        <span class="report ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
       </v-card-title>
       <v-divider></v-divider>
 
       <v-list>
         <alert-bar></alert-bar>
-        <v-list-subheader>신고 대상자</v-list-subheader>
+        <v-list-subheader>{{ TEXT[home.lang].TARGET }}</v-list-subheader>
         <v-divider></v-divider>
         <v-list-item
           :prepend-avatar="TSBOARD.PREFIX + (report.targetUser.profile || '/no-profile.svg')"
@@ -17,7 +17,7 @@
           <v-list-item-title>{{ report.targetUser.name }}</v-list-item-title>
         </v-list-item>
 
-        <v-list-subheader class="mt-3">블랙리스트</v-list-subheader>
+        <v-list-subheader class="mt-3">{{ TEXT[home.lang].BLACKLIST }}</v-list-subheader>
 
         <v-divider></v-divider>
         <v-list-item class="pa-0">
@@ -26,7 +26,7 @@
             color="blue-grey"
             icon="mdi-information"
             class="text-caption"
-            text="내 블랙리스트에 추가된 회원은 나에게 채팅 메시지를 보낼 수 없으며, 내가 작성한 게시글을 열람할 수 없습니다."
+            :text="TEXT[home.lang].BLACKLIST_INFO"
           ></v-alert>
         </v-list-item>
         <v-list-item class="pa-0 pl-3">
@@ -34,12 +34,12 @@
             v-model="report.checkedBlackList"
             density="compact"
             hide-details
-            :label="report.targetUser.name + '님을 나의 블랙랙리스트에 추가합니다.'"
+            :label="TEXT[home.lang].ADD_BLACKLIST + report.targetUser.name"
           ></v-checkbox>
         </v-list-item>
         <v-divider></v-divider>
 
-        <v-list-subheader>신고 내용 (1000자 이내)</v-list-subheader>
+        <v-list-subheader>{{ TEXT[home.lang].REPORT_CONTENT }}</v-list-subheader>
         <v-list-item>
           <v-textarea
             v-model="report.content"
@@ -54,11 +54,13 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="report.closeDialog">닫기</v-btn>
+        <v-btn prepend-icon="mdi-close" @click="report.closeDialog">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn append-icon="mdi-chevron-right" @click="report.sendReport"
-          >운영진에게 신고하기</v-btn
-        >
+        <v-btn append-icon="mdi-chevron-right" @click="report.sendReport">{{
+          TEXT[home.lang].SUBMIT
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -69,6 +71,7 @@ import { useReportStore } from "../../store/user/report"
 import { useHomeStore } from "../../store/home"
 import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
+import { TEXT } from "../../messages/components/board/user/send-report-dialog"
 
 const report = useReportStore()
 const home = useHomeStore()

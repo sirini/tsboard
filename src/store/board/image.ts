@@ -10,7 +10,8 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { EDITOR } from "../../messages/store/board/editor"
+import { useHomeStore } from "../home"
+import { TEXT } from "../../messages/store/board/editor"
 import { Pair } from "../../interface/board"
 import { TSBOARD } from "../../../tsboard.config"
 
@@ -18,6 +19,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const server = edenTreaty<App>(process.env.API!)
   const auth = useAuthStore()
   const util = useUtilStore()
+  const home = useHomeStore()
   const uploadImageDialog = ref<boolean>(false)
   const addImageFromDBDialog = ref<boolean>(false)
   const showRemoveImageInfo = ref<boolean>(false)
@@ -38,7 +40,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         !value ||
         !value.length ||
         value[0].size < limit.value ||
-        `파일 크기는 ${(limit.value / 1024768).toFixed(1)}MB 이하여야 합니다.`
+        `${TEXT[home.lang].FILESIZE_TOO_LARGE} ${(limit.value / 1024768).toFixed(1)}`
       )
     },
   ]
@@ -56,11 +58,11 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_UPLOAD_IMAGE} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -81,15 +83,15 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_LOAD_IMAGE} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${response.data.error})`)
       return
     }
     if (response.data.result.images.length < 1) {
-      util.snack(EDITOR.EMPTY_IMAGES)
+      util.snack(TEXT[home.lang].EMPTY_IMAGES)
       disableReloadButton.value = true
       return
     }
@@ -133,11 +135,11 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     })
 
     if (!response.data) {
-      util.snack(EDITOR.NO_RESPONSE)
+      util.snack(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.snack(`${EDITOR.FAILED_REMOVE_IMAGE} (${response.data.error})`)
+      util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
       return
     }
     auth.updateUserToken(response.data.result.newAccessToken)

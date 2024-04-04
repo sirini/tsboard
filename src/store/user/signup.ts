@@ -12,12 +12,14 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
-import { AUTH } from "../../messages/store/user/auth"
+import { useHomeStore } from "../home"
+import { TEXT } from "../../messages/store/user/auth"
 
 export const useSignupStore = defineStore("signup", () => {
   const router = useRouter()
   const util = useUtilStore()
   const auth = useAuthStore()
+  const home = useHomeStore()
   const server = edenTreaty<App>(process.env.API!)
   const verificationCode = ref<string>("")
   const loading = ref<boolean>(false)
@@ -25,28 +27,28 @@ export const useSignupStore = defineStore("signup", () => {
   // 아이디(이메일) 중복 체크하기
   async function checkEmail(): Promise<void> {
     if (auth.user.id.length < 6) {
-      util.error(AUTH.INVALID_EMAIL)
+      util.error(TEXT[home.lang].INVALID_EMAIL)
       return
     }
     const response = await server.api.auth.checkemail.post({
       email: auth.user.id.trim(),
     })
     if (!response.data) {
-      util.error(AUTH.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(AUTH.EXIST_EMAIL)
+      util.error(TEXT[home.lang].EXIST_EMAIL)
       auth.user.id = ""
       return
     }
-    util.success(AUTH.AVAILABLE_EMAIL)
+    util.success(TEXT[home.lang].AVAILABLE_EMAIL)
   }
 
   // 이름 중복 체크하기
   async function checkName(): Promise<void> {
     if (auth.user.name.length < 2) {
-      util.error(AUTH.INVALID_NAME)
+      util.error(TEXT[home.lang].INVALID_NAME)
       return
     }
     const response = await server.api.auth.checkname.post({
@@ -54,33 +56,33 @@ export const useSignupStore = defineStore("signup", () => {
       userUid: auth.user.uid,
     })
     if (!response.data) {
-      util.error(AUTH.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(AUTH.EXIST_NAME)
+      util.error(TEXT[home.lang].EXIST_NAME)
       auth.user.name = ""
       return
     }
-    util.success(AUTH.AVAILABLE_NAME)
+    util.success(TEXT[home.lang].AVAILABLE_NAME)
   }
 
   // 가입 양식 제출받기
   async function submit(): Promise<void> {
     if (util.filters.email.test(auth.user.id) === false) {
-      util.error(AUTH.INVALID_EMAIL)
+      util.error(TEXT[home.lang].INVALID_EMAIL)
       return
     }
     if (util.filters.password.test(auth.password) === false) {
-      util.error(AUTH.INVALID_PASSWORD)
+      util.error(TEXT[home.lang].INVALID_PASSWORD)
       return
     }
     if (auth.password !== auth.checkedPassword) {
-      util.error(AUTH.DIFFERENT_PASSWORD)
+      util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
       return
     }
     if (auth.user.name.length < 3) {
-      util.error(AUTH.INVALID_NAME)
+      util.error(TEXT[home.lang].INVALID_NAME)
       return
     }
 
@@ -92,23 +94,23 @@ export const useSignupStore = defineStore("signup", () => {
       name: auth.user.name,
     })
     if (!response.data) {
-      util.error(AUTH.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(AUTH.FAILED_ADD_USER)
+      util.error(TEXT[home.lang].FAILED_ADD_USER)
       loading.value = false
       return
     }
     if (response.data.result.sendmail === false) {
-      util.success(AUTH.SIGNUP_COMPLETE)
+      util.success(TEXT[home.lang].SIGNUP_COMPLETE)
       setTimeout(() => {
         util.go("login")
       }, 5000)
       loading.value = false
       return
     }
-    util.success(`${auth.user.id} ${AUTH.SENT_VERIFICATION}`)
+    util.success(`${auth.user.id} ${TEXT[home.lang].SENT_VERIFICATION}`)
     router.push({ name: "verify", params: { target: response.data.result.target } })
     loading.value = false
   }
@@ -116,25 +118,25 @@ export const useSignupStore = defineStore("signup", () => {
   // 인증 완료하기
   async function verify(target: number): Promise<void> {
     if (target < 1) {
-      util.error(AUTH.WRONG_VERIFY_TARGET)
+      util.error(TEXT[home.lang].WRONG_VERIFY_TARGET)
       return
     }
     if (verificationCode.value.length !== 6) {
-      util.error(AUTH.WRONG_VERIFICATION_LENGTH)
+      util.error(TEXT[home.lang].WRONG_VERIFICATION_LENGTH)
       return
     }
     if (auth.user.id.length < 1) {
-      util.error(AUTH.VERIFY_EMPTY_EMAIL)
+      util.error(TEXT[home.lang].VERIFY_EMPTY_EMAIL)
       util.go("signup")
       return
     }
     if (auth.user.name.length < 1) {
-      util.error(AUTH.VERIFY_EMPTY_NAME)
+      util.error(TEXT[home.lang].VERIFY_EMPTY_NAME)
       util.go("signup")
       return
     }
     if (auth.password.length < 8) {
-      util.error(AUTH.VERIFY_EMPTY_PASSWORD)
+      util.error(TEXT[home.lang].VERIFY_EMPTY_PASSWORD)
       util.go("signup")
       return
     }
@@ -148,14 +150,14 @@ export const useSignupStore = defineStore("signup", () => {
       },
     })
     if (!response.data) {
-      util.error(AUTH.NO_RESPONSE)
+      util.error(TEXT[home.lang].NO_RESPONSE)
       return
     }
     if (response.data.success === false) {
-      util.error(`인증 코드가 잘못되었습니다. 대소문자 등 다시 확인해 주세요.`)
+      util.error(TEXT[home.lang].WRONG_VERIFICATION_CODE)
       return
     }
-    util.success(AUTH.SIGNUP_COMPLETE)
+    util.success(TEXT[home.lang].SIGNUP_COMPLETE)
     util.go("login")
   }
 

@@ -13,6 +13,9 @@
       <v-spacer v-if="home.cols >= TSBOARD.SCREEN.TABLET.COLS"></v-spacer>
       <home-header-search v-else-if="route.name === 'home'"></home-header-search>
 
+      <home-header-select-language
+        v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+      ></home-header-select-language>
       <home-header-login></home-header-login>
       <home-header-chat v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></home-header-chat>
       <home-header-notification></home-header-notification>
@@ -28,6 +31,7 @@ import { useHomeStore } from "../../store/home"
 import { TSBOARD } from "../../../tsboard.config"
 import ChatDialog from "../../components/user/ChatDialog.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
+import HomeHeaderSelectLanguage from "./components/header/HomeHeaderSelectLanguage.vue"
 import HomeHeaderLogin from "./components/header/HomeHeaderLogin.vue"
 import HomeHeaderChat from "./components/header/HomeHeaderChat.vue"
 import HomeHeaderNotification from "./components/header/HomeHeaderNotification.vue"

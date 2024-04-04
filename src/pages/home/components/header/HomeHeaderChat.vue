@@ -21,11 +21,11 @@
           </template>
         </v-list-item>
         <v-list-item v-if="chat.list.length < 1" prepend-icon="mdi-check-circle">
-          아직 생성된 채팅방이 없습니다.
+          {{ TEXT[home.lang].EMPTY }}
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-tooltip activator="parent">나에게 온 채팅들 확인하기</v-tooltip>
+    <v-tooltip activator="parent">{{ TEXT[home.lang].TOOLTIP }}</v-tooltip>
   </v-btn>
 </template>
 
@@ -36,6 +36,7 @@ import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
 import { useChatStore } from "../../../../store/user/chat"
 import { TSBOARD } from "../../../../../tsboard.config"
+import { TEXT } from "../../../../messages/pages/home/components/header/home-header-chat"
 
 const home = useHomeStore()
 const auth = useAuthStore()

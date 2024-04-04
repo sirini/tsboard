@@ -4,7 +4,8 @@
  * 알림 관련 필요한 함수들
  */
 
-import { AddNoticeParams, Notification } from "../../../src/interface/home"
+import { BOARD_TYPE, BoardType } from "../../../src/interface/board"
+import { AddNoticeParams, NoticeType, Notification } from "../../../src/interface/home"
 import { table, select, insert, update } from "../common"
 
 // 알림 정보 추가하기
@@ -47,11 +48,13 @@ export async function getNotifications(userUid: number, limit: number): Promise<
       noti.post_uid,
     ])
     let boardId = ""
+    let boardType = BOARD_TYPE.BOARD as BoardType
     if (post) {
-      const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+      const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
         post.board_uid,
       ])
       boardId = board.id
+      boardType = board.type as BoardType
     }
     const [user] = await select(`SELECT name, profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
       noti.from_uid,
@@ -64,8 +67,9 @@ export async function getNotifications(userUid: number, limit: number): Promise<
         name: user.name,
         profile: user.profile,
       },
-      type: noti.type,
+      type: noti.type as NoticeType,
       id: boardId,
+      boardType,
       postUid: noti.post_uid,
       checked: noti.checked > 0 ? true : false,
       timestamp: noti.timestamp,

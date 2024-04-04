@@ -11,8 +11,8 @@
             :color="home.color.header"
           >
             <v-card-title class="change_password_title">
-              비밀번호 변경
-              <span class="info ml-3">이곳에서 비밀번호를 변경하세요</span>
+              {{ TEXT[home.lang].TITLE }}
+              <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
@@ -24,7 +24,7 @@
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   class="mt-6"
-                  label="비밀번호를 입력해 주세요"
+                  :label="TEXT[home.lang].FILL_PASSWORD"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -37,7 +37,7 @@
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   class="mt-2 mb-6"
-                  label="비밀번호를 한 번 더 입력해 주세요"
+                  :label="TEXT[home.lang].AGAIN_PASSWORD"
                   :rules="auth.passwordRule"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
@@ -48,13 +48,13 @@
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')"
-                >로그인 하러가기</v-btn
-              >
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+                TEXT[home.lang].LOGIN
+              }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" append-icon="mdi-chevron-right" @click="change"
-                >비밀번호 변경하기</v-btn
-              >
+              <v-btn color="primary" append-icon="mdi-chevron-right" @click="change">{{
+                TEXT[home.lang].CHANGE_PASSWORD
+              }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-container>
@@ -68,12 +68,13 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
-import { usePasswordStore } from "../../store/password"
+import { usePasswordStore } from "../../store/user/password"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/change-password"
 
 const route = useRoute()
 const auth = useAuthStore()
@@ -107,3 +108,4 @@ function change(): void {
   font-size: 0.7em;
 }
 </style>
+../../store/user/password

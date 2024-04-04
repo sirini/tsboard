@@ -9,7 +9,7 @@
       hide-details
       multiple
       variant="outlined"
-      label="첨부할 파일들을 선택해 주세요"
+      :label="TEXT[home.lang].SELECT_ATTACHMENTS"
     >
       <template v-slot:selection="{ fileNames }">
         <template v-for="fileName in fileNames" :key="fileName">
@@ -30,6 +30,9 @@
 
 <script setup lang="ts">
 import { useBoardEditorStore } from "../../../store/board/editor"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
+const home = useHomeStore()
 </script>

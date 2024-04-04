@@ -7,6 +7,7 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
+import { READ_POST_KEY } from "../../server/database/board/const"
 
 export const useUtilStore = defineStore("util", () => {
   const router = useRouter()
@@ -152,6 +153,27 @@ export const useUtilStore = defineStore("util", () => {
     return result
   }
 
+  // 게시글을 이미 읽었는지 확인하기
+  function isAlreadyRead(postUid: number): boolean {
+    const readPosts = window.localStorage.getItem(READ_POST_KEY)
+    if (readPosts) {
+      const postUids = JSON.parse(readPosts) as number[]
+      return postUids.includes(postUid)
+    }
+    return false
+  }
+
+  // 게시글 읽음으로 체크하기
+  function markAsRead(postUid: number): void {
+    const readPosts = window.localStorage.getItem(READ_POST_KEY)
+    let postUids: number[] = []
+    if (readPosts) {
+      postUids = JSON.parse(readPosts) as number[]
+    }
+    postUids.push(postUid)
+    window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -173,5 +195,7 @@ export const useUtilStore = defineStore("util", () => {
     unescape,
     num,
     attachments,
+    isAlreadyRead,
+    markAsRead,
   }
 })

@@ -16,6 +16,7 @@ import {
   isBannedByWriter,
   likePost,
   removePost,
+  updatePostHit,
 } from "../../database/board/view"
 import { fail, getUpdatedAccessToken, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
@@ -56,7 +57,7 @@ export const view = new Elysia()
   })
   .get(
     "/view",
-    async ({ query: { id, postUid }, accessUserUid, userLevel, newAccessToken }) => {
+    async ({ query: { id, postUid, needUpdateHit }, accessUserUid, userLevel, newAccessToken }) => {
       let response = {
         config: BOARD_CONFIG,
         post: INIT_POST_VIEW,
@@ -98,6 +99,10 @@ export const view = new Elysia()
         return fail(`Post not found.`, response)
       }
 
+      if (needUpdateHit > 0) {
+        updatePostHit(postUid)
+      }
+
       response.tags = await getTags(postUid)
       return success(response)
     },
@@ -108,6 +113,7 @@ export const view = new Elysia()
       query: t.Object({
         id: t.String(),
         postUid: t.Numeric(),
+        needUpdateHit: t.Numeric(),
       }),
     },
   )

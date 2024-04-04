@@ -1,23 +1,25 @@
 <template>
   <v-dialog v-model="image.addImageFromDBDialog" persistent>
     <v-card width="700" class="mx-auto" rounded="lg" :color="home.color.header">
-      <v-card-title>기존 이미지를 본문에 추가/관리 ({{ image.totalImageCount }}개)</v-card-title>
+      <v-card-title
+        >{{ TEXT[home.lang].TITLE_MANAGE_IMAGE }} ({{ image.totalImageCount }} ea)</v-card-title
+      >
       <v-divider></v-divider>
       <alert-bar></alert-bar>
 
       <v-card-text>
         <v-card v-show="image.showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">
           <v-card-text class="pa-3">
-            정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만
-            삭제해 주세요! 만약 이전 게시글들에 이미 사용하셨다면, 해당 게시글들은 더 이상 이미지가
-            나타나지 않게 됩니다. 계속 진행하시겠습니까?
+            {{ TEXT[home.lang].CHECK_BEFORE_REMOVE_IMAGE }}
           </v-card-text>
           <v-card-actions>
-            <v-btn prepend-icon="mdi-check" @click="image.clearRemoveTarget"
-              >아니요, 삭제하지 않겠습니다</v-btn
-            >
+            <v-btn prepend-icon="mdi-check" @click="image.clearRemoveTarget">{{
+              TEXT[home.lang].CANCEL_REMOVE
+            }}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제하기</v-btn>
+            <v-btn prepend-icon="mdi-trash-can" @click="remove">{{
+              TEXT[home.lang].CONFIRM_REMOVE
+            }}</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -51,7 +53,7 @@
           </v-col>
 
           <v-col v-if="image.loadImages.length < 1" cols="12">
-            이 게시판에서 아직 업로드하신 이미지가 없습니다.
+            {{ TEXT[home.lang].EMPTY_IMAGE_LIST }}
           </v-col>
         </v-row>
         <v-row>
@@ -63,16 +65,16 @@
               class="mb-3"
               :disabled="image.disableReloadButton"
               @click="image.loadUploadedImages(true)"
-              >이전 이미지들 가져오기</v-btn
+              >{{ TEXT[home.lang].LOAD_PREV_IMAGE }}</v-btn
             >
           </v-col>
         </v-row>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="image.addImageFromDBDialog = false"
-          >닫기</v-btn
-        >
+        <v-btn block prepend-icon="mdi-close" @click="image.addImageFromDBDialog = false">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -84,9 +86,9 @@ import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { EDITOR } from "../../../messages/store/board/editor"
 import { TSBOARD } from "../../../../tsboard.config"
 import AlertBar from "../../util/AlertBar.vue"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const image = useEditorImageStore()
@@ -119,7 +121,7 @@ function remove(): void {
   image.loadImages = image.loadImages.filter((value) => {
     return value.uid !== image.removeImageTarget.uid
   })
-  util.snack(EDITOR.REMOVED_IMAGE)
+  util.snack("REMOVED_IMAGE")
   image.clearRemoveTarget()
 }
 </script>

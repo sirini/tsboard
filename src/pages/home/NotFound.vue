@@ -12,14 +12,13 @@
           >
             <v-card-title>
               404 Not Found
-              <span class="info ml-3 pl-3">페이지를 찾을 수 없습니다</span>
+              <span class="info ml-3 pl-3">{{ TEXT[home.lang].PAGE_NOT_FOUND }}</span>
             </v-card-title>
             <v-divider></v-divider>
 
             <p class="pa-6">
               <v-icon class="mr-2">mdi-robot-confused-outline</v-icon>
-              혹시 URL에 철자가 잘못 입력되진 않았을까요? 문제가 지속되면
-              <strong>관리자에게 문의</strong>해주세요!
+              {{ TEXT[home.lang].SUGGESTION }}
             </p>
 
             <v-divider></v-divider>
@@ -29,7 +28,7 @@
                 prepend-icon="mdi-home"
                 append-icon="mdi-chevron-right"
                 @click="util.go('home')"
-                >첫화면으로 이동</v-btn
+                >{{ TEXT[home.lang].MOVE_HOME }}</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -46,6 +45,7 @@ import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
+import { TEXT } from "../../messages/pages/home/not-found"
 
 const util = useUtilStore()
 const home = useHomeStore()
@@ -57,6 +57,9 @@ const home = useHomeStore()
 }
 .wrap {
   min-height: calc(100vh - 118px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .info {
   color: #cfd8dc;
