@@ -20,5 +20,12 @@ export const TEXT = [
     FIRST_PAGE: "This is the first page.",
     LAST_PAGE: "This is the last page.",
   },
+  /* LANG.CN */ {
+    NO_BOARD_ID: "看板ID不正确。这是一次无效的访问。",
+    NO_RESPONSE: "无法收到服务器的响应。请联系管理员。",
+    FAILED_LOAD_LIST: "加载帖子列表失败。您可能没有权限查看。",
+    FIRST_PAGE: "这是第一页。",
+    LAST_PAGE: "这是最后一页。",
+  },
 ]
 Object.freeze(TEXT)

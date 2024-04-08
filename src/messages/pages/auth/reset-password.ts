@@ -26,5 +26,15 @@ please be cautious as exposure could allow others to attempt unauthorized resets
     LOGIN: "Login",
     ASK_RESET: "Request Password Reset",
   },
+  /* LANG.CN */ {
+    TITLE: "密码重置",
+    INFO: "忘记密码了吗？",
+    FILL_EMAIL: "请输入您的ID（电子邮箱地址）。",
+    DESCRIPTION: `重置密码将发送到注册时提供的电子邮箱地址。
+虽然网站设计上是保护用户ID（电子邮箱地址）的隐私，
+但请小心，因为暴露可能会让其他人尝试未经授权的重置。`,
+    LOGIN: "登录",
+    ASK_RESET: "请求密码重置",
+  },
 ]
 Object.freeze(TEXT)

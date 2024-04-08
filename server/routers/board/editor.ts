@@ -125,7 +125,7 @@ export const editor = new Elysia()
   )
   .post(
     "/uploadimages",
-    async ({ body: { boardUid, sizeLimit, images }, newAccessToken, accessUserUid, userLevel }) => {
+    async ({ body: { boardUid, images }, newAccessToken, accessUserUid, userLevel }) => {
       const response = {
         newAccessToken,
         uploadedImages: [],
@@ -147,7 +147,6 @@ export const editor = new Elysia()
 
       const uploadedImages = await uploadImages({
         boardUid,
-        sizeLimit,
         accessUserUid,
         images,
       })
@@ -161,7 +160,6 @@ export const editor = new Elysia()
       ...DEFAULT_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
-        sizeLimit: t.Numeric(),
         images: t.Optional(
           t.Files({
             type: "image",
@@ -307,10 +305,8 @@ export const editor = new Elysia()
       content = sanitizeHtml(content, htmlFilter)
 
       let isNoticePost = false
-      if ((await haveAdminPermission(accessUserUid, boardUid)) === true) {
-        if (isNotice > 0) {
-          isNoticePost = true
-        }
+      if ((await haveAdminPermission(accessUserUid, boardUid)) === true && isNotice > 0) {
+        isNoticePost = true
       }
 
       const postUid = await writeNewPost({

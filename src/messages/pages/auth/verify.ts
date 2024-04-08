@@ -17,5 +17,11 @@ export const TEXT = [
     RETRY: "Didn't receive the email?",
     CONFIRM: "Complete Verification",
   },
+  /* LANG.CN */ {
+    TITLE: "输入验证码",
+    INFO: "请输入发送到您邮箱的6位数验证码。",
+    RETRY: "没有收到邮件？",
+    CONFIRM: "完成验证",
+  },
 ]
 Object.freeze(TEXT)

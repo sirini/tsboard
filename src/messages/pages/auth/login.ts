@@ -29,5 +29,17 @@ If you've forgotten your password, we will send a reset password to the email ad
     SIGNUP: "Sign Up",
     LOGIN: "Login",
   },
+  /* LANG.CN */ {
+    TITLE: "登录",
+    INFO: "欢迎回来！",
+    FILL_EMAIL: "请输入您的ID（电子邮箱）。",
+    FILL_PASSWORD: "请输入您的密码。",
+    DESCRIPTION: `登录后可使用发布帖子、评论、点赞和消息等功能。
+如果登录后遇到任何与会话相关的问题，请退出登录并重新登录。
+如果您忘记了密码，我们将发送重置密码到您注册时使用的电子邮箱地址。`,
+    RESET_PASSWORD: "重置密码",
+    SIGNUP: "注册",
+    LOGIN: "登录",
+  },
 ]
 Object.freeze(TEXT)

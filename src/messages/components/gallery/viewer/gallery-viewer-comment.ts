@@ -18,5 +18,11 @@ export const TEXT = [
     REMOVE_TOOLTIP:
       "Delete this comment (cannot be deleted if there are replies, only for the author/admin)",
   },
+  /* LANG.CN */ {
+    LIKE_TOOLTIP: "喜欢这条评论",
+    REPLY_TOOLTIP: "回复此评论",
+    MODIFY_TOOLTIP: "编辑此评论（仅限作者/管理员）",
+    REMOVE_TOOLTIP: "删除此评论（如果有回复则无法删除，仅限作者/管理员）",
+  },
 ]
 Object.freeze(TEXT)

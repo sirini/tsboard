@@ -33,5 +33,19 @@ export const TEXT = [
     BACK: "Go Back",
     SAVE: "Save Changes",
   },
+  /* LANG.CN */ {
+    TITLE: "我的信息",
+    INFO: "根据需要查看并更新您的信息。",
+    EMAIL_TOOLTIP: "不要与他人分享您的ID（电子邮箱）。",
+    FILL_NAME: "输入您想要更新的姓名，并检查可用性。",
+    CHOOSE_PROFILE: "选择一个头像。",
+    FILL_SIGNATURE: "在250个字符内输入您的签名。",
+    SIGNUP_DATE: "注册日期",
+    SIGNIN_DATE: "上次登录",
+    FILL_PASSWORD: "输入您希望使用的新密码。",
+    AGAIN_PASSWORD: "重新输入新密码以确认。",
+    BACK: "返回",
+    SAVE: "保存更改",
+  },
 ]
 Object.freeze(TEXT)

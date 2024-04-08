@@ -30,9 +30,11 @@ export const useSignupStore = defineStore("signup", () => {
       util.error(TEXT[home.lang].INVALID_EMAIL)
       return
     }
+
     const response = await server.api.auth.checkemail.post({
       email: auth.user.id.trim(),
     })
+
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
       return
@@ -51,10 +53,12 @@ export const useSignupStore = defineStore("signup", () => {
       util.error(TEXT[home.lang].INVALID_NAME)
       return
     }
+
     const response = await server.api.auth.checkname.post({
       name: auth.user.name.trim(),
       userUid: auth.user.uid,
     })
+
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
       return
@@ -92,7 +96,9 @@ export const useSignupStore = defineStore("signup", () => {
       email: auth.user.id,
       password: SHA256(auth.password).toString(),
       name: auth.user.name,
+      lang: home.lang as number,
     })
+
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
       return
@@ -140,6 +146,7 @@ export const useSignupStore = defineStore("signup", () => {
       util.go("signup")
       return
     }
+
     const response = await server.api.auth.verify.post({
       target,
       code: verificationCode.value,
@@ -148,7 +155,9 @@ export const useSignupStore = defineStore("signup", () => {
         name: auth.user.name,
         password: SHA256(auth.password).toString(),
       },
+      lang: home.lang as number,
     })
+
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
       return

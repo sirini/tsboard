@@ -29,5 +29,17 @@ export const TEXT = [
     LOADED_PERMISSION: "Successfully loaded the user's existing permissions.",
     FAILED_LOAD_INFO: "Failed to retrieve user information.",
   },
+  /* LANG.CN */ {
+    NO_RESPONSE: "无法收到服务器的响应。请联系管理员。",
+    INVALID_TEXT_LENGTH: "请输入3到1000个字符之间的文本。",
+    UNKNOWN_REPORT_TARGET: "报告的目标未被正确识别。",
+    FAILED_REPORT: "发送报告失败。",
+    REPORTED_USER: "已被报告给管理层。",
+    ACTION_TAKEN: "的案件已处理。窗口即将关闭...",
+    FAILED_MANAGE_USER: "应用用户操作失败。",
+    FAILED_LOAD_PERMISSION: "无法检索用户的现有权限。",
+    LOADED_PERMISSION: "成功加载用户的现有权限。",
+    FAILED_LOAD_INFO: "无法检索用户信息。",
+  },
 ]
 Object.freeze(TEXT)

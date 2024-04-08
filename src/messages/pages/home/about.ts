@@ -100,5 +100,45 @@ export const TEXT = [
 </p>`,
     GITHUB_TOOLTIP: "Visit the TSBOARD project on GitHub and give us a star (★) if you like it! 😄",
   },
+  /* LANG.CN */ {
+    TITLE: "关于这个网站",
+    INFO: `
+<h2>欢迎来到TSBOARD.dev！</h2>
+<p>&nbsp;</p>
+<p>
+  本站为<strong>TSBOARD</strong>的用户创建，TSBOARD是一个以其重点命名的社区构建器。TSBOARD是开源的，可在GitHub上找到，
+  其首个Beta版本预计于2024年4月发布。由于目前还处于开发的早期阶段，我们建议最初用于测试目的。
+</p>
+<p>&nbsp;</p>
+<p>
+  TSBOARD的名字来源于<strong>类型安全看板（Type Safety BOARD）</strong>。
+  它源于创建一个完全用TypeScript操作的论坛的愿望，TypeScript是JavaScript的一个超集，从前端到后端均使用TypeScript。
+  目前，平台仅提供论坛和画廊功能，但我们的终极目标是提供开源博客和电子商务能力。
+</p>
+<p>&nbsp;</p>
+<p>
+  像基础的韩国论坛软件Gnuboard一样，TSBOARD使用Maria(MySQL)作为其DBMS。
+  但在服务器端，它基于Bun + Elysia编写，<strong>全部用TypeScript</strong>。
+  对于客户端，它使用Vue3 (Composition API) + Vuetify3，同样全部用TypeScript编写。
+</p>
+<p>&nbsp;</p>
+<p>
+  后端选择了在2023年9月作为v1.0发布的Bun，以及基于Bun的Elysia web框架，因为它们的开发便利性和速度。
+  Bun是一个全能工具包和JS/TS运行时。尽管与Node.js相比，它在全球应用方面仍面临一些挑战，
+  但我们相信它会逐步改善。
+</p>
+<p>&nbsp;</p>
+<p>
+  对于已经熟悉TypeScript语言和Node.js生态系统的开发者，可能会觉得TSBOARD在某些方面不足。
+  相反，对于习惯了与论坛软件相关联的PHP语言的人来说，可能会觉得非常陌生。（我也有同感... 😅）
+  我们欢迎任何建议或帮助以进行改进，对于那些觉得使用TypeScript或像Vue这样的框架有难度的人，
+  TSBOARD提供了一个学习和应用这些技术的绝佳机会。
+</p>
+<p>&nbsp;</p>
+<p>
+  TSBOARD.DEV网站目前运行在家中的一台小型PC上。如果您在访问时遇到任何困难，请您谅解。🥲
+</p>`,
+    GITHUB_TOOLTIP: "访问GitHub上的TSBOARD项目并给我们一个星标（★），如果你喜欢的话！😄",
+  },
 ]
 Object.freeze(TEXT)

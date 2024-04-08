@@ -21,5 +21,13 @@ export const TEXT = [
     PLACEHOLDER: "Please enter a search term.",
     TOOLTIP: "To reset the search term, click the button that looks like this on the right: ",
   },
+  /* LANG.CN */ {
+    TITLE: "标题",
+    CONTENT: "内容",
+    WRITER: "作者",
+    TAG: "标签",
+    PLACEHOLDER: "请输入搜索词。",
+    TOOLTIP: "要重置搜索词，请点击右侧这样的按钮：",
+  },
 ]
 Object.freeze(TEXT)

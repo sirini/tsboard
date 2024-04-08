@@ -19,5 +19,12 @@ export const TEXT = [
     CHAT_HISTORY: "Previous Chat History",
     CLOSE: "Close",
   },
+  /* LANG.CN */ {
+    TITLE: "消息",
+    INFO: "向另一个用户发送消息。",
+    RECEIVER: "接收者",
+    CHAT_HISTORY: "以前的聊天记录",
+    CLOSE: "关闭",
+  },
 ]
 Object.freeze(TEXT)

@@ -17,5 +17,10 @@ export const TEXT = [
       "Could the URL have been mistyped? If the problem persists, please contact the administrator!",
     MOVE_HOME: "Go to the main screen",
   },
+  /* LANG.CN */ {
+    PAGE_NOT_FOUND: "未找到页面。",
+    SUGGESTION: "可能URL输入错误了吗？如果问题持续存在，请联系管理员！",
+    MOVE_HOME: "前往主屏幕",
+  },
 ]
 Object.freeze(TEXT)

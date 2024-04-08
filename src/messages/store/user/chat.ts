@@ -17,5 +17,11 @@ export const TEXT = [
     LOADED_HISTORY: "Successfully loaded previous chat history.",
     FAILED_ADD_CHAT: "Failed to deliver the chat message.",
   },
+  /* LANG.CN */ {
+    NO_RESPONSE: "无法收到服务器的响应。请联系管理员。",
+    FAILED_LOAD_HISTORY: "加载过去的聊天记录失败。",
+    LOADED_HISTORY: "成功加载了以前的聊天记录。",
+    FAILED_ADD_CHAT: "发送聊天消息失败。",
+  },
 ]
 Object.freeze(TEXT)

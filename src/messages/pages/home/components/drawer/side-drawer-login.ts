@@ -15,5 +15,10 @@ export const TEXT = [
     FIND_PASSWORD: "Find Password",
     LOGIN: "Login",
   },
+  /* LANG.CN */ {
+    TITLE: "登录",
+    FIND_PASSWORD: "找回密码",
+    LOGIN: "登录",
+  },
 ]
 Object.freeze(TEXT)

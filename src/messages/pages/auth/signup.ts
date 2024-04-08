@@ -34,5 +34,20 @@ If it's missing, it may have been marked as spam, so be sure to check there too!
     LOGIN: "Login",
     SUBMIT: "Submit",
   },
+  /* LANG.CN */ {
+    TITLE: "注册",
+    INFO: "欢迎！",
+    FILL_EMAIL: "请输入您常用的电子邮箱地址。",
+    FILL_PASSWORD: "请输入您的密码。",
+    AGAIN_PASSWORD: "请再次输入您的密码以确认。",
+    FILL_NAME: "请输入您想要的昵称。",
+    DESCRIPTION: `作为您ID的电子邮箱地址不仅用于登录，也用于密码找回。
+请输入一个常用的电子邮箱地址，并确保它是保密的。
+通过点击输入框旁的检查图标来检查您的昵称是否可用。
+提交表单后，请在提供的电子邮箱地址的收件箱中检查验证电子邮件。
+如果找不到，可能已被标记为垃圾邮件，所以也请确保检查那里！`,
+    LOGIN: "登录",
+    SUBMIT: "提交",
+  },
 ]
 Object.freeze(TEXT)

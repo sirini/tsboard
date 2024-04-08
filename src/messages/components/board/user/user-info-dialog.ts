@@ -31,5 +31,18 @@ export const TEXT = [
     SIGNIN_DATE: "Last Login",
     CLOSE: "Close",
   },
+  /* LANG.CN */ {
+    TITLE: "用户信息",
+    INFO: "查看用户的基本信息。",
+    NAME: "姓名",
+    BLOCKED_USER: "已屏蔽用户",
+    ADMIN: "管理员",
+    LEVEL: "级别",
+    SIGNATURE: "个性签名",
+    NO_SIGNATURE: "未提供个性签名。",
+    SIGNUP_DATE: "注册日期",
+    SIGNIN_DATE: "上次登录",
+    CLOSE: "关闭",
+  },
 ]
 Object.freeze(TEXT)

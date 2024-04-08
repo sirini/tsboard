@@ -50,11 +50,10 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
   const savePath = await makeSavePath("images")
 
   for (const image of param.images) {
-    const newSavePath = `${savePath}/${generateRandomID()}.webp`
+    const newSavePath = `${savePath}/${generateRandomID()}.avif`
     const tempFilePath = await saveUploadedFile(image, `./upload/temp/images`)
-    const minImageSize = TSBOARD.IMAGE.CONTENT_INSERT_SIZE
 
-    await resizeImage(tempFilePath, newSavePath, minImageSize)
+    await resizeImage(tempFilePath, newSavePath, TSBOARD.IMAGE.CONTENT_INSERT_SIZE)
     removeFile(tempFilePath)
 
     if ((await exists(newSavePath)) === true) {
@@ -174,24 +173,22 @@ export async function saveTags(boardUid: number, postUid: number, tags: string[]
 }
 
 // 첨부파일이 이미지 파일이면 썸네일도 생성하여 저장하기
-async function saveThumbnailImage(
+export async function saveThumbnailImage(
   fileUid: number,
   postUid: number,
   inputFilePath: string,
-  randID: string,
 ): Promise<void> {
   const thumbPath = await makeSavePath("thumbnails")
-  const thumbSavePath = `${thumbPath}/${randID}.webp`
-  await resizeImage(inputFilePath, thumbSavePath, 512)
+  const thumbSavePath = `${thumbPath}/t${generateRandomID()}.avif`
+  await resizeImage(inputFilePath, thumbSavePath, TSBOARD.IMAGE.THUMBNAIL_SIZE)
 
-  if ((await exists(thumbSavePath)) === true) {
-    const pathForThumbnail = thumbSavePath.slice(1)
-    await insert(`INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path) VALUES (?, ?, ?)`, [
-      fileUid,
-      postUid,
-      pathForThumbnail,
-    ])
-  }
+  const fullSavePath = `${thumbPath}/f${generateRandomID()}.avif`
+  await resizeImage(inputFilePath, fullSavePath, TSBOARD.IMAGE.FULL_SIZE)
+
+  await insert(
+    `INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path, full_path) VALUES (?, ?, ?, ?)`,
+    [fileUid, postUid, thumbSavePath.slice(1), fullSavePath.slice(1)],
+  )
 }
 
 // 입력받은 첨부파일들을 저장하기
@@ -203,19 +200,17 @@ export async function saveAttachments(
   const savePath = await makeSavePath("attachments")
   for (const file of files) {
     const ext = file.name.split(".").pop() || ""
-    const randID = generateRandomID()
-    const newSavePath = `${savePath}/${randID}.${ext}`
+    const newSavePath = `${savePath}/${generateRandomID()}.${ext}`
     await Bun.write(newSavePath, file)
 
     if ((await exists(newSavePath)) === true) {
-      const pathForAttachment = newSavePath.slice(1)
       const fileUid = await insert(
         `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) VALUES (?, ?, ?, ?, ?)`,
-        [boardUid, postUid, file.name, pathForAttachment, Date.now()],
+        [boardUid, postUid, file.name, newSavePath.slice(1), Date.now()],
       )
 
-      if (/(jpg|jpeg|png|bmp|webp|gif)/i.test(ext) === true) {
-        await saveThumbnailImage(fileUid, postUid, newSavePath, randID)
+      if (/(jpg|jpeg|png|bmp|webp|gif|avif)/i.test(ext) === true) {
+        await saveThumbnailImage(fileUid, postUid, newSavePath)
       }
     }
   }
@@ -294,13 +289,14 @@ export async function isAuthor(
 // 첨부파일이 이미지라면 썸네일도 삭제하기
 async function removeThumbnailFile(fileUid: number): Promise<void> {
   const [thumb] = await select(
-    `SELECT uid, path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
+    `SELECT uid, path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
     [fileUid],
   )
   if (!thumb) {
     return
   }
   removeFile(`.${thumb.path}`)
+  removeFile(`.${thumb.full_path}`)
   remove(`DELETE FROM ${table}file_thumbnail WHERE uid = ? LIMIT 1`, [thumb.uid])
 }
 
@@ -310,7 +306,7 @@ export async function removeAttachedFile(fileUid: number): Promise<void> {
   if (!file) {
     return
   }
-  if (/\.(jpg|jpeg|png|bmp|webp|gif)$/i.test(file.path) === true) {
+  if (/\.(jpg|jpeg|png|bmp|webp|gif|avif)$/i.test(file.path) === true) {
     removeThumbnailFile(fileUid)
   }
 

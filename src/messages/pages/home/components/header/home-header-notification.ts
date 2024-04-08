@@ -13,5 +13,9 @@ export const TEXT = [
     EMPTY: "No notifications to check.",
     TOOLTIP: "Check notifications for me",
   },
+  /* LANG.CN */ {
+    EMPTY: "没有通知可以查看。",
+    TOOLTIP: "为我检查通知",
+  },
 ]
 Object.freeze(TEXT)

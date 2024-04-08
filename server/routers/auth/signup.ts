@@ -14,12 +14,13 @@ import {
 } from "../../database/auth/signup"
 import { sendMail } from "../../util/sendmail"
 import { fail, success } from "../../util/tools"
-import { WELCOME } from "../../../src/messages/mail/welcome"
+import { TEXT } from "../../../src/messages/mail/welcome"
+import { LangType } from "../../../src/interface/home"
 
 export const signUp = new Elysia()
   .post(
     "/signup",
-    async ({ body: { email, password, name } }) => {
+    async ({ body: { email, password, name, lang } }) => {
       const response = {
         sendmail: false,
         target: 0,
@@ -44,7 +45,7 @@ export const signUp = new Elysia()
         return success(response)
       }
       // GMAIL 설정이 되어 있다면 인증 메일을 발송한다
-      const target = await sendVerificationMail(email, name)
+      const target = await sendVerificationMail(email, name, lang as LangType)
       return success({ sendmail: true, target })
     },
     {
@@ -52,6 +53,7 @@ export const signUp = new Elysia()
         email: t.String(),
         password: t.String(),
         name: t.String(),
+        lang: t.Numeric(),
       }),
     },
   )
@@ -88,12 +90,12 @@ export const signUp = new Elysia()
   )
   .post(
     "/verify",
-    async ({ body: { target, code, user } }) => {
+    async ({ body: { target, code, user, lang } }) => {
       const response = ""
       const result = await verify(target, code, user)
       if (result) {
-        const subject = WELCOME.SUBJECT.replaceAll("#name#", user.name)
-        const html = WELCOME.HTML.replaceAll("#name#", user.name)
+        const subject = TEXT[lang].SUBJECT.replaceAll("#name#", user.name)
+        const html = TEXT[lang].HTML.replaceAll("#name#", user.name)
         sendMail(user.email, subject, html)
         return success(response)
       }
@@ -108,6 +110,7 @@ export const signUp = new Elysia()
           name: t.String(),
           password: t.String(),
         }),
+        lang: t.Numeric(),
       }),
     },
   )

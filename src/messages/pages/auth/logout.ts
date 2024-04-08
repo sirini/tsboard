@@ -23,5 +23,14 @@ export const TEXT = [
     LOGIN: "Login",
     HOME: "Home",
   },
+  /* LANG.CN */ {
+    TITLE: "登出",
+    INFO: "您将会安全地登出。",
+    GOODBYE: "您已安全地登出。再见！",
+    HOWTO: "点击下面的登出按钮以安全地登出。",
+    LOGOUT: "登出",
+    LOGIN: "登录",
+    HOME: "首页",
+  },
 ]
 Object.freeze(TEXT)

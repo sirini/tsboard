@@ -4,7 +4,8 @@
  * 서버단에서 활용할 함수들 정의
  */
 
-import { unlinkSync } from "node:fs"
+import { rmdir, readdir, unlink, stat } from "node:fs/promises"
+import { join } from "node:path"
 import { JWTPayloadSpec } from "@elysiajs/jwt"
 import { Token } from "../../src/interface/auth"
 import { saveTokens } from "../database/auth/authorization"
@@ -117,10 +118,34 @@ export async function getUpdatedAccessToken(
 export async function removeFile(path: string): Promise<boolean> {
   const filepath = Bun.file(path)
   if ((await filepath.exists()) === true) {
-    unlinkSync(path)
+    await unlink(path)
     return true
   }
   return false
+}
+
+// 주어진 디렉토리 경로에 빈 디렉토리들을 제거하기
+export async function removeEmptyDir(directory: string): Promise<void> {
+  const files = await readdir(directory)
+  if (files.length > 0) {
+    await Promise.all(
+      files.map((file) => {
+        const fullPath = join(directory, file)
+        return stat(fullPath).then((stats) => {
+          if (stats.isDirectory()) {
+            return removeEmptyDir(fullPath)
+          }
+        })
+      }),
+    )
+
+    const filesAfter = await readdir(directory)
+    if (filesAfter.length == 0) {
+      await rmdir(directory)
+    }
+  } else {
+    await rmdir(directory)
+  }
 }
 
 // 업로드된 파일을 임시 경로에 잠깐 저장하기
@@ -150,13 +175,15 @@ export async function makeSavePath(target: string): Promise<string> {
 export async function resizeImage(
   inputPath: string,
   outputPath: string,
-  size: number,
+  width: number,
 ): Promise<void> {
   await sharp(inputPath)
-    .resize(size, size)
+    .resize({ width })
     .rotate()
     .withMetadata()
-    .toFormat("webp")
+    .toFormat("avif", {
+      quality: 90,
+    })
     .toFile(outputPath)
 }
 

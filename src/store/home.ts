@@ -48,6 +48,8 @@ export const useHomeStore = defineStore("home", () => {
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
   const lang = ref<LangType>(LANG.KO as LangType)
+  const langName = ref<string>("한국어")
+  const langIcon = ref<string>("mdi-syllabary-hangul")
   const color = ref({
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -254,16 +256,32 @@ export const useHomeStore = defineStore("home", () => {
     }
   }
 
+  // 선택한 언어의 이름과 대표 아이콘 반환
+  function updateLanguageInfo(): void {
+    if (lang.value === (LANG.EN as LangType)) {
+      langName.value = "English"
+      langIcon.value = "mdi-alphabetical-variant"
+    } else if (lang.value === (LANG.CN as LangType)) {
+      langName.value = "中文"
+      langIcon.value = "mdi-ideogram-cjk"
+    } else {
+      langName.value = "한국어"
+      langIcon.value = "mdi-syllabary-hangul"
+    }
+  }
+
   // 언어 변경하기
   function changeUserLanguage(type: LangType): void {
     lang.value = type
     window.localStorage.setItem(LANG_KEY, lang.value.toString())
+    updateLanguageInfo()
   }
 
   // 기존에 선택된 언어 불러오기
   function loadUserLanguage(): void {
     const type = window.localStorage.getItem(LANG_KEY) ?? "0"
     lang.value = parseInt(type) as LangType
+    updateLanguageInfo()
   }
 
   return {
@@ -281,6 +299,8 @@ export const useHomeStore = defineStore("home", () => {
     option,
     keyword,
     lang,
+    langName,
+    langIcon,
     color,
     coming,
     visit,

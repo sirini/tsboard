@@ -2,19 +2,19 @@
   <v-toolbar density="compact" class="write-editor-menu" :color="home.color.header">
     <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
       ><v-icon>mdi-format-bold</v-icon>
-      <v-tooltip activator="parent" location="top">글자 굵게</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].BOLD }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleItalic().run()"
       ><v-icon>mdi-format-italic</v-icon>
-      <v-tooltip activator="parent" location="top">글자 기울이기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ITALIC }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleStrike().run()"
       ><v-icon>mdi-format-strikethrough-variant</v-icon>
-      <v-tooltip activator="parent" location="top">취소선 그리기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].STRIKE }}</v-tooltip>
     </v-btn>
     <v-btn icon
       ><v-icon>mdi-format-header-1</v-icon>
-      <v-tooltip activator="parent" location="top">글 제목 레벨 지정</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HEADING }}</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list>
           <v-list-item
@@ -25,14 +25,14 @@
             <template v-slot:prepend>
               <v-icon>mdi-format-header-{{ level }}</v-icon>
             </template>
-            <v-list-item-title>글 제목 {{ level }}</v-list-item-title>
+            <v-list-item-title>H{{ level }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-btn>
     <v-btn icon v-bind="props"
       ><v-icon>mdi-palette</v-icon>
-      <v-tooltip activator="parent" location="top">글자 색상 지정</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].COLOR }}</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
           <v-list-item @click="editor?.chain().focus().setColor('#F44336').run()">
@@ -103,7 +103,9 @@
           <v-divider></v-divider>
           <v-list-item @click="editor?.chain().focus().unsetColor().run()">
             <v-list-item-title
-              ><span style="color: #000000">◼︎ 기본 (Black)</span></v-list-item-title
+              ><span style="color: #000000"
+                >◼︎ {{ TEXT[home.lang].DEFAULT }} (Black)</span
+              ></v-list-item-title
             >
           </v-list-item>
         </v-list>
@@ -112,28 +114,26 @@
 
     <v-btn icon>
       <v-icon>mdi-image</v-icon>
-      <v-tooltip activator="parent" location="top"
-        >이미지 추가 (직접 업로드 혹은 외부 링크)</v-tooltip
-      >
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ADD_IMAGE }}</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
           <v-list-item prepend-icon="mdi-image-plus" @click="editorImage.uploadImageDialog = true">
-            이미지 파일 직접 업로드
+            {{ TEXT[home.lang].UPLOAD_IMAGE }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-image-search-outline"
             @click="editorImage.addImageFromDBDialog = true"
           >
-            기존 이미지 추가/관리
+            {{ TEXT[home.lang].ADD_EXIST_IMAGE }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-link-variant-plus"
             @click="writeEditor.addImageURLDialog = true"
           >
-            외부 이미지 URL 추가
+            {{ TEXT[home.lang].ADD_EXTERNAL_IMAGE }}
           </v-list-item>
           <v-list-item prepend-icon="mdi-youtube" @click="writeEditor.addVideoURLDialog = true">
-            YouTube URL 추가
+            {{ TEXT[home.lang].ADD_YOUTUBE }}
           </v-list-item>
         </v-list>
       </v-menu>
@@ -141,69 +141,69 @@
 
     <v-btn icon>
       <v-icon>mdi-table</v-icon>
-      <v-tooltip activator="parent" location="top">표 (Table) 작업</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].TABLE }}</v-tooltip>
       <v-menu open-on-hover activator="parent">
         <v-list density="compact">
-          <v-list-item prepend-icon="mdi-table-plus" @click="writeEditor.addTableDialog = true"
-            >표 추가하기</v-list-item
-          >
+          <v-list-item prepend-icon="mdi-table-plus" @click="writeEditor.addTableDialog = true">{{
+            TEXT[home.lang].ADD_TABLE
+          }}</v-list-item>
           <v-list-item
             prepend-icon="mdi-table-column-plus-before"
             @click="editor?.chain().focus().addColumnBefore().run()"
-            >앞에 열(column) 추가하기</v-list-item
+            >{{ TEXT[home.lang].ADD_BEFORE_COLUMN }}</v-list-item
           >
           <v-list-item
             prepend-icon="mdi-table-column-plus-after"
             @click="editor?.chain().focus().addColumnAfter().run()"
-            >뒤에 열(column) 추가하기</v-list-item
+            >{{ TEXT[home.lang].ADD_AFTER_COLUMN }}</v-list-item
           >
           <v-list-item
             prepend-icon="mdi-table-column-remove"
             @click="editor?.chain().focus().deleteColumn().run()"
           >
-            열(column) 삭제하기
+            {{ TEXT[home.lang].REMOVE_COLUMN }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-row-plus-before"
             @click="editor?.chain().focus().addRowBefore().run()"
           >
-            위에 행(row) 추가하기
+            {{ TEXT[home.lang].ADD_BEFORE_ROW }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-row-plus-after"
             @click="editor?.chain().focus().addRowAfter().run()"
           >
-            아래에 행(row) 추가하기
+            {{ TEXT[home.lang].ADD_AFTER_ROW }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-row-remove"
             @click="editor?.chain().focus().deleteRow().run()"
           >
-            행(row) 삭제하기
+            {{ TEXT[home.lang].REMOVE_ROW }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-remove"
             @click="editor?.chain().focus().deleteTable().run()"
           >
-            표 삭제하기
+            {{ TEXT[home.lang].REMOVE_TABLE }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-merge-cells"
             @click="editor?.chain().focus().mergeCells().run()"
           >
-            셀 병합하기
+            {{ TEXT[home.lang].MERGE_CELL }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-split-cell"
             @click="editor?.chain().focus().splitCell().run()"
           >
-            셀 분리하기
+            {{ TEXT[home.lang].SPLIT_CELL }}
           </v-list-item>
           <v-list-item
             prepend-icon="mdi-table-edit"
             @click="editor?.chain().focus().toggleHeaderCell().run()"
           >
-            헤더로 변환 혹은 취소
+            {{ TEXT[home.lang].TOGGLE_HEADER_CELL }}
           </v-list-item>
         </v-list>
       </v-menu>
@@ -211,45 +211,45 @@
 
     <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()"
       ><v-icon>mdi-format-color-highlight</v-icon>
-      <v-tooltip activator="parent" location="top">글자 강조(하이라이트)</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HIGHLIGHT }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleCode().run()"
       ><v-icon>mdi-code-braces</v-icon>
-      <v-tooltip activator="parent" location="top">코드 표현하기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_LINE }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleCodeBlock().run()"
       ><v-icon>mdi-code-braces-box</v-icon>
-      <v-tooltip activator="parent" location="top">코드 블럭 지정</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_BLOCK }}</v-tooltip>
     </v-btn>
 
     <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()"
       ><v-icon>mdi-format-list-bulleted-type</v-icon>
-      <v-tooltip activator="parent" location="top">순서 없는 목록</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNORDER_LIST }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleOrderedList().run()"
       ><v-icon>mdi-format-list-numbered</v-icon>
-      <v-tooltip activator="parent" location="top">순서 있는 목록</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ORDER_LIST }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().toggleBlockquote().run()"
       ><v-icon>mdi-format-quote-open</v-icon>
-      <v-tooltip activator="parent" location="top">인용 문구</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].QUOTE }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().setHorizontalRule().run()"
       ><v-icon>mdi-minus</v-icon>
-      <v-tooltip activator="parent" location="top">가로 구분선</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HORIZONTAL_LINE }}</v-tooltip>
     </v-btn>
 
     <v-btn icon @click="editor?.chain().focus().undo().run()"
       ><v-icon>mdi-arrow-u-left-top</v-icon>
-      <v-tooltip activator="parent" location="top">방금 작업 취소하기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNDO }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().redo().run()"
       ><v-icon>mdi-arrow-u-right-top</v-icon>
-      <v-tooltip activator="parent" location="top">취소한 작업 되돌리기</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REDO }}</v-tooltip>
     </v-btn>
     <v-btn icon @click="editor?.chain().focus().unsetAllMarks().run()"
       ><v-icon>mdi-restore</v-icon>
-      <v-tooltip activator="parent" location="top">효과 취소</v-tooltip>
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNSET }}</v-tooltip>
     </v-btn>
   </v-toolbar>
 
@@ -273,6 +273,9 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onBeforeUnmount } from "vue"
+import { useBoardEditorStore } from "../../../store/board/editor"
+import { useEditorImageStore } from "../../../store/board/image"
+import { useHomeStore } from "../../../store/home"
 import { useEditor, EditorContent } from "@tiptap/vue-3"
 import StarterKit from "@tiptap/starter-kit"
 import Highlight from "@tiptap/extension-highlight"
@@ -295,9 +298,6 @@ import cpp from "highlight.js/lib/languages/cpp"
 import php from "highlight.js/lib/languages/php"
 import rs from "highlight.js/lib/languages/rust"
 import { all, createLowlight } from "lowlight"
-import { useBoardEditorStore } from "../../../store/board/editor"
-import { useEditorImageStore } from "../../../store/board/image"
-import { useHomeStore } from "../../../store/home"
 import { VideoURL, TableOption } from "../../../interface/editor"
 import BoardWriteEditorUploadImageDialog from "./BoardWriteEditorUploadImageDialog.vue"
 import BoardWriteEditorAddImageFromDBDialog from "./BoardWriteEditorAddImageFromDBDialog.vue"
@@ -305,6 +305,7 @@ import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue
 import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue"
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../../assets/board/editor.scss"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor"
 
 const writeEditor = useBoardEditorStore()
 const editorImage = useEditorImageStore()

@@ -11,5 +11,8 @@ export const TEXT = [
   /* LANG.EN */ {
     EMPTY: "No photos have been uploaded yet, or you do not have permission to view the list.",
   },
+  /* LANG.CN */ {
+    EMPTY: "还没有照片被上传，或者您没有权限查看列表。",
+  },
 ]
 Object.freeze(TEXT)

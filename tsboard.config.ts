@@ -6,7 +6,7 @@
 
 export const TSBOARD = {
   IS_DEVELOPING: false /* 개발중일 때 true */,
-  VERSION: "v0.8.12",
+  VERSION: "v0.8.14",
   SITE: {
     NAME: "tsboard.dev" /* 수정 필요 */,
     URL: "https://tsboard.dev" /* 수정 필요 */,
@@ -18,10 +18,12 @@ export const TSBOARD = {
     DEVELOPING: 3200,
     PRODUCTION: 3100 /* 가급적 수정하지 마세요 */,
   },
-  MAX_FILE_SIZE: 10247680 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
+  MAX_FILE_SIZE: 51238400 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
   IMAGE: {
     PROFILE_SIZE: 256 /* px */,
-    CONTENT_INSERT_SIZE: 512 /* px */,
+    CONTENT_INSERT_SIZE: 480 /* px */,
+    THUMBNAIL_SIZE: 504 /* px */,
+    FULL_SIZE: 2016 /* px, for gallery */,
   },
   JWT: {
     ACCESS_TIMEOUT: 30 /* minutes */,

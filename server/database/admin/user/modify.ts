@@ -64,7 +64,7 @@ async function removeOldProfile(userUid: number): Promise<void> {
 async function updateUserProfile(userUid: number, newProfile: File): Promise<string> {
   removeOldProfile(userUid)
   const savePath = await makeSavePath("profile")
-  const newSavePath = `${savePath}/${generateRandomID()}.webp`
+  const newSavePath = `${savePath}/${generateRandomID()}.avif`
   const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
 
   await resizeImage(tempFilePath, newSavePath, TSBOARD.IMAGE.PROFILE_SIZE)
@@ -85,14 +85,13 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
     ])
   }
 
-  let pathForProfile = ""
   if (param.profile !== undefined) {
     const newProfilePath = await updateUserProfile(param.userUid, param.profile)
     if (newProfilePath.length > 0) {
-      pathForProfile = newProfilePath.slice(1)
-      await update(`UPDATE ${table}user SET profile = '${pathForProfile}' WHERE uid = ? LIMIT 1`, [
-        param.userUid,
-      ])
+      await update(
+        `UPDATE ${table}user SET profile = '${newProfilePath.slice(1)}' WHERE uid = ? LIMIT 1`,
+        [param.userUid],
+      )
     }
   }
 

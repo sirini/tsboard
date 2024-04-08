@@ -10,21 +10,21 @@
         prepend-icon="mdi-login-variant"
         variant="text"
         @click="util.go('login')"
-        >로그인</v-btn
+        >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
         v-else
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
-        >내정보</v-btn
+        >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
         v-if="auth.user.admin"
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', list.id)"
-        >관리</v-btn
+        >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>
   </v-card-title>
@@ -43,6 +43,7 @@ import { useBoardListStore } from "../../../store/board/list"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/components/board/common/board-header"
 
 const auth = useAuthStore()
 const list = useBoardListStore()

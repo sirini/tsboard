@@ -23,5 +23,13 @@ export const TEXT = [
     GITHUB_TOOLTIP:
       "Check the TSBOARD README.md document on GitHub for installation instructions, precautions, and more!",
   },
+  /* LANG.CN */ {
+    TITLE: "什么是TSBOARD？",
+    SUMMARY: "它是一个完全基于TypeScript运行的社区构建器。",
+    FRONT: "前端围绕Vue和Vuetify构建。",
+    BACK: "后端由Bun、ElysiaJS和MySQL组成，稳定且快速。",
+    GITHUB: "访问Github",
+    GITHUB_TOOLTIP: "查看GitHub上的TSBOARD README.md文档，了解安装指南、注意事项等更多信息！",
+  },
 ]
 Object.freeze(TEXT)

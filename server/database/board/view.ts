@@ -198,11 +198,12 @@ export async function removePost(postUid: number): Promise<void> {
   }
   remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid])
 
-  const thumbs = await select(`SELECT path FROM ${table}file_thumbnail WHERE post_uid = ?`, [
+  const thumbs = await select(`SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`, [
     postUid,
   ])
   for (const thumb of thumbs) {
     removeFile(`.${thumb.path}`)
+    removeFile(`.${thumb.full_path}`)
   }
   remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid])
 }

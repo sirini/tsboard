@@ -17,5 +17,11 @@ export const TEXT = [
     SEND_REPORT: "Report",
     MANAGE_USER: "Manage User",
   },
+  /* LANG.CN */ {
+    SEE_INFO: "查看信息",
+    SEND_CHAT: "发送消息",
+    SEND_REPORT: "举报",
+    MANAGE_USER: "管理用户",
+  },
 ]
 Object.freeze(TEXT)

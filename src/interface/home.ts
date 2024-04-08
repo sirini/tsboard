@@ -12,8 +12,9 @@ export const LANG_KEY = "tsboardLanguage"
 export const LANG = {
   KO: 0,
   EN: 1,
+  CN: 2,
 }
-export type LangType = 0 | 1
+export type LangType = 0 | 1 | 2
 export type NoticeType = 0 | 1 | 2 | 3 | 4
 
 export type AddNoticeParams = {

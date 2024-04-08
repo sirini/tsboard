@@ -17,5 +17,11 @@ export const TEXT = [
     NO: "No, I will continue writing",
     YES: "Yes",
   },
+  /* LANG.CN */ {
+    TITLE: "确认",
+    INFO: "您将失去当前正在编写的所有内容。您是否要继续？",
+    NO: "不，我要继续编写",
+    YES: "是的",
+  },
 ]
 Object.freeze(TEXT)

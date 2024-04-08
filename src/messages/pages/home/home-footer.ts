@@ -17,5 +17,11 @@ export const TEXT = [
     LICENSE: "License",
     BUG_REPORT: "Bug report",
   },
+  /* LANG.CN */ {
+    HOME: "首页",
+    ABOUT: "关于我们",
+    LICENSE: "许可证",
+    BUG_REPORT: "错误报告",
+  },
 ]
 Object.freeze(TEXT)

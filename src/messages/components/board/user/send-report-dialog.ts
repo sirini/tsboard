@@ -29,5 +29,16 @@ export const TEXT = [
     CLOSE: "Close",
     SUBMIT: "Report to Administrator",
   },
+  /* LANG.CN */ {
+    TITLE: "举报",
+    INFO: "使用举报和拉黑功能。",
+    TARGET: "被举报用户",
+    BLACKLIST: "黑名单",
+    BLACKLIST_INFO: "加入黑名单的用户无法向我发送聊天消息或查看我创建的帖子。",
+    ADD_BLACKLIST: "将此用户添加到我的黑名单中：",
+    REPORT_CONTENT: "举报详情（请在1000个字符内写明）",
+    CLOSE: "关闭",
+    SUBMIT: "向管理员举报",
+  },
 ]
 Object.freeze(TEXT)

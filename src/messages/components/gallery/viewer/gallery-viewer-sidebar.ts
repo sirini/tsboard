@@ -13,5 +13,9 @@ export const TEXT = [
     CLOSE_TOOLTIP: "Click to close this window",
     LEAVE_COMMENT: "If you like the photo, please leave a comment!",
   },
+  /* LANG.CN */ {
+    CLOSE_TOOLTIP: "点击关闭此窗口",
+    LEAVE_COMMENT: "如果您喜欢这张照片，请留下评论！",
+  },
 ]
 Object.freeze(TEXT)

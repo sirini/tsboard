@@ -30,7 +30,6 @@ export type TableOption = {
 }
 
 export type UploadImageParams = CommonPairParam & {
-  sizeLimit: number
   images: File[]
 }
 

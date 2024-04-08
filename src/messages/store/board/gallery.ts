@@ -19,5 +19,12 @@ export const TEXT = [
     FAILED_LOAD_PHOTO: "Failed to load the photo.",
     LAST_PAGE: "These are the last photos.",
   },
+  /* LANG.CN */ {
+    NO_BOARD_ID: "看板ID不正确。这是一次无效的访问。",
+    NO_RESPONSE: "无法收到服务器的响应。请联系管理员。",
+    FAILED_LOAD_LIST: "加载照片列表失败。您可能没有权限查看。",
+    FAILED_LOAD_PHOTO: "加载照片失败。",
+    LAST_PAGE: "这些是最后的照片。",
+  },
 ]
 Object.freeze(TEXT)

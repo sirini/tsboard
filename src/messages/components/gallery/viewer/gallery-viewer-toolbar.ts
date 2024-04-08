@@ -27,5 +27,16 @@ export const TEXT = [
     REMOVE: "Remove this post",
     CLOSE: "Close",
   },
+  /* LANG.CN */ {
+    PREV_TOOLTIP: "查看上一张照片",
+    NEXT_TOOLTIP: "查看下一张照片",
+    RESET_IMAGE_TOOLTIP: "重置照片位置/大小",
+    ZOOMIN_TOOLTIP: "放大照片",
+    ZOOMOUT_TOOLTIP: "缩小照片",
+    LIKE_TOOLTIP: "喜欢这张照片",
+    MODIFY: "修改此帖子",
+    REMOVE: "删除此帖子",
+    CLOSE: "关闭",
+  },
 ]
 Object.freeze(TEXT)

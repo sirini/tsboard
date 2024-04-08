@@ -1,5 +1,5 @@
 /**
- * messages/components/gallery/common/gallery-header
+ * messages/components/board/common/board-header
  *
  * language pack
  */
@@ -12,7 +12,7 @@ export const TEXT = [
   },
   /* LANG.EN */ {
     LOGIN: "Login",
-    MYINFO: "My info",
+    MYINFO: "Myinfo",
     MANAGE: "Manage",
   },
   /* LANG.CN */ {

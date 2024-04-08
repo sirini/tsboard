@@ -9,7 +9,8 @@ import { generateRandomCode } from "../../util/tools"
 import { prepareVerificationCode } from "./verify"
 import { sendMail } from "../../util/sendmail"
 import { ChangePassword } from "../../../src/interface/auth"
-import { RESETPASSWORD } from "../../../src/messages/mail/resetpassword"
+import { TEXT } from "../../../src/messages/mail/resetpassword"
+import { LangType } from "../../../src/interface/home"
 
 // 이메일(아이디)로 회원 고유 번호 가져오기
 async function getUserUid(email: string): Promise<number> {
@@ -30,9 +31,9 @@ export async function isValidEmail(email: string): Promise<boolean> {
 }
 
 // GMAIL OAUTH 등록이 안되어 있을경우 사이트 관리자에게 쪽지 보내기
-export async function askResetPassword(email: string): Promise<void> {
+export async function askResetPassword(email: string, lang: LangType): Promise<void> {
   const fromUid = await getUserUid(email)
-  let message = RESETPASSWORD.CHAT.replaceAll("#fromUid#", fromUid.toString())
+  let message = TEXT[lang].CHAT.replaceAll("#fromUid#", fromUid.toString())
   message = message.replaceAll("#email#", email)
 
   await insert(
@@ -43,13 +44,13 @@ export async function askResetPassword(email: string): Promise<void> {
 }
 
 // 메일로 비밀번호 초기화 링크 전달하기
-export async function sendResetPassword(email: string): Promise<void> {
+export async function sendResetPassword(email: string, lang: LangType): Promise<void> {
   const code = generateRandomCode()
   const uid = await prepareVerificationCode(code, email)
-  let html = RESETPASSWORD.HTML.replaceAll("#uid#", uid.toString())
+  let html = TEXT[lang].HTML.replaceAll("#uid#", uid.toString())
   html = html.replaceAll("#code#", code)
 
-  await sendMail(email, RESETPASSWORD.SUBJECT, html)
+  await sendMail(email, TEXT[lang].SUBJECT, html)
 }
 
 // 비밀번호 변경하기

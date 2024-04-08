@@ -27,5 +27,16 @@ export const TEXT = [
     LIST: "List",
     UPLOAD: "Upload",
   },
+  /* LANG.CN */ {
+    PHOTO_TITLE: "标题",
+    CONTENT: "描述",
+    PHOTOGRAPHER: "所有者",
+    TAG: "标签",
+    FILL_SEARCH: "请输入搜索词",
+    SEARCH: "搜索",
+    PREV: "上一页",
+    LIST: "列表",
+    UPLOAD: "上传",
+  },
 ]
 Object.freeze(TEXT)

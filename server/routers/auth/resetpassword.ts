@@ -12,11 +12,12 @@ import {
   changePassword,
 } from "../../database/auth/resetpassword"
 import { fail, success } from "../../util/tools"
+import { LangType } from "../../../src/interface/home"
 
 export const resetPassword = new Elysia()
   .post(
     "/resetpassword",
-    async ({ body: { email } }) => {
+    async ({ body: { email, lang } }) => {
       const response = {
         sendmail: false,
       }
@@ -24,11 +25,12 @@ export const resetPassword = new Elysia()
       if ((await isValidEmail(email)) === false) {
         return fail(`Invalid email address.`, response)
       }
+
       if (process.env.GMAIL_APP_PASSWORD === undefined || process.env.GMAIL_APP_PASSWORD === "") {
-        await askResetPassword(email)
+        await askResetPassword(email, lang as LangType)
         return success(response)
       }
-      await sendResetPassword(email)
+      await sendResetPassword(email, lang as LangType)
       return success({
         sendmail: true,
       })
@@ -36,6 +38,7 @@ export const resetPassword = new Elysia()
     {
       body: t.Object({
         email: t.String(),
+        lang: t.Numeric(),
       }),
     },
   )

@@ -13,5 +13,9 @@ export const TEXT = [
     EMPTY: "No chat rooms have been created yet.",
     TOOLTIP: "Check chats for me",
   },
+  /* LANG.CN */ {
+    EMPTY: "还没有创建聊天室。",
+    TOOLTIP: "为我检查聊天",
+  },
 ]
 Object.freeze(TEXT)

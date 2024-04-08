@@ -1,19 +1,19 @@
 <template>
   <v-card-actions class="mt-3 mb-3">
     <v-btn prepend-icon="mdi-magnify"
-      >검색
+      >{{ TEXT[home.lang].SEARCH }}
       <v-menu activator="parent" :close-on-content-click="false">
         <board-list-search></board-list-search>
       </v-menu>
     </v-btn>
     <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.loadPrevPosts"
-      >이전</v-btn
+      >{{ TEXT[home.lang].PREV }}</v-btn
     >
     <v-btn
       append-icon="mdi-chevron-right"
       :disabled="list.page >= list.pageLength"
       @click="list.loadNextPosts"
-      >다음</v-btn
+      >{{ TEXT[home.lang].NEXT }}</v-btn
     >
 
     <v-spacer></v-spacer>
@@ -29,14 +29,14 @@
       prepend-icon="mdi-list-box-outline"
       @click="list.init"
       v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-      >목록</v-btn
+      >{{ TEXT[home.lang].LIST }}</v-btn
     >
     <v-btn
       prepend-icon="mdi-pencil"
       variant="text"
       @click="util.go('boardWrite', list.id)"
       :disabled="auth.user.uid < 1"
-      >글작성</v-btn
+      >{{ TEXT[home.lang].WRITE }}</v-btn
     >
   </v-card-actions>
 </template>
@@ -48,6 +48,7 @@ import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import BoardListSearch from "./BoardListSearch.vue"
 import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/pages/board/list"
 
 const auth = useAuthStore()
 const list = useBoardListStore()

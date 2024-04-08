@@ -13,5 +13,9 @@ export const TEXT = [
     LOGIN_TOOLTIP: "Go to the login page.",
     LOGOUT_TOOLTIP: "Go to the logout page.",
   },
+  /* LANG.CN */ {
+    LOGIN_TOOLTIP: "前往登录页面。",
+    LOGOUT_TOOLTIP: "前往登出页面。",
+  },
 ]
 Object.freeze(TEXT)

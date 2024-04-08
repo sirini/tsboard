@@ -21,5 +21,13 @@ export const TEXT = [
     LOGIN: "Login",
     CHANGE_PASSWORD: "Change Password",
   },
+  /* LANG.CN */ {
+    TITLE: "修改密码",
+    INFO: "在此处更改您的密码。",
+    FILL_PASSWORD: "请输入您的密码。",
+    AGAIN_PASSWORD: "请再次输入您的密码以确认。",
+    LOGIN: "登录",
+    CHANGE_PASSWORD: "修改密码",
+  },
 ]
 Object.freeze(TEXT)

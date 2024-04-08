@@ -53,7 +53,6 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         authorization: auth.user.token,
       },
       boardUid: boardUid.value,
-      sizeLimit: TSBOARD.IMAGE.CONTENT_INSERT_SIZE,
       images: files.value,
     })
 

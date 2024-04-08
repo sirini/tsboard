@@ -25,5 +25,14 @@ export const TEXT = [
     FAILED_REMOVE_POST: "Failed to delete the post.",
     REMOVED_POST: "The post has been deleted.",
   },
+  /* LANG.CN */ {
+    NO_BOARD_ID: "看板ID不正确。这是一次无效的访问。",
+    NO_RESPONSE: "无法收到服务器的响应。请联系管理员。",
+    FAILED_LOAD_POST: "加载帖子失败。您可能没有权限查看。",
+    FAILED_DOWNLOAD: "文件下载失败。您可能没有权限或积分不足。",
+    DOWNLOADED_FILE: "文件已成功下载。请检查您的下载文件夹。",
+    FAILED_REMOVE_POST: "删除帖子失败。",
+    REMOVED_POST: "帖子已被删除。",
+  },
 ]
 Object.freeze(TEXT)

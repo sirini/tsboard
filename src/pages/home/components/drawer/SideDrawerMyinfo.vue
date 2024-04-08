@@ -7,18 +7,21 @@
       :prepend-avatar="
         TSBOARD.PREFIX + (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
       "
+      append-icon="mdi-chevron-right"
     >
       <v-list-item-title>{{ auth.user.name }}</v-list-item-title>
       <v-list-item-subtitle class="email">{{ auth.user.id }}</v-list-item-subtitle>
       <v-tooltip activator="parent">{{ TEXT[home.lang].MODIFY_TOOLTIP }}</v-tooltip>
     </v-list-item>
-    <v-list-item class="text-center">
+
+    <v-list-item class="text-center mt-2">
       <v-chip color="blue-grey" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
         {{ auth.user.level }}
         <v-divider vertical class="ml-2 mr-2"></v-divider>
         {{ auth.user.point }}
       </v-chip>
     </v-list-item>
+
     <v-list-item v-if="auth.user.admin" class="message text-center"
       ><strong>{{ TEXT[home.lang].WELCOME_ADMIN }}</strong>
     </v-list-item>

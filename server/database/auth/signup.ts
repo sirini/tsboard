@@ -9,8 +9,9 @@ import { prepareVerificationCode } from "./verify"
 import { Signup } from "../../../src/interface/auth"
 import { generateRandomCode } from "../../util/tools"
 import { sendMail } from "../../util/sendmail"
-import { VERIFICATION } from "../../../src/messages/mail/verification"
+import { TEXT } from "../../../src/messages/mail/verification"
 import { TSBOARD } from "../../../tsboard.config"
+import { LangType } from "../../../src/interface/home"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
 export async function isDuplicatedEmail(email: string): Promise<boolean> {
@@ -33,12 +34,16 @@ export async function isDuplicatedName(userUid: number, name: string): Promise<b
 }
 
 // 이메일 인증 진행을 위해 메일 발송하기
-export async function sendVerificationMail(email: string, name: string): Promise<number> {
+export async function sendVerificationMail(
+  email: string,
+  name: string,
+  lang: LangType,
+): Promise<number> {
   const code = generateRandomCode()
   const uid = await prepareVerificationCode(code, email)
 
-  const subject = VERIFICATION.SUBJECT.replace("#name#", name)
-  let html = VERIFICATION.HTML.replaceAll("#name#", name)
+  const subject = TEXT[lang].SUBJECT.replace("#name#", name)
+  let html = TEXT[lang].HTML.replaceAll("#name#", name)
   html = html.replaceAll("#code#", code)
   html = html.replaceAll("#uid#", uid.toString())
 

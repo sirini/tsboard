@@ -9,7 +9,7 @@
         @click="view.like(!view.post.liked)"
       >
         {{ util.num(view.post.like) }}
-        <v-tooltip activator="parent">이 글에 좋아요 누르기</v-tooltip>
+        <v-tooltip activator="parent">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
       </v-chip>
 
       <user-nametag
@@ -26,14 +26,14 @@
         variant="text"
         @click="util.go('boardModify', view.id, view.postUid)"
         :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-        >수정</v-btn
+        >{{ TEXT[home.lang].MODIFY }}</v-btn
       >
       <v-btn
         prepend-icon="mdi-trash-can"
         variant="text"
         @click="view.openConfirmRemoveDialog"
         :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-        >삭제
+        >{{ TEXT[home.lang].REMOVE }}
       </v-btn>
     </template>
   </v-list-item>
@@ -43,9 +43,12 @@
 import { useBoardViewStore } from "../../../store/board/view"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../../components/user/UserNametag.vue"
+import { TEXT } from "../../../messages/pages/board/view"
 
 const view = useBoardViewStore()
 const auth = useAuthStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>

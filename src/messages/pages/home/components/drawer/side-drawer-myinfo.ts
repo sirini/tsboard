@@ -17,5 +17,11 @@ export const TEXT = [
     WELCOME_ADMIN: "Welcome, Admin!",
     WELCOME_USER: "Welcome, ",
   },
+  /* LANG.CN */ {
+    TITLE: "我的信息",
+    MODIFY_TOOLTIP: "点击此处以修改我的信息。",
+    WELCOME_ADMIN: "欢迎，管理员！",
+    WELCOME_USER: "欢迎，",
+  },
 ]
 Object.freeze(TEXT)

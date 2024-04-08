@@ -8,7 +8,7 @@
       <v-divider vertical v-if="view.config.useCategory" class="mr-2"></v-divider>
 
       <span class="mr-2 text-caption" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-        >작성: {{ util.date(view.post.submitted, true, true) }}</span
+        >{{ TEXT[home.lang].SUBMITTED }}: {{ util.date(view.post.submitted, true, true) }}</span
       >
 
       <v-divider
@@ -16,7 +16,7 @@
         v-if="view.post.modified > 0 && home.cols < TSBOARD.SCREEN.MOBILE.COLS"
       ></v-divider>
       <span class="ml-2 mr-2 text-caption" v-if="view.post.modified > 0"
-        >수정: {{ util.date(view.post.modified, true, true) }}</span
+        >{{ TEXT[home.lang].MODIFIED }}: {{ util.date(view.post.modified, true, true) }}</span
       >
     </template>
 
@@ -38,6 +38,7 @@ import { useBoardViewStore } from "../../../store/board/view"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/pages/board/view"
 
 const view = useBoardViewStore()
 const util = useUtilStore()
