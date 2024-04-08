@@ -58,7 +58,7 @@ async function remove(): Promise<void> {
   }
   to {
     backdrop-filter: blur(2px);
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.4);
   }
 }
 </style>

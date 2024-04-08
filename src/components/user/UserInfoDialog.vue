@@ -131,7 +131,7 @@ const util = useUtilStore()
     background: rgba(0, 0, 0, 0);
   }
   to {
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(2px);
     background: rgba(0, 0, 0, 0.2);
   }
 }

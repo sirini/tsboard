@@ -26,48 +26,9 @@
       </v-card>
     </v-list-item>
 
-    <v-list-item class="pt-2 pb-2">
-      <v-row no-gutters>
-        <v-col v-for="(thumb, index) in viewer.thumbnails" :key="index" cols="2">
-          <v-img
-            cover
-            height="80"
-            :src="TSBOARD.PREFIX + thumb"
-            :class="viewer.position === index ? 'selected' : 'deselected'"
-            @click="viewer.position = index"
-          ></v-img>
-        </v-col>
-      </v-row>
-    </v-list-item>
-
-    <v-list-item class="pt-2 pb-2">
-      <v-chip
-        label
-        prepend-icon="mdi-tag-outline"
-        class="mr-2 mb-2"
-        v-for="(tag, index) in viewer.tags"
-        :key="index"
-        >{{ tag.name }}</v-chip
-      >
-    </v-list-item>
-
-    <v-list-item class="pt-2 pb-2 info">
-      <v-icon class="mr-2">mdi-calendar</v-icon>
-      <span class="submitted">{{ util.date(viewer.post.submitted) }}</span>
-      <span v-if="viewer.post.modified > 0" class="modified pl-2 ml-2 mr-2">{{
-        util.date(viewer.post.modified)
-      }}</span>
-      <v-icon class="ml-4 mr-2">mdi-eye-outline</v-icon> {{ util.num(viewer.post.hit) }}
-
-      <template v-slot:append>
-        <user-nametag
-          :uid="viewer.post.writer.uid"
-          :name="viewer.post.writer.name"
-          :profile="viewer.post.writer.profile"
-          size="small"
-        ></user-nametag>
-      </template>
-    </v-list-item>
+    <gallery-viewer-sidebar-thumbnails></gallery-viewer-sidebar-thumbnails>
+    <gallery-viewer-sidebar-tag></gallery-viewer-sidebar-tag>
+    <gallery-viewer-sidebar-date-writer></gallery-viewer-sidebar-date-writer>
 
     <gallery-viewer-toolbar
       :postLike="viewer.post.like"
@@ -76,30 +37,7 @@
       :liked="viewer.post.liked"
     ></gallery-viewer-toolbar>
 
-    <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="(reply, index) in viewer.comments">
-      <gallery-viewer-comment
-        :commentUid="reply.uid"
-        :commentContent="reply.content"
-        :commentLike="reply.like"
-        :writerProfile="
-          TSBOARD.PREFIX +
-          (reply.writer.profile.length > 0 ? reply.writer.profile : '/no-profile.svg')
-        "
-        :writerUid="reply.writer.uid"
-        :writerName="reply.writer.name"
-        :liked="reply.liked"
-      ></gallery-viewer-comment>
-    </v-list-item>
-
-    <v-list-item class="pa-0 mt-2 ml-2 mr-2">
-      <v-textarea
-        v-model="comment.content"
-        variant="outlined"
-        auto-grow
-        hide-details
-        :placeholder="TEXT[home.lang].LEAVE_COMMENT"
-      ></v-textarea>
-    </v-list-item>
+    <gallery-viewer-sidebar-comment></gallery-viewer-sidebar-comment>
   </v-list>
 </template>
 
@@ -110,9 +48,11 @@ import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
-import GalleryViewerComment from "./GalleryViewerComment.vue"
-import UserNametag from "../../user/UserNametag.vue"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-sidebar"
+import GalleryViewerSidebarThumbnails from "./sidebar/GalleryViewerSidebarThumbnails.vue"
+import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
+import GalleryViewerSidebarDateWriter from "./sidebar/GalleryViewerSidebarDateWriter.vue"
+import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()

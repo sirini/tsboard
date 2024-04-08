@@ -25,7 +25,9 @@
         @click="like"
       >
         {{ commentLike }}
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
+        <v-tooltip activator="parent" location="top">{{
+          TEXT[home.lang].LIKE_COMMENT_TOOLTIP
+        }}</v-tooltip>
       </v-chip>
 
       <v-btn
@@ -68,7 +70,7 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../user/UserNametag.vue"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-comment"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
 const auth = useAuthStore()

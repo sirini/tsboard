@@ -53,6 +53,8 @@ export const useViewerStore = defineStore("viewer", () => {
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
   const bunch = ref<number>(100)
   const position = ref<number>(0)
+  const mobileColor = ref<string>("grey-darken-4")
+  const isViewContent = ref<boolean>(false)
   const textRule = [
     (value: any) => {
       if (value.length > 2) return true
@@ -278,6 +280,8 @@ export const useViewerStore = defineStore("viewer", () => {
     thumbnails,
     tags,
     position,
+    mobileColor,
+    isViewContent,
     textRule,
     loadPost,
     loadComments,

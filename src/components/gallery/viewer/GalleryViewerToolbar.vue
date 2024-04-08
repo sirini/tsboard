@@ -69,7 +69,7 @@ import { useBoardViewStore } from "../../../store/board/view"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-toolbar"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
 const view = useBoardViewStore()

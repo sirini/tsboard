@@ -50,7 +50,7 @@ function confirmCancel(): void {
     background: rgba(0, 0, 0, 0);
   }
   to {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(2px);
     background: rgba(0, 0, 0, 0.4);
   }
 }

@@ -34,7 +34,7 @@ export const TSBOARD = {
     SECURE: false,
   },
   API: {
-    DEVELOPING: "http://geunyul2.asuscomm.com" /* 기본 http://localhost */,
+    DEVELOPING: "http://localhost" /* 기본 http://localhost */,
     PRODUCTION: "https://tsboard.dev" /* 수정 필요 */,
   },
   /* 새 게시판 생성시 기본값 */

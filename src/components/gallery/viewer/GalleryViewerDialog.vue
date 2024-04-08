@@ -1,9 +1,13 @@
 <template>
   <v-dialog v-model="viewer.dialog" persistent>
-    <v-card>
+    <v-card rounded="xl">
       <v-layout>
         <v-main>
+          <gallery-viewer-sidebar-mobile-content
+            v-if="viewer.isViewContent"
+          ></gallery-viewer-sidebar-mobile-content>
           <v-img
+            v-else
             class="text-right"
             :src="TSBOARD.PREFIX + viewer.files.at(viewer.position)"
             @mousedown="viewer.mouseDown"
@@ -13,27 +17,10 @@
             @mouseleave="viewer.mouseLeave"
             id="tsboardViewerPreview"
           >
-            <v-btn
-              class="mt-2 mr-2 close"
-              icon
-              variant="tonal"
-              color="white"
-              elevation="0"
-              size="small"
-              v-if="home.cols > TSBOARD.SCREEN.PC.COLS"
-              @click="viewer.close"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
           </v-img>
-          <gallery-viewer-toolbar
-            v-if="home.cols > TSBOARD.SCREEN.PC.COLS"
-            :postLike="viewer.post.like"
-            :postUid="viewer.post.uid"
-            :writerUid="viewer.post.writer.uid"
-            :liked="viewer.post.liked"
-            color="blue-grey"
-          ></gallery-viewer-toolbar>
+          <gallery-viewer-sidebar-mobile-bottom
+            v-if="home.cols > TSBOARD.SCREEN.TABLET.COLS"
+          ></gallery-viewer-sidebar-mobile-bottom>
         </v-main>
 
         <v-navigation-drawer
@@ -69,7 +56,8 @@ import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerSidebar from "./GalleryViewerSidebar.vue"
-import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
+import GalleryViewerSidebarMobileContent from "./GalleryViewerSidebarMobileContent.vue"
+import GalleryViewerSidebarMobileBottom from "./GalleryViewerSidebarMobileBottom.vue"
 import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import ChatDialog from "../../user/ChatDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
@@ -77,7 +65,7 @@ import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 import BoardViewCommentWriteButton from "../../board/comment/BoardViewCommentWriteButton.vue"
 import "../../../assets/board/editor.scss"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer-toolbar"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const route = useRoute()
 const viewer = useViewerStore()
@@ -89,6 +77,7 @@ function prepare(): void {
     viewer.postUid = parseInt(route.params.no as string)
     viewer.loadPost()
     viewer.loadComments()
+    viewer.isViewContent = false
     home.setGridLayout()
   }
 }
@@ -124,7 +113,7 @@ watch(
 
 /** 다이얼로그 배경 조정 */
 .v-overlay--active {
-  animation: tsboardCustomOverlay 0.5s ease-in forwards;
+  animation: tsboardCustomOverlay 1s ease-in forwards;
 }
 @keyframes tsboardCustomOverlay {
   from {
@@ -133,7 +122,7 @@ watch(
   }
   to {
     backdrop-filter: blur(5px);
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.8);
   }
 }
 </style>
