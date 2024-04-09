@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="viewer.dialog" persistent>
-    <v-card rounded="xl">
+    <v-card rounded="0">
       <gallery-viewer-dialog-content v-if="viewer.isViewContent"></gallery-viewer-dialog-content>
       <gallery-viewer-dialog-image v-else></gallery-viewer-dialog-image>
     </v-card>
