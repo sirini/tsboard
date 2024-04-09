@@ -12,9 +12,7 @@
           <v-btn :value="SEARCH_OPTION.WRITER as SearchOption">{{
             TEXT[home.lang].PHOTOGRAPHER
           }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">{{
-            TEXT[home.lang].FILL_SEARCH
-          }}</v-btn>
+          <v-btn :value="SEARCH_OPTION.TAG as SearchOption">{{ TEXT[home.lang].TAG }}</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
