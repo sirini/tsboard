@@ -34,6 +34,7 @@ export const TSBOARD = {
     SECURE: false,
   },
   API: {
+    ACCESS_POINT: "/api",
     DEVELOPING: "http://geunyul2.asuscomm.com" /* 기본 http://localhost */,
     PRODUCTION: "https://tsboard.dev" /* 수정 필요 */,
   },
