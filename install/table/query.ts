@@ -15,7 +15,6 @@ const engineEncode = `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_gene
 
 export const tables: string[] = []
 export const inserts: string[] = []
-export const tests: string[] = []
 
 // 사용자 기본 정보 테이블, blocked = 1 일 경우 차단된 사용자
 tables.push(`${create} #db#user (

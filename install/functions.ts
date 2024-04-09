@@ -5,7 +5,7 @@
  */
 const fs = require("fs")
 import mysql from "mysql2/promise"
-import { tables, inserts, tests } from "./table/query"
+import { tables, inserts } from "./table/query"
 import { env, foundEnv } from "./messages"
 import chalk from "chalk"
 const log = console.log
@@ -186,12 +186,6 @@ export async function initDatabase(info: SetupInfo): Promise<boolean> {
   VALUES ('${info.admin.id}', 'Admin', SHA2('${
     info.admin.pw
   }', 256), '', 9, 0, '', ${Date.now()}, 0, 0)`)
-
-  // for test only
-  for (const sql of tests) {
-    const query = sql.replace("#db#", prefix)
-    await conn.execute(query)
-  }
 
   return true
 }
