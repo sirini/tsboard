@@ -29,6 +29,9 @@ ADMIN_PW=#adminpw#
 # 참고) https://velog.io/@seul06/nodemailer
 GMAIL_ID=yourgmailaddress@gmail.com
 GMAIL_APP_PASSWORD=
+
+# 구글 OAuth 클라이언트 비밀번호 (나머지 정보는 tsboard.config.ts > OAUTH.GOOGLE 참조)
+OAUTH_GOOGLE_PW=
 `
 
 const foundEnvTitle = `

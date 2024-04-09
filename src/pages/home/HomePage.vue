@@ -7,7 +7,7 @@
         <v-card class="mx-auto wrap app" elevation="0" rounded="0" :max-width="home.width">
           <v-row class="mt-3 mb-12">
             <v-col :cols="home.cols" v-if="home.isMobile || home.isTablet">
-              <v-card :color="home.color.header" class="pt-2 pb-2">
+              <v-card :color="home.color.header" class="pt-1 pb-1">
                 <home-header-search :is-small-screen="true"></home-header-search>
               </v-card>
             </v-col>

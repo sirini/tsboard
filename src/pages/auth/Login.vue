@@ -63,6 +63,26 @@
               }}</v-btn>
             </v-card-actions>
           </v-card>
+
+          <div class="oauth">
+            <div
+              id="g_id_onload"
+              :data-client_id="TSBOARD.OAUTH.GOOGLE.CLIENT_ID"
+              data-context="signin"
+              data-ux_mode="popup"
+              :data-login_uri="TSBOARD.OAUTH.GOOGLE.REDIRECT_URI"
+              data-auto_prompt="false"
+            ></div>
+
+            <div
+              class="g_id_signin"
+              data-type="icon"
+              data-shape="circle"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+            ></div>
+          </div>
         </v-container>
         <home-footer></home-footer>
       </v-main>
@@ -79,6 +99,7 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
+import { TSBOARD } from "../../../tsboard.config"
 
 const auth = useAuthStore()
 const util = useUtilStore()
@@ -102,5 +123,8 @@ const visible = ref<boolean>(false)
 .info {
   color: #cfd8dc;
   font-size: 0.7em;
+}
+.oauth {
+  text-align: center;
 }
 </style>

@@ -38,6 +38,15 @@ export const TSBOARD = {
     DEVELOPING: "http://localhost" /* 기본 http://localhost */,
     PRODUCTION: "https://tsboard.dev" /* 수정 필요 */,
   },
+  OAUTH: {
+    GOOGLE: {
+      REDIRECT_URI: "https://tsboard.dev/api/auth/google" /* tsboard.dev 도메인 교체 필요 */,
+      TOKEN_URI: "https://oauth2.googleapis.com/token",
+      USERINFO_URI: "https://www.googleapis.com/oauth2/v2/userinfo",
+      CLIENT_ID:
+        "480180821950-lf6c139j2g521t2fjistepaf7ibj1586.apps.googleusercontent.com" /* 구글 개발자 콘솔에서 클라이언트 ID 확인 후 교체 필요 */,
+    },
+  },
   /* 새 게시판 생성시 기본값 */
   BOARD: {
     ADMIN: 1 /* admin user uid */,

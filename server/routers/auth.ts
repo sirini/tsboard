@@ -10,7 +10,8 @@ import { signUp } from "./auth/signup"
 import { logout } from "./auth/logout"
 import { resetPassword } from "./auth/resetpassword"
 import { myInfo } from "./auth/myinfo"
+import { oauth } from "./auth/oauth"
 
 export const auth = new Elysia().group("/auth", (app) => {
-  return app.use(signIn).use(signUp).use(logout).use(resetPassword).use(myInfo)
+  return app.use(signIn).use(signUp).use(logout).use(resetPassword).use(myInfo).use(oauth)
 })
