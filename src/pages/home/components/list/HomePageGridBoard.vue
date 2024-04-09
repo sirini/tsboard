@@ -1,5 +1,5 @@
 <template>
-  <v-card rounded="xl" class="box" :color="home.color.header">
+  <v-card class="box" :color="home.color.header">
     <v-card-title class="post-title" @click="util.go('boardList', 'free')"
       ><v-icon class="mr-2">mdi-pin</v-icon> <strong>{{ board.name }}</strong></v-card-title
     >

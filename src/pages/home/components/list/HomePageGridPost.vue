@@ -1,6 +1,5 @@
 <template>
   <v-card
-    rounded="xl"
     class="box"
     @click="
       util.go(post.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen', post.id, post.uid)

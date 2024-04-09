@@ -4,7 +4,7 @@
     nav
     :width="viewer.drawerWidth"
     :location="viewer.drawerPosition"
-    v-if="home.cols < TSBOARD.SCREEN.TABLET.COLS"
+    v-if="home.isPC || home.isLarge"
   >
     <gallery-viewer-sidebar></gallery-viewer-sidebar>
     <board-view-comment-write-button></board-view-comment-write-button>
@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../../store/home"
-import { TSBOARD } from "../../../../../tsboard.config"
 import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 import GalleryViewerSidebar from "../GalleryViewerSidebar.vue"
 import BoardViewCommentWriteButton from "../../../../components/board/comment/BoardViewCommentWriteButton.vue"

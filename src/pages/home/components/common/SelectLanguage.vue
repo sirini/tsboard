@@ -12,7 +12,7 @@
     <v-divider></v-divider>
 
     <v-list-item
-      prepend-icon="mdi-alphabet-latin"
+      prepend-icon="mdi-alphabetical-variant"
       @click="home.changeUserLanguage(LANG.EN as LangType)"
     >
       English

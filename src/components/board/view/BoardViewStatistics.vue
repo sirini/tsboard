@@ -7,14 +7,11 @@
       >
       <v-divider vertical v-if="view.config.useCategory" class="mr-2"></v-divider>
 
-      <span class="mr-2 text-caption" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+      <span class="mr-2 text-caption" v-if="home.isMobile === false"
         >{{ TEXT[home.lang].SUBMITTED }}: {{ util.date(view.post.submitted, true, true) }}</span
       >
 
-      <v-divider
-        vertical
-        v-if="view.post.modified > 0 && home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-      ></v-divider>
+      <v-divider vertical v-if="view.post.modified > 0 && home.isMobile === false"></v-divider>
       <span class="ml-2 mr-2 text-caption" v-if="view.post.modified > 0"
         >{{ TEXT[home.lang].MODIFIED }}: {{ util.date(view.post.modified, true, true) }}</span
       >

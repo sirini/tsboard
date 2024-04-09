@@ -6,9 +6,9 @@
         <board-list-search></board-list-search>
       </v-menu>
     </v-btn>
-    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.loadPrevPosts"
-      >{{ TEXT[home.lang].PREV }}</v-btn
-    >
+    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.loadPrevPosts">{{
+      TEXT[home.lang].PREV
+    }}</v-btn>
     <v-btn
       append-icon="mdi-chevron-right"
       :disabled="list.page >= list.pageLength"
@@ -17,20 +17,14 @@
     >
 
     <v-spacer></v-spacer>
-    <v-chip
-      variant="tonal"
-      color="blue-grey-lighten-3"
-      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+    <v-chip variant="tonal" color="blue-grey-lighten-3" v-if="home.isMobile === false"
       >{{ list.page }} / {{ list.pageLength }}
     </v-chip>
-    <v-spacer v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-spacer>
+    <v-spacer v-if="home.isMobile === false"></v-spacer>
 
-    <v-btn
-      prepend-icon="mdi-list-box-outline"
-      @click="list.init"
-      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-      >{{ TEXT[home.lang].LIST }}</v-btn
-    >
+    <v-btn prepend-icon="mdi-list-box-outline" @click="list.init" v-if="home.isMobile === false">{{
+      TEXT[home.lang].LIST
+    }}</v-btn>
     <v-btn
       prepend-icon="mdi-pencil"
       variant="text"

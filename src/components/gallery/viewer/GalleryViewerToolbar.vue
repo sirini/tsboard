@@ -10,11 +10,7 @@
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>
 
-    <v-btn
-      icon
-      @click="viewer.isViewContent = !viewer.isViewContent"
-      v-if="home.cols > TSBOARD.SCREEN.TABLET.COLS"
-    >
+    <v-btn icon @click="viewer.isViewContent = !viewer.isViewContent" v-if="home.isMobile">
       <v-icon>mdi-swap-horizontal</v-icon>
       <v-tooltip activator="parent">{{
         viewer.isViewContent ? TEXT[home.lang].VIEW_PHOTO : TEXT[home.lang].VIEW_CONTENT

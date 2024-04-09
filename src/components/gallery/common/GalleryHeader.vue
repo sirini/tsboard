@@ -1,7 +1,7 @@
 <template>
   <v-card-title class="pt-3 pb-3"
     >{{ gallery.config.name }}
-    <span class="info ml-3 pl-3" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS">{{
+    <span class="info ml-3 pl-3" v-if="home.isMobile === false">{{
       util.unescape(gallery.config.info)
     }}</span>
     <div class="login">

@@ -1,9 +1,7 @@
 <template>
   <v-card-title class="list-title"
     >{{ util.unescape(name) }}
-    <span class="info ml-3 pl-3" v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS">
-      {{ util.unescape(info) }}</span
-    >
+    <span class="info ml-3 pl-3" v-if="home.isMobile === false"> {{ util.unescape(info) }}</span>
     <div class="login">
       <v-btn
         v-if="auth.user.uid < 1"

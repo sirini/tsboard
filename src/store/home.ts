@@ -47,6 +47,10 @@ export const useHomeStore = defineStore("home", () => {
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
+  const isMobile = ref<boolean>(false)
+  const isTablet = ref<boolean>(false)
+  const isPC = ref<boolean>(true)
+  const isLarge = ref<boolean>(false)
   const lang = ref<LangType>(LANG.KO as LangType)
   const langName = ref<string>("한국어")
   const langIcon = ref<string>("mdi-syllabary-hangul")
@@ -94,28 +98,38 @@ export const useHomeStore = defineStore("home", () => {
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
     width.value = window.innerWidth - Math.floor(window.innerWidth / 20)
+    isMobile.value = false
+    isTablet.value = false
+    isPC.value = false
+    isLarge.value = false
+
     if (window.innerWidth < TSBOARD.SCREEN.MOBILE.WIDTH) {
       cols.value = TSBOARD.SCREEN.MOBILE.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
+      isMobile.value = true
     } else if (
       window.innerWidth >= TSBOARD.SCREEN.MOBILE.WIDTH &&
       window.innerWidth < TSBOARD.SCREEN.TABLET.WIDTH
     ) {
       cols.value = TSBOARD.SCREEN.TABLET.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
+      isTablet.value = true
     } else if (
       window.innerWidth >= TSBOARD.SCREEN.TABLET.WIDTH &&
       window.innerWidth < TSBOARD.SCREEN.PC.WIDTH
     ) {
       cols.value = TSBOARD.SCREEN.PC.COLS
+      isPC.value = true
     } else if (
       window.innerWidth >= TSBOARD.SCREEN.PC.WIDTH &&
       window.innerWidth < TSBOARD.SCREEN.LARGE.WIDTH
     ) {
       cols.value = TSBOARD.SCREEN.LARGE.COLS
+      isLarge.value = true
     } else {
       cols.value = TSBOARD.SCREEN.LARGE.COLS
       width.value = TSBOARD.SCREEN.LARGE.WIDTH - 50
+      isLarge.value = true
     }
   }
 
@@ -298,6 +312,10 @@ export const useHomeStore = defineStore("home", () => {
     latestPosts,
     option,
     keyword,
+    isMobile,
+    isTablet,
+    isPC,
+    isLarge,
     lang,
     langName,
     langIcon,

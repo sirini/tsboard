@@ -18,7 +18,7 @@
         :writerUid="viewer.post.writer.uid"
         :liked="viewer.post.liked"
         :color="viewer.mobileColor"
-        v-if="home.cols > TSBOARD.SCREEN.TABLET.COLS"
+        v-if="home.isMobile"
       ></gallery-viewer-toolbar>
     </v-main>
 

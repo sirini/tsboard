@@ -1,66 +1,76 @@
 <template>
-  <v-card elevation="0" rounded="0" width="600" :color="home.color.header">
-    <v-row no-gutters>
-      <v-col cols="2" class="mr-3">
-        <v-text-field
-          v-model="optionTitle"
-          hide-details
-          variant="plain"
-          density="compact"
-          readonly
-          append-inner-icon="mdi-chevron-down"
-        >
-          <v-menu activator="parent" open-on-hover>
-            <v-list>
-              <v-list-item
-                @click="selectSearchOption(SEARCH_OPTION.TITLE as SearchOption)"
-                :class="home.option === (SEARCH_OPTION.TITLE as SearchOption) ? 'selected' : ''"
-                >{{ TEXT[home.lang].TITLE }}
-                <template
-                  v-slot:append
-                  v-if="home.option === (SEARCH_OPTION.TITLE as SearchOption)"
-                >
-                  <v-icon>mdi-check</v-icon>
-                </template>
-              </v-list-item>
+  <v-card
+    elevation="0"
+    rounded="0"
+    :width="isSmallScreen ? home.width : 500"
+    :color="home.color.header"
+  >
+    <v-list :bg-color="home.color.header">
+      <v-list-item>
+        <template v-slot:prepend>
+          <v-text-field
+            v-model="optionTitle"
+            hide-details
+            variant="outlined"
+            density="compact"
+            class="mr-2"
+            readonly
+            append-inner-icon="mdi-chevron-down"
+          >
+            <v-menu activator="parent">
+              <v-list>
+                <v-list-item
+                  @click="selectSearchOption(SEARCH_OPTION.TITLE as SearchOption)"
+                  :class="home.option === (SEARCH_OPTION.TITLE as SearchOption) ? 'selected' : ''"
+                  >{{ TEXT[home.lang].TITLE }}
+                  <template
+                    v-slot:append
+                    v-if="home.option === (SEARCH_OPTION.TITLE as SearchOption)"
+                  >
+                    <v-icon>mdi-check</v-icon>
+                  </template>
+                </v-list-item>
 
-              <v-list-item
-                @click="selectSearchOption(SEARCH_OPTION.CONTENT as SearchOption)"
-                :class="home.option === (SEARCH_OPTION.CONTENT as SearchOption) ? 'selected' : ''"
-                >{{ TEXT[home.lang].CONTENT }}
-                <template
-                  v-slot:append
-                  v-if="home.option === (SEARCH_OPTION.CONTENT as SearchOption)"
-                >
-                  <v-icon>mdi-check</v-icon>
-                </template>
-              </v-list-item>
+                <v-list-item
+                  @click="selectSearchOption(SEARCH_OPTION.CONTENT as SearchOption)"
+                  :class="home.option === (SEARCH_OPTION.CONTENT as SearchOption) ? 'selected' : ''"
+                  >{{ TEXT[home.lang].CONTENT }}
+                  <template
+                    v-slot:append
+                    v-if="home.option === (SEARCH_OPTION.CONTENT as SearchOption)"
+                  >
+                    <v-icon>mdi-check</v-icon>
+                  </template>
+                </v-list-item>
 
-              <v-list-item
-                @click="selectSearchOption(SEARCH_OPTION.WRITER as SearchOption)"
-                :class="home.option === (SEARCH_OPTION.WRITER as SearchOption) ? 'selected' : ''"
-                >{{ TEXT[home.lang].WRITER }}
-                <template
-                  v-slot:append
-                  v-if="home.option === (SEARCH_OPTION.WRITER as SearchOption)"
-                >
-                  <v-icon>mdi-check</v-icon>
-                </template>
-              </v-list-item>
+                <v-list-item
+                  @click="selectSearchOption(SEARCH_OPTION.WRITER as SearchOption)"
+                  :class="home.option === (SEARCH_OPTION.WRITER as SearchOption) ? 'selected' : ''"
+                  >{{ TEXT[home.lang].WRITER }}
+                  <template
+                    v-slot:append
+                    v-if="home.option === (SEARCH_OPTION.WRITER as SearchOption)"
+                  >
+                    <v-icon>mdi-check</v-icon>
+                  </template>
+                </v-list-item>
 
-              <v-list-item
-                @click="selectSearchOption(SEARCH_OPTION.TAG as SearchOption)"
-                :class="home.option === (SEARCH_OPTION.TAG as SearchOption) ? 'selected' : ''"
-                >{{ TEXT[home.lang].TAG }}
-                <template v-slot:append v-if="home.option === (SEARCH_OPTION.TAG as SearchOption)">
-                  <v-icon>mdi-check</v-icon>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-text-field>
-      </v-col>
-      <v-col>
+                <v-list-item
+                  @click="selectSearchOption(SEARCH_OPTION.TAG as SearchOption)"
+                  :class="home.option === (SEARCH_OPTION.TAG as SearchOption) ? 'selected' : ''"
+                  >{{ TEXT[home.lang].TAG }}
+                  <template
+                    v-slot:append
+                    v-if="home.option === (SEARCH_OPTION.TAG as SearchOption)"
+                  >
+                    <v-icon>mdi-check</v-icon>
+                  </template>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-text-field>
+        </template>
+
         <v-text-field
           v-model="home.keyword"
           hide-details
@@ -79,11 +89,9 @@
             <v-icon>mdi-restore</v-icon>
           </v-tooltip>
         </v-text-field>
-      </v-col>
-    </v-row>
+      </v-list-item>
+    </v-list>
   </v-card>
-
-  <v-spacer></v-spacer>
 </template>
 
 <script setup lang="ts">
@@ -94,6 +102,9 @@ import { TEXT } from "../../../../messages/pages/home/components/header/home-hea
 
 const home = useHomeStore()
 const optionTitle = ref<string>(TEXT[home.lang].TITLE)
+const props = defineProps<{
+  isSmallScreen: boolean
+}>()
 
 // 검색 옵션 선택하기
 function selectSearchOption(option: SearchOption): void {

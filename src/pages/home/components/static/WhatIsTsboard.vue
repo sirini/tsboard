@@ -1,5 +1,5 @@
 <template>
-  <v-card rounded="xl" class="box" :color="home.color.header">
+  <v-card class="box" :color="home.color.header">
     <v-card-title class="post-title"
       ><v-icon class="mr-2">mdi-pin</v-icon>
       <strong>{{ TEXT[home.lang].TITLE }}</strong></v-card-title

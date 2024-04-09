@@ -58,7 +58,7 @@
 
                   <template v-slot:append>
                     <user-nametag
-                      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
+                      v-if="home.isMobile === false"
                       :uid="post.writer.uid"
                       :name="post.writer.name"
                       :profile="post.writer.profile"
@@ -67,12 +67,10 @@
                     <span class="col no text-center"
                       ><v-icon size="small">mdi-eye-outline</v-icon> {{ util.num(post.hit) }}</span
                     >
-                    <v-divider vertical v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-divider>
-                    <span
-                      class="col date text-center"
-                      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-                      >{{ util.date(post.submitted) }}</span
-                    >
+                    <v-divider vertical v-if="home.isMobile === false"></v-divider>
+                    <span class="col date text-center" v-if="home.isMobile === false">{{
+                      util.date(post.submitted)
+                    }}</span>
                   </template>
                 </v-list-item>
               </v-list>

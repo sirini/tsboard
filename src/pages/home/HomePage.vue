@@ -5,8 +5,14 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-card class="mx-auto wrap app" elevation="0" rounded="0" :max-width="home.width">
-          <v-row class="mt-6 mb-12">
-            <v-col :cols="home.cols">
+          <v-row class="mt-3 mb-12">
+            <v-col :cols="home.cols" v-if="home.isMobile || home.isTablet">
+              <v-card :color="home.color.header" class="pt-2 pb-2">
+                <home-header-search :is-small-screen="true"></home-header-search>
+              </v-card>
+            </v-col>
+
+            <v-col :cols="home.cols" v-if="home.isMobile === false">
               <what-is-tsboard></what-is-tsboard>
             </v-col>
 
@@ -39,6 +45,7 @@ import WhatIsTsboard from "./components/static/WhatIsTsboard.vue"
 import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
 import HomePageGridBoard from "./components/list/HomePageGridBoard.vue"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
+import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 
 const home = useHomeStore()
 onMounted(() => home.loadLatestPosts())

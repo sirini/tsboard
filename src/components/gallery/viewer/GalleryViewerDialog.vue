@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { watch } from "vue"
 import { useRoute } from "vue-router"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../store/home"
@@ -29,7 +29,6 @@ import "../../../assets/board/editor.scss"
 const route = useRoute()
 const viewer = useViewerStore()
 const home = useHomeStore()
-const imageHeight = ref<number>(500)
 
 // 뷰어 다이얼로그 데이터 준비
 function prepare(): void {

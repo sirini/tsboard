@@ -5,19 +5,21 @@
       <v-app-bar-title
         @click="home.coming"
         class="title"
-        :class="home.cols > TSBOARD.SCREEN.TABLET.COLS ? 'mobile-title' : ''"
+        :class="home.isMobile ? 'mobile-title' : ''"
       >
         <div>TSBOARD<span>.dev</span></div>
       </v-app-bar-title>
 
-      <v-spacer v-if="home.cols >= TSBOARD.SCREEN.TABLET.COLS"></v-spacer>
-      <home-header-search v-else-if="route.name === 'home'"></home-header-search>
+      <v-spacer v-if="home.isMobile || home.isTablet"></v-spacer>
+      <home-header-search
+        :is-small-screen="false"
+        v-else-if="route.name === 'home'"
+      ></home-header-search>
+      <v-spacer v-if="home.isPC || home.isLarge"></v-spacer>
 
-      <home-header-select-language
-        v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-      ></home-header-select-language>
+      <home-header-select-language v-if="home.isMobile === false"></home-header-select-language>
       <home-header-login></home-header-login>
-      <home-header-chat v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></home-header-chat>
+      <home-header-chat v-if="home.isMobile === false"></home-header-chat>
       <home-header-notification></home-header-notification>
     </v-toolbar>
 

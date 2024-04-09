@@ -11,14 +11,10 @@
     }}</v-btn>
 
     <v-spacer></v-spacer>
-    <v-chip
-      variant="tonal"
-      color="blue-grey-lighten-3"
-      v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"
-    >
+    <v-chip variant="tonal" color="blue-grey-lighten-3" v-if="home.isMobile === false">
       {{ gallery.page }} / {{ gallery.pageLength }}
     </v-chip>
-    <v-spacer v-if="home.cols < TSBOARD.SCREEN.MOBILE.COLS"></v-spacer>
+    <v-spacer v-if="home.isMobile === false"></v-spacer>
 
     <v-btn prepend-icon="mdi-list-box-outline" @click="gallery.list">{{
       TEXT[home.lang].LIST
