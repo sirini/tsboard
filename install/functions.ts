@@ -162,6 +162,7 @@ export async function initDatabase(info: SetupInfo): Promise<boolean> {
       host: info.db.host,
       user: info.db.user,
       password: info.db.pass,
+      socketPath: info.db.sock,
     })
   } catch (e) {
     console.table(info.db)
