@@ -10,7 +10,11 @@
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>
 
-    <v-btn icon @click="viewer.isViewContent = !viewer.isViewContent">
+    <v-btn
+      icon
+      @click="viewer.isViewContent = !viewer.isViewContent"
+      v-if="home.cols > TSBOARD.SCREEN.TABLET.COLS"
+    >
       <v-icon>mdi-swap-horizontal</v-icon>
       <v-tooltip activator="parent">{{
         viewer.isViewContent ? TEXT[home.lang].VIEW_PHOTO : TEXT[home.lang].VIEW_CONTENT
@@ -79,6 +83,7 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const viewer = useViewerStore()
 const view = useBoardViewStore()
