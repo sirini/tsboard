@@ -147,7 +147,7 @@ export function saveEnvFile(info: SetupInfo): void {
 }
 
 // 데이터터베이스 및 테이블 추가하기 진행
-export async function initDatabase(info: SetupInfo): Promise<void> {
+export async function initDatabase(info: SetupInfo): Promise<boolean> {
   let conn: any = null
   try {
     conn = await mysql.createConnection({
@@ -163,7 +163,8 @@ export async function initDatabase(info: SetupInfo): Promise<void> {
         "bun setup.ts",
       )} 를 실행해 주세요!`,
     )
-    return
+    console.log(`\n\n[DEBUG] Error: ${e}\n\n`)
+    return false
   }
   await conn.execute(
     `CREATE DATABASE IF NOT EXISTS ${info.db.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
@@ -191,4 +192,6 @@ export async function initDatabase(info: SetupInfo): Promise<void> {
     const query = sql.replace("#db#", prefix)
     await conn.execute(query)
   }
+
+  return true
 }

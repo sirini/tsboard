@@ -32,7 +32,10 @@ if (
 
 saveEnvFile(info)
 console.log(install)
-await initDatabase(info)
+const result = await initDatabase(info)
+if (result === false) {
+  process.exit(0)
+}
 
 let message = complete.replace("#dbname#", info.db.name)
 message = message.replace("#dbprefix#", info.db.prefix)
