@@ -4,26 +4,18 @@
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].PREV_TOOLTIP }}</v-tooltip>
     </v-btn>
+
     <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.files.length">
       <v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>
-    <v-btn icon @click="viewer.reset">
-      <v-icon>mdi-reload</v-icon>
-      <v-tooltip activator="parent" location="top">{{
-        TEXT[home.lang].RESET_IMAGE_TOOLTIP
-      }}</v-tooltip>
-    </v-btn>
-    <v-btn icon @click="viewer.zoomIn">
-      <v-icon>mdi-magnify-expand</v-icon>
-      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ZOOMIN_TOOLTIP }}</v-tooltip>
-    </v-btn>
-    <v-btn icon @click="viewer.zoomOut">
-      <v-icon>mdi-arrow-collapse</v-icon>
-      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ZOOMOUT_TOOLTIP }}</v-tooltip>
-    </v-btn>
 
-    <v-spacer></v-spacer>
+    <v-btn icon @click="viewer.isViewContent = !viewer.isViewContent">
+      <v-icon>mdi-swap-horizontal</v-icon>
+      <v-tooltip activator="parent">{{
+        viewer.isViewContent ? TEXT[home.lang].VIEW_PHOTO : TEXT[home.lang].VIEW_CONTENT
+      }}</v-tooltip></v-btn
+    >
 
     <v-chip
       pill
@@ -35,10 +27,24 @@
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
     </v-chip>
 
+    <v-spacer></v-spacer>
+
     <v-btn icon @click="isOpenMenu = !isOpenMenu">
       <v-icon>mdi-dots-vertical</v-icon>
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
         <v-list density="compact">
+          <v-list-item prepend-icon="mdi-reload" @click="viewer.reset">{{
+            TEXT[home.lang].RESET_IMAGE
+          }}</v-list-item>
+
+          <v-list-item prepend-icon="mdi-magnify-expand" @click="viewer.zoomIn">{{
+            TEXT[home.lang].ZOOMIN
+          }}</v-list-item>
+
+          <v-list-item prepend-icon="mdi-arrow-collapse" @click="viewer.zoomOut">{{
+            TEXT[home.lang].ZOOMOUT
+          }}</v-list-item>
+
           <v-list-item
             prepend-icon="mdi-pencil"
             @click="util.go('galleryModify', viewer.id, viewer.postUid)"
@@ -46,6 +52,7 @@
           >
             {{ TEXT[home.lang].MODIFY }}
           </v-list-item>
+
           <v-list-item
             prepend-icon="mdi-trash-can"
             @click="remove"
@@ -53,11 +60,13 @@
           >
             {{ TEXT[home.lang].REMOVE }}
           </v-list-item>
-          <v-list-item @click="viewer.close" prepend-icon="mdi-close">{{
-            TEXT[home.lang].CLOSE
-          }}</v-list-item>
         </v-list>
       </v-menu>
+    </v-btn>
+
+    <v-btn icon @click="viewer.close"
+      ><v-icon>mdi-close</v-icon>
+      <v-tooltip activator="parent">{{ TEXT[home.lang].CLOSE_TOOLTIP }}</v-tooltip>
     </v-btn>
   </v-toolbar>
 </template>

@@ -25,7 +25,7 @@
     }}</v-btn>
     <v-btn
       prepend-icon="mdi-upload"
-      @click="util.go('boardWrite', gallery.id)"
+      @click="util.go('galleryWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
       >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >

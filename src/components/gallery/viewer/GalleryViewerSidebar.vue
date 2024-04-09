@@ -9,14 +9,6 @@
       :title="util.unescape(viewer.post.title)"
       :subtitle="util.unescape(viewer.post.writer.name)"
     >
-      <template v-slot:append>
-        <v-btn icon @click="viewer.close" elevation="0"
-          ><v-icon>mdi-close</v-icon>
-          <v-tooltip activator="parent" location="top">{{
-            TEXT[home.lang].CLOSE_TOOLTIP
-          }}</v-tooltip>
-        </v-btn>
-      </template>
     </v-list-item>
     <v-divider></v-divider>
 
