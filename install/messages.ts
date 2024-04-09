@@ -4,6 +4,7 @@
  * 설치 실행 시 보여줄 메시지들 모음, 콘솔 화면에 출력을 위해 chalk 사용
  */
 import chalk from "chalk"
+import { TSBOARD } from "../tsboard.config"
 
 export const env = `#
 # TSBOARD 서버쪽 설정 파일
@@ -15,6 +16,7 @@ DB_USER=#dbuser#
 DB_PASS=#dbpass#
 DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
+DB_SOCK=#dbsock#
 
 # JWT 설정
 JWT_SECRET_KEY=#jwtsecret#
@@ -46,7 +48,7 @@ const welcomeTitle = `
  \\__|___/_.__/ \\___/ \\__,_|_|  \\__,_|`
 export const welcome = `${chalk.cyan.bold(welcomeTitle)}
 
-v0.8.0 | tsboard.dev | ${chalk.gray("Currently only available in Korean.")}
+${TSBOARD.VERSION} | tsboard.dev
 
 ✓ TSBOARD 설치 화면에 오신 것을 환영합니다!
   이 프로그램 설치를 위해 아래 Github 페이지에서 
@@ -93,5 +95,33 @@ ${chalk.bold("이제 거의 다 왔습니다.")}\n
 
 ${chalk.bgBlack.bold("https://github.com/sirini/tsboard")}
 
-혹은, 도움이 필요할땐 언제든지 ${chalk.yellow.bold("tsboard.dev")} 에 방문해 주세요!\n
+혹은, 도움이 필요할땐 언제든지 ${chalk.yellow.bold("tsboard.dev")} 에 방문해 주세요!
+
+---------
+Thanks to
+---------
+
+TSBOARD exists thanks to the wonderful results created by various open source communities. 
+We extend our unreserved praise to all the open source communities 
+that have contributed to the projects listed below.
+
+MySQL(MariaDB)
+Node.js
+Bun
+ElysiaJS
+mysql2
+Sharp
+Nodemailer
+Vite
+Vue
+Vuetify
+Vue Router
+Pinia
+Tiptap
+Crypto-js
+Highlight.js
+Sanitize-html
+nanoid
+Chalk
+...and TypeScript!
 `

@@ -30,15 +30,16 @@ export function checkEnvFile(): void {
   }
 }
 
-export interface DBInfo {
+export type DBInfo = {
   host: string
   user: string
   pass: string
   name: string
   prefix: string
+  sock: string
 }
 
-export interface SetupInfo {
+export type SetupInfo = {
   db: DBInfo
   admin: {
     id: string
@@ -55,6 +56,7 @@ export function getSetupInformation(): SetupInfo {
     pass: "",
     name: "",
     prefix: "",
+    sock: "",
   }
   let admin = {
     id: "",
@@ -68,6 +70,9 @@ export function getSetupInformation(): SetupInfo {
     db.pass = prompt(`DB 비밀번호 입력 :`) ?? ""
     db.name = prompt(`DB 데이터베이스명 (기본 → ${chalk.yellow("tsboard")}) :`) ?? "tsboard"
     db.prefix = prompt(`테이블명의 앞머리 글자 지정 (기본 → ${chalk.yellow("tsb_")}) :`) ?? "tsb_"
+    db.sock =
+      prompt(`mysqld.sock 파일 경로 (기본 → ${chalk.yellow("/var/run/mysqld/mysqld.sock")}) :`) ??
+      "/var/run/mysqld/mysqld.sock"
 
     log(`\n다음으로, 관리자 아이디(이메일)와 비밀번호를 입력해 주세요!\n`)
     admin.id =
@@ -87,6 +92,7 @@ export function getSetupInformation(): SetupInfo {
         db.user === "" ||
         db.pass === "" ||
         db.name === "" ||
+        db.sock === "" ||
         admin.id === "" ||
         admin.pw === ""
       ) {
@@ -104,6 +110,7 @@ export function getSetupInformation(): SetupInfo {
         pass: "",
         name: "",
         prefix: "",
+        sock: "",
       }
       admin = {
         id: "",
@@ -139,6 +146,7 @@ export function saveEnvFile(info: SetupInfo): void {
   uEnv = uEnv.replace("#dbpass#", info.db.pass)
   uEnv = uEnv.replace("#dbname#", info.db.name)
   uEnv = uEnv.replace("#dbprefix#", info.db.prefix)
+  uEnv = uEnv.replace("#dbsock#", info.db.sock)
   uEnv = uEnv.replace("#jwtsecret#", jwtSecret)
   uEnv = uEnv.replace("#adminid#", info.admin.id)
   uEnv = uEnv.replace("#adminpw#", info.admin.pw)

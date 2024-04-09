@@ -19,6 +19,7 @@ if (
   info.db.user === "" ||
   info.db.pass === "" ||
   info.db.name === "" ||
+  info.db.sock === "" ||
   info.admin.id === "" ||
   info.admin.pw === ""
 ) {
