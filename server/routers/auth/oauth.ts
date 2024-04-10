@@ -107,8 +107,5 @@ export const oauth = new Elysia()
     if (googleUserInfo.value.length < 1) {
       return fail(`User information from Google is not available.`, response)
     }
-
-    console.log(googleUserInfo.value) // DEBUG
-
     return success(googleUserInfo.value)
   })
