@@ -20,7 +20,7 @@ import {
   saveUploadedFile,
 } from "../../util/tools"
 import { exists } from "node:fs/promises"
-import { TSBOARD } from "../../../tsboard.config"
+import { SIZE } from "../../../tsboard.config"
 
 // 글작성 레벨 제한 가져오기
 export async function getWriteLevel(boardUid: number): Promise<number> {
@@ -53,7 +53,7 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
     const newSavePath = `${savePath}/${generateRandomID()}.avif`
     const tempFilePath = await saveUploadedFile(image, `./upload/temp/images`)
 
-    await resizeImage(tempFilePath, newSavePath, TSBOARD.IMAGE.CONTENT_INSERT_SIZE)
+    await resizeImage(tempFilePath, newSavePath, SIZE.CONTENT_INSERT)
     removeFile(tempFilePath)
 
     if ((await exists(newSavePath)) === true) {
@@ -180,10 +180,10 @@ export async function saveThumbnailImage(
 ): Promise<void> {
   const thumbPath = await makeSavePath("thumbnails")
   const thumbSavePath = `${thumbPath}/t${generateRandomID()}.avif`
-  await resizeImage(inputFilePath, thumbSavePath, TSBOARD.IMAGE.THUMBNAIL_SIZE)
+  await resizeImage(inputFilePath, thumbSavePath, SIZE.THUMBNAIL)
 
   const fullSavePath = `${thumbPath}/f${generateRandomID()}.avif`
-  await resizeImage(inputFilePath, fullSavePath, TSBOARD.IMAGE.FULL_SIZE)
+  await resizeImage(inputFilePath, fullSavePath, SIZE.FULL)
 
   await insert(
     `INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path, full_path) VALUES (?, ?, ?, ?)`,

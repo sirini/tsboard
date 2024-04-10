@@ -25,6 +25,7 @@
 import { useUtilStore } from "../../../store/util"
 import { useAdminStore } from "../../../store/admin/common"
 import { useHomeStore } from "../../../store/home"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const admin = useAdminStore()

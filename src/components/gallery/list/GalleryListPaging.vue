@@ -34,7 +34,6 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import GalleryListSearch from "./GalleryListSearch.vue"
-import { TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 
 const gallery = useGalleryStore()

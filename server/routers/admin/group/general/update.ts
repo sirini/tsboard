@@ -13,7 +13,7 @@ import {
   createBoard,
 } from "../../../../database/admin/group/general/update"
 import { CREATE_BOARD_RESULT } from "../../../../database/admin/group/general/const"
-import { TSBOARD } from "../../../../../tsboard.config"
+import { NEW_BOARD } from "../../../../../tsboard.config"
 
 export const update = new Elysia()
   .use(
@@ -115,10 +115,10 @@ export const update = new Elysia()
       return success({
         newAccessToken,
         uid: newBoardUid,
-        name: TSBOARD.BOARD.NAME,
-        info: TSBOARD.BOARD.INFO,
+        name: NEW_BOARD.NAME,
+        info: NEW_BOARD.INFO,
         manager: {
-          uid: TSBOARD.BOARD.ADMIN,
+          uid: NEW_BOARD.ADMIN,
           name: "Admin",
         },
       })

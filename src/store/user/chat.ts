@@ -13,9 +13,10 @@ import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/user/chat"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useChatStore = defineStore("chat", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()

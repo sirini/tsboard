@@ -16,9 +16,10 @@ import { useCommentSaveStore } from "./comment/save"
 import { Comment } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/comment"
 import { PAGING_DIRECTION } from "../../../server/database/board/const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useCommentStore = defineStore("comment", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()

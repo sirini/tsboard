@@ -7,7 +7,7 @@
         class="title"
         :class="home.isMobile ? 'mobile-title' : ''"
       >
-        <div>TSBOARD<span>.dev</span></div>
+        <div>{{ TSBOARD.SITE.NAME }}</div>
       </v-app-bar-title>
 
       <v-spacer v-if="home.isMobile || home.isTablet"></v-spacer>
@@ -30,13 +30,13 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import { useHomeStore } from "../../store/home"
-import { TSBOARD } from "../../../tsboard.config"
 import ChatDialog from "../../components/user/ChatDialog.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import HomeHeaderSelectLanguage from "./components/header/HomeHeaderSelectLanguage.vue"
 import HomeHeaderLogin from "./components/header/HomeHeaderLogin.vue"
 import HomeHeaderChat from "./components/header/HomeHeaderChat.vue"
 import HomeHeaderNotification from "./components/header/HomeHeaderNotification.vue"
+import { TSBOARD } from "../../../tsboard.config"
 
 const route = useRoute()
 const home = useHomeStore()

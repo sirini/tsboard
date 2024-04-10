@@ -14,9 +14,10 @@ import { INIT_USER_BASIC, UserBasicInfo, UserPermissionParams } from "../../inte
 import { useAuthStore } from "./auth"
 import { TEXT } from "../../messages/store/user/user"
 import { INIT_PERMISSION } from "./const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useManageUserStore = defineStore("manageuser", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()

@@ -18,12 +18,12 @@ export const TEXT = [
 직접 비밀번호를 변경하실 수 있습니다.<br />
 <br />
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
-&middot; 링크 : <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}changepassword/#uid#/#code#" target="_blank">여기를 눌러 비밀번호 초기화 하기!</a>
+&middot; 링크 : <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/changepassword/#uid#/#code#" target="_blank">여기를 눌러 비밀번호 초기화 하기!</a>
 </div>
 <br />
 From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
     CHAT: `[resetpassword] 비밀번호 초기화 요청 (회원 번호: #fromUid# / 아이디: #email#)
-관리 화면에서 비밀번호를 임시로 초기화 해주세요. (${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}admin/member/#fromUid#)  
+관리 화면에서 비밀번호를 임시로 초기화 해주세요. (${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/admin/member/#fromUid#)  
 이후 초기화한 비밀번호를 #email# (으)로 전달해 주세요!
 `,
   },
@@ -38,12 +38,12 @@ If you did request a password reset, you can change your password using the rese
 <br />
 
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
-&middot; Link : <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}changepassword/#uid#/#code#" target="_blank">Click here to reset your password!</a>
+&middot; Link : <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/changepassword/#uid#/#code#" target="_blank">Click here to reset your password!</a>
 </div>
 <br />
 From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
     CHAT: `[resetpassword] Password reset request (Member ID: #fromUid# / Email: #email#)
-Please temporarily reset the password from the admin panel. (${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}admin/member/#fromUid#)  
+Please temporarily reset the password from the admin panel. (${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/admin/member/#fromUid#)  
 Then, send the newly reset password to #email#!
 `,
   },
@@ -58,12 +58,12 @@ Then, send the newly reset password to #email#!
 <br />
 
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
-&middot; 链接 : <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}changepassword/#uid#/#code#" target="_blank">点击此处重置您的密码！</a>
+&middot; 链接 : <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/changepassword/#uid#/#code#" target="_blank">点击此处重置您的密码！</a>
 </div>
 <br />
 来自 <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; 由 tsboard.dev 提供技术支持</span>`,
     CHAT: `[resetpassword] 密码重置请求 (会员ID: #fromUid# / 电子邮箱: #email#)
-请暂时从管理面板重置密码。 (${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}admin/member/#fromUid#)  
+请暂时从管理面板重置密码。 (${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/admin/member/#fromUid#)  
 然后，将新重置的密码发送给 #email#！
 `,
   },

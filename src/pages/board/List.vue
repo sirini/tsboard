@@ -102,7 +102,6 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import { CONTENT_STATUS } from "../../interface/board"
-import { TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/pages/board/list"
 
 const list = useBoardListStore()

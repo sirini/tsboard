@@ -14,9 +14,10 @@ import { useHomeStore } from "../home"
 import { User } from "../../interface/auth"
 import { TEXT } from "../../messages/store/user/auth"
 import { INIT_USER, USER_INFO_KEY } from "./const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useAuthStore = defineStore("auth", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const home = useHomeStore()
   const password = ref<string>("")
@@ -108,6 +109,29 @@ export const useAuthStore = defineStore("auth", () => {
     }, 1000)
   }
 
+  // 구글 OAuth 로그인 이후 결과 받아오기
+  async function loadGoogleUserInfo(): Promise<void> {
+    const response = await server.api.auth.google.userinfo.get()
+
+    if (!response.data) {
+      util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
+      return
+    }
+    if (response.data.success === false) {
+      util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+      return
+    }
+
+    user.value = response.data.result
+    if (user.value) {
+      window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
+    }
+    util.success(`${TEXT[home.lang].WELCOME_USER}, ${user.value.name}!`, 2000)
+    setTimeout(() => {
+      util.go("home")
+    }, 1000)
+  }
+
   // 사용자 로그아웃 하기
   async function logout(): Promise<void> {
     const token = user.value.token
@@ -194,6 +218,7 @@ export const useAuthStore = defineStore("auth", () => {
     passwordRule,
     nameRule,
     login,
+    loadGoogleUserInfo,
     logout,
     updateMyInfo,
     selectProfileImage,

@@ -15,10 +15,11 @@ import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { PERMISSION } from "../../../messages/store/admin/board/permission"
 import { BOARD_PERMISSION } from "../../../../server/database/admin/group/general/const"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()

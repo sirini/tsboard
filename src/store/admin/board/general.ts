@@ -14,10 +14,11 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const confirmRemoveCategoryDialog = ref<boolean>(false)

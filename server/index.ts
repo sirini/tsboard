@@ -17,7 +17,7 @@ const app = new Elysia()
   .group(TSBOARD.API.ACCESS_POINT, (app) => {
     return app.use(auth).use(admin).use(home).use(user).use(board)
   })
-  .listen(TSBOARD.IS_DEVELOPING ? TSBOARD.PORT.DEVELOPING : TSBOARD.PORT.PRODUCTION)
+  .listen(TSBOARD.SITE.API_PORT)
 
 export type App = typeof app
 

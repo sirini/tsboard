@@ -11,7 +11,7 @@ import { saveTokens } from "../../database/auth/authorization"
 import { Token } from "../../../src/interface/auth"
 import { fail, success } from "../../util/tools"
 import { INIT_USER } from "../../database/auth/const"
-import { TSBOARD } from "../../../tsboard.config"
+import { AUTH } from "../../../tsboard.config"
 
 export const signIn = new Elysia()
   .use(
@@ -39,10 +39,10 @@ export const signIn = new Elysia()
         access: await jwt.sign({
           uid: user.uid,
           id: user.id,
-          signin: user.signin + TSBOARD.JWT.ACCESS_TIMEOUT * 1000 * 60,
+          signin: user.signin + AUTH.JWT.ACCESS_TIMEOUT * 1000 * 60,
         }),
         refresh: await jwt.sign({
-          signin: user.signin + TSBOARD.JWT.REFRESH_TIMEOUT * 1000 * 60 * 60 * 24,
+          signin: user.signin + AUTH.JWT.REFRESH_TIMEOUT * 1000 * 60 * 60 * 24,
         }),
       }
       user.token = token.access
@@ -54,8 +54,8 @@ export const signIn = new Elysia()
         value: token.refresh,
         maxAge: 86400 * 14,
         path: "/",
-        httpOnly: TSBOARD.COOKIE.HTTP_ONLY,
-        secure: TSBOARD.COOKIE.SECURE,
+        httpOnly: AUTH.COOKIE.HTTP_ONLY,
+        secure: AUTH.COOKIE.SECURE,
       })
 
       return success({ user })

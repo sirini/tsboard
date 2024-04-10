@@ -15,9 +15,10 @@ import { useHomeStore } from "../home"
 import { BoardConfig, Pair, Post, SEARCH_OPTION, SearchOption } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/list"
 import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/database/board/const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardListStore = defineStore("boardList", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()

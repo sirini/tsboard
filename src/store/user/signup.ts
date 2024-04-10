@@ -14,13 +14,14 @@ import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/user/auth"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useSignupStore = defineStore("signup", () => {
   const router = useRouter()
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const verificationCode = ref<string>("")
   const loading = ref<boolean>(false)
 

@@ -16,10 +16,10 @@ import { TEXT } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
 import { BOARD_TYPE, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { BOARD_CONFIG } from "../../../server/database/board/const"
-import { TSBOARD } from "../../../tsboard.config"
+import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -234,10 +234,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       files.value.map((file) => {
         totalSize += file.size
       })
-      if (TSBOARD.MAX_FILE_SIZE < totalSize) {
-        util.error(
-          `${TEXT[home.lang].EXCEED_FILESIZE_LIMIT} (limit: ${util.num(TSBOARD.MAX_FILE_SIZE)})`,
-        )
+      if (SIZE.MAX_FILE < totalSize) {
+        util.error(`${TEXT[home.lang].EXCEED_FILESIZE_LIMIT} (limit: ${util.num(SIZE.MAX_FILE)})`)
         return false
       }
     }

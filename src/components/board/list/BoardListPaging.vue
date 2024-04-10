@@ -41,7 +41,6 @@ import { useUtilStore } from "../../../store/util"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import BoardListSearch from "./BoardListSearch.vue"
-import { TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/list"
 
 const auth = useAuthStore()

@@ -24,7 +24,6 @@ export const visit = new Elysia()
   .get("/tsboard", async () => {
     return {
       version: TSBOARD.VERSION,
-      mode: TSBOARD.IS_DEVELOPING ? "Development" : "Production",
       license: "MIT license (https://tsboard.dev/license)",
       git: "https://github.com/sirini/tsboard",
       tsboard: "https://tsboard.dev",

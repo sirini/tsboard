@@ -14,12 +14,13 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { POINT } from "../../../messages/store/admin/board/point"
 import { INIT_POINT_CONFIG } from "../../../../server/database/admin/board/point/const"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const board = ref<AdminPoint>(INIT_POINT_CONFIG)
   const boardView = ref<string>("0")
   const boardWrite = ref<string>("0")

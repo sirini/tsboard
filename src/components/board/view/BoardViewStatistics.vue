@@ -34,7 +34,6 @@
 import { useBoardViewStore } from "../../../store/board/view"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/view"
 
 const view = useBoardViewStore()

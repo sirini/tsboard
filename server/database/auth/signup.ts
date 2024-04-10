@@ -10,7 +10,7 @@ import { Signup } from "../../../src/interface/auth"
 import { generateRandomCode } from "../../util/tools"
 import { sendMail } from "../../util/sendmail"
 import { TEXT } from "../../../src/messages/mail/verification"
-import { TSBOARD } from "../../../tsboard.config"
+import { NEW_MEMBER } from "../../../tsboard.config"
 import { LangType } from "../../../src/interface/home"
 
 // 이미 등록된 이메일인지 확인하기 (true -> 이미 등록됨)
@@ -78,8 +78,8 @@ export async function addNewUser(user: Signup): Promise<boolean> {
       user.name,
       user.password,
       "",
-      TSBOARD.MEMBER.LEVEL,
-      TSBOARD.MEMBER.POINT,
+      NEW_MEMBER.LEVEL,
+      NEW_MEMBER.POINT,
       "",
       Date.now(),
       0,

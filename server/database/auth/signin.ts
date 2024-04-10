@@ -10,7 +10,7 @@ import { INIT_USER } from "./const"
 import { SHA256 } from "crypto-js"
 import { generateRandomID, makeSavePath } from "../../util/tools"
 import sharp from "sharp"
-import { TSBOARD } from "../../../tsboard.config"
+import { SIZE } from "../../../tsboard.config"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
 export async function userSignIn(id: string, password: string): Promise<User> {
@@ -63,10 +63,7 @@ async function saveGoogleProfile(pictureUri: string): Promise<string> {
     const savePath = await makeSavePath("profile")
     const newSavePath = `${savePath}/${generateRandomID()}.avif`
 
-    await sharp(buffer)
-      .resize({ width: TSBOARD.IMAGE.PROFILE_SIZE })
-      .toFormat("avif")
-      .toFile(newSavePath)
+    await sharp(buffer).resize({ width: SIZE.PROFILE }).toFormat("avif").toFile(newSavePath)
 
     return newSavePath
   } catch (e) {
@@ -77,15 +74,37 @@ async function saveGoogleProfile(pictureUri: string): Promise<string> {
 
 // OAuth 로그인 시 등록이 안되었으면 등록하고, 이미 등록되었다면 고유 번호 반환
 export async function registerUser(id: string, name: string, pictureUri: string): Promise<number> {
-  const [user] = await select(`SELECT uid FROM ${table}user WHERE id = ? LIMIT 1`, [id])
+  let userUid = 0
+  const [user] = await select(`SELECT uid, profile FROM ${table}user WHERE id = ? LIMIT 1`, [id])
+
   if (!user) {
     const profile = await saveGoogleProfile(pictureUri)
-    const insertId = await insert(
+    userUid = await insert(
       `INSERT INTO ${table}user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, name, SHA256(generateRandomID()).toString(), profile, 1, 100, "", Date.now(), 0, 0],
+      [
+        id,
+        name,
+        SHA256(generateRandomID()).toString(),
+        profile.slice(1),
+        1,
+        100,
+        "",
+        Date.now(),
+        0,
+        0,
+      ],
     )
-    return insertId
+  } else {
+    userUid = user.uid
+    if (user.profile.length < 1 && pictureUri.length > 0) {
+      const profile = await saveGoogleProfile(pictureUri)
+      await update(`UPDATE ${table}user SET profile = ? WHERE uid = ? LIMIT 1`, [
+        profile.slice(1),
+        user.uid,
+      ])
+    }
   }
-  return user.uid
+
+  return userUid
 }

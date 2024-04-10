@@ -15,9 +15,10 @@ import { UserModifyResult } from "../../../interface/auth"
 import { MODIFY } from "../../../messages/store/admin/user/modify"
 import { SHA256 } from "crypto-js"
 import { USER_INFO } from "./const"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()

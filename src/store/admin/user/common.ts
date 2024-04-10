@@ -8,13 +8,14 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
-import { AdminUser, AdminPair, AdminReport } from "../../../interface/admin"
+import { AdminUser, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { COMMON } from "../../../messages/store/admin/user/common"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminUserStore = defineStore("adminUser", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const blockUserTarget = ref<AdminPair>({ uid: 0, name: "" })

@@ -9,19 +9,19 @@ export const TEXT = [
     HOME: "첫화면",
     ABOUT: "사이트 소개",
     LICENSE: "라이선스",
-    BUG_REPORT: "버그 신고",
+    POLICY: "정책",
   },
   /* LANG.EN */ {
     HOME: "Home",
     ABOUT: "About",
     LICENSE: "License",
-    BUG_REPORT: "Bug report",
+    POLICY: "Policy",
   },
   /* LANG.CN */ {
     HOME: "首页",
     ABOUT: "关于我们",
     LICENSE: "许可证",
-    BUG_REPORT: "错误报告",
+    POLICY: "政策",
   },
 ]
 Object.freeze(TEXT)

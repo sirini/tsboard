@@ -40,7 +40,6 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useBoardListStore } from "../../../store/board/list"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/board/common/board-header"
 
 const auth = useAuthStore()

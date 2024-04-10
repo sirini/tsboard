@@ -13,9 +13,10 @@ import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { AdminLatestPost } from "../../../interface/admin"
 import { POST } from "../../../messages/store/admin/latest/post"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()

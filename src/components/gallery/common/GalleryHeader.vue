@@ -42,7 +42,6 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/gallery/common/gallery-header"
 
 const auth = useAuthStore()

@@ -12,13 +12,9 @@
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">{{
           TEXT[home.lang].LICENSE
         }}</v-btn>
-        <v-btn
-          color="grey"
-          class="mx-2"
-          rounded="xl"
-          @click="util.open('https://github.com/sirini/tsboard/issues')"
-          >{{ TEXT[home.lang].BUG_REPORT }}</v-btn
-        >
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('policy')">{{
+          TEXT[home.lang].POLICY
+        }}</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>

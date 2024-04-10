@@ -26,10 +26,10 @@ import {
 import { NOTICE_TYPE } from "../../server/database/board/const"
 import { TEXT } from "../messages/store/home"
 import { SEARCH_OPTION, SearchOption } from "../interface/board"
-import { TSBOARD } from "../../tsboard.config"
+import { SCREEN, TSBOARD } from "../../tsboard.config"
 
 export const useHomeStore = defineStore("home", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -38,10 +38,10 @@ export const useHomeStore = defineStore("home", () => {
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
   const sidebarWidth = ref<number>(300)
-  const width = ref<number>(TSBOARD.SCREEN.PC.WIDTH)
-  const staticWidth = ref<number>(TSBOARD.SCREEN.TABLET.WIDTH)
+  const width = ref<number>(SCREEN.PC.WIDTH)
+  const staticWidth = ref<number>(SCREEN.TABLET.WIDTH)
   const dialogWidth = ref<number>(600)
-  const cols = ref<number>(TSBOARD.SCREEN.PC.COLS)
+  const cols = ref<number>(SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(16)
   const latestPosts = ref<PostItem[]>([])
@@ -103,32 +103,26 @@ export const useHomeStore = defineStore("home", () => {
     isPC.value = false
     isLarge.value = false
 
-    if (window.innerWidth < TSBOARD.SCREEN.MOBILE.WIDTH) {
-      cols.value = TSBOARD.SCREEN.MOBILE.COLS
+    if (window.innerWidth < SCREEN.MOBILE.WIDTH) {
+      cols.value = SCREEN.MOBILE.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
       isMobile.value = true
     } else if (
-      window.innerWidth >= TSBOARD.SCREEN.MOBILE.WIDTH &&
-      window.innerWidth < TSBOARD.SCREEN.TABLET.WIDTH
+      window.innerWidth >= SCREEN.MOBILE.WIDTH &&
+      window.innerWidth < SCREEN.TABLET.WIDTH
     ) {
-      cols.value = TSBOARD.SCREEN.TABLET.COLS
+      cols.value = SCREEN.TABLET.COLS
       width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
       isTablet.value = true
-    } else if (
-      window.innerWidth >= TSBOARD.SCREEN.TABLET.WIDTH &&
-      window.innerWidth < TSBOARD.SCREEN.PC.WIDTH
-    ) {
-      cols.value = TSBOARD.SCREEN.PC.COLS
+    } else if (window.innerWidth >= SCREEN.TABLET.WIDTH && window.innerWidth < SCREEN.PC.WIDTH) {
+      cols.value = SCREEN.PC.COLS
       isPC.value = true
-    } else if (
-      window.innerWidth >= TSBOARD.SCREEN.PC.WIDTH &&
-      window.innerWidth < TSBOARD.SCREEN.LARGE.WIDTH
-    ) {
-      cols.value = TSBOARD.SCREEN.LARGE.COLS
+    } else if (window.innerWidth >= SCREEN.PC.WIDTH && window.innerWidth < SCREEN.LARGE.WIDTH) {
+      cols.value = SCREEN.LARGE.COLS
       isLarge.value = true
     } else {
-      cols.value = TSBOARD.SCREEN.LARGE.COLS
-      width.value = TSBOARD.SCREEN.LARGE.WIDTH - 50
+      cols.value = SCREEN.LARGE.COLS
+      width.value = SCREEN.LARGE.WIDTH - 50
       isLarge.value = true
     }
   }

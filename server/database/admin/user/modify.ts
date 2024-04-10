@@ -15,7 +15,7 @@ import {
 } from "../../../util/tools"
 import { table, select, update } from "../../common"
 import { exists } from "node:fs/promises"
-import { TSBOARD } from "../../../../tsboard.config"
+import { SIZE } from "../../../../tsboard.config"
 
 // 기존 회원 정보 가져오기
 export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
@@ -67,7 +67,7 @@ async function updateUserProfile(userUid: number, newProfile: File): Promise<str
   const newSavePath = `${savePath}/${generateRandomID()}.avif`
   const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
 
-  await resizeImage(tempFilePath, newSavePath, TSBOARD.IMAGE.PROFILE_SIZE)
+  await resizeImage(tempFilePath, newSavePath, SIZE.PROFILE)
   removeFile(tempFilePath)
 
   if ((await exists(newSavePath)) === false) {

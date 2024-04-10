@@ -16,6 +16,7 @@ export const TEXT = [
     RESET_PASSWORD: "비밀번호 초기화",
     SIGNUP: "회원가입",
     LOGIN: "로그인",
+    GOOGLE_LOGIN_TOOLTIP: "구글 계정으로 로그인하기",
   },
   /* LANG.EN */ {
     TITLE: "Login",
@@ -28,6 +29,7 @@ If you've forgotten your password, we will send a reset password to the email ad
     RESET_PASSWORD: "Reset Password",
     SIGNUP: "Sign Up",
     LOGIN: "Login",
+    GOOGLE_LOGIN_TOOLTIP: "Sign in with Google",
   },
   /* LANG.CN */ {
     TITLE: "登录",
@@ -40,6 +42,7 @@ If you've forgotten your password, we will send a reset password to the email ad
     RESET_PASSWORD: "重置密码",
     SIGNUP: "注册",
     LOGIN: "登录",
+    GOOGLE_LOGIN_TOOLTIP: "使用谷歌登录",
   },
 ]
 Object.freeze(TEXT)

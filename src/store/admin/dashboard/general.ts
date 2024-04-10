@@ -12,6 +12,7 @@ import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { AdminDashboardStat, AdminLatest, AdminUserInfo } from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
+import { TSBOARD } from "../../../../tsboard.config"
 
 type Today = {
   year: string
@@ -20,7 +21,7 @@ type Today = {
 }
 
 export const useAdminDashboardStore = defineStore("adminDashboard", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const visit = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })

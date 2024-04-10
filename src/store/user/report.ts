@@ -13,9 +13,10 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { TEXT } from "../../messages/store/user/user"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useReportStore = defineStore("report", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()

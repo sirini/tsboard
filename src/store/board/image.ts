@@ -13,10 +13,10 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/board/editor"
 import { Pair } from "../../interface/board"
-import { TSBOARD } from "../../../tsboard.config"
+import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -33,7 +33,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const lastImageUid = ref<number>(0)
   const totalImageCount = ref<number>(0)
   const bunch = ref<number>(20)
-  const limit = ref<number>(TSBOARD.MAX_FILE_SIZE)
+  const limit = ref<number>(SIZE.MAX_FILE)
   const uploadRule = [
     (value: any) => {
       return (

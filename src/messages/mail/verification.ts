@@ -15,7 +15,7 @@ export const TEXT = [
 <br />
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
 &middot; 인증 코드 : <strong style="letter-spacing: 5px;">#code#</strong><br />
-&middot; 코드 입력 : <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}verify/#uid#" target="_blank">여기를 눌러 위의 인증 코드 입력하기!</a>
+&middot; 코드 입력 : <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/verify/#uid#" target="_blank">여기를 눌러 위의 인증 코드 입력하기!</a>
 </div>
 <br />
 From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
@@ -29,7 +29,7 @@ To complete your registration, please enter the 6-digit verification code at the
 
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
 &middot; Verification Code: <strong style="letter-spacing: 5px;">#code#</strong><br />
-&middot; Enter Code: <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}verify/#uid#" target="_blank">Click here to enter your verification code!</a>
+&middot; Enter Code: <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/verify/#uid#" target="_blank">Click here to enter your verification code!</a>
 </div>
 <br />
 From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
@@ -43,7 +43,7 @@ From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span
 
 <div style="width: 500px; background-color: #f0f0f0; border-radius: 10px; border: 2px solid #ddd; margin-top: 10px; margin-bottom: 10px; padding: 10px; line-height: 170%;">
 &middot; 验证码: <strong style="letter-spacing: 5px;">#code#</strong><br />
-&middot; 填写验证码: <a href="${TSBOARD.SITE.URL}${TSBOARD.SITE.TSBOARD_PATH}verify/#uid#" target="_blank">点击这里填写您的验证码！</a>
+&middot; 填写验证码: <a href="${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/verify/#uid#" target="_blank">点击这里填写您的验证码！</a>
 </div>
 <br />
 来自 <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; 由 tsboard.dev 提供技术支持</span>`,

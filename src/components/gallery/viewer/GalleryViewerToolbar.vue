@@ -79,7 +79,6 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const viewer = useViewerStore()
 const view = useBoardViewStore()

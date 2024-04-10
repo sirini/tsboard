@@ -23,4 +23,9 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     name: "license",
     component: () => import("@/pages/home/License.vue"),
   },
+  {
+    path: TSBOARD.PREFIX + "/policy",
+    name: "policy",
+    component: () => import("@/pages/home/Policy.vue"),
+  },
 ]

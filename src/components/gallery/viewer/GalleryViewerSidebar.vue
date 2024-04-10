@@ -35,19 +35,14 @@
 
 <script setup lang="ts">
 import { useViewerStore } from "../../../store/board/gallery/viewer"
-import { useCommentStore } from "../../../store/board/comment"
 import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import GalleryViewerSidebarThumbnails from "./sidebar/GalleryViewerSidebarThumbnails.vue"
 import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
 import GalleryViewerSidebarDateWriter from "./sidebar/GalleryViewerSidebarDateWriter.vue"
 import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
-const comment = useCommentStore()
 const util = useUtilStore()
-const home = useHomeStore()
 </script>

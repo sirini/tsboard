@@ -20,10 +20,11 @@ import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/group/general"
 import { INIT_GROUP_CONFIG } from "../../../../server/database/admin/group/general/const"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()

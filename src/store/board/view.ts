@@ -14,15 +14,11 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { BoardConfig, Pair, PostFile, PostView } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/view"
-import {
-  BOARD_CONFIG,
-  TYPE_MATCH,
-  INIT_POST_VIEW,
-  READ_POST_KEY,
-} from "../../../server/database/board/const"
+import { BOARD_CONFIG, TYPE_MATCH, INIT_POST_VIEW } from "../../../server/database/board/const"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardViewStore = defineStore("boardView", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -129,7 +125,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
 
     const link = document.createElement("a")
-    link.href = `${process.env.API!}/${response.data.result.path}`
+    link.href = `${TSBOARD.API.URI}/${response.data.result.path}`
     link.download = response.data.result.name
     document.body.appendChild(link)
     link.click()

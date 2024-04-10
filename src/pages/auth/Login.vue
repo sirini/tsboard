@@ -22,7 +22,7 @@
                 <v-text-field
                   v-model="auth.user.id"
                   variant="outlined"
-                  class="mt-6"
+                  class="mt-3"
                   prepend-inner-icon="mdi-email-outline"
                   :label="TEXT[home.lang].FILL_EMAIL"
                   @keyup.enter="auth.login"
@@ -42,11 +42,26 @@
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-6" variant="tonal" color="blue-grey">
+              <v-card class="mt-2 mb-2" variant="tonal" color="blue-grey">
                 <v-card-text class="text-medium-emphasis text-caption">
                   {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
               </v-card>
+            </v-list>
+
+            <v-list v-if="OAUTH.IS_READY">
+              <v-list-item class="text-center mb-4">
+                <v-avatar size="large" @click="googleLogin">
+                  <v-img
+                    :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'"
+                    width="64"
+                    height="64"
+                  ></v-img>
+                  <v-tooltip activator="parent">{{
+                    TEXT[home.lang].GOOGLE_LOGIN_TOOLTIP
+                  }}</v-tooltip>
+                </v-avatar>
+              </v-list-item>
             </v-list>
 
             <v-divider></v-divider>
@@ -63,27 +78,8 @@
               }}</v-btn>
             </v-card-actions>
           </v-card>
-
-          <div class="oauth">
-            <div
-              id="g_id_onload"
-              :data-client_id="TSBOARD.OAUTH.GOOGLE.CLIENT_ID"
-              data-context="signin"
-              data-ux_mode="popup"
-              :data-login_uri="TSBOARD.OAUTH.GOOGLE.REDIRECT_URI"
-              data-auto_prompt="false"
-            ></div>
-
-            <div
-              class="g_id_signin"
-              data-type="icon"
-              data-shape="circle"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-            ></div>
-          </div>
         </v-container>
+
         <home-footer></home-footer>
       </v-main>
     </v-layout>
@@ -91,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -99,12 +95,32 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
-import { TSBOARD } from "../../../tsboard.config"
+import { OAUTH, TSBOARD } from "../../../tsboard.config"
 
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
+
+// 구글 로그인하기
+function googleLogin(): void {
+  const scope = "email profile"
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${OAUTH.GOOGLE.CLIENT_ID}&redirect_uri=${OAUTH.GOOGLE.REDIRECT_URI}&scope=${scope}&response_type=code&access_type=offline&prompt=select_account`
+  window.open(authUrl, "googleLogin", "width=500,height=600")
+}
+
+// OAuth 로그인 성공 시 처리
+onMounted(() => {
+  window.addEventListener("message", (event) => {
+    if (event.origin !== TSBOARD.SITE.URL) {
+      return
+    }
+
+    if (event.data === OAUTH.SUCCESS_MESSAGE) {
+      auth.loadGoogleUserInfo()
+    }
+  })
+})
 </script>
 
 <style scoped>
@@ -123,8 +139,5 @@ const visible = ref<boolean>(false)
 .info {
   color: #cfd8dc;
   font-size: 0.7em;
-}
-.oauth {
-  text-align: center;
 }
 </style>

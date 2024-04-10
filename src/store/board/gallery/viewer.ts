@@ -21,9 +21,10 @@ import {
 import { TEXT } from "../../../messages/store/board/gallery"
 import { BoardConfig, Comment, Pair, PostView } from "../../../interface/board"
 import * as COMMENT from "../../../messages/store/board/comment"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useViewerStore = defineStore("viewer", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()

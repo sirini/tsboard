@@ -8,7 +8,7 @@ import { defineConfig } from "vite"
 import { fileURLToPath, URL } from "node:url"
 
 // TSBOARD Configuration
-import { TSBOARD } from "./tsboard.config"
+import { LOCALHOST, PORT_DEV, PORT_DEV_VITE } from "./tsboard.config"
 
 export default defineConfig({
   plugins: [
@@ -33,13 +33,7 @@ export default defineConfig({
     }),
   ],
   define: {
-    "process.env": {
-      API: TSBOARD.IS_DEVELOPING
-        ? `${TSBOARD.API.DEVELOPING}:${TSBOARD.PORT.VITE}`
-        : TSBOARD.API.PRODUCTION,
-      PREFIX: TSBOARD.PREFIX,
-      MAX_FILE_SIZE: TSBOARD.MAX_FILE_SIZE,
-    },
+    "process.env": {},
   },
   resolve: {
     alias: {
@@ -48,10 +42,10 @@ export default defineConfig({
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
   server: {
-    port: TSBOARD.PORT.VITE,
+    port: PORT_DEV_VITE,
     proxy: {
       "/api": {
-        target: `${TSBOARD.API.DEVELOPING}:${TSBOARD.PORT.DEVELOPING}`,
+        target: `${LOCALHOST}:${PORT_DEV}`,
         changeOrigin: true,
       },
     },

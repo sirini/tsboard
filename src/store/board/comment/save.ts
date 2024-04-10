@@ -14,6 +14,7 @@ import { useHomeStore } from "../../home"
 import { TEXT } from "../../../messages/store/board/comment"
 import { INIT_COMMENT } from "../../../../server/database/board/const"
 import { Comment } from "../../../interface/board"
+import { TSBOARD } from "../../../../tsboard.config"
 
 type SaveNewCommentParams = {
   boardUid: number
@@ -30,7 +31,7 @@ type SaveModifyCommentParams = SaveNewCommentParams & {
 }
 
 export const useCommentSaveStore = defineStore("commentSave", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()

@@ -21,9 +21,10 @@ import {
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
 import { BoardConfig, Post, SEARCH_OPTION, SearchOption } from "../../../interface/board"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useGalleryStore = defineStore("gallery", () => {
-  const server = edenTreaty<App>(process.env.API!)
+  const server = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
