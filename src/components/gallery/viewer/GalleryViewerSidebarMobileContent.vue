@@ -23,15 +23,11 @@
 <script setup lang="ts">
 import { useUtilStore } from "../../../store/util"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
-import { useHomeStore } from "../../../store/home"
-import { useCommentStore } from "../../../store/board/comment"
 import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
 import GalleryViewerSidebarDateWriter from "./sidebar/GalleryViewerSidebarDateWriter.vue"
 import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
 import BoardViewCommentWriteButton from "../../board/comment/BoardViewCommentWriteButton.vue"
 
 const util = useUtilStore()
-const comment = useCommentStore()
 const viewer = useViewerStore()
-const home = useHomeStore()
 </script>

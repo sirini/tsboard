@@ -4,7 +4,7 @@
  * 게시판 관리 > 일반 > 업데이트에 필요한 함수들
  */
 
-import { table, update, select, insert, remove } from "../../../common"
+import { table, update, select, insert } from "../../../common"
 
 // 게시판 소속 그룹 변경하기
 export async function changeGroup(boardUid: number, groupUid: number): Promise<void> {

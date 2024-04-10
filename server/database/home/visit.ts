@@ -4,7 +4,7 @@
  * 사용자 방문 통계용으로 업데이트
  */
 
-import { table, select, insert } from "../common"
+import { table, insert } from "../common"
 
 // 오늘 방문한 걸로 등록하기
 export async function addAccessLog(userUid: number): Promise<void> {

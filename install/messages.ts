@@ -65,6 +65,7 @@ ${TSBOARD.VERSION} | tsboard.dev
 
   ${chalk.gray("GMAIL_ID")}
   ${chalk.gray("GMAIL_APP_PASSWORD")}
+  ${chalk.gray("OAUTH_GOOGLE_PW")}
 `
 
 const installTitle = `

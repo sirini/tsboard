@@ -8,7 +8,6 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
-import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/user/user"
@@ -18,7 +17,6 @@ import { TSBOARD } from "../../../tsboard.config"
 
 export const useUserStore = defineStore("user", () => {
   const server = edenTreaty<App>(TSBOARD.API.URI)
-  const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
   const userInfoDialog = ref<boolean>(false)
