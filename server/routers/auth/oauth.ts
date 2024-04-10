@@ -79,7 +79,7 @@ export const oauth = new Elysia()
 
         refresh.set({
           value: token.refresh,
-          maxAge: 86400 * 14,
+          maxAge: 86400 * AUTH.JWT.REFRESH_TIMEOUT,
           path: "/",
           httpOnly: AUTH.COOKIE.HTTP_ONLY,
           secure: AUTH.COOKIE.SECURE,
@@ -88,7 +88,7 @@ export const oauth = new Elysia()
         const googleUser = await getUser(userUid)
         googleUserInfo.set({
           value: JSON.stringify(googleUser),
-          maxAge: 600000,
+          maxAge: 1000 * 60 * AUTH.JWT.OAUTH_TIMEOUT,
           path: "/",
           httpOnly: AUTH.COOKIE.HTTP_ONLY,
           secure: AUTH.COOKIE.SECURE,
@@ -107,5 +107,8 @@ export const oauth = new Elysia()
     if (googleUserInfo.value.length < 1) {
       return fail(`User information from Google is not available.`, response)
     }
+
+    console.log(googleUserInfo.value) // DEBUG
+
     return success(googleUserInfo.value)
   })

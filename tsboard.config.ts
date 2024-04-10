@@ -30,6 +30,7 @@ export const AUTH = {
   JWT: {
     ACCESS_TIMEOUT: 30 /* minutes */,
     REFRESH_TIMEOUT: 14 /* day */,
+    OAUTH_TIMEOUT: 10 /* minutes */,
   },
   COOKIE: {
     HTTP_ONLY: true,
