@@ -14,7 +14,7 @@ import { TSBOARD } from "../tsboard.config"
 
 const app = new Elysia()
   .use(cors())
-  .group(TSBOARD.API.ACCESS_POINT, (app) => {
+  .group("/api", (app) => {
     return app.use(auth).use(admin).use(home).use(user).use(board)
   })
   .listen(TSBOARD.SITE.API_PORT)

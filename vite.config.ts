@@ -8,7 +8,7 @@ import { defineConfig } from "vite"
 import { fileURLToPath, URL } from "node:url"
 
 // TSBOARD Configuration
-import { LOCALHOST, PORT_DEV, PORT_DEV_VITE } from "./tsboard.config"
+import { IS_DEV, LOCALHOST, PORT_DEV, PORT_DEV_VITE, TSBOARD } from "./tsboard.config"
 
 export default defineConfig({
   plugins: [
@@ -32,6 +32,7 @@ export default defineConfig({
       },
     }),
   ],
+  base: IS_DEV ? "" : TSBOARD.PREFIX,
   define: {
     "process.env": {},
   },

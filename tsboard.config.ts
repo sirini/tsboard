@@ -4,7 +4,7 @@
  * TSBOARD 기본 설정 파일
  */
 
-const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
+export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
 export const PORT_DEV_VITE = 3000
 export const PORT_DEV = 3200
 export const PORT_PROD = 3100
@@ -21,7 +21,6 @@ export const TSBOARD = {
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
   API: {
-    ACCESS_POINT: "/api",
     URI: IS_DEV ? DEV_URL : PROD_URL,
   },
 }
