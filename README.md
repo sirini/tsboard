@@ -14,7 +14,6 @@
 1. TSBOARD란 무엇인가요?
 2. 왜 만들었나요?
 3. TSBOARD만의 장점은 무엇인가요?
-4. 그렇다면 단점은 무엇이고 어떻게 개선할 생각인가요?
 
 ## TSBOARD란 무엇인가요?
 
@@ -26,9 +25,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - 제 머리 속 마지막 `JavaScript` 언어에 대한 추억은 `jQuery` 없으면 쓰레기(...)같은 언어, 정도였습니다.
 - 그러나 지속적인 표준안 개선과 `Node.js` 의 등장, `TypeScript` 언어에 뒤늦게 반해버렸습니다.
 - 그래서 다시 웹 프로그램을 한 번 만들어보고 싶었고, **늘 만들었던 게시판을 TypeScript 언어로만 작성**해보고 싶었습니다.
-- 그래서 시작하게 되었습니다.
-
-> (존경하는 우리나라 게시판의 근본, 그누보드가 PHP에서 파이썬으로 업데이트 하는 걸 보고 자극받은 것도 있습니다 😉)
+- 더불어 (이왕이면) 쓰기 쉽고, 더 빠르고 안전하게 동작하도록 만들어보고 싶어서 만들게 되었습니다.
 
 ## TSBOARD만의 장점은 무엇인가요?
 
@@ -37,21 +34,6 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - JS/TS 런타임으로 `Bun`, 웹 프레임워크로 Bun 기반의 `ElysiaJS`를 선택하여 **보다 빠른 동작이 가능**합니다.
 - `Node.js` 기반의 풀스택 개발을 해보신 분들에게는 쉽게 이해되며, 바로 활용 가능한 디자인입니다.
 - 중소규모의 커뮤니티 사이트를 제작하는데 필요한 **모든 기능들이 내장**되어 있습니다.
-
-## 그렇다면 단점은 무엇이고 어떻게 개선할 생각인가요?
-
-- TSBOARD는 **백엔드를 Bun에 전적으로 의지**하고 있습니다.
-  - `Bun` 은 23년 9월 1.0 버전이 출시되었고, 이후 안정화 단계를 거치고 있습니다.
-  - `Bun` 은 패키지 관리 기능도 겸하고 있지만, `npm` 대비 아직 호환성이 떨어집니다.
-  - 성능을 위해 `Bun` 을 선택한만큼, 인내하며 더 안정화 되길 바라고 있습니다.
-- TSBOARD는 **프론트엔드를 Vue 와 Vuetify에 전적으로 의지**하고 있습니다.
-  - 왜 `React`나 `Svelte`를 선택하지 않았냐는 원망 아닌 원망도 겸허히 받아들입니다.
-  - `Vue` 의 간결성과 Single File Component가 마음에 들어 선택하였습니다.
-  - 또한, `Vuetify`의 풍부한 UI 컴포넌트들이 좋아서 선택하게 되었습니다.
-- TSBOARD는 **TypeScript 단일 언어로 작성**되어 있습니다.
-  - 물론 여전히 `HTML`과 `CSS`라는 친구가 남아있습니다만, 더이상 PHP언어는 없습니다.
-  - `TypeScript` 언어에 대한 애정을 바탕으로, 여러분들과 함께 배우는 자세로 도움을 드리겠습니다.
-  - 어렵다고 포기하지 마시고, TSBOARD와 함께 새로운 언어를 배워보면 좋겠습니다.
 
 > TSBOARD는 사용자분들을 위한 자체 커뮤니티를 <https://tsboard.dev/> 사이트에서 운영하고 있습니다.
 > 사용하시면서 궁금한 점, 어려운 점들은 위 사이트에서 편하게 문의해 주시면 됩니다.
@@ -186,11 +168,11 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
     server_name tsboard.dev; # 사용하시는 도메인 이름으로 변경 필요
 
-    # 최대 업로드 허용 크기, tsboard.config.ts 파일의 MAX_FILE_SIZE 주석 참조
+    # 최대 업로드 허용 크기, tsboard.config.ts 파일의 SIZE.MAX_FILE 주석 참조
     client_max_body_size 20M;
 
     location /upload {
-      root /var/www/tsboard.dev; # TSBOARD설치경로
+      root /var/www/tsboard.dev; # TSBOARD설치경로, 이 폴더 아래에 upload 폴더 위치
       try_files $uri $uri/ =404;
     }
 
@@ -198,9 +180,10 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
       try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
     }
 
-    location /api {
-      # tsboard.config.ts 에서 PORT.PRODUCTION 값과 아래 3100 이 동일해야 함
-      proxy_pass http://127.0.0.1:3100/api;
+    location /tsboard {
+      # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
+      # v0.8.17부터 기존 /api 가 /tsboard 로 변경됨 (타 백엔드와 충돌 방지)
+      proxy_pass http://127.0.0.1:3100/tsboard;
       proxy_buffering off;
       proxy_connect_timeout 300;
       proxy_send_timeout 300;
@@ -348,4 +331,4 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - X (twitter) `@tsboard_dev` 계정을 통해서 업데이트 소식을 전해드리고, 여러분들과 만나뵙길 희망합니다!
 - 개발자 커뮤니티에 기웃거리면서 조심스레 홍보를 해보려고 합니다.
   - 혹시 안쓰러운 마음이 든다면 댓글로 응원을 부탁드립니다!!!
-- 그 밖에 돈 안드는 홍보 방법을 찾아보겠습니다. TSBOARD 프로젝트를 많이 알려주세요!!
+- 그 밖에 돈 안드는 홍보 방법을 찾아보겠습니다. **TSBOARD 프로젝트를 많이 알려주세요!!**
