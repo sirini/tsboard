@@ -24,7 +24,7 @@ import * as COMMENT from "../../../messages/store/board/comment"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useViewerStore = defineStore("viewer", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
@@ -79,7 +79,7 @@ export const useViewerStore = defineStore("viewer", () => {
       needUpdateHit = 1
     }
 
-    const response = await server.api.board.view.get({
+    const response = await api.tsboard.board.view.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -116,7 +116,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 댓글 불러오기
   async function loadComments(): Promise<void> {
-    const response = await server.api.board.comment.get({
+    const response = await api.tsboard.board.comment.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -143,7 +143,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await server.api.board.likepost.patch({
+    const response = await api.tsboard.board.likepost.patch({
       $headers: {
         authorization: auth.user.token,
       },

@@ -16,7 +16,7 @@ import { COMMON } from "../../../messages/store/admin/report/common"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminReportStore = defineStore("adminReport", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -30,7 +30,7 @@ export const useAdminReportStore = defineStore("adminReport", () => {
 
   // 신고 목록 가져오기
   async function loadReports(): Promise<void> {
-    const response = await server.api.admin.report.list.get({
+    const response = await api.tsboard.admin.report.list.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -65,7 +65,7 @@ export const useAdminReportStore = defineStore("adminReport", () => {
     if (keyword.value.length < 2) {
       return
     }
-    const response = await server.api.admin.report.search.list.get({
+    const response = await api.tsboard.admin.report.search.list.get({
       $headers: {
         authorization: auth.user.token,
       },

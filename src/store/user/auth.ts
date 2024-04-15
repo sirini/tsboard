@@ -17,7 +17,7 @@ import { INIT_USER, USER_INFO_KEY } from "./const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useAuthStore = defineStore("auth", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const home = useHomeStore()
   const password = ref<string>("")
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     user.value = JSON.parse(savedUserInfo) as User
-    const response = await server.api.auth.load.get({
+    const response = await api.tsboard.auth.load.get({
       $headers: {
         authorization: user.value.token,
       },
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore("auth", () => {
       util.error(TEXT[home.lang].INVALID_EMAIL)
       return
     }
-    const response = await server.api.auth.signin.post({
+    const response = await api.tsboard.auth.signin.post({
       id: user.value.id.trim(),
       password: SHA256(password.value).toString(),
     })
@@ -111,7 +111,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 구글 OAuth 로그인 이후 결과 받아오기
   async function loadGoogleUserInfo(): Promise<void> {
-    const response = await server.api.auth.google.userinfo.get()
+    const response = await api.tsboard.auth.google.userinfo.get()
 
     if (!response.data) {
       util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
@@ -135,7 +135,7 @@ export const useAuthStore = defineStore("auth", () => {
   // 사용자 로그아웃 하기
   async function logout(): Promise<void> {
     const token = user.value.token
-    server.api.auth.logout.post({
+    api.tsboard.auth.logout.post({
       $headers: {
         authorization: token,
       },
@@ -185,7 +185,7 @@ export const useAuthStore = defineStore("auth", () => {
       return
     }
 
-    const response = await server.api.auth.update.patch({
+    const response = await api.tsboard.auth.update.patch({
       $headers: {
         authorization: user.value.token,
       },

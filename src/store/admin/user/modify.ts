@@ -18,7 +18,7 @@ import { USER_INFO } from "./const"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -34,7 +34,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       util.error(MODIFY.TOO_SHORT_NAME)
       return
     }
-    const response = await server.api.auth.checkname.post({
+    const response = await api.tsboard.auth.checkname.post({
       name: user.value.name,
       userUid: user.value.uid,
     })
@@ -51,7 +51,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
 
   // 기존 회원 정보를 가져와 업데이트하기
   async function loadUserInfo(userUid: number): Promise<void> {
-    const response = await server.api.admin.user.load.get({
+    const response = await api.tsboard.admin.user.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -93,7 +93,7 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
         return
       }
     }
-    const response = await server.api.admin.user.modify.patch({
+    const response = await api.tsboard.admin.user.modify.patch({
       $headers: {
         authorization: auth.user.token,
       },

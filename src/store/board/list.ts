@@ -18,7 +18,7 @@ import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/data
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardListStore = defineStore("boardList", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -41,7 +41,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       util.snack(TEXT[home.lang].NO_BOARD_ID)
       return
     }
-    const response = await server.api.board.list.get({
+    const response = await api.tsboard.board.list.get({
       $headers: {
         authorization: auth.user.token,
       },

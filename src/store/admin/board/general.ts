@@ -18,7 +18,7 @@ import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const confirmRemoveCategoryDialog = ref<boolean>(false)
@@ -32,7 +32,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
-    const response = await server.api.admin.board.general.load.get({
+    const response = await api.tsboard.admin.board.general.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -68,7 +68,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 그룹 변경하기
   async function changeGroup(group: AdminPair): Promise<void> {
-    const response = await server.api.admin.board.general.changegroup.patch({
+    const response = await api.tsboard.admin.board.general.changegroup.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -97,7 +97,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(GENERAL.TOO_SHORT_CATEGORY)
       return
     }
-    const response = await server.api.admin.board.general.updatename.patch({
+    const response = await api.tsboard.admin.board.general.updatename.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -123,7 +123,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(GENERAL.TOO_SHORT_NAME)
       return
     }
-    const response = await server.api.admin.board.general.updateinfo.patch({
+    const response = await api.tsboard.admin.board.general.updateinfo.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -144,7 +144,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 게시판 타입 변경하기
   async function changeType(): Promise<void> {
-    const response = await server.api.admin.board.general.changetype.patch({
+    const response = await api.tsboard.admin.board.general.changetype.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -171,7 +171,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardRows.value = "20"
       return
     }
-    const response = await server.api.admin.board.general.updaterows.patch({
+    const response = await api.tsboard.admin.board.general.updaterows.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -198,7 +198,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardWidth.value = "1000"
       return
     }
-    const response = await server.api.admin.board.general.updatewidth.patch({
+    const response = await api.tsboard.admin.board.general.updatewidth.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -225,7 +225,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(GENERAL.TOO_SHORT_CATEGORY)
       return
     }
-    const response = await server.api.admin.board.general.addcategory.post({
+    const response = await api.tsboard.admin.board.general.addcategory.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -265,7 +265,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       admin.error(GENERAL.REMOVE_LAST_CATEGORY)
       return
     }
-    const response = await server.api.admin.board.general.removecategory.delete({
+    const response = await api.tsboard.admin.board.general.removecategory.delete({
       $headers: {
         authorization: auth.user.token,
       },
@@ -290,7 +290,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 카테고리 사용 여부 설정하기
   async function useCategory(): Promise<void> {
-    const response = await server.api.admin.board.general.usecategory.patch({
+    const response = await api.tsboard.admin.board.general.usecategory.patch({
       $headers: {
         authorization: auth.user.token,
       },

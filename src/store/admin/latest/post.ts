@@ -16,7 +16,7 @@ import { POST } from "../../../messages/store/admin/latest/post"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -29,7 +29,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
 
   // 최신 글 목록 가져오기
   async function loadLatestPosts(): Promise<void> {
-    const response = await server.api.admin.latest.post.get({
+    const response = await api.tsboard.admin.latest.post.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -62,7 +62,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (keyword.value.length < 2) {
       return
     }
-    const response = await server.api.admin.latest.search.post.get({
+    const response = await api.tsboard.admin.latest.search.post.get({
       $headers: {
         authorization: auth.user.token,
       },

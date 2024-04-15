@@ -31,7 +31,7 @@ type SaveModifyCommentParams = SaveNewCommentParams & {
 }
 
 export const useCommentSaveStore = defineStore("commentSave", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()
@@ -40,7 +40,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   // 새 댓글 작성하기
   async function newComment(param: SaveNewCommentParams): Promise<Comment> {
     let result: Comment = INIT_COMMENT
-    const response = await server.api.board.newcomment.post({
+    const response = await api.tsboard.board.newcomment.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -83,7 +83,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   async function replyComment(param: SaveReplyCommentParams): Promise<Comment> {
     let result = INIT_COMMENT
 
-    const response = await server.api.board.replycomment.post({
+    const response = await api.tsboard.board.replycomment.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -125,7 +125,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
 
   // 기존 댓글 수정하기
   async function modifyComment(param: SaveModifyCommentParams): Promise<void> {
-    const response = await server.api.board.modifycomment.patch({
+    const response = await api.tsboard.board.modifycomment.patch({
       $headers: {
         authorization: auth.user.token,
       },

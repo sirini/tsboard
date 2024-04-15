@@ -177,7 +177,7 @@ export async function resizeImage(
   outputPath: string,
   width: number,
 ): Promise<void> {
-  await sharp(inputPath)
+  await sharp(inputPath, { failOn: "truncated" })
     .resize({ width })
     .rotate()
     .withMetadata()

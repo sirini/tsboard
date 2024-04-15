@@ -21,7 +21,7 @@ export const useSignupStore = defineStore("signup", () => {
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const verificationCode = ref<string>("")
   const loading = ref<boolean>(false)
 
@@ -32,7 +32,7 @@ export const useSignupStore = defineStore("signup", () => {
       return
     }
 
-    const response = await server.api.auth.checkemail.post({
+    const response = await api.tsboard.auth.checkemail.post({
       email: auth.user.id.trim(),
     })
 
@@ -55,7 +55,7 @@ export const useSignupStore = defineStore("signup", () => {
       return
     }
 
-    const response = await server.api.auth.checkname.post({
+    const response = await api.tsboard.auth.checkname.post({
       name: auth.user.name.trim(),
       userUid: auth.user.uid,
     })
@@ -93,7 +93,7 @@ export const useSignupStore = defineStore("signup", () => {
 
     loading.value = true
 
-    const response = await server.api.auth.signup.post({
+    const response = await api.tsboard.auth.signup.post({
       email: auth.user.id,
       password: SHA256(auth.password).toString(),
       name: auth.user.name,
@@ -148,7 +148,7 @@ export const useSignupStore = defineStore("signup", () => {
       return
     }
 
-    const response = await server.api.auth.verify.post({
+    const response = await api.tsboard.auth.verify.post({
       target,
       code: verificationCode.value,
       user: {

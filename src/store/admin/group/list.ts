@@ -16,7 +16,7 @@ import { LIST } from "../../../messages/store/admin/group/list"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminGroupListStore = defineStore("adminGroupList", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -31,7 +31,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
 
   // 그룹들 목록 가져오기
   async function loadGroupList(): Promise<void> {
-    const response = await server.api.admin.group.list.load.get({
+    const response = await api.tsboard.admin.group.list.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -53,7 +53,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (newGroupId.value.length < 2) {
       return
     }
-    const response = await server.api.admin.group.list.groupids.get({
+    const response = await api.tsboard.admin.group.list.groupids.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -89,7 +89,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       newGroupId.value = ""
       return
     }
-    const response = await server.api.admin.group.list.creategroup.post({
+    const response = await api.tsboard.admin.group.list.creategroup.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -136,7 +136,7 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       admin.error(LIST.MINIMUM_GROUP_COUNT)
       return
     }
-    const response = await server.api.admin.group.list.removegroup.delete({
+    const response = await api.tsboard.admin.group.list.removegroup.delete({
       $headers: {
         authorization: auth.user.token,
       },

@@ -19,7 +19,7 @@ import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -29,7 +29,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 게시판 권한 설정 불러오기
   async function loadPermissionConfig(): Promise<void> {
-    const response = await server.api.admin.board.permission.load.get({
+    const response = await api.tsboard.admin.board.permission.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -52,7 +52,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 회원 이름(닉네임)을 입력할 때마다 하단에 검색해서 보여주기
   async function _updateBoardManagerSuggestion(): Promise<void> {
-    const response = await server.api.admin.board.permission.candidates.get({
+    const response = await api.tsboard.admin.board.permission.candidates.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -78,7 +78,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 선택한 회원을 관리자로 지정하기
   async function updateBoardManager(user: AdminPair): Promise<void> {
-    const response = await server.api.admin.board.permission.changeadmin.patch({
+    const response = await api.tsboard.admin.board.permission.changeadmin.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -144,7 +144,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 액세스 권한 변경
   async function updateAllPermissions(): Promise<boolean> {
-    const response = await server.api.admin.board.permission.updatelevels.patch({
+    const response = await api.tsboard.admin.board.permission.updatelevels.patch({
       $headers: {
         authorization: auth.user.token,
       },

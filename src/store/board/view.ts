@@ -18,7 +18,7 @@ import { BOARD_CONFIG, TYPE_MATCH, INIT_POST_VIEW } from "../../../server/databa
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardViewStore = defineStore("boardView", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -46,7 +46,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
       needUpdateHit = 1
     }
 
-    const response = await server.api.board.view.get({
+    const response = await api.tsboard.board.view.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -84,7 +84,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await server.api.board.likepost.patch({
+    const response = await api.tsboard.board.likepost.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -105,7 +105,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 첨부파일 다운로드하기
   async function download(fileUid: number): Promise<void> {
-    const response = await server.api.board.download.get({
+    const response = await api.tsboard.board.download.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -149,7 +149,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await server.api.board.removepost.delete({
+    const response = await api.tsboard.board.removepost.delete({
       $headers: {
         authorization: auth.user.token,
       },

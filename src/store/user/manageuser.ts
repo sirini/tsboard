@@ -17,7 +17,7 @@ import { INIT_PERMISSION } from "./const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useManageUserStore = defineStore("manageuser", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -40,7 +40,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
 
   // 회원의 기존 권한들 불러오기
   async function loadUserPermission(): Promise<void> {
-    const response = await server.api.user.loadpermission.get({
+    const response = await api.tsboard.user.loadpermission.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -66,7 +66,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
       util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
       return
     }
-    const response = await server.api.user.manageuser.post({
+    const response = await api.tsboard.user.manageuser.post({
       $headers: {
         authorization: auth.user.token,
       },

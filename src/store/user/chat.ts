@@ -16,7 +16,7 @@ import { TEXT } from "../../messages/store/user/chat"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useChatStore = defineStore("chat", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -31,7 +31,7 @@ export const useChatStore = defineStore("chat", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await server.api.user.load.chatlist.get({
+    const response = await api.tsboard.user.load.chatlist.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -65,7 +65,7 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await server.api.user.load.chathistory.get({
+    const response = await api.tsboard.user.load.chathistory.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -94,7 +94,7 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await server.api.user.savechat.post({
+    const response = await api.tsboard.user.savechat.post({
       $headers: {
         authorization: auth.user.token,
       },

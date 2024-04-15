@@ -29,7 +29,7 @@ import { SEARCH_OPTION, SearchOption } from "../interface/board"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 
 export const useHomeStore = defineStore("home", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -88,7 +88,7 @@ export const useHomeStore = defineStore("home", () => {
       return
     }
     window.localStorage.setItem(VISIT_KEY, today)
-    server.api.home.visit.get({
+    api.tsboard.home.visit.get({
       $query: {
         userUid: auth.user.uid,
       },
@@ -130,7 +130,7 @@ export const useHomeStore = defineStore("home", () => {
   // 최신글 목록 가져오기
   async function loadLatestPosts(): Promise<void> {
     setGridLayout()
-    const response = await server.api.home.latest.get({
+    const response = await api.tsboard.home.latest.get({
       $query: {
         sinceUid: sinceUid.value,
         bunch: bunch.value,
@@ -159,7 +159,7 @@ export const useHomeStore = defineStore("home", () => {
     if (id.length < 2 || limit < 1) {
       return result
     }
-    const response = await server.api.home.latest.board.get({
+    const response = await api.tsboard.home.latest.board.get({
       $query: {
         id,
         limit,
@@ -202,7 +202,7 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await server.api.home.load.notification.get({
+    const response = await api.tsboard.home.load.notification.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -227,7 +227,7 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await server.api.home.checked.notification.patch({
+    const response = await api.tsboard.home.checked.notification.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -258,7 +258,7 @@ export const useHomeStore = defineStore("home", () => {
 
   // 사이드바 링크들 가져오기
   async function loadSidebarLinks(): Promise<void> {
-    const response = await server.api.home.sidebar.links.get()
+    const response = await api.tsboard.home.sidebar.links.get()
     if (response.data && response.data.success === true) {
       sidebarLinks.value = response.data.result
     }

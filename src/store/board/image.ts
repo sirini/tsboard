@@ -16,7 +16,7 @@ import { Pair } from "../../interface/board"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
-  const server = edenTreaty<App>(TSBOARD.API.URI)
+  const api = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -48,7 +48,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   // 본문에 삽입할 이미지들 선택 및 업로드
   async function uploadImageFiles(event: MouseEvent): Promise<void> {
     files.value = util.attachments(event)
-    const response = await server.api.board.uploadimages.post({
+    const response = await api.tsboard.board.uploadimages.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -70,7 +70,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지들 가져오기
   async function loadUploadedImages(isAppend: boolean): Promise<void> {
-    const response = await server.api.board.loadimages.get({
+    const response = await api.tsboard.board.loadimages.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -124,7 +124,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지 제거
   async function removeUploadedImage(imageUid: number): Promise<void> {
-    const response = await server.api.board.removeimage.delete({
+    const response = await api.tsboard.board.removeimage.delete({
       $headers: {
         authorization: auth.user.token,
       },
