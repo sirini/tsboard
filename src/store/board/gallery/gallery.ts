@@ -98,6 +98,15 @@ export const useGalleryStore = defineStore("gallery", () => {
       response.data.result.config.admin.board === auth.user.uid
   }
 
+  // 갤러리 목록 초기화
+  async function resetGalleryList(): Promise<void> {
+    sinceUid.value = 0
+    page.value = 1
+    await loadPhotoList()
+    home.setGridLayout()
+    gridSize.value = Math.floor(Math.min(config.value.width, home.width) / (12 / home.cols))
+  }
+
   // 이전 사진들 가져오기
   async function loadOldPhotos(): Promise<void> {
     pagingDirection.value = PAGING_DIRECTION.NEXT
@@ -153,11 +162,13 @@ export const useGalleryStore = defineStore("gallery", () => {
     confirmCancelDialog,
     images,
     gridSize,
+    sinceUid,
     page,
     pageLength,
     option,
     keyword,
     loadPhotoList,
+    resetGalleryList,
     loadOldPhotos,
     open,
     resetSearchKeyword,

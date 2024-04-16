@@ -15,7 +15,7 @@ import {
   getTotalPostCount,
   getUserLevel,
 } from "../../database/board/list"
-import { getPhotos } from "../../database/board/gallery"
+import { getPhotoItems, getPhotos } from "../../database/board/gallery"
 import { SearchOption } from "../../../src/interface/board"
 
 export const gallery = new Elysia()
@@ -110,6 +110,46 @@ export const gallery = new Elysia()
         sinceUid: t.Numeric(),
         option: t.Numeric(),
         keyword: t.String(),
+      }),
+    },
+  )
+  .get(
+    "/photoview",
+    async ({ query: { id, no }, userLevel, newAccessToken }) => {
+      let response = {
+        config: BOARD_CONFIG,
+        files: [] as string[],
+        thumbnails: [] as string[],
+        newAccessToken,
+      }
+
+      if (id.length < 2) {
+        return fail(`Invalid gallery ID.`, response)
+      }
+      if (no < 1) {
+        return fail(`Invalid gallery no.`, response)
+      }
+      const config = await getBoardConfig(id)
+      if (config.uid < 1) {
+        return fail(`Gallery not found.`, response)
+      }
+
+      const { files, thumbnails } = await getPhotoItems(no)
+
+      return success({
+        config,
+        files,
+        thumbnails,
+        newAccessToken,
+      })
+    },
+    {
+      headers: t.Object({
+        authorization: t.String(),
+      }),
+      query: t.Object({
+        id: t.String(),
+        no: t.Numeric(),
       }),
     },
   )

@@ -62,31 +62,30 @@ const home = useHomeStore()
 
 // 뷰어 띄우기
 function openViewerDialog(): void {
-  const no = parseInt(route.params?.no as string)
-  if (no > 0) {
-    viewer.postUid = no
+  viewer.postUid = parseInt(route.params?.no as string)
+  if (viewer.postUid > 0) {
     viewer.dialog = true
-    gallery.images.map((image) => {
-      if (image.uid === no) {
-        viewer.files = image.files
-        viewer.thumbnails = image.thumbnails
-        return
-      }
-    })
+    viewer.loadPhotos()
   }
 }
 
 onMounted(async () => {
-  await gallery.loadPhotoList()
   openViewerDialog()
-  home.setGridLayout()
-  gallery.gridSize = Math.floor(Math.min(gallery.config.width, home.width) / (12 / home.cols))
+  gallery.resetGalleryList()
 })
 
 watch(
+  () => route.params?.id,
+  () => gallery.resetGalleryList(),
+)
+
+watch(
   () => route.params?.no,
-  async () => {
-    await gallery.loadPhotoList()
+  async (value) => {
+    viewer.postUid = parseInt(value as string)
+    if (viewer.sinceUid < 1) {
+      await gallery.loadPhotoList()
+    }
     openViewerDialog()
   },
 )

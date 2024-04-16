@@ -11,6 +11,26 @@ import { table, select } from "../common"
 import { PAGING_DIRECTION } from "./const"
 import { getPostRelated, getSearchedPosts } from "./list"
 
+// 사진들 가져오기
+export async function getPhotoItems(postUid: number): Promise<{
+  files: string[]
+  thumbnails: string[]
+}> {
+  let images = {
+    files: [] as string[],
+    thumbnails: [] as string[],
+  }
+  const thumbs = await select(
+    `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
+    [postUid],
+  )
+  for (const thumb of thumbs) {
+    images.thumbnails.push(thumb.path)
+    images.files.push(thumb.full_path)
+  }
+  return images
+}
+
 // 갤러리 목록 가져오기
 export async function getPhotos(param: PostParams): Promise<GridItem[]> {
   let posts: RowDataPacket[] = []
@@ -40,17 +60,7 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
       categoryUid: post.category_uid,
     })
 
-    const thumbnails: string[] = []
-    const files: string[] = []
-    const thumbs = await select(
-      `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
-      [post.uid],
-    )
-
-    for (const thumb of thumbs) {
-      thumbnails.push(thumb.path)
-      files.push(thumb.full_path)
-    }
+    const { files, thumbnails } = await getPhotoItems(post.uid)
 
     result.push({
       uid: post.uid,

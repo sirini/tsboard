@@ -76,6 +76,14 @@ export const useBoardListStore = defineStore("boardList", () => {
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
   }
 
+  // 게시판 목록 초기화
+  async function resetBoardList(): Promise<void> {
+    sinceUid.value = 0
+    page.value = 1
+    await loadPostList()
+    home.setGridLayout()
+  }
+
   // 이전 페이지 가져오기
   async function loadPrevPosts(): Promise<void> {
     page.value -= 1
@@ -152,6 +160,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     option,
     keyword,
     loadPostList,
+    resetBoardList,
     loadPrevPosts,
     loadNextPosts,
     resetSearchKeyword,

@@ -88,7 +88,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { watch, onMounted } from "vue"
+import { useRoute } from "vue-router"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -104,14 +105,17 @@ import SideDrawer from "../home/SideDrawer.vue"
 import { CONTENT_STATUS } from "../../interface/board"
 import { TEXT } from "../../messages/pages/board/list"
 
+const route = useRoute()
 const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
 
-onMounted(() => {
-  list.loadPostList()
-  home.setGridLayout()
-})
+onMounted(() => list.resetBoardList())
+
+watch(
+  () => route.params?.id,
+  () => list.resetBoardList(),
+)
 </script>
 
 <style type="scss" scoped>

@@ -63,7 +63,7 @@ export const useViewerStore = defineStore("viewer", () => {
     },
   ]
 
-  // 사진들 불러오기
+  // 게시글 불러오기
   async function loadPost(): Promise<void> {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
@@ -112,6 +112,40 @@ export const useViewerStore = defineStore("viewer", () => {
     post.value = response.data.result.post
     tags.value = response.data.result.tags
     position.value = 0
+  }
+
+  // 사진들 불러오기
+  async function loadPhotos(): Promise<void> {
+    id.value = route.params.id as string
+    if (id.value.length < 2) {
+      util.snack(TEXT[home.lang].NO_BOARD_ID)
+      return
+    }
+
+    const response = await api.tsboard.board.photoview.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        id: id.value,
+        no: postUid.value,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(TEXT[home.lang].NO_RESPONSE)
+      close()
+      return
+    }
+    if (response.data.success === false) {
+      config.value = response.data.result.config
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
+      close()
+      return
+    }
+
+    files.value = response.data.result.files
+    thumbnails.value = response.data.result.thumbnails
   }
 
   // 댓글 불러오기
@@ -265,6 +299,7 @@ export const useViewerStore = defineStore("viewer", () => {
   // 이미지 뷰어 다이얼로그 닫기
   function close(): void {
     dialog.value = false
+    postUid.value = 0
     router.push({ name: "galleryList", params: { id: id.value } })
   }
 
@@ -274,6 +309,7 @@ export const useViewerStore = defineStore("viewer", () => {
     drawerWidth,
     drawerPosition,
     config,
+    sinceUid,
     postUid,
     post,
     comments,
@@ -285,6 +321,7 @@ export const useViewerStore = defineStore("viewer", () => {
     isViewContent,
     textRule,
     loadPost,
+    loadPhotos,
     loadComments,
     like,
     mouseDown,

@@ -3,7 +3,6 @@
     <v-chip
       variant="text"
       prepend-icon="mdi-tag-outline"
-      class="mr-2 mb-2"
       v-for="(tag, index) in viewer.tags"
       :key="index"
       >{{ tag.name }}</v-chip

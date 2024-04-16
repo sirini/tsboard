@@ -5,7 +5,7 @@
         <v-img
           cover
           height="80"
-          :src="TSBOARD.PREFIX + thumb"
+          :src="thumb"
           :class="viewer.position === index ? 'selected' : 'deselected'"
           @click="viewer.position = index"
         ></v-img>
@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import { useViewerStore } from "../../../../store/board/gallery/viewer"
-import { TSBOARD } from "../../../../../tsboard.config"
 
 const viewer = useViewerStore()
 </script>
