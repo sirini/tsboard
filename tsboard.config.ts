@@ -21,7 +21,7 @@ export const TSBOARD = {
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
   API: {
-    URI: IS_DEV ? DEV_URL : PROD_URL,
+    URI: IS_DEV ? `${LOCALHOST}:${PORT_DEV}` : PROD_URL,
   },
 }
 

@@ -1,5 +1,5 @@
 /**
- * server/index.ts
+ * server/index
  *
  * 웹서버 진입점, 클라이언트에서는 @elysiajs/eden을 이용하여 App 접근
  */
