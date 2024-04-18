@@ -16,7 +16,7 @@ import { USER_OPEN_INFO } from "../../../server/database/user/const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useUserStore = defineStore("user", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const home = useHomeStore()
   const userInfoDialog = ref<boolean>(false)
@@ -39,7 +39,7 @@ export const useUserStore = defineStore("user", () => {
 
   // 회원 기본 정보 가져오기
   async function loadUserInfo(): Promise<void> {
-    const response = await api.tsboard.user.loaduserinfo.get({
+    const response = await client.tsapi.user.loaduserinfo.get({
       $query: {
         userUid: targetUser.value.uid,
       },

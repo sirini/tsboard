@@ -7,12 +7,14 @@
 import { RowDataPacket } from "mysql2"
 import {
   AdminLatestComment,
+  AdminLatestRelatedResults,
   AdminSearchCommon,
   AdminUserInfo,
 } from "../../../../../src/interface/admin"
 import { select, table } from "../../../common"
 import { getUserBasic } from "../../../board/list"
 import { getCommentLikeCount } from "../../../board/comment"
+import { BoardType } from "../../../../../src/interface/board"
 
 // 최근 uid 값 반환하기
 export async function getMaxCommentUid(): Promise<number> {
@@ -23,29 +25,25 @@ export async function getMaxCommentUid(): Promise<number> {
   return max.uid
 }
 
-type RelatedResults = {
-  id: string
-  like: number
-  writer: AdminUserInfo
-}
-
 // 댓글에 연관된 내용들 가져오기
 async function getRelatedInfo(
   postUid: number,
   commentUid: number,
   userUid: number,
-): Promise<RelatedResults> {
+): Promise<AdminLatestRelatedResults> {
   const [post] = await select(`SELECT board_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [postUid])
-  const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+  const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
     post.board_uid,
   ])
   const like = await getCommentLikeCount(commentUid)
   const writer = await getUserBasic(userUid)
 
-  let result: RelatedResults = {
+  let result: AdminLatestRelatedResults = {
     id: board.id,
+    type: board.type as BoardType,
     like,
     writer: writer as AdminUserInfo,
+    comment: 0,
   }
 
   return result
@@ -58,6 +56,7 @@ async function makeCommentResult(comments: RowDataPacket[]): Promise<AdminLatest
     const info = await getRelatedInfo(comment.post_uid, comment.uid, comment.user_uid)
     result.push({
       id: info.id,
+      type: info.type,
       uid: comment.uid,
       like: info.like,
       date: comment.submitted,

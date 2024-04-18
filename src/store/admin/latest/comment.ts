@@ -16,7 +16,7 @@ import { COMMENT } from "../../../messages/store/admin/latest/comment"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminLatestCommentStore = defineStore("adminLatestComment", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -29,7 +29,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
 
   // 최신 댓글 목록 가져오기
   async function loadLatestComments(): Promise<void> {
-    const response = await api.tsboard.admin.latest.comment.get({
+    const response = await client.tsapi.admin.latest.comment.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -63,7 +63,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     if (keyword.value.length < 2) {
       return
     }
-    const response = await api.tsboard.admin.latest.search.comment.get({
+    const response = await client.tsapi.admin.latest.search.comment.get({
       $headers: {
         authorization: auth.user.token,
       },

@@ -8,7 +8,7 @@ import { defineConfig } from "vite"
 import { fileURLToPath, URL } from "node:url"
 
 // TSBOARD Configuration
-import { IS_DEV, PORT_DEV_VITE, TSBOARD } from "./tsboard.config"
+import { IS_DEV, LOCALHOST, PORT_DEV, PORT_DEV_VITE, TSBOARD } from "./tsboard.config"
 
 export default defineConfig({
   plugins: [
@@ -44,6 +44,11 @@ export default defineConfig({
   },
   server: {
     port: PORT_DEV_VITE,
-    proxy: {},
+    proxy: {
+      "/tsapi": {
+        target: `${LOCALHOST}:${PORT_DEV}`,
+        changeOrigin: true,
+      },
+    },
   },
 })

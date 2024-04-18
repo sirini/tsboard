@@ -62,10 +62,6 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ## 미리 알아두어야 할 사항들
 
-- TSBOARD 설치는 대부분 `CLI` (명령줄 인터페이스)를 통해 진행됩니다.
-  - 보통 웹게시판들은 설치 시 `.zip` 파일을 받아서 압축을 풀고, FTP로 업로드 후 브라우저에서 설치합니다.
-  - 그러나, TSBOARD는 `SSH` 등으로 서버에 원격으로 접속할 수 있어야 합니다.
-  - `CLI` 사용이 어려우신 분들은 아래 안내를 건너뛰고, **설치가 어려운 분들께** 항목을 읽어주세요.
 - MySQL(Mariadb) 계정이 데이터베이스 생성 권한을 가지고 있어야 합니다.
   - TSBOARD는 설치 과정에서 새로운 데이터베이스 (기본 `tsboard`)를 생성합니다.
   - 만약 MySQL(Mariadb) 접속 계정에 해당 권한이 없다면 설치는 실패합니다.
@@ -126,7 +122,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 - TSBOARD를 본인의 Linux PC or Mac 에 먼저 설치하여 개발 모드로 사용해 보실 수도 있습니다.
   - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
-  - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEVELOPING` 항목을 `true` 로 수정합니다.
+  - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEV` 항목을 `true` 로 수정합니다.
   - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
   - 다른 터미널을 열고 `npm run dev:server` 를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
   - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
@@ -180,10 +176,10 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
       try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
     }
 
-    location /tsboard {
+    # v0.8.18부터 기존 /api 가 /tsapi 로 변경됨 (타 백엔드와 충돌 방지)
+    location /tsapi {
       # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
-      # v0.8.17부터 기존 /api 가 /tsboard 로 변경됨 (타 백엔드와 충돌 방지)
-      proxy_pass http://127.0.0.1:3100/tsboard;
+      proxy_pass http://127.0.0.1:3100/tsapi;
       proxy_buffering off;
       proxy_connect_timeout 300;
       proxy_send_timeout 300;
@@ -204,18 +200,10 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ### 대신 설치 요청하기
 
-- 먼저 설치 과정에서 어려움을 만나신 분들께 위로를 드립니다.
-  - TSBOARD는 사실 설치하기가 쉽지 않습니다. 일반적인 JavaScript/TypeScript 프로젝트라면 보통 `Node.js` 만 있으면 되지만, CPU도 가려쓰는(...) Bun을 추가로 요구하니까요. (곧 해결되길 희망합니다.)
-  - 또한 개발 과정의 간소화 내지는 우선순위 조정으로 인해 설치 과정에서 예외 케이스들을 면밀히 검토하지 못했습니다.
-  - 앞으로 더 편하게 설치하여 사용하실 수 있도록 더욱 노력하겠습니다. 설치 관련 어려움을 겪으신 분들께 도움을 드릴 수 있도록, 아래 내용들을 잘 살펴봐 주세요!
 - **TSBOARD 설치를 대신** 도와드리겠습니다.
   - 본인이 운영하시는 서버가 있으시고, `SSH` 접속 권한을 공유해 주실 수 있으시다면 `sirini@gmail.com` 으로 요청 메일을 보내주세요.
   - 단, 앞서 언급한대로 가상 서버나 기타 조건으로 인해 제대로 운영이 안될 수 있으며, 오직 설치만 대신해 드립니다.
-  - 기존에 운영하시는 서비스를 TSBOARD로 전환하길 원하시는 분들은 <https://tsboard.dev> 사이트에 관련 내용들을 공유해주세요. (기존에 어떤 게시판을 쓰셨는지, 따로 커스텀 하신 건 있으신지 등...)
-- 개발자 지인이 있다면 도움을 요청해보세요.
-  - TSBOARD가 사용하는 기술 스택들은 `Bun` 을 제외한다면 크게 특별하지 않습니다.
-  - 주변에 개발자 지인이 있다면, 이 리드미 내용을 공유하면서 설치를 부탁해보세요.
-  - 때로는 **정당한 대가를 지불하고 개발자의 시간을 사는 것도 방법**이 될 수 있습니다.
+  - 기존에 운영하시는 서비스를 TSBOARD로 전환하길 원하시는 분들은 <https://tsboard.dev> 사이트에 관련 내용들을 공유해주세요. (기존에 어떤 게시판을 쓰셨는지, 따로 커스텀 하신 건 있으신지 등, v0.8.18부터 제공되는 `converter.sample.ts` 파일도 참고해 보세요!)
 
 ### 문의하러가기
 

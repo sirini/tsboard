@@ -135,10 +135,19 @@ export type AdminLatest = {
   writer: AdminUserInfo
 }
 
-type AdminLatestCommon = {
+type AdminLatestEssential = {
   id: string
-  uid: number
+  type: BoardType
   like: number
+}
+
+export type AdminLatestRelatedResults = AdminLatestEssential & {
+  writer: AdminUserInfo
+  comment: number
+}
+
+type AdminLatestCommon = AdminLatestEssential & {
+  uid: number
   date: number
   status: number
 }

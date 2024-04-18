@@ -20,7 +20,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const board = ref<AdminPoint>(INIT_POINT_CONFIG)
   const boardView = ref<string>("0")
   const boardWrite = ref<string>("0")
@@ -29,7 +29,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 게시판 포인트 설정 불러오기
   async function loadPointConfig(): Promise<void> {
-    const response = await api.tsboard.admin.board.point.load.get({
+    const response = await client.tsapi.admin.board.point.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -114,7 +114,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 포인트 처리
   async function updateAllPoints(): Promise<boolean> {
-    const response = await api.tsboard.admin.board.point.updatepoints.patch({
+    const response = await client.tsapi.admin.board.point.updatepoints.patch({
       $headers: {
         authorization: auth.user.token,
       },

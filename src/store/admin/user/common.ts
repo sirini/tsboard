@@ -15,7 +15,7 @@ import { COMMON } from "../../../messages/store/admin/user/common"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminUserStore = defineStore("adminUser", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const blockUserTarget = ref<AdminPair>({ uid: 0, name: "" })
@@ -29,7 +29,7 @@ export const useAdminUserStore = defineStore("adminUser", () => {
 
   // 회원 목록 가져오기
   async function loadUsers(): Promise<void> {
-    const response = await api.tsboard.admin.user.list.get({
+    const response = await client.tsapi.admin.user.list.get({
       $headers: {
         authorization: auth.user.token,
       },

@@ -51,7 +51,7 @@ export const load = new Elysia()
   )
   .get(
     "/candidates",
-    async ({ jwt, cookie: { refresh }, headers, query: { name, limit } }) => {
+    async ({ query: { name, limit } }) => {
       const response = {
         candidates: [],
       }

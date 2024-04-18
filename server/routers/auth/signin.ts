@@ -52,7 +52,7 @@ export const signIn = new Elysia()
 
       refresh.set({
         value: token.refresh,
-        maxAge: 86400 * 14,
+        maxAge: 86400 * AUTH.JWT.REFRESH_TIMEOUT,
         path: "/",
         httpOnly: AUTH.COOKIE.HTTP_ONLY,
         secure: AUTH.COOKIE.SECURE,

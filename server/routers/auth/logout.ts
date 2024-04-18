@@ -6,7 +6,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { clearUserToken } from "../../database/auth/logout"
-import { success } from "../../util/tools"
+import { DEFAULT_TYPE_CHECK, success } from "../../util/tools"
 
 export const logout = new Elysia()
   .use(
@@ -22,13 +22,13 @@ export const logout = new Elysia()
       if (access !== false) {
         clearUserToken(access.uid as number)
       }
-      refresh.remove()
+      if (refresh.value) {
+        refresh.remove()
+      }
 
       return success("")
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...DEFAULT_TYPE_CHECK,
     },
   )

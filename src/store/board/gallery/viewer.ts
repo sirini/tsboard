@@ -24,7 +24,7 @@ import * as COMMENT from "../../../messages/store/board/comment"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useViewerStore = defineStore("viewer", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
@@ -79,7 +79,7 @@ export const useViewerStore = defineStore("viewer", () => {
       needUpdateHit = 1
     }
 
-    const response = await api.tsboard.board.view.get({
+    const response = await client.tsapi.board.view.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -122,7 +122,7 @@ export const useViewerStore = defineStore("viewer", () => {
       return
     }
 
-    const response = await api.tsboard.board.photoview.get({
+    const response = await client.tsapi.board.photoview.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -150,7 +150,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 댓글 불러오기
   async function loadComments(): Promise<void> {
-    const response = await api.tsboard.board.comment.get({
+    const response = await client.tsapi.board.comment.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -177,7 +177,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await api.tsboard.board.likepost.patch({
+    const response = await client.tsapi.board.likepost.patch({
       $headers: {
         authorization: auth.user.token,
       },

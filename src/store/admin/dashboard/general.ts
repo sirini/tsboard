@@ -21,7 +21,7 @@ type Today = {
 }
 
 export const useAdminDashboardStore = defineStore("adminDashboard", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const visit = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
@@ -52,7 +52,7 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 간단 통계 데이터 가져오기
   async function loadStatistics(): Promise<void> {
-    const response = await api.tsboard.admin.dashboard.general.load.statistic.get({
+    const response = await client.tsapi.admin.dashboard.general.load.statistic.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -71,7 +71,7 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 최신 글/댓글/신고 가져오기
   async function loadLatests(): Promise<void> {
-    const response = await api.tsboard.admin.dashboard.general.load.latest.get({
+    const response = await client.tsapi.admin.dashboard.general.load.latest.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -90,7 +90,7 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 그룹/게시판/회원 최신 목록 가져오기
   async function loadItems(): Promise<void> {
-    const response = await api.tsboard.admin.dashboard.general.load.item.get({
+    const response = await client.tsapi.admin.dashboard.general.load.item.get({
       $headers: {
         authorization: auth.user.token,
       },

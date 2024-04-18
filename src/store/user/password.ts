@@ -16,7 +16,7 @@ import { TEXT } from "../../messages/store/user/auth"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const usePasswordStore = defineStore("password", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -31,7 +31,7 @@ export const usePasswordStore = defineStore("password", () => {
 
     loading.value = true
 
-    const response = await api.tsboard.auth.resetpassword.post({
+    const response = await client.tsapi.auth.resetpassword.post({
       email: auth.user.id,
       lang: home.lang as number,
     })
@@ -65,7 +65,7 @@ export const usePasswordStore = defineStore("password", () => {
       return
     }
 
-    const response = await api.tsboard.auth.changepassword.post({
+    const response = await client.tsapi.auth.changepassword.post({
       target,
       code,
       password: SHA256(auth.password).toString(),

@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getPointConfig } from "../../../../database/admin/board/point/load"
-import { fail, success, getUpdatedAccessToken } from "../../../../util/tools"
+import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 import { INIT_POINT_CONFIG } from "../../../../database/admin/board/point/const"
 
 export const load = new Elysia()
@@ -37,12 +37,7 @@ export const load = new Elysia()
       })
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
-      cookie: t.Cookie({
-        refresh: t.String(),
-      }),
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         id: t.String(),
       }),

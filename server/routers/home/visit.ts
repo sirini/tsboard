@@ -33,7 +33,6 @@ export const visit = new Elysia()
         prettier: "https://prettier.io",
         typescript: "https://www.typescriptlang.org",
         vite: "https://vitejs.dev",
-        google: "https://google.com",
         mariadb: "https://mariadb.org",
         mysql2: "https://www.npmjs.com/package/mysql2",
         nginx: "https://www.nginx.com",

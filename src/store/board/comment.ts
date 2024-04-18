@@ -19,7 +19,7 @@ import { PAGING_DIRECTION } from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useCommentStore = defineStore("comment", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -47,7 +47,7 @@ export const useCommentStore = defineStore("comment", () => {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 
-    const response = await api.tsboard.board.comment.get({
+    const response = await client.tsapi.board.comment.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -104,7 +104,7 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
   async function like(commentUid: number, isLike: boolean): Promise<void> {
-    const response = await api.tsboard.board.likecomment.patch({
+    const response = await client.tsapi.board.likecomment.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -223,7 +223,7 @@ export const useCommentStore = defineStore("comment", () => {
       return
     }
 
-    const response = await api.tsboard.board.removecomment.delete({
+    const response = await client.tsapi.board.removecomment.delete({
       $headers: {
         authorization: auth.user.token,
       },

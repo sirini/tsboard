@@ -26,7 +26,7 @@ export const admin = new Elysia().group("/admin", (app) => {
       }),
     )
     .onBeforeHandle(async ({ cookie: { refresh }, jwt, headers }) => {
-      const response = null
+      const response = ""
       const access = await jwt.verify(headers.authorization ?? "")
       if (access === false) {
         return fail(`Invalid authorization.`, response)

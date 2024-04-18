@@ -16,7 +16,7 @@ import { TEXT } from "../../messages/store/user/user"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useReportStore = defineStore("report", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -49,7 +49,7 @@ export const useReportStore = defineStore("report", () => {
       return
     }
 
-    const response = await api.tsboard.user.report.post({
+    const response = await client.tsapi.user.report.post({
       $headers: {
         authorization: auth.user.token,
       },

@@ -19,7 +19,7 @@ import { BOARD_CONFIG } from "../../../server/database/board/const"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -65,7 +65,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await api.tsboard.board.config.get({
+    const response = await client.tsapi.board.config.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -97,7 +97,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await api.tsboard.board.loadpost.get({
+    const response = await client.tsapi.board.loadpost.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -137,7 +137,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await api.tsboard.board.tagsuggestion.get({
+    const response = await client.tsapi.board.tagsuggestion.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -249,7 +249,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
 
     loading.value = true
-    const response = await api.tsboard.board.write.post({
+    const response = await client.tsapi.board.write.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -286,7 +286,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
 
     loading.value = true
-    const response = await api.tsboard.board.modify.patch({
+    const response = await client.tsapi.board.modify.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -322,7 +322,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (fileUid < 1) {
       return
     }
-    const response = await api.tsboard.board.removeattached.delete({
+    const response = await client.tsapi.board.removeattached.delete({
       $headers: {
         authorization: auth.user.token,
       },

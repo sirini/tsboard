@@ -24,7 +24,7 @@ import { BoardConfig, Post, SEARCH_OPTION, SearchOption } from "../../../interfa
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useGalleryStore = defineStore("gallery", () => {
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -50,7 +50,7 @@ export const useGalleryStore = defineStore("gallery", () => {
       return
     }
 
-    const response = await api.tsboard.board.photolist.get({
+    const response = await client.tsapi.board.photolist.get({
       $headers: {
         authorization: auth.user.token,
       },

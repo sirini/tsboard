@@ -24,7 +24,7 @@ import { TSBOARD } from "../../../../tsboard.config"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
-  const api = edenTreaty<App>(TSBOARD.API.URI)
+  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -39,7 +39,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
 
   // 지정된 그룹의 설정값 불러오기
   async function loadGeneralConfig(): Promise<void> {
-    const response = await api.tsboard.admin.group.general.load.get({
+    const response = await client.tsapi.admin.group.general.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -66,7 +66,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (newGroupManager.value.length < 2) {
       return
     }
-    const response = await api.tsboard.admin.group.general.candidates.get({
+    const response = await client.tsapi.admin.group.general.candidates.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -95,7 +95,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (newBoardId.value.length < 2) {
       return
     }
-    const response = await api.tsboard.admin.group.general.boardids.get({
+    const response = await client.tsapi.admin.group.general.boardids.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -131,7 +131,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       newBoardId.value = ""
       return
     }
-    const response = await api.tsboard.admin.group.general.createboard.post({
+    const response = await client.tsapi.admin.group.general.createboard.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -171,7 +171,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
 
   // 선택한 회원을 그룹 관리자로 지정하기
   async function updateGroupManager(user: AdminPair): Promise<void> {
-    const response = await api.tsboard.admin.group.general.changeadmin.patch({
+    const response = await client.tsapi.admin.group.general.changeadmin.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -214,7 +214,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return
     }
 
-    const response = await api.tsboard.admin.group.general.removeboard.delete({
+    const response = await client.tsapi.admin.group.general.removeboard.delete({
       $headers: {
         authorization: auth.user.token,
       },
