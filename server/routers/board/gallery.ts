@@ -84,7 +84,7 @@ export const gallery = new Elysia()
       const images = await getPhotos({
         boardUid: config.uid,
         page,
-        bunch: config.row,
+        bunch: config.rowCount,
         sinceUid,
         accessUserUid,
         pagingDirection,

@@ -28,7 +28,7 @@ export async function changeType(boardUid: number, newType: number): Promise<voi
 
 // 한 페이지에 보여줄 게시글 갯수 변경하기
 export async function updateRows(boardUid: number, newRows: number): Promise<void> {
-  await update(`UPDATE ${table}board SET row = ? WHERE uid = ? LIMIT 1`, [newRows, boardUid])
+  await update(`UPDATE ${table}board SET row_count = ? WHERE uid = ? LIMIT 1`, [newRows, boardUid])
 }
 
 // 게시판 너비 변경하기

@@ -27,7 +27,7 @@ export const BOARD_CONFIG: BoardConfig = {
   type: 0,
   name: "",
   info: "",
-  row: 0,
+  rowCount: 0,
   width: 0,
   useCategory: false,
   category: [{ uid: 0, name: "" }],

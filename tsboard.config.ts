@@ -21,7 +21,9 @@ export const TSBOARD = {
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
   API: {
-    URI: IS_DEV ? `${LOCALHOST}:${PORT_DEV}` : PROD_URL,
+    URI: IS_DEV
+      ? DEV_URL
+      : PROD_URL /* 쿠키가 제대로 동작하려면, API 호출은 3000(개발 시) 혹은 80(프로덕션 시) */,
   },
 }
 
@@ -62,7 +64,7 @@ export const NEW_BOARD = {
   TYPE: 0 /* 0: 게시판, 1: 갤러리, 2: 블로그, 3: 쇼핑몰 */,
   NAME: "새로운 게시판",
   INFO: "새 게시판 설명",
-  ROW: 20,
+  ROWS: 20,
   WIDTH: 1000,
   USE_CATEGORY: 1,
   LEVEL: {

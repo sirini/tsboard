@@ -22,30 +22,33 @@ import { removeEmptyDir, removeFile } from "./server/util/tools"
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`)
 
 // 0.8.4 >>> 0.8.14, file_thumbnail 테이블에 full_path 컬럼 추가
-await execute(
-  `ALTER TABLE ${table}file_thumbnail ADD full_path VARCHAR(300) NOT NULL DEFAULT '' AFTER path`,
-)
+// await execute(
+//   `ALTER TABLE ${table}file_thumbnail ADD full_path VARCHAR(300) NOT NULL DEFAULT '' AFTER path`,
+// )
 
-const thumbs = await select(`SELECT path FROM ${table}file_thumbnail`)
-for (const thumb of thumbs) {
-  await removeFile(`.${thumb.path}`)
-  console.log(`Remove file: .${thumb.path}`)
-}
+// const thumbs = await select(`SELECT path FROM ${table}file_thumbnail`)
+// for (const thumb of thumbs) {
+//   await removeFile(`.${thumb.path}`)
+//   console.log(`Remove file: .${thumb.path}`)
+// }
 
-await execute(`TRUNCATE ${table}file_thumbnail`)
-console.log(`Truncate table: ${table}file_thumbnail`)
+// await execute(`TRUNCATE ${table}file_thumbnail`)
+// console.log(`Truncate table: ${table}file_thumbnail`)
 
-await removeEmptyDir(`./upload/thumbnails`)
-console.log(`Empty directories have been removed: ./upload/thumbnails`)
+// await removeEmptyDir(`./upload/thumbnails`)
+// console.log(`Empty directories have been removed: ./upload/thumbnails`)
 
-const files = await select(`SELECT uid, post_uid, path FROM ${table}file`)
-for (const file of files) {
-  if (/\.(jpg|jpeg|png|bmp|webp|gif|avif)$/i.test(file.path)) {
-    await saveThumbnailImage(file.uid, file.post_uid, `.${file.path}`)
-    console.log(`SAVED: .${file.path} for #${file.post_uid}`)
-  }
-}
+// const files = await select(`SELECT uid, post_uid, path FROM ${table}file`)
+// for (const file of files) {
+//   if (/\.(jpg|jpeg|png|bmp|webp|gif|avif)$/i.test(file.path)) {
+//     await saveThumbnailImage(file.uid, file.post_uid, `.${file.path}`)
+//     console.log(`SAVED: .${file.path} for #${file.post_uid}`)
+//   }
+// }
 
-console.log(`v0.8.14, done.`)
+// 0.8.14 >>> 0.8.18, board 테이블의 row 컬럼을 rows 로 변경
+await execute(`ALTER TABLE ${table}board CHANGE \`row\` row_count TINYINT`)
+
+console.log(`v0.8.18, done.`)
 
 process.exit(0)

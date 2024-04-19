@@ -121,7 +121,7 @@ tables.push(`${create} #db#board (
   type TINYINT ${nnd0},
   name VARCHAR(20) ${nnde},
   info VARCHAR(100) ${nnde},
-  \`row\` TINYINT UNSIGNED ${nnd} '20',
+  row_count TINYINT UNSIGNED ${nnd} '20',
   width INT UNSIGNED NOT NULL DEFAULT '1000',
   use_category TINYINT ${unnd0},
   level_list TINYINT ${unnd0},
@@ -252,7 +252,7 @@ tables.push(`${create} #db#file (
   KEY (post_uid)
 ) ${engineEncode}`)
 
-// 첨부된 파일이 이미지일 때 썸네일/풀 이미지 경로 보관하는 테이블, 
+// 첨부된 파일이 이미지일 때 썸네일/풀 이미지 경로 보관하는 테이블,
 // ^0.8.14, 모든 이미지는 avif/12MP 이하 해상도로 저장됨
 tables.push(`${create} #db#file_thumbnail (
   ${uid},
@@ -306,7 +306,7 @@ inserts.push(`INSERT INTO #db#group (
 
 // 자유 게시판 생성하기 (삭제 가능)
 inserts.push(`INSERT INTO #db#board (
-  id, group_uid, admin_uid, type, name, info, row, width, use_category,
+  id, group_uid, admin_uid, type, name, info, row_count, width, use_category,
   level_list, level_view, level_write, level_comment, level_download,
   point_view, point_write, point_comment, point_download
 ) VALUES (

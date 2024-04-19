@@ -51,7 +51,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value = response.data.result.config
-    boardRows.value = board.value.row.toString()
+    boardRows.value = board.value.rowCount.toString()
     boardWidth.value = board.value.width.toString()
     boardUseCategory.value = board.value.useCategory
     admin.success(GENERAL.LOADED_CONFIG)

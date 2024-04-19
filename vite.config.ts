@@ -45,6 +45,7 @@ export default defineConfig({
   server: {
     port: PORT_DEV_VITE,
     proxy: {
+      /* 쿠키가 정상적으로 동작하려면, 반드시 proxy 설정으로 API 호출 필요 */
       "/tsapi": {
         target: `${LOCALHOST}:${PORT_DEV}`,
         changeOrigin: true,

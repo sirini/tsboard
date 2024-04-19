@@ -71,7 +71,7 @@ export type BoardConfig = {
   type: BoardType
   name: string
   info: string
-  row: number
+  rowCount: number
   width: number
   useCategory: boolean
   category: Pair[]

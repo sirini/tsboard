@@ -55,7 +55,7 @@ export async function createBoard(newId: string, groupUid: number): Promise<numb
   }
   const boardUid = await insert(
     `INSERT INTO ${table}board 
-  (id, group_uid, admin_uid, type, name, info, row, width, use_category, 
+  (id, group_uid, admin_uid, type, name, info, row_count, width, use_category, 
     level_list, level_view, level_write, level_comment, level_download, 
     point_view, point_write, point_comment, point_download) VALUES 
   (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -66,7 +66,7 @@ export async function createBoard(newId: string, groupUid: number): Promise<numb
       NEW_BOARD.TYPE,
       NEW_BOARD.NAME,
       NEW_BOARD.INFO,
-      NEW_BOARD.ROW!,
+      NEW_BOARD.ROWS!,
       NEW_BOARD.WIDTH,
       NEW_BOARD.USE_CATEGORY,
       NEW_BOARD.LEVEL.LIST,

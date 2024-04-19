@@ -32,7 +32,7 @@ export type AdminBoardConfig = AdminPair & {
   groups: AdminPair[]
   groupUid: number
   info: string
-  row: number
+  rowCount: number
   width: number
   useCategory: boolean
   categories: AdminPair[]

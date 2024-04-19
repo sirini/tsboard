@@ -73,7 +73,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
 
     posts.value = response.data.result.posts
-    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.rowCount)
   }
 
   // 게시판 목록 초기화
@@ -104,7 +104,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = posts.value.at(-1)?.uid ?? 0
 
-    if (posts.value.length < config.value.row) {
+    if (posts.value.length < config.value.rowCount) {
       util.snack(TEXT[home.lang].LAST_PAGE)
       sinceUid.value = 0
       return

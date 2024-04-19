@@ -91,7 +91,7 @@ export const useGalleryStore = defineStore("gallery", () => {
         util.snack(TEXT[home.lang].LAST_PAGE)
       }
     }
-    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.row)
+    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.rowCount)
 
     auth.user.admin =
       response.data.result.config.admin.group === auth.user.uid ||
@@ -112,7 +112,7 @@ export const useGalleryStore = defineStore("gallery", () => {
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = images.value.at(-1)?.uid ?? 0
 
-    if (images.value.length < config.value.row) {
+    if (images.value.length < config.value.rowCount) {
       util.snack(TEXT[home.lang].LAST_PAGE)
       sinceUid.value = 0
       return

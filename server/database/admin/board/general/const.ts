@@ -15,7 +15,7 @@ export const INIT_BOARD_CONFIG: AdminBoardConfig = {
   groupUid: 0,
   name: "",
   info: "",
-  row: 0,
+  rowCount: 0,
   width: 0,
   useCategory: false,
   categories: [],

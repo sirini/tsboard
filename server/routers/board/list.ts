@@ -83,7 +83,7 @@ export const list = new Elysia()
       const posts = await getPosts({
         boardUid: config.uid,
         page,
-        bunch: config.row,
+        bunch: config.rowCount,
         sinceUid,
         accessUserUid,
         pagingDirection,

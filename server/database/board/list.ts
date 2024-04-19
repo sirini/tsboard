@@ -26,7 +26,7 @@ import { getCategories } from "./editor"
 export async function getBoardConfig(id: string): Promise<BoardConfig> {
   let result: BoardConfig = BOARD_CONFIG
   const [board] =
-    await select(`SELECT uid, group_uid, admin_uid, type, name, info, row, width, use_category, 
+    await select(`SELECT uid, group_uid, admin_uid, type, name, info, row_count, width, use_category, 
   level_list, level_view, level_write, level_comment, level_download, 
   point_view, point_write, point_comment, point_download
   FROM ${table}board WHERE id = '${id}' LIMIT 1`)
@@ -48,7 +48,7 @@ export async function getBoardConfig(id: string): Promise<BoardConfig> {
     type: board.type,
     name: board.name,
     info: board.info,
-    row: board.row,
+    rowCount: board.row_count,
     width: board.width,
     useCategory: board.use_category > 0 ? true : false,
     category,
