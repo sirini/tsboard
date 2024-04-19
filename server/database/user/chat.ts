@@ -10,13 +10,13 @@ import { NOTICE_TYPE } from "../board/const"
 import { addNotification } from "../home/notification"
 import { NoticeType } from "../../../src/interface/home"
 
-// 나에게 온 채팅 목록들 가져오기
+// 채팅 목록들 가져오기
 export async function getChatList(accessUserUid: number, limit: number): Promise<ChatItem[]> {
   let result: ChatItem[] = []
 
   const chats = await select(
-    `SELECT from_uid, MAX(message) AS latest_message, MAX(timestamp) AS latest_timestamp FROM ${table}chat 
-  WHERE to_uid = ? GROUP BY from_uid ORDER BY uid DESC LIMIT ?`,
+    `SELECT MAX(uid) AS latest_uid, from_uid, MAX(message) AS latest_message, MAX(timestamp) AS latest_timestamp FROM ${table}chat 
+  WHERE to_uid = ? GROUP BY from_uid ORDER BY latest_uid DESC LIMIT ?`,
     [accessUserUid.toString(), limit.toString()],
   )
 

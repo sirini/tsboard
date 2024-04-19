@@ -171,7 +171,7 @@ export async function getBoardLatests(id: string, limit: number): Promise<BoardL
   const posts = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit FROM ${table}post 
   WHERE board_uid = ? AND status = ? ORDER BY uid DESC LIMIT ?`,
-    [board.uid, CONTENT_STATUS.NORMAL, limit],
+    [board.uid, CONTENT_STATUS.NORMAL.toString(), limit.toString()],
   )
   for (const post of posts) {
     const writer = await getUserBasic(post.user_uid)
