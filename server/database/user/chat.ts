@@ -15,7 +15,7 @@ export async function getChatList(accessUserUid: number, limit: number): Promise
   let result: ChatItem[] = []
 
   const chats = await select(
-    `SELECT from_uid, message, timestamp FROM ${table}chat 
+    `SELECT from_uid, MAX(message) AS latest_message, MAX(timestamp) AS latest_timestamp FROM ${table}chat 
   WHERE to_uid = ? GROUP BY from_uid ORDER BY uid DESC LIMIT ?`,
     [accessUserUid.toString(), limit.toString()],
   )
