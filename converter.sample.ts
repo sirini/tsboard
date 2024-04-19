@@ -19,7 +19,7 @@ import { makeSavePath } from "./server/util/tools"
 import { saveThumbnailImage } from "./server/database/board/editor"
 import { CONTENT_STATUS } from "./src/interface/board"
 
-const BOARD_UID = 1 // TSBOARD 설치 시 생성되는 free 를 가리킵니다.
+const BOARD_UID = "1" // TSBOARD 설치 시 생성되는 free 를 가리킵니다.
 
 // 기존 사용자 테이블 >>> TSBOARD 사용자 테이블
 // 기존 테이블이 아래처럼 구성되어 있다고 가정
@@ -107,9 +107,10 @@ for (const comment of comments) {
   )
 
   // 모든 댓글은 답글이 없는 걸로 가정
+  const insertUidQuery = insertUid.toString()
   await update(`UPDATE ${table}comment SET reply_uid = ? WHERE uid = ? LIMIT 1`, [
-    insertUid,
-    insertUid,
+    insertUidQuery,
+    insertUidQuery,
   ])
 }
 
@@ -183,7 +184,7 @@ for (const pl of postLikes) {
   await insert(
     `INSERT INTO ${table}post_like (board_uid, post_uid, user_uid, liked, timestamp) 
   VALUES (?, ?, ?, ?, ?)`,
-    [BOARD_UID, pl.post_uid, pl.user_uid, pl.is_liked, Date.now()],
+    [BOARD_UID, pl.post_uid, pl.user_uid, pl.is_liked, Date.now().toString()],
   )
 }
 
@@ -210,7 +211,7 @@ for (const file of files) {
   const fileUid = await insert(
     `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) 
   VALUES (?, ?, ?, ?, ?)`,
-    [BOARD_UID, file.post_uid, file.name, newPath.slice(1), Date.now()],
+    [BOARD_UID, file.post_uid, file.name, newPath.slice(1), Date.now().toString()],
   )
 
   if (/(jpg|jpeg|png|bmp|webp|gif|avif)/i.test(ext) === true) {

@@ -59,7 +59,7 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
 
   const boards = await select(
     `SELECT uid, id, admin_uid, name, info FROM ${table}board WHERE group_uid = ?`,
-    [groupUid],
+    [groupUid.toString()],
   )
   if (!boards[0]) {
     return result
