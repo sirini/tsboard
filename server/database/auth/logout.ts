@@ -16,6 +16,6 @@ export async function clearUserToken(userUid: number): Promise<void> {
     `UPDATE ${table}user_token 
   SET access = ?, refresh = ?, timestamp_access = ?, timestamp_refresh = ?
   WHERE user_uid = ? LIMIT 1`,
-    ["", "", 0, 0, userUid],
+    ["", "", "0", "0", userUid.toString()],
   )
 }

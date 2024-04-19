@@ -15,7 +15,7 @@ export async function getUserOpenInfo(userUid: number): Promise<UserOpenInfo> {
   const [user] = await select(
     `SELECT name, profile, level, signature, signup, signin, blocked 
   FROM ${table}user WHERE uid = ? LIMIT 1`,
-    [userUid],
+    [userUid.toString()],
   )
   if (!user) {
     return result

@@ -14,7 +14,7 @@ export async function getLatestPosts(limit: number): Promise<AdminLatest[]> {
 
   const posts = await select(
     `SELECT uid, board_uid, user_uid, title FROM ${table}post ORDER BY uid DESC LIMIT ?`,
-    [limit],
+    [limit.toString()],
   )
   if (!posts[0]) {
     return result
@@ -45,7 +45,7 @@ export async function getLatestComments(limit: number): Promise<AdminLatest[]> {
 
   const comments = await select(
     `SELECT uid, post_uid, user_uid, content FROM ${table}comment ORDER BY uid DESC LIMIT ?`,
-    [limit],
+    [limit.toString()],
   )
   if (!comments[0]) {
     return result
@@ -81,7 +81,7 @@ export async function getLatestReports(limit: number): Promise<AdminLatest[]> {
   let result: AdminLatest[] = []
   const reports = await select(
     `SELECT uid, from_uid, request FROM ${table}report ORDER BY uid DESC LIMIT ?`,
-    [limit],
+    [limit.toString()],
   )
   if (!reports[0]) {
     return result

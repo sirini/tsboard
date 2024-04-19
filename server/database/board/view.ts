@@ -25,7 +25,7 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
   const [post] = await select(
     `SELECT user_uid, category_uid, title, content, submitted, modified, hit, status 
   FROM ${table}post WHERE uid = ? AND status != ? LIMIT 1`,
-    [postUid, CONTENT_STATUS.REMOVED],
+    [postUid.toString(), CONTENT_STATUS.REMOVED.toString()],
   )
   if (!post) {
     return result
@@ -59,14 +59,14 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
 
 // 조회수 업데이트
 export async function updatePostHit(postUid: number): Promise<void> {
-  update(`UPDATE ${table}post SET hit = hit + 1 WHERE uid = ? LIMIT 1`, [postUid])
+  update(`UPDATE ${table}post SET hit = hit + 1 WHERE uid = ? LIMIT 1`, [postUid.toString()])
 }
 
 // 첨부파일들 가져오기
 export async function getFiles(postUid: number): Promise<PostFile[]> {
   let result: PostFile[] = []
   const files = await select(`SELECT uid, name, path FROM ${table}file WHERE post_uid = ?`, [
-    postUid,
+    postUid.toString(),
   ])
   for (const file of files) {
     const stat = statSync(`.${file.path}`)
@@ -83,7 +83,7 @@ export async function getFiles(postUid: number): Promise<PostFile[]> {
 export async function getTags(postUid: number): Promise<Pair[]> {
   let result: Pair[] = []
   const tagUids = await select(`SELECT hashtag_uid FROM ${table}post_hashtag WHERE post_uid = ?`, [
-    postUid,
+    postUid.toString(),
   ])
   for (const uid of tagUids) {
     const [tag] = await select(`SELECT name FROM ${table}hashtag WHERE uid = ? LIMIT 1`, [
@@ -99,26 +99,33 @@ export async function getTags(postUid: number): Promise<Pair[]> {
 
 // 게시글 좋아하기 누르기
 export async function likePost(param: PostLikeParams): Promise<void> {
+  const postUidQuery = param.postUid.toString()
   const [like] = await select(
     `SELECT post_uid FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? LIMIT 1`,
-    [param.postUid, param.accessUserUid],
+    [postUidQuery, param.accessUserUid.toString()],
   )
   if (!like) {
     await select(
       `INSERT INTO ${table}post_like (board_uid, post_uid, user_uid, liked, timestamp) 
     VALUES (?, ?, ?, ? ,?)`,
-      [param.boardUid, param.postUid, param.accessUserUid, param.liked, Date.now()],
+      [
+        param.boardUid.toString(),
+        postUidQuery,
+        param.accessUserUid.toString(),
+        param.liked.toString(),
+        Date.now().toString(),
+      ],
     )
   } else {
     await update(
       `UPDATE ${table}post_like SET liked = ?, timestamp = ? WHERE post_uid = ? AND user_uid = ? LIMIT 1`,
-      [param.liked, Date.now(), param.postUid, param.accessUserUid],
+      [param.liked.toString(), Date.now().toString(), postUidQuery, param.accessUserUid.toString()],
     )
   }
 
   if (param.liked > 0) {
     const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
-      param.postUid,
+      postUidQuery,
     ])
 
     addNotification({
@@ -141,7 +148,7 @@ export async function getDownloadPermission(
   }
   const [config] = await select(
     `SELECT level_download, point_download FROM ${table}board WHERE uid = ? LIMIT 1`,
-    [boardUid],
+    [boardUid.toString()],
   )
   if (!config) {
     return result
@@ -160,7 +167,7 @@ export async function getDownloadPath(fileUid: number): Promise<{ path: string; 
     name: "",
   }
   const [file] = await select(`SELECT name, path FROM ${table}file WHERE uid = ? LIMIT 1`, [
-    fileUid,
+    fileUid.toString(),
   ])
   if (!file) {
     return result
@@ -173,7 +180,9 @@ export async function getDownloadPath(fileUid: number): Promise<{ path: string; 
 
 // 글작성자의 블랙리스트 대상자인지 확인
 export async function isBannedByWriter(postUid: number, accessUserUid: number): Promise<boolean> {
-  const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [postUid])
+  const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
+    postUid.toString(),
+  ])
   if (!post) {
     return false
   }
@@ -189,21 +198,24 @@ export async function isBannedByWriter(postUid: number, accessUserUid: number): 
 
 // 게시글 삭제 표기하고 소속된 댓글들도 삭제 표기 및 첨부 파일, 썸네일은 삭제
 export async function removePost(postUid: number): Promise<void> {
-  update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, [-1, postUid])
-  update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, [-1, postUid])
+  update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, ["-1", postUid.toString()])
+  update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, ["-1", postUid.toString()])
 
-  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [postUid])
+  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
+    postUid.toString(),
+  ])
   for (const file of files) {
     removeFile(`.${file.path}`)
   }
-  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid])
+  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid.toString()])
 
-  const thumbs = await select(`SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`, [
-    postUid,
-  ])
+  const thumbs = await select(
+    `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
+    [postUid.toString()],
+  )
   for (const thumb of thumbs) {
     removeFile(`.${thumb.path}`)
     removeFile(`.${thumb.full_path}`)
   }
-  remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid])
+  remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid.toString()])
 }

@@ -31,7 +31,9 @@ async function getRelatedInfo(
   commentUid: number,
   userUid: number,
 ): Promise<AdminLatestRelatedResults> {
-  const [post] = await select(`SELECT board_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [postUid])
+  const [post] = await select(`SELECT board_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
+    postUid.toString(),
+  ])
   const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
     post.board_uid,
   ])
@@ -78,7 +80,7 @@ export async function getComments(
   const last = 1 + maxUid - (page - 1) * bunch
   const comments = await select(
     `SELECT uid, post_uid, user_uid, content, submitted, status FROM ${table}comment WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
-    [last, bunch],
+    [last.toString(), bunch.toString()],
   )
   if (!comments[0]) {
     return result

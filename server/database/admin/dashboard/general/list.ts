@@ -11,7 +11,9 @@ import { table, select } from "../../../common"
 export async function getGroupList(limit: number): Promise<string[]> {
   let result: string[] = []
 
-  const groups = await select(`SELECT id FROM ${table}group ORDER BY uid DESC LIMIT ?`, [limit])
+  const groups = await select(`SELECT id FROM ${table}group ORDER BY uid DESC LIMIT ?`, [
+    limit.toString(),
+  ])
   if (!groups[0]) {
     return result
   }
@@ -27,7 +29,9 @@ export async function getGroupList(limit: number): Promise<string[]> {
 export async function getBoardList(limit: number): Promise<string[]> {
   let result: string[] = []
 
-  const boards = await select(`SELECT id FROM ${table}board ORDER BY uid DESC LIMIT ?`, [limit])
+  const boards = await select(`SELECT id FROM ${table}board ORDER BY uid DESC LIMIT ?`, [
+    limit.toString(),
+  ])
   if (!boards[0]) {
     return result
   }
@@ -45,7 +49,7 @@ export async function getMemberList(limit: number): Promise<AdminUserInfo[]> {
 
   const members = await select(
     `SELECT uid, name, profile FROM ${table}user ORDER BY uid DESC LIMIT ?`,
-    [limit],
+    [limit.toString()],
   )
   if (!members[0]) {
     return result

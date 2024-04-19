@@ -25,7 +25,7 @@ import { SIZE } from "../../../tsboard.config"
 // 글작성 레벨 제한 가져오기
 export async function getWriteLevel(boardUid: number): Promise<number> {
   const [board] = await select(`SELECT level_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid,
+    boardUid.toString(),
   ])
   if (!board) {
     return 0
@@ -36,7 +36,7 @@ export async function getWriteLevel(boardUid: number): Promise<number> {
 // 글작성 포인트 가져오기
 export async function getWritePoint(boardUid: number): Promise<number> {
   const [board] = await select(`SELECT point_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid,
+    boardUid.toString(),
   ])
   if (!board) {
     return 0
@@ -61,7 +61,12 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
       await insert(
         `INSERT INTO ${table}image (board_uid, user_uid, path, timestamp) VALUES 
       (?, ?, ?, ?)`,
-        [param.boardUid, param.accessUserUid, pathForImage, Date.now()],
+        [
+          param.boardUid.toString(),
+          param.accessUserUid.toString(),
+          pathForImage,
+          Date.now().toString(),
+        ],
       )
       result.push(pathForImage)
     }
@@ -73,7 +78,7 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
 export async function getMaxImageUid(boardUid: number, accessUserUid: number): Promise<number> {
   const [max] = await select(
     `SELECT MAX(uid) AS uid FROM ${table}image WHERE board_uid = ? AND user_uid = ?`,
-    [boardUid, accessUserUid],
+    [boardUid.toString(), accessUserUid.toString()],
   )
   if (!max) {
     return 0
@@ -85,7 +90,7 @@ export async function getMaxImageUid(boardUid: number, accessUserUid: number): P
 export async function getTotalImageCount(boardUid: number, accessUserUid: number): Promise<number> {
   const [total] = await select(
     `SELECT COUNT(*) AS count FROM ${table}image WHERE board_uid = ? AND user_uid = ?`,
-    [boardUid, accessUserUid],
+    [boardUid.toString(), accessUserUid.toString()],
   )
   if (!total) {
     return 0
@@ -102,7 +107,12 @@ export async function loadUploadedImages(param: LoadImageParams): Promise<Pair[]
   const images = await select(
     `SELECT uid, path FROM ${table}image WHERE uid < ? AND board_uid = ? AND user_uid = ? 
   ORDER BY uid DESC LIMIT ?`,
-    [param.lastUid, param.boardUid, param.accessUserUid, param.bunch],
+    [
+      param.lastUid.toString(),
+      param.boardUid.toString(),
+      param.accessUserUid.toString(),
+      param.bunch.toString(),
+    ],
   )
 
   for (const image of images) {
@@ -116,8 +126,9 @@ export async function removeUploadedImage(
   imageUid: number,
   accessUserUid: number,
 ): Promise<boolean> {
+  const imageUidQuery = imageUid.toString()
   const [image] = await select(`SELECT user_uid, path FROM ${table}image WHERE uid = ? LIMIT 1`, [
-    imageUid,
+    imageUidQuery,
   ])
   if (!image) {
     return false
@@ -125,7 +136,7 @@ export async function removeUploadedImage(
   if (accessUserUid !== image.user_uid) {
     return false
   }
-  remove(`DELETE FROM ${table}image WHERE uid = ? LIMIT 1`, [imageUid])
+  remove(`DELETE FROM ${table}image WHERE uid = ? LIMIT 1`, [imageUidQuery])
   removeFile(`.${image.path}`)
   return true
 }
@@ -157,17 +168,19 @@ export async function saveTags(boardUid: number, postUid: number, tags: string[]
     const [exist] = await select(`SELECT uid FROM ${table}hashtag WHERE name = ? LIMIT 1`, [tag])
     if (exist) {
       hashtagUid = exist.uid
-      await update(`UPDATE ${table}hashtag SET used = used + 1 WHERE uid = ? LIMIT 1`, [hashtagUid])
+      await update(`UPDATE ${table}hashtag SET used = used + 1 WHERE uid = ? LIMIT 1`, [
+        hashtagUid.toString(),
+      ])
     } else {
       hashtagUid = await insert(
         `INSERT INTO ${table}hashtag (name, used, timestamp) VALUES (?, ?, ?)`,
-        [tag, 1, Date.now()],
+        [tag, "1", Date.now().toString()],
       )
     }
     insert(`INSERT INTO ${table}post_hashtag (board_uid, post_uid, hashtag_uid) VALUES (?, ?, ?)`, [
-      boardUid,
-      postUid,
-      hashtagUid,
+      boardUid.toString(),
+      postUid.toString(),
+      hashtagUid.toString(),
     ])
   }
 }
@@ -187,7 +200,7 @@ export async function saveThumbnailImage(
 
   await insert(
     `INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path, full_path) VALUES (?, ?, ?, ?)`,
-    [fileUid, postUid, thumbSavePath.slice(1), fullSavePath.slice(1)],
+    [fileUid.toString(), postUid.toString(), thumbSavePath.slice(1), fullSavePath.slice(1)],
   )
 }
 
@@ -206,7 +219,13 @@ export async function saveAttachments(
     if ((await exists(newSavePath)) === true) {
       const fileUid = await insert(
         `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) VALUES (?, ?, ?, ?, ?)`,
-        [boardUid, postUid, file.name, newSavePath.slice(1), Date.now()],
+        [
+          boardUid.toString(),
+          postUid.toString(),
+          file.name,
+          newSavePath.slice(1),
+          Date.now().toString(),
+        ],
       )
 
       if (/(jpg|jpeg|png|bmp|webp|gif|avif)/i.test(ext) === true) {
@@ -223,15 +242,15 @@ export async function writeNewPost(param: WritePostParams): Promise<number> {
   (board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status) 
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      param.boardUid,
-      param.accessUserUid,
-      param.categoryUid,
+      param.boardUid.toString(),
+      param.accessUserUid.toString(),
+      param.categoryUid.toString(),
       param.title,
       param.content,
-      Date.now(),
-      0,
-      0,
-      param.isNoticePost ? CONTENT_STATUS.NOTICE : CONTENT_STATUS.NORMAL,
+      Date.now().toString(),
+      "0",
+      "0",
+      param.isNoticePost ? CONTENT_STATUS.NOTICE.toString() : CONTENT_STATUS.NORMAL.toString(),
     ],
   )
   return insertId
@@ -242,12 +261,12 @@ export async function modifyOriginalPost(param: ModifyPostParams): Promise<void>
   await update(
     `UPDATE ${table}post SET category_uid = ?, title = ?, content = ?, modified = ?, status = ? WHERE uid = ? LIMIT 1`,
     [
-      param.categoryUid,
+      param.categoryUid.toString(),
       param.title,
       param.content,
-      Date.now(),
-      param.isNoticePost ? CONTENT_STATUS.NOTICE : CONTENT_STATUS.NORMAL,
-      param.postUid,
+      Date.now().toString(),
+      param.isNoticePost ? CONTENT_STATUS.NOTICE.toString() : CONTENT_STATUS.NORMAL.toString(),
+      param.postUid.toString(),
     ],
   )
 }
@@ -256,7 +275,7 @@ export async function modifyOriginalPost(param: ModifyPostParams): Promise<void>
 export async function getCategories(boardUid: number): Promise<Pair[]> {
   let result: Pair[] = []
   const cats = await select(`SELECT uid, name FROM ${table}board_category WHERE board_uid = ?`, [
-    boardUid,
+    boardUid.toString(),
   ])
   if (!cats[0]) {
     return result
@@ -278,7 +297,7 @@ export async function isAuthor(
   target: TargetTable,
 ): Promise<boolean> {
   const [content] = await select(`SELECT user_uid FROM ${table}${target} WHERE uid = ? LIMIT 1`, [
-    targetUid,
+    targetUid.toString(),
   ])
   if (!content) {
     return false
@@ -290,7 +309,7 @@ export async function isAuthor(
 async function removeThumbnailFile(fileUid: number): Promise<void> {
   const [thumb] = await select(
     `SELECT uid, path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
-    [fileUid],
+    [fileUid.toString()],
   )
   if (!thumb) {
     return
@@ -302,7 +321,8 @@ async function removeThumbnailFile(fileUid: number): Promise<void> {
 
 // 첨부되어 있던 파일 삭제
 export async function removeAttachedFile(fileUid: number): Promise<void> {
-  const [file] = await select(`SELECT path FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
+  const fileUidQuery = fileUid.toString()
+  const [file] = await select(`SELECT path FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUidQuery])
   if (!file) {
     return
   }
@@ -311,16 +331,17 @@ export async function removeAttachedFile(fileUid: number): Promise<void> {
   }
 
   removeFile(`.${file.path}`)
-  remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUid])
+  remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUidQuery])
 }
 
 // 기존에 등록했던 태그들 제거 (글수정 시)
 export async function removeOriginalTags(postUid: number): Promise<void> {
+  const postUidQuery = postUid.toString()
   const tags = await select(`SELECT hashtag_uid FROM ${table}post_hashtag WHERE post_uid = ?`, [
-    postUid,
+    postUidQuery,
   ])
   for (const tag of tags) {
     update(`UPDATE ${table}hashtag SET used = used - 1 WHERE uid = ? LIMIT 1`, [tag.hashtag_uid])
   }
-  remove(`DELETE FROM ${table}post_hashtag WHERE post_uid = ?`, [postUid])
+  remove(`DELETE FROM ${table}post_hashtag WHERE post_uid = ?`, [postUidQuery])
 }

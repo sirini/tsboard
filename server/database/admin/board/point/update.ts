@@ -17,6 +17,12 @@ export async function updatePoints(boardUid: number, points: AdminBoardPointList
   await update(
     `UPDATE ${table}board SET point_view = ?, point_write = ?, point_comment = ?, point_download = ? 
   WHERE uid = ? LIMIT 1`,
-    [view, write, comment, download, boardUid],
+    [
+      view.toString(),
+      write.toString(),
+      comment.toString(),
+      download.toString(),
+      boardUid.toString(),
+    ],
   )
 }

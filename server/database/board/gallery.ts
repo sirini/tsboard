@@ -22,7 +22,7 @@ export async function getPhotoItems(postUid: number): Promise<{
   }
   const thumbs = await select(
     `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
-    [postUid],
+    [postUid.toString()],
   )
   for (const thumb of thumbs) {
     images.thumbnails.push(thumb.path)
@@ -47,7 +47,12 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
     posts = await select(
       `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
-      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+      [
+        param.boardUid.toString(),
+        CONTENT_STATUS.NORMAL.toString(),
+        param.sinceUid.toString(),
+        param.bunch.toString(),
+      ],
     )
   }
 

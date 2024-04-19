@@ -9,14 +9,19 @@ import { table, update, select } from "../../../common"
 
 // 게시판 관리자 변경하기
 export async function changeBoardAdmin(boardUid: number, userUid: number): Promise<boolean> {
-  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUid.toString(),
+  ])
   if (!user) {
     return false
   }
   if ((user.blocked as number) !== 0) {
     return false
   }
-  await update(`UPDATE ${table}board SET admin_uid = ? WHERE uid = ? LIMIT 1`, [userUid, boardUid])
+  await update(`UPDATE ${table}board SET admin_uid = ? WHERE uid = ? LIMIT 1`, [
+    userUid.toString(),
+    boardUid.toString(),
+  ])
   return true
 }
 
@@ -28,6 +33,13 @@ export async function updatePermissionLevels(
   await update(
     `UPDATE ${table}board SET level_list = ?, level_view = ?, level_write = ?, level_comment = ?, level_download = ? 
   WHERE uid = ? LIMIT 1`,
-    [levels.list, levels.view, levels.write, levels.comment, levels.download, boardUid],
+    [
+      levels.list.toString(),
+      levels.view.toString(),
+      levels.write.toString(),
+      levels.comment.toString(),
+      levels.download.toString(),
+      boardUid.toString(),
+    ],
   )
 }

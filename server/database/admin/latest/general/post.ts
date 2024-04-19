@@ -32,7 +32,7 @@ async function getRelatedInfo(
   userUid: number,
 ): Promise<AdminLatestRelatedResults> {
   const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid,
+    boardUid.toString(),
   ])
   const likeCount = await getPostLikeCount(postUid)
   const writer = await getUserBasic(userUid)
@@ -80,7 +80,7 @@ export async function getPosts(
   const last = 1 + maxUid - (page - 1) * bunch
   const posts = await select(
     `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit, status FROM ${table}post WHERE uid < ? ORDER BY uid DESC LIMIT ?`,
-    [last, bunch],
+    [last.toString(), bunch.toString()],
   )
   if (!posts[0]) {
     return result

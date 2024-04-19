@@ -30,7 +30,7 @@ export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
   }
   const [user] = await select(
     `SELECT id, name, profile, level, point, signature FROM ${table}user WHERE uid = ? LIMIT 1`,
-    [userUid],
+    [userUid.toString()],
   )
   if (!user) {
     return result
@@ -49,7 +49,9 @@ export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
 
 // 기존 프로필이 있을 경우 삭제하기
 async function removeOldProfile(userUid: number): Promise<void> {
-  const [old] = await select(`SELECT profile FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const [old] = await select(`SELECT profile FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUid.toString(),
+  ])
   if (!old) {
     return
   }
@@ -81,7 +83,7 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
   if (param.password.length === 64) {
     await update(`UPDATE ${table}user SET password = ? WHERE uid = ? LIMIT 1`, [
       param.password,
-      param.userUid,
+      param.userUid.toString(),
     ])
   }
 
@@ -90,7 +92,7 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
     if (newProfilePath.length > 0) {
       await update(
         `UPDATE ${table}user SET profile = '${newProfilePath.slice(1)}' WHERE uid = ? LIMIT 1`,
-        [param.userUid],
+        [param.userUid.toString()],
       )
     }
   }
@@ -101,6 +103,6 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
     }, point = ${param.point}, signature = '${Bun.escapeHTML(
       param.signature,
     )}' WHERE uid = ? LIMIT 1`,
-    [param.userUid],
+    [param.userUid.toString()],
   )
 }

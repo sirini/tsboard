@@ -15,14 +15,14 @@ export async function getUser(userUid: number): Promise<User> {
   let result: User = INIT_USER
   const [user] = await select(
     `SELECT id, name, profile, level, point, signature, signup, signin FROM ${table}user WHERE uid = ? AND blocked = 0`,
-    [userUid],
+    [userUid.toString()],
   )
   if (!user) {
     return result
   }
 
   const [token] = await select(`SELECT access FROM ${table}user_token WHERE user_uid = ? LIMIT 1`, [
-    userUid,
+    userUid.toString(),
   ])
   if (!token) {
     return result

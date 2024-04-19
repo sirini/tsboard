@@ -17,14 +17,14 @@ export async function prepareVerificationCode(code: string, email: string): Prom
     uid = await insert(
       `INSERT INTO ${table}user_verification (email, code, timestamp) 
     VALUES (?, ?, ?)`,
-      [email, code, Date.now()],
+      [email, code, Date.now().toString()],
     )
   } else {
     uid = result.uid
     await update(
       `UPDATE ${table}user_verification SET code = ?, timestamp = ? 
     WHERE uid = ? LIMIT 1`,
-      [code, Date.now(), uid],
+      [code, Date.now().toString(), uid.toString()],
     )
   }
   return uid

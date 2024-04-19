@@ -17,7 +17,13 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
   const [exist] = await select(
     `SELECT uid FROM ${table}notification WHERE 
     to_uid = ? AND from_uid = ? AND type = ? AND post_uid = ? AND comment_uid = ? LIMIT 1`,
-    [param.toUid, param.fromUid, param.type, param.postUid, param.commentUid],
+    [
+      param.toUid.toString(),
+      param.fromUid.toString(),
+      param.type.toString(),
+      param.postUid.toString(),
+      param.commentUid.toString(),
+    ],
   )
   if (exist) {
     return
@@ -26,7 +32,15 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
   insert(
     `INSERT INTO ${table}notification (to_uid, from_uid, type, post_uid, comment_uid, checked, timestamp) 
   VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [param.toUid, param.fromUid, param.type, param.postUid, param.commentUid, 0, Date.now()],
+    [
+      param.toUid.toString(),
+      param.fromUid.toString(),
+      param.type.toString(),
+      param.postUid.toString(),
+      param.commentUid.toString(),
+      "0",
+      Date.now().toString(),
+    ],
   )
 }
 
@@ -36,7 +50,7 @@ export async function getNotifications(userUid: number, limit: number): Promise<
   const notifications = await select(
     `SELECT uid, from_uid, type, post_uid, checked, timestamp FROM ${table}notification 
     WHERE to_uid = ? ORDER BY uid DESC LIMIT ?`,
-    [userUid, limit],
+    [userUid.toString(), limit.toString()],
   )
 
   if (!notifications[0]) {
@@ -80,5 +94,5 @@ export async function getNotifications(userUid: number, limit: number): Promise<
 
 // 확인안한 알림들 확인 체크 하기
 export async function checkedAllNotifications(userUid: number): Promise<void> {
-  update(`UPDATE ${table}notification SET checked = 1 WHERE to_uid = ?`, [userUid])
+  update(`UPDATE ${table}notification SET checked = 1 WHERE to_uid = ?`, [userUid.toString()])
 }

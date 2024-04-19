@@ -25,7 +25,7 @@ import { getUserBasic } from "./list"
 export async function getCommentLikeCount(commentUid: number): Promise<number> {
   const [like] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}comment_like WHERE comment_uid = ? AND liked = ?`,
-    [commentUid, 1],
+    [commentUid.toString(), "1"],
   )
   if (!like) {
     return 0
@@ -40,7 +40,7 @@ export async function isCommentViewerLiked(
 ): Promise<boolean> {
   const [isLiked] = await select(
     `SELECT liked FROM ${table}comment_like WHERE comment_uid = ? AND user_uid = ? AND liked = ? LIMIT 1`,
-    [commentUid, accessUserUid, 1],
+    [commentUid.toString(), accessUserUid.toString(), "1"],
   )
   if (!isLiked) {
     return false
@@ -68,7 +68,12 @@ export async function getComments(param: CommentParams): Promise<Comment[]> {
     param.pagingDirection === PAGING_DIRECTION.NEXT ? "<" : ">"
   } ? 
   ORDER BY reply_uid ASC LIMIT ?`,
-    [param.postUid, CONTENT_STATUS.REMOVED, param.sinceUid, param.bunch],
+    [
+      param.postUid.toString(),
+      CONTENT_STATUS.REMOVED.toString(),
+      param.sinceUid.toString(),
+      param.bunch.toString(),
+    ],
   )
   for (const comment of comments) {
     const info = await getCommentRelated({
@@ -96,7 +101,7 @@ export async function getComments(param: CommentParams): Promise<Comment[]> {
 export async function getMaxCommentUid(postUid: number): Promise<number> {
   const [comment] = await select(
     `SELECT MAX(uid) AS max_uid FROM ${table}comment WHERE post_uid = ? AND status != ?`,
-    [postUid, CONTENT_STATUS.REMOVED],
+    [postUid.toString(), CONTENT_STATUS.REMOVED.toString()],
   )
   if (!comment) {
     return 0
@@ -108,7 +113,7 @@ export async function getMaxCommentUid(postUid: number): Promise<number> {
 export async function getTotalCommentCount(postUid: number): Promise<number> {
   const [total] = await select(
     `SELECT COUNT(*) AS count FROM ${table}comment WHERE post_uid = ? AND status != ?`,
-    [postUid, CONTENT_STATUS.REMOVED],
+    [postUid.toString(), CONTENT_STATUS.REMOVED.toString()],
   )
   if (!total) {
     return 0
@@ -128,7 +133,7 @@ export async function getBoardUid(id: string): Promise<number> {
 // 글보기 레벨 권한 조회하기
 export async function getViewPostLevel(boardUid: number): Promise<number> {
   const [board] = await select(`SELECT level_view FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid,
+    boardUid.toString(),
   ])
   if (!board) {
     return INVALID_VIEW_LEVEL
@@ -138,20 +143,24 @@ export async function getViewPostLevel(boardUid: number): Promise<number> {
 
 // 댓글 좋아하기 누르기
 export async function likeComment(param: CommentLikeParams): Promise<void> {
+  const commentUidQuery = param.commentUid.toString()
+  const accessUserUidQuery = param.accessUserUid.toString()
+  const likedQuery = param.liked.toString()
+  const nowQuery = Date.now().toString()
   const [like] = await select(
     `SELECT comment_uid FROM ${table}comment_like WHERE comment_uid = ? AND user_uid = ? LIMIT 1`,
-    [param.commentUid, param.accessUserUid],
+    [commentUidQuery, accessUserUidQuery],
   )
   if (!like) {
     await select(
       `INSERT INTO ${table}comment_like (board_uid, comment_uid, user_uid, liked, timestamp) 
     VALUES (?, ?, ?, ? ,?)`,
-      [param.boardUid, param.commentUid, param.accessUserUid, param.liked, Date.now()],
+      [param.boardUid.toString(), commentUidQuery, accessUserUidQuery, likedQuery, nowQuery],
     )
 
     const [comment] = await select(
       `SELECT post_uid, user_uid FROM ${table}comment WHERE uid = ? LIMIT 1`,
-      [param.commentUid],
+      [commentUidQuery],
     )
     if (comment) {
       addNotification({
@@ -165,7 +174,7 @@ export async function likeComment(param: CommentLikeParams): Promise<void> {
   } else {
     await update(
       `UPDATE ${table}comment_like SET liked = ?, timestamp = ? WHERE comment_uid = ? AND user_uid = ? LIMIT 1`,
-      [param.liked, Date.now(), param.commentUid, param.accessUserUid],
+      [likedQuery, nowQuery, commentUidQuery, accessUserUidQuery],
     )
   }
 }
@@ -173,19 +182,30 @@ export async function likeComment(param: CommentLikeParams): Promise<void> {
 // 새 댓글 추가하기
 export async function saveNewComment(param: SaveCommentParams): Promise<number> {
   let insertId = 0
+  const postUidQuery = param.postUid.toString()
   insertId = await insert(
     `INSERT INTO ${table}comment 
     (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) VALUES
     (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [0, param.boardUid, param.postUid, param.accessUserUid, param.content, Date.now(), 0, 0],
+    [
+      "0",
+      param.boardUid.toString(),
+      postUidQuery,
+      param.accessUserUid.toString(),
+      param.content,
+      Date.now().toString(),
+      "0",
+      "0",
+    ],
   )
   if (insertId > 0) {
+    const insertIdQuery = insertId.toString()
     await update(`UPDATE ${table}comment SET reply_uid = ? WHERE uid = ? LIMIT 1`, [
-      insertId,
-      insertId,
+      insertIdQuery,
+      insertIdQuery,
     ])
     const [post] = await select(`SELECT user_uid FROM ${table}post WHERE uid = ? LIMIT 1`, [
-      param.postUid,
+      postUidQuery,
     ])
     if (post) {
       addNotification({
@@ -206,18 +226,18 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
     `INSERT INTO ${table}comment (reply_uid, board_uid, post_uid, user_uid, content, submitted, modified, status) 
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      param.replyTargetUid,
-      param.boardUid,
-      param.postUid,
-      param.accessUserUid,
+      param.replyTargetUid.toString(),
+      param.boardUid.toString(),
+      param.postUid.toString(),
+      param.accessUserUid.toString(),
       param.content,
-      Date.now(),
-      0,
-      0,
+      Date.now().toString(),
+      "0",
+      "0",
     ],
   )
   const [comment] = await select(`SELECT user_uid FROM ${table}comment WHERE uid = ? LIMIT 1`, [
-    param.replyTargetUid,
+    param.replyTargetUid.toString(),
   ])
   if (comment) {
     addNotification({
@@ -235,8 +255,8 @@ export async function saveReplyComment(param: SaveReplyParams): Promise<number> 
 export async function saveModifyComment(param: SaveModifyParams): Promise<void> {
   await update(`UPDATE ${table}comment SET content = ?, modified = ? WHERE uid = ? LIMIT 1`, [
     param.content,
-    Date.now(),
-    param.modifyTargetUid,
+    Date.now().toString(),
+    param.modifyTargetUid.toString(),
   ])
 }
 
@@ -244,8 +264,8 @@ export async function saveModifyComment(param: SaveModifyParams): Promise<void> 
 async function cleanupComment(commentUid: number): Promise<boolean> {
   update(`UPDATE ${table}comment SET content = ?, modified = ? WHERE uid = ? LIMIT 1`, [
     "",
-    Date.now(),
-    commentUid,
+    Date.now().toString(),
+    commentUid.toString(),
   ])
   return false
 }
@@ -253,18 +273,19 @@ async function cleanupComment(commentUid: number): Promise<boolean> {
 // 댓글 내용은 보존하고 삭제 상태로 변경하기
 async function setRemoveStatus(commentUid: number): Promise<boolean> {
   update(`UPDATE ${table}comment SET status = ?, modified = ? WHERE uid = ? LIMIT 1`, [
-    CONTENT_STATUS.REMOVED,
-    Date.now(),
-    commentUid,
+    CONTENT_STATUS.REMOVED.toString(),
+    Date.now().toString(),
+    commentUid.toString(),
   ])
   return true
 }
 
 // 댓글 삭제하기, 답글이 달려져 있을 경우 내용만 지우고 삭제 처리 하지 않음
 export async function removeComment(removeTargetUid: number): Promise<boolean> {
+  const removeTargetUidQuery = removeTargetUid.toString()
   const [comment] = await select(
     `SELECT uid, reply_uid FROM ${table}comment WHERE uid = ? LIMIT 1`,
-    [removeTargetUid],
+    [removeTargetUidQuery],
   )
   if (!comment) {
     return false
@@ -273,7 +294,7 @@ export async function removeComment(removeTargetUid: number): Promise<boolean> {
   if (comment.uid === comment.reply_uid) {
     const [reply] = await select(
       `SELECT uid FROM ${table}comment WHERE reply_uid = ? AND uid != ? LIMIT 1`,
-      [removeTargetUid, removeTargetUid],
+      [removeTargetUidQuery, removeTargetUidQuery],
     )
     if (reply) {
       return cleanupComment(removeTargetUid)

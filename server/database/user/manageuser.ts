@@ -23,7 +23,7 @@ export async function haveAdminPermission(
   }
   if (boardUid !== NO_TABLE_TARGET) {
     const [board] = await select(`SELECT admin_uid FROM ${table}board WHERE uid = ? LIMIT 1`, [
-      boardUid,
+      boardUid.toString(),
     ])
     if (board && board.admin_uid === accessUserUid) {
       return true
@@ -36,18 +36,21 @@ export async function haveAdminPermission(
 export async function getUserPermission(userUid: number): Promise<UserPermissionParams> {
   let result: UserPermissionParams = USER_PERMISSION_PARAMS
   result.userUid = userUid
+  const userUidQuery = userUid.toString()
 
   const [perm] = await select(
     `SELECT write_post, write_comment, send_chat, send_report FROM ${table}user_permission 
   WHERE user_uid = ? LIMIT 1`,
-    [userUid],
+    [userUidQuery],
   )
   if (!perm) {
     return result
   }
-  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUidQuery,
+  ])
   const [report] = await select(`SELECT response FROM ${table}report WHERE to_uid = ? LIMIT 1`, [
-    userUid,
+    userUidQuery,
   ])
 
   result = {
@@ -67,20 +70,22 @@ export async function updateUserPermission(
   param: UserPermissionParams,
   accessUserUid: number,
 ): Promise<void> {
+  const userUidQuery = param.userUid.toString()
+  const accessUserUidQuery = accessUserUid.toString()
   const [perm] = await select(
     `SELECT uid FROM ${table}user_permission WHERE user_uid = ? LIMIT 1`,
-    [param.userUid],
+    [userUidQuery],
   )
   if (perm) {
     await update(
       `UPDATE ${table}user_permission SET write_post = ?, write_comment = ?, send_chat = ?, send_report = ?
     WHERE user_uid = ? LIMIT 1`,
       [
-        param.writePost ? 1 : 0,
-        param.writeComment ? 1 : 0,
-        param.sendChatMessage ? 1 : 0,
-        param.sendReport ? 1 : 0,
-        param.userUid,
+        param.writePost ? "1" : "0",
+        param.writeComment ? "1" : "0",
+        param.sendChatMessage ? "1" : "0",
+        param.sendReport ? "1" : "0",
+        userUidQuery,
       ],
     )
   } else {
@@ -88,39 +93,39 @@ export async function updateUserPermission(
       `INSERT INTO ${table}user_permission (user_uid, write_post, write_comment, send_chat, send_report) 
     VALUES (?, ?, ?, ?, ?)`,
       [
-        param.userUid,
-        param.writePost ? 1 : 0,
-        param.writeComment ? 1 : 0,
-        param.sendChatMessage ? 1 : 0,
-        param.sendReport ? 1 : 0,
+        userUidQuery,
+        param.writePost ? "1" : "0",
+        param.writeComment ? "1" : "0",
+        param.sendChatMessage ? "1" : "0",
+        param.sendReport ? "1" : "0",
       ],
     )
   }
 
   const [report] = await select(`SELECT uid FROM ${table}report WHERE to_uid = ? LIMIT 1`, [
-    param.userUid,
+    userUidQuery,
   ])
   if (report) {
     await update(`UPDATE ${table}report SET response = ?, solved = ? WHERE to_uid = ?`, [
       param.response,
-      1,
-      param.userUid,
+      "1",
+      userUidQuery,
     ])
   } else {
     await insert(
       `INSERT INTO ${table}report (to_uid, from_uid, request, response, timestamp, solved) VALUES 
     (?, ?, ?, ?, ?, ?)`,
-      [param.userUid, accessUserUid, "", param.response, Date.now(), 1],
+      [userUidQuery, accessUserUidQuery, "", param.response, Date.now().toString(), "1"],
     )
   }
 
   // 주의) login == true 로그인 가능이므로 blocked = 0
   await update(`UPDATE ${table}user SET blocked = ? WHERE uid = ? LIMIT 1`, [
-    param.login ? 0 : 1,
-    param.userUid,
+    param.login ? "0" : "1",
+    userUidQuery,
   ])
   await insert(
     `INSERT INTO ${table}chat (to_uid, from_uid, message, timestamp) VALUES (?, ?, ?, ?)`,
-    [param.userUid, accessUserUid, param.response, Date.now()],
+    [userUidQuery, accessUserUidQuery, param.response, Date.now().toString()],
   )
 }

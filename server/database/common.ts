@@ -26,10 +26,7 @@ const pool = mysql.createPool({
 export const table = process.env.DB_TABLE_PREFIX ?? "tsb_"
 
 // SELECT 쿼리 실행 후 결과 리턴
-export async function select(
-  query: string,
-  values: (string | number)[] = [],
-): Promise<RowDataPacket[]> {
+export async function select(query: string, values: string[] = []): Promise<RowDataPacket[]> {
   let result: RowDataPacket[] = []
   const db = await pool.getConnection()
   try {
@@ -39,7 +36,7 @@ export async function select(
     }
     result = rows
   } catch (e: any) {
-    console.log(`[error/select] ${query}\n\n(${values.toString()})`)
+    console.log(`[error/select] ${query} (${e})`)
   } finally {
     db.release()
   }
@@ -47,26 +44,26 @@ export async function select(
 }
 
 // UPDATE 쿼리 실행
-export async function update(query: string, values: (string | number)[]): Promise<void> {
+export async function update(query: string, values: string[]): Promise<void> {
   const db = await pool.getConnection()
   try {
     await db.execute(query, values)
   } catch (e: any) {
-    console.log(`[error/update] ${query}\n\n(${values.toString()})`)
+    console.log(`[error/update] ${query} (${e})`)
   } finally {
     db.release()
   }
 }
 
 // INSERT 쿼리 실행 후 insertId 리턴
-export async function insert(query: string, values: (string | number)[]): Promise<number> {
+export async function insert(query: string, values: string[]): Promise<number> {
   let insertId = 0
   const db = await pool.getConnection()
   try {
     const [rows] = await db.execute<ResultSetHeader>(query, values)
     insertId = rows.insertId
   } catch (e: any) {
-    console.log(`[error/insert] ${query}\n\n(${values.toString()})`)
+    console.log(`[error/insert] ${query} (${e})`)
   } finally {
     db.release()
   }
@@ -74,12 +71,12 @@ export async function insert(query: string, values: (string | number)[]): Promis
 }
 
 // DELETE 쿼리 실행하기
-export async function remove(query: string, values: (string | number)[]): Promise<void> {
+export async function remove(query: string, values: string[]): Promise<void> {
   const db = await pool.getConnection()
   try {
     await db.execute(query, values)
   } catch (e: any) {
-    console.log(`[error/delete] ${query}\n\n(${values.toString()})`)
+    console.log(`[error/delete] ${query} (${e})`)
   } finally {
     db.release()
   }
@@ -91,7 +88,7 @@ export async function execute(query: string): Promise<void> {
   try {
     await db.execute(query)
   } catch (e: any) {
-    console.log(`[error/execute] ${query}`)
+    console.log(`[error/execute] ${query} (${e})`)
   } finally {
     db.release()
   }

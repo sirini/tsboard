@@ -25,7 +25,7 @@ export async function checkUserPermission(param: CheckUserPermissionParams): Pro
 
   const [target] = await select(
     `SELECT user_uid FROM ${table}${param.targetTable} WHERE uid = ? LIMIT 1`,
-    [param.targetUid],
+    [param.targetUid.toString()],
   )
   if (target && param.accessUserUid === target.user_uid) {
     return true
@@ -33,7 +33,7 @@ export async function checkUserPermission(param: CheckUserPermissionParams): Pro
 
   const [board] = await select(
     `SELECT group_uid, admin_uid FROM ${table}board WHERE uid = ? LIMIT 1`,
-    [param.boardUid],
+    [param.boardUid.toString()],
   )
   if (board && param.accessUserUid === board.admin_uid) {
     return true
@@ -62,7 +62,12 @@ async function updatePointHistory(param: UpdatePointHistoryParams): Promise<void
   insert(
     `INSERT INTO ${table}point_history (user_uid, board_uid, action, point) VALUES 
   (?, ?, ?, ?)`,
-    [param.accessUserUid, param.boardUid, action, param.point],
+    [
+      param.accessUserUid.toString(),
+      param.boardUid.toString(),
+      action.toString(),
+      param.point.toString(),
+    ],
   )
 }
 
@@ -74,14 +79,14 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
 
   const [board] = await select(
     `SELECT point_${param.action} AS point FROM ${table}board WHERE uid = ? LIMIT 1`,
-    [param.boardUid],
+    [param.boardUid.toString()],
   )
   if (!board) {
     return false
   }
 
   const [user] = await select(`SELECT point FROM ${table}user WHERE uid = ? LIMIT 1`, [
-    param.accessUserUid,
+    param.accessUserUid.toString(),
   ])
   if (!user) {
     return false
@@ -107,7 +112,7 @@ export async function updateUserPoint(param: UpdateUserPointParams): Promise<boo
 export async function havePermission(userUid: number, action: PermissionAction): Promise<boolean> {
   const [perm] = await select(
     `SELECT ${action} AS action FROM ${table}user_permission WHERE user_uid = ? LIMIT 1`,
-    [userUid],
+    [userUid.toString()],
   )
   if (!perm) {
     return true

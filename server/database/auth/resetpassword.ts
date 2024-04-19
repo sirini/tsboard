@@ -39,7 +39,7 @@ export async function askResetPassword(email: string, lang: LangType): Promise<v
   await insert(
     `INSERT INTO ${table}chat (to_uid, from_uid, message, timestamp) 
   VALUES (?, ?, ?, ?)`,
-    [1, fromUid, message, Date.now()],
+    ["1", fromUid.toString(), message, Date.now().toString()],
   )
 }
 
@@ -57,7 +57,7 @@ export async function sendResetPassword(email: string, lang: LangType): Promise<
 export async function changePassword(user: ChangePassword): Promise<boolean> {
   const [result] = await select(
     `SELECT email, code FROM ${table}user_verification WHERE uid = ? LIMIT 1`,
-    [user.target],
+    [user.target.toString()],
   )
   if (!result) {
     return false
@@ -71,7 +71,7 @@ export async function changePassword(user: ChangePassword): Promise<boolean> {
   }
   await update(`UPDATE ${table}user SET password = ? WHERE uid = ? LIMIT 1`, [
     user.password,
-    userUid,
+    userUid.toString(),
   ])
   return true
 }

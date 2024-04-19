@@ -11,15 +11,15 @@ import { table, select } from "../../../common"
 export async function getVisitStat(date: AdminDate): Promise<AdminDashboardStat> {
   const [today] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}user_access_log WHERE timestamp > ?`,
-    [date.today],
+    [date.today.toString()],
   )
   const [yesterday] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}user_access_log WHERE timestamp BETWEEN ? AND ?`,
-    [date.yesterday, date.today],
+    [date.yesterday.toString(), date.today.toString()],
   )
   const [daybefore] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}user_access_log WHERE timestamp BETWEEN ? AND ?`,
-    [date.daybefore, date.yesterday],
+    [date.daybefore.toString(), date.yesterday.toString()],
   )
 
   return {
@@ -37,11 +37,11 @@ export async function getStatistic(
 ): Promise<AdminDashboardStat> {
   const [today] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}${name} WHERE ${where} > ?`,
-    [date.today],
+    [date.today.toString()],
   )
   const [yesterday] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}${name} WHERE ${where} BETWEEN ? AND ?`,
-    [date.yesterday, date.today],
+    [date.yesterday.toString(), date.today.toString()],
   )
   const [all] = await select(`SELECT COUNT(*) AS total_count FROM ${table}${name}`)
   return {

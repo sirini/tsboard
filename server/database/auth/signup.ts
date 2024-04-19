@@ -55,7 +55,7 @@ export async function sendVerificationMail(
 export async function verify(target: number, code: string, user: Signup): Promise<boolean> {
   const [result] = await select(
     `SELECT code FROM ${table}user_verification WHERE uid = ? LIMIT 1`,
-    [target],
+    [target.toString()],
   )
   if (!result) {
     return false
@@ -78,12 +78,12 @@ export async function addNewUser(user: Signup): Promise<boolean> {
       user.name,
       user.password,
       "",
-      NEW_MEMBER.LEVEL,
-      NEW_MEMBER.POINT,
+      NEW_MEMBER.LEVEL.toString(),
+      NEW_MEMBER.POINT.toString(),
       "",
-      Date.now(),
-      0,
-      0,
+      Date.now().toString(),
+      "0",
+      "0",
     ],
   )
   if (insertId > 1) {

@@ -10,20 +10,28 @@ import { NEW_BOARD } from "../../../../../tsboard.config"
 
 // 그룹 관리자 변경하기
 export async function changeGroupAdmin(groupUid: number, userUid: number): Promise<boolean> {
-  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const userUidQuery = userUid.toString()
+  const [user] = await select(`SELECT blocked FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUidQuery,
+  ])
   if (!user) {
     return false
   }
   if ((user.blocked as number) !== 0) {
     return false
   }
-  await update(`UPDATE ${table}group SET admin_uid = ? WHERE uid = ? LIMIT 1`, [userUid, groupUid])
+  await update(`UPDATE ${table}group SET admin_uid = ? WHERE uid = ? LIMIT 1`, [
+    userUidQuery,
+    groupUid.toString(),
+  ])
   return true
 }
 
 // 주어진 게시글 번호에 속한 파일들 삭제하기
 async function removeFiles(postUid: number): Promise<void> {
-  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [postUid])
+  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
+    postUid.toString(),
+  ])
   for (const file of files) {
     removeFile(`.${file.path}`)
   }
@@ -31,19 +39,22 @@ async function removeFiles(postUid: number): Promise<void> {
 
 // 특정 게시판 삭제 시 가능한 DELETE 동작 보단 UPDATE로 처리
 export async function removeBoard(boardUid: number): Promise<boolean> {
-  const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUid])
+  const boardUidQuery = boardUid.toString()
+  const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    boardUidQuery,
+  ])
   if (!board) {
     return false
   }
-  const posts = await select(`SELECT uid FROM ${table}post WHERE board_uid = ?`, [boardUid])
+  const posts = await select(`SELECT uid FROM ${table}post WHERE board_uid = ?`, [boardUidQuery])
   for (const post of posts) {
     await removeFiles(post.uid)
   }
-  await update(`UPDATE ${table}file SET path = '' WHERE board_uid = ?`, [boardUid])
-  await update(`UPDATE ${table}comment SET status = ? WHERE board_uid = ?`, [-1, boardUid])
-  await update(`UPDATE ${table}board_category SET name = '' WHERE board_uid = ?`, [boardUid])
-  await update(`UPDATE ${table}post SET status = ? WHERE board_uid = ?`, [-1, boardUid])
-  await remove(`DELETE FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUid])
+  await update(`UPDATE ${table}file SET path = '' WHERE board_uid = ?`, [boardUidQuery])
+  await update(`UPDATE ${table}comment SET status = ? WHERE board_uid = ?`, ["-1", boardUidQuery])
+  await update(`UPDATE ${table}board_category SET name = '' WHERE board_uid = ?`, [boardUidQuery])
+  await update(`UPDATE ${table}post SET status = ? WHERE board_uid = ?`, ["-1", boardUidQuery])
+  await remove(`DELETE FROM ${table}board WHERE uid = ? LIMIT 1`, [boardUidQuery])
   return true
 }
 
@@ -61,41 +72,42 @@ export async function createBoard(newId: string, groupUid: number): Promise<numb
   (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       newId,
-      groupUid,
-      NEW_BOARD.ADMIN,
-      NEW_BOARD.TYPE,
+      groupUid.toString(),
+      NEW_BOARD.ADMIN.toString(),
+      NEW_BOARD.TYPE.toString(),
       NEW_BOARD.NAME,
       NEW_BOARD.INFO,
-      NEW_BOARD.ROWS!,
-      NEW_BOARD.WIDTH,
-      NEW_BOARD.USE_CATEGORY,
-      NEW_BOARD.LEVEL.LIST,
-      NEW_BOARD.LEVEL.VIEW,
-      NEW_BOARD.LEVEL.WRITE,
-      NEW_BOARD.LEVEL.COMMENT,
-      NEW_BOARD.LEVEL.DOWNLOAD,
-      NEW_BOARD.POINT.VIEW,
-      NEW_BOARD.POINT.WRITE,
-      NEW_BOARD.POINT.COMMENT,
-      NEW_BOARD.POINT.DOWNLOAD,
+      NEW_BOARD.ROWS!.toString(),
+      NEW_BOARD.WIDTH.toString(),
+      NEW_BOARD.USE_CATEGORY.toString(),
+      NEW_BOARD.LEVEL.LIST.toString(),
+      NEW_BOARD.LEVEL.VIEW.toString(),
+      NEW_BOARD.LEVEL.WRITE.toString(),
+      NEW_BOARD.LEVEL.COMMENT.toString(),
+      NEW_BOARD.LEVEL.DOWNLOAD.toString(),
+      NEW_BOARD.POINT.VIEW.toString(),
+      NEW_BOARD.POINT.WRITE.toString(),
+      NEW_BOARD.POINT.COMMENT.toString(),
+      NEW_BOARD.POINT.DOWNLOAD.toString(),
     ],
   )
 
+  const boardUidQuery = boardUid.toString()
   if (NEW_BOARD.USE_CATEGORY > 0) {
     await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
-      boardUid,
+      boardUidQuery,
       "lounge",
     ])
     await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
-      boardUid,
+      boardUidQuery,
       "news",
     ])
     await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
-      boardUid,
+      boardUidQuery,
       "qna",
     ])
     await insert(`INSERT INTO ${table}board_category (board_uid, name) VALUES (?, ?)`, [
-      boardUid,
+      boardUidQuery,
       "discussion",
     ])
   }

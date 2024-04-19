@@ -38,7 +38,7 @@ async function searchTitleContent(param: LatestPostParams): Promise<RowDataPacke
     `SELECT uid, board_uid, user_uid, category_uid, title, content, hit 
     FROM ${table}post WHERE status = ? AND ${option} LIKE '%${param.keyword}%' AND uid < ? 
     ORDER BY uid DESC LIMIT ?`,
-    [CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+    [CONTENT_STATUS.NORMAL.toString(), param.sinceUid.toString(), param.bunch.toString()],
   )
   return result
 }
@@ -53,7 +53,12 @@ async function searchTagName(param: LatestPostParams): Promise<RowDataPacket[]> 
     WHERE ${table}post.status = ? AND uid < ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
     GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
     ORDER BY ${table}post.uid DESC LIMIT ?`,
-    [CONTENT_STATUS.NORMAL, param.sinceUid, tags.length, param.bunch],
+    [
+      CONTENT_STATUS.NORMAL.toString(),
+      param.sinceUid.toString(),
+      tags.length.toString(),
+      param.bunch.toString(),
+    ],
   )
   return result
 }
@@ -101,7 +106,7 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
     posts = await select(
       `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
     WHERE status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-      [CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+      [CONTENT_STATUS.NORMAL.toString(), param.sinceUid.toString(), param.bunch.toString()],
     )
   } else {
     posts = await getSearchedPosts(param)

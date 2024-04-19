@@ -74,7 +74,7 @@ export async function getBoardConfig(id: string): Promise<BoardConfig> {
 export async function getMaxPostUid(boardUid: number): Promise<number> {
   const [post] = await select(
     `SELECT MAX(uid) AS max_uid FROM ${table}post WHERE board_uid = ? AND status != ?`,
-    [boardUid, CONTENT_STATUS.REMOVED],
+    [boardUid.toString(), CONTENT_STATUS.REMOVED.toString()],
   )
   if (!post) {
     return 0
@@ -86,7 +86,7 @@ export async function getMaxPostUid(boardUid: number): Promise<number> {
 export async function getTotalPostCount(boardUid: number): Promise<number> {
   const [total] = await select(
     `SELECT COUNT(*) AS count FROM ${table}post WHERE board_uid = ? AND status != ?`,
-    [boardUid, CONTENT_STATUS.REMOVED],
+    [boardUid.toString(), CONTENT_STATUS.REMOVED.toString()],
   )
   if (!total) {
     return 0
@@ -105,7 +105,7 @@ export async function getUserBasic(userUid: number): Promise<Writer> {
 
   const [user] = await select(
     `SELECT name, profile, signature FROM ${table}user WHERE uid = ? LIMIT 1`,
-    [userUid],
+    [userUid.toString()],
   )
   if (!user) {
     return result
@@ -123,7 +123,7 @@ export async function getUserBasic(userUid: number): Promise<Writer> {
 export async function getPostLikeCount(postUid: number): Promise<number> {
   const [like] = await select(
     `SELECT COUNT(*) AS total_count FROM ${table}post_like WHERE post_uid = ? AND liked = ?`,
-    [postUid, 1],
+    [postUid.toString(), "1"],
   )
   if (!like) {
     return 0
@@ -139,7 +139,7 @@ export async function isPostViewerLiked(postUid: number, accessUserUid: number):
 
   const [isLiked] = await select(
     `SELECT liked FROM ${table}post_like WHERE post_uid = ? AND user_uid = ? AND liked = ? LIMIT 1`,
-    [postUid, accessUserUid, 1],
+    [postUid.toString(), accessUserUid.toString(), "1"],
   )
   if (!isLiked) {
     return false
@@ -155,7 +155,7 @@ export async function getCategoryInfo(categoryUid: number): Promise<Pair> {
   }
   const [category] = await select(
     `SELECT uid, name FROM ${table}board_category WHERE uid = ? LIMIT 1`,
-    [categoryUid],
+    [categoryUid.toString()],
   )
   if (!category) {
     return result
@@ -211,7 +211,7 @@ async function getNotices(boardUid: number, accessUserUid: number): Promise<Post
   const notices = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ?`,
-    [boardUid, CONTENT_STATUS.NOTICE],
+    [boardUid.toString(), CONTENT_STATUS.NOTICE.toString()],
   )
   result.push(...(await makePostResult(notices, accessUserUid)))
   return result
@@ -243,7 +243,12 @@ async function searchTitleContent(
     FROM ${table}post WHERE board_uid = ? AND status = ? AND ${option} 
     LIKE '%${param.keyword}%' AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+    [
+      param.boardUid.toString(),
+      CONTENT_STATUS.NORMAL.toString(),
+      param.sinceUid.toString(),
+      param.bunch.toString(),
+    ],
   )
   return result
 }
@@ -263,7 +268,13 @@ async function searchWriterName(
       `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
-      [param.boardUid, CONTENT_STATUS.NORMAL, writer.uid, param.sinceUid, param.bunch],
+      [
+        param.boardUid.toString(),
+        CONTENT_STATUS.NORMAL.toString(),
+        writer.uid,
+        param.sinceUid,
+        param.bunch,
+      ],
     )
   }
   return result
@@ -280,7 +291,13 @@ async function searchCategoryUid(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND category_uid = ? AND status = ? AND uid ${direction} ? 
     ORDER BY uid ${ordering} LIMIT ?`,
-    [param.boardUid, categoryUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+    [
+      param.boardUid.toString(),
+      categoryUid.toString(),
+      CONTENT_STATUS.NORMAL.toString(),
+      param.sinceUid.toString(),
+      param.bunch.toString(),
+    ],
   )
   return result
 }
@@ -299,7 +316,13 @@ async function searchTagName(
     WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
     GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
     ORDER BY ${table}post.uid ${ordering} LIMIT ?`,
-    [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, tags.length, param.bunch],
+    [
+      param.boardUid.toString(),
+      CONTENT_STATUS.NORMAL.toString(),
+      param.sinceUid.toString(),
+      tags.length.toString(),
+      param.bunch.toString(),
+    ],
   )
   return result
 }
@@ -347,7 +370,12 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
     posts = await select(
       `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
-      [param.boardUid, CONTENT_STATUS.NORMAL, param.sinceUid, param.bunch],
+      [
+        param.boardUid.toString(),
+        CONTENT_STATUS.NORMAL.toString(),
+        param.sinceUid.toString(),
+        param.bunch.toString(),
+      ],
     )
   }
 
@@ -359,7 +387,9 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
 // 레벨 제한이 있을 시 회원의 레벨 가져오기
 export async function getUserLevel(userUid: number): Promise<number> {
   let level = 0
-  const [user] = await select(`SELECT level FROM ${table}user WHERE uid = ? LIMIT 1`, [userUid])
+  const [user] = await select(`SELECT level FROM ${table}user WHERE uid = ? LIMIT 1`, [
+    userUid.toString(),
+  ])
   if (user) {
     level = user.level
   }

@@ -10,7 +10,7 @@ import { INIT_USER } from "./const"
 import { SHA256 } from "crypto-js"
 import { generateRandomID, makeSavePath } from "../../util/tools"
 import sharp from "sharp"
-import { SIZE } from "../../../tsboard.config"
+import { NEW_MEMBER, SIZE } from "../../../tsboard.config"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
 export async function userSignIn(id: string, password: string): Promise<User> {
@@ -87,12 +87,12 @@ export async function registerUser(id: string, name: string, pictureUri: string)
         name,
         SHA256(generateRandomID()).toString(),
         profile.slice(1),
-        1,
-        100,
+        NEW_MEMBER.LEVEL.toString(),
+        NEW_MEMBER.POINT.toString(),
         "",
-        Date.now(),
-        0,
-        0,
+        Date.now().toString(),
+        "0",
+        "0",
       ],
     )
   } else {

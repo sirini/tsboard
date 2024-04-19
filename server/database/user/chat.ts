@@ -17,7 +17,7 @@ export async function getChatList(accessUserUid: number, limit: number): Promise
   const chats = await select(
     `SELECT from_uid, message, timestamp FROM ${table}chat 
   WHERE to_uid = ? GROUP BY from_uid ORDER BY uid DESC LIMIT ?`,
-    [accessUserUid, limit],
+    [accessUserUid.toString(), limit.toString()],
   )
 
   for (const chat of chats) {
@@ -49,7 +49,13 @@ export async function getChatHistory(
     `SELECT uid, to_uid, from_uid, message, timestamp FROM ${table}chat 
   WHERE to_uid IN (?, ?) AND from_uid IN (?, ?)
   ORDER BY uid DESC LIMIT ?`,
-    [myUserUid, otherUserUid, myUserUid, otherUserUid, limit],
+    [
+      myUserUid.toString(),
+      otherUserUid.toString(),
+      myUserUid.toString(),
+      otherUserUid.toString(),
+      limit.toString(),
+    ],
   )
 
   for (const chat of chats) {
@@ -72,7 +78,7 @@ export async function saveNewChat(
 ): Promise<number> {
   const insertId = await insert(
     `INSERT INTO ${table}chat (to_uid, from_uid, message, timestamp) VALUES (?, ?, ?, ?)`,
-    [otherUserUid, myUserUid, message, Date.now()],
+    [otherUserUid.toString(), myUserUid.toString(), message, Date.now().toString()],
   )
 
   addNotification({
@@ -90,7 +96,7 @@ export async function saveNewChat(
 export async function isBannedByOther(myUserUid: number, otherUserUid: number): Promise<boolean> {
   const [banned] = await select(
     `SELECT user_uid FROM ${table}user_black_list WHERE user_uid = ? AND black_uid = ? LIMIT 1`,
-    [otherUserUid, myUserUid],
+    [otherUserUid.toString(), myUserUid.toString()],
   )
   if (!banned) {
     return false
