@@ -121,7 +121,7 @@ tables.push(`${create} #db#board (
   type TINYINT ${nnd0},
   name VARCHAR(20) ${nnde},
   info VARCHAR(100) ${nnde},
-  row TINYINT UNSIGNED ${nnd} '20',
+  \`row\` TINYINT UNSIGNED ${nnd} '20',
   width INT UNSIGNED NOT NULL DEFAULT '1000',
   use_category TINYINT ${unnd0},
   level_list TINYINT ${unnd0},
