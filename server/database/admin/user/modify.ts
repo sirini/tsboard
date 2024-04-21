@@ -58,8 +58,8 @@ async function removeOldProfile(userUid: number): Promise<void> {
   if (old.profile === "") {
     return
   }
-  const oldProfile = `.${old.profile}`
-  removeFile(oldProfile)
+
+  removeFile(`.${old.profile}`)
 }
 
 // 새 프로필 사진이 있을 경우 업데이트
@@ -75,6 +75,11 @@ async function updateUserProfile(userUid: number, newProfile: File): Promise<str
   if ((await exists(newSavePath)) === false) {
     return ""
   }
+
+  await update(
+    `UPDATE ${table}user SET profile = '${newSavePath.slice(1)}' WHERE uid = ? LIMIT 1`,
+    [userUid.toString()],
+  )
   return newSavePath
 }
 
@@ -88,13 +93,7 @@ export async function modifyUserInfo(param: AdminUserModifyParams): Promise<void
   }
 
   if (param.profile !== undefined) {
-    const newProfilePath = await updateUserProfile(param.userUid, param.profile)
-    if (newProfilePath.length > 0) {
-      await update(
-        `UPDATE ${table}user SET profile = '${newProfilePath.slice(1)}' WHERE uid = ? LIMIT 1`,
-        [param.userUid.toString()],
-      )
-    }
+    await updateUserProfile(param.userUid, param.profile)
   }
 
   await update(
