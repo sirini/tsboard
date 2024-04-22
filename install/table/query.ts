@@ -35,10 +35,8 @@ tables.push(`${create} #db#user (
 // 사용자 인증용 토근 관리 테이블
 tables.push(`${create} #db#user_token (
   user_uid INT ${unnd0},
-  access VARCHAR(300) ${nnde},
-  refresh VARCHAR(100) ${nnde},
-  timestamp_access BIGINT ${unnd0},
-  timestamp_refresh BIGINT ${unnd0},
+  refresh CHAR(64) ${nnde},
+  timestamp BIGINT ${unnd0},
   KEY (user_uid)
 ) ${engineEncode}`)
 

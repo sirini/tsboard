@@ -46,8 +46,14 @@ import { removeEmptyDir, removeFile } from "./server/util/tools"
 //   }
 // }
 
-// 0.8.14 >>> 0.8.18, board 테이블의 row 컬럼을 rows 로 변경
+// 0.8.14 >>> 0.8.18
 await execute(`ALTER TABLE ${table}board CHANGE \`row\` row_count TINYINT`)
+await execute(`ALTER TABLE ${table}user_token DROP COLUMN access`)
+await execute(`ALTER TABLE ${table}user_token DROP COLUMN timestamp_access`)
+await execute(`ALTER TABLE ${table}user_token MODIFY COLUMN refresh CHAR(64) NOT NULL DEFAULT ''`)
+await execute(
+  `ALTER TABLE ${table}user_token CHANGE timestamp_refresh timestamp BIGINT UNSIGNED NOT NULL DEFAULT '0'`,
+)
 
 console.log(`v0.8.18, done.`)
 
