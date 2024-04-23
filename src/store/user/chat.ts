@@ -31,12 +31,13 @@ export const useChatStore = defineStore("chat", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.user.load.chatlist.get({
+    const response = await client.tsapi.user.load.chat.list.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         limit: 10,
+        userUid: auth.user.uid,
       },
     })
 
@@ -65,7 +66,7 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.user.load.chathistory.get({
+    const response = await client.tsapi.user.load.chat.history.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -76,12 +77,10 @@ export const useChatStore = defineStore("chat", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_LOAD_HISTORY} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_HISTORY} (${response.data.error})`)
     }
 
     history.value = response.data.result.reverse()
@@ -94,21 +93,22 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.user.savechat.post({
+    const response = await client.tsapi.user.save.chat.post({
       $headers: {
         authorization: auth.user.token,
       },
-      userUid: targetUser.value.uid,
+      $query: {
+        userUid: auth.user.uid,
+      },
+      targetUserUid: targetUser.value.uid,
       message: message.value,
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_ADD_CHAT} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_ADD_CHAT} (${response.data.error})`)
     }
 
     history.value.push({

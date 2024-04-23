@@ -6,10 +6,11 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import { ChatHistory, ChatItem } from "../../../src/interface/user"
 import { getChatHistory, getChatList, isBannedByOther, saveNewChat } from "../../database/user/chat"
 import { havePermission } from "../../database/board/common"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const chat = new Elysia()
   .use(
@@ -18,21 +19,26 @@ export const chat = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
-    const access = await jwt.verify(headers.authorization ?? "")
-    if (access === false) {
-      return {
-        accessUserUid,
-      }
+
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
     }
-    accessUserUid = access.uid as number
+
     return {
       accessUserUid,
     }
   })
   .get(
-    "/load/chatlist",
+    "/load/chat/list",
     async ({ query: { limit }, accessUserUid }) => {
       let response: ChatItem[] = []
       if (accessUserUid < 1) {
@@ -45,11 +51,12 @@ export const chat = new Elysia()
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         limit: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .get(
-    "/load/chathistory",
+    "/load/chat/history",
     async ({ query: { userUid, limit }, accessUserUid }) => {
       let response: ChatHistory[] = []
       if (userUid < 1 || accessUserUid < 1) {
@@ -68,13 +75,14 @@ export const chat = new Elysia()
     },
   )
   .post(
-    "/savechat",
-    async ({ body: { userUid, message }, accessUserUid }) => {
+    "/save/chat",
+    async ({ body: { targetUserUid, message }, accessUserUid }) => {
       let response = 0
-      if (userUid < 1 || message.length < 1) {
+
+      if (accessUserUid < 1 || targetUserUid < 1 || message.length < 1) {
         return fail(`Invalid parameters.`, response)
       }
-      if ((await isBannedByOther(accessUserUid, userUid)) === true) {
+      if ((await isBannedByOther(accessUserUid, targetUserUid)) === true) {
         return fail(`You have been blocked.`, response)
       }
       if ((await havePermission(accessUserUid, "send_chat")) === false) {
@@ -82,14 +90,14 @@ export const chat = new Elysia()
       }
 
       message = Bun.escapeHTML(message)
-      response = await saveNewChat(accessUserUid, userUid, message)
+      response = await saveNewChat(accessUserUid, targetUserUid, message)
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
-        userUid: t.Numeric(),
         message: t.String(),
+        targetUserUid: t.Numeric(),
       }),
     },
   )

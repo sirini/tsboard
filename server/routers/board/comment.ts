@@ -20,10 +20,11 @@ import {
   saveNewComment,
   saveReplyComment,
 } from "../../database/board/comment"
-import { fail, getUpdatedAccessToken, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import { checkUserPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { Comment } from "../../../src/interface/board"
 import { isBannedByWriter } from "../../database/board/view"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -41,23 +42,24 @@ export const comment = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let userLevel = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        userLevel = await getUserLevel(accessUserUid)
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       userLevel,
@@ -110,11 +112,12 @@ export const comment = new Elysia()
         pagingDirection: t.Numeric(),
         sinceUid: t.Numeric(),
         bunch: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .patch(
-    "/likecomment",
+    "/like/comment",
     async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
       const response = ""
 
@@ -133,7 +136,7 @@ export const comment = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         commentUid: t.Numeric(),
@@ -142,7 +145,7 @@ export const comment = new Elysia()
     },
   )
   .post(
-    "/newcomment",
+    "/new/comment",
     async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
       const response = { newCommentUid: 0, newAccessToken: "" }
 
@@ -178,7 +181,7 @@ export const comment = new Elysia()
       return success({ newCommentUid, newAccessToken })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -187,7 +190,7 @@ export const comment = new Elysia()
     },
   )
   .post(
-    "/replycomment",
+    "/reply/comment",
     async ({
       body: { boardUid, postUid, replyTargetUid, content },
       accessUserUid,
@@ -227,7 +230,7 @@ export const comment = new Elysia()
       return success({ newCommentUid, newAccessToken })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -237,7 +240,7 @@ export const comment = new Elysia()
     },
   )
   .patch(
-    "/modifycomment",
+    "/modify/comment",
     async ({
       body: { boardUid, postUid, modifyTargetUid, content },
       accessUserUid,
@@ -273,7 +276,7 @@ export const comment = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -283,7 +286,7 @@ export const comment = new Elysia()
     },
   )
   .delete(
-    "/removecomment",
+    "/remove/comment",
     async ({ query: { boardUid, removeTargetUid }, accessUserUid, newAccessToken }) => {
       const response = { newAccessToken, isChangeStatus: false }
 
@@ -312,6 +315,7 @@ export const comment = new Elysia()
       query: t.Object({
         boardUid: t.Numeric(),
         removeTargetUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

@@ -6,9 +6,6 @@
 
 import { rmdir, readdir, unlink, stat } from "node:fs/promises"
 import { join } from "node:path"
-import { JWTPayloadSpec } from "@elysiajs/jwt"
-import { Token } from "../../src/interface/auth"
-import { saveTokens } from "../database/auth/authorization"
 import { exists, mkdir } from "node:fs/promises"
 import { nanoid, customAlphabet } from "nanoid"
 import sharp from "sharp"
@@ -21,6 +18,14 @@ export const DEFAULT_TYPE_CHECK = {
   }),
   cookie: t.Cookie({
     refresh: t.String(),
+  }),
+}
+
+// 사용자 고유 번호까지 같이 체크
+export const EXTEND_TYPE_CHECK = {
+  ...DEFAULT_TYPE_CHECK,
+  query: t.Object({
+    userUid: t.Numeric(),
   }),
 }
 
@@ -80,38 +85,6 @@ export function success<T>(result: T): Result<T> {
     error: "",
     result,
   }
-}
-
-// 액세스 토큰 [만료] & 리프레시 토큰 [유효] 때 액세스 토큰 업데이트 후 반환
-export async function getUpdatedAccessToken(
-  jwt: any,
-  accessToken: string,
-  refreshToken: string,
-): Promise<string> {
-  let newAccessToken = ""
-  const access = (await jwt.verify(accessToken)) as
-    | false
-    | (Record<string, string | number> & JWTPayloadSpec)
-  if (access === false) {
-    return newAccessToken
-  }
-  const userUid = access.uid as number
-  const accessTokenTime = access.signin as number
-  const now = Date.now()
-
-  if (accessTokenTime < now) {
-    newAccessToken = await jwt.sign({
-      uid: userUid,
-      id: access.id,
-      signin: Date.now(),
-    })
-    const token: Token = {
-      access: newAccessToken,
-      refresh: refreshToken,
-    }
-    saveTokens(userUid, token)
-  }
-  return newAccessToken
 }
 
 // 주어진 파일 경로가 유효한지 확인하고 삭제하기

@@ -11,7 +11,10 @@ import {
   getSearchedReports,
   getMaxReportUid,
 } from "../../../database/admin/report/common"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK } from "../../../util/tools"
+import { checkUserVerification } from "../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../database/user/const"
 
 export const common = new Elysia()
   .use(
@@ -22,7 +25,12 @@ export const common = new Elysia()
   )
   .get(
     "/list",
-    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch, isSolved } }) => {
+    async ({
+      jwt,
+      cookie: { refresh },
+      headers: { authorization },
+      query: { page, bunch, isSolved, userUid },
+    }) => {
       const response = {
         newAccessToken: "",
         reports: [],
@@ -32,8 +40,23 @@ export const common = new Elysia()
       if (page < 1 || bunch < 5 || bunch > 100) {
         return fail(`Invalid parameters.`, response)
       }
+
+      const verification = await checkUserVerification({
+        jwt,
+        userUid,
+        accessToken: authorization,
+        refreshToken: refresh.value,
+      })
+
+      if (verification.success === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      if ((await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === false) {
+        return fail(`Access denied, only administrator can access.`, response)
+      }
+
       const solved = isSolved > 0 ? true : false
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const maxReportUid = await getMaxReportUid(solved)
       const reports = await getReports({
         page,
@@ -45,7 +68,7 @@ export const common = new Elysia()
       })
 
       return success({
-        newAccessToken,
+        newAccessToken: verification.newAccessToken,
         reports,
         maxReportUid,
       })
@@ -56,12 +79,18 @@ export const common = new Elysia()
         page: t.Numeric(),
         bunch: t.Numeric(),
         isSolved: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .get(
     "/search/list",
-    async ({ query: { option, keyword, page, bunch, isSolved } }) => {
+    async ({
+      jwt,
+      headers: { authorization },
+      cookie: { refresh },
+      query: { option, keyword, page, bunch, isSolved, userUid },
+    }) => {
       const response = {
         reports: [],
         maxReportUid: 0,
@@ -70,6 +99,22 @@ export const common = new Elysia()
       if (option.length < 2 || keyword.length < 2 || page < 1 || bunch < 5 || bunch > 100) {
         return fail(`Invalid parameters.`, response)
       }
+
+      const verification = await checkUserVerification({
+        jwt,
+        userUid,
+        accessToken: authorization,
+        refreshToken: refresh.value,
+      })
+
+      if (verification.success === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      if ((await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === false) {
+        return fail(`Access denied, only administrator can access.`, response)
+      }
+
       const solved = isSolved > 0 ? true : false
       const maxReportUid = await getMaxReportUid(solved)
       const reports = await getSearchedReports({
@@ -94,6 +139,7 @@ export const common = new Elysia()
         page: t.Numeric(),
         bunch: t.Numeric(),
         isSolved: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

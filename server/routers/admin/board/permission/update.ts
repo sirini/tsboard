@@ -10,8 +10,11 @@ import {
   changeBoardAdmin,
   updatePermissionLevels,
 } from "../../../../database/admin/board/permission/update"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, EXTEND_TYPE_CHECK } from "../../../../util/tools"
 import { AdminPermissionLevel } from "../../../../../src/interface/admin"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const update = new Elysia()
   .use(
@@ -20,40 +23,47 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (
+      verification.success === true &&
+      (await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === true
+    ) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       newAccessToken,
     }
   })
   .patch(
-    "/changeadmin",
-    async ({ body: { boardUid, userUid }, newAccessToken }) => {
+    "/change/admin",
+    async ({ body: { boardUid, targetUserUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken: "",
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1) {
         return fail(`Invalid board uid.`, response)
       }
-      if (userUid < 1) {
+      if (targetUserUid < 1) {
         return fail(`Invalid user uid.`, response)
       }
-      const result = await changeBoardAdmin(boardUid, userUid)
+      const result = await changeBoardAdmin(boardUid, targetUserUid)
       if (result === false) {
         return fail(`User not found.`, response)
       }
@@ -62,20 +72,23 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
-        userUid: t.Number(),
+        targetUserUid: t.Number(),
       }),
     },
   )
   .patch(
-    "/updatelevels",
-    async ({ body: { boardUid, levels }, newAccessToken }) => {
+    "/update/levels",
+    async ({ body: { boardUid, levels }, newAccessToken, accessUserUid }) => {
       const response = {
-        newAccessToken: "",
+        newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1) {
         return fail(`Invalid board uid.`, response)
       }
@@ -91,7 +104,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         levels: t.Object({

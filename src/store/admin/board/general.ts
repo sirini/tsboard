@@ -38,16 +38,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       },
       $query: {
         id: route.params.id as string,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value = response.data.result.config
@@ -68,20 +67,22 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 그룹 변경하기
   async function changeGroup(group: AdminPair): Promise<void> {
-    const response = await client.tsapi.admin.board.general.changegroup.patch({
+    const response = await client.tsapi.admin.board.general.change.group.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       groupUid: group.uid,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value.groupUid = group.uid
@@ -94,23 +95,24 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   async function updateName(): Promise<void> {
     const newName = board.value.name.trim()
     if (newName.length < 2) {
-      admin.error(GENERAL.TOO_SHORT_CATEGORY)
-      return
+      return admin.error(GENERAL.TOO_SHORT_CATEGORY)
     }
-    const response = await client.tsapi.admin.board.general.updatename.patch({
+    const response = await client.tsapi.admin.board.general.update.name.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newName,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_NAME} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_NAME} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_NAME1} ${newName} ${GENERAL.CHANGED_NAME2}`)
@@ -120,23 +122,24 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   async function updateInfo(): Promise<void> {
     const newInfo = board.value.info.trim()
     if (newInfo.length < 2) {
-      admin.error(GENERAL.TOO_SHORT_NAME)
-      return
+      return admin.error(GENERAL.TOO_SHORT_NAME)
     }
-    const response = await client.tsapi.admin.board.general.updateinfo.patch({
+    const response = await client.tsapi.admin.board.general.update.info.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newInfo,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_INFO} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_INFO} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(GENERAL.UPDATED_INFO)
@@ -144,20 +147,22 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 게시판 타입 변경하기
   async function changeType(): Promise<void> {
-    const response = await client.tsapi.admin.board.general.changetype.patch({
+    const response = await client.tsapi.admin.board.general.change.type.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newType: board.value.type as number,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_TYPE1} ${board.value.type} ${GENERAL.CHANGED_TYPE2}`)
@@ -171,20 +176,22 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardRows.value = "20"
       return
     }
-    const response = await client.tsapi.admin.board.general.updaterows.patch({
+    const response = await client.tsapi.admin.board.general.update.rows.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newRows,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_UPDATE_ROWS} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_UPDATE_ROWS} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${newRows} ${GENERAL.UPDATED_ROWS}`)
@@ -198,20 +205,22 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardWidth.value = "1000"
       return
     }
-    const response = await client.tsapi.admin.board.general.updatewidth.patch({
+    const response = await client.tsapi.admin.board.general.update.width.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newWidth,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_UPDATE_WIDTH} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_UPDATE_WIDTH} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(`${GENERAL.CHANGED_WIDTH1} ${newWidth} ${GENERAL.CHANGED_WIDTH2}`)
@@ -222,23 +231,24 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     const newCategory = boardAddCategory.value.trim()
     boardAddCategory.value = ""
     if (newCategory.length < 2) {
-      admin.error(GENERAL.TOO_SHORT_CATEGORY)
-      return
+      return admin.error(GENERAL.TOO_SHORT_CATEGORY)
     }
-    const response = await client.tsapi.admin.board.general.addcategory.post({
+    const response = await client.tsapi.admin.board.general.add.category.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       newCategory,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_ADD_CATEGORY} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_ADD_CATEGORY} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value.categories.push({
@@ -251,8 +261,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   // 카테고리 삭제 전 확인하기
   function confirmRemoveCategory(uid: number, name: string): void {
     if (board.value.categories.length < 2) {
-      admin.error(GENERAL.REMOVE_LAST_CATEGORY)
-      return
+      return admin.error(GENERAL.REMOVE_LAST_CATEGORY)
     }
     boardRemoveCategory.value.uid = uid
     boardRemoveCategory.value.name = name
@@ -262,24 +271,24 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   // 카테고리 삭제하기
   async function removeCategory(): Promise<void> {
     if (board.value.categories.length < 2) {
-      admin.error(GENERAL.REMOVE_LAST_CATEGORY)
-      return
+      return admin.error(GENERAL.REMOVE_LAST_CATEGORY)
     }
-    const response = await client.tsapi.admin.board.general.removecategory.delete({
+    const response = await client.tsapi.admin.board.general.remove.category.delete({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       categoryUid: boardRemoveCategory.value.uid,
     })
 
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_REMOVE_CATEGORY} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_REMOVE_CATEGORY} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value.categories = board.value.categories.filter((cat: AdminPair) => {
@@ -290,21 +299,22 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 카테고리 사용 여부 설정하기
   async function useCategory(): Promise<void> {
-    const response = await client.tsapi.admin.board.general.usecategory.patch({
+    const response = await client.tsapi.admin.board.general.use.category.patch({
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       boardUid: board.value.uid,
-      useCategory: boardUseCategory.value === true ? 0 : 1 /* reserved */,
+      useCategory: boardUseCategory.value === true ? 0 : 1,
     })
 
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.FAILED_CHANGE_USE_CATEGORY} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.FAILED_CHANGE_USE_CATEGORY} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     admin.success(GENERAL.CHANGED_USE_CATEGORY)

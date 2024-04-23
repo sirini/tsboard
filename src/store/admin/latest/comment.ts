@@ -40,12 +40,10 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     })
 
     if (!response.data) {
-      admin.error(COMMENT.NO_RESPONSE)
-      return
+      return admin.error(COMMENT.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(COMMENT.FAILED_LOAD)
-      return
+      return admin.error(COMMENT.FAILED_LOAD)
     }
     pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
     comments.value = response.data.result.comments
@@ -75,8 +73,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       },
     })
     if (!response.data) {
-      admin.error(COMMENT.NO_RESPONSE)
-      return
+      return admin.error(COMMENT.NO_RESPONSE)
     }
     pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
     comments.value = response.data.result.comments

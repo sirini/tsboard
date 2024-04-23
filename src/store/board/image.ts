@@ -48,21 +48,22 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   // 본문에 삽입할 이미지들 선택 및 업로드
   async function uploadImageFiles(event: MouseEvent): Promise<void> {
     files.value = util.attachments(event)
-    const response = await client.tsapi.board.uploadimages.post({
+    const response = await client.tsapi.board.upload.images.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: boardUid.value,
       images: files.value,
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     uploadedImages.value = response.data.result.uploadedImages
@@ -70,7 +71,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지들 가져오기
   async function loadUploadedImages(isAppend: boolean): Promise<void> {
-    const response = await client.tsapi.board.loadimages.get({
+    const response = await client.tsapi.board.load.images.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -78,16 +79,15 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         boardUid: boardUid.value,
         lastUid: isAppend ? lastImageUid.value : 0,
         bunch: bunch.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${response.data.error})`)
     }
     if (response.data.result.images.length < 1) {
       util.snack(TEXT[home.lang].EMPTY_IMAGES)
@@ -124,22 +124,21 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지 제거
   async function removeUploadedImage(imageUid: number): Promise<void> {
-    const response = await client.tsapi.board.removeimage.delete({
+    const response = await client.tsapi.board.remove.image.delete({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         imageUid,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
   }

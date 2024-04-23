@@ -11,7 +11,7 @@ import {
   getSearchedComments,
   getMaxCommentUid,
 } from "../../../../database/admin/latest/general/comment"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const comment = new Elysia()
   .use(
@@ -22,9 +22,8 @@ export const comment = new Elysia()
   )
   .get(
     "/comment",
-    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+    async ({ query: { page, bunch } }) => {
       const response = {
-        newAccessToken: "",
         comments: [],
         maxCommentUid: 0,
       }
@@ -34,10 +33,8 @@ export const comment = new Elysia()
 
       const maxCommentUid = await getMaxCommentUid()
       const comments = await getComments(page, bunch, maxCommentUid)
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
 
       return success({
-        newAccessToken,
         comments,
         maxCommentUid,
       })

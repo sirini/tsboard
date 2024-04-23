@@ -25,20 +25,18 @@ export const usePasswordStore = defineStore("password", () => {
   // 비밀번호 초기화 요청하기
   async function askResetPassword(): Promise<void> {
     if (util.filters.email.test(auth.user.id) === false) {
-      util.error(TEXT[home.lang].INVALID_EMAIL)
-      return
+      return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
 
     loading.value = true
 
-    const response = await client.tsapi.auth.resetpassword.post({
+    const response = await client.tsapi.auth.reset.password.post({
       email: auth.user.id,
       lang: home.lang as number,
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       util.error(TEXT[home.lang].INVALID_EMAIL)
@@ -57,22 +55,19 @@ export const usePasswordStore = defineStore("password", () => {
   // 비밀번호 변경하기
   async function changePassword(target: number, code: string): Promise<void> {
     if (util.filters.password.test(auth.password) === false) {
-      util.error(TEXT[home.lang].INVALID_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].INVALID_PASSWORD)
     }
     if (auth.password !== auth.checkedPassword) {
-      util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
 
-    const response = await client.tsapi.auth.changepassword.post({
+    const response = await client.tsapi.auth.change.password.post({
       target,
       code,
       password: SHA256(auth.password).toString(),
     })
     if (response.data!.success === false) {
-      util.error(TEXT[home.lang].UNABLE_CHANGE_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].UNABLE_CHANGE_PASSWORD)
     }
     util.success(TEXT[home.lang].SUCCESS_CHANGE_PASSWORD)
     util.go("login")

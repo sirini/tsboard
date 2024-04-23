@@ -208,6 +208,7 @@ export const useHomeStore = defineStore("home", () => {
       },
       $query: {
         limit: 10,
+        userUid: auth.user.uid,
       },
     })
 
@@ -230,6 +231,9 @@ export const useHomeStore = defineStore("home", () => {
     const response = await client.tsapi.home.checked.notification.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
     })
   }

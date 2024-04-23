@@ -18,12 +18,13 @@ import {
   removePost,
   updatePostHit,
 } from "../../database/board/view"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
 import { BOARD_CONFIG, INIT_POST_VIEW } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { isAuthor } from "../../database/board/editor"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const view = new Elysia()
   .use(
@@ -32,23 +33,24 @@ export const view = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let userLevel = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        userLevel = await getUserLevel(accessUserUid)
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       userLevel,
@@ -114,11 +116,12 @@ export const view = new Elysia()
         id: t.String(),
         postUid: t.Numeric(),
         needUpdateHit: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .patch(
-    "/likepost",
+    "/like/post",
     async ({ body: { boardUid, postUid, liked }, accessUserUid }) => {
       const response = ""
       if (accessUserUid < 1) {
@@ -133,9 +136,7 @@ export const view = new Elysia()
       return success(response)
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
@@ -179,11 +180,12 @@ export const view = new Elysia()
       query: t.Object({
         boardUid: t.Numeric(),
         fileUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .delete(
-    "/removepost",
+    "/remove/post",
     async ({ query: { boardUid, postUid }, accessUserUid, newAccessToken }) => {
       let response = {
         newAccessToken,
@@ -201,12 +203,11 @@ export const view = new Elysia()
       return success(response)
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

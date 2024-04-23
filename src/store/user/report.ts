@@ -41,30 +41,29 @@ export const useReportStore = defineStore("report", () => {
   // 운영진에게 특정 사용자 신고하기
   async function sendReport(): Promise<void> {
     if (targetUser.value.uid < 1) {
-      util.error(TEXT[home.lang].UNKNOWN_REPORT_TARGET)
-      return
+      return util.error(TEXT[home.lang].UNKNOWN_REPORT_TARGET)
     }
     if (content.value.length < 3 || content.value.length > 1000) {
-      util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
-      return
+      return util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
     }
 
     const response = await client.tsapi.user.report.post({
       $headers: {
         authorization: auth.user.token,
       },
-      userUid: targetUser.value.uid,
+      $query: {
+        userUid: auth.user.uid,
+      },
+      targetUserUid: targetUser.value.uid,
       content: content.value,
       checkedBlackList: checkedBlackList.value ? 1 : 0,
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_REPORT} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_REPORT} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].REPORTED_USER)

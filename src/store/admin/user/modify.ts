@@ -38,13 +38,12 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       name: user.value.name,
       userUid: user.value.uid,
     })
+
     if (!response.data) {
-      util.error(MODIFY.NO_RESPONSE)
-      return
+      return util.error(MODIFY.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${user.value.name} ${MODIFY.DUPLICATED_NAME}`)
-      return
+      return util.error(`${user.value.name} ${MODIFY.DUPLICATED_NAME}`)
     }
     util.success(`${user.value.name} ${MODIFY.VALID_NAME}`)
   }
@@ -59,13 +58,12 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
         userUid,
       },
     })
+
     if (!response.data) {
-      admin.error(MODIFY.NO_RESPONSE)
-      return
+      return admin.error(MODIFY.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${MODIFY.FAILED_LOAD} (${response.data.error})`)
-      return
+      return admin.error(`${MODIFY.FAILED_LOAD} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     user.value = response.data.result.user
@@ -97,6 +95,9 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       userUid: user.value.uid,
       name: user.value.name,
       level: user.value.level,
@@ -105,13 +106,12 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       password: password.value.length > 0 ? SHA256(password.value).toString() : "",
       profile: newProfile.value,
     })
+
     if (!response.data) {
-      admin.error(MODIFY.NO_RESPONSE)
-      return
+      return admin.error(MODIFY.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${MODIFY.FAILED_UPDATE} (${response.data.error})`)
-      return
+      return admin.error(`${MODIFY.FAILED_UPDATE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     password.value = ""

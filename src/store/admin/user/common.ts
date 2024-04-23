@@ -37,15 +37,15 @@ export const useAdminUserStore = defineStore("adminUser", () => {
         page: page.value,
         bunch: bunch.value,
         isBlocked: isBlocked.value ? 1 : 0,
+        userUid: auth.user.uid,
       },
     })
+
     if (!response.data) {
-      admin.error(COMMON.NO_RESPONSE)
-      return
+      return admin.error(COMMON.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
-      return
+      return admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     pageLength.value = Math.ceil(response.data.result.maxUserUid / bunch.value)

@@ -69,8 +69,7 @@ export const useViewerStore = defineStore("viewer", () => {
     postUid.value = parseInt(route.params.no as string)
 
     if (id.value.length < 2) {
-      util.snack(TEXT[home.lang].NO_BOARD_ID)
-      return
+      return util.snack(TEXT[home.lang].NO_BOARD_ID)
     }
 
     let needUpdateHit = 0
@@ -87,26 +86,24 @@ export const useViewerStore = defineStore("viewer", () => {
         id: id.value,
         postUid: postUid.value,
         needUpdateHit,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
-      close()
-      return
+      return close()
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
       util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
-      close()
-      return
+      return close()
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-      util.go(TYPE_MATCH[config.value.type].name)
-      return
+      return util.go(TYPE_MATCH[config.value.type].name)
     }
 
     post.value = response.data.result.post
@@ -118,30 +115,28 @@ export const useViewerStore = defineStore("viewer", () => {
   async function loadPhotos(): Promise<void> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
-      util.snack(TEXT[home.lang].NO_BOARD_ID)
-      return
+      return util.snack(TEXT[home.lang].NO_BOARD_ID)
     }
 
-    const response = await client.tsapi.board.photoview.get({
+    const response = await client.tsapi.board.photo.view.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         id: id.value,
         no: postUid.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
-      close()
-      return
+      return close()
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
       util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
-      close()
-      return
+      return close()
     }
 
     files.value = response.data.result.files
@@ -161,25 +156,27 @@ export const useViewerStore = defineStore("viewer", () => {
         pagingDirection: pagingDirection.value,
         bunch: bunch.value,
         sinceUid: sinceUid.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(COMMENT.TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(COMMENT.TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
-      return
+      return util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
     comments.value = response.data.result.comments
   }
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.likepost.patch({
+    const response = await client.tsapi.board.like.post.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: config.value.uid,
       postUid: postUid.value,
@@ -273,12 +270,10 @@ export const useViewerStore = defineStore("viewer", () => {
   // 이전 사진 보기
   function prev(): void {
     if (files.value.length === 1) {
-      util.snack("사진이 한 장만 있습니다")
-      return
+      return util.snack("사진이 한 장만 있습니다")
     }
     if (position.value === 0) {
-      util.snack("첫번째 사진입니다")
-      return
+      return util.snack("첫번째 사진입니다")
     }
     position.value -= 1
   }
@@ -286,12 +281,10 @@ export const useViewerStore = defineStore("viewer", () => {
   // 다음 사진 보기
   function next(): void {
     if (files.value.length === 1) {
-      util.snack("사진이 한 장만 있습니다")
-      return
+      return util.snack("사진이 한 장만 있습니다")
     }
     if (position.value + 1 === files.value.length) {
-      util.snack("마지막 사진입니다")
-      return
+      return util.snack("마지막 사진입니다")
     }
     position.value += 1
   }

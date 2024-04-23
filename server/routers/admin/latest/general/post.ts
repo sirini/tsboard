@@ -11,7 +11,7 @@ import {
   getMaxPostUid,
   getSearchedPosts,
 } from "../../../../database/admin/latest/general/post"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 
 export const post = new Elysia()
   .use(
@@ -22,9 +22,8 @@ export const post = new Elysia()
   )
   .get(
     "/post",
-    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch } }) => {
+    async ({ query: { page, bunch } }) => {
       const response = {
-        newAccessToken: "",
         posts: [],
         maxPostUid: 0,
       }
@@ -35,9 +34,8 @@ export const post = new Elysia()
 
       const maxPostUid = await getMaxPostUid()
       const posts = await getPosts(page, bunch, maxPostUid)
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
+
       return success({
-        newAccessToken,
         posts,
         maxPostUid,
       })

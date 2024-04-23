@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../../../util/tools"
 import {
   changeGroupAdmin,
   removeBoard,
@@ -14,6 +14,9 @@ import {
 } from "../../../../database/admin/group/general/update"
 import { CREATE_BOARD_RESULT } from "../../../../database/admin/group/general/const"
 import { NEW_BOARD } from "../../../../../tsboard.config"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const update = new Elysia()
   .use(
@@ -22,40 +25,44 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (
+      verification.success === true &&
+      (await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === true
+    ) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       newAccessToken,
     }
   })
   .patch(
-    "/changeadmin",
-    async ({ body: { groupUid, userUid }, newAccessToken }) => {
+    "/change/admin",
+    async ({ body: { groupUid, targetUserUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken: "",
       }
 
-      if (groupUid < 1) {
-        return fail(`Invalid group uid.`, response)
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
       }
-      if (userUid < 1) {
-        return fail(`Invalid user uid.`, response)
+      if (groupUid < 1 || targetUserUid < 1) {
+        return fail(`Invalid parameters.`, response)
       }
-      const result = await changeGroupAdmin(groupUid, userUid)
+      const result = await changeGroupAdmin(groupUid, targetUserUid)
       if (result === false) {
         return fail(`User not found.`, response)
       }
@@ -64,24 +71,26 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
-        userUid: t.Number(),
+        targetUserUid: t.Number(),
       }),
     },
   )
   .delete(
-    "/removeboard",
-    async ({ query: { boardUid }, newAccessToken }) => {
+    "/remove/board",
+    async ({ query: { boardUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken: "",
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1) {
         return fail(`Invalid board uid.`, response)
       }
-
       const result = await removeBoard(boardUid)
       if (result === false) {
         return fail(`Board not found.`, response)
@@ -94,14 +103,18 @@ export const update = new Elysia()
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         boardUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .post(
-    "/createboard",
-    async ({ body: { groupUid, newId }, newAccessToken }) => {
+    "/create/board",
+    async ({ body: { groupUid, newId }, newAccessToken, accessUserUid }) => {
       const response = CREATE_BOARD_RESULT
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (groupUid < 1) {
         return fail(`Invalid group uid.`, response)
       }
@@ -124,7 +137,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
         newId: t.String(),

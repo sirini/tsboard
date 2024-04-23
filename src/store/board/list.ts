@@ -38,8 +38,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   async function loadPostList(): Promise<void> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
-      util.snack(TEXT[home.lang].NO_BOARD_ID)
-      return
+      return util.snack(TEXT[home.lang].NO_BOARD_ID)
     }
     const response = await client.tsapi.board.list.get({
       $headers: {
@@ -52,24 +51,22 @@ export const useBoardListStore = defineStore("boardList", () => {
         sinceUid: sinceUid.value,
         option: option.value as number,
         keyword: keyword.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
-      util.go(TYPE_MATCH[config.value.type].name)
-      return
+      return util.go(TYPE_MATCH[config.value.type].name)
     }
 
     posts.value = response.data.result.posts

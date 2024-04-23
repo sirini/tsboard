@@ -7,7 +7,10 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getGroupList, getExistGroupIds } from "../../../../database/admin/group/list/load"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../../../util/tools"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const load = new Elysia()
   .use(
@@ -18,7 +21,7 @@ export const load = new Elysia()
   )
   .get(
     "/load",
-    async ({ jwt, cookie: { refresh }, headers }) => {
+    async ({ jwt, cookie: { refresh }, headers: { authorization }, query: { userUid } }) => {
       const response = {
         newAccessToken: "",
         groups: [],
@@ -28,19 +31,34 @@ export const load = new Elysia()
       if (groups.length < 1) {
         return fail(`Unable to get group list.`, response)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
+
+      const verification = await checkUserVerification({
+        jwt,
+        userUid,
+        accessToken: authorization,
+        refreshToken: refresh.value,
+      })
+
+      if (verification.success === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      if ((await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === false) {
+        return fail(`Access denied, only administrator can access.`, response)
+      }
+
       return success({
-        newAccessToken,
+        newAccessToken: verification.newAccessToken,
         groups,
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
     },
   )
   .get(
     "/groupids",
-    async ({ jwt, cookie: { refresh }, headers, query: { id, limit } }) => {
+    async ({ query: { id, limit } }) => {
       const response = {
         ids: [],
       }

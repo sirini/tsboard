@@ -9,13 +9,7 @@ import { jwt } from "@elysiajs/jwt"
 import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
-import {
-  fail,
-  getUpdatedAccessToken,
-  refineText,
-  success,
-  DEFAULT_TYPE_CHECK,
-} from "../../util/tools"
+import { fail, refineText, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import {
   getCategories,
   getMaxImageUid,
@@ -39,6 +33,7 @@ import { checkPermission, havePermission, updateUserPoint } from "../../database
 import { getFiles, getPost, getTags } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { SIZE } from "../../../tsboard.config"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -72,23 +67,24 @@ export const editor = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let userLevel = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        userLevel = await getUserLevel(accessUserUid)
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       userLevel,
@@ -120,11 +116,12 @@ export const editor = new Elysia()
       }),
       query: t.Object({
         id: t.String(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .post(
-    "/uploadimages",
+    "/upload/images",
     async ({ body: { boardUid, images }, newAccessToken, accessUserUid, userLevel }) => {
       const response = {
         newAccessToken,
@@ -157,7 +154,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         images: t.Optional(
@@ -170,7 +167,7 @@ export const editor = new Elysia()
     },
   )
   .get(
-    "/loadimages",
+    "/load/images",
     async ({ query: { boardUid, lastUid, bunch }, accessUserUid, newAccessToken, userLevel }) => {
       const response = {
         images: [],
@@ -212,11 +209,12 @@ export const editor = new Elysia()
         boardUid: t.Numeric(),
         lastUid: t.Numeric(),
         bunch: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .delete(
-    "/removeimage",
+    "/remove/image",
     async ({ query: { imageUid }, accessUserUid, newAccessToken }) => {
       const response = {
         newAccessToken,
@@ -240,11 +238,12 @@ export const editor = new Elysia()
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         imageUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .get(
-    "/tagsuggestion",
+    "/tag/suggestion",
     async ({ query: { tag, limit }, accessUserUid }) => {
       const response = {
         suggestions: [] as CountPair[],
@@ -265,6 +264,7 @@ export const editor = new Elysia()
       query: t.Object({
         tag: t.String(),
         limit: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
@@ -334,12 +334,12 @@ export const editor = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object(writeBody),
     },
   )
   .get(
-    "/loadpost",
+    "/load/post",
     async ({ query: { boardUid, postUid }, accessUserUid, newAccessToken }) => {
       let response = {
         post: INIT_POST_VIEW,
@@ -371,11 +371,12 @@ export const editor = new Elysia()
       query: t.Object({
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .delete(
-    "/removeattached",
+    "/remove/attached",
     async ({ query: { boardUid, postUid, fileUid }, accessUserUid }) => {
       let response = ""
       if (fileUid < 1) {
@@ -400,6 +401,7 @@ export const editor = new Elysia()
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
         fileUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
@@ -470,7 +472,7 @@ export const editor = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         ...writeBody,
         postUid: t.Numeric(),

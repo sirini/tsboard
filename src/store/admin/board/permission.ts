@@ -35,15 +35,15 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       },
       $query: {
         id: route.params.id as string,
+        userUid: auth.user.uid,
       },
     })
+
     if (!response.data) {
-      admin.error(PERMISSION.NO_RESPONSE)
-      return
+      return admin.error(PERMISSION.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
-      return
+      return admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value = response.data.result.permission
@@ -62,8 +62,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       },
     })
     if (!response.data) {
-      admin.error(PERMISSION.NO_RESPONSE)
-      return
+      return admin.error(PERMISSION.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return
@@ -78,20 +77,21 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 선택한 회원을 관리자로 지정하기
   async function updateBoardManager(user: AdminPair): Promise<void> {
-    const response = await client.tsapi.admin.board.permission.changeadmin.patch({
+    const response = await client.tsapi.admin.board.permission.change.admin.patch({
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       boardUid: board.value.uid,
-      userUid: user.uid,
+      targetUserUid: user.uid,
     })
     if (!response.data) {
-      admin.error(PERMISSION.NO_RESPONSE)
-      return
+      return admin.error(PERMISSION.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
-      return
+      return admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value.admin = {
@@ -144,9 +144,12 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 액세스 권한 변경
   async function updateAllPermissions(): Promise<boolean> {
-    const response = await client.tsapi.admin.board.permission.updatelevels.patch({
+    const response = await client.tsapi.admin.board.permission.update.levels.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       levels: board.value.level,

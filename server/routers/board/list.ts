@@ -13,9 +13,10 @@ import {
   getTotalPostCount,
   getUserLevel,
 } from "../../database/board/list"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { fail, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
 import { Post, SearchOption } from "../../../src/interface/board"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const list = new Elysia()
   .use(
@@ -24,23 +25,24 @@ export const list = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let userLevel = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        userLevel = await getUserLevel(accessUserUid)
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       userLevel,
@@ -109,6 +111,7 @@ export const list = new Elysia()
         sinceUid: t.Numeric(),
         option: t.Numeric(),
         keyword: t.String(),
+        userUid: t.Numeric(),
       }),
     },
   )

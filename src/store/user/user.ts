@@ -39,19 +39,17 @@ export const useUserStore = defineStore("user", () => {
 
   // 회원 기본 정보 가져오기
   async function loadUserInfo(): Promise<void> {
-    const response = await client.tsapi.user.loaduserinfo.get({
+    const response = await client.tsapi.user.load.user.info.get({
       $query: {
-        userUid: targetUser.value.uid,
+        targetUserUid: targetUser.value.uid,
       },
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_LOAD_INFO} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_INFO} (${response.data.error})`)
     }
 
     info.value = response.data.result

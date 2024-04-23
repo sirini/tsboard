@@ -12,10 +12,6 @@ import { group } from "./admin/group"
 import { latest } from "./admin/latest"
 import { report } from "./admin/report"
 import { user } from "./admin/user"
-import { isValidRefreshToken } from "../database/auth/authorization"
-import { fail } from "../util/tools"
-import { haveAdminPermission } from "../database/user/manageuser"
-import { NO_TABLE_TARGET } from "../database/user/const"
 
 export const admin = new Elysia().group("/admin", (app) => {
   return app
@@ -25,27 +21,6 @@ export const admin = new Elysia().group("/admin", (app) => {
         secret: process.env.JWT_SECRET_KEY!,
       }),
     )
-    .onBeforeHandle(async ({ cookie: { refresh }, jwt, headers }) => {
-      const response = ""
-      const access = await jwt.verify(headers.authorization ?? "")
-      if (access === false) {
-        return fail(`Invalid authorization.`, response)
-      }
-
-      const userUid = access.uid as number
-      if ((await haveAdminPermission(userUid, NO_TABLE_TARGET)) === false) {
-        return fail(`Access denied.`, response)
-      }
-
-      const now = Date.now()
-      const accessTokenTime = access.signin as number
-
-      if (accessTokenTime < now) {
-        if ((await isValidRefreshToken(userUid, refresh.value)) === false) {
-          return fail(`Invalid refresh token.`, response)
-        }
-      }
-    })
     .use(dashboard)
     .use(board)
     .use(group)

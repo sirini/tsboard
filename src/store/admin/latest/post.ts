@@ -38,13 +38,12 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
         bunch: bunch.value,
       },
     })
+
     if (!response.data) {
-      admin.error(POST.NO_RESPONSE)
-      return
+      return admin.error(POST.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(POST.FAILED_LOAD)
-      return
+      return admin.error(POST.FAILED_LOAD)
     }
     pageLength.value = Math.ceil(response.data.result.maxPostUid / bunch.value)
     posts.value = response.data.result.posts
@@ -73,9 +72,9 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
         bunch: bunch.value,
       },
     })
+
     if (!response.data) {
-      admin.error(POST.NO_RESPONSE)
-      return
+      return admin.error(POST.NO_RESPONSE)
     }
     pageLength.value = Math.ceil(response.data.result.maxPostUid / bunch.value)
     posts.value = response.data.result.posts

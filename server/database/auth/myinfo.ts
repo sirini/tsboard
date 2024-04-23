@@ -21,15 +21,7 @@ export async function getUser(userUid: number): Promise<User> {
     return result
   }
 
-  const [token] = await select(`SELECT access FROM ${table}user_token WHERE user_uid = ? LIMIT 1`, [
-    userUid.toString(),
-  ])
-  if (!token) {
-    return result
-  }
-
   const admin = await haveAdminPermission(userUid, NO_TABLE_TARGET)
-
   return {
     uid: userUid,
     id: user.id,
@@ -41,6 +33,6 @@ export async function getUser(userUid: number): Promise<User> {
     signup: user.signup,
     signin: user.signin,
     admin,
-    token: token.access,
+    token: "" /* 로그인 시점에 생성된 액세스 토큰을 받아서 따로 저장 */,
   }
 }

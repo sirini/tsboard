@@ -68,12 +68,10 @@ export const useAuthStore = defineStore("auth", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
     updateUserToken(response.data.result.newAccessToken)
     user.value = response.data.result.user as User
@@ -83,20 +81,18 @@ export const useAuthStore = defineStore("auth", () => {
   // 사용자 로그인하기
   async function login(): Promise<void> {
     if (util.filters.email.test(user.value.id) === false) {
-      util.error(TEXT[home.lang].INVALID_EMAIL)
-      return
+      return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
     const response = await client.tsapi.auth.signin.post({
       id: user.value.id.trim(),
       password: SHA256(password.value).toString(),
     })
+
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(TEXT[home.lang].INVALID_ID_PW)
-      return
+      return util.error(TEXT[home.lang].INVALID_ID_PW)
     }
     user.value = response.data.result.user
     if (user.value) {
@@ -114,12 +110,10 @@ export const useAuthStore = defineStore("auth", () => {
     const response = await client.tsapi.auth.google.userinfo.get()
 
     if (!response.data) {
-      util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
-      return
+      return util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
 
     user.value = response.data.result
@@ -173,21 +167,21 @@ export const useAuthStore = defineStore("auth", () => {
   async function updateMyInfo(): Promise<void> {
     const name = user.value.name.trim()
     if (name.length < 2) {
-      util.error(TEXT[home.lang].INVALID_NAME)
-      return
+      return util.error(TEXT[home.lang].INVALID_NAME)
     }
     if (password.value.length > 7 && password.value !== checkedPassword.value) {
-      util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
     if (password.value.length > 7 && util.filters.password.test(password.value) === false) {
-      util.error(TEXT[home.lang].INVALID_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].INVALID_PASSWORD)
     }
 
     const response = await client.tsapi.auth.update.patch({
       $headers: {
         authorization: user.value.token,
+      },
+      $query: {
+        userUid: user.value.uid,
       },
       name: user.value.name,
       password: password.value.length < 1 ? "" : SHA256(password.value).toString(),
@@ -196,12 +190,10 @@ export const useAuthStore = defineStore("auth", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${response.data.error})`)
     }
     updateUserToken(response.data.result.newAccessToken)
     loadUserInfo()

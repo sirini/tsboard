@@ -40,14 +40,18 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   // 새 댓글 작성하기
   async function newComment(param: SaveNewCommentParams): Promise<Comment> {
     let result: Comment = INIT_COMMENT
-    const response = await client.tsapi.board.newcomment.post({
+    const response = await client.tsapi.board.new.comment.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: param.boardUid,
       postUid: param.postUid,
       content: param.content,
     })
+
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
       return result
@@ -83,15 +87,19 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   async function replyComment(param: SaveReplyCommentParams): Promise<Comment> {
     let result = INIT_COMMENT
 
-    const response = await client.tsapi.board.replycomment.post({
+    const response = await client.tsapi.board.reply.comment.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       replyTargetUid: param.replyTargetUid,
       boardUid: param.boardUid,
       postUid: param.postUid,
       content: param.content,
     })
+
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
       return result
@@ -125,9 +133,12 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
 
   // 기존 댓글 수정하기
   async function modifyComment(param: SaveModifyCommentParams): Promise<void> {
-    const response = await client.tsapi.board.modifycomment.patch({
+    const response = await client.tsapi.board.modify.comment.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       modifyTargetUid: param.modifyTargetUid,
       boardUid: param.boardUid,
@@ -135,12 +146,10 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       content: param.content,
     })
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(TEXT[home.lang].MODIFIED_COMMENT)

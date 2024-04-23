@@ -7,10 +7,11 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { isDuplicatedName } from "../../database/auth/signup"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import { getUser } from "../../database/auth/myinfo"
 import { getUserInfo, modifyUserInfo } from "../../database/admin/user/modify"
 import { INIT_USER } from "../../database/auth/const"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const myInfo = new Elysia()
   .use(
@@ -19,21 +20,22 @@ export const myInfo = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       newAccessToken,
@@ -41,12 +43,15 @@ export const myInfo = new Elysia()
   })
   .get(
     "/load",
-    async ({ query: { userUid }, newAccessToken }) => {
+    async ({ query: { userUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
         user: INIT_USER,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (userUid < 1) {
         return fail(`Invalid user uid.`, response)
       }
@@ -74,7 +79,7 @@ export const myInfo = new Elysia()
         return fail(`Name is too short.`, response)
       }
       if (accessUserUid < 1) {
-        return fail(`Invalid authorization, please login in again.`, response)
+        return fail(`Unauthorized access.`, response)
       }
       const userUid = accessUserUid
       if ((await isDuplicatedName(userUid, name)) === true) {
@@ -96,7 +101,7 @@ export const myInfo = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         name: t.String(),
         password: t.String(),

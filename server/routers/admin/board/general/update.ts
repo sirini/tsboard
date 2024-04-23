@@ -17,7 +17,10 @@ import {
   removeCategory,
   updateUseCategory,
 } from "../../../../database/admin/board/general/update"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../../../util/tools"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const update = new Elysia()
   .use(
@@ -26,33 +29,40 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (
+      verification.success === true &&
+      (await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === true
+    ) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       newAccessToken,
     }
   })
   .patch(
-    "/changegroup",
-    async ({ body: { groupUid, boardUid }, newAccessToken }) => {
+    "/change/group",
+    async ({ body: { groupUid, boardUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (groupUid < 1 || boardUid < 1) {
         return fail(`Invalid target.`, response)
       }
@@ -60,7 +70,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Numeric(),
         boardUid: t.Numeric(),
@@ -68,12 +78,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/updatename",
-    async ({ body: { boardUid, newName }, newAccessToken }) => {
+    "/update/name",
+    async ({ body: { boardUid, newName }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || newName.length < 2) {
         return fail(`Invalid parameters.`, response)
       }
@@ -81,7 +94,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newName: t.String(),
@@ -89,12 +102,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/updateinfo",
-    async ({ body: { boardUid, newInfo }, newAccessToken }) => {
+    "/update/info",
+    async ({ body: { boardUid, newInfo }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || newInfo.length < 2) {
         return fail(`Invalid parameters.`, response)
       }
@@ -102,7 +118,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newInfo: t.String(),
@@ -110,12 +126,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/changetype",
-    async ({ body: { boardUid, newType }, newAccessToken }) => {
+    "/change/type",
+    async ({ body: { boardUid, newType }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1) {
         return fail(`Invalid board uid.`, response)
       }
@@ -123,7 +142,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newType: t.Numeric(),
@@ -131,12 +150,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/updaterows",
-    async ({ body: { boardUid, newRows }, newAccessToken }) => {
+    "/update/rows",
+    async ({ body: { boardUid, newRows }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || newRows < 1) {
         return fail(`Invalid parameters.`, response)
       }
@@ -144,7 +166,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newRows: t.Numeric(),
@@ -152,12 +174,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/updatewidth",
-    async ({ body: { boardUid, newWidth }, newAccessToken }) => {
+    "/update/width",
+    async ({ body: { boardUid, newWidth }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || newWidth < 100) {
         return fail(`Invalid board uid.`, response)
       }
@@ -165,7 +190,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newWidth: t.Numeric(),
@@ -173,13 +198,16 @@ export const update = new Elysia()
     },
   )
   .post(
-    "/addcategory",
-    async ({ body: { boardUid, newCategory }, newAccessToken }) => {
+    "/add/category",
+    async ({ body: { boardUid, newCategory }, newAccessToken, accessUserUid }) => {
       let response = {
         newAccessToken,
         categoryUid: 0,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || newCategory.length < 2) {
         return fail(`Invalid parameters.`, response)
       }
@@ -190,7 +218,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         newCategory: t.String(),
@@ -198,12 +226,15 @@ export const update = new Elysia()
     },
   )
   .delete(
-    "/removecategory",
-    async ({ body: { boardUid, categoryUid }, newAccessToken }) => {
+    "/remove/category",
+    async ({ body: { boardUid, categoryUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || categoryUid < 1) {
         return fail(`Invalid parameters.`, response)
       }
@@ -214,7 +245,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Number(),
         categoryUid: t.Number(),
@@ -222,12 +253,15 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/usecategory",
-    async ({ body: { boardUid, useCategory }, newAccessToken }) => {
+    "/use/category",
+    async ({ body: { boardUid, useCategory }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (boardUid < 1 || useCategory < 0 || useCategory > 1) {
         return fail(`Invalid parameters.`, response)
       }
@@ -235,7 +269,7 @@ export const update = new Elysia()
       return success(response)
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         boardUid: t.Numeric(),
         useCategory: t.Numeric(),

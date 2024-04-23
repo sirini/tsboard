@@ -71,16 +71,15 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       },
       $query: {
         id: id.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
@@ -97,23 +96,22 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await client.tsapi.board.loadpost.get({
+    const response = await client.tsapi.board.load.post.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         boardUid: config.value.uid,
         postUid: postUid.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     category.value = response.data.result.post.category
@@ -137,23 +135,22 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await client.tsapi.board.tagsuggestion.get({
+    const response = await client.tsapi.board.tag.suggestion.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         tag: tag.value,
         limit: 5,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
     }
     suggestionTags.value = response.data.result.suggestions
   }
@@ -253,6 +250,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       boardUid: config.value.uid,
       isNotice: isNotice.value ? 1 : 0,
       categoryUid: category.value.uid,
@@ -264,13 +264,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
-      clearVariables()
-      return
+      return clearVariables()
     }
     if (response.data.success === false) {
       util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
-      clearVariables()
-      return
+      return clearVariables()
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].WRITTEN_NEW_POST)
@@ -290,6 +288,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       postUid: postUid.value,
       boardUid: config.value.uid,
       isNotice: isNotice.value ? 1 : 0,
@@ -302,13 +303,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     if (!response.data) {
       util.error(TEXT[home.lang].NO_RESPONSE)
-      clearVariables()
-      return
+      return clearVariables()
     }
     if (response.data.success === false) {
       util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${response.data.error})`)
-      clearVariables()
-      return
+      return clearVariables()
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].MODIFIED_POST)
@@ -322,7 +321,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (fileUid < 1) {
       return
     }
-    const response = await client.tsapi.board.removeattached.delete({
+    const response = await client.tsapi.board.remove.attached.delete({
       $headers: {
         authorization: auth.user.token,
       },
@@ -330,16 +329,15 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         boardUid: config.value.uid,
         postUid: postUid.value,
         fileUid,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${response.data.error})`)
     }
     attachedFiles.value = attachedFiles.value.filter((file) => file.uid !== fileUid)
     util.success(TEXT[home.lang].REMOVED_FILE)

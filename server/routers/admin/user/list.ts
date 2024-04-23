@@ -7,7 +7,10 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { getMaxUserUid, getUsers } from "../../../database/admin/user/list"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK } from "../../../util/tools"
+import { checkUserVerification } from "../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../database/user/const"
 
 export const list = new Elysia()
   .use(
@@ -18,7 +21,12 @@ export const list = new Elysia()
   )
   .get(
     "/list",
-    async ({ jwt, cookie: { refresh }, headers, query: { page, bunch, isBlocked } }) => {
+    async ({
+      jwt,
+      cookie: { refresh },
+      headers: { authorization },
+      query: { page, bunch, isBlocked, userUid },
+    }) => {
       const response = {
         newAccessToken: "",
         users: [],
@@ -31,8 +39,23 @@ export const list = new Elysia()
       if (bunch < 5 || bunch > 100) {
         return fail(`Invalid bunch.`, response)
       }
+
+      const verification = await checkUserVerification({
+        jwt,
+        userUid,
+        accessToken: authorization,
+        refreshToken: refresh.value,
+      })
+
+      if (verification.success === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      if ((await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === false) {
+        return fail(`Access denied, only administrator can access.`, response)
+      }
+
       const blocked = isBlocked > 0 ? true : false
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
       const maxUserUid = await getMaxUserUid(blocked)
       const users = await getUsers({
         page,
@@ -44,7 +67,7 @@ export const list = new Elysia()
       })
 
       return success({
-        newAccessToken,
+        newAccessToken: verification.newAccessToken,
         users,
         maxUserUid,
       })
@@ -55,6 +78,7 @@ export const list = new Elysia()
         page: t.Numeric(),
         bunch: t.Numeric(),
         isBlocked: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

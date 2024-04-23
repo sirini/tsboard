@@ -45,15 +45,15 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       },
       $query: {
         id: route.params.id as string,
+        userUid: auth.user.uid,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     group.value = response.data.result.config
@@ -75,9 +75,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         limit: 5,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return
@@ -104,9 +104,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         limit: 5,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return
@@ -123,28 +123,29 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   async function createNewBoard(): Promise<void> {
     const newId = newBoardId.value.trim()
     if (newId.length < 2) {
-      admin.error(GENERAL.TOO_SHORT_BOARD_ID)
-      return
+      return admin.error(GENERAL.TOO_SHORT_BOARD_ID)
     }
     if (/^[a-z0-9_]{2,}$/.test(newId) === false) {
       admin.error(GENERAL.INVALID_BOARD_ID)
       newBoardId.value = ""
       return
     }
-    const response = await client.tsapi.admin.group.general.createboard.post({
+    const response = await client.tsapi.admin.group.general.create.board.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       groupUid: group.value.uid,
       newId,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
 
@@ -171,20 +172,22 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
 
   // 선택한 회원을 그룹 관리자로 지정하기
   async function updateGroupManager(user: AdminPair): Promise<void> {
-    const response = await client.tsapi.admin.group.general.changeadmin.patch({
+    const response = await client.tsapi.admin.group.general.change.admin.patch({
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       groupUid: group.value.uid,
-      userUid: user.uid,
+      targetUserUid: user.uid,
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
 
@@ -210,26 +213,24 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
   // 게시판을 정말로 삭제할 때 처리
   async function removeBoard(): Promise<void> {
     if (removeBoardTarget.value.uid < 1) {
-      admin.error(GENERAL.INVALID_REMOVE_TARGET)
-      return
+      return admin.error(GENERAL.INVALID_REMOVE_TARGET)
     }
 
-    const response = await client.tsapi.admin.group.general.removeboard.delete({
+    const response = await client.tsapi.admin.group.general.remove.board.delete({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         boardUid: removeBoardTarget.value.uid,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${GENERAL.FAILED_REMOVE_BOARD} (${response.data.error})`)
-      return
+      return admin.error(`${GENERAL.FAILED_REMOVE_BOARD} (${response.data.error})`)
     }
 
     boards.value = boards.value.filter((board) => {

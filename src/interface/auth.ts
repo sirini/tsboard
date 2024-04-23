@@ -32,3 +32,16 @@ export type ChangePassword = {
   code: string
   password: string
 }
+
+export type VerificationParams = {
+  jwt: any
+  userUid: number
+  accessToken: string
+  refreshToken: string
+}
+
+export type VerificationResult = {
+  success: boolean
+  accessUserUid: number
+  newAccessToken: string
+}

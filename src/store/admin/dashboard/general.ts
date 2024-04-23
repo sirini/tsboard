@@ -57,9 +57,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         authorization: auth.user.token,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     visit.value = response.data.result.visit
     member.value = response.data.result.member
@@ -79,9 +79,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         limit: 5,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     posts.value = response.data.result.posts
     comments.value = response.data.result.comments
@@ -98,9 +98,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         limit: 5,
       },
     })
+
     if (!response.data) {
-      admin.error(GENERAL.NO_RESPONSE)
-      return
+      return admin.error(GENERAL.NO_RESPONSE)
     }
     groups.value = response.data.result.groups
     boards.value = response.data.result.boards

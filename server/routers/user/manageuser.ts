@@ -6,13 +6,14 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import {
   getUserPermission,
   haveAdminPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
 import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "../../database/user/const"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const manageUser = new Elysia()
   .use(
@@ -21,47 +22,45 @@ export const manageUser = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    const access = await jwt.verify(headers.authorization ?? "")
-    if (access === false) {
-      return {
-        accessUserUid,
-        newAccessToken,
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
-    accessUserUid = access.uid as number
+
     if ((await haveAdminPermission(accessUserUid, NO_TABLE_TARGET)) === false) {
       return {
         accessUserUid,
         newAccessToken,
       }
     }
-    if (cookie && cookie.refresh) {
-      newAccessToken = await getUpdatedAccessToken(
-        jwt,
-        headers.authorization as string,
-        cookie.refresh.value,
-      )
-    }
+
     return {
       accessUserUid,
       newAccessToken,
     }
   })
   .get(
-    "/loadpermission",
-    async ({ newAccessToken, query: { userUid } }) => {
+    "/load/permission",
+    async ({ newAccessToken, query: { targetUserUid } }) => {
       let response = {
         newAccessToken: "",
         permission: USER_PERMISSION_PARAMS,
       }
-      if (userUid < 1) {
-        return fail(`Invalid user uid.`, response)
+      if (targetUserUid < 1) {
+        return fail(`Invalid target user uid.`, response)
       }
-      const permission = await getUserPermission(userUid)
+      const permission = await getUserPermission(targetUserUid)
       return success({
         newAccessToken,
         permission,
@@ -70,12 +69,13 @@ export const manageUser = new Elysia()
     {
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
+        targetUserUid: t.Numeric(),
         userUid: t.Numeric(),
       }),
     },
   )
   .post(
-    "/manageuser",
+    "/manage/user",
     async ({
       body: { userUid, writePost, writeComment, sendChatMessage, sendReport, login, response },
       accessUserUid,
@@ -107,7 +107,7 @@ export const manageUser = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         userUid: t.Number(),
         writePost: t.Boolean(),

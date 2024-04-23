@@ -35,16 +35,15 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       },
       $query: {
         id: route.params.id as string,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      admin.error(POINT.NO_RESPONSE)
-      return
+      return admin.error(POINT.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
-      return
+      return admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     board.value = response.data.result.point
@@ -114,9 +113,12 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 포인트 처리
   async function updateAllPoints(): Promise<boolean> {
-    const response = await client.tsapi.admin.board.point.updatepoints.patch({
+    const response = await client.tsapi.admin.board.point.update.points.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: board.value.uid,
       points: {
@@ -126,6 +128,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
         download: board.value.download,
       },
     })
+
     if (!response.data) {
       admin.error(POINT.NO_RESPONSE)
       return false

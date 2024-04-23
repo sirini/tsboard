@@ -58,15 +58,15 @@ export const useCommentStore = defineStore("comment", () => {
         pagingDirection: pagingDirection.value,
         bunch: bunch.value,
         sinceUid: sinceUid.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
     boardUid.value = response.data.result.boardUid
     comments.value = response.data.result.comments
@@ -104,9 +104,12 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
   async function like(commentUid: number, isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.likecomment.patch({
+    const response = await client.tsapi.board.like.comment.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: boardUid.value,
       commentUid,
@@ -219,27 +222,27 @@ export const useCommentStore = defineStore("comment", () => {
   // 댓글 삭제하기, 답글이 달려있는 댓글은 내용만 제거됨 (isChangeStatus = false)
   async function removeComment(): Promise<void> {
     if (removeTarget.value < 1) {
-      util.snack(TEXT[home.lang].INVALID_REMOVE_TARGET)
-      return
+      return util.snack(TEXT[home.lang].INVALID_REMOVE_TARGET)
     }
 
-    const response = await client.tsapi.board.removecomment.delete({
+    const response = await client.tsapi.board.remove.comment.delete({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         boardUid: boardUid.value,
         removeTargetUid: removeTarget.value,
+        userUid: auth.user.uid,
       },
     })
+
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_REMOVE_COMMENT} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_COMMENT} (${response.data.error})`)
     }
+
     if (response.data.result.isChangeStatus === true) {
       comments.value = comments.value.filter((comment) => {
         return removeTarget.value !== comment.uid

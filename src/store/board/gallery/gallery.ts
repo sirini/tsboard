@@ -50,7 +50,7 @@ export const useGalleryStore = defineStore("gallery", () => {
       return
     }
 
-    const response = await client.tsapi.board.photolist.get({
+    const response = await client.tsapi.board.photo.list.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -61,24 +61,22 @@ export const useGalleryStore = defineStore("gallery", () => {
         sinceUid: sinceUid.value,
         option: option.value as number,
         keyword: keyword.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-      util.go(TYPE_MATCH[config.value.type].name)
-      return
+      return util.go(TYPE_MATCH[config.value.type].name)
     }
 
     if (sinceUid.value < 1) {

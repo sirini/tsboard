@@ -16,7 +16,7 @@ import { LangType } from "../../../src/interface/home"
 
 export const resetPassword = new Elysia()
   .post(
-    "/resetpassword",
+    "/reset/password",
     async ({ body: { email, lang } }) => {
       const response = {
         sendmail: false,
@@ -43,7 +43,7 @@ export const resetPassword = new Elysia()
     },
   )
   .post(
-    "/changepassword",
+    "/change/password",
     async ({ body: { target, code, password } }) => {
       const response = ""
       if (target < 1 || code.length !== 6 || password.length !== 64) {

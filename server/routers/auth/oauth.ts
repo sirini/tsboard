@@ -8,7 +8,6 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { registerUser } from "../../database/auth/signin"
 import { saveTokens } from "../../database/auth/authorization"
-import { Token } from "../../../src/interface/auth"
 import { AUTH, OAUTH } from "../../../tsboard.config"
 import { getUser } from "../../database/auth/myinfo"
 import { INIT_USER } from "../../database/auth/const"
@@ -65,30 +64,31 @@ export const oauth = new Elysia()
 
       if (userInfo.email) {
         const userUid = await registerUser(userInfo.email, userInfo.name, userInfo.picture)
-        const token: Token = {
-          access: await jwt.sign({
-            uid: userUid,
-            id: userInfo.email,
-            signin: Date.now() + AUTH.JWT.ACCESS_TIMEOUT * 1000 * 60,
-          }),
-          refresh: await jwt.sign({
-            signin: Date.now() + AUTH.JWT.REFRESH_TIMEOUT * 1000 * 60 * 60 * 24,
-          }),
-        }
-        saveTokens(userUid, token)
+        const now = Math.floor(Date.now() / 1000)
+        const accessToken = await jwt.sign({
+          uid: userUid,
+          exp: now + AUTH.JWT.ACCESS_TIMEOUT * 60,
+        })
+        const refreshToken = await jwt.sign({
+          exp: now + AUTH.JWT.REFRESH_TIMEOUT * 60 * 60 * 24,
+        })
+
+        saveTokens(userUid, refreshToken)
 
         refresh.set({
-          value: token.refresh,
-          maxAge: 86400 * AUTH.JWT.REFRESH_TIMEOUT,
+          value: refreshToken,
+          maxAge: AUTH.JWT.REFRESH_TIMEOUT * 86400,
           path: "/",
           httpOnly: AUTH.COOKIE.HTTP_ONLY,
           secure: AUTH.COOKIE.SECURE,
         })
 
         const googleUser = await getUser(userUid)
+        googleUser.token = accessToken
+
         googleUserInfo.set({
           value: JSON.stringify(googleUser),
-          maxAge: 1000 * 60 * AUTH.JWT.OAUTH_TIMEOUT,
+          maxAge: AUTH.JWT.OAUTH_TIMEOUT * 60,
           path: "/",
           httpOnly: AUTH.COOKIE.HTTP_ONLY,
           secure: AUTH.COOKIE.SECURE,

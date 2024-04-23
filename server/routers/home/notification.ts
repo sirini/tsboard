@@ -6,9 +6,10 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, DEFAULT_TYPE_CHECK } from "../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
 import { Notification } from "../../../src/interface/home"
 import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const notification = new Elysia()
   .use(
@@ -17,15 +18,20 @@ export const notification = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
-    const access = await jwt.verify(headers.authorization ?? "")
-    if (access === false) {
-      return {
-        accessUserUid,
-      }
+
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
     }
-    accessUserUid = access.uid as number
+
     return {
       accessUserUid,
     }
@@ -45,15 +51,20 @@ export const notification = new Elysia()
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         limit: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
-  .patch("/checked/notification", async ({ accessUserUid }) => {
-    const response = ""
-    if (accessUserUid < 1) {
-      return fail(`Invalid parameter.`, response)
-    }
+  .patch(
+    "/checked/notification",
+    async ({ accessUserUid }) => {
+      const response = ""
+      if (accessUserUid < 1) {
+        return fail(`Invalid parameter.`, response)
+      }
 
-    checkedAllNotifications(accessUserUid)
-    return success(response)
-  })
+      checkedAllNotifications(accessUserUid)
+      return success(response)
+    },
+    EXTEND_TYPE_CHECK,
+  )

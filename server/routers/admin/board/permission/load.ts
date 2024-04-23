@@ -10,8 +10,11 @@ import {
   getAdminCandidates,
   getBoardPermission,
 } from "../../../../database/admin/board/permission/load"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
 import { INIT_PERMISSION_CONFIG } from "../../../../database/admin/board/permission/const"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const load = new Elysia()
   .use(
@@ -22,10 +25,25 @@ export const load = new Elysia()
   )
   .get(
     "/load",
-    async ({ jwt, cookie: { refresh }, headers, query: { id } }) => {
-      const response = {
+    async ({ jwt, cookie: { refresh }, headers: { authorization }, query: { id, userUid } }) => {
+      let response = {
         permission: INIT_PERMISSION_CONFIG,
         newAccessToken: "",
+      }
+
+      const verification = await checkUserVerification({
+        jwt,
+        userUid,
+        accessToken: authorization,
+        refreshToken: refresh.value,
+      })
+
+      if (verification.success === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      if ((await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === false) {
+        return fail(`Access denied, only administrator can access.`, response)
       }
 
       if (id.length < 2) {
@@ -36,16 +54,17 @@ export const load = new Elysia()
       if (permission.uid < 1) {
         return fail(`Invalid board ID.`, response)
       }
-      const newAccessToken = await getUpdatedAccessToken(jwt, headers.authorization, refresh.value)
+
       return success({
         permission,
-        newAccessToken,
+        newAccessToken: verification.newAccessToken,
       })
     },
     {
       ...DEFAULT_TYPE_CHECK,
       query: t.Object({
         id: t.String(),
+        userUid: t.Numeric(),
       }),
     },
   )

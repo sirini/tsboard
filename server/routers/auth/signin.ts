@@ -33,18 +33,15 @@ export const signIn = new Elysia()
         return fail(`Unable to get an user information`, response)
       }
 
-      // 토큰 만료 시간 지정
       const now = Math.floor(Date.now() / 1000)
-      const accessToken = await jwt.sign({
+      user.token = await jwt.sign({
         uid: user.uid,
-        id: user.id,
         exp: now + AUTH.JWT.ACCESS_TIMEOUT * 60,
       })
 
       const refreshToken = await jwt.sign({
         exp: now + AUTH.JWT.REFRESH_TIMEOUT * 60 * 60 * 24,
       })
-      user.token = accessToken
       user.admin = user.uid === 1 ? true : false
 
       saveTokens(user.uid, refreshToken)

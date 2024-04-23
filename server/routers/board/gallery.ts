@@ -6,7 +6,7 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, getUpdatedAccessToken, success } from "../../util/tools"
+import { fail, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
 import { GridItem } from "../../../src/interface/gallery"
 import {
@@ -17,6 +17,7 @@ import {
 } from "../../database/board/list"
 import { getPhotoItems, getPhotos } from "../../database/board/gallery"
 import { SearchOption } from "../../../src/interface/board"
+import { checkUserVerification } from "../../database/auth/authorization"
 
 export const gallery = new Elysia()
   .use(
@@ -25,23 +26,24 @@ export const gallery = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let userLevel = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        userLevel = await getUserLevel(accessUserUid)
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (verification.success === true) {
+      accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       userLevel,
@@ -49,7 +51,7 @@ export const gallery = new Elysia()
     }
   })
   .get(
-    "/photolist",
+    "/photo/list",
     async ({
       query: { id, sinceUid, option, keyword, page, pagingDirection },
       accessUserUid,
@@ -110,11 +112,12 @@ export const gallery = new Elysia()
         sinceUid: t.Numeric(),
         option: t.Numeric(),
         keyword: t.String(),
+        userUid: t.Numeric(),
       }),
     },
   )
   .get(
-    "/photoview",
+    "/photo/view",
     async ({ query: { id, no }, userLevel, newAccessToken }) => {
       let response = {
         config: BOARD_CONFIG,
@@ -150,6 +153,7 @@ export const gallery = new Elysia()
       query: t.Object({
         id: t.String(),
         no: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

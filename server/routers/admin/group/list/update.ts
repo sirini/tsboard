@@ -7,9 +7,12 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { createGroup, removeGroup } from "../../../../database/admin/group/list/update"
-import { fail, success, getUpdatedAccessToken, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, EXTEND_TYPE_CHECK } from "../../../../util/tools"
 import { getUserBasic } from "../../../../database/board/list"
 import { SUPER_ADMIN_UID } from "../../../../database/auth/const"
+import { checkUserVerification } from "../../../../database/auth/authorization"
+import { haveAdminPermission } from "../../../../database/user/manageuser"
+import { NO_TABLE_TARGET } from "../../../../database/user/const"
 
 export const update = new Elysia()
   .use(
@@ -18,29 +21,33 @@ export const update = new Elysia()
       secret: process.env.JWT_SECRET_KEY!,
     }),
   )
-  .resolve(async ({ jwt, headers, cookie }) => {
+  .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
     let newAccessToken = ""
 
-    if (headers.authorization !== undefined && cookie && cookie.refresh) {
-      const access = await jwt.verify(headers.authorization)
-      if (access !== false) {
-        accessUserUid = access.uid as number
-        newAccessToken = await getUpdatedAccessToken(
-          jwt,
-          headers.authorization,
-          cookie.refresh.value,
-        )
-      }
+    const verification = await checkUserVerification({
+      jwt,
+      userUid: parseInt(userUid ?? "0"),
+      accessToken: authorization ?? "",
+      refreshToken: refresh.value,
+    })
+
+    if (
+      verification.success === true &&
+      (await haveAdminPermission(verification.accessUserUid, NO_TABLE_TARGET)) === true
+    ) {
+      accessUserUid = verification.accessUserUid
+      newAccessToken = verification.newAccessToken
     }
+
     return {
       accessUserUid,
       newAccessToken,
     }
   })
   .post(
-    "/creategroup",
-    async ({ body: { newId }, newAccessToken }) => {
+    "/create/group",
+    async ({ body: { newId }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken: "",
         uid: 0,
@@ -52,6 +59,9 @@ export const update = new Elysia()
         },
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (newId.length < 2) {
         return fail(`Group id is too short.`, response)
       }
@@ -71,19 +81,22 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         newId: t.String(),
       }),
     },
   )
   .delete(
-    "/removegroup",
-    async ({ body: { groupUid }, newAccessToken }) => {
+    "/remove/group",
+    async ({ body: { groupUid }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken: "",
       }
 
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
       if (groupUid < 1) {
         return fail(`Invalid group uid.`, response)
       }
@@ -96,7 +109,7 @@ export const update = new Elysia()
       })
     },
     {
-      ...DEFAULT_TYPE_CHECK,
+      ...EXTEND_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
       }),

@@ -35,14 +35,16 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
     })
+
     if (!response.data) {
-      admin.error(LIST.NO_RESPONSE)
-      return
+      return admin.error(LIST.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
-      return
+      return admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     groups.value = response.data.result.groups
@@ -62,9 +64,9 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         limit: 5,
       },
     })
+
     if (!response.data) {
-      admin.error(LIST.NO_RESPONSE)
-      return
+      return admin.error(LIST.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return
@@ -89,19 +91,21 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       newGroupId.value = ""
       return
     }
-    const response = await client.tsapi.admin.group.list.creategroup.post({
+    const response = await client.tsapi.admin.group.list.create.group.post({
       $headers: {
         authorization: auth.user.token,
       },
+      $query: {
+        userUid: auth.user.uid,
+      },
       newId,
     })
+
     if (!response.data) {
-      admin.error(LIST.NO_RESPONSE)
-      return
+      return admin.error(LIST.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
-      return
+      return admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     groups.value.push({
@@ -133,23 +137,23 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   // 그룹 삭제하기
   async function removeGroup(): Promise<void> {
     if (groups.value.length < 2) {
-      admin.error(LIST.MINIMUM_GROUP_COUNT)
-      return
+      return admin.error(LIST.MINIMUM_GROUP_COUNT)
     }
-    const response = await client.tsapi.admin.group.list.removegroup.delete({
+    const response = await client.tsapi.admin.group.list.remove.group.delete({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       groupUid: removeGroupTarget.value.uid,
     })
 
     if (!response.data) {
-      admin.error(LIST.NO_RESPONSE)
-      return
+      return admin.error(LIST.NO_RESPONSE)
     }
     if (response.data.success === false) {
-      admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
-      return
+      return admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
 

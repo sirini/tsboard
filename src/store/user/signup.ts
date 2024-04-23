@@ -28,8 +28,7 @@ export const useSignupStore = defineStore("signup", () => {
   // 아이디(이메일) 중복 체크하기
   async function checkEmail(): Promise<void> {
     if (auth.user.id.length < 6) {
-      util.error(TEXT[home.lang].INVALID_EMAIL)
-      return
+      return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
 
     const response = await client.tsapi.auth.checkemail.post({
@@ -37,8 +36,7 @@ export const useSignupStore = defineStore("signup", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       util.error(TEXT[home.lang].EXIST_EMAIL)
@@ -51,8 +49,7 @@ export const useSignupStore = defineStore("signup", () => {
   // 이름 중복 체크하기
   async function checkName(): Promise<void> {
     if (auth.user.name.length < 2) {
-      util.error(TEXT[home.lang].INVALID_NAME)
-      return
+      return util.error(TEXT[home.lang].INVALID_NAME)
     }
 
     const response = await client.tsapi.auth.checkname.post({
@@ -61,8 +58,7 @@ export const useSignupStore = defineStore("signup", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       util.error(TEXT[home.lang].EXIST_NAME)
@@ -75,20 +71,16 @@ export const useSignupStore = defineStore("signup", () => {
   // 가입 양식 제출받기
   async function submit(): Promise<void> {
     if (util.filters.email.test(auth.user.id) === false) {
-      util.error(TEXT[home.lang].INVALID_EMAIL)
-      return
+      return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
     if (util.filters.password.test(auth.password) === false) {
-      util.error(TEXT[home.lang].INVALID_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].INVALID_PASSWORD)
     }
     if (auth.password !== auth.checkedPassword) {
-      util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
-      return
+      return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
     if (auth.user.name.length < 3) {
-      util.error(TEXT[home.lang].INVALID_NAME)
-      return
+      return util.error(TEXT[home.lang].INVALID_NAME)
     }
 
     loading.value = true
@@ -101,8 +93,7 @@ export const useSignupStore = defineStore("signup", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       util.error(TEXT[home.lang].FAILED_ADD_USER)
@@ -125,12 +116,10 @@ export const useSignupStore = defineStore("signup", () => {
   // 인증 완료하기
   async function verify(target: number): Promise<void> {
     if (target < 1) {
-      util.error(TEXT[home.lang].WRONG_VERIFY_TARGET)
-      return
+      return util.error(TEXT[home.lang].WRONG_VERIFY_TARGET)
     }
     if (verificationCode.value.length !== 6) {
-      util.error(TEXT[home.lang].WRONG_VERIFICATION_LENGTH)
-      return
+      return util.error(TEXT[home.lang].WRONG_VERIFICATION_LENGTH)
     }
     if (auth.user.id.length < 1) {
       util.error(TEXT[home.lang].VERIFY_EMPTY_EMAIL)
@@ -160,12 +149,10 @@ export const useSignupStore = defineStore("signup", () => {
     })
 
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(TEXT[home.lang].WRONG_VERIFICATION_CODE)
-      return
+      return util.error(TEXT[home.lang].WRONG_VERIFICATION_CODE)
     }
     util.success(TEXT[home.lang].SIGNUP_COMPLETE)
     util.go("login")

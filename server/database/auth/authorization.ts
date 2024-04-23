@@ -4,6 +4,7 @@
  * 사용자 인증에 필요한 토큰 관련 함수들
  */
 
+import { VerificationParams, VerificationResult } from "../../../src/interface/auth"
 import { AUTH } from "../../../tsboard.config"
 import { table, select, update, insert } from "../common"
 import { SHA256 } from "crypto-js"
@@ -58,10 +59,38 @@ export async function isValidRefreshToken(userUid: number, refresh: string): Pro
 
 // 사용자 세션 검사
 export async function checkUserVerification(
-  userUid: number,
-  accessToken: string,
-  refreshToken: string,
-): Promise<boolean> {
-  // TODO
-  return false
+  param: VerificationParams,
+): Promise<VerificationResult> {
+  let result: VerificationResult = {
+    success: false,
+    accessUserUid: 0,
+    newAccessToken: "",
+  }
+
+  if (param.accessToken.length < 1 || param.userUid < 1 || param.refreshToken?.length < 1) {
+    return result
+  }
+
+  const checkAccessToken = await param.jwt.verify(param.accessToken)
+  if (checkAccessToken !== false) {
+    return {
+      success: true,
+      accessUserUid: checkAccessToken.uid as number,
+      newAccessToken: param.accessToken,
+    }
+  }
+
+  const checkRefreshToken = await isValidRefreshToken(param.userUid, param.refreshToken)
+  if (checkRefreshToken === true) {
+    return {
+      success: true,
+      accessUserUid: param.userUid,
+      newAccessToken: await param.jwt.sign({
+        uid: param.userUid,
+        exp: Math.floor(Date.now() / 1000) + AUTH.JWT.ACCESS_TIMEOUT * 60,
+      }),
+    }
+  }
+
+  return result
 }

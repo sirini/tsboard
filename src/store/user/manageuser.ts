@@ -40,21 +40,21 @@ export const useManageUserStore = defineStore("manageuser", () => {
 
   // 회원의 기존 권한들 불러오기
   async function loadUserPermission(): Promise<void> {
-    const response = await client.tsapi.user.loadpermission.get({
+    const response = await client.tsapi.user.load.permission.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
-        userUid: targetUser.value.uid,
+        targetUserUid: targetUser.value.uid,
+        userUid: auth.user.uid,
       },
     })
+
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_LOAD_PERMISSION} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_PERMISSION} (${response.data.error})`)
     }
     permission.value = response.data.result.permission
     util.success(TEXT[home.lang].LOADED_PERMISSION)
@@ -63,12 +63,14 @@ export const useManageUserStore = defineStore("manageuser", () => {
   // 회원 관리하기
   async function manageUser(): Promise<void> {
     if (permission.value.response.length < 3 || permission.value.response.length > 1000) {
-      util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
-      return
+      return util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
     }
-    const response = await client.tsapi.user.manageuser.post({
+    const response = await client.tsapi.user.manage.user.post({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       userUid: targetUser.value.uid,
       writePost: permission.value.writePost,
@@ -78,13 +80,12 @@ export const useManageUserStore = defineStore("manageuser", () => {
       login: permission.value.login,
       response: permission.value.response,
     })
+
     if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.error(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${response.data.error})`)
-      return
+      return util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].ACTION_TAKEN)

@@ -36,8 +36,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     postUid.value = parseInt(route.params.no as string)
 
     if (id.value.length < 2) {
-      util.snack(TEXT[home.lang].NO_BOARD_ID)
-      return
+      return util.snack(TEXT[home.lang].NO_BOARD_ID)
     }
 
     let needUpdateHit = 0
@@ -54,24 +53,22 @@ export const useBoardViewStore = defineStore("boardView", () => {
         id: id.value,
         postUid: postUid.value,
         needUpdateHit,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-      util.go(TYPE_MATCH[config.value.type].name)
-      return
+      return util.go(TYPE_MATCH[config.value.type].name)
     }
     post.value = response.data.result.post
     tags.value = response.data.result.tags
@@ -84,9 +81,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.likepost.patch({
+    const response = await client.tsapi.board.like.post.patch({
       $headers: {
         authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
       },
       boardUid: config.value.uid,
       postUid: postUid.value,
@@ -112,16 +112,15 @@ export const useBoardViewStore = defineStore("boardView", () => {
       $query: {
         boardUid: config.value.uid,
         fileUid,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${response.data.error})`)
     }
 
     const link = document.createElement("a")
@@ -149,23 +148,22 @@ export const useBoardViewStore = defineStore("boardView", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await client.tsapi.board.removepost.delete({
+    const response = await client.tsapi.board.remove.post.delete({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         boardUid: config.value.uid,
         postUid: postUid.value,
+        userUid: auth.user.uid,
       },
     })
 
     if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
-      return
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(TEXT[home.lang].REMOVED_POST)
