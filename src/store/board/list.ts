@@ -12,7 +12,14 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import { BoardConfig, Pair, Post, SEARCH_OPTION, SearchOption } from "../../interface/board"
+import {
+  BoardConfig,
+  CONTENT_STATUS,
+  Pair,
+  Post,
+  SEARCH_OPTION,
+  SearchOption,
+} from "../../interface/board"
 import { TEXT } from "../../messages/store/board/list"
 import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
@@ -81,18 +88,29 @@ export const useBoardListStore = defineStore("boardList", () => {
     home.setGridLayout()
   }
 
-  // 이전 페이지 가져오기
+  // 이전 페이지 가져오기 (공지글 먼저 올리고, 나머진 순서 반대로 해주기)
   async function loadPrevPosts(): Promise<void> {
     page.value -= 1
     pagingDirection.value = PAGING_DIRECTION.PREV
-    sinceUid.value = posts.value.at(0)?.uid ?? 0
+    posts.value.map((post) => {
+      if (post.status === CONTENT_STATUS.NORMAL) {
+        sinceUid.value = post.uid
+        return
+      }
+    })
 
     if (page.value < 2) {
       util.snack(TEXT[home.lang].FIRST_PAGE)
     }
 
     await loadPostList()
-    posts.value = posts.value.reverse()
+    const notices = posts.value.filter((post) => {
+      return post.status === CONTENT_STATUS.NOTICE
+    })
+    const normals = posts.value.reverse().filter((post) => {
+      return post.status === CONTENT_STATUS.NORMAL
+    })
+    posts.value = [...notices, ...normals]
   }
 
   // 다음 페이지 가져오기

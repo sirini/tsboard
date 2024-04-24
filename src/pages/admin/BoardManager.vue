@@ -68,26 +68,29 @@ const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
 const menu = ref<"normal" | "permission" | "point">("normal")
 
+// 상단 메뉴 준비하기
+function prepareBreadcrumbs(): void {
+  general.updateGroupName()
+  admin.clearBreadcrumbs()
+  admin.addBreadcrumbs("게시판 그룹 목록", `${TSBOARD.PREFIX}/admin/board`)
+  admin.addBreadcrumbs(
+    `${general.boardGroupName} 그룹`,
+    `${TSBOARD.PREFIX}/admin/board/group/${general.boardGroupName}`,
+  )
+  admin.addBreadcrumbs(
+    `${general.board.id} 게시판 관리`,
+    `${TSBOARD.PREFIX}/admin/board/${general.board.id}`,
+  )
+}
+
 onMounted(() => {
   general.board.id = route.params.id as string
+  prepareBreadcrumbs()
 })
 
 watch(
   () => general.board.groupUid,
-  () => {
-    general.updateGroupName()
-
-    admin.clearBreadcrumbs()
-    admin.addBreadcrumbs("게시판 그룹 목록", `${TSBOARD.PREFIX}/admin/board`)
-    admin.addBreadcrumbs(
-      `${general.boardGroupName} 그룹`,
-      `${TSBOARD.PREFIX}/admin/board/group/${general.boardGroupName}`,
-    )
-    admin.addBreadcrumbs(
-      `${general.board.id} 게시판 관리`,
-      `${TSBOARD.PREFIX}/admin/board/${general.board.id}`,
-    )
-  },
+  () => prepareBreadcrumbs(),
 )
 </script>
 

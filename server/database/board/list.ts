@@ -15,6 +15,7 @@ import {
   PostRelatedParams,
   SEARCH_OPTION,
   SearchOption,
+  SearchPostParams,
   Writer,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
@@ -232,33 +233,25 @@ export async function getHashtagUids(tags: string[]): Promise<string> {
 }
 
 // 제목 혹은 본문 검색
-async function searchTitleContent(
-  param: PostParams,
-  direction: ">" | "<",
-  ordering: "ASC" | "DESC",
-): Promise<RowDataPacket[]> {
+async function searchTitleContent(param: SearchPostParams): Promise<RowDataPacket[]> {
   const option = param.option === (SEARCH_OPTION.TITLE as SearchOption) ? "title" : "content"
   const result = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post WHERE board_uid = ? AND status = ? AND ${option} 
-    LIKE '%${param.keyword}%' AND uid ${direction} ? 
-    ORDER BY uid ${ordering} LIMIT ?`,
+    LIKE '%${param.keyword}%' AND uid ${param.direction} ? 
+    ORDER BY uid ${param.ordering} LIMIT ?`,
     [
       param.boardUid.toString(),
       CONTENT_STATUS.NORMAL.toString(),
       param.sinceUid.toString(),
-      param.bunch.toString(),
+      (param.bunch - param.noticeCount).toString(),
     ],
   )
   return result
 }
 
 // 글 작성자 이름으로 검색
-async function searchWriterName(
-  param: PostParams,
-  direction: ">" | "<",
-  ordering: "ASC" | "DESC",
-): Promise<RowDataPacket[]> {
+async function searchWriterName(param: SearchPostParams): Promise<RowDataPacket[]> {
   let result: RowDataPacket[] = []
   const [writer] = await select(`SELECT uid FROM ${table}user WHERE name = ? LIMIT 1`, [
     param.keyword,
@@ -266,14 +259,14 @@ async function searchWriterName(
   if (writer) {
     result = await select(
       `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${direction} ? 
-    ORDER BY uid ${ordering} LIMIT ?`,
+    FROM ${table}post WHERE board_uid = ? AND status = ? AND user_uid = ? AND uid ${param.direction} ? 
+    ORDER BY uid ${param.ordering} LIMIT ?`,
       [
         param.boardUid.toString(),
         CONTENT_STATUS.NORMAL.toString(),
         writer.uid,
         param.sinceUid,
-        param.bunch,
+        (param.bunch - param.noticeCount).toString(),
       ],
     )
   }
@@ -281,71 +274,59 @@ async function searchWriterName(
 }
 
 // 카테고리 번호로 검색
-async function searchCategoryUid(
-  param: PostParams,
-  direction: ">" | "<",
-  ordering: "ASC" | "DESC",
-): Promise<RowDataPacket[]> {
+async function searchCategoryUid(param: SearchPostParams): Promise<RowDataPacket[]> {
   const categoryUid = parseInt(param.keyword)
   const result = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND category_uid = ? AND status = ? AND uid ${direction} ? 
-    ORDER BY uid ${ordering} LIMIT ?`,
+    FROM ${table}post WHERE board_uid = ? AND category_uid = ? AND status = ? AND uid ${param.direction} ? 
+    ORDER BY uid ${param.ordering} LIMIT ?`,
     [
       param.boardUid.toString(),
       categoryUid.toString(),
       CONTENT_STATUS.NORMAL.toString(),
       param.sinceUid.toString(),
-      param.bunch.toString(),
+      (param.bunch - param.noticeCount).toString(),
     ],
   )
   return result
 }
 
 // 태그명으로 검색
-async function searchTagName(
-  param: PostParams,
-  direction: ">" | "<",
-  ordering: "ASC" | "DESC",
-): Promise<RowDataPacket[]> {
+async function searchTagName(param: SearchPostParams): Promise<RowDataPacket[]> {
   const tags = param.keyword.split(" ")
   const tagUidStr = await getHashtagUids(tags)
   const result = await select(
     `SELECT uid, user_uid, category_uid, title, submitted, hit, status 
     FROM ${table}post JOIN ${table}post_hashtag ON ${table}post.uid = ${table}post_hashtag.post_uid 
-    WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
+    WHERE ${table}post_hashtag.board_uid = ? AND ${table}post.status = ? AND uid ${param.direction} ? AND ${table}post_hashtag.hashtag_uid IN ('${tagUidStr}')
     GROUP BY ${table}post_hashtag.post_uid HAVING (COUNT(${table}post_hashtag.hashtag_uid) = ?)
-    ORDER BY ${table}post.uid ${ordering} LIMIT ?`,
+    ORDER BY ${table}post.uid ${param.ordering} LIMIT ?`,
     [
       param.boardUid.toString(),
       CONTENT_STATUS.NORMAL.toString(),
       param.sinceUid.toString(),
       tags.length.toString(),
-      param.bunch.toString(),
+      (param.bunch - param.noticeCount).toString(),
     ],
   )
   return result
 }
 
 // 검색어가 있을 경우의 글 목록 가져오기
-export async function getSearchedPosts(
-  param: PostParams,
-  direction: ">" | "<",
-  ordering: "ASC" | "DESC",
-): Promise<RowDataPacket[]> {
+export async function getSearchedPosts(param: SearchPostParams): Promise<RowDataPacket[]> {
   let result: RowDataPacket[] = []
 
   if (
     param.option === (SEARCH_OPTION.TITLE as SearchOption) ||
     param.option === (SEARCH_OPTION.CONTENT as SearchOption)
   ) {
-    result = await searchTitleContent(param, direction, ordering)
+    result = await searchTitleContent(param)
   } else if (param.option === (SEARCH_OPTION.WRITER as SearchOption)) {
-    result = await searchWriterName(param, direction, ordering)
+    result = await searchWriterName(param)
   } else if (param.option === (SEARCH_OPTION.CATEGORY as SearchOption)) {
-    result = await searchCategoryUid(param, direction, ordering)
+    result = await searchCategoryUid(param)
   } else if (param.option === (SEARCH_OPTION.TAG as SearchOption)) {
-    result = await searchTagName(param, direction, ordering)
+    result = await searchTagName(param)
   }
   return result
 }
@@ -365,7 +346,12 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
 
   let posts: RowDataPacket[] = []
   if (param.keyword.length > 0) {
-    posts = await getSearchedPosts(param, direction, ordering)
+    posts = await getSearchedPosts({
+      ...param,
+      direction,
+      ordering,
+      noticeCount: notices.length,
+    })
   } else {
     posts = await select(
       `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
@@ -374,7 +360,7 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
         param.boardUid.toString(),
         CONTENT_STATUS.NORMAL.toString(),
         param.sinceUid.toString(),
-        param.bunch.toString(),
+        (param.bunch - notices.length).toString(),
       ],
     )
   }

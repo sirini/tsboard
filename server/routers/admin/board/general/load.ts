@@ -12,7 +12,6 @@ import { INIT_BOARD_CONFIG } from "../../../../database/admin/board/general/cons
 import { checkUserVerification } from "../../../../database/auth/authorization"
 import { haveAdminPermission } from "../../../../database/user/manageuser"
 import { NO_TABLE_TARGET } from "../../../../database/user/const"
-import { VerificationParams } from "../../../../../src/interface/auth"
 
 export const load = new Elysia()
   .use(

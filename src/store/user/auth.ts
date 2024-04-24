@@ -73,9 +73,10 @@ export const useAuthStore = defineStore("auth", () => {
     if (response.data.success === false) {
       return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
-    updateUserToken(response.data.result.newAccessToken)
+
     user.value = response.data.result.user as User
     user.value.signature = util.unescape(user.value.signature)
+    updateUserToken(response.data.result.newAccessToken) // 마지막에 토큰 변경
   }
 
   // 사용자 로그인하기

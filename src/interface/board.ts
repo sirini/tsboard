@@ -115,6 +115,12 @@ export type PostParams = PostCommentParams & {
   keyword: string
 }
 
+export type SearchPostParams = PostParams & {
+  direction: ">" | "<"
+  ordering: "ASC" | "DESC"
+  noticeCount: number
+}
+
 export type CommentParams = PostCommentParams & {
   postUid: number
 }

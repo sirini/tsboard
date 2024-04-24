@@ -1,6 +1,6 @@
 <template>
   <v-app-bar flat rounded="0" :color="home.color.admin.header" class="appbar">
-    <v-container>
+    <v-card class="mx-auto" elevation="0" rounded="0" :width="admin.width">
       <v-toolbar :color="home.color.admin.header">
         <v-btn @click="util.go('admin')" prepend-icon="mdi-cog-outline" rounded="xl"
           >Admin
@@ -20,7 +20,7 @@
           <v-tooltip activator="parent">클릭하시면 웹사이트 홈 화면으로 이동합니다</v-tooltip>
         </v-btn>
       </v-toolbar>
-    </v-container>
+    </v-card>
   </v-app-bar>
 </template>
 

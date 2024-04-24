@@ -1,7 +1,8 @@
 <template>
   <v-card class="box" :color="home.color.header">
     <v-card-title class="post-title" @click="util.go('boardList', 'free')"
-      ><v-icon class="mr-2">mdi-pin</v-icon> <strong>{{ board.name }}</strong></v-card-title
+      ><v-icon class="mr-2">mdi-pin</v-icon>
+      <strong>{{ util.unescape(board.name) }}</strong></v-card-title
     >
     <v-divider></v-divider>
     <v-card-text class="pa-0">
@@ -13,7 +14,7 @@
         >
           <template v-slot:prepend>
             <v-chip size="small" color="blue-grey" v-if="post.useCategory">{{
-              post.category
+              util.unescape(post.category)
             }}</v-chip>
 
             <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline" v-else>{{
@@ -22,7 +23,7 @@
           </template>
 
           <v-list-item-title class="pl-2 pr-2 post-title"
-            >{{ post.title }}
+            >{{ util.unescape(post.title) }}
             <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.comment > 0">{{
               util.num(post.comment)
             }}</v-chip></v-list-item-title

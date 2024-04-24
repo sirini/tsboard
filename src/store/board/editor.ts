@@ -213,6 +213,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     tag.value = ""
     tags.value = []
     postUid.value = 0
+    isNotice.value = false
   }
 
   // 글 작성 or 수정 전에 체크 로직
