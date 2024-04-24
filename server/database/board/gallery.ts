@@ -42,7 +42,12 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
   }
 
   if (param.keyword.length > 1) {
-    posts = await getSearchedPosts(param, direction, ordering)
+    posts = await getSearchedPosts({
+      ...param,
+      direction,
+      ordering,
+      noticeCount: 0,
+    })
   } else {
     posts = await select(
       `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
