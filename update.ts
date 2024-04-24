@@ -50,6 +50,7 @@ import { removeEmptyDir, removeFile } from "./server/util/tools"
 await execute(`ALTER TABLE ${table}board CHANGE \`row\` row_count TINYINT`)
 await execute(`ALTER TABLE ${table}user_token DROP COLUMN access`)
 await execute(`ALTER TABLE ${table}user_token DROP COLUMN timestamp_access`)
+await execute(`TRUNCATE ${table}user_token`)
 await execute(`ALTER TABLE ${table}user_token MODIFY COLUMN refresh CHAR(64) NOT NULL DEFAULT ''`)
 await execute(
   `ALTER TABLE ${table}user_token CHANGE timestamp_refresh timestamp BIGINT UNSIGNED NOT NULL DEFAULT '0'`,
