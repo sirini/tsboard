@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
-import { Notification } from "../../../src/interface/home"
+import { TsboardNotification } from "../../../src/interface/home"
 import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
 import { checkUserVerification } from "../../database/auth/authorization"
 
@@ -39,7 +39,7 @@ export const notification = new Elysia()
   .get(
     "/load/notification",
     async ({ accessUserUid, query: { limit } }) => {
-      let response = [] as Notification[]
+      let response = [] as TsboardNotification[]
       if (accessUserUid < 1 || limit < 1) {
         return fail(`Invalid parameters.`, response)
       }

@@ -5,7 +5,7 @@
  */
 
 import { BoardType } from "../../../src/interface/board"
-import { AddNoticeParams, NoticeType, Notification } from "../../../src/interface/home"
+import { AddNoticeParams, NoticeType, TsboardNotification } from "../../../src/interface/home"
 import { BOARD_TYPE } from "../board/const"
 import { table, select, insert, update } from "../common"
 
@@ -46,8 +46,11 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
 }
 
 // 나에게 온 최근 알림들 가져오기
-export async function getNotifications(userUid: number, limit: number): Promise<Notification[]> {
-  let result: Notification[] = []
+export async function getNotifications(
+  userUid: number,
+  limit: number,
+): Promise<TsboardNotification[]> {
+  let result: TsboardNotification[] = []
   const notifications = await select(
     `SELECT uid, from_uid, type, post_uid, checked, timestamp FROM ${table}notification 
     WHERE to_uid = ? ORDER BY uid DESC LIMIT ?`,

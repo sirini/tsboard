@@ -26,7 +26,7 @@
       ><strong>{{ TEXT[home.lang].WELCOME_ADMIN }}</strong>
     </v-list-item>
     <v-list-item v-else class="message text-center"
-      >{{ TEXT[home.lang].WELCOME_USER }}, {{ auth.user.name }}</v-list-item
+      >{{ TEXT[home.lang].WELCOME_USER }} <strong>{{ auth.user.name }}</strong></v-list-item
     >
     <v-divider></v-divider>
   </v-list>

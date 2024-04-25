@@ -19,7 +19,7 @@ import {
   LangType,
   LatestPost,
   NoticeType,
-  Notification,
+  TsboardNotification,
   PostItem,
   VISIT_KEY,
 } from "../interface/home"
@@ -34,7 +34,7 @@ export const useHomeStore = defineStore("home", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const drawer = ref<boolean>(false)
-  const notifications = ref<Notification[]>([])
+  const notifications = ref<TsboardNotification[]>([])
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
   const sidebarWidth = ref<number>(300)

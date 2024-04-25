@@ -25,7 +25,7 @@ export type AddNoticeParams = {
   commentUid: number
 }
 
-export type Notification = {
+export type TsboardNotification = {
   uid: number
   fromUser: UserBasicInfo
   type: NoticeType

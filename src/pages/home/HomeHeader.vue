@@ -19,7 +19,6 @@
 
       <home-header-select-language v-if="home.isMobile === false"></home-header-select-language>
       <home-header-login></home-header-login>
-      <home-header-chat v-if="home.isMobile === false"></home-header-chat>
       <home-header-notification></home-header-notification>
     </v-toolbar>
 
@@ -34,7 +33,6 @@ import ChatDialog from "../../components/user/ChatDialog.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import HomeHeaderSelectLanguage from "./components/header/HomeHeaderSelectLanguage.vue"
 import HomeHeaderLogin from "./components/header/HomeHeaderLogin.vue"
-import HomeHeaderChat from "./components/header/HomeHeaderChat.vue"
 import HomeHeaderNotification from "./components/header/HomeHeaderNotification.vue"
 import { TSBOARD } from "../../../tsboard.config"
 

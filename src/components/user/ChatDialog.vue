@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="chat.dialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
+    <v-card class="mx-auto" :width="home.dialogWidth" :color="home.color.header">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="note ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -22,24 +22,43 @@
           <v-divider></v-divider>
 
           <v-list-item v-for="(msg, index) in chat.history" :key="index" class="mt-2 mb-2">
-            <template v-slot:prepend v-if="msg.userUid === chat.targetUser.uid">
+            <template v-slot:prepend>
               <v-avatar>
                 <v-img
+                  v-if="msg.userUid === chat.targetUser.uid"
                   :src="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
                 ></v-img>
               </v-avatar>
+
+              <v-card
+                v-if="msg.userUid !== auth.user.uid"
+                :max-width="Math.floor(home.dialogWidth * 0.5)"
+                variant="tonal"
+                rounded="xl"
+                color="blue-grey"
+                class="ml-3"
+              >
+                <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
+              </v-card>
             </template>
 
-            <v-card
-              variant="tonal"
-              :color="msg.userUid === auth.user.uid ? 'primary' : 'blue-grey'"
-            >
-              <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
-            </v-card>
+            <template v-slot:append>
+              <v-card
+                v-if="msg.userUid === auth.user.uid"
+                :max-width="Math.floor(home.dialogWidth * 0.5)"
+                variant="tonal"
+                rounded="xl"
+                color="primary"
+                class="mr-3"
+              >
+                <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
+              </v-card>
 
-            <template v-slot:append v-if="msg.userUid === auth.user.uid">
               <v-avatar>
-                <v-img :src="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"></v-img>
+                <v-img
+                  v-if="msg.userUid === auth.user.uid"
+                  :src="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
+                ></v-img>
               </v-avatar>
             </template>
           </v-list-item>

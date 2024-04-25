@@ -12,17 +12,9 @@
           v-for="(noti, index) in home.notifications"
           :key="index"
           :prepend-avatar="TSBOARD.PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
-          @click="
-            noti.id.length > 0
-              ? util.go(
-                  noti.boardType === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen',
-                  noti.id,
-                  noti.postUid,
-                )
-              : ''
-          "
+          @click="actionForNoti(noti)"
         >
-          {{ noti.fromUser.name }} {{ home.translateNotification(noti.type) }}
+          {{ util.unescape(noti.fromUser.name) }} {{ home.translateNotification(noti.type) }}
 
           <template v-slot:append v-if="noti.type !== (NOTICE_TYPE.CHAT_MESSAGE as NoticeType)">
             <v-icon>mdi-chevron-right</v-icon>
@@ -42,8 +34,9 @@ import { onMounted } from "vue"
 import { useHomeStore } from "../../../../store/home"
 import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
+import { useChatStore } from "../../../../store/user/chat"
 import { NOTICE_TYPE } from "../../../../../server/database/board/const"
-import { NoticeType } from "../../../../interface/home"
+import { NoticeType, TsboardNotification } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
@@ -51,6 +44,26 @@ import { TEXT } from "../../../../messages/pages/home/components/header/home-hea
 const home = useHomeStore()
 const auth = useAuthStore()
 const util = useUtilStore()
+const chat = useChatStore()
+
+// 노티 클릭 시 행동 지정하기
+function actionForNoti(noti: TsboardNotification): void {
+  if (noti.type === NOTICE_TYPE.CHAT_MESSAGE) {
+    return chat.openDialog(noti.fromUser)
+  }
+
+  if (noti.id.length > 0) {
+    let destination = "boardView"
+    if (noti.type === BOARD_TYPE.GALLERY) {
+      destination = "galleryOpen"
+    } else if (noti.type === BOARD_TYPE.BLOG) {
+      destination = "blogRead"
+    } else if (noti.type === BOARD_TYPE.SHOP) {
+      destination = "shopOpen"
+    }
+    return util.go(destination, noti.id, noti.postUid)
+  }
+}
 
 onMounted(() => home.loadNotification())
 </script>
