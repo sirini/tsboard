@@ -385,3 +385,17 @@ export async function getUserLevel(userUid: number): Promise<number> {
   }
   return level
 }
+
+// (글목록을 보는 회원의) 블랙리스트를 반환하기
+export async function getBlackList(userUid: number): Promise<number[]> {
+  let result: number[] = []
+  const blacks = await select(`SELECT black_uid FROM ${table}user_black_list WHERE user_uid = ?`, [
+    userUid.toString(),
+  ])
+
+  for (const black of blacks) {
+    result.push(black.black_uid as number)
+  }
+
+  return result
+}

@@ -75,6 +75,18 @@ export const useBoardListStore = defineStore("boardList", () => {
       return util.go(TYPE_MATCH[config.value.type].name)
     }
 
+    response.data.result.posts.map((post): void => {
+      if (response.data.result.blackList.includes(post.writer.uid) === true) {
+        post.uid = 0
+        post.writer.uid = 0
+        post.writer.name = "X"
+        post.like = 0
+        post.liked = false
+        post.title = TEXT[home.lang].BLACKLIST_POST
+        return
+      }
+    })
+
     posts.value = response.data.result.posts
     pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.rowCount)
   }

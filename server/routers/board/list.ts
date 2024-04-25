@@ -7,6 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import {
+  getBlackList,
   getBoardConfig,
   getMaxPostUid,
   getPosts,
@@ -62,6 +63,7 @@ export const list = new Elysia()
         config: BOARD_CONFIG,
         posts: [] as Post[],
         newAccessToken,
+        blackList: [] as number[],
       }
 
       if (id.length < 2) {
@@ -92,12 +94,17 @@ export const list = new Elysia()
         option: searchOption,
         keyword,
       })
+      let blackList: number[] = []
+      if (accessUserUid > 0) {
+        blackList = await getBlackList(accessUserUid)
+      }
 
       return success({
         totalPostCount,
         config,
         posts,
         newAccessToken,
+        blackList,
       })
     },
     {
