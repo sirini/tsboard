@@ -44,7 +44,7 @@ export const SIZE = {
   CONTENT_INSERT: 480 /* px */,
   THUMBNAIL: 504 /* px */,
   FULL: 2016 /* px, for gallery */,
-  MAX_FILE: 51238400 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
+  MAX_FILE: 21238400 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
 }
 
 export const OAUTH = {
