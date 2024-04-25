@@ -4,34 +4,6 @@
  * 게시판에서 사용되는 각종 인터페이스 모음
  */
 
-export const BOARD_TYPE = {
-  BOARD: 0,
-  GALLERY: 1,
-  BLOG: 2,
-  SHOP: 3,
-}
-
-export const CONTENT_STATUS = {
-  REMOVED: -1,
-  NORMAL: 0,
-  NOTICE: 1,
-}
-
-export const POINT_HISTORY_TYPE = {
-  VIEW: 0,
-  WRITE_POST: 1,
-  WRITE_COMMENT: 2,
-  DOWNLOAD: 3,
-}
-
-export const SEARCH_OPTION = {
-  TITLE: 0,
-  CONTENT: 1,
-  WRITER: 2,
-  TAG: 3,
-  CATEGORY: 4,
-}
-
 export type Pair = {
   uid: number
   name: string
@@ -207,4 +179,11 @@ export type CommentRelated = {
 export type PostRelated = CommentRelated & {
   category: Pair
   reply: number
+}
+
+export type AutoSaveItems = {
+  title: string
+  content: string
+  contentWithSyntax: string
+  tags: string
 }

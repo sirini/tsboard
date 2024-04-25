@@ -15,12 +15,13 @@ import { useHomeStore } from "../../home"
 import { GridItem } from "../../../interface/gallery"
 import { TEXT } from "../../../messages/store/board/gallery"
 import {
+  SEARCH_OPTION,
   BOARD_CONFIG,
   INIT_POST,
   PAGING_DIRECTION,
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
-import { BoardConfig, Post, SEARCH_OPTION, SearchOption } from "../../../interface/board"
+import { BoardConfig, Post, SearchOption } from "../../../interface/board"
 import { TSBOARD } from "../../../../tsboard.config"
 
 export const useGalleryStore = defineStore("gallery", () => {

@@ -23,9 +23,9 @@ import {
   PostItem,
   VISIT_KEY,
 } from "../interface/home"
-import { NOTICE_TYPE } from "../../server/database/board/const"
+import { NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
 import { TEXT } from "../messages/store/home"
-import { SEARCH_OPTION, SearchOption } from "../interface/board"
+import { SearchOption } from "../interface/board"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 
 export const useHomeStore = defineStore("home", () => {

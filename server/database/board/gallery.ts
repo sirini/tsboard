@@ -5,10 +5,10 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { CONTENT_STATUS, PostParams } from "../../../src/interface/board"
+import { PostParams } from "../../../src/interface/board"
 import { GridItem } from "../../../src/interface/gallery"
 import { table, select } from "../common"
-import { PAGING_DIRECTION } from "./const"
+import { PAGING_DIRECTION, CONTENT_STATUS } from "./const"
 import { getPostRelated, getSearchedPosts } from "./list"
 
 // 사진들 가져오기

@@ -13,7 +13,7 @@ const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" // 본인 도메인으로 교체 필요
 
 export const TSBOARD = {
-  VERSION: "v0.8.18",
+  VERSION: "v0.8.20",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
     URL: IS_DEV ? DEV_URL : PROD_URL /*** 본인의 도메인으로 교체 필요 ***/,

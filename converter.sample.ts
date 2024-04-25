@@ -17,7 +17,7 @@ import { nanoid } from "nanoid"
 import { table, select, insert, execute, update } from "./server/database/common"
 import { makeSavePath } from "./server/util/tools"
 import { saveThumbnailImage } from "./server/database/board/editor"
-import { CONTENT_STATUS } from "./src/interface/board"
+import { CONTENT_STATUS } from "./server/database/board/const"
 
 const BOARD_UID = "1" // TSBOARD 설치 시 생성되는 free 를 가리킵니다.
 

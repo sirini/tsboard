@@ -5,7 +5,7 @@
  */
 
 import { table, insert, select, remove, update } from "../common"
-import { CONTENT_STATUS, CountPair, Pair, TargetTable } from "../../../src/interface/board"
+import { CountPair, Pair, TargetTable } from "../../../src/interface/board"
 import {
   UploadImageParams,
   WritePostParams,
@@ -19,6 +19,7 @@ import {
   resizeImage,
   saveUploadedFile,
 } from "../../util/tools"
+import { CONTENT_STATUS } from "./const"
 import { exists } from "node:fs/promises"
 import { SIZE } from "../../../tsboard.config"
 

@@ -242,7 +242,7 @@ import { useAdminStore } from "../../../store/admin/common"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
-import { BOARD_TYPE } from "../../../interface/board"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 
 const admin = useAdminStore()
 const util = useUtilStore()

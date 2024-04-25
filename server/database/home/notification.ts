@@ -4,8 +4,9 @@
  * 알림 관련 필요한 함수들
  */
 
-import { BOARD_TYPE, BoardType } from "../../../src/interface/board"
+import { BoardType } from "../../../src/interface/board"
 import { AddNoticeParams, NoticeType, Notification } from "../../../src/interface/home"
+import { BOARD_TYPE } from "../board/const"
 import { table, select, insert, update } from "../common"
 
 // 알림 정보 추가하기

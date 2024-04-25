@@ -23,7 +23,7 @@
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
-import { BOARD_TYPE } from "../../../interface/board"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-remove-dialog"
 
 const viewer = useViewerStore()

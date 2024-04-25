@@ -90,7 +90,8 @@ import ChatDialog from "../../user/ChatDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"
-import { BOARD_TYPE, BoardType } from "../../../interface/board"
+import { BoardType } from "../../../interface/board"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()

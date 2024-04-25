@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import { useUtilStore } from "../../../../store/util"
-import { BOARD_TYPE } from "../../../../interface/board"
+import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { PostItem } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"

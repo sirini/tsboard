@@ -5,12 +5,7 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import {
-  BoardType,
-  CONTENT_STATUS,
-  SEARCH_OPTION,
-  SearchOption,
-} from "../../../src/interface/board"
+import { BoardType, SearchOption } from "../../../src/interface/board"
 import { BoardLatest, LatestPost, LatestPostParams, PostItem } from "../../../src/interface/home"
 import { table, select } from "../common"
 import {
@@ -20,6 +15,7 @@ import {
   getUserBasic,
   isPostViewerLiked,
 } from "../board/list"
+import { CONTENT_STATUS, SEARCH_OPTION } from "../board/const"
 import { getTotalCommentCount } from "../board/comment"
 
 // 가장 최신글의 고유 번호 가져오기

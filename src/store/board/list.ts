@@ -12,16 +12,15 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import {
-  BoardConfig,
-  CONTENT_STATUS,
-  Pair,
-  Post,
-  SEARCH_OPTION,
-  SearchOption,
-} from "../../interface/board"
+import { BoardConfig, Pair, Post, SearchOption } from "../../interface/board"
+import { SEARCH_OPTION } from "../../../server/database/board/const"
 import { TEXT } from "../../messages/store/board/list"
-import { TYPE_MATCH, BOARD_CONFIG, PAGING_DIRECTION } from "../../../server/database/board/const"
+import {
+  TYPE_MATCH,
+  BOARD_CONFIG,
+  PAGING_DIRECTION,
+  CONTENT_STATUS,
+} from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardListStore = defineStore("boardList", () => {

@@ -359,6 +359,7 @@ const editor = useEditor({
     const e = document.querySelector(".tiptap") as HTMLDivElement
     emits("update:modelValue", html)
     emits("updateRealHtml", e.innerHTML)
+    writeEditor.autoSave()
   },
 })
 declare type Level = 1 | 2 | 3 | 4 | 5 | 6

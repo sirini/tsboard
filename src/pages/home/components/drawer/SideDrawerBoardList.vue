@@ -29,7 +29,8 @@
 import { onMounted } from "vue"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
-import { BOARD_TYPE, BoardType } from "../../../../interface/board"
+import { BoardType } from "../../../../interface/board"
+import { BOARD_TYPE } from "../../../../../server/database/board/const"
 
 const home = useHomeStore()
 const util = useUtilStore()

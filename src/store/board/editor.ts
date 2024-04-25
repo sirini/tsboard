@@ -14,8 +14,8 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/board/editor"
 import { useBoardViewStore } from "./view"
-import { BOARD_TYPE, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
-import { BOARD_CONFIG } from "../../../server/database/board/const"
+import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
+import { BOARD_TYPE, AUTO_SAVE_KEY, BOARD_CONFIG } from "../../../server/database/board/const"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
@@ -86,8 +86,38 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     categories.value = response.data.result.categories
     category.value = categories.value[0]
 
+    loadAutoSaved()
     if (config.value.type === BOARD_TYPE.GALLERY) {
       viewRouteName.value = "galleryOpen"
+    }
+  }
+
+  // 게시글 임시 보관하기
+  function autoSave(): void {
+    let hashtags = ""
+    if (tags.value.length > 0) {
+      hashtags = tags.value.join(",")
+    }
+    const saved: AutoSaveItems = {
+      title: title.value,
+      content: content.value,
+      contentWithSyntax: contentWithSyntax.value,
+      tags: hashtags,
+    }
+    window.localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(saved))
+  }
+
+  // 임시 보관된 제목과 내용 불러오기
+  function loadAutoSaved(): void {
+    const saved =
+      window.localStorage.getItem(AUTO_SAVE_KEY) ??
+      "{ title: '', content: '', contentWithSyntax: '', tags: '' }"
+    const loaded = JSON.parse(saved) as AutoSaveItems
+    title.value = loaded.title
+    content.value = loaded.content
+    contentWithSyntax.value = loaded.contentWithSyntax
+    if (loaded.tags.includes(",") === true) {
+      tags.value = loaded.tags.split(",")
     }
   }
 
@@ -214,6 +244,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     tags.value = []
     postUid.value = 0
     isNotice.value = false
+
+    window.localStorage.removeItem(AUTO_SAVE_KEY)
   }
 
   // 글 작성 or 수정 전에 체크 로직
@@ -366,6 +398,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     suggestionTags,
     loadBoardConfig,
     loadOriginalPost,
+    autoSave,
     selectCategory,
     selectAttachmentFiles,
     updateTagSuggestion,

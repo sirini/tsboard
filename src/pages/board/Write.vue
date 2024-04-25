@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
@@ -126,6 +126,11 @@ onMounted(async () => {
   }
   home.setGridLayout()
 })
+
+watch(
+  () => [editor.title, editor.tags],
+  () => editor.autoSave(),
+)
 </script>
 
 <style scoped>

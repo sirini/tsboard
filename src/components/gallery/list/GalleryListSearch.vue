@@ -35,9 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { SEARCH_OPTION, SearchOption } from "../../../interface/board"
+import { SearchOption } from "../../../interface/board"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { useHomeStore } from "../../../store/home"
+import { SEARCH_OPTION } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 
 const gallery = useGalleryStore()

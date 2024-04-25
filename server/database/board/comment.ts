@@ -5,7 +5,6 @@
  */
 
 import {
-  CONTENT_STATUS,
   Comment,
   CommentLikeParams,
   CommentParams,
@@ -18,7 +17,13 @@ import {
 import { NoticeType } from "../../../src/interface/home"
 import { insert, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
-import { COMMENT_RELATED, INVALID_VIEW_LEVEL, NOTICE_TYPE, PAGING_DIRECTION } from "./const"
+import {
+  COMMENT_RELATED,
+  INVALID_VIEW_LEVEL,
+  NOTICE_TYPE,
+  PAGING_DIRECTION,
+  CONTENT_STATUS,
+} from "./const"
 import { getUserBasic } from "./list"
 
 // 댓글에 달린 좋아요 수 반환하기

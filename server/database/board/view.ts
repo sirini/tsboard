@@ -4,18 +4,12 @@
  * 게시글 보기에 필요한 함수들
  */
 
-import {
-  CONTENT_STATUS,
-  Pair,
-  PostFile,
-  PostLikeParams,
-  PostView,
-} from "../../../src/interface/board"
+import { Pair, PostFile, PostLikeParams, PostView } from "../../../src/interface/board"
 import { NoticeType } from "../../../src/interface/home"
 import { removeFile } from "../../util/tools"
 import { remove, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
-import { INIT_POST_VIEW, NOTICE_TYPE } from "./const"
+import { INIT_POST_VIEW, NOTICE_TYPE, CONTENT_STATUS } from "./const"
 import { getPostRelated } from "./list"
 import { statSync } from "fs"
 

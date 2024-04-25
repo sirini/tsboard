@@ -45,7 +45,7 @@ import { useUtilStore } from "../../../../store/util"
 import { NOTICE_TYPE } from "../../../../../server/database/board/const"
 import { NoticeType } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
-import { BOARD_TYPE } from "../../../../interface/board"
+import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
 
 const home = useHomeStore()

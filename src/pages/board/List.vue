@@ -102,7 +102,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
-import { CONTENT_STATUS } from "../../interface/board"
+import { CONTENT_STATUS } from "../../../server/database/board/const"
 import { TEXT } from "../../messages/pages/board/list"
 
 const route = useRoute()

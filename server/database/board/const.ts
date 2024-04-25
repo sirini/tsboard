@@ -35,6 +35,34 @@ export const BOARD_CONFIG: BoardConfig = {
   point: { view: 0, write: 0, comment: 0, download: 0 },
 }
 
+export const BOARD_TYPE = {
+  BOARD: 0,
+  GALLERY: 1,
+  BLOG: 2,
+  SHOP: 3,
+}
+
+export const CONTENT_STATUS = {
+  REMOVED: -1,
+  NORMAL: 0,
+  NOTICE: 1,
+}
+
+export const POINT_HISTORY_TYPE = {
+  VIEW: 0,
+  WRITE_POST: 1,
+  WRITE_COMMENT: 2,
+  DOWNLOAD: 3,
+}
+
+export const SEARCH_OPTION = {
+  TITLE: 0,
+  CONTENT: 1,
+  WRITER: 2,
+  TAG: 3,
+  CATEGORY: 4,
+}
+
 export const PAGING_DIRECTION = {
   PREV: -1,
   NEXT: 1,
@@ -97,3 +125,4 @@ export const NOTICE_TYPE = {
 }
 
 export const READ_POST_KEY = "tsboardReadPosts"
+export const AUTO_SAVE_KEY = "tsboardAutoSave"

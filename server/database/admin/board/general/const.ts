@@ -5,7 +5,8 @@
  */
 
 import { AdminBoardConfig } from "../../../../../src/interface/admin"
-import { BOARD_TYPE, BoardType } from "../../../../../src/interface/board"
+import { BoardType } from "../../../../../src/interface/board"
+import { BOARD_TYPE } from "../../../board/const"
 
 export const INIT_BOARD_CONFIG: AdminBoardConfig = {
   uid: 0,

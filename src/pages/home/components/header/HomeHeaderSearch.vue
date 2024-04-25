@@ -97,7 +97,8 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useHomeStore } from "../../../../store/home"
-import { SEARCH_OPTION, SearchOption } from "../../../../interface/board"
+import { SearchOption } from "../../../../interface/board"
+import { SEARCH_OPTION } from "../../../../../server/database/board/const"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-search"
 
 const home = useHomeStore()

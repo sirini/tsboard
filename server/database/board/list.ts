@@ -7,19 +7,23 @@
 import { RowDataPacket } from "mysql2"
 import {
   BoardConfig,
-  CONTENT_STATUS,
   Pair,
   Post,
   PostParams,
   PostRelated,
   PostRelatedParams,
-  SEARCH_OPTION,
   SearchOption,
   SearchPostParams,
   Writer,
 } from "../../../src/interface/board"
 import { table, select } from "../common"
-import { BOARD_CONFIG, PAGING_DIRECTION, POST_RELATED } from "./const"
+import {
+  BOARD_CONFIG,
+  PAGING_DIRECTION,
+  POST_RELATED,
+  CONTENT_STATUS,
+  SEARCH_OPTION,
+} from "./const"
 import { getTotalCommentCount } from "./comment"
 import { getCategories } from "./editor"
 
