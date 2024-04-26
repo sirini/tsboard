@@ -12,7 +12,7 @@
         <v-list-subheader>{{ TEXT[home.lang].TARGET }}</v-list-subheader>
         <v-divider></v-divider>
         <v-list-item
-          :prepend-avatar="TSBOARD.PREFIX + (report.targetUser.profile || '/no-profile.svg')"
+          :prepend-avatar="report.targetUser.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
         >
           <v-list-item-title>{{ report.targetUser.name }}</v-list-item-title>
         </v-list-item>

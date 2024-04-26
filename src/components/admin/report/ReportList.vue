@@ -45,7 +45,7 @@
         <template v-slot:prepend>
           <v-chip
             :prepend-avatar="
-              TSBOARD.PREFIX + (list.to.profile.length < 1 ? '/no-profile.svg' : list.to.profile)
+              list.to.profile.length < 1 ? `${TSBOARD.PREFIX}/no-profile.svg` : list.to.profile
             "
             color="red"
             class="mt-1"
@@ -68,8 +68,7 @@
         <template v-slot:append
           ><v-chip
             :prepend-avatar="
-              TSBOARD.PREFIX +
-              (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
+              list.from.profile.length < 1 ? `${TSBOARD.PREFIX}/no-profile.svg` : list.from.profile
             "
             color="blue-grey"
             class="mt-1"

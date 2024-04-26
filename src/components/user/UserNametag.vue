@@ -1,7 +1,7 @@
 <template>
   <v-chip class="pointer" :size="size || 'small'" :color="color || 'blue-grey'">
     <v-avatar start>
-      <v-img :src="TSBOARD.PREFIX + (profile.length < 1 ? '/no-profile.svg' : profile)"></v-img>
+      <v-img :src="profile || `${TSBOARD.PREFIX}/no-profile.svg`"></v-img>
     </v-avatar>
     {{ util.unescape(name) }}
 

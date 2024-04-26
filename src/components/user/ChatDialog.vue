@@ -13,7 +13,7 @@
           <v-list-subheader>{{ TEXT[home.lang].RECEIVER }}</v-list-subheader>
           <v-divider></v-divider>
           <v-list-item
-            :prepend-avatar="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
+            :prepend-avatar="chat.targetUser.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
           >
             <v-list-item-title>{{ chat.targetUser.name }}</v-list-item-title>
           </v-list-item>
@@ -26,7 +26,7 @@
               <v-avatar>
                 <v-img
                   v-if="msg.userUid === chat.targetUser.uid"
-                  :src="TSBOARD.PREFIX + (chat.targetUser.profile || '/no-profile.svg')"
+                  :src="chat.targetUser.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
                 ></v-img>
               </v-avatar>
 
@@ -57,7 +57,7 @@
               <v-avatar>
                 <v-img
                   v-if="msg.userUid === auth.user.uid"
-                  :src="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
+                  :src="auth.user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
                 ></v-img>
               </v-avatar>
             </template>

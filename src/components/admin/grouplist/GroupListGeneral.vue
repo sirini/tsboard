@@ -46,7 +46,7 @@
           variant="tonal"
           color="blue-grey"
           class="ml-2"
-          :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
+          :prepend-avatar="group.manager.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
         >
           <strong class="ml-1">{{ group.manager.name }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>

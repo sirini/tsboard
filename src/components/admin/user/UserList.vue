@@ -45,7 +45,7 @@
           <span class="date mr-3">{{ util.date(user.signup) }}</span>
           <v-chip
             :prepend-avatar="
-              TSBOARD.PREFIX + (user.profile.length < 1 ? '/no-profile.svg' : user.profile)
+              user.profile.length < 1 ? `${TSBOARD.PREFIX}/no-profile.svg` : user.profile
             "
             append-icon="mdi-email-outline"
             color="blue-grey"

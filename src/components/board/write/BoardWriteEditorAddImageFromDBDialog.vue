@@ -26,7 +26,7 @@
         <v-row no-gutters>
           <v-col v-for="(img, index) in image.loadImages" :key="index" cols="2" class="mb-3">
             <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
-              <v-img cover width="105" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img.name">
+              <v-img cover width="105" aspect-ratio="1/1" :src="img.name">
                 <div class="action">
                   <v-row no-gutters>
                     <v-col
@@ -111,7 +111,7 @@ watch(
 
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
-  emits("addImageURL", TSBOARD.PREFIX + src)
+  emits("addImageURL", src)
 }
 
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)

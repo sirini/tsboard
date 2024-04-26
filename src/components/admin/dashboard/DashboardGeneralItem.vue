@@ -71,7 +71,7 @@
             v-for="(member, index) in dashboard.members"
             :key="index"
             :prepend-avatar="
-              TSBOARD.PREFIX + (member.profile.length < 1 ? '/no-profile.svg' : member.profile)
+              member.profile.length < 1 ? `${TSBOARD.PREFIX}/no-profile.svg` : member.profile
             "
             @click="util.go('adminUserManager', '', member.uid)"
             >{{ member.name }}

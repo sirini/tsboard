@@ -113,7 +113,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   // 이미지 삭제하기 준비
   function setRemoveTarget(uid: number, src: string): void {
     showRemoveImageInfo.value = true
-    removeImageTarget.value = { uid, name: TSBOARD.PREFIX + src }
+    removeImageTarget.value = { uid, name: src }
   }
 
   // 이미지 삭제하기 초기화

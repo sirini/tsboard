@@ -6,10 +6,7 @@
         <v-list-item
           v-for="(item, index) in chat.list"
           :key="index"
-          :prepend-avatar="
-            TSBOARD.PREFIX +
-            (item.sender.profile.length > 0 ? item.sender.profile : '/no-profile.svg')
-          "
+          :prepend-avatar="item.sender.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
           :title="util.unescape(item.sender.name)"
           :subtitle="util.unescape(item.message)"
           @click="chat.openDialog(item.sender)"

@@ -5,12 +5,7 @@
       util.go(post.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen', post.id, post.uid)
     "
   >
-    <v-img
-      v-if="post.cover.length > 0"
-      height="200"
-      cover
-      :src="TSBOARD.PREFIX + post.cover"
-    ></v-img>
+    <v-img v-if="post.cover.length > 0" height="200" cover :src="post.cover"></v-img>
 
     <v-card-title class="post-title">
       <v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
@@ -44,10 +39,7 @@
       <v-spacer></v-spacer>
 
       <v-chip
-        :prepend-avatar="
-          TSBOARD.PREFIX +
-          (post.writer.profile.length > 0 ? post.writer.profile : '/no-profile.svg')
-        "
+        :prepend-avatar="post.writer.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
         size="small"
         color="blue-grey"
         >{{ util.unescape(post.writer.name) }}</v-chip

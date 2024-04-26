@@ -35,9 +35,7 @@
           <v-col class="mt-1">
             <v-chip
               color="blue-grey"
-              :prepend-avatar="
-                TSBOARD.PREFIX + (permission.board.admin.profile || '/no-profile.svg')
-              "
+              :prepend-avatar="permission.board.admin.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
               variant="tonal"
               >{{ permission.board.admin.name }}
               <v-tooltip activator="parent">현재 게시판 관리자입니다.</v-tooltip>

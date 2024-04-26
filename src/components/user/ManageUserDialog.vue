@@ -13,10 +13,7 @@
         <v-divider></v-divider>
         <v-list-item
           class="mt-2 mb-2"
-          :prepend-avatar="
-            TSBOARD.PREFIX +
-            (manage.targetUser.profile.length < 1 ? '/no-profile.svg' : manage.targetUser.profile)
-          "
+          :prepend-avatar="manage.targetUser.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
         >
           <v-list-item-title>{{ manage.targetUser.name }}</v-list-item-title>
         </v-list-item>

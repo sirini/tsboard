@@ -11,7 +11,7 @@
         <v-list-item
           v-for="(noti, index) in home.notifications"
           :key="index"
-          :prepend-avatar="TSBOARD.PREFIX + (noti.fromUser.profile || '/no-profile.svg')"
+          :prepend-avatar="noti.fromUser.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
           @click="actionForNoti(noti)"
         >
           {{ util.unescape(noti.fromUser.name) }} {{ home.translateNotification(noti.type) }}

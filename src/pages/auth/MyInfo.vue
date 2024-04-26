@@ -23,10 +23,7 @@
                   size="x-large"
                   color="blue-grey"
                   class="mt-9 mb-9"
-                  :prepend-avatar="
-                    TSBOARD.PREFIX +
-                    (auth.user.profile.length < 1 ? '/no-profile.svg' : auth.user.profile)
-                  "
+                  :prepend-avatar="auth.user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
                 >
                   {{ auth.user.id }}
                   <v-divider vertical class="ml-2 mr-2"></v-divider>

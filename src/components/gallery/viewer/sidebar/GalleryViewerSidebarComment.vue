@@ -4,7 +4,7 @@
       :commentUid="reply.uid"
       :commentContent="reply.content"
       :commentLike="reply.like"
-      :writerProfile="reply.writer.profile.length > 0 ? reply.writer.profile : '/no-profile.svg'"
+      :writerProfile="reply.writer.profile"
       :writerUid="reply.writer.uid"
       :writerName="reply.writer.name"
       :liked="reply.liked"

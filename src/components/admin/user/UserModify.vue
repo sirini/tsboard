@@ -2,12 +2,7 @@
   <v-card>
     <v-card-title
       ><v-avatar size="100" class="mt-2 mb-2 mr-3"
-        ><v-img
-          :src="
-            TSBOARD.PREFIX +
-            (userModify.user.profile.length < 1 ? '/no-profile.svg' : userModify.user.profile)
-          "
-        ></v-img
+        ><v-img :src="userModify.user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"></v-img
       ></v-avatar>
       {{ userModify.user.name }} 님의 정보 수정하기
     </v-card-title>

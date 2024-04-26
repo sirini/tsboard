@@ -3,8 +3,9 @@
     <v-list-item
       class="pb-2"
       :prepend-avatar="
-        TSBOARD.PREFIX +
-        (viewer.post.writer.profile.length > 0 ? viewer.post.writer.profile : '/no-profile.svg')
+        viewer.post.writer.profile.length < 1
+          ? `${TSBOARD.PREFIX}/no-profile.svg`
+          : viewer.post.writer.profile
       "
       :title="util.unescape(viewer.post.title)"
       :subtitle="util.unescape(viewer.post.writer.name)"
