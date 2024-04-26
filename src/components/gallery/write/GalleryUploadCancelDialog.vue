@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="gallery.confirmCancelDialog">
-    <v-card width="500" class="mx-auto">
+    <v-card :max-width="home.dialogWidth" class="mx-auto">
       <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="image.uploadImageDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
       <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
       <v-divider></v-divider>
 

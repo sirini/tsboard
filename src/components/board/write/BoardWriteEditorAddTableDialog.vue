@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addTableDialog" persistent>
-    <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="home.color.header">
       <v-card-title>{{ TEXT[home.lang].TITLE_TABLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addVideoURLDialog" persistent>
-    <v-card width="600" class="mx-auto" rounded="lg" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="home.color.header">
       <v-card-title>{{ TEXT[home.lang].TITLE_YOUTUBE }}</v-card-title>
       <v-divider></v-divider>
 

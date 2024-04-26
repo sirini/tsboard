@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="view.confirmRemovePostDialog" persistent>
-    <v-card width="500" class="mx-auto" color="red">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" color="red">
       <v-card-title><v-icon>mdi-alert</v-icon> {{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>

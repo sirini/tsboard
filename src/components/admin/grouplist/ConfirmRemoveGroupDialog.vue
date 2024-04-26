@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="list.confirmRemoveGroupDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
       <v-card-title>정말로 삭제하시겠습니까?</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-3">

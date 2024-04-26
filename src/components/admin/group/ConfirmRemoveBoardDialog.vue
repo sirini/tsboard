@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="general.confirmRemoveBoardDialog" persistent>
-    <v-card width="500" class="mx-auto" color="error">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" color="error">
       <v-card-title><v-icon>mdi-alert</v-icon> 주의가 필요합니다 !</v-card-title>
       <v-divider></v-divider>
 
@@ -28,8 +28,10 @@
 
 <script setup lang="ts">
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
+import { useHomeStore } from "../../../store/home"
 
 const general = useAdminGroupGeneralStore()
+const home = useHomeStore()
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="general.confirmRemoveCategoryDialog" persistent>
-    <v-card width="500" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
       <v-card-title>카테고리를 삭제할까요?</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-3">
