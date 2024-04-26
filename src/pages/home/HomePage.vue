@@ -48,14 +48,14 @@ import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 
 const home = useHomeStore()
-onMounted(() => {
-  home.loadLatestPosts()
+onMounted(async () => {
+  await home.loadLatestPosts()
 
   window.onscroll = (event: Event) => {
-    const scroll = window.innerHeight + window.scrollY + 50
-    if (scroll > document.body.offsetHeight) {
-      home.loadLatestPosts()
-    }
+    // const scroll = window.innerHeight + window.scrollY + 50
+    // if (scroll > document.body.offsetHeight) {
+    //   home.loadLatestPosts()
+    // }
   }
 })
 </script>
