@@ -1,6 +1,8 @@
 <template>
   <v-card class="box" :color="home.color.header">
-    <v-card-title class="post-title" @click="util.go('boardList', 'free')"
+    <v-card-title
+      class="post-title"
+      @click="util.go(board.latest[0].type === BOARD_TYPE.BOARD ? 'boardList' : 'galleryList', id)"
       ><v-icon class="mr-2">mdi-pin</v-icon>
       <strong>{{ util.unescape(board.name) }}</strong></v-card-title
     >
@@ -10,7 +12,9 @@
         <v-list-item
           v-for="(post, index) in board.latest"
           :key="index"
-          @click="util.go('boardView', id, post.uid)"
+          @click="
+            util.go(post.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen', id, post.uid)
+          "
         >
           <template v-slot:prepend>
             <v-chip size="small" color="blue-grey" v-if="post.useCategory">{{
@@ -39,6 +43,7 @@ import { ref, onMounted } from "vue"
 import { useUtilStore } from "../../../../store/util"
 import { useHomeStore } from "../../../../store/home"
 import { BoardLatest, LatestPost } from "../../../../interface/home"
+import { BOARD_TYPE } from "../../../../../server/database/board/const"
 
 const util = useUtilStore()
 const home = useHomeStore()

@@ -10,7 +10,7 @@
         cover
         :height="gallery.gridSize"
         aspect-ratio="1/1"
-        :src="item.thumbnails[0]"
+        :src="item.thumbnails[0] || `${TSBOARD.PREFIX}/image-not-found.svg`"
         class="text-center vimg"
         :class="{ onHover: isHovering }"
         @click="gallery.open(item.uid)"
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
 import { GridItem } from "../../../interface/gallery"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const gallery = useGalleryStore()
 const props = defineProps<{
