@@ -4,10 +4,7 @@
       :commentUid="reply.uid"
       :commentContent="reply.content"
       :commentLike="reply.like"
-      :writerProfile="
-        TSBOARD.PREFIX +
-        (reply.writer.profile.length > 0 ? reply.writer.profile : '/no-profile.svg')
-      "
+      :writerProfile="reply.writer.profile.length > 0 ? reply.writer.profile : '/no-profile.svg'"
       :writerUid="reply.writer.uid"
       :writerName="reply.writer.name"
       :liked="reply.liked"
@@ -30,7 +27,6 @@ import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useCommentStore } from "../../../../store/board/comment"
 import { useHomeStore } from "../../../../store/home"
 import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
-import { TSBOARD } from "../../../../../tsboard.config"
 import GalleryViewerComment from "../GalleryViewerComment.vue"
 
 const viewer = useViewerStore()
