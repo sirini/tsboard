@@ -3,6 +3,7 @@ node_modules
 /dist
 bun.lockb
 /upload
+test.ts
 
 # local env files
 .env
