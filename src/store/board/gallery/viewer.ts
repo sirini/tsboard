@@ -11,7 +11,7 @@ import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { useHomeStore } from "../../home"
-import { Position } from "../../../interface/gallery"
+import { Exif, Position } from "../../../interface/gallery"
 import {
   BOARD_CONFIG,
   INIT_POST_VIEW,
@@ -48,6 +48,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const post = ref<PostView>(INIT_POST_VIEW)
   const files = ref<string[]>([])
   const thumbnails = ref<string[]>([])
+  const exifs = ref<Exif[]>([])
   const tags = ref<Pair[]>([])
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -141,6 +142,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
     files.value = response.data.result.files
     thumbnails.value = response.data.result.thumbnails
+    exifs.value = response.data.result.exifs
   }
 
   // 댓글 불러오기
@@ -308,6 +310,7 @@ export const useViewerStore = defineStore("viewer", () => {
     comments,
     files,
     thumbnails,
+    exifs,
     tags,
     position,
     mobileColor,

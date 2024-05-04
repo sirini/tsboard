@@ -138,7 +138,7 @@ export const INIT_EXIF: Exif = {
   exposure: 0,
   width: 0,
   height: 0,
-  date: "",
+  date: 0,
 }
 
 export const EXIF_APERTURE_FACTOR = 100

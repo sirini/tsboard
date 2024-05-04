@@ -10,25 +10,24 @@
       :title="util.unescape(viewer.post.title)"
       :subtitle="util.unescape(viewer.post.writer.name)"
     >
+      <template v-slot:append v-if="viewer.exifs[viewer.position]?.width > 0">
+        <v-chip
+          size="small"
+          label
+          color="blue-grey"
+          :append-icon="showExif ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+          @click="showExif = !showExif"
+          >EXIF</v-chip
+        >
+      </template>
     </v-list-item>
     <v-divider></v-divider>
 
     <v-list-item class="pt-2 pb-2">
-      <v-tabs v-model="tab" align-tabs="center">
-        <v-tab :value="1">CONTENT</v-tab>
-        <t-tab :value="2">EXIF</t-tab>
-      </v-tabs>
-
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item :value="1">
-          <v-card elevation="0" rounded="0">
-            <v-card-text class="pa-0 pt-2 tsboard" v-html="viewer.post.content"></v-card-text>
-          </v-card>
-        </v-tabs-window-item>
-        <v-tabs-window-item :value="2">
-          <v-card elevation="0" rounded="0"> EXIF ?? </v-card>
-        </v-tabs-window-item>
-      </v-tabs-window>
+      <gallery-viewer-sidebar-exif :is-mobile="false" v-if="showExif"></gallery-viewer-sidebar-exif>
+      <v-card elevation="0" rounded="0">
+        <v-card-text class="pa-0 pt-2 tsboard" v-html="viewer.post.content"></v-card-text>
+      </v-card>
     </v-list-item>
 
     <gallery-viewer-sidebar-thumbnails></gallery-viewer-sidebar-thumbnails>
@@ -50,14 +49,17 @@
 import { ref } from "vue"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useUtilStore } from "../../../store/util"
+import { useHomeStore } from "../../../store/home"
 import { TSBOARD } from "../../../../tsboard.config"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
 import GalleryViewerSidebarThumbnails from "./sidebar/GalleryViewerSidebarThumbnails.vue"
 import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
 import GalleryViewerSidebarDateWriter from "./sidebar/GalleryViewerSidebarDateWriter.vue"
 import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
+import GalleryViewerSidebarExif from "./sidebar/GalleryViewerSidebarExif.vue"
 
 const viewer = useViewerStore()
 const util = useUtilStore()
-const tab = ref<number>(1)
+const home = useHomeStore()
+const showExif = ref<boolean>(false)
 </script>

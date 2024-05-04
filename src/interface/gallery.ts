@@ -34,5 +34,5 @@ export type Exif = {
   exposure: number
   width: number
   height: number
-  date: string
+  date: number
 }

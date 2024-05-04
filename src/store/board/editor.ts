@@ -273,6 +273,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+
     loading.value = true
     const response = await client.tsapi.board.write.post({
       $headers: {

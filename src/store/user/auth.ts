@@ -58,25 +58,31 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     user.value = JSON.parse(savedUserInfo) as User
-    const response = await client.tsapi.auth.load.get({
-      $headers: {
-        authorization: user.value.token,
-      },
-      $query: {
-        userUid: user.value.uid,
-      },
-    })
+    try {
+      const response = await client.tsapi.auth.load.get({
+        $headers: {
+          authorization: user.value.token,
+        },
+        $query: {
+          userUid: user.value.uid,
+        },
+      })
 
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
-    }
+      if (!response.data) {
+        return util.error(TEXT[home.lang].NO_RESPONSE)
+      }
+      if (response.data.success === false) {
+        return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+      }
 
-    user.value = response.data.result.user as User
-    user.value.signature = util.unescape(user.value.signature)
-    updateUserToken(response.data.result.newAccessToken) // 마지막에 토큰 변경
+      user.value = response.data.result.user as User
+      user.value.signature = util.unescape(user.value.signature)
+      updateUserToken(response.data.result.newAccessToken) // 마지막에 토큰 변경
+    } catch (e) {
+      util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
+      logout()
+      util.go("home")
+    }
   }
 
   // 사용자 로그인하기
