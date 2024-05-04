@@ -79,6 +79,7 @@
           </v-card>
         </v-container>
         <home-footer></home-footer>
+        <quick-button v-if="home.isMobile"></quick-button>
       </v-main>
     </v-layout>
     <user-info-dialog></user-info-dialog>
@@ -102,6 +103,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import QuickButton from "../home/components/mobile/QuickButton.vue"
 import { CONTENT_STATUS } from "../../../server/database/board/const"
 import { TEXT } from "../../messages/pages/board/list"
 

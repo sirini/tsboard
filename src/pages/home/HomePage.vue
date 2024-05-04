@@ -30,6 +30,8 @@
           </v-row>
         </v-card>
         <home-footer></home-footer>
+
+        <quick-button v-if="home.isMobile"></quick-button>
       </v-main>
     </v-layout>
   </v-app>
@@ -46,6 +48,7 @@ import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
 import HomePageGridBoard from "./components/list/HomePageGridBoard.vue"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
+import QuickButton from "./components/mobile/QuickButton.vue"
 
 const home = useHomeStore()
 onMounted(async () => {
@@ -69,9 +72,5 @@ onMounted(async () => {
 }
 .layout {
   margin-top: 64px;
-}
-.box {
-  font-size: 1em;
-  height: 300px;
 }
 </style>

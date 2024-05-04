@@ -31,6 +31,7 @@
           </v-card>
         </v-container>
         <home-footer></home-footer>
+        <quick-button v-if="home.isMobile"></quick-button>
       </v-main>
     </v-layout>
 
@@ -53,6 +54,7 @@ import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemo
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import QuickButton from "../home/components/mobile/QuickButton.vue"
 import { TEXT } from "../../messages/pages/gallery/list"
 
 const route = useRoute()
