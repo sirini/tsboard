@@ -58,6 +58,8 @@ export const OAUTH = {
     REDIRECT_URI: `${IS_DEV ? DEV_URL : PROD_URL}/api/auth/google`,
     TOKEN_URI: "https://oauth2.googleapis.com/token",
     USERINFO_URI: "https://www.googleapis.com/oauth2/v2/userinfo",
+    CLIENT_ID:
+      "480180821950-lf6c139j2g521t2fjistepaf7ibj1586.apps.googleusercontent.com" /* .env 파일 OAUTH_GOOGLE_CLIENT_ID 참조 */,
   },
   SUCCESS_MESSAGE: "tsboardOAuthLoggedIn",
 }
