@@ -41,8 +41,8 @@ export const oauth = new Elysia()
         },
         body: new URLSearchParams({
           code,
-          client_id: OAUTH.GOOGLE.CLIENT_ID,
-          client_secret: process.env.OAUTH_GOOGLE_PW,
+          client_id: process.env.OAUTH_GOOGLE_CLIENT_ID || "",
+          client_secret: process.env.OAUTH_GOOGLE_PW || "",
           redirect_uri: OAUTH.GOOGLE.REDIRECT_URI,
           grant_type: "authorization_code",
         }),

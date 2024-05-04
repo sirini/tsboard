@@ -1,13 +1,8 @@
 <template>
-  <v-card
-    class="box"
-    @click="
-      util.go(post.type === BOARD_TYPE.BOARD ? 'boardView' : 'galleryOpen', post.id, post.uid)
-    "
-  >
+  <v-card class="box" @click="util.go(util.routerName(post.type, 'view'), post.id, post.uid)">
     <v-img v-if="post.cover.length > 0" height="200" cover :src="post.cover"></v-img>
 
-    <v-card-title class="post-title">
+    <v-card-title class="pa-2 post-title">
       <v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
         util.unescape(post.category)
       }}</v-chip
@@ -23,10 +18,14 @@
 
     <v-divider v-if="post.cover.length < 1"></v-divider>
 
-    <v-card-actions class="pl-3 pr-3">
-      <v-chip prepend-icon="mdi-eye-outline" color="blue-grey" size="small">{{
-        util.num(post.hit)
-      }}</v-chip>
+    <v-card-actions class="pa-2">
+      <v-chip
+        prepend-icon="mdi-eye-outline"
+        append-icon="mdi-chat-outline"
+        color="blue-grey"
+        size="small"
+        >{{ util.num(post.hit) }} / {{ util.num(post.comment) }}</v-chip
+      >
       <v-chip
         class="ml-2"
         :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
@@ -35,7 +34,6 @@
       >
         {{ util.num(post.like) }}
       </v-chip>
-
       <v-spacer></v-spacer>
 
       <v-chip
@@ -50,7 +48,6 @@
 
 <script setup lang="ts">
 import { useUtilStore } from "../../../../store/util"
-import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { PostItem } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"

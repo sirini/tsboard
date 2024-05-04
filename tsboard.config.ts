@@ -27,6 +27,11 @@ export const TSBOARD = {
   },
 }
 
+export const QUICK_BUTTONS = {
+  WRITE: "free" /* (모바일) 글쓰기 버튼 클릭 시 이동할 게시판 아이디 */,
+  UPLOAD: "photo" /* (모바일) 사진 업로드 버튼 클릭 시 이동할 갤러리 아이디 */,
+}
+
 export const AUTH = {
   JWT: {
     ACCESS_TIMEOUT: 30 /* minutes */,
@@ -44,7 +49,7 @@ export const SIZE = {
   CONTENT_INSERT: 480 /* px */,
   THUMBNAIL: 504 /* px */,
   FULL: 2016 /* px, for gallery */,
-  MAX_FILE: 21238400 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
+  MAX_FILE: 99999999 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
 }
 
 export const OAUTH = {
@@ -53,8 +58,6 @@ export const OAUTH = {
     REDIRECT_URI: `${IS_DEV ? DEV_URL : PROD_URL}/api/auth/google`,
     TOKEN_URI: "https://oauth2.googleapis.com/token",
     USERINFO_URI: "https://www.googleapis.com/oauth2/v2/userinfo",
-    CLIENT_ID:
-      "480180821950-lf6c139j2g521t2fjistepaf7ibj1586.apps.googleusercontent.com" /*** 구글 클라우드 콘솔에서 본인의 클라이언트 ID로 교체 필요 ***/,
   },
   SUCCESS_MESSAGE: "tsboardOAuthLoggedIn",
 }
