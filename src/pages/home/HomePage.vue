@@ -73,4 +73,9 @@ onMounted(async () => {
 .layout {
   margin-top: 64px;
 }
+/* for HomePageGrid(Board|Post).vue */
+.box {
+  font-size: 1em;
+  height: 300px;
+}
 </style>
