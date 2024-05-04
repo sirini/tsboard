@@ -14,9 +14,21 @@
     <v-divider></v-divider>
 
     <v-list-item class="pt-2 pb-2">
-      <v-card elevation="0" rounded="0">
-        <v-card-text class="pa-0 pt-2 tsboard" v-html="viewer.post.content"></v-card-text>
-      </v-card>
+      <v-tabs v-model="tab" align-tabs="center">
+        <v-tab :value="1">CONTENT</v-tab>
+        <t-tab :value="2">EXIF</t-tab>
+      </v-tabs>
+
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item :value="1">
+          <v-card elevation="0" rounded="0">
+            <v-card-text class="pa-0 pt-2 tsboard" v-html="viewer.post.content"></v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item :value="2">
+          <v-card elevation="0" rounded="0"> EXIF ?? </v-card>
+        </v-tabs-window-item>
+      </v-tabs-window>
     </v-list-item>
 
     <gallery-viewer-sidebar-thumbnails></gallery-viewer-sidebar-thumbnails>
@@ -35,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useUtilStore } from "../../../store/util"
 import { TSBOARD } from "../../../../tsboard.config"
@@ -46,4 +59,5 @@ import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.v
 
 const viewer = useViewerStore()
 const util = useUtilStore()
+const tab = ref<number>(1)
 </script>

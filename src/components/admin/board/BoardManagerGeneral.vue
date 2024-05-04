@@ -12,7 +12,7 @@
               hide-details
               prepend-inner-icon="mdi-identifier"
               append-icon="mdi-link-variant"
-              @click:append="util.go('boardList', general.board.id)"
+              @click:append="util.go(util.routerName(general.board.type), general.board.id)"
             >
             </v-text-field>
           </v-col>

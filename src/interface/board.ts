@@ -4,6 +4,8 @@
  * 게시판에서 사용되는 각종 인터페이스 모음
  */
 
+import { Exif } from "./gallery"
+
 export type Pair = {
   uid: number
   name: string
@@ -91,6 +93,12 @@ export type SearchPostParams = PostParams & {
   direction: ">" | "<"
   ordering: "ASC" | "DESC"
   noticeCount: number
+}
+
+export type PhotoItemParams = {
+  files: string[]
+  thumbnails: string[]
+  exifs: Exif[]
 }
 
 export type CommentParams = PostCommentParams & {

@@ -4,7 +4,8 @@
  * 관리화면 첫페이지 > 최근 게시글, 댓글, 신고글에 필요한 함수들
  */
 
-import { AdminLatest } from "../../../../../src/interface/admin"
+import { AdminLatest, AdminReportLatest } from "../../../../../src/interface/admin"
+import { BoardType } from "../../../../../src/interface/board"
 import { getUserBasic } from "../../../board/list"
 import { table, select } from "../../../common"
 
@@ -21,7 +22,7 @@ export async function getLatestPosts(limit: number): Promise<AdminLatest[]> {
   }
 
   for (const post of posts) {
-    const [board] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    const [board] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
       post.board_uid,
     ])
     if (!board) {
@@ -31,6 +32,7 @@ export async function getLatestPosts(limit: number): Promise<AdminLatest[]> {
     result.push({
       uid: post.uid,
       id: board.id,
+      type: board.type as BoardType,
       content: post.title,
       writer,
     })
@@ -58,7 +60,7 @@ export async function getLatestComments(limit: number): Promise<AdminLatest[]> {
     if (!board) {
       continue
     }
-    const [bid] = await select(`SELECT id FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    const [bid] = await select(`SELECT id, type FROM ${table}board WHERE uid = ? LIMIT 1`, [
       board.board_uid,
     ])
     if (!bid) {
@@ -68,6 +70,7 @@ export async function getLatestComments(limit: number): Promise<AdminLatest[]> {
     result.push({
       uid: comment.post_uid,
       id: bid.id,
+      type: bid.type as BoardType,
       content: comment.content,
       writer,
     })
@@ -77,8 +80,8 @@ export async function getLatestComments(limit: number): Promise<AdminLatest[]> {
 }
 
 // 대시보드에서 볼 최신 신고 내역 가져오기
-export async function getLatestReports(limit: number): Promise<AdminLatest[]> {
-  let result: AdminLatest[] = []
+export async function getLatestReports(limit: number): Promise<AdminReportLatest[]> {
+  let result: AdminReportLatest[] = []
   const reports = await select(
     `SELECT uid, from_uid, request FROM ${table}report ORDER BY uid DESC LIMIT ?`,
     [limit.toString()],

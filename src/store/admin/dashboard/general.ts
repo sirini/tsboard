@@ -10,7 +10,7 @@ import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
-import { AdminDashboardStat, AdminLatest, AdminUserInfo } from "../../../interface/admin"
+import { AdminDashboardStat, AdminLatest, AdminReportLatest, AdminUserInfo } from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 import { TSBOARD } from "../../../../tsboard.config"
 
@@ -32,7 +32,7 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
   const image = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
   const posts = ref<AdminLatest[]>([])
   const comments = ref<AdminLatest[]>([])
-  const reports = ref<AdminLatest[]>([])
+  const reports = ref<AdminReportLatest[]>([])
   const groups = ref<string[]>([])
   const boards = ref<string[]>([])
   const members = ref<AdminUserInfo[]>([])

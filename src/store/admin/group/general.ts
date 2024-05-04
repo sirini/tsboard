@@ -21,6 +21,7 @@ import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/group/general"
 import { INIT_GROUP_CONFIG } from "../../../../server/database/admin/group/general/const"
 import { TSBOARD } from "../../../../tsboard.config"
+import { BoardType } from "../../../interface/board"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
@@ -152,6 +153,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     boards.value.push({
       uid: response.data.result.uid as number,
       id: newId,
+      type: response.data.result.type as BoardType,
       name: response.data.result.name as string,
       info: response.data.result.info as string,
       manager: {

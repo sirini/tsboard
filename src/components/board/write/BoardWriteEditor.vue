@@ -288,6 +288,7 @@ import TableCell from "@tiptap/extension-table-cell"
 import TableHeader from "@tiptap/extension-table-header"
 import TableRow from "@tiptap/extension-table-row"
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight"
+import Link from "@tiptap/extension-link"
 import css from "highlight.js/lib/languages/css"
 import js from "highlight.js/lib/languages/javascript"
 import ts from "highlight.js/lib/languages/typescript"
@@ -353,6 +354,7 @@ const editor = useEditor({
       lowlight,
       defaultLanguage: "typescript",
     }),
+    Link,
   ],
   onUpdate: () => {
     let html = editor.value?.getHTML() || ""

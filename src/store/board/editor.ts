@@ -54,11 +54,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
   // 게시판 설정 가져오기
   async function loadBoardConfig(): Promise<void> {
-    if (view.config.uid > 0) {
-      config.value = view.config
-      return
-    }
-
     id.value = route.params.id as string
     if (id.value.length < 2) {
       util.snack(TEXT[home.lang].NO_BOARD_ID)

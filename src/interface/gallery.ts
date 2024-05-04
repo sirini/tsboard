@@ -24,3 +24,15 @@ export type GridItem = {
   liked: boolean
   reply: number
 }
+
+export type Exif = {
+  make: string
+  model: string
+  aperture: number
+  iso: number
+  focalLength: number
+  exposure: number
+  width: number
+  height: number
+  date: string
+}

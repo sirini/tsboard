@@ -57,9 +57,9 @@ function actionForNoti(noti: TsboardNotification): void {
     if (noti.type === BOARD_TYPE.GALLERY) {
       destination = "galleryOpen"
     } else if (noti.type === BOARD_TYPE.BLOG) {
-      destination = "blogRead"
+      destination = "blogView"
     } else if (noti.type === BOARD_TYPE.SHOP) {
-      destination = "shopOpen"
+      destination = "shopView"
     }
     return util.go(destination, noti.id, noti.postUid)
   }

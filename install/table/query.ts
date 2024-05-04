@@ -292,6 +292,27 @@ tables.push(`${create} #db#notification (
   KEY (checked)
 ) ${engineEncode}`)
 
+// EXIF 정보 저장하는 테이블 (^0.8.22)
+// 참조) exposure/latitude/longitude는 1,000,000을 곱한 값이 들어가서 INT로 설정함
+// aperture 에는 100을 곱한 값이 들어가서 INT로 설정
+tables.push(`${create} #db#exif (
+  ${uid},
+  file_uid INT ${unnd0},
+  post_uid INT ${unnd0},
+  make VARCHAR(20) ${nnde},
+  model VARCHAR(20) ${nnde},
+  aperture INT ${unnd0},
+  iso INT ${unnd0},
+  focal_length INT ${unnd0},
+  exposure INT ${unnd0},
+  width INT ${unnd0},
+  height INT ${unnd0},
+  date BIGINT ${unnd0},
+  ${primary},
+  KEY (file_uid),
+  KEY (post_uid)
+) ${engineEncode}`)
+
 //////////
 // v0.8.0
 

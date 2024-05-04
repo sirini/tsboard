@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
-import { GridItem } from "../../../src/interface/gallery"
+import { Exif, GridItem } from "../../../src/interface/gallery"
 import {
   getBoardConfig,
   getMaxPostUid,
@@ -123,26 +123,29 @@ export const gallery = new Elysia()
         config: BOARD_CONFIG,
         files: [] as string[],
         thumbnails: [] as string[],
+        exifs: [] as Exif[],
         newAccessToken,
       }
 
-      if (id.length < 2) {
-        return fail(`Invalid gallery ID.`, response)
-      }
-      if (no < 1) {
-        return fail(`Invalid gallery no.`, response)
+      if (id.length < 2 || no < 1) {
+        return fail(`Invalid parameters.`, response)
       }
       const config = await getBoardConfig(id)
       if (config.uid < 1) {
         return fail(`Gallery not found.`, response)
       }
 
-      const { files, thumbnails } = await getPhotoItems(no)
+      if (config.level.list > userLevel) {
+        return fail(`Level restriction.`, response)
+      }
+
+      const photos = await getPhotoItems(no)
 
       return success({
         config,
-        files,
-        thumbnails,
+        files: photos.files,
+        thumbnails: photos.thumbnails,
+        exifs: photos.exifs,
         newAccessToken,
       })
     },

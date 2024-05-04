@@ -7,7 +7,8 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
-import { READ_POST_KEY } from "../../server/database/board/const"
+import { BOARD_TYPE, READ_POST_KEY } from "../../server/database/board/const"
+import { BoardType } from "../interface/board"
 
 export const useUtilStore = defineStore("util", () => {
   const router = useRouter()
@@ -174,6 +175,24 @@ export const useUtilStore = defineStore("util", () => {
     window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
   }
 
+  // 게시판 형태에 따른 라우터 이름 반환
+  function routerName(type: BoardType, action: "list" | "view" = "list"): string {
+    switch (type) {
+      case BOARD_TYPE.GALLERY:
+        if (action === "list") return "galleryList"
+        else return "galleryOpen"
+      case BOARD_TYPE.BLOG:
+        if (action === "list") return "blogList"
+        else return "blogView"
+      case BOARD_TYPE.SHOP:
+        if (action === "list") return "shopList"
+        else return "shopView"
+      default:
+        if (action === "list") return "boardList"
+        else return "boardView"
+    }
+  }
+
   return {
     snackbar,
     snackbarTimeout,
@@ -197,5 +216,6 @@ export const useUtilStore = defineStore("util", () => {
     attachments,
     isAlreadyRead,
     markAsRead,
+    routerName,
   }
 })

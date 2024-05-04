@@ -14,6 +14,7 @@ import {
 } from "../../../src/interface/editor"
 import {
   generateRandomID,
+  exif,
   makeSavePath,
   removeFile,
   resizeImage,
@@ -205,6 +206,35 @@ export async function saveThumbnailImage(
   )
 }
 
+// 이미지 파일 첨부시 EXIF 정보도 추출해서 저장하기
+export async function extractEXIF(
+  fileUid: number,
+  postUid: number,
+  inputFilePath: string,
+): Promise<void> {
+  const result = await exif(inputFilePath)
+  if (result.make.length < 1 && result.model.length < 1) {
+    return
+  }
+  await insert(
+    `INSERT INTO ${table}exif (file_uid, post_uid, make, model, aperture, iso, focal_length, exposure, width, height, date) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      fileUid.toString(),
+      postUid.toString(),
+      result.make,
+      result.model,
+      result.aperture.toString(),
+      result.iso.toString(),
+      result.focalLength.toString(),
+      result.exposure.toString(),
+      result.width.toString(),
+      result.height.toString(),
+      result.date.toString(),
+    ],
+  )
+}
+
 // 입력받은 첨부파일들을 저장하기
 export async function saveAttachments(
   boardUid: number,
@@ -231,6 +261,7 @@ export async function saveAttachments(
 
       if (/(jpg|jpeg|png|bmp|webp|gif|avif)/i.test(ext) === true) {
         await saveThumbnailImage(fileUid, postUid, newSavePath)
+        await extractEXIF(fileUid, postUid, newSavePath)
       }
     }
   }

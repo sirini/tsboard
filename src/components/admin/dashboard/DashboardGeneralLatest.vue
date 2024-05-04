@@ -22,7 +22,7 @@
           <v-list-item
             v-for="(post, index) in dashboard.posts"
             :key="index"
-            @click="util.go('boardView', post.id, post.uid)"
+            @click="util.go(util.routerName(post.type as BoardType, 'view'), post.id, post.uid)"
             :prepend-avatar="
               post.writer.profile.length < 1
                 ? `${TSBOARD.PREFIX}/no-profile.svg`
@@ -55,7 +55,9 @@
           <v-list-item
             v-for="(comment, index) in dashboard.comments"
             :key="index"
-            @click="util.go('boardView', comment.id, comment.uid)"
+            @click="
+              util.go(util.routerName(comment.type as BoardType, 'view'), comment.id, comment.uid)
+            "
             :prepend-avatar="
               comment.writer.profile.length < 1
                 ? `${TSBOARD.PREFIX}/no-profile.svg`
@@ -108,6 +110,7 @@
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 import { TSBOARD } from "../../../../tsboard.config"
+import { BoardType } from "../../../interface/board"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()

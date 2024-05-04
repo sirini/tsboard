@@ -4,7 +4,7 @@
  * 관리자 기능과 관련된 인터페이스
  */
 
-import { BoardType } from "./board"
+import { BoardType, Writer } from "./board"
 
 export type AdminBreadcrumb = {
   title: string
@@ -91,6 +91,7 @@ type AdminGroupTotalCount = {
 }
 
 export type AdminGroupList = AdminGroupCommon & {
+  type: BoardType
   name: string
   info: string
   total: AdminGroupTotalCount
@@ -128,9 +129,16 @@ export type AdminReport = {
   date: number
 }
 
+export type AdminReportLatest = {
+  uid: number
+  content: string
+  writer: Writer
+}
+
 export type AdminLatest = {
   uid: number
-  id?: string
+  id: string
+  type: BoardType
   content: string
   writer: AdminUserInfo
 }

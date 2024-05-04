@@ -39,9 +39,11 @@ const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
   allowedAttributes: {
     code: ["class"],
-    img: ["src", "alt", "class"],
+    img: ["src", "alt", "class", "title", "width", "height"],
     span: ["class"],
+    a: ["href", "name", "title"],
   },
+  selfClosing: ["img", "br", "hr"],
 }
 
 const writeBody = {

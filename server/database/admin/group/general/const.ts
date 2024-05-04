@@ -5,10 +5,13 @@
  */
 
 import { AdminBoardPermission, AdminGroupConfig } from "../../../../../src/interface/admin"
+import { BoardType } from "../../../../../src/interface/board"
+import { BOARD_TYPE } from "../../../board/const"
 
 export const CREATE_BOARD_RESULT = {
   newAccessToken: "",
   uid: 0,
+  type: BOARD_TYPE.BOARD as BoardType,
   name: "",
   info: "",
   manager: {

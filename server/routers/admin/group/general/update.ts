@@ -17,6 +17,7 @@ import { NEW_BOARD } from "../../../../../tsboard.config"
 import { checkUserVerification } from "../../../../database/auth/authorization"
 import { haveAdminPermission } from "../../../../database/user/manageuser"
 import { NO_TABLE_TARGET } from "../../../../database/user/const"
+import { BoardType } from "../../../../../src/interface/board"
 
 export const update = new Elysia()
   .use(
@@ -128,6 +129,7 @@ export const update = new Elysia()
       return success({
         newAccessToken,
         uid: newBoardUid,
+        type: NEW_BOARD.TYPE as BoardType,
         name: NEW_BOARD.NAME,
         info: NEW_BOARD.INFO,
         manager: {

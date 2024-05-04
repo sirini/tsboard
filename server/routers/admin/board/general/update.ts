@@ -17,7 +17,7 @@ import {
   removeCategory,
   updateUseCategory,
 } from "../../../../database/admin/board/general/update"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../../../util/tools"
+import { fail, success, EXTEND_TYPE_CHECK } from "../../../../util/tools"
 import { checkUserVerification } from "../../../../database/auth/authorization"
 import { haveAdminPermission } from "../../../../database/user/manageuser"
 import { NO_TABLE_TARGET } from "../../../../database/user/const"

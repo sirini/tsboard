@@ -8,10 +8,12 @@ import {
   BoardConfig,
   Comment,
   CommentRelated,
+  PhotoItemParams,
   Post,
   PostRelated,
   PostView,
 } from "../../../src/interface/board"
+import { Exif } from "../../../src/interface/gallery"
 import { INIT_USER_BASIC } from "../../../src/interface/user"
 
 export const TYPE_MATCH = [
@@ -126,3 +128,18 @@ export const NOTICE_TYPE = {
 
 export const READ_POST_KEY = "tsboardReadPosts"
 export const AUTO_SAVE_KEY = "tsboardAutoSave"
+
+export const INIT_EXIF: Exif = {
+  make: "",
+  model: "",
+  aperture: 0,
+  iso: 0,
+  focalLength: 0,
+  exposure: 0,
+  width: 0,
+  height: 0,
+  date: "",
+}
+
+export const EXIF_APERTURE_FACTOR = 100
+export const EXIF_EXPOSURE_FACTOR = 1000000

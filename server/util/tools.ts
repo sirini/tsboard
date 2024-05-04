@@ -10,6 +10,9 @@ import { exists, mkdir } from "node:fs/promises"
 import { nanoid, customAlphabet } from "nanoid"
 import sharp from "sharp"
 import { t } from "elysia"
+import exifr from "exifr"
+import { Exif } from "../../src/interface/gallery"
+import { EXIF_APERTURE_FACTOR, EXIF_EXPOSURE_FACTOR, INIT_EXIF } from "../database/board/const"
 
 // 헤더 쿠키 유효성 체크하는 코드
 export const DEFAULT_TYPE_CHECK = {
@@ -158,6 +161,29 @@ export async function resizeImage(
       quality: 90,
     })
     .toFile(outputPath)
+}
+
+// EXIF 정보 추출해서 반환하기
+export async function exif(path: string): Promise<Exif> {
+  let result: Exif = INIT_EXIF
+  try {
+    const exif = await exifr.parse(path)
+    result = {
+      make: exif.Make,
+      model: exif.Model,
+      aperture: exif.FNumber * EXIF_APERTURE_FACTOR,
+      iso: exif.ISO,
+      focalLength: exif.FocalLengthIn35mmFormat,
+      exposure: exif.ExposureTime * EXIF_EXPOSURE_FACTOR,
+      width: exif.ExifImageWidth,
+      height: exif.ExifImageHeight,
+      date: exif.CreateDate.getTime(),
+    }
+  } catch (e) {
+    console.log(`[getExif] ${e}`) // DEBUG
+  } finally {
+    return result
+  }
 }
 
 // 순수한 (소문자) 텍스트만 남기기

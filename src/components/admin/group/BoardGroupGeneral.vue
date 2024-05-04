@@ -88,7 +88,7 @@
             prepend-icon="mdi-identifier"
             variant="outlined"
             color="blue-grey"
-            @click="util.go('boardList', board.id)"
+            @click="util.go(util.routerName(board.type), board.id)"
           >
             {{ board.id }}
             <v-tooltip activator="parent"

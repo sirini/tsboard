@@ -14,7 +14,7 @@
       <v-list-item
         v-for="(board, idx) in group.boards"
         :key="idx"
-        @click="util.go(convertBoardType(board.type), board.id)"
+        @click="util.go(util.routerName(board.type), board.id)"
         append-icon="mdi-chevron-right"
         >{{ board.name }}
         <v-tooltip activator="parent">{{ board.info }}</v-tooltip>
@@ -29,23 +29,9 @@
 import { onMounted } from "vue"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
-import { BoardType } from "../../../../interface/board"
-import { BOARD_TYPE } from "../../../../../server/database/board/const"
 
 const home = useHomeStore()
 const util = useUtilStore()
 
 onMounted(() => home.loadSidebarLinks())
-
-// 게시판 형태 변환
-function convertBoardType(type: BoardType): string {
-  switch (type) {
-    case BOARD_TYPE.GALLERY as BoardType:
-      return "galleryList"
-    case BOARD_TYPE.BLOG as BoardType:
-      return "blogList"
-    default:
-      return "boardList"
-  }
-}
 </script>

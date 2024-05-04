@@ -43,7 +43,7 @@
         v-for="(comment, index) in latest.comments"
         :key="index"
         class="underline"
-        @click="util.go(generateBoardType(comment.type as BoardType), comment.id, comment.uid)"
+        @click="util.go(util.routerName(comment.type as BoardType), comment.id, comment.uid)"
       >
         <template v-slot:prepend>
           <span class="date mr-3">{{ util.date(comment.date) }}</span>
@@ -91,7 +91,6 @@ import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"
 import { BoardType } from "../../../interface/board"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()
@@ -101,20 +100,6 @@ watch(
   () => [latest.page, latest.bunch],
   () => latest.loadLatestComments(),
 )
-
-// 게시판 타입에 따라 라우터 이름 변경
-function generateBoardType(type: BoardType): string {
-  switch (type) {
-    case BOARD_TYPE.SHOP as BoardType:
-      return "shopView"
-    case BOARD_TYPE.GALLERY as BoardType:
-      return "galleryOpen"
-    case BOARD_TYPE.BLOG as BoardType:
-      return "blogRead"
-    default:
-      return "boardView"
-  }
-}
 </script>
 
 <style scoped>

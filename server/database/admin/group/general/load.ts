@@ -12,6 +12,8 @@ import {
   AdminUserInfo,
 } from "../../../../../src/interface/admin"
 import { INIT_GROUP_CONFIG } from "./const"
+import { BoardType } from "../../../../../src/interface/board"
+import { BOARD_TYPE } from "../../../board/const"
 
 // 주어진 아이디에 해당하는 그룹 설정 가져오기
 export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {
@@ -58,7 +60,7 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
   let result: AdminGroupList[] = []
 
   const boards = await select(
-    `SELECT uid, id, admin_uid, name, info FROM ${table}board WHERE group_uid = ?`,
+    `SELECT uid, id, admin_uid, type, name, info FROM ${table}board WHERE group_uid = ?`,
     [groupUid.toString()],
   )
   if (!boards[0]) {
@@ -103,6 +105,7 @@ export async function getGroupBoards(groupUid: number): Promise<AdminGroupList[]
     result.push({
       uid: board.uid,
       id: board.id,
+      type: board.type as BoardType,
       name: board.name,
       info: board.info,
       manager,
