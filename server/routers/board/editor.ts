@@ -36,14 +36,19 @@ import { SIZE } from "../../../tsboard.config"
 import { checkUserVerification } from "../../database/auth/authorization"
 
 const htmlFilter = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "iframe"]),
   allowedAttributes: {
     code: ["class"],
     img: ["src", "alt", "class", "title", "width", "height"],
     span: ["class"],
     a: ["href", "name", "title"],
+    iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
   },
   selfClosing: ["img", "br", "hr"],
+  allowIFrameHostname: ["www.youtube.com", "youtube.com"],
+  exclusiveFilter: function (frame: any) {
+    return frame.tag === "iframe" && !frame.attribs.src.includes("youtube.com")
+  },
 }
 
 const writeBody = {
