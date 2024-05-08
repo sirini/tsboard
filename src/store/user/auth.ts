@@ -113,8 +113,8 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   // 구글 OAuth 로그인 이후 결과 받아오기
-  async function loadGoogleUserInfo(): Promise<void> {
-    const response = await client.tsapi.auth.google.userinfo.get()
+  async function loadOAuthUserInfo(): Promise<void> {
+    const response = await client.tsapi.auth.oauth.userinfo.get()
 
     if (!response.data) {
       return util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
@@ -217,7 +217,7 @@ export const useAuthStore = defineStore("auth", () => {
     passwordRule,
     nameRule,
     login,
-    loadGoogleUserInfo,
+    loadOAuthUserInfo,
     logout,
     updateMyInfo,
     selectProfileImage,

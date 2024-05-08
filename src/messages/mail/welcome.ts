@@ -17,7 +17,7 @@ export const TEXT = [
 ${TSBOARD.SITE.NAME} 에서 자주 만나뵈었으면 좋겠습니다!<br />
 <br />
 <br />
-From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
+From <a href="${TSBOARD.API.URI}" target="_blank">${TSBOARD.API.URI}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
   },
   /* LANG.EN */ {
     SUBJECT: `[${TSBOARD.SITE.NAME}] Welcome to your membership, #name#!`,
@@ -29,7 +29,7 @@ You can now log in to the site.<br />
 We look forward to seeing you often at ${TSBOARD.SITE.NAME}!<br /> 
 <br /> 
 <br /> 
-From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
+From <a href="${TSBOARD.API.URI}" target="_blank">${TSBOARD.API.URI}</a> <span style="color: #888888">&middot; Powered by tsboard.dev</span>`,
   },
   /* LANG.CN */ {
     SUBJECT: `[${TSBOARD.SITE.NAME}] 欢迎加入会员，#name#！`,
@@ -41,6 +41,6 @@ From <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span
 我们期待在${TSBOARD.SITE.NAME}经常见到您！<br /> 
 <br /> 
 <br /> 
-来自 <a href="${TSBOARD.SITE.URL}" target="_blank">${TSBOARD.SITE.URL}</a> <span style="color: #888888">&middot; 由 tsboard.dev 提供技术支持</span>`,
+来自 <a href="${TSBOARD.API.URI}" target="_blank">${TSBOARD.API.URI}</a> <span style="color: #888888">&middot; 由 tsboard.dev 提供技术支持</span>`,
   },
 ]

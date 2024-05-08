@@ -51,7 +51,7 @@
 
             <v-list v-if="OAUTH.IS_READY">
               <v-list-item class="text-center mb-4">
-                <v-avatar size="large" @click="googleLogin">
+                <v-avatar size="large" @click="oauthLogin('google')" class="mr-2">
                   <v-img
                     :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'"
                     width="64"
@@ -59,6 +59,17 @@
                   ></v-img>
                   <v-tooltip activator="parent">{{
                     TEXT[home.lang].GOOGLE_LOGIN_TOOLTIP
+                  }}</v-tooltip>
+                </v-avatar>
+
+                <v-avatar size="large" @click="oauthLogin('naver')" class="ml-2 mr-2">
+                  <v-img
+                    :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'"
+                    width="64"
+                    height="64"
+                  ></v-img>
+                  <v-tooltip activator="parent">{{
+                    TEXT[home.lang].NAVER_LOGIN_TOOLTIP
                   }}</v-tooltip>
                 </v-avatar>
               </v-list-item>
@@ -88,6 +99,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
+import { useRoute } from "vue-router"
 import { useAuthStore } from "../../store/user/auth"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
@@ -97,29 +109,22 @@ import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
 import { OAUTH, TSBOARD } from "../../../tsboard.config"
 
+const route = useRoute()
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
 
-// 구글 로그인하기
-function googleLogin(): void {
-  const scope = "email profile"
-  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${OAUTH.GOOGLE.CLIENT_ID}&redirect_uri=${OAUTH.GOOGLE.REDIRECT_URI}&scope=${scope}&response_type=code&access_type=offline&prompt=select_account`
-  window.open(authUrl, "googleLogin", "width=500,height=600")
+// OAuth 로그인하기
+function oauthLogin(service: string): void {
+  location.href = `${TSBOARD.API.URI}/tsapi/auth/${service}/request`
 }
 
 // OAuth 로그인 성공 시 처리
 onMounted(() => {
-  window.addEventListener("message", (event) => {
-    if (event.origin !== TSBOARD.SITE.URL) {
-      return
-    }
-
-    if (event.data === OAUTH.SUCCESS_MESSAGE) {
-      auth.loadGoogleUserInfo()
-    }
-  })
+  if (route.name === "oauthLogin") {
+    auth.loadOAuthUserInfo()
+  }
 })
 </script>
 

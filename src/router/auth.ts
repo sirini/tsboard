@@ -14,6 +14,11 @@ export const authRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/auth/Login.vue"),
   },
   {
+    path: TSBOARD.PREFIX + "/login/oauth",
+    name: "oauthLogin",
+    component: () => import("@/pages/auth/Login.vue"),
+  },
+  {
     path: TSBOARD.PREFIX + "/logout",
     name: "logout",
     component: () => import("@/pages/auth/Logout.vue"),

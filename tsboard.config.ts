@@ -8,15 +8,14 @@ export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프�
 export const PORT_DEV_VITE = 3000
 export const PORT_DEV = 3200
 export const PORT_PROD = 3100
-export const LOCALHOST = "http://localhost"
+export const LOCALHOST = "http://geunyul2.asuscomm.com"
 const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" // 본인 도메인으로 교체 필요
 
 export const TSBOARD = {
-  VERSION: "v0.8.22",
+  VERSION: "v0.8.23",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
-    URL: IS_DEV ? DEV_URL : PROD_URL /*** 본인의 도메인으로 교체 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
@@ -54,14 +53,6 @@ export const SIZE = {
 
 export const OAUTH = {
   IS_READY: true,
-  GOOGLE: {
-    REDIRECT_URI: `${IS_DEV ? DEV_URL : PROD_URL}/api/auth/google`,
-    TOKEN_URI: "https://oauth2.googleapis.com/token",
-    USERINFO_URI: "https://www.googleapis.com/oauth2/v2/userinfo",
-    CLIENT_ID:
-      "480180821950-lf6c139j2g521t2fjistepaf7ibj1586.apps.googleusercontent.com" /* .env 파일 OAUTH_GOOGLE_CLIENT_ID 참조 */,
-  },
-  SUCCESS_MESSAGE: "tsboardOAuthLoggedIn",
 }
 
 export const NEW_BOARD = {

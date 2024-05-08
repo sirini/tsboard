@@ -30,9 +30,13 @@ ADMIN_PW=#adminpw#
 GMAIL_ID=yourgmailaddress@gmail.com
 GMAIL_APP_PASSWORD=
 
-# 구글 OAuth 클라이언트
+# 구글 OAuth 클라이언트 (CLIENT_ID는 tsboard.config.ts OAUTH.GOOGLE.CLIENT_ID와 동일)
 OAUTH_GOOGLE_CLIENT_ID=
 OAUTH_GOOGLE_PW=
+
+# 네이버 OAuth 클라이언트
+OAUTH_NAVER_CLIENT_ID=
+OAUTH_NAVER_PW=
 `
 
 const foundEnvTitle = `

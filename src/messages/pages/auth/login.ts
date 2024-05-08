@@ -17,6 +17,7 @@ export const TEXT = [
     SIGNUP: "회원가입",
     LOGIN: "로그인",
     GOOGLE_LOGIN_TOOLTIP: "구글 계정으로 로그인하기",
+    NAVER_LOGIN_TOOLTIP: "네이버 계정으로 로그인하기",
   },
   /* LANG.EN */ {
     TITLE: "Login",
@@ -30,6 +31,7 @@ If you've forgotten your password, we will send a reset password to the email ad
     SIGNUP: "Sign Up",
     LOGIN: "Login",
     GOOGLE_LOGIN_TOOLTIP: "Sign in with Google",
+    NAVER_LOGIN_TOOLTIP: "Sign in with Naver",
   },
   /* LANG.CN */ {
     TITLE: "登录",
@@ -43,6 +45,7 @@ If you've forgotten your password, we will send a reset password to the email ad
     SIGNUP: "注册",
     LOGIN: "登录",
     GOOGLE_LOGIN_TOOLTIP: "使用谷歌登录",
+    NAVER_LOGIN_TOOLTIP: "使用naver登录",
   },
 ]
 Object.freeze(TEXT)

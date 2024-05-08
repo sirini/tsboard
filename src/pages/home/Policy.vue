@@ -16,7 +16,7 @@
             <v-list class="policy pa-6">
               <p>
                 본 개인정보 처리방침은 [<strong>{{ TSBOARD.SITE.NAME }}</strong
-                >] 가(이) 운영하는 「<strong>{{ TSBOARD.SITE.URL }}</strong
+                >] 가(이) 운영하는 「<strong>{{ TSBOARD.API.URI }}</strong
                 >」 (이하 "서비스")에서 제공하는 모든 서비스에 적용되며, 회사가 사용자의 개인정보를
                 어떻게 수집, 사용, 공유 및 보호하는지, 그리고 사용자의 권리와 선택에 대해
                 설명합니다.
