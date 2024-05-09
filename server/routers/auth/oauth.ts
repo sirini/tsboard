@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { registerUser } from "../../database/auth/signin"
 import { saveTokens } from "../../database/auth/authorization"
-import { AUTH, OAUTH, TSBOARD } from "../../../tsboard.config"
+import { AUTH, TSBOARD } from "../../../tsboard.config"
 import { getUser } from "../../database/auth/myinfo"
 import { INIT_USER } from "../../database/auth/const"
 import { fail, success } from "../../util/tools"
@@ -31,8 +31,6 @@ export const oauth = new Elysia()
   .get(
     "/google/callback",
     async ({ jwt, cookie: { refresh, oauthUserInfo }, query: { code }, set }) => {
-      set.headers["Content-Type"] = "text/html"
-
       if (!process.env.OAUTH_GOOGLE_PW) {
         set.redirect = TSBOARD.API.URI
         return
