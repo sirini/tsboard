@@ -180,7 +180,7 @@ export async function exif(path: string): Promise<Exif> {
       date: exif.CreateDate.getTime(),
     }
   } catch (e) {
-    console.log(`[getExif] ${e}`) // DEBUG
+    // do nothing
   } finally {
     return result
   }

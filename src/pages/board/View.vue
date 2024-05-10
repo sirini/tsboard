@@ -17,6 +17,15 @@
               <board-view-statistics></board-view-statistics>
               <board-view-attachments></board-view-attachments>
 
+              <v-list-item class="pa-6" v-if="view.thumbs.length > 0">
+                <v-row>
+                  <v-col cols="3" v-for="(thumb, index) in view.thumbs" :key="index">
+                    <v-img cover :src="thumb"></v-img>
+                  </v-col>
+                </v-row>
+              </v-list-item>
+              <v-divider v-if="view.thumbs.length > 0"></v-divider>
+
               <v-list-item class="pa-3 mb-16 tsboard">
                 <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
               </v-list-item>

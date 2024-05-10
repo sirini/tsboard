@@ -343,9 +343,11 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
 
   let direction: ">" | "<" = ">"
   let ordering: "ASC" | "DESC" = "ASC"
+  param.sinceUid -= 1
   if (param.pagingDirection === PAGING_DIRECTION.NEXT) {
     direction = "<"
     ordering = "DESC"
+    param.sinceUid += 2
   }
 
   let posts: RowDataPacket[] = []

@@ -51,7 +51,12 @@
 
             <v-list v-if="OAUTH.IS_READY">
               <v-list-item class="text-center mb-4">
-                <v-avatar size="large" @click="oauthLogin('google')" class="mr-2">
+                <v-avatar
+                  size="large"
+                  @click="oauthLogin('google')"
+                  class="mr-2"
+                  v-if="OAUTH.USE.GOOGLE"
+                >
                   <v-img
                     :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'"
                     width="64"
@@ -62,7 +67,12 @@
                   }}</v-tooltip>
                 </v-avatar>
 
-                <v-avatar size="large" @click="oauthLogin('naver')" class="ml-2 mr-2">
+                <v-avatar
+                  size="large"
+                  @click="oauthLogin('naver')"
+                  class="ml-2 mr-2"
+                  v-if="OAUTH.USE.GOOGLE"
+                >
                   <v-img
                     :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'"
                     width="64"
@@ -70,6 +80,22 @@
                   ></v-img>
                   <v-tooltip activator="parent">{{
                     TEXT[home.lang].NAVER_LOGIN_TOOLTIP
+                  }}</v-tooltip>
+                </v-avatar>
+
+                <v-avatar
+                  size="large"
+                  @click="oauthLogin('kakao')"
+                  class="ml-2"
+                  v-if="OAUTH.USE.KAKAO"
+                >
+                  <v-img
+                    :src="TSBOARD.PREFIX + '/kakao/btn-kakao-login.webp'"
+                    width="64"
+                    height="64"
+                  ></v-img>
+                  <v-tooltip activator="parent">{{
+                    TEXT[home.lang].KAKAO_LOGIN_TOOLTIP
                   }}</v-tooltip>
                 </v-avatar>
               </v-list-item>

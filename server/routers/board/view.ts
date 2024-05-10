@@ -25,6 +25,7 @@ import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { isAuthor } from "../../database/board/editor"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { getPhotoItems } from "../../database/board/gallery"
 
 export const view = new Elysia()
   .use(
@@ -65,6 +66,8 @@ export const view = new Elysia()
         post: INIT_POST_VIEW,
         files: [] as PostFile[],
         tags: [] as Pair[],
+        images: [] as string[],
+        thumbs: [] as string[],
         newAccessToken,
       }
       if (id.length < 2 || postUid < 1) {
@@ -93,7 +96,10 @@ export const view = new Elysia()
       }
 
       if (response.config.level.download <= userLevel) {
+        const photoItems = await getPhotoItems(postUid)
         response.files = await getFiles(postUid)
+        response.images = photoItems.files
+        response.thumbs = photoItems.thumbnails
       }
 
       response.post = await getPost(postUid, accessUserUid)

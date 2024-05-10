@@ -88,13 +88,22 @@ export const useBoardListStore = defineStore("boardList", () => {
     })
 
     posts.value = response.data.result.posts
-    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.rowCount)
+    let noticeCount = 0
+    posts.value.map((post) => {
+      if (post.status === CONTENT_STATUS.NOTICE) {
+        noticeCount += 1
+      }
+    })
+    pageLength.value = Math.ceil(
+      response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
+    )
   }
 
   // 게시판 목록 초기화
   async function resetBoardList(): Promise<void> {
     sinceUid.value = 0
     page.value = 1
+    pagingDirection.value = PAGING_DIRECTION.NEXT
     await loadPostList()
     home.setGridLayout()
   }
@@ -104,9 +113,8 @@ export const useBoardListStore = defineStore("boardList", () => {
     page.value -= 1
     pagingDirection.value = PAGING_DIRECTION.PREV
     posts.value.map((post) => {
-      if (post.status === CONTENT_STATUS.NORMAL) {
+      if (post.status === CONTENT_STATUS.NORMAL && sinceUid.value < post.uid) {
         sinceUid.value = post.uid
-        return
       }
     })
 
@@ -169,11 +177,11 @@ export const useBoardListStore = defineStore("boardList", () => {
     loadPostList()
   }
 
-  // 갤러리 목록보기 초기화
+  // 게시판 목록보기 초기화
   function init(): void {
     clearVariables()
     resetSearchKeyword()
-    loadPostList()
+    resetBoardList()
   }
 
   return {

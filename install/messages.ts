@@ -30,13 +30,17 @@ ADMIN_PW=#adminpw#
 GMAIL_ID=yourgmailaddress@gmail.com
 GMAIL_APP_PASSWORD=
 
-# 구글 OAuth 클라이언트 (CLIENT_ID는 tsboard.config.ts OAUTH.GOOGLE.CLIENT_ID와 동일)
+# 구글 OAuth 클라이언트
 OAUTH_GOOGLE_CLIENT_ID=
-OAUTH_GOOGLE_PW=
+OAUTH_GOOGLE_SECRET=
 
 # 네이버 OAuth 클라이언트
 OAUTH_NAVER_CLIENT_ID=
-OAUTH_NAVER_PW=
+OAUTH_NAVER_SECRET=
+
+# 카카오 OAuth 클라이언트
+OAUTH_KAKAO_CLIENT_ID=
+OAUTH_KAKAO_SECRET=
 `
 
 const foundEnvTitle = `
@@ -70,7 +74,7 @@ ${TSBOARD.VERSION} | tsboard.dev
 
   ${chalk.gray("GMAIL_ID")}
   ${chalk.gray("GMAIL_APP_PASSWORD")}
-  ${chalk.gray("OAUTH_GOOGLE_PW")}
+  ${chalk.gray("OAUTH_GOOGLE_SECRET")}
 `
 
 const installTitle = `
