@@ -22,7 +22,9 @@ import {
 } from "../../util/tools"
 import { CONTENT_STATUS } from "./const"
 import { exists } from "node:fs/promises"
-import { SIZE } from "../../../tsboard.config"
+import { SIZE, TSBOARD } from "../../../tsboard.config"
+import OpenAI from "openai"
+import sharp from "sharp"
 
 // 글작성 레벨 제한 가져오기
 export async function getWriteLevel(boardUid: number): Promise<number> {
@@ -192,7 +194,11 @@ export async function saveThumbnailImage(
   fileUid: number,
   postUid: number,
   inputFilePath: string,
-): Promise<void> {
+): Promise<{ thumb: string; full: string }> {
+  let result = {
+    thumb: "",
+    full: "",
+  }
   const thumbPath = await makeSavePath("thumbnails")
   const thumbSavePath = `${thumbPath}/t${generateRandomID()}.avif`
   await resizeImage(inputFilePath, thumbSavePath, SIZE.THUMBNAIL)
@@ -200,10 +206,14 @@ export async function saveThumbnailImage(
   const fullSavePath = `${thumbPath}/f${generateRandomID()}.avif`
   await resizeImage(inputFilePath, fullSavePath, SIZE.FULL)
 
+  result.thumb = thumbSavePath.slice(1)
+  result.full = fullSavePath.slice(1)
   await insert(
     `INSERT INTO ${table}file_thumbnail (file_uid, post_uid, path, full_path) VALUES (?, ?, ?, ?)`,
-    [fileUid.toString(), postUid.toString(), thumbSavePath.slice(1), fullSavePath.slice(1)],
+    [fileUid.toString(), postUid.toString(), result.thumb, result.full],
   )
+
+  return result
 }
 
 // 이미지 파일 첨부시 EXIF 정보도 추출해서 저장하기
@@ -235,6 +245,65 @@ export async function extractEXIF(
   )
 }
 
+// OpenAI API를 이용하여 올려진 사진에 대한 설명 추가
+export async function saveDescriptionForImage(
+  fileUid: number,
+  postUid: number,
+  thumbnailPath: string,
+): Promise<void> {
+  if (process.env.OPENAI_API_KEY === undefined || process.env.OPENAI_API_KEY === "") {
+    return
+  }
+
+  const outputPath = thumbnailPath.replace(".avif", ".jpg")
+  await sharp(thumbnailPath, { failOn: "truncated" })
+    .toFormat("jpg", {
+      quality: 90,
+    })
+    .toFile(outputPath)
+
+  if ((await exists(outputPath)) === false) {
+    return
+  }
+
+  const url = `${TSBOARD.API.URI}${outputPath.slice(1)}`
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: "Describe the content of this image in Korean.",
+          },
+          {
+            type: "image_url",
+            image_url: {
+              url,
+              detail: "low",
+            },
+          },
+        ],
+      },
+    ],
+  })
+
+  const description = response.choices[0].message.content || ""
+  if (description.length > 0) {
+    await insert(
+      `INSERT INTO ${table}image_description (file_uid, post_uid, description) VALUES (?, ?, ?)`,
+      [fileUid.toString(), postUid.toString(), description],
+    )
+  }
+
+  await removeFile(`.${outputPath}`)
+}
+
 // 입력받은 첨부파일들을 저장하기
 export async function saveAttachments(
   boardUid: number,
@@ -260,8 +329,12 @@ export async function saveAttachments(
       )
 
       if (/(jpg|jpeg|png|bmp|webp|gif|avif)/i.test(ext) === true) {
-        await saveThumbnailImage(fileUid, postUid, newSavePath)
+        const image = await saveThumbnailImage(fileUid, postUid, newSavePath)
         await extractEXIF(fileUid, postUid, newSavePath)
+        await saveDescriptionForImage(fileUid, postUid, `.${image.thumb}`)
+
+        // DEBUG
+        console.log(`saveDescriptionForImage has been called.`)
       }
     }
   }

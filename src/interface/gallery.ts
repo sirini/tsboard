@@ -23,6 +23,7 @@ export type GridItem = {
   like: number
   liked: boolean
   reply: number
+  descriptions: string[]
 }
 
 export type Exif = {

@@ -124,6 +124,7 @@ export const gallery = new Elysia()
         files: [] as string[],
         thumbnails: [] as string[],
         exifs: [] as Exif[],
+        descriptions: [] as string[],
         newAccessToken,
       }
 
@@ -146,6 +147,7 @@ export const gallery = new Elysia()
         files: photos.files,
         thumbnails: photos.thumbnails,
         exifs: photos.exifs,
+        descriptions: photos.descriptions,
         newAccessToken,
       })
     },

@@ -23,6 +23,7 @@ export async function getPhotoItems(postUid: number): Promise<PhotoItemParams> {
     files: [] as string[],
     thumbnails: [] as string[],
     exifs: [] as Exif[],
+    descriptions: [] as string[],
   }
 
   const thumbs = await select(
@@ -53,6 +54,17 @@ export async function getPhotoItems(postUid: number): Promise<PhotoItemParams> {
       })
     } else {
       images.exifs.push(INIT_EXIF)
+    }
+
+    const [ai] = await select(
+      `SELECT description FROM ${table}image_description WHERE file_uid = ? LIMIT 1`,
+      [thumb.file_uid],
+    )
+
+    if (ai) {
+      images.descriptions.push(ai.description)
+    } else {
+      images.descriptions.push("")
     }
   }
 
@@ -108,6 +120,7 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
       like: info.like,
       liked: info.liked,
       reply: info.reply,
+      descriptions: photos.descriptions,
     })
   }
 

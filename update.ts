@@ -57,24 +57,35 @@ import { removeEmptyDir, removeFile } from "./server/util/tools"
 // )
 
 // 0.8.18 >>> 0.8.22
-await execute(`CREATE TABLE ${table}exif (
+// await execute(`CREATE TABLE ${table}exif (
+// uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
+// file_uid INT UNSIGNED NOT NULL DEFAULT '0',
+// post_uid INT UNSIGNED NOT NULL DEFAULT '0',
+// make VARCHAR(20) NOT NULL DEFAULT '',
+// model VARCHAR(20) NOT NULL DEFAULT '',
+// aperture INT UNSIGNED NOT NULL DEFAULT '0',
+// iso INT UNSIGNED NOT NULL DEFAULT '0',
+// focal_length INT UNSIGNED NOT NULL DEFAULT '0',
+// exposure INT UNSIGNED NOT NULL DEFAULT '0',
+// width INT UNSIGNED NOT NULL DEFAULT '0',
+// height INT UNSIGNED NOT NULL DEFAULT '0',
+// date BIGINT UNSIGNED NOT NULL DEFAULT '0',
+// PRIMARY KEY(uid),
+// KEY (file_uid),
+// KEY (post_uid)
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`)
+
+// 0.8.22 >>> 0.8.26
+await execute(`CREATE TABLE ${table}image_description (
 uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
 file_uid INT UNSIGNED NOT NULL DEFAULT '0',
 post_uid INT UNSIGNED NOT NULL DEFAULT '0',
-make VARCHAR(20) NOT NULL DEFAULT '',
-model VARCHAR(20) NOT NULL DEFAULT '',
-aperture INT UNSIGNED NOT NULL DEFAULT '0',
-iso INT UNSIGNED NOT NULL DEFAULT '0',
-focal_length INT UNSIGNED NOT NULL DEFAULT '0',
-exposure INT UNSIGNED NOT NULL DEFAULT '0',
-width INT UNSIGNED NOT NULL DEFAULT '0',
-height INT UNSIGNED NOT NULL DEFAULT '0',
-date BIGINT UNSIGNED NOT NULL DEFAULT '0',
+description VARCHAR(500) NOT NULL DEFAULT '',
 PRIMARY KEY(uid),
 KEY (file_uid),
 KEY (post_uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`)
 
-console.log(`v0.8.22, done.`)
+console.log(`v0.8.26, done.`)
 
 process.exit(0)

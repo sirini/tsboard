@@ -50,8 +50,8 @@ export async function userSignIn(id: string, password: string): Promise<User> {
   return result
 }
 
-// 구글 프로필 이미지 받아서 저장하기
-async function saveGoogleProfile(pictureUri: string): Promise<string> {
+// 외부 서비스 프로필 이미지 받아서 저장하기
+async function saveOAuthProfile(pictureUri: string): Promise<string> {
   try {
     const response = await fetch(pictureUri)
     if (response.ok === false) {
@@ -78,7 +78,7 @@ export async function registerUser(id: string, name: string, pictureUri: string)
   const [user] = await select(`SELECT uid, profile FROM ${table}user WHERE id = ? LIMIT 1`, [id])
 
   if (!user) {
-    const profile = await saveGoogleProfile(pictureUri)
+    const profile = await saveOAuthProfile(pictureUri)
     userUid = await insert(
       `INSERT INTO ${table}user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -98,7 +98,7 @@ export async function registerUser(id: string, name: string, pictureUri: string)
   } else {
     userUid = user.uid
     if (user.profile.length < 1 && pictureUri.length > 0) {
-      const profile = await saveGoogleProfile(pictureUri)
+      const profile = await saveOAuthProfile(pictureUri)
       await update(`UPDATE ${table}user SET profile = ? WHERE uid = ? LIMIT 1`, [
         profile.slice(1),
         user.uid,

@@ -54,11 +54,15 @@ const home = useHomeStore()
 onMounted(async () => {
   await home.loadLatestPosts()
 
+  let timer: Timer
   window.onscroll = (event: Event) => {
-    // const scroll = window.innerHeight + window.scrollY + 50
-    // if (scroll > document.body.offsetHeight) {
-    //   home.loadLatestPosts()
-    // }
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      const scroll = window.innerHeight + window.scrollY + 50
+      if (scroll > document.body.offsetHeight) {
+        home.loadLatestPosts()
+      }
+    }, 500)
   }
 })
 </script>

@@ -6,7 +6,7 @@
     v-if="viewer.exifs[viewer.position]?.width > 0"
   >
     <v-card-text class="pa-0">
-      <v-table density="compact" :theme="isMobile ? 'dark' : 'light'">
+      <v-table density="compact" :theme="home.isMobile ? 'dark' : 'light'">
         <tbody>
           <tr>
             <td>{{ TEXT[home.lang].MAKER }} ({{ TEXT[home.lang].MODEL }})</td>
@@ -56,7 +56,4 @@ import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-vie
 const viewer = useViewerStore()
 const home = useHomeStore()
 const util = useUtilStore()
-const props = defineProps<{
-  isMobile: boolean
-}>()
 </script>

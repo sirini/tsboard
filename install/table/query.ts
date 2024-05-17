@@ -313,6 +313,17 @@ tables.push(`${create} #db#exif (
   KEY (post_uid)
 ) ${engineEncode}`)
 
+// 이미지 설명글을 저장하는 테이블 (^0.8.26 by OpenAI API)
+tables.push(`${create} #db#image_description (
+  ${uid},
+  file_uid INT ${unnd0},
+  post_uid INT ${unnd0},
+  description VARCHAR(500) ${nnde},
+  ${primary},
+  KEY (file_uid),
+  KEY (post_uid)
+) ${engineEncode}`)
+
 //////////
 // v0.8.0
 

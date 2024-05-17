@@ -99,6 +99,7 @@ export type PhotoItemParams = {
   files: string[]
   thumbnails: string[]
   exifs: Exif[]
+  descriptions: string[]
 }
 
 export type CommentParams = PostCommentParams & {

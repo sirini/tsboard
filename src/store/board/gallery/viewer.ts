@@ -49,6 +49,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const files = ref<string[]>([])
   const thumbnails = ref<string[]>([])
   const exifs = ref<Exif[]>([])
+  const descriptions = ref<string[]>([])
   const tags = ref<Pair[]>([])
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -142,6 +143,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
     files.value = response.data.result.files
     thumbnails.value = response.data.result.thumbnails
+    descriptions.value = response.data.result.descriptions
     exifs.value = response.data.result.exifs
   }
 
@@ -310,6 +312,7 @@ export const useViewerStore = defineStore("viewer", () => {
     comments,
     files,
     thumbnails,
+    descriptions,
     exifs,
     tags,
     position,

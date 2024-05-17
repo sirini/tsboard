@@ -41,6 +41,9 @@ OAUTH_NAVER_SECRET=
 # 카카오 OAuth 클라이언트
 OAUTH_KAKAO_CLIENT_ID=
 OAUTH_KAKAO_SECRET=
+
+# OpenAI API Key
+OPENAI_API_KEY=
 `
 
 const foundEnvTitle = `
