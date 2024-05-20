@@ -37,6 +37,23 @@
         </v-card-actions>
       </v-card>
     </v-list-item>
+
+    <v-list-item v-if="OAUTH.IS_READY" class="text-center">
+      <v-avatar size="large" @click="oauthLogin('google')" class="mr-2" v-if="OAUTH.USE.GOOGLE">
+        <v-img :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'" width="64" height="64"></v-img>
+        <v-tooltip activator="parent">{{ TEXT[home.lang].GOOGLE_LOGIN_TOOLTIP }}</v-tooltip>
+      </v-avatar>
+
+      <v-avatar size="large" @click="oauthLogin('naver')" class="ml-2 mr-2" v-if="OAUTH.USE.GOOGLE">
+        <v-img :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'" width="64" height="64"></v-img>
+        <v-tooltip activator="parent">{{ TEXT[home.lang].NAVER_LOGIN_TOOLTIP }}</v-tooltip>
+      </v-avatar>
+
+      <v-avatar size="large" @click="oauthLogin('kakao')" class="ml-2" v-if="OAUTH.USE.KAKAO">
+        <v-img :src="TSBOARD.PREFIX + '/kakao/btn-kakao-login.webp'" width="64" height="64"></v-img>
+        <v-tooltip activator="parent">{{ TEXT[home.lang].KAKAO_LOGIN_TOOLTIP }}</v-tooltip>
+      </v-avatar>
+    </v-list-item>
   </v-list>
 </template>
 
@@ -47,9 +64,15 @@ import { useUtilStore } from "../../../../store/util"
 import { useHomeStore } from "../../../../store/home"
 import AlertBar from "../../../../components/util/AlertBar.vue"
 import { TEXT } from "../../../../messages/pages/home/components/drawer/side-drawer-login"
+import { TSBOARD, OAUTH } from "../../../../../tsboard.config"
 
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
+
+// OAuth 로그인하기
+function oauthLogin(service: string): void {
+  location.href = `${TSBOARD.API.URI}/tsapi/auth/${service}/request`
+}
 </script>

@@ -15,46 +15,38 @@
               <board-header :name="editor.config.name" :info="editor.config.info"></board-header>
               <alert-bar></alert-bar>
 
-              <v-list class="pa-0">
-                <v-list-item class="pa-0">
-                  <v-checkbox
-                    v-model="editor.isNotice"
-                    class="ml-8"
-                    :label="TEXT[home.lang].SET_NOTICE"
-                    hide-details
-                  ></v-checkbox>
-                </v-list-item>
+              <v-checkbox
+                v-model="editor.isNotice"
+                class="ml-8"
+                :label="TEXT[home.lang].SET_NOTICE"
+                hide-details
+              ></v-checkbox>
 
-                <board-write-select-category
-                  v-if="editor.config.useCategory"
-                ></board-write-select-category>
+              <board-write-select-category
+                v-if="editor.config.useCategory"
+              ></board-write-select-category>
 
-                <board-write-select-attachments></board-write-select-attachments>
+              <board-write-select-attachments></board-write-select-attachments>
 
-                <board-write-attachments
-                  v-if="editor.postUid > 0 && editor.attachedFiles.length > 0"
-                ></board-write-attachments>
+              <board-write-attachments
+                v-if="editor.postUid > 0 && editor.attachedFiles.length > 0"
+              ></board-write-attachments>
 
-                <v-list-item class="pa-0">
-                  <v-text-field
-                    v-model="editor.title"
-                    :rules="editor.textRule"
-                    class="pt-3 pb-2"
-                    prepend-icon="mdi-pencil-outline"
-                    variant="outlined"
-                    :label="TEXT[home.lang].FILL_TITLE"
-                  ></v-text-field>
-                </v-list-item>
+              <v-text-field
+                v-model="editor.title"
+                :rules="editor.textRule"
+                class="pt-3 pb-2"
+                prepend-icon="mdi-pencil-outline"
+                variant="outlined"
+                :label="TEXT[home.lang].FILL_TITLE"
+              ></v-text-field>
 
-                <v-list-item class="pa-0">
-                  <board-write-editor
-                    v-model="editor.content"
-                    @updateRealHtml="(html: string) => editor.updateRealHtml(html)"
-                  ></board-write-editor>
-                </v-list-item>
+              <board-write-editor
+                v-model="editor.content"
+                @updateRealHtml="(html: string) => editor.updateRealHtml(html)"
+              ></board-write-editor>
 
-                <board-write-add-tags></board-write-add-tags>
-              </v-list>
+              <board-write-add-tags></board-write-add-tags>
             </v-form>
 
             <v-divider class="mt-12"></v-divider>
@@ -70,7 +62,7 @@
                 color="primary"
                 @click="editor.write"
                 append-icon="mdi-chevron-right"
-                :disabled="auth.user.uid < 1"
+                :disabled="auth.user.uid < 1 || editor.loading === true"
                 >{{ TEXT[home.lang].SUBMIT }}</v-btn
               >
               <v-btn
@@ -78,7 +70,7 @@
                 color="primary"
                 @click="editor.modify"
                 append-icon="mdi-chevron-right"
-                :disabled="auth.user.uid < 1"
+                :disabled="auth.user.uid < 1 || editor.loading === true"
                 >{{ TEXT[home.lang].MODIFY }}</v-btn
               >
             </v-card-actions>
