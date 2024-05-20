@@ -97,12 +97,12 @@ export const view = new Elysia()
       }
 
       if (response.config.level.download <= userLevel) {
-        const photoItems = await getPhotoItems(postUid)
         response.files = await getFiles(postUid)
-        response.images = photoItems.files
-        response.thumbs = photoItems.thumbnails
-        response.descriptions = photoItems.descriptions
       }
+      const photoItems = await getPhotoItems(postUid)
+      response.images = photoItems.files
+      response.thumbs = photoItems.thumbnails
+      response.descriptions = photoItems.descriptions
 
       response.post = await getPost(postUid, accessUserUid)
       if (response.post.submitted < 1) {
