@@ -82,6 +82,7 @@
     <board-write-cancel-dialog
       @cancel="util.go(util.routerName(editor.config.type as BoardType, 'list'), editor.id)"
     ></board-write-cancel-dialog>
+    <board-write-loading-dialog></board-write-loading-dialog>
   </v-app>
 </template>
 
@@ -99,6 +100,7 @@ import BoardWriteAttachments from "../../components/board/write/BoardWriteAttach
 import BoardWriteEditor from "../../components/board/write/BoardWriteEditor.vue"
 import BoardWriteAddTags from "../../components/board/write/BoardWriteAddTags.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
+import BoardWriteLoadingDialog from "../../components/board/write/BoardWriteLoadingDialog.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"

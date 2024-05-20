@@ -11,6 +11,7 @@ export const TEXT = [
     CANCEL: "취소",
     SUBMIT: "작성 완료하기",
     MODIFY: "수정 완료하기",
+    WAIT: "잠시만 기다려주세요 ...",
   },
   /* LANG.EN */ {
     SET_NOTICE: "Set as Notice (Admins only)",
@@ -18,6 +19,7 @@ export const TEXT = [
     CANCEL: "Cancel",
     SUBMIT: "Submit",
     MODIFY: "Update",
+    WAIT: "Please wait a while ...",
   },
   /* LANG.CN */ {
     SET_NOTICE: "设置为公告（仅限管理员）",
@@ -25,6 +27,7 @@ export const TEXT = [
     CANCEL: "取消",
     SUBMIT: "提交",
     MODIFY: "更新",
+    WAIT: "请稍等 ...",
   },
 ]
 Object.freeze(TEXT)

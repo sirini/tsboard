@@ -13,7 +13,6 @@ import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/board/editor"
-import { useBoardViewStore } from "./view"
 import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { BOARD_TYPE, AUTO_SAVE_KEY, BOARD_CONFIG } from "../../../server/database/board/const"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
@@ -23,7 +22,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const view = useBoardViewStore()
   const home = useHomeStore()
   const confirmWriteCancelDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
@@ -273,12 +271,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-
+    window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
+
     const response = await client.tsapi.board.write.post({
       $headers: {
         authorization: auth.user.token,
@@ -316,7 +311,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
+    window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
+
     const response = await client.tsapi.board.modify.patch({
       $headers: {
         authorization: auth.user.token,
