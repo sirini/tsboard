@@ -68,6 +68,7 @@ export const view = new Elysia()
         tags: [] as Pair[],
         images: [] as string[],
         thumbs: [] as string[],
+        descriptions: [] as string[],
         newAccessToken,
       }
       if (id.length < 2 || postUid < 1) {
@@ -100,6 +101,7 @@ export const view = new Elysia()
         response.files = await getFiles(postUid)
         response.images = photoItems.files
         response.thumbs = photoItems.thumbnails
+        response.descriptions = photoItems.descriptions
       }
 
       response.post = await getPost(postUid, accessUserUid)

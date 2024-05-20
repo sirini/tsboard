@@ -31,6 +31,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const files = ref<PostFile[]>([])
   const images = ref<string[]>([])
   const thumbs = ref<string[]>([])
+  const descriptions = ref<string[]>([])
   const tags = ref<Pair[]>([])
 
   async function loadPostView(): Promise<void> {
@@ -77,6 +78,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     files.value = response.data.result.files
     images.value = response.data.result.images
     thumbs.value = response.data.result.thumbs
+    descriptions.value = response.data.result.descriptions
 
     auth.user.admin =
       response.data.result.config.admin.group === auth.user.uid ||
@@ -184,6 +186,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     files,
     images,
     thumbs,
+    descriptions,
     tags,
     loadPostView,
     like,

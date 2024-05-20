@@ -332,9 +332,6 @@ export async function saveAttachments(
         const image = await saveThumbnailImage(fileUid, postUid, newSavePath)
         await extractEXIF(fileUid, postUid, newSavePath)
         await saveDescriptionForImage(fileUid, postUid, `.${image.thumb}`)
-
-        // DEBUG
-        console.log(`saveDescriptionForImage has been called.`)
       }
     }
   }

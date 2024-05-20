@@ -16,15 +16,7 @@
 
               <board-view-statistics></board-view-statistics>
               <board-view-attachments></board-view-attachments>
-
-              <v-list-item class="pa-6" v-if="view.thumbs.length > 0">
-                <v-row>
-                  <v-col cols="3" v-for="(thumb, index) in view.thumbs" :key="index">
-                    <v-img cover :src="thumb"></v-img>
-                  </v-col>
-                </v-row>
-              </v-list-item>
-              <v-divider v-if="view.thumbs.length > 0"></v-divider>
+              <board-view-attachment-thumbnail></board-view-attachment-thumbnail>
 
               <v-list-item class="pa-3 mb-16 tsboard">
                 <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
@@ -78,6 +70,7 @@ import { useUtilStore } from "../../store/util"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
+import BoardViewAttachmentThumbnail from "../../components/board/view/BoardViewAttachmentThumbnail.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
