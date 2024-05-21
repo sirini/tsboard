@@ -127,7 +127,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ### AI 기능 활성화하기
 
-> 걱정마세요! OpenAI의 API Key가 없더라도 TSBOARD 사용에는 아무런 문제가 없습니다.
+> OpenAI의 API Key가 없더라도 TSBOARD 기본 기능 사용에는 아무런 문제가 없습니다. AI를 활용하는 기능들만 비활성화 됩니다.
 
 - TSBOARD는 OpenAI의 `ChatGPT-4o` 모델을 활용하여 이미지 설명글 추출 등의 기능을 사용하실 수 있습니다.
   - 이 기능은 소셜 로그인처럼 원하실 경우에 사용하시면 됩니다. (OpenAI의 API Key 값이 필요합니다.)
