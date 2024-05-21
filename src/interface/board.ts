@@ -53,13 +53,14 @@ export type BoardConfig = {
   point: BoardAccessPoint
 }
 
+export type PostStatus = -1 | 0 | 1 | 2 /* = CONTENT_STATUS.(REMOVED | NORMAL | NOTICE | SECRET) */
 type ContentCommon = {
   uid: number
   writer: Writer
   like: number
   liked: boolean
   submitted: number
-  status: -1 | 0 | 1 /* CONTENT_STATUS */
+  status: PostStatus
 }
 
 export type Post = ContentCommon & {

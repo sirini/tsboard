@@ -4,16 +4,16 @@
  * TSBOARD 기본 설정 파일
  */
 
-export const IS_DEV = true // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
+export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
 export const PORT_DEV_VITE = 3000
 export const PORT_DEV = 3200
 export const PORT_PROD = 3100
-export const LOCALHOST = "http://geunyul2.asuscomm.com"
+export const LOCALHOST = "http://geunyul2.asuscomm.com" // 개발중일때는 localhost 혹은 본인 도메인 설정
 const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
-const PROD_URL = "https://tsboard.dev" // 본인 도메인으로 교체 필요
+const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
 export const TSBOARD = {
-  VERSION: "v0.8.26",
+  VERSION: "v0.8.28",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,

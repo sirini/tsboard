@@ -12,6 +12,7 @@ import {
   getBoardUid,
   getComments,
   getMaxCommentUid,
+  getPostInfo,
   getTotalCommentCount,
   getViewPostLevel,
   likeComment,
@@ -25,6 +26,8 @@ import { checkUserPermission, havePermission, updateUserPoint } from "../../data
 import { Comment } from "../../../src/interface/board"
 import { isBannedByWriter } from "../../database/board/view"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { CONTENT_STATUS } from "../../database/board/const"
+import { haveAdminPermission } from "../../database/user/manageuser"
 
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
@@ -88,6 +91,18 @@ export const comment = new Elysia()
       const configViewLevel = await getViewPostLevel(response.boardUid)
       if (configViewLevel > userLevel) {
         return fail(`Level restriction.`, response)
+      }
+
+      const post = await getPostInfo(postUid)
+      const isAdmin = await haveAdminPermission(accessUserUid, response.boardUid)
+      if (post.status === CONTENT_STATUS.SECRET) {
+        if (accessUserUid !== post.writerUid && isAdmin === false) {
+          return fail(`You don't have permission to read comments.`, response)
+        }
+      }
+
+      if (post.status === CONTENT_STATUS.REMOVED) {
+        return fail(`Post has been removed.`, response)
       }
 
       if (sinceUid < 1) {

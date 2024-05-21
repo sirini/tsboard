@@ -20,7 +20,7 @@ import {
 } from "../../database/board/view"
 import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 import { Pair, PostFile } from "../../../src/interface/board"
-import { BOARD_CONFIG, INIT_POST_VIEW } from "../../database/board/const"
+import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { isAuthor } from "../../database/board/editor"
@@ -107,6 +107,19 @@ export const view = new Elysia()
       response.post = await getPost(postUid, accessUserUid)
       if (response.post.submitted < 1) {
         return fail(`Post not found.`, response)
+      }
+
+      if (response.post.status === CONTENT_STATUS.SECRET) {
+        const isAdmin = await haveAdminPermission(accessUserUid, response.config.uid)
+        if (accessUserUid !== response.post.writer.uid && isAdmin === false) {
+          response.post = INIT_POST_VIEW
+          response.files = []
+          response.tags = []
+          response.images = []
+          response.thumbs = []
+          response.descriptions = []
+          return fail(`You don't have permission to read this post.`, response)
+        }
       }
 
       if (needUpdateHit > 0) {

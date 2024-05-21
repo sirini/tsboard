@@ -65,6 +65,13 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
     if (response.data.success === false) {
       config.value = response.data.result.config
+      post.value = INIT_POST_VIEW
+      post.value.title = TEXT[home.lang].FAILED_TITLE
+      post.value.content = TEXT[home.lang].FAILED_CONTENT
+      files.value = []
+      images.value = []
+      thumbs.value = []
+      descriptions.value = []
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)

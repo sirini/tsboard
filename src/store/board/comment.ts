@@ -66,6 +66,8 @@ export const useCommentStore = defineStore("comment", () => {
       return util.snack(TEXT[home.lang].NO_RESPONSE)
     }
     if (response.data.success === false) {
+      comments.value = []
+      pageLength.value = 1
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
     boardUid.value = response.data.result.boardUid

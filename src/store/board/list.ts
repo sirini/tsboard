@@ -31,6 +31,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const home = useHomeStore()
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
+  const isAdmin = ref<boolean>(false)
   const posts = ref<Post[]>([])
   const categories = ref<Pair[]>([])
   const page = ref<number>(1)
@@ -70,6 +71,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     config.value = response.data.result.config
+    isAdmin.value = response.data.result.isAdmin
 
     if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
       return util.go(TYPE_MATCH[config.value.type].name)
@@ -187,6 +189,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   return {
     id,
     config,
+    isAdmin,
     posts,
     page,
     pageLength,

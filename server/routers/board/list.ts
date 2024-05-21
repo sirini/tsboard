@@ -18,6 +18,7 @@ import { fail, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
 import { Post, SearchOption } from "../../../src/interface/board"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { haveAdminPermission } from "../../database/user/manageuser"
 
 export const list = new Elysia()
   .use(
@@ -64,6 +65,7 @@ export const list = new Elysia()
         posts: [] as Post[],
         newAccessToken,
         blackList: [] as number[],
+        isAdmin: false,
       }
 
       if (id.length < 2) {
@@ -99,12 +101,14 @@ export const list = new Elysia()
         blackList = await getBlackList(accessUserUid)
       }
 
+      const isAdmin = await haveAdminPermission(accessUserUid, config.uid)
       return success({
         totalPostCount,
         config,
         posts,
         newAccessToken,
         blackList,
+        isAdmin,
       })
     },
     {

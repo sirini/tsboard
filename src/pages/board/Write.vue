@@ -20,6 +20,14 @@
                 class="ml-8"
                 :label="TEXT[home.lang].SET_NOTICE"
                 hide-details
+                v-if="editor.isAdmin === true"
+              ></v-checkbox>
+
+              <v-checkbox
+                v-model="editor.isSecret"
+                class="ml-8"
+                :label="TEXT[home.lang].SET_SECRET"
+                hide-details
               ></v-checkbox>
 
               <board-write-select-category

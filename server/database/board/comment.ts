@@ -9,6 +9,7 @@ import {
   CommentLikeParams,
   CommentParams,
   CommentRelated,
+  PostStatus,
   RelatedParams,
   SaveCommentParams,
   SaveModifyParams,
@@ -144,6 +145,21 @@ export async function getViewPostLevel(boardUid: number): Promise<number> {
     return INVALID_VIEW_LEVEL
   }
   return board.level_view
+}
+
+// 게시글 작성자 번호와 상태 가져오기
+export async function getPostInfo(
+  postUid: number,
+): Promise<{ status: PostStatus; writerUid: number }> {
+  let result = { status: CONTENT_STATUS.NORMAL as PostStatus, writerUid: 0 }
+  const [post] = await select(`SELECT user_uid, status FROM ${table}post WHERE uid = ? LIMIT 1`, [
+    postUid.toString(),
+  ])
+  if (post) {
+    result.status = post.status as PostStatus
+    result.writerUid = post.user_uid
+  }
+  return result
 }
 
 // 댓글 좋아하기 누르기

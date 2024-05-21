@@ -8,7 +8,6 @@ import {
   BoardConfig,
   Comment,
   CommentRelated,
-  PhotoItemParams,
   Post,
   PostRelated,
   PostView,
@@ -48,6 +47,7 @@ export const CONTENT_STATUS = {
   REMOVED: -1,
   NORMAL: 0,
   NOTICE: 1,
+  SECRET: 2,
 }
 
 export const POINT_HISTORY_TYPE = {

@@ -54,6 +54,7 @@ const htmlFilter = {
 const writeBody = {
   boardUid: t.Numeric(),
   isNotice: t.Numeric(),
+  isSecret: t.Numeric(),
   categoryUid: t.Numeric(),
   title: t.String(),
   content: t.String(),
@@ -100,21 +101,24 @@ export const editor = new Elysia()
   })
   .get(
     "/config",
-    async ({ query: { id }, newAccessToken }) => {
+    async ({ query: { id, userUid }, newAccessToken }) => {
       const response = {
         newAccessToken: "",
         config: BOARD_CONFIG,
         categories: [] as Pair[],
+        isAdmin: false,
       }
       if (id.length < 2) {
         return fail(`Invalid board ID.`, response)
       }
       const config = await getBoardConfig(id)
       const categories = await getCategories(config.uid)
+      const isAdmin = await haveAdminPermission(userUid, config.uid)
       return success({
         newAccessToken,
         config,
         categories,
+        isAdmin,
       })
     },
     {
@@ -278,7 +282,7 @@ export const editor = new Elysia()
   .post(
     "/write",
     async ({
-      body: { boardUid, categoryUid, title, content, attachments, tags, isNotice },
+      body: { boardUid, categoryUid, title, content, attachments, tags, isNotice, isSecret },
       accessUserUid,
       newAccessToken,
       userLevel,
@@ -323,6 +327,7 @@ export const editor = new Elysia()
         title,
         content,
         isNoticePost,
+        isSecretPost: isSecret > 0 ? true : false,
       })
 
       if (tags.length > 0) {
@@ -415,7 +420,17 @@ export const editor = new Elysia()
   .patch(
     "/modify",
     async ({
-      body: { boardUid, categoryUid, postUid, title, content, attachments, tags, isNotice },
+      body: {
+        boardUid,
+        categoryUid,
+        postUid,
+        title,
+        content,
+        attachments,
+        tags,
+        isNotice,
+        isSecret,
+      },
       accessUserUid,
       newAccessToken,
     }) => {
@@ -462,6 +477,7 @@ export const editor = new Elysia()
         content,
         postUid,
         isNoticePost,
+        isSecretPost: isSecret > 0 ? true : false,
       })
 
       if (tags.length > 0) {

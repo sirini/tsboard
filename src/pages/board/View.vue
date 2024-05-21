@@ -31,8 +31,8 @@
               <board-view-buttons></board-view-buttons>
             </v-list>
 
-            <board-view-comment-write></board-view-comment-write>
-            <board-view-comment-list></board-view-comment-list>
+            <board-view-comment-write v-if="view.post.uid > 0"></board-view-comment-write>
+            <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
 
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>

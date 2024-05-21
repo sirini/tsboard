@@ -32,13 +32,24 @@
                     class="pointer ml-2 mr-2"
                     @click="util.go('boardView', list.id, post.uid)"
                   >
-                    <v-chip
+                    <v-icon
                       size="small"
                       color="blue-grey"
                       class="mr-2"
                       v-if="post.status === CONTENT_STATUS.NOTICE"
-                      ><v-icon>mdi-bullhorn-variant-outline</v-icon></v-chip
+                      >mdi-bullhorn-variant-outline</v-icon
                     >
+
+                    <span v-if="post.status === CONTENT_STATUS.SECRET">
+                      <v-icon
+                        size="small"
+                        color="blue-grey"
+                        class="mr-2"
+                        v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
+                        >mdi-lock-open-outline</v-icon
+                      >
+                      <v-icon size="small" color="blue-grey" class="mr-2" v-else>mdi-lock</v-icon>
+                    </span>
 
                     <v-chip
                       v-if="list.config.useCategory && post.status === CONTENT_STATUS.NORMAL"
@@ -94,6 +105,7 @@ import { useRoute } from "vue-router"
 import { useBoardListStore } from "../../store/board/list"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
+import { useAuthStore } from "../../store/user/auth"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import UserNametag from "../../components/user/UserNametag.vue"
@@ -111,6 +123,7 @@ const route = useRoute()
 const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const auth = useAuthStore()
 
 onMounted(() => list.resetBoardList())
 

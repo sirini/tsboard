@@ -7,13 +7,21 @@
 import { table, select, update, insert } from "../common"
 import { UserPermissionParams } from "../../../src/interface/user"
 import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "./const"
+import { SUPER_ADMIN_UID } from "../auth/const"
 
 // 주어진 회원 번호가 관리 권한이 있는지 반환 (게시판/그룹 관리자)
 export async function haveAdminPermission(
   accessUserUid: number,
   boardUid: number,
 ): Promise<boolean> {
-  let admins = [1]
+  if (accessUserUid < 1) {
+    return false
+  }
+  if (accessUserUid === SUPER_ADMIN_UID) {
+    return true
+  }
+
+  let admins = []
   const uids = await select(`SELECT admin_uid FROM ${table}group`)
   for (const uid of uids) {
     admins.push(uid.admin_uid)

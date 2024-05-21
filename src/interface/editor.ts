@@ -11,6 +11,7 @@ export type WritePostParams = CommonPairParam & {
   title: string
   content: string
   isNoticePost: boolean
+  isSecretPost: boolean
 }
 
 export type ModifyPostParams = WritePostParams & {

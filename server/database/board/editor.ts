@@ -337,6 +337,15 @@ export async function saveAttachments(
   }
 }
 
+// 공지 or 비밀글 or 일반글 반환
+function getPostStatus(isNotice: boolean, isSecret: boolean): string {
+  return isNotice
+    ? CONTENT_STATUS.NOTICE.toString()
+    : isSecret
+      ? CONTENT_STATUS.SECRET.toString()
+      : CONTENT_STATUS.NORMAL.toString()
+}
+
 // 새 게시글 작성하기
 export async function writeNewPost(param: WritePostParams): Promise<number> {
   const insertId = await insert(
@@ -352,7 +361,7 @@ export async function writeNewPost(param: WritePostParams): Promise<number> {
       Date.now().toString(),
       "0",
       "0",
-      param.isNoticePost ? CONTENT_STATUS.NOTICE.toString() : CONTENT_STATUS.NORMAL.toString(),
+      getPostStatus(param.isNoticePost, param.isSecretPost),
     ],
   )
   return insertId
@@ -367,7 +376,7 @@ export async function modifyOriginalPost(param: ModifyPostParams): Promise<void>
       param.title,
       param.content,
       Date.now().toString(),
-      param.isNoticePost ? CONTENT_STATUS.NOTICE.toString() : CONTENT_STATUS.NORMAL.toString(),
+      getPostStatus(param.isNoticePost, param.isSecretPost),
       param.postUid.toString(),
     ],
   )

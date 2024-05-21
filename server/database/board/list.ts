@@ -361,10 +361,11 @@ export async function getPosts(param: PostParams): Promise<Post[]> {
   } else {
     posts = await select(
       `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
-    FROM ${table}post WHERE board_uid = ? AND status = ? AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
+    FROM ${table}post WHERE board_uid = ? AND (status = ? OR status = ?) AND uid ${direction} ? ORDER BY uid ${ordering} LIMIT ?`,
       [
         param.boardUid.toString(),
         CONTENT_STATUS.NORMAL.toString(),
+        CONTENT_STATUS.SECRET.toString(),
         param.sinceUid.toString(),
         (param.bunch - notices.length).toString(),
       ],

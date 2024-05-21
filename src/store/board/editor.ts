@@ -14,7 +14,12 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/board/editor"
 import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
-import { BOARD_TYPE, AUTO_SAVE_KEY, BOARD_CONFIG } from "../../../server/database/board/const"
+import {
+  BOARD_TYPE,
+  AUTO_SAVE_KEY,
+  BOARD_CONFIG,
+  CONTENT_STATUS,
+} from "../../../server/database/board/const"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
@@ -32,6 +37,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const isNotice = ref<boolean>(false)
+  const isAdmin = ref<boolean>(false)
+  const isSecret = ref<boolean>(false)
   const category = ref<Pair>({ uid: 0, name: "" })
   const categories = ref<Pair[]>([])
   const files = ref<File[]>([])
@@ -78,6 +85,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     config.value = response.data.result.config
     categories.value = response.data.result.categories
     category.value = categories.value[0]
+    isAdmin.value = response.data.result.isAdmin
 
     loadAutoSaved()
     if (config.value.type === BOARD_TYPE.GALLERY) {
@@ -143,6 +151,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     contentWithSyntax.value = response.data.result.post.content
     content.value = response.data.result.post.content.replaceAll("<br />", "")
     tags.value = response.data.result.tags.map((tag) => tag.name)
+    isNotice.value = response.data.result.post.status === CONTENT_STATUS.NOTICE ? true : false
+    isSecret.value = response.data.result.post.status === CONTENT_STATUS.SECRET ? true : false
 
     util.snack(TEXT[home.lang].LOADED_ORIGINAL_POST)
   }
@@ -283,6 +293,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       },
       boardUid: config.value.uid,
       isNotice: isNotice.value ? 1 : 0,
+      isSecret: isSecret.value ? 1 : 0,
       categoryUid: category.value.uid,
       title: title.value,
       content: contentWithSyntax.value,
@@ -324,6 +335,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       postUid: postUid.value,
       boardUid: config.value.uid,
       isNotice: isNotice.value ? 1 : 0,
+      isSecret: isSecret.value ? 1 : 0,
       categoryUid: category.value.uid,
       title: title.value,
       content: contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"),
@@ -378,6 +390,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     config,
     postUid,
     isNotice,
+    isSecret,
+    isAdmin,
     category,
     categories,
     confirmWriteCancelDialog,
