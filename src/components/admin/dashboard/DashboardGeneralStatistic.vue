@@ -20,7 +20,7 @@
             >어제 {{ dashboard.visit.yesterday }}명</v-chip
           >
           <v-spacer></v-spacer>
-          <v-chip color="blue-grey-lighten-2" size="small"
+          <v-chip color="blue-grey-lighten-2" size="small" prepend-icon="mdi-finance"
             >그제 {{ dashboard.visit.total }}명</v-chip
           >
         </v-card-actions>
