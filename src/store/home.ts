@@ -47,6 +47,7 @@ export const useHomeStore = defineStore("home", () => {
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
+  const keywordHistories = ref<string[]>([])
   const isMobile = ref<boolean>(false)
   const isTablet = ref<boolean>(false)
   const isPC = ref<boolean>(true)
@@ -183,6 +184,21 @@ export const useHomeStore = defineStore("home", () => {
   }
   const searchPosts = util.debounce(_searchPosts, 250)
 
+  // 검색어 입력 확정 (검색어 히스토리 추가)
+  function enterSearchPosts(): void {
+    _searchPosts()
+    keywordHistories.value.push(keyword.value)
+    if (keywordHistories.value.length > 10) {
+      keywordHistories.value.splice(0, 1)
+    }
+  }
+
+  // 검색어 히스토리에서 이전 검색어 클릭 시 업데이트
+  function selectKeywordFromHistory(selectedKeyword: string): void {
+    keyword.value = selectedKeyword
+    _searchPosts()
+  }
+
   // 검색 옵션 초기화하기
   function resetSearchKeyword(): void {
     clearVariables()
@@ -310,6 +326,7 @@ export const useHomeStore = defineStore("home", () => {
     latestPosts,
     option,
     keyword,
+    keywordHistories,
     isMobile,
     isTablet,
     isPC,
@@ -324,6 +341,8 @@ export const useHomeStore = defineStore("home", () => {
     loadLatestPosts,
     getBoardLatest,
     searchPosts,
+    enterSearchPosts,
+    selectKeywordFromHistory,
     resetSearchKeyword,
     loadNotification,
     translateNotification,

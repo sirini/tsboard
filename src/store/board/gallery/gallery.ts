@@ -42,6 +42,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
+  const keywordHistories = ref<string[]>([])
 
   // 갤러리 사진들 불러오기
   async function loadPhotoList(): Promise<void> {
@@ -138,11 +139,25 @@ export const useGalleryStore = defineStore("gallery", () => {
     pageLength.value = 1
   }
 
-  // 검색하기
-  function search(): void {
+  // 검색어 확정하고 검색어 히스토리에 추가
+  function enterSearchKeyword(): void {
     if (keyword.value.length < 2) {
       return
     }
+    clearVariables()
+    loadPhotoList()
+    keywordHistories.value.push(keyword.value)
+    if (keywordHistories.value.length > 10) {
+      keywordHistories.value.splice(0, 1)
+    }
+  }
+
+  // 검색어 히스토리에서 이전 검색어 클릭 시 업데이트
+  function selectKeywordFromHistory(selectedKeyword: string): void {
+    if (keyword.value.length < 2) {
+      return
+    }
+    keyword.value = selectedKeyword
     clearVariables()
     loadPhotoList()
   }
@@ -166,12 +181,14 @@ export const useGalleryStore = defineStore("gallery", () => {
     pageLength,
     option,
     keyword,
+    keywordHistories,
     loadPhotoList,
     resetGalleryList,
     loadOldPhotos,
     open,
     resetSearchKeyword,
-    search,
+    enterSearchKeyword,
+    selectKeywordFromHistory,
     list,
   }
 })

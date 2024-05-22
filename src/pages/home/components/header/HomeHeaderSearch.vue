@@ -81,13 +81,27 @@
           prepend-inner-icon="mdi-restore"
           @click:prepend-inner="home.resetSearchKeyword"
           append-inner-icon="mdi-magnify"
-          @click:append-inner="home.searchPosts"
+          @click:append-inner="home.enterSearchPosts"
+          @keydown.enter="home.enterSearchPosts"
           @input="home.searchPosts"
         >
           <v-tooltip activator="parent"
             >{{ TEXT[home.lang].TOOLTIP }}
             <v-icon>mdi-restore</v-icon>
           </v-tooltip>
+
+          <v-menu activator="parent">
+            <v-list v-show="home.keywordHistories.length > 0">
+              <v-list-subheader>이전에 입력한 검색어</v-list-subheader>
+              <v-list-item
+                v-for="(keyword, index) in home.keywordHistories"
+                :key="index"
+                prepend-icon="mdi-history"
+                @click="home.selectKeywordFromHistory(keyword)"
+                >{{ keyword }}</v-list-item
+              >
+            </v-list>
+          </v-menu>
         </v-text-field>
       </v-list-item>
     </v-list>
