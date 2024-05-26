@@ -266,42 +266,46 @@ export async function saveDescriptionForImage(
     return
   }
 
-  const url = `${TSBOARD.API.URI}${outputPath.slice(1)}`
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
+  try {
+    const url = `${TSBOARD.API.URI}${outputPath.slice(1)}`
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: "Describe the content of this image in Korean.",
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url,
-              detail: "low",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Describe the content of this image in Korean.",
             },
-          },
-        ],
-      },
-    ],
-  })
+            {
+              type: "image_url",
+              image_url: {
+                url,
+                detail: "low",
+              },
+            },
+          ],
+        },
+      ],
+    })
 
-  const description = response.choices[0].message.content || ""
-  if (description.length > 0) {
-    await insert(
-      `INSERT INTO ${table}image_description (file_uid, post_uid, description) VALUES (?, ?, ?)`,
-      [fileUid.toString(), postUid.toString(), description],
-    )
+    const description = response.choices[0].message.content || ""
+    if (description.length > 0) {
+      await insert(
+        `INSERT INTO ${table}image_description (file_uid, post_uid, description) VALUES (?, ?, ?)`,
+        [fileUid.toString(), postUid.toString(), description],
+      )
+    }
+  } catch (e: any) {
+    // do nothing
+  } finally {
+    await removeFile(`.${outputPath}`)
   }
-
-  await removeFile(`.${outputPath}`)
 }
 
 // 입력받은 첨부파일들을 저장하기

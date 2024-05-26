@@ -38,10 +38,10 @@ import { checkUserVerification } from "../../database/auth/authorization"
 const htmlFilter = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "iframe"]),
   allowedAttributes: {
-    code: ["class"],
-    img: ["src", "alt", "class", "title", "width", "height"],
-    span: ["class"],
-    a: ["href", "name", "title"],
+    code: ["class", "style"],
+    img: ["src", "alt", "class", "title", "width", "height", "style"],
+    span: ["class", "style"],
+    a: ["href", "name", "title", "style"],
     iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
   },
   selfClosing: ["img", "br", "hr"],
