@@ -11,7 +11,7 @@ export const TEXT = [
     EXIST_EMAIL: "이미 등록된 아이디(이메일) 입니다. 다른 이메일 주소를 넣어주세요.",
     AVAILABLE_EMAIL: "사용할 수 있는 아이디입니다.",
     INVALID_PASSWORD:
-      "비밀번호는 8글자 이상, 숫자/대문자/특수문자를 각각 하나 이상 포함해야 합니다.",
+      "비밀번호는 8글자 이상, 숫자/알파벳 대문자/알파벳 소문자/특수문자를 각각 하나 이상 포함해야 합니다.",
     INVALID_ID_PW: "아이디 혹은 비밀번호가 올바르지 않습니다.",
     INVALID_NAME: "이름은 2글자 이상 입력해 주세요.",
     EXIST_NAME: "이미 등록된 이름입니다. 다른 이름을 만들어보세요.",
@@ -44,7 +44,7 @@ export const TEXT = [
     EXIST_EMAIL: "The email address is already registered. Please use a different email address.",
     AVAILABLE_EMAIL: "The email address is available.",
     INVALID_PASSWORD:
-      "Password must be at least 8 characters long and include at least one number, one uppercase letter, and one special character.",
+      "Password must be at least 8 characters long and include at least one number, one uppercase and one lowercase letter, and one special character.",
     INVALID_ID_PW: "The ID or password is incorrect.",
     INVALID_NAME: "Please enter a name of at least 2 characters.",
     EXIST_NAME: "The name is already registered. Please try a different name.",
