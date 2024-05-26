@@ -11,6 +11,7 @@ import { nanoid, customAlphabet } from "nanoid"
 import sharp from "sharp"
 import { t } from "elysia"
 import exifr from "exifr"
+import sanitizeHtml from "sanitize-html"
 import { Exif } from "../../src/interface/gallery"
 import { EXIF_APERTURE_FACTOR, EXIF_EXPOSURE_FACTOR, INIT_EXIF } from "../database/board/const"
 
@@ -30,6 +31,23 @@ export const EXTEND_TYPE_CHECK = {
   query: t.Object({
     userUid: t.Numeric(),
   }),
+}
+
+// 사용자 입력에 대한 필터 설정
+export const DEFAULT_HTML_FILTER = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "iframe"]),
+  allowedAttributes: {
+    code: ["class", "style"],
+    img: ["src", "alt", "class", "title", "width", "height", "style"],
+    span: ["class", "style"],
+    a: ["href", "name", "title", "style"],
+    iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
+  },
+  selfClosing: ["img", "br", "hr"],
+  allowIFrameHostname: ["www.youtube.com", "youtube.com"],
+  exclusiveFilter: function (frame: any) {
+    return frame.tag === "iframe" && !frame.attribs.src.includes("youtube.com")
+  },
 }
 
 // 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다

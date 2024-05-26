@@ -9,7 +9,14 @@ import { jwt } from "@elysiajs/jwt"
 import sanitizeHtml from "sanitize-html"
 import { getUserLevel } from "../../database/board/list"
 import { getBoardConfig } from "../../database/board/list"
-import { fail, refineText, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import {
+  fail,
+  refineText,
+  success,
+  DEFAULT_TYPE_CHECK,
+  EXTEND_TYPE_CHECK,
+  DEFAULT_HTML_FILTER,
+} from "../../util/tools"
 import {
   getCategories,
   getMaxImageUid,
@@ -34,22 +41,6 @@ import { getFiles, getPost, getTags } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { SIZE } from "../../../tsboard.config"
 import { checkUserVerification } from "../../database/auth/authorization"
-
-const htmlFilter = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "iframe"]),
-  allowedAttributes: {
-    code: ["class", "style"],
-    img: ["src", "alt", "class", "title", "width", "height", "style"],
-    span: ["class", "style"],
-    a: ["href", "name", "title", "style"],
-    iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
-  },
-  selfClosing: ["img", "br", "hr"],
-  allowIFrameHostname: ["www.youtube.com", "youtube.com"],
-  exclusiveFilter: function (frame: any) {
-    return frame.tag === "iframe" && !frame.attribs.src.includes("youtube.com")
-  },
-}
 
 const writeBody = {
   boardUid: t.Numeric(),
@@ -313,7 +304,7 @@ export const editor = new Elysia()
       }
 
       title = Bun.escapeHTML(title)
-      content = sanitizeHtml(content, htmlFilter)
+      content = sanitizeHtml(content, DEFAULT_HTML_FILTER)
 
       let isNoticePost = false
       if ((await haveAdminPermission(accessUserUid, boardUid)) === true && isNotice > 0) {
@@ -460,7 +451,7 @@ export const editor = new Elysia()
       await removeOriginalTags(postUid)
 
       title = Bun.escapeHTML(title)
-      content = sanitizeHtml(content, htmlFilter)
+      content = sanitizeHtml(content, DEFAULT_HTML_FILTER)
 
       let isNoticePost = false
       if ((await haveAdminPermission(accessUserUid, boardUid)) === true) {

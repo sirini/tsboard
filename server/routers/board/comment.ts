@@ -21,22 +21,19 @@ import {
   saveNewComment,
   saveReplyComment,
 } from "../../database/board/comment"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import {
+  fail,
+  success,
+  DEFAULT_TYPE_CHECK,
+  EXTEND_TYPE_CHECK,
+  DEFAULT_HTML_FILTER,
+} from "../../util/tools"
 import { checkUserPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { Comment } from "../../../src/interface/board"
 import { isBannedByWriter } from "../../database/board/view"
 import { checkUserVerification } from "../../database/auth/authorization"
 import { CONTENT_STATUS } from "../../database/board/const"
 import { haveAdminPermission } from "../../database/user/manageuser"
-
-const htmlFilter = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-  allowedAttributes: {
-    code: ["class"],
-    img: ["src", "alt", "class"],
-    span: ["class"],
-  },
-}
 
 export const comment = new Elysia()
   .use(
@@ -186,7 +183,7 @@ export const comment = new Elysia()
         return fail(`Not enough point.`, response)
       }
 
-      content = sanitizeHtml(content, htmlFilter)
+      content = sanitizeHtml(content, DEFAULT_HTML_FILTER)
       const newCommentUid = await saveNewComment({
         boardUid,
         postUid,
@@ -234,7 +231,7 @@ export const comment = new Elysia()
         return fail(`Not enough point.`, response)
       }
 
-      content = sanitizeHtml(content, htmlFilter)
+      content = sanitizeHtml(content, DEFAULT_HTML_FILTER)
       const newCommentUid = await saveReplyComment({
         boardUid,
         postUid,
@@ -286,7 +283,7 @@ export const comment = new Elysia()
         return fail(`No permission.`, response)
       }
 
-      content = sanitizeHtml(content, htmlFilter)
+      content = sanitizeHtml(content, DEFAULT_HTML_FILTER)
       await saveModifyComment({ modifyTargetUid, content })
       return success(response)
     },
