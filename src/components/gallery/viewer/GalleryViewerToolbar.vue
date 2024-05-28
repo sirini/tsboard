@@ -5,7 +5,7 @@
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].PREV_TOOLTIP }}</v-tooltip>
     </v-btn>
 
-    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.files.length">
+    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.images.length">
       <v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>

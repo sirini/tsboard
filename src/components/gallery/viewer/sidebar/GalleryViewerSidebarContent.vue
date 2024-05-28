@@ -1,16 +1,24 @@
 <template>
-  <v-list-item class="pt-2 pb-2" :prepend-avatar="viewer.post.writer.profile || '/no-profile.svg'">
+  <v-list-item class="pt-2 pb-2">
     <v-list-item-title>{{ util.unescape(viewer.post.title) }}</v-list-item-title>
-    <template v-slot:append v-if="viewer.exifs[viewer.position]?.width > 0">
+    <v-list-item-subtitle class="mt-2">
+      <user-nametag
+        :uid="viewer.post.writer.uid"
+        :name="viewer.post.writer.name"
+        :profile="viewer.post.writer.profile"
+        size="small"
+      ></user-nametag>
+
       <v-chip
         size="small"
-        label
         color="blue-grey"
+        class="ml-2"
         :append-icon="showExif ? 'mdi-chevron-up' : 'mdi-chevron-down'"
         @click="showExif = !showExif"
+        v-if="viewer.images[viewer.position]?.exif.model.length > 0"
         >EXIF</v-chip
       >
-    </template>
+    </v-list-item-subtitle>
   </v-list-item>
   <v-divider></v-divider>
 
@@ -21,10 +29,10 @@
     </v-card>
   </v-list-item>
 
-  <v-list-item class="pt-2 pb-2" v-if="viewer.descriptions[viewer.position]">
+  <v-list-item class="pt-2 pb-2" v-if="viewer.images[viewer.position]?.description">
     <v-card elevation="0" variant="tonal" color="blue-grey" class="mt-2 mb-2">
       <v-card-title><v-icon>mdi-robot-excited-outline</v-icon></v-card-title>
-      <v-card-text>{{ viewer.descriptions[viewer.position] }}</v-card-text></v-card
+      <v-card-text>{{ viewer.images[viewer.position]?.description }}</v-card-text></v-card
     >
   </v-list-item>
 </template>
@@ -35,6 +43,7 @@ import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 import GalleryViewerSidebarExif from "./GalleryViewerSidebarExif.vue"
+import UserNametag from "../../../user/UserNametag.vue"
 
 const viewer = useViewerStore()
 const home = useHomeStore()

@@ -11,7 +11,7 @@ import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { useHomeStore } from "../../home"
-import { Exif, Position } from "../../../interface/gallery"
+import { Position } from "../../../interface/gallery"
 import {
   BOARD_CONFIG,
   INIT_POST_VIEW,
@@ -19,7 +19,7 @@ import {
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/store/board/gallery"
-import { BoardConfig, Comment, Pair, PostView } from "../../../interface/board"
+import { BoardConfig, Comment, Pair, PhotoItem, PostView } from "../../../interface/board"
 import * as COMMENT from "../../../messages/store/board/comment"
 import { TSBOARD } from "../../../../tsboard.config"
 
@@ -35,7 +35,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const startPos = ref<Position>({ x: 0, y: 0 })
   const transPos = ref<Position>({ x: 0, y: 0 })
   const scale = ref<number>(1.0)
-  const drawerWidth = ref<number>(400)
+  const drawerWidth = ref<number>(350)
   const drawerPosition = ref<"left" | "right" | "bottom">("right")
   const targetDom = "#tsboardViewerPreview"
   const zoomSpeed = 0.25
@@ -46,10 +46,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const postUid = ref<number>(0)
   const sinceUid = ref<number>(0)
   const post = ref<PostView>(INIT_POST_VIEW)
-  const files = ref<string[]>([])
-  const thumbnails = ref<string[]>([])
-  const exifs = ref<Exif[]>([])
-  const descriptions = ref<string[]>([])
+  const images = ref<PhotoItem[]>([])
   const tags = ref<Pair[]>([])
   const comments = ref<Comment[]>([])
   const page = ref<number>(1)
@@ -141,10 +138,7 @@ export const useViewerStore = defineStore("viewer", () => {
       return close()
     }
 
-    files.value = response.data.result.files
-    thumbnails.value = response.data.result.thumbnails
-    descriptions.value = response.data.result.descriptions
-    exifs.value = response.data.result.exifs
+    images.value = response.data.result.images
   }
 
   // 댓글 불러오기
@@ -273,7 +267,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 이전 사진 보기
   function prev(): void {
-    if (files.value.length === 1) {
+    if (images.value.length === 1) {
       return util.snack("사진이 한 장만 있습니다")
     }
     if (position.value === 0) {
@@ -284,10 +278,10 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 다음 사진 보기
   function next(): void {
-    if (files.value.length === 1) {
+    if (images.value.length === 1) {
       return util.snack("사진이 한 장만 있습니다")
     }
-    if (position.value + 1 === files.value.length) {
+    if (position.value + 1 === images.value.length) {
       return util.snack("마지막 사진입니다")
     }
     position.value += 1
@@ -310,10 +304,7 @@ export const useViewerStore = defineStore("viewer", () => {
     postUid,
     post,
     comments,
-    files,
-    thumbnails,
-    descriptions,
-    exifs,
+    images,
     tags,
     position,
     mobileColor,

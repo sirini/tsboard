@@ -19,7 +19,7 @@ import {
   updatePostHit,
 } from "../../database/board/view"
 import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
-import { Pair, PostFile } from "../../../src/interface/board"
+import { Pair, PostFile, PhotoItem } from "../../../src/interface/board"
 import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
 import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
@@ -64,11 +64,9 @@ export const view = new Elysia()
       let response = {
         config: BOARD_CONFIG,
         post: INIT_POST_VIEW,
+        images: [] as PhotoItem[],
         files: [] as PostFile[],
         tags: [] as Pair[],
-        images: [] as string[],
-        thumbs: [] as string[],
-        descriptions: [] as string[],
         newAccessToken,
       }
       if (id.length < 2 || postUid < 1) {
@@ -99,10 +97,8 @@ export const view = new Elysia()
       if (response.config.level.download <= userLevel) {
         response.files = await getFiles(postUid)
       }
-      const photoItems = await getPhotoItems(postUid)
-      response.images = photoItems.files
-      response.thumbs = photoItems.thumbnails
-      response.descriptions = photoItems.descriptions
+      const photos = await getPhotoItems(postUid)
+      response.images = photos
 
       response.post = await getPost(postUid, accessUserUid)
       if (response.post.submitted < 1) {
@@ -116,8 +112,6 @@ export const view = new Elysia()
           response.files = []
           response.tags = []
           response.images = []
-          response.thumbs = []
-          response.descriptions = []
           return fail(`You don't have permission to read this post.`, response)
         }
       }

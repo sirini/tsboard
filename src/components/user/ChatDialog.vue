@@ -118,7 +118,7 @@ watch(
 #tsboardChatHistory {
   --sb-track-color: #eceff1;
   --sb-thumb-color: #546e7a;
-  --sb-size: 5px;
+  --sb-size: 3px;
 
   scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 }
@@ -128,12 +128,10 @@ watch(
 
 #tsboardChatHistory::-webkit-scrollbar-track {
   background: var(--sb-track-color);
-  border-radius: 5px;
 }
 
 #tsboardChatHistory::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 5px;
 }
 .note {
   color: #78909c;

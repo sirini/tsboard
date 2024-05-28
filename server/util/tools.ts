@@ -187,15 +187,15 @@ export async function exif(path: string): Promise<Exif> {
   try {
     const exif = await exifr.parse(path)
     result = {
-      make: exif.Make,
-      model: exif.Model,
-      aperture: exif.FNumber * EXIF_APERTURE_FACTOR,
-      iso: exif.ISO,
-      focalLength: exif.FocalLengthIn35mmFormat,
-      exposure: exif.ExposureTime * EXIF_EXPOSURE_FACTOR,
-      width: exif.ExifImageWidth,
-      height: exif.ExifImageHeight,
-      date: exif.CreateDate.getTime(),
+      make: exif.Make || "",
+      model: exif.Model || "",
+      aperture: (exif.FNumber || 0) * EXIF_APERTURE_FACTOR,
+      iso: exif.ISO || 0,
+      focalLength: exif.FocalLengthIn35mmFormat || 0,
+      exposure: (exif.ExposureTime || 0) * EXIF_EXPOSURE_FACTOR,
+      width: exif.ExifImageWidth || exif.ImageWidth || 0,
+      height: exif.ExifImageHeight || exif.ImageHeight || 0,
+      date: exif.CreateDate.getTime() || Date.now(),
     }
   } catch (e) {
     // do nothing

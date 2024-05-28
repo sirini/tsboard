@@ -1,15 +1,15 @@
 <template>
-  <v-list-item class="pa-6" v-if="view.thumbs.length > 0">
+  <v-list-item class="pa-6" v-if="view.images.length > 0">
     <v-row>
-      <v-col :cols="home.cols" v-for="(thumb, index) in view.thumbs" :key="index">
+      <v-col :cols="home.cols" v-for="(image, index) in view.images" :key="index">
         <v-card elevation="0">
-          <v-img cover :src="thumb"></v-img>
-          <v-card-text class="description pa-3">{{ view.descriptions[index] }}</v-card-text>
+          <v-img cover :src="image.thumbnail.small"></v-img>
+          <v-card-text class="description pa-3">{{ view.images[index].description }}</v-card-text>
         </v-card>
       </v-col>
     </v-row>
   </v-list-item>
-  <v-divider v-if="view.thumbs.length > 0"></v-divider>
+  <v-divider v-if="view.images.length > 0"></v-divider>
 </template>
 
 <script setup lang="ts">

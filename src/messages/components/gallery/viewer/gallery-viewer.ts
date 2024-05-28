@@ -31,6 +31,7 @@ export const TEXT = [
     EXPOSURE: "노출 시간",
     IMAGE_SIZE: "사진 크기",
     DATE: "촬영 시간",
+    DOWNLOAD: "원본 받기",
   },
   /* LANG.EN */ {
     LIKE_COMMENT_TOOLTIP: "Like this comment",
@@ -59,6 +60,7 @@ export const TEXT = [
     EXPOSURE: "Exposure time",
     IMAGE_SIZE: "Image size",
     DATE: "Date",
+    DOWNLOAD: "Download",
   },
   /* LANG.CN */ {
     LIKE_COMMENT_TOOLTIP: "喜欢这条评论",
@@ -86,6 +88,7 @@ export const TEXT = [
     EXPOSURE: "曝光时间",
     IMAGE_SIZE: "图像大小",
     DATE: "拍照日期",
+    DOWNLOAD: "下载原本",
   },
 ]
 Object.freeze(TEXT)

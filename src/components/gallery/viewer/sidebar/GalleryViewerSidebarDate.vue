@@ -8,21 +8,26 @@
     <v-icon class="ml-4 mr-2">mdi-eye-outline</v-icon> {{ util.num(viewer.post.hit) }}
 
     <template v-slot:append>
-      <user-nametag
-        :uid="viewer.post.writer.uid"
-        :name="viewer.post.writer.name"
-        :profile="viewer.post.writer.profile"
+      <v-chip
+        prepend-icon="mdi-download"
         size="small"
-      ></user-nametag>
+        color="blue-grey"
+        @click="view.download(viewer.images[viewer.position].file.uid)"
+        >{{ TEXT[home.lang].DOWNLOAD }}</v-chip
+      >
     </template>
   </v-list-item>
 </template>
 
 <script setup lang="ts">
+import { useBoardViewStore } from "../../../../store/board/view"
 import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useUtilStore } from "../../../../store/util"
-import UserNametag from "../../../user/UserNametag.vue"
+import { useHomeStore } from "../../../../store/home"
+import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 
+const view = useBoardViewStore()
 const viewer = useViewerStore()
 const util = useUtilStore()
+const home = useHomeStore()
 </script>

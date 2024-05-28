@@ -8,7 +8,7 @@ import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { fail, success } from "../../util/tools"
 import { BOARD_CONFIG } from "../../database/board/const"
-import { Exif, GridItem } from "../../../src/interface/gallery"
+import { GridItem } from "../../../src/interface/gallery"
 import {
   getBoardConfig,
   getMaxPostUid,
@@ -16,7 +16,7 @@ import {
   getUserLevel,
 } from "../../database/board/list"
 import { getPhotoItems, getPhotos } from "../../database/board/gallery"
-import { SearchOption } from "../../../src/interface/board"
+import { PhotoItem, SearchOption } from "../../../src/interface/board"
 import { checkUserVerification } from "../../database/auth/authorization"
 
 export const gallery = new Elysia()
@@ -121,10 +121,7 @@ export const gallery = new Elysia()
     async ({ query: { id, no }, userLevel, newAccessToken }) => {
       let response = {
         config: BOARD_CONFIG,
-        files: [] as string[],
-        thumbnails: [] as string[],
-        exifs: [] as Exif[],
-        descriptions: [] as string[],
+        images: [] as PhotoItem[],
         newAccessToken,
       }
 
@@ -140,14 +137,10 @@ export const gallery = new Elysia()
         return fail(`Level restriction.`, response)
       }
 
-      const photos = await getPhotoItems(no)
-
+      const images = await getPhotoItems(no)
       return success({
         config,
-        files: photos.files,
-        thumbnails: photos.thumbnails,
-        exifs: photos.exifs,
-        descriptions: photos.descriptions,
+        images,
         newAccessToken,
       })
     },

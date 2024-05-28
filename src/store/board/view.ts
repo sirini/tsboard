@@ -12,7 +12,7 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import { BoardConfig, Pair, PostFile, PostView } from "../../interface/board"
+import { BoardConfig, Pair, PhotoItem, PostFile, PostView } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/view"
 import { BOARD_CONFIG, TYPE_MATCH, INIT_POST_VIEW } from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
@@ -29,9 +29,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<PostView>(INIT_POST_VIEW)
   const files = ref<PostFile[]>([])
-  const images = ref<string[]>([])
-  const thumbs = ref<string[]>([])
-  const descriptions = ref<string[]>([])
+  const images = ref<PhotoItem[]>([])
   const tags = ref<Pair[]>([])
 
   async function loadPostView(): Promise<void> {
@@ -70,8 +68,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
       post.value.content = TEXT[home.lang].FAILED_CONTENT
       files.value = []
       images.value = []
-      thumbs.value = []
-      descriptions.value = []
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -84,8 +80,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
     tags.value = response.data.result.tags
     files.value = response.data.result.files
     images.value = response.data.result.images
-    thumbs.value = response.data.result.thumbs
-    descriptions.value = response.data.result.descriptions
 
     auth.user.admin =
       response.data.result.config.admin.group === auth.user.uid ||
@@ -192,8 +186,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
     post,
     files,
     images,
-    thumbs,
-    descriptions,
     tags,
     loadPostView,
     like,

@@ -23,7 +23,7 @@ import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../store/home"
 import GalleryViewerSidebarMobileContent from "./GalleryViewerSidebarMobileContent.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
-import GalleryViewerNavigationDrawer from "./sidebar/GalleryViewerNavigationDrawer.vue"
+import GalleryViewerNavigationDrawer from "./GalleryViewerNavigationDrawer.vue"
 
 const viewer = useViewerStore()
 const home = useHomeStore()

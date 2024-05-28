@@ -18,7 +18,7 @@ home.visit()
 body {
   --sb-track-color: #eceff1;
   --sb-thumb-color: #546e7a;
-  --sb-size: 5px;
+  --sb-size: 3px;
 
   scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 }
@@ -29,11 +29,9 @@ body::-webkit-scrollbar {
 
 body::-webkit-scrollbar-track {
   background: var(--sb-track-color);
-  border-radius: 5px;
 }
 
 body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 5px;
 }
 </style>

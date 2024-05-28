@@ -3,7 +3,10 @@
     <v-main>
       <v-img
         class="text-right"
-        :src="viewer.files.at(viewer.position) || `${TSBOARD.PREFIX}/image-not-found.svg`"
+        :src="
+          viewer.images.at(viewer.position)?.thumbnail.large ||
+          `${TSBOARD.PREFIX}/image-not-found.svg`
+        "
         @mousedown="viewer.mouseDown"
         @mousemove="viewer.mouseMove"
         @mouseup="viewer.mouseUp"
@@ -30,7 +33,7 @@
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../store/home"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"
-import GalleryViewerNavigationDrawer from "./sidebar/GalleryViewerNavigationDrawer.vue"
+import GalleryViewerNavigationDrawer from "./GalleryViewerNavigationDrawer.vue"
 import { TSBOARD } from "../../../../tsboard.config"
 
 const viewer = useViewerStore()

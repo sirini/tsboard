@@ -18,11 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
-import { useHomeStore } from "../../../../store/home"
-import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
-import GalleryViewerSidebar from "../GalleryViewerSidebar.vue"
-import BoardViewCommentWriteButton from "../../../../components/board/comment/BoardViewCommentWriteButton.vue"
+import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useHomeStore } from "../../../store/home"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
+import GalleryViewerSidebar from "./sidebar/GalleryViewerSidebar.vue"
+import BoardViewCommentWriteButton from "../../../components/board/comment/BoardViewCommentWriteButton.vue"
 
 const viewer = useViewerStore()
 const home = useHomeStore()

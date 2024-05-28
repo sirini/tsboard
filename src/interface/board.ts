@@ -96,11 +96,17 @@ export type SearchPostParams = PostParams & {
   noticeCount: number
 }
 
-export type PhotoItemParams = {
-  files: string[]
-  thumbnails: string[]
-  exifs: Exif[]
-  descriptions: string[]
+export type PhotoItem = {
+  file: {
+    uid: number
+    path: string
+  }
+  thumbnail: {
+    large: string
+    small: string
+  }
+  exif: Exif
+  description: string
 }
 
 export type CommentParams = PostCommentParams & {

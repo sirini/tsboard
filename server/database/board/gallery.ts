@@ -5,8 +5,8 @@
  */
 
 import { RowDataPacket } from "mysql2"
-import { PhotoItemParams, PostParams } from "../../../src/interface/board"
-import { Exif, GridItem } from "../../../src/interface/gallery"
+import { PhotoItem, PostParams } from "../../../src/interface/board"
+import { GridItem } from "../../../src/interface/gallery"
 import { table, select } from "../common"
 import {
   PAGING_DIRECTION,
@@ -18,30 +18,26 @@ import {
 import { getPostRelated, getSearchedPosts } from "./list"
 
 // 사진들 가져오기
-export async function getPhotoItems(postUid: number): Promise<PhotoItemParams> {
-  let images: PhotoItemParams = {
-    files: [] as string[],
-    thumbnails: [] as string[],
-    exifs: [] as Exif[],
-    descriptions: [] as string[],
-  }
+export async function getPhotoItems(postUid: number): Promise<PhotoItem[]> {
+  let result: PhotoItem[] = []
+  const postUidQuery = postUid.toString()
+  const downloads = await select(`SELECT uid, path FROM ${table}file WHERE post_uid = ?`, [
+    postUidQuery,
+  ])
 
-  const thumbs = await select(
-    `SELECT file_uid, path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
-    [postUid.toString()],
-  )
-
-  for (const thumb of thumbs) {
-    images.thumbnails.push(thumb.path)
-    images.files.push(thumb.full_path)
-
+  for (const download of downloads) {
+    const [thumb] = await select(
+      `SELECT path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
+      [download.uid],
+    )
     const [exif] = await select(
       `SELECT make, model, aperture, iso, focal_length, exposure, width, height, date FROM ${table}exif WHERE file_uid = ? LIMIT 1`,
-      [thumb.file_uid],
+      [download.uid],
     )
 
+    let itemExif = INIT_EXIF
     if (exif) {
-      images.exifs.push({
+      itemExif = {
         make: exif.make,
         model: exif.model,
         aperture: exif.aperture / EXIF_APERTURE_FACTOR,
@@ -51,24 +47,38 @@ export async function getPhotoItems(postUid: number): Promise<PhotoItemParams> {
         width: exif.width,
         height: exif.height,
         date: exif.date,
-      })
+      }
     } else {
-      images.exifs.push(INIT_EXIF)
+      itemExif = INIT_EXIF
     }
 
     const [ai] = await select(
       `SELECT description FROM ${table}image_description WHERE file_uid = ? LIMIT 1`,
-      [thumb.file_uid],
+      [download.uid],
     )
 
+    let itemDescription = ""
     if (ai) {
-      images.descriptions.push(ai.description)
+      itemDescription = ai.description
     } else {
-      images.descriptions.push("")
+      itemDescription = ""
     }
+
+    result.push({
+      file: {
+        uid: download.uid,
+        path: download.path,
+      },
+      thumbnail: {
+        large: thumb.full_path,
+        small: thumb.path,
+      },
+      exif: itemExif,
+      description: itemDescription,
+    })
   }
 
-  return images
+  return result
 }
 
 // 갤러리 목록 가져오기
@@ -110,17 +120,14 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
       categoryUid: post.category_uid,
     })
 
-    const photos = await getPhotoItems(post.uid as number)
-
+    const images = await getPhotoItems(post.uid as number)
     result.push({
       uid: post.uid,
       writer: info.writer,
-      files: photos.files,
-      thumbnails: photos.thumbnails,
       like: info.like,
       liked: info.liked,
       reply: info.reply,
-      descriptions: photos.descriptions,
+      images,
     })
   }
 

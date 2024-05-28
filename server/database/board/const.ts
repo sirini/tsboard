@@ -141,5 +141,18 @@ export const INIT_EXIF: Exif = {
   date: 0,
 }
 
+export const INIT_PHOTO_ITEM = {
+  file: {
+    uid: 0,
+    path: "",
+  },
+  thumbnail: {
+    large: "",
+    small: "",
+  },
+  exif: INIT_EXIF,
+  description: "",
+}
+
 export const EXIF_APERTURE_FACTOR = 100
 export const EXIF_EXPOSURE_FACTOR = 1000000
