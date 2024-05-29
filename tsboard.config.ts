@@ -13,7 +13,7 @@ const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
 export const TSBOARD = {
-  VERSION: "v0.8.30",
+  VERSION: "v0.8.31",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,

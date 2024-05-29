@@ -1,6 +1,11 @@
 <template>
   <div v-if="editor">
-    <v-toolbar density="compact" class="write-editor-menu" :color="home.color.header">
+    <v-toolbar
+      density="compact"
+      id="tsboardEditorToolbar"
+      class="write-editor-menu"
+      :color="home.color.header"
+    >
       <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
         ><v-icon>mdi-format-bold</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].BOLD }}</v-tooltip>
@@ -342,7 +347,30 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
 
-onMounted(() => writeEditor.loadBoardConfig())
+// 스크롤 움직임에 따라 에디터 툴바 위치도 조정
+let scrollTimer: any = null
+function changeToolbarPosition(): void {
+  clearTimeout(scrollTimer)
+  scrollTimer = setTimeout(() => {
+    const toolbar = document.querySelector("#tsboardEditorToolbar") as HTMLDivElement
+    if (!toolbar) return
+
+    const stickyPoint = toolbar.offsetTop
+    if (window.scrollY > stickyPoint) {
+      toolbar.classList.add("sticky")
+      toolbar.style.width = `${writeEditor.config.width}px`
+    } else {
+      toolbar.classList.remove("sticky")
+      toolbar.style.width = ""
+    }
+  }, 200)
+}
+
+onMounted(() => {
+  writeEditor.loadBoardConfig()
+  window.addEventListener("scroll", changeToolbarPosition)
+})
+
 watch(
   () => writeEditor.id,
   () => writeEditor.loadBoardConfig(),
@@ -475,13 +503,26 @@ function addTable(option: TableOption): void {
 // 에디터 메모리 정리하기
 onBeforeUnmount(() => {
   editor.value?.destroy()
+  window.removeEventListener("scroll", changeToolbarPosition)
 })
 </script>
 
 <style scoped>
 .write-editor-menu {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: all 0.3s ease;
   border-left: 1px #dddddd solid;
   border-right: 1px #dddddd solid;
   border-top: 1px #dddddd solid;
+}
+
+.sticky {
+  position: fixed;
+  top: 64px;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
 }
 </style>

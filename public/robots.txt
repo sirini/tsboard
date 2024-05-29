@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /admin/board
+Disallow: /admin/user
+Disallow: /admin/report
+Disallow: /admin/latest/post
+Disallow: /admin/latest/comment
+
+Sitemap: https://tsboard.dev/tsapi/sitemap.xml

@@ -10,12 +10,13 @@ import { admin } from "./routers/admin"
 import { user } from "./routers/user"
 import { home } from "./routers/home"
 import { board } from "./routers/board"
+import { sitemap } from "./routers/sitemap"
 import { TSBOARD } from "../tsboard.config"
 
 const app = new Elysia()
   .use(cors())
   .group("/tsapi", (app) => {
-    return app.use(auth).use(admin).use(home).use(user).use(board)
+    return app.use(auth).use(admin).use(home).use(user).use(board).use(sitemap)
   })
   .listen(TSBOARD.SITE.API_PORT)
 
