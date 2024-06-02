@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="pa-0 mt-2 ml-2 mr-2" v-for="(reply, index) in viewer.comments">
+  <v-list-item class="pa-0 mt-4 ml-4 mr-4" v-for="(reply, index) in viewer.comments">
     <gallery-viewer-comment
       :commentUid="reply.uid"
       :commentContent="reply.content"
@@ -11,7 +11,7 @@
     ></gallery-viewer-comment>
   </v-list-item>
 
-  <v-list-item class="pa-0 mt-2 ml-2 mr-2">
+  <v-list-item class="pa-0 mt-4 ml-4 mr-4">
     <v-textarea
       v-model="comment.content"
       variant="outlined"

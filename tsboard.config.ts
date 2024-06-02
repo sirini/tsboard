@@ -8,7 +8,7 @@ export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프�
 export const PORT_DEV_VITE = 3000
 export const PORT_DEV = 3200
 export const PORT_PROD = 3100
-export const LOCALHOST = "http://geunyul2.asuscomm.com" // 개발중일때는 localhost 혹은 본인 도메인 설정
+export const LOCALHOST = "http://localhost" // 개발중일때는 localhost 혹은 본인 도메인 설정
 const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
@@ -109,6 +109,8 @@ export const POLICY = {
 }
 
 Object.freeze(TSBOARD)
+Object.freeze(SEO)
+Object.freeze(QUICK_BUTTONS)
 Object.freeze(AUTH)
 Object.freeze(SIZE)
 Object.freeze(OAUTH)

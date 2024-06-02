@@ -2,9 +2,8 @@
   <v-list-item class="pa-0 pl-3 pb-2"
     >{{ util.unescape(viewer.post.title) }}
     <template v-slot:append>
-      <v-btn icon @click="viewer.close" elevation="0"
+      <v-btn icon @click="viewer.close" elevation="0" variant="text"
         ><v-icon>mdi-close</v-icon>
-        <v-tooltip activator="parent">{{ TEXT[home.lang].CLOSE_TOOLTIP }}</v-tooltip>
       </v-btn>
     </template>
   </v-list-item>
