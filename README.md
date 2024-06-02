@@ -22,18 +22,14 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 ## 왜 만들었나요?
 
 - 저는 웹 프로그램을 `PHP`로 시작했고, 제로보드와 그누보드 시절을 겪은 (이제는 아재) 개발자입니다.
-- 제 머리 속 마지막 `JavaScript` 언어에 대한 추억은 `jQuery` 없으면 쓰레기(...)같은 언어, 정도였습니다.
-- 그러나 지속적인 표준안 개선과 `Node.js` 의 등장, `TypeScript` 언어에 뒤늦게 반해버렸습니다.
-- 그래서 다시 웹 프로그램을 한 번 만들어보고 싶었고, **늘 만들었던 게시판을 TypeScript 언어로만 작성**해보고 싶었습니다.
-- 더불어 (이왕이면) 쓰기 쉽고, 더 빠르고 안전하게 동작하도록 만들어보고 싶어서 시작하게 되었습니다.
+- 10년 넘게 웹 개발을 안하다가, 우연히 TypeScript 언어를 만나 코딩의 즐거움을 만끽했습니다.
+- 그래서 이왕이면 이 언어로 재밌는 프로젝트를 해보고 싶어서 시작하게 되었습니다.
 
 ## TSBOARD만의 장점은 무엇인가요?
 
 - TSBOARD는 프론트엔드와 백엔드 모두 `TypeScript` 언어로 작성되어 **타입 안정성을 보장**합니다.
 - 프론트엔드는 `Vue` 와 `Vuetify` 로 제작되어 있어 유려하면서도 빠른 UI 개발이 가능합니다.
 - JS/TS 런타임으로 `Bun`, 웹 프레임워크로 Bun 기반의 `ElysiaJS`를 선택하여 **보다 빠른 동작이 가능**합니다.
-- `Node.js` 기반의 풀스택 개발을 해보신 분들에게는 쉽게 이해되며, 바로 활용 가능한 디자인입니다.
-- 중소규모의 커뮤니티 사이트를 제작하는데 필요한 **모든 기능들이 내장**되어 있습니다.
 
 > TSBOARD는 사용자분들을 위한 자체 커뮤니티를 <https://tsboard.dev/> 사이트에서 운영하고 있습니다.
 > 사용하시면서 궁금한 점, 어려운 점들은 위 사이트에서 편하게 문의해 주시면 됩니다.
@@ -53,14 +49,12 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - TSBOARD는 **JS/TS 런타임으로 Bun** (<https://bun.sh>)을 필요로 합니다.
 - 또한, 보다 안정적인 패키징 관리를 위해 `Node.js` (및 `npm`) 설치도 권장하고 있습니다.
   - 원래 `Bun`은 패키지 관리까지 올인원으로 지원하므로, **향후 Bun만 필요할 것**입니다.
-  - 만약 아직 `Node.js` 설치가 안되어 있는 서버라면, 우선 `Bun` 먼저 설치하여 사용해 보세요.
-  - `Bun` 의 패키지 관리에 문제가 있어 보이면, `Node.js` 설치 후 `npm i` 으로 바로 잡을 수 있습니다.
 - Cafe24등 웹호스팅 업체의 서비스를 이용하실 예정이라면, 아래 사항들을 참조해 주세요.
-  - PHP 게시판이나 워드프레스 설치 등으로 우리가 흔히 접하는 웹호스팅에선 활용이 어려울 수 있습니다.
+  - PHP 게시판이나 워드프레스 설치 등으로 우리가 흔히 접하는 웹호스팅에선 활용이 어렵습니다.
   - 웹호스팅이 아닌, **서버 호스팅의 경우 사용이 가능**합니다.
   - 단, 가상 CPU로 운영되는 (보통 저렴한) 가상 서버 서비스에서는 제대로 동작하지 않습니다.
 
-> AWS, Azure, GCP에서는 Bun 사용에 문제가 없는 것으로 알려져 있습니다. (돈이 없어서 직접 해보진 못했습니다만...) 만약 클라우드 플랫폼에서 설치가 안되시는 분들은 <https://tsboard.dev> 사이트로 제보 부탁드립니다!
+> AWS, Azure, GCP에서는 Bun 사용에 문제가 없는 것으로 알려져 있습니다. 만약 사용하시는 클라우드 플랫폼에서 설치가 안되시는 분들은 <https://tsboard.dev> 사이트로 제보 부탁드립니다!
 
 ## 미리 알아두어야 할 사항들
 
@@ -68,23 +62,18 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - TSBOARD는 설치 과정에서 새로운 데이터베이스 (기본 `tsboard`)를 생성합니다.
   - 만약 MySQL(Mariadb) 접속 계정에 해당 권한이 없다면 설치는 실패합니다.
   - 잘 모르시겠다면 역시 **설치가 어려운 분들께** 항목을 읽어주세요.
-- TSBOARD는 웹서버로 `Nginx`를 권장하며, `Bun` 설치 전에 `Node.js` (및 `npm`) 설치를 권장합니다.
-  - TSBOARD가 제공하는 API들은 **설치 후 서버 설정** 단계에서 Nginx reverse proxy 기능을 이용합니다.
-  - TSBOARD는 오직 패키지 관리에만 `npm` 을 사용합니다. (Bun 도 가능은 합니다만...)
-  - 추후 `Bun`의 안정화가 진행되면, `Node.js` 사전 설치 내용은 제거될 수 있습니다.
 
 ## 설치 진행 안내
-
-> 이제부터는 여러분이 TSBOARD를 독자적인 리눅스 PC (혹은 Mac) 에 설치하는 것으로 가정합니다.
-
-> 도저히 어떻게 해야할지 모르겠다면, **설치가 어려운 분들께** 항목을 읽어주세요.
 
 ### Bun 설치
 
 - Bun은 <https://bun.sh/> 사이트에서 `Bun`은 무엇인지, 어떻게 설치하는지 등을 확인하실 수 있습니다.
   - 먼저, `curl -fsSL https://bun.sh/install | bash` 명령어로 `Bun`을 설치합니다.
-  - 설치 시 패키지 의존성 관련 메시지들이 나올 수 있습니다. (`curl`, `zip` 등) 먼저 설치해주세요.
-  - 설치 후 `source .bashrc` 등을 추가적으로 실행해 `Bun` 환경변수를 등록 후, `bun --help` 를 실행합니다.
+  - 설치 시 패키지 의존성 관련 메시지들이 나올 수 있습니다. (`curl`, `unzip` 등) 먼저 설치해주세요.
+  - 설치 후 `source .bashrc` 등을 추가적으로 실행해 `Bun` 환경변수를 등록 후, `bun --help` 를 실행해 봅니다.
+
+> Bun은 믿기지 않을 정도로 빠른 성능을 보여줍니다만, 그 대신 가상 CPU상에서의 동작은 보장하지 않습니다.
+> TSBOARD는 빠르게 동작하는 것을 목표로 개발되어 있으며, Bun이 설치되지 않은 서버에서는 동작하지 않는 점 다시 알려드립니다.
 
 ### TSBOARD 설치
 
@@ -102,9 +91,25 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - `bun setup.ts` 과정에서 문제가 발생하신 경우, 깃허브 이슈 혹은 <https://tsboard.dev> 로 알려주세요!
 - TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
   - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 **대부분의 설정**들이 들어 있습니다.
-  - `SITE` 와 `API` 항목을 확인하시고, 이름 및 도메인 등을 적절하게 수정 후 저장하세요.
-  - 그 밖에 항목들도 원하시면 수정하실 수 있습니다. 단, 가급적 `PORT` 항목은 그대로 두세요.
-- 이제 TSBOARD를 `build` 합니다.
+  - `SITE`, `QUICK_BUTTONS` 그리고 `API` 항목 등을 확인하시고, 그 밖에 다른 항목들도 업데이트 해주세요.
+- `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
+- 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
+  - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
+
+```
+Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
+```
+
+- `src/pages/home/HomePage.vue` 파일을 에디터로 열어 본인 사이트에 맞게 미리 수정해 주세요.
+  - 기본적으로 여러분의 커뮤니티 사이트에는 `WhatIsTsboard.vue` 내용이 필요 없으므로, 아래 내용은 제거하시면 됩니다.
+
+```html
+<v-col :cols="home.cols" v-if="home.isMobile === false">
+  <what-is-tsboard></what-is-tsboard>
+</v-col>
+```
+
+- 이제 수정해야 할 것들을 모두 완료하였습니다. TSBOARD를 `build` 합니다!
   - 여러분이 받으신 TSBOARD는 이제 `vite` 를 통해 `build` 가 가능합니다.
   - (Node.js 설치 시) `npm run build` 혹은 `bun run build` 를 실행하여 `build` 를 진행합니다.
   - 이 때 TSBOARD의 프론트엔드 코드들(TypeScript)이 JavaScript로 변환되며, 파일들도 최적화됩니다.
@@ -124,6 +129,13 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 해당 로그인 서비스 제공업체에서 요구하는 개발자 등록 및 OAuth 클라이언트 ID, 비밀번호등은 직접 준비하셔야 합니다.
   - 이미 해당 정보들을 가지고 계신 분들은 `.env` 파일에서 ID, Secret 정보를 입력하시면 사용 가능합니다.
   - 추가로, `tsboard.config.ts` 파일에서 `OAUTH` 항목을 통해 사용할 소셜 로그인을 개별적으로 선택하실 수 있습니다. (사용을 원치 않으시면 `IS_READY` 항목을 `false` 로 변경 후 저장하시면 됩니다.)
+    - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 혹은 `bun run build` 를 통해 프로젝트를 `build` 해주세요!
+    - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `bun server/index.ts` 로 백엔드를 실행해 주세요.
+    - 백엔드 서버를 시작하기 전, 반드시 기존에 동작중인 백엔드 서버는 종료해 주세요. `Node.js` 를 주로 사용하신 분들은 `pm2` 프로세스 매니저 사용이 익숙하실텐데, Bun도 `pm2`를 지원하므로 프로세스 관리에 참조해 보세요! (<https://bun.sh/guides/ecosystem/pm2>)
+
+```
+pm2 start --interpreter ~/.bun/bin/bun server/index.ts
+```
 
 ### AI 기능 활성화하기
 
@@ -141,18 +153,31 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - TSBOARD를 본인의 Linux PC or Mac 에 먼저 설치하여 개발 모드로 사용해 보실 수도 있습니다.
   - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
   - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEV` 항목을 `true` 로 수정합니다.
+    - `LOCALHOST` 항목을 `localhost` 으로 수정해 주세요.
   - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
   - 다른 터미널을 열고 `npm run dev:server` 를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
   - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
 
 ### TSBOARD 업데이트
 
-> 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다.
+> 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다. DB의 경우에도 mysqldump 프로그램을 통해 백업하시고 작업을 진행하세요!
 
 - 설치 후 TSBOARD를 업데이트 하고자 할 땐 `git pull` 를 실행하시면 됩니다.
   - `git pull` 진행 시 여러분이 직접 수정하신 파일과, TSBOARD에서 변경된 내용이 충돌날 수 있습니다.
   - 이 때는 본인의 수정 내용과 TSBOARD 변경사항을 직접 `merge` 하셔야 합니다.
   - 변경사항이 많이 따라가기 어려울 때는, 작업하신 내용을 먼저 백업한 이후 하나씩 `merge` 해주세요.
+  - `git stash` 명령어를 통해 따로 작업하신 내용을 잠시 치운 후, 변경사항을 업데이트하고 다시 이전 작업을 반영하는 방법도 있습니다.
+  - 가능하면 `git pull` 명령어를 통해 변경사항을 수시로 업데이트 할 수 있도록 관리해 주세요!
+- `git pull` 이후에는 `npm run build` 혹은 `bun run build` 명령어로 프로젝트를 `build` 합니다!
+  - 빌드 하기 전에 `tsboard.config.ts` 파일이나 `index.html` 혹은 `public/robots.txt` 가 제대로 수정되었는지 확인해 보세요!
+  - `src/pages/home/HomePage.vue` 파일에 반영하신 작업들이 있을 경우 마찬가지로 다시 확인해 보세요.
+  - 이 밖에 수정하신 파일들이 `git pull` 이후에도 제대로 변경사항을 유지하고 있는지 확인이 필요합니다.
+- 업데이트에 따라서 간혹 `bun update.ts` 실행을 요구할 때가 있습니다. 이때는 터미널에서 한 번 실행하시면 됩니다.
+  - 실행 전에 에디터로 `update.ts` 파일을 열어서 어떤 변경사항들이 있는지 확인해보세요.
+  - 이전 업데이트는 주석으로 실행되지 않도록 처리되어 있습니다. 만약 해당 업데이트를 반영하지 않았다면, 해당 부분만 주석을 해제하고 저장한 뒤 실행하시면 됩니다.
+- `build` 이후에는 백엔드 프로세스를 다시 실행해야 합니다. 실행중인 `bun` 프로세스를 종료하고 다시 `bun server/index.ts` 혹은 `pm2` 를 이용해서 `reload` 해주세요.
+  - 여러분의 터미널 프로그램이 닫혀도 TSBOARD 백엔드가 계속 동작해야 하므로, 가능하면 `pm2` 같은 프로세스 매니저 활용을 권장합니다.
+  - 혹은, `tmux`나 `screen`과 같은 도구를 이용해서 해당 세션을 계속 열어두는 것도 방법입니다.
 
 ## 설치 후 서버 설정
 
@@ -163,7 +188,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 - 축하합니다! 여러분은 `git clone` → `bun install` → `bun setup.ts` 과정까지 무사히 마쳤습니다.
 - 이제 보다 원할한 TSBOARD 활용을 위해, 아래의 추가적인 설정 단계를 진행해 봅시다.
 
-  - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다.
+  - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
   - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
   - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
   <p>&nbsp;</p>
@@ -214,6 +239,29 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   }
   ```
 
+  - 추가로, `apache2` 웹서버를 사용중이신 분들은 아래 내용을 참조해 주세요! (참고: <https://enginnersnack.tistory.com/15>)
+  <p>&nbsp;</p>
+
+  ```
+  #
+  # /etc/apache2/site-available/000-default.conf
+  #
+  # apache2 웹서버 사용 시 TSBOARD 설정 예시입니다. 위 참고 페이지도 확인해보세요!
+  #
+  <VirtualHost *:443>
+    DocumentRoot /var/www/tsboard.git/dist  # TSBOARD 설치 경로
+    ProxyRequests Off
+    ProxyPreserveHost On
+    <Proxy *>
+      Order deny,allow
+      Allow from all
+    </Proxy>
+    # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
+    ProxyPass /tsapi http://127.0.0.1:3100/tsapi
+    ProxyPassReverse /tsapi http://127.0.0.1:3100/tsapi
+  </VirtualHost>
+  ```
+
 ## 설치가 어려운 분들께
 
 ### 대신 설치 요청하기
@@ -242,7 +290,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 ## 전체 구조
 
-### 프론트엔드
+### 프론트엔드 : Client Side Rendering
 
 - 프론트엔드는 `Vue`, `Vuetify`, `Vue Router`, `Pinia` 그리고 에디터에 `tiptap` 이 사용됩니다.
 - `.vue` 파일에서 UI는 대부분 `Vuetify` 컴포넌트를 사용하는 걸로 구현되어 있습니다. 대부분 `<v-card>` 처럼 `v-` 접두사를 가집니다.
@@ -253,13 +301,57 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - TSBOARD는 Client Side Rendering 방식으로 동작합니다. 따라서 모든 접속 경로는 반드시 `src/router/index.ts` 를 통해 결정됩니다.
 - 어쩌면 가장 궁금하실 수 있는 부분인데, TSBOARD는 **Server Side Rendering을 지원하지 않습니다.** 이 선택에 대한 제 나름의 이유들은 아래와 같습니다.
   - TSBOARD 개발 초기부터, 가능하면 서버의 부담을 줄이는 방향으로 개발하고자 했습니다. 브라우저 성능은 계속해서 개선되고 있고, 네트워크도 점점 빨라지면서 이제는 진짜 클라이언트가 좀 더 부담스런 작업들을 많이 해도 괜찮겠다고 생각했었거든요.
-  - Server Side Rendering이 SEO에 유리한 건 맞지만, Client Side Rendering이라고 해서 검색이 안된다거나 하진 않습니다. 다만 불리한 것은 사실이므로, 여러 보완책을 추가로 반영해 나가면서 SEO 개선에도 노력을 기울이겠습니다.
-  - 처음 방문 시 로딩 속도 관점에서는 분명히 Server Side Rendering이 장점인 건 맞습니다. 하지만 5G 시대에 처음 방문하는 웹사이트의 로딩 속도가 느리다고 해봤자 얼마나 느릴까요? 차라리 서버의 부담을 줄여서 응답속도를 개선하는 게 낫겠다는 생각이었습니다.
+  - 그리고, SEO(Search Engine Optimization) 관련한 대책은 아래 별도의 절에서 설명드리고자 합니다.
 
-> GeekNews (<https://news.hada.io>) 에서 받은 조언들을 토대로, v1에서 SEO를 보완하는 방안을 추가로 반영하도록 하겠습니다. 검색 봇들을 위한 Plain HTML 페이지를 별도로 만들고, meta 태그 등을 통해 SEO에 도움 되는 정보를 추가하는 등의 조치를 취하도록 하겠습니다.
-> 이후 v2부터는 SEO에 보다 친화적인 SSR 방식과 CSR 방식을 혼합하는 형태로 개선하여 TSBOARD의 원래 개발 목적에 맞게 서버 부담을 최대한 줄이면서도 SEO에는 좀 더 유리한 방식으로 개선하도록 하겠습니다.
+### SEO (검색 엔진 최적화) 방안
 
-### 백엔드
+- 검색 엔진 최적화를 위해 TSBOARD는 `robots.txt` 파일에 지정된 `Sitemap` 경로를 통해 **서버에서 렌더링한 main.html 페이지를 제공**합니다. (v0.8.40 이상 버전부터 지원)
+- `public/robots.txt` 파일을 열어보면 `Sitemap` 항목에 `sitemap.xml` 경로가 지정되어 있습니다.
+  - 기본 경로는 `https://tsboard.dev/tsapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 설명드렸었습니다.
+- 아래 `sitemap.xml` 예시 내용입니다.
+
+  ```xml
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://tsboard.dev/tsapi/seo/main.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2024-06-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tsboard.dev/tsapi/seo/about.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <lastmod>2024-06-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tsboard.dev/tsapi/seo/policy.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <lastmod>2024-06-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tsboard.dev/board/free</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2024-06-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tsboard.dev/board/photo</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2024-06-02</lastmod>
+  </url>
+  </urlset>
+  ```
+
+- 위 예시에서 가장 중요한 링크는 `https://tsboard.dev/tsapi/seo/main.html` 입니다. 크롤러가 해당 페이지를 방문하면, 서버에서 렌더링된 html 페이지를 만나게 됩니다.
+- 해당 페이지에서는 `src/pages/home/HomePage.vue` 에서 보여지는 게시글들 및 댓글들이 출력됩니다. 얼마나 많이 출력해서 크롤러에게 제공할지는 `tsboard.config.ts` 의 `SEO` 항목을 통해 조절하실 수 있습니다.
+- 크롤러가 수집하는 내용 중에 게시글 링크나 사이트 링크의 경우 기존 CSR로 준비된 페이지로 링크가 걸립니다. 따라서 검색을 통해 해당 `main.html` 페이지를 열람한 사용자는 어떤 링크를 클릭하든 CSR로 만들어진 페이지로 이동할 수 있습니다.
+
+> 결과적으로 검색 엔진 크롤러는 위의 main.html 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
+
+### 백엔드 : Bun & ElysiaJS
 
 - TSBOARD의 빠른 퍼포먼스와 타입 안정성은 `Bun` 과 `ElysiaJS` 덕분입니다.
   - 특히 TSBOARD는 `ElysiaJS` 의 공식 플러그인인 `edenTreaty` 에 크게 의존하고 있습니다.
@@ -272,7 +364,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 또한 내부적으로 SQL을 활용하며, `Prisma` 는 사용하지 않습니다. 물론 특별한 이유는 없고 저는 DB 작업에 여전히 SQL 쿼리가 더 편하기 때문입니다.
   - 모든 쿼리문은 `server/database/common.ts` 에 정의된 4개의 함수 (`select`, `update`, `insert`, `remove`) 를 통해서 할 수 있습니다. 이는 의도한 것으로, 쿼리 실행에 불필요한 `try { ... } catch { ... } finally { ... }` 반복을 줄이고 싶어서 입니다.
 
-## 테이블 구조
+## DB 테이블
 
 - 테이블 구조는 `install/table/query.ts` 파일을 통해 확인 하실 수 있습니다.
 - TSBOARD는 기본적으로 정규화된 테이블 구조를 지향하지만, `SELECT` 쿼리의 횟수를 줄이기 위해서나 혹은 데이터 관리를 보다 편하게 하기 위해 일부 중복된 데이터를 가지도록 구성되어 있습니다.
@@ -283,6 +375,8 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - TSBOARD는 테이블들의 인덱스에 비용을 좀 더 지불하고, 대신 테이블 자체를 게시판 생성에 맞춰 더 만들거나 줄이지 않음으로서 전체 검색이나 게시글 이동과 같은 기능을 쉽게 구현하고자 현재 구조를 선택하게 되었습니다.
   - `post`, `comment` 테이블이 하나로 고정되지만, 보관하는 데이터의 대부분은 사실 외부 키이며 나머지도 대부분 크기가 고정된 정수형 컬럼입니다. 이를 통해 테이블에 가해지는 부담을 줄였습니다.
   - 이러한 디자인을 선택한 대신, 보다 극한의 인덱스 활용을 위해 TSBOARD는 게시글을 삭제해도 실제로 `DELETE` 작업 대신 상태값만 변경하는 식으로 해서 인덱스가 항상 hit 되도록 하였습니다. 결과적으로 TSBOARD는 게시판을 얼마나 많이 만들더라도 DB에 가해지는 부담없이 **여전히 빠르게 동작 가능**합니다.
+
+> `v0.8.40` 이상 버전부터 TSBOARD의 테이블 간 의존 관계를 명확히 하도록 외래 키(FOREIGN KEY) 설정이 적용되었습니다.
 
 ## 커스텀 가이드
 
