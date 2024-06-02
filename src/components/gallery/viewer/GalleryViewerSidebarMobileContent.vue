@@ -4,7 +4,6 @@
     <gallery-viewer-sidebar-tag></gallery-viewer-sidebar-tag>
     <v-divider></v-divider>
 
-    <gallery-viewer-sidebar-date></gallery-viewer-sidebar-date>
     <gallery-viewer-sidebar-comment></gallery-viewer-sidebar-comment>
     <board-view-comment-write-button></board-view-comment-write-button>
   </v-list>
@@ -13,7 +12,6 @@
 <script setup lang="ts">
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
-import GalleryViewerSidebarDate from "./sidebar/GalleryViewerSidebarDate.vue"
 import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
 import BoardViewCommentWriteButton from "../../board/comment/BoardViewCommentWriteButton.vue"
 import GalleryViewerSidebarContent from "./sidebar/GalleryViewerSidebarContent.vue"

@@ -1,9 +1,11 @@
 <template>
-  <v-card class="box" :color="home.color.header">
-    <v-card-title class="post-title"
-      ><v-icon class="mr-2">mdi-pin</v-icon>
-      <strong>{{ TEXT[home.lang].TITLE }}</strong></v-card-title
-    >
+  <v-card class="box-static" :color="home.color.header">
+    <v-list class="pa-0" :bg-color="home.color.header">
+      <v-list-item class="title">
+        {{ TEXT[home.lang].TITLE }}
+      </v-list-item>
+    </v-list>
+
     <v-divider></v-divider>
     <v-card-text class="pa-0 post-content">
       <v-list class="pa-0" :bg-color="home.color.header">
@@ -42,8 +44,12 @@ const util = useUtilStore()
 </script>
 
 <style scoped>
-.post-title {
+.box-static {
+  height: 300px;
+}
+.title {
   font-size: 1em;
+  font-weight: bold;
 }
 .post-content {
   line-height: 1.8em;

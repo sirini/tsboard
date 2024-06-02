@@ -71,8 +71,11 @@ interface Date {
 }
 
 // 현재 시간을 연월일시분초 형태 객체로 반환
-export function generateDate(): Date {
-  const date = new Date()
+export function generateDate(originDate?: number): Date {
+  let date = new Date()
+  if (originDate) {
+    date = new Date(originDate)
+  }
   const result: Date = {
     year: date.getFullYear().toString(),
     month: ("0" + (date.getMonth() + 1)).slice(-2),

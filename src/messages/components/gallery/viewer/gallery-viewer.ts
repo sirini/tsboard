@@ -7,9 +7,7 @@
 export const TEXT = [
   /* LANG.KO */ {
     LIKE_COMMENT_TOOLTIP: "이 댓글에 좋아요를 표시합니다",
-    REPLY_TOOLTIP: "이 댓글에 답글을 작성합니다",
-    MODIFY_TOOLTIP: "댓글 내용을 수정합니다 (작성자/관리자만 가능)",
-    REMOVE_TOOLTIP: "댓글을 삭제합니다 (답글이 달려있을 경우 삭제 불가, 작성자/관리자만 가능)",
+    COMMENT_REPLY: "답글 달기",
     CLOSE_TOOLTIP: "클릭하시면 이 창을 닫습니다",
     LEAVE_COMMENT: "사진이 마음에 드셨다면 댓글을 남겨주세요!",
     VIEW_CONTENT: "글내용 및 댓글 보기",
@@ -35,10 +33,7 @@ export const TEXT = [
   },
   /* LANG.EN */ {
     LIKE_COMMENT_TOOLTIP: "Like this comment",
-    REPLY_TOOLTIP: "Reply to this comment",
-    MODIFY_TOOLTIP: "Edit this comment (only for the author/admin)",
-    REMOVE_TOOLTIP:
-      "Delete this comment (cannot be deleted if there are replies, only for the author/admin)",
+    COMMENT_REPLY: "Reply",
     CLOSE_TOOLTIP: "Click to close this window",
     LEAVE_COMMENT: "If you like the photo, please leave a comment!",
     VIEW_CONTENT: "View content and comments",
@@ -64,9 +59,7 @@ export const TEXT = [
   },
   /* LANG.CN */ {
     LIKE_COMMENT_TOOLTIP: "喜欢这条评论",
-    REPLY_TOOLTIP: "回复此评论",
-    MODIFY_TOOLTIP: "编辑此评论（仅限作者/管理员）",
-    REMOVE_TOOLTIP: "删除此评论（如果有回复则无法删除，仅限作者/管理员）",
+    COMMENT_REPLY: "回复",
     CLOSE_TOOLTIP: "点击关闭此窗口",
     LEAVE_COMMENT: "如果您喜欢这张照片，请留下评论！",
     VIEW_CONTENT: "看内容和评论",

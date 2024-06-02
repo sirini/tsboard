@@ -230,9 +230,22 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     clearVariables()
   }
 
+  // 선택된 파일들의 배열 반환
+  function getFiles(event: MouseEvent): File[] {
+    let result: File[] = []
+    const targets = (event?.target as HTMLInputElement).files
+    if (targets) {
+      const arr = Array.from(targets)
+      for (const f of arr) {
+        result.push(f)
+      }
+    }
+    return result
+  }
+
   // 선택한 파일들 목록 보관하기
   function selectAttachmentFiles(event: MouseEvent): void {
-    files.value = util.attachments(event)
+    files.value = getFiles(event)
   }
 
   // 글 작성 or 수정 후 변수들 초기화
@@ -411,6 +424,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     loadOriginalPost,
     autoSave,
     selectCategory,
+    getFiles,
     selectAttachmentFiles,
     updateTagSuggestion,
     addTag,

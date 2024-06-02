@@ -43,7 +43,7 @@
         v-for="(comment, index) in latest.comments"
         :key="index"
         class="underline"
-        @click="util.go(util.routerName(comment.type as BoardType), comment.id, comment.uid)"
+        @click="util.go(comment.type, comment.id, comment.uid)"
       >
         <template v-slot:prepend>
           <span class="date mr-3">{{ util.date(comment.date) }}</span>

@@ -22,10 +22,20 @@
       prepend-icon="mdi-heart"
       @click="viewer.like(!viewer.post.liked)"
       :color="liked ? 'red' : ''"
+      class="ml-2 mr-2"
     >
       {{ postLike }}
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
     </v-chip>
+
+    <v-btn
+      icon
+      @click="view.download(viewer.images[viewer.position].file.uid)"
+      :disabled="auth.user.uid < 1"
+    >
+      <v-icon>mdi-download</v-icon>
+      <v-tooltip activator="parent">{{ TEXT[home.lang].DOWNLOAD }}</v-tooltip>
+    </v-btn>
 
     <v-spacer></v-spacer>
 
@@ -62,11 +72,6 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-btn>
-
-    <v-btn icon @click="viewer.close"
-      ><v-icon>mdi-close</v-icon>
-      <v-tooltip activator="parent">{{ TEXT[home.lang].CLOSE_TOOLTIP }}</v-tooltip>
     </v-btn>
   </v-toolbar>
 </template>

@@ -4,7 +4,7 @@
       v-bind="props"
       class="mx-auto my-1"
       :width="gallery.gridSize"
-      :elevation="isHovering ? 3 : 0"
+      :elevation="isHovering ? 6 : 0"
     >
       <v-img
         cover
@@ -23,9 +23,16 @@
         class="status text-center"
         width="180"
       >
-        <span class="icon"><v-icon>mdi-image-multiple</v-icon> {{ item.images.length }}</span>
-        <span class="icon"><v-icon>mdi-heart</v-icon> {{ item.like }}</span>
-        <span class="icon"><v-icon>mdi-comment-multiple-outline</v-icon> {{ item.reply }}</span>
+        <span class="icon"
+          ><v-icon size="small">mdi-image-multiple</v-icon> {{ item.images.length }}</span
+        >
+        <span class="icon"
+          ><v-icon size="small" :color="item.liked ? 'red' : ''">mdi-heart</v-icon>
+          {{ item.like }}</span
+        >
+        <span class="icon"
+          ><v-icon size="small">mdi-comment-multiple-outline</v-icon> {{ item.reply }}</span
+        >
       </v-card>
     </v-card>
   </v-hover>
@@ -48,7 +55,8 @@ const props = defineProps<{
 }
 .onHover {
   background-color: black;
-  opacity: 0.5;
+  opacity: 0.3;
+  transition: all 0.3s ease;
 }
 .status {
   position: absolute;

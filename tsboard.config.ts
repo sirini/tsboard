@@ -13,9 +13,10 @@ const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
 export const TSBOARD = {
-  VERSION: "v0.8.31",
+  VERSION: "v0.8.40",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
+    TITLE: "TSBOARD - Type Safety Community Builder" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
@@ -23,6 +24,13 @@ export const TSBOARD = {
     URI: IS_DEV
       ? DEV_URL
       : PROD_URL /* 쿠키가 제대로 동작하려면, API 호출은 3000(개발 시) 혹은 80(프로덕션 시) */,
+  },
+}
+
+export const SEO = {
+  LIMIT: {
+    POST: 50 /* 검색엔진용 페이지에 보여줄 최근 게시글 갯수, 많을수록 페이지 생성이 느려집니다 */,
+    COMMENT: 20 /* 검색엔진용 페이지에 보여줄 게시글 별 최근 댓글 수, 많을수록 페이지 생성이 느려집니다 */,
   },
 }
 

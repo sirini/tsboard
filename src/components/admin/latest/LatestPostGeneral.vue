@@ -44,7 +44,7 @@
         v-for="(post, index) in latest.posts"
         :key="index"
         class="underline"
-        @click="util.go(util.routerName(post.type as BoardType), post.id, post.uid)"
+        @click="util.go(post.type, post.id, post.uid)"
       >
         <template v-slot:prepend>
           <span class="date mr-3">{{ util.date(post.date) }}</span>

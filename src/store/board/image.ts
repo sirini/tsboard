@@ -11,6 +11,7 @@ import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
+import { useBoardEditorStore } from "./editor"
 import { TEXT } from "../../messages/store/board/editor"
 import { Pair } from "../../interface/board"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
@@ -20,6 +21,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
+  const editor = useBoardEditorStore()
   const uploadImageDialog = ref<boolean>(false)
   const addImageFromDBDialog = ref<boolean>(false)
   const showRemoveImageInfo = ref<boolean>(false)
@@ -47,7 +49,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 본문에 삽입할 이미지들 선택 및 업로드
   async function uploadImageFiles(event: MouseEvent): Promise<void> {
-    files.value = util.attachments(event)
+    files.value = editor.getFiles(event)
     const response = await client.tsapi.board.upload.images.post({
       $headers: {
         authorization: auth.user.token,

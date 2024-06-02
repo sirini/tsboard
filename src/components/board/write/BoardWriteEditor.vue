@@ -286,7 +286,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted, onBeforeUnmount } from "vue"
+import { watch, onMounted, onBeforeUnmount, ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useHomeStore } from "../../../store/home"
@@ -346,6 +346,7 @@ const props = defineProps<{
   modelValue: string
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
+const stickyPoint = ref<number>(9999)
 
 // 스크롤 움직임에 따라 에디터 툴바 위치도 조정
 let scrollTimer: any = null
@@ -355,13 +356,13 @@ function changeToolbarPosition(): void {
     const toolbar = document.querySelector("#tsboardEditorToolbar") as HTMLDivElement
     if (!toolbar) return
 
-    const stickyPoint = toolbar.offsetTop
-    if (window.scrollY > stickyPoint) {
+    if (window.scrollY > stickyPoint.value) {
       toolbar.classList.add("sticky")
       toolbar.style.width = `${writeEditor.config.width}px`
     } else {
       toolbar.classList.remove("sticky")
       toolbar.style.width = ""
+      stickyPoint.value = toolbar.offsetTop
     }
   }, 200)
 }

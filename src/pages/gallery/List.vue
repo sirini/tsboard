@@ -25,6 +25,18 @@
               </v-col>
             </v-row>
 
+            <v-btn
+              block
+              elevation="0"
+              variant="text"
+              class="mt-4"
+              :color="home.color.header"
+              @click="gallery.loadOldPhotos"
+              prepend-icon="mdi-restore"
+            >
+              {{ TEXT[home.lang].LOAD_PREV_PHOTOS }}
+            </v-btn>
+
             <v-divider class="mt-6"></v-divider>
 
             <gallery-list-paging></gallery-list-paging>

@@ -5,7 +5,7 @@
  */
 
 import { ref } from "vue"
-import { useRouter } from "vue-router"
+import { NavigationFailure, useRouter } from "vue-router"
 import { defineStore } from "pinia"
 import { BOARD_TYPE, READ_POST_KEY } from "../../server/database/board/const"
 import { BoardType } from "../interface/board"
@@ -62,8 +62,33 @@ export const useUtilStore = defineStore("util", () => {
     alert(message, "info", timeout)
   }
 
+  // 게시판 형태에 따른 라우터 이름 반환
+  function _name(type: BoardType, isView: boolean): string {
+    switch (type) {
+      case BOARD_TYPE.GALLERY:
+        if (isView === false) return "galleryList"
+        else return "galleryOpen"
+      case BOARD_TYPE.BLOG:
+        if (isView === false) return "blogList"
+        else return "blogView"
+      case BOARD_TYPE.SHOP:
+        if (isView === false) return "shopList"
+        else return "shopView"
+      default:
+        if (isView === false) return "boardList"
+        else return "boardView"
+    }
+  }
+
   // 페이지 이동하기
-  function go(name: string, id: string = "", no: number = 0): void {
+  function go(target: string | BoardType, id: string = "", no: number = 0): void {
+    let name = ""
+    if ("string" === typeof target) {
+      name = target
+    } else {
+      name = _name(target, no > 0)
+    }
+
     if (id.length < 1) {
       if (no < 1) {
         router.push({ name })
@@ -141,58 +166,6 @@ export const useUtilStore = defineStore("util", () => {
     }
   }
 
-  // 선택된 파일들의 배열 반환
-  function attachments(event: MouseEvent): File[] {
-    let result: File[] = []
-    const targets = (event?.target as HTMLInputElement).files
-    if (targets) {
-      const arr = Array.from(targets)
-      for (const f of arr) {
-        result.push(f)
-      }
-    }
-    return result
-  }
-
-  // 게시글을 이미 읽었는지 확인하기
-  function isAlreadyRead(postUid: number): boolean {
-    const readPosts = window.localStorage.getItem(READ_POST_KEY)
-    if (readPosts) {
-      const postUids = JSON.parse(readPosts) as number[]
-      return postUids.includes(postUid)
-    }
-    return false
-  }
-
-  // 게시글 읽음으로 체크하기
-  function markAsRead(postUid: number): void {
-    const readPosts = window.localStorage.getItem(READ_POST_KEY)
-    let postUids: number[] = []
-    if (readPosts) {
-      postUids = JSON.parse(readPosts) as number[]
-    }
-    postUids.push(postUid)
-    window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
-  }
-
-  // 게시판 형태에 따른 라우터 이름 반환
-  function routerName(type: BoardType, action: "list" | "view" = "list"): string {
-    switch (type) {
-      case BOARD_TYPE.GALLERY:
-        if (action === "list") return "galleryList"
-        else return "galleryOpen"
-      case BOARD_TYPE.BLOG:
-        if (action === "list") return "blogList"
-        else return "blogView"
-      case BOARD_TYPE.SHOP:
-        if (action === "list") return "shopList"
-        else return "shopView"
-      default:
-        if (action === "list") return "boardList"
-        else return "boardView"
-    }
-  }
-
   return {
     snackbar,
     snackbarTimeout,
@@ -213,9 +186,5 @@ export const useUtilStore = defineStore("util", () => {
     date,
     unescape,
     num,
-    attachments,
-    isAlreadyRead,
-    markAsRead,
-    routerName,
   }
 })

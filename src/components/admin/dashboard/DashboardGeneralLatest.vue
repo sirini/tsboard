@@ -22,7 +22,7 @@
           <v-list-item
             v-for="(post, index) in dashboard.posts"
             :key="index"
-            @click="util.go(util.routerName(post.type as BoardType, 'view'), post.id, post.uid)"
+            @click="util.go(post.type, post.id, post.uid)"
             :prepend-avatar="
               post.writer.profile.length < 1
                 ? `${TSBOARD.PREFIX}/no-profile.svg`
@@ -55,9 +55,7 @@
           <v-list-item
             v-for="(comment, index) in dashboard.comments"
             :key="index"
-            @click="
-              util.go(util.routerName(comment.type as BoardType, 'view'), comment.id, comment.uid)
-            "
+            @click="util.go(comment.type, comment.id, comment.uid)"
             :prepend-avatar="
               comment.writer.profile.length < 1
                 ? `${TSBOARD.PREFIX}/no-profile.svg`

@@ -1,0 +1,141 @@
+body {
+  font-family: "IBM Plex Sans KR", sans-serif;
+  font-weight: 400;
+  margin: 0px;
+  font-size: 1em;
+  background-color: #eceff1;
+}
+
+a {
+  text-decoration: none;
+}
+
+#tsboardToolbar {
+  position: fixed;
+  z-index: 100;
+  top: 0px;
+  width: 100%;
+  height: 64px;
+  padding-left: 30px;
+  background-color: #37474f;
+}
+
+#tsboardToolbar .title {
+  cursor: pointer;
+  font-family: "Protest Strike", sans-serif;
+  font-size: 1.6em;
+  color: white;
+}
+
+#tsboardToolbar .title a {
+  color: white;
+}
+
+#tsboardContainer {
+  padding-top: 64px;
+  width: 1000px;
+  min-height: 300px;
+  margin: auto;
+}
+
+#tsboardContainer .article {
+  position: relative;
+  margin-top: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+#tsboardContainer .article:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+#tsboardContainer .tag {
+  border-top: #dddddd 1px solid;
+  padding: 15px;
+}
+
+#tsboardContainer ul {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  list-style-type: none;
+}
+
+#tsboardContainer .tag li {
+  display: inline;
+  margin-top: 5px;
+  margin-right: 5px;
+  background-color: #cfd8dc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#tsboardContainer .comment {
+  border-top: #dddddd 1px solid;
+  padding: 15px;
+}
+
+#tsboardContainer .pa {
+  padding: 15px;
+}
+
+#tsboardContainer .image {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+}
+
+#tsboardContainer .post {
+  margin-left: 320px;
+  height: 300px;
+  overflow: hidden;
+}
+
+#tsboardContainer .post .title {
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#tsboardContainer .post .title a {
+  color: #263238;
+}
+
+#tsboardContainer .post .content {
+  line-height: 1.6em;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+#tsboardContainer .additional {
+  font-size: 0.9em;
+  color: #b0bec5;
+  padding-bottom: 10px;
+}
+
+#tsboardFooter {
+  background-color: #cfd8dc;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 30px;
+}
+
+#tsboardFooter a {
+  color: #455a64;
+}
+
+#tsboardFooter .poweredBy {
+  padding-top: 10px;
+  color: #b0bec5;
+  font-size: 0.9em;
+}
+
+#tsboardFooter .poweredBy a {
+  color: #b0bec5;
+}

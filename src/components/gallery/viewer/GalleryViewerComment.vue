@@ -30,35 +30,34 @@
         }}</v-tooltip>
       </v-chip>
 
-      <v-btn
-        icon
-        size="small"
-        :disabled="auth.user.uid < 1"
-        @click="comment.setReplyComment(commentUid, commentContent, false)"
-        ><v-icon>mdi-reply</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REPLY_TOOLTIP }}</v-tooltip>
-      </v-btn>
+      <v-btn icon size="small">
+        <v-icon>mdi-dots-vertical</v-icon>
+        <v-menu activator="parent" open-on-hover>
+          <v-list>
+            <v-list-item
+              prepend-icon="mdi-reply"
+              :disabled="auth.user.uid < 1"
+              @click="comment.setReplyComment(commentUid, commentContent, false)"
+              >{{ TEXT[home.lang].COMMENT_REPLY }}
+            </v-list-item>
 
-      <v-btn
-        icon
-        size="small"
-        :disabled="auth.user.uid !== writerUid && !auth.user.admin"
-        @click="comment.setModifyComment(commentUid, commentContent)"
-        ><v-icon>mdi-pencil</v-icon>
-        <v-tooltip activator="parent" location="top">{{
-          TEXT[home.lang].MODIFY_TOOLTIP
-        }}</v-tooltip>
-      </v-btn>
+            <v-list-item
+              :disabled="auth.user.uid !== writerUid && !auth.user.admin"
+              @click="comment.setModifyComment(commentUid, commentContent)"
+              prepend-icon="mdi-pencil"
+            >
+              {{ TEXT[home.lang].MODIFY }}
+            </v-list-item>
 
-      <v-btn
-        icon
-        size="small"
-        :disabled="auth.user.uid !== writerUid && !auth.user.admin"
-        @click="remove"
-        ><v-icon>mdi-trash-can</v-icon>
-        <v-tooltip activator="parent" location="top">{{
-          TEXT[home.lang].REMOVE_TOOLTIP
-        }}</v-tooltip>
+            <v-list-item
+              :disabled="auth.user.uid !== writerUid && !auth.user.admin"
+              @click="remove"
+              prepend-icon="mdi-trash-can"
+            >
+              {{ TEXT[home.lang].REMOVE }}
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-btn>
     </v-card-actions>
   </v-card>

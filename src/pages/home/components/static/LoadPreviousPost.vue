@@ -1,5 +1,10 @@
 <template>
-  <v-card class="box" :color="home.color.header" @click="home.loadLatestPosts" variant="text">
+  <v-card
+    class="box-static"
+    :color="home.color.header"
+    @click="home.loadLatestPosts"
+    variant="text"
+  >
     <v-card-text class="text-center mt-12">
       <v-icon size="150">mdi-restore</v-icon>
     </v-card-text>
@@ -11,3 +16,9 @@ import { useHomeStore } from "../../../../store/home"
 
 const home = useHomeStore()
 </script>
+
+<style scoped>
+.box-static {
+  height: 300px;
+}
+</style>

@@ -14,7 +14,7 @@
       <v-list-item
         v-for="(board, idx) in group.boards"
         :key="idx"
-        @click="util.go(util.routerName(board.type), board.id)"
+        @click="util.go(board.type, board.id)"
         append-icon="mdi-chevron-right"
         >{{ board.name }}
         <v-tooltip activator="parent">{{ board.info }}</v-tooltip>

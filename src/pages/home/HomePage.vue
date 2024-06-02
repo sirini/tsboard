@@ -20,6 +20,10 @@
               <home-page-grid-board id="free" :limit="5"></home-page-grid-board>
             </v-col>
 
+            <v-col :cols="home.cols">
+              <home-page-grid-board id="photo" :limit="5"></home-page-grid-board>
+            </v-col>
+
             <v-col v-for="(post, index) in home.latestPosts" :key="index" :cols="home.cols">
               <home-page-grid-post :post="post"></home-page-grid-post>
             </v-col>
@@ -62,7 +66,7 @@ onMounted(async () => {
       if (scroll > document.body.offsetHeight) {
         home.loadLatestPosts()
       }
-    }, 500)
+    }, 250)
   }
 })
 </script>
@@ -76,10 +80,5 @@ onMounted(async () => {
 }
 .layout {
   margin-top: 64px;
-}
-/* for HomePageGrid(Board|Post).vue */
-.box {
-  font-size: 1em;
-  height: 300px;
 }
 </style>

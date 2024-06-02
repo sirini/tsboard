@@ -9,6 +9,7 @@ import { useRoute, useRouter } from "vue-router"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../../server/index"
 import { useAuthStore } from "../../user/auth"
+import { useBoardViewStore } from "../view"
 import { useUtilStore } from "../../util"
 import { useHomeStore } from "../../home"
 import { Position } from "../../../interface/gallery"
@@ -28,6 +29,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
+  const view = useBoardViewStore()
   const util = useUtilStore()
   const home = useHomeStore()
   const dialog = ref<boolean>(false)
@@ -72,8 +74,8 @@ export const useViewerStore = defineStore("viewer", () => {
     }
 
     let needUpdateHit = 0
-    if (util.isAlreadyRead(postUid.value) === false) {
-      util.markAsRead(postUid.value)
+    if (view.isAlreadyRead(postUid.value) === false) {
+      view.markAsRead(postUid.value)
       needUpdateHit = 1
     }
 

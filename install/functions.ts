@@ -181,12 +181,12 @@ export async function initDatabase(info: SetupInfo): Promise<boolean> {
 
   const prefix = `${info.db.name}.${info.db.prefix}`
   for (const sql of tables) {
-    const query = sql.replace("#db#", prefix)
+    const query = sql.replaceAll("#db#", prefix)
     await conn.execute(query)
   }
 
   for (const sql of inserts) {
-    const query = sql.replace("#db#", prefix)
+    const query = sql.replaceAll("#db#", prefix)
     await conn.execute(query)
   }
 

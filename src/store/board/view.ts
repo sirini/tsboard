@@ -14,7 +14,12 @@ import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
 import { BoardConfig, Pair, PhotoItem, PostFile, PostView } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/view"
-import { BOARD_CONFIG, TYPE_MATCH, INIT_POST_VIEW } from "../../../server/database/board/const"
+import {
+  BOARD_CONFIG,
+  TYPE_MATCH,
+  INIT_POST_VIEW,
+  READ_POST_KEY,
+} from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardViewStore = defineStore("boardView", () => {
@@ -41,8 +46,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
 
     let needUpdateHit = 0
-    if (util.isAlreadyRead(postUid.value) === false) {
-      util.markAsRead(postUid.value)
+    if (isAlreadyRead(postUid.value) === false) {
+      markAsRead(postUid.value)
       needUpdateHit = 1
     }
 
@@ -178,6 +183,27 @@ export const useBoardViewStore = defineStore("boardView", () => {
     util.go(route.name === "galleryOpen" ? "galleryList" : "boardList", id.value)
   }
 
+  // 게시글을 이미 읽었는지 확인하기
+  function isAlreadyRead(postUid: number): boolean {
+    const readPosts = window.localStorage.getItem(READ_POST_KEY)
+    if (readPosts) {
+      const postUids = JSON.parse(readPosts) as number[]
+      return postUids.includes(postUid)
+    }
+    return false
+  }
+
+  // 게시글 읽음으로 체크하기
+  function markAsRead(postUid: number): void {
+    const readPosts = window.localStorage.getItem(READ_POST_KEY)
+    let postUids: number[] = []
+    if (readPosts) {
+      postUids = JSON.parse(readPosts) as number[]
+    }
+    postUids.push(postUid)
+    window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
+  }
+
   return {
     confirmRemovePostDialog,
     id,
@@ -193,5 +219,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     openConfirmRemoveDialog,
     closeConfirmRemoveDialog,
     removePost,
+    isAlreadyRead,
+    markAsRead,
   }
 })

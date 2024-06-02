@@ -1,3 +1,5 @@
+import { BOARD_TYPE } from "../../server/database/board/const"
+
 /**
  * install/table/query
  *
@@ -37,7 +39,8 @@ tables.push(`${create} #db#user_token (
   user_uid INT ${unnd0},
   refresh CHAR(64) ${nnde},
   timestamp BIGINT ${unnd0},
-  KEY (user_uid)
+  KEY (user_uid),
+  CONSTRAINT fk_ut FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 사용자의 권한들은 1 = 가능 / 0 = 차단
@@ -49,7 +52,8 @@ tables.push(`${create} #db#user_permission (
   send_chat TINYINT UNSIGNED ${nnd} '1',
   send_report TINYINT UNSIGNED ${nnd} '1',
   ${primary},
-  KEY (user_uid)
+  KEY (user_uid),
+  CONSTRAINT fk_up FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 가입 시 사용자 인증용 테이블
@@ -73,7 +77,8 @@ tables.push(`${create} #db#user_access_log (
 tables.push(`${create} #db#user_black_list (
   user_uid INT ${unnd0},
   black_uid INT ${unnd0},
-  KEY (user_uid)
+  KEY (user_uid),
+  CONSTRAINT fk_ubl FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 신고 내역
@@ -98,7 +103,9 @@ tables.push(`${create} #db#chat (
   timestamp BIGINT ${unnd0},
   ${primary},
   KEY (to_uid),
-  KEY (from_uid)
+  KEY (from_uid),
+  CONSTRAINT fk_ct FOREIGN KEY (to_uid) REFERENCES #db#user(uid),
+  CONSTRAINT fk_cf FOREIGN KEY (from_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 그룹 관리용 테이블
@@ -140,7 +147,8 @@ tables.push(`${create} #db#board_category (
   board_uid INT ${unnd0},
   name VARCHAR(30) ${nnde},
   ${primary},
-  KEY (board_uid)
+  KEY (board_uid),
+  CONSTRAINT fk_bc FOREIGN KEY (board_uid) REFERENCES #db#board(uid)
 ) ${engineEncode}`)
 
 // 포인트 사용 이력 보관 테이블 (action = 0 view / 1 write / 2 comment / 3 download)
@@ -151,7 +159,8 @@ tables.push(`${create} #db#point_history (
   action TINYINT ${unnd0},
   point INT ${nnd0},
   ${primary},
-  KEY (user_uid)
+  KEY (user_uid),
+  CONSTRAINT fk_ph FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 게시글 보관 테이블 (status = -1 삭제됨 / 0 정상 / 1 공지)
@@ -172,17 +181,10 @@ tables.push(`${create} #db#post (
   KEY (category_uid),
   KEY (submitted),
   KEY (hit),
-  KEY (status)
-) ${engineEncode}`)
-
-// 게시글과 해시태그들의 연관성 정보 보관 테이블
-tables.push(`${create} #db#post_hashtag (
-  board_uid INT ${unnd0},
-  post_uid INT ${unnd0},
-  hashtag_uid INT ${unnd0},
-  KEY (board_uid),
-  KEY (post_uid),
-  KEY (hashtag_uid)
+  KEY (status),
+  CONSTRAINT fk_pb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
+  CONSTRAINT fk_pu FOREIGN KEY (user_uid) REFERENCES #db#user(uid),
+  CONSTRAINT fk_pc FOREIGN KEY (category_uid) REFERENCES #db#board_category(uid)
 ) ${engineEncode}`)
 
 // 해시태그 테이블
@@ -194,6 +196,19 @@ tables.push(`${create} #db#hashtag (
   ${primary}
 ) ${engineEncode}`)
 
+// 게시글과 해시태그들의 연관성 정보 보관 테이블
+tables.push(`${create} #db#post_hashtag (
+  board_uid INT ${unnd0},
+  post_uid INT ${unnd0},
+  hashtag_uid INT ${unnd0},
+  KEY (board_uid),
+  KEY (post_uid),
+  KEY (hashtag_uid),
+  CONSTRAINT fk_phb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
+  CONSTRAINT fk_php FOREIGN KEY (post_uid) REFERENCES #db#post(uid),
+  CONSTRAINT fk_phh FOREIGN KEY (hashtag_uid) REFERENCES #db#hashtag(uid)
+) ${engineEncode}`)
+
 // 게시글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
 tables.push(`${create} #db#post_like (
   board_uid INT ${unnd0},
@@ -203,7 +218,9 @@ tables.push(`${create} #db#post_like (
   timestamp BIGINT ${unnd0},
   KEY (post_uid),
   KEY (user_uid),
-  KEY (liked)
+  KEY (liked),
+  CONSTRAINT fk_plp FOREIGN KEY (post_uid) REFERENCES #db#post(uid),
+  CONSTRAINT fk_plu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 댓글 보관 테이블 (status = -1 삭제됨 / 0 정상 / 1 공지)
@@ -223,7 +240,10 @@ tables.push(`${create} #db#comment (
   KEY (post_uid),
   KEY (user_uid),
   KEY (submitted),
-  KEY (status)
+  KEY (status),
+  CONSTRAINT fk_cb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
+  CONSTRAINT fk_cp FOREIGN KEY (post_uid) REFERENCES #db#post(uid),
+  CONSTRAINT fk_cu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 댓글에 대해 사용자마다 좋아요를 눌렀는지 상태 저장
@@ -235,7 +255,9 @@ tables.push(`${create} #db#comment_like (
   timestamp BIGINT ${unnd0},
   KEY (comment_uid),
   KEY (user_uid),
-  KEY (liked)
+  KEY (liked),
+  CONSTRAINT fk_clc FOREIGN KEY (comment_uid) REFERENCES #db#comment(uid),
+  CONSTRAINT fk_clu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 파일 첨부하기 기능으로 추가한 파일 정보 보관하는 테이블
@@ -247,7 +269,8 @@ tables.push(`${create} #db#file (
   path VARCHAR(300) ${nnde},
   timestamp BIGINT ${unnd0},
   ${primary},
-  KEY (post_uid)
+  KEY (post_uid),
+  CONSTRAINT fk_f FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
 ) ${engineEncode}`)
 
 // 첨부된 파일이 이미지일 때 썸네일/풀 이미지 경로 보관하는 테이블,
@@ -260,7 +283,9 @@ tables.push(`${create} #db#file_thumbnail (
   full_path VARCHAR(300) ${nnde},
   ${primary},
   KEY (file_uid),
-  KEY (post_uid)
+  KEY (post_uid),
+  CONSTRAINT fk_ftf FOREIGN KEY (file_uid) REFERENCES #db#file(uid),
+  CONSTRAINT fk_ftp FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
 ) ${engineEncode}`)
 
 // 본문 작성 시 이미지 첨부하기 기능으로 추가한 이미지 정보 보관하는 테이블, 이미지는 리사이즈 후 저장됨
@@ -271,7 +296,9 @@ tables.push(`${create} #db#image (
   path VARCHAR(300) ${nnde},
   timestamp BIGINT ${unnd0},
   ${primary},
-  KEY (user_uid)
+  KEY (user_uid),
+  CONSTRAINT fk_ib FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
+  CONSTRAINT fk_iu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 알림 정보 저장용 테이블
@@ -289,7 +316,9 @@ tables.push(`${create} #db#notification (
   KEY (to_uid),
   KEY (from_uid),
   KEY (post_uid),
-  KEY (checked)
+  KEY (checked),
+  CONSTRAINT fk_nt FOREIGN KEY (to_uid) REFERENCES #db#user(uid),
+  CONSTRAINT fk_nf FOREIGN KEY (from_uid) REFERENCES #db#board(uid)
 ) ${engineEncode}`)
 
 // EXIF 정보 저장하는 테이블 (^0.8.22)
@@ -310,7 +339,9 @@ tables.push(`${create} #db#exif (
   date BIGINT ${unnd0},
   ${primary},
   KEY (file_uid),
-  KEY (post_uid)
+  KEY (post_uid),
+  CONSTRAINT fk_ef FOREIGN KEY (file_uid) REFERENCES #db#file(uid),
+  CONSTRAINT fk_ep FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
 ) ${engineEncode}`)
 
 // 이미지 설명글을 저장하는 테이블 (^0.8.26 by OpenAI API)
@@ -321,7 +352,9 @@ tables.push(`${create} #db#image_description (
   description VARCHAR(500) ${nnde},
   ${primary},
   KEY (file_uid),
-  KEY (post_uid)
+  KEY (post_uid),
+  CONSTRAINT fk_idf FOREIGN KEY (file_uid) REFERENCES #db#file(uid),
+  CONSTRAINT fk_idp FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
 ) ${engineEncode}`)
 
 //////////
@@ -331,16 +364,16 @@ tables.push(`${create} #db#image_description (
 inserts.push(`INSERT INTO #db#group (
   id, admin_uid, timestamp
 ) VALUES (
-  'default', 1, ${Date.now()}
+  'boards', 1, ${Date.now()}
 )`)
 
-// 자유 게시판 생성하기 (삭제 가능)
+// 자유 게시판 생성하기
 inserts.push(`INSERT INTO #db#board (
   id, group_uid, admin_uid, type, name, info, row_count, width, use_category,
   level_list, level_view, level_write, level_comment, level_download,
   point_view, point_write, point_comment, point_download
 ) VALUES (
-  'free', 1, 1, 0, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1000, 1,
+  'free', 1, 1, ${BOARD_TYPE.BOARD}, '자유 게시판', '아무거나 자유롭게 써봅시다', 20, 1000, 1,
   0, 0, 1, 1, 1,
   0, 5, 2, -5
 )`)
@@ -354,15 +387,28 @@ inserts.push(`INSERT INTO #db#board_category (
 inserts.push(`INSERT INTO #db#board_category (
   board_uid, name
 ) VALUES (
-  1, '아무거나'
-)`)
-inserts.push(`INSERT INTO #db#board_category (
-  board_uid, name
-) VALUES (
   1, '질문답변'
 )`)
 inserts.push(`INSERT INTO #db#board_category (
   board_uid, name
 ) VALUES (
   1, '새소식'
+)`)
+
+// 갤러리 생성하기
+inserts.push(`INSERT INTO #db#board (
+  id, group_uid, admin_uid, type, name, info, row_count, width, use_category,
+  level_list, level_view, level_write, level_comment, level_download,
+  point_view, point_write, point_comment, point_download
+) VALUES (
+  'photo', 1, 1, ${BOARD_TYPE.GALLERY}, '갤러리', '우리만의 인스타그램', 16, 1000, 0,
+  0, 0, 1, 1, 1,
+  0, 5, 2, -5
+)`)
+
+// 갤러리의 기본 카테고리
+inserts.push(`INSERT INTO #db#board_category (
+  board_uid, name
+) VALUES (
+  2, '일상'
 )`)

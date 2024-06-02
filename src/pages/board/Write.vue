@@ -88,7 +88,7 @@
       </v-main>
     </v-layout>
     <board-write-cancel-dialog
-      @cancel="util.go(util.routerName(editor.config.type as BoardType, 'list'), editor.id)"
+      @cancel="util.go(editor.config.type, editor.id)"
     ></board-write-cancel-dialog>
     <board-write-loading-dialog></board-write-loading-dialog>
   </v-app>
@@ -113,7 +113,6 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/board/write"
-import { BoardType } from "../../interface/board"
 
 const route = useRoute()
 const auth = useAuthStore()

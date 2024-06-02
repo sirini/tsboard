@@ -6,4 +6,4 @@ Disallow: /admin/report
 Disallow: /admin/latest/post
 Disallow: /admin/latest/comment
 
-Sitemap: https://tsboard.dev/tsapi/sitemap.xml
+Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml

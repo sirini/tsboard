@@ -6,19 +6,21 @@
         <gallery-list-search></gallery-list-search>
       </v-menu>
     </v-btn>
-    <v-btn @click="gallery.loadOldPhotos" prepend-icon="mdi-download">{{
-      TEXT[home.lang].PREV
-    }}</v-btn>
 
     <v-spacer></v-spacer>
-    <v-chip variant="tonal" color="blue-grey-lighten-3" v-if="home.isMobile === false">
+
+    <v-chip variant="tonal" color="blue-grey-lighten-3">
       {{ gallery.page }} / {{ gallery.pageLength }}
     </v-chip>
-    <v-spacer v-if="home.isMobile === false"></v-spacer>
+    <v-spacer></v-spacer>
 
-    <v-btn prepend-icon="mdi-list-box-outline" @click="gallery.list">{{
-      TEXT[home.lang].LIST
-    }}</v-btn>
+    <v-btn
+      prepend-icon="mdi-list-box-outline"
+      @click="gallery.list"
+      v-if="home.isMobile === false"
+      >{{ TEXT[home.lang].LIST }}</v-btn
+    >
+
     <v-btn
       prepend-icon="mdi-upload"
       @click="util.go('galleryWrite', gallery.id)"
