@@ -302,7 +302,6 @@ server {
 ### SEO (검색 엔진 최적화) 방안
 
 - 검색 엔진 최적화를 위해 TSBOARD는 `public/robots.txt` 파일에 지정된 `Sitemap:` 경로를 통해 **서버에서 렌더링한 main.html 페이지를 제공**합니다. (v0.8.40 이상 버전부터 지원)
-- `public/robots.txt` 파일을 열어보면 `Sitemap:` 항목에 `sitemap.xml` 경로가 지정되어 있습니다.
   - 기본 경로는 `https://tsboard.dev/tsapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 말씀드린 적이 있습니다!
 - 아래 `sitemap.xml` 예시 내용입니다.
 
