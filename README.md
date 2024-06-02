@@ -134,7 +134,7 @@ Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
     - 백엔드 서버를 시작하기 전, 반드시 기존에 동작중인 백엔드 서버는 종료해 주세요. `Node.js` 를 주로 사용하신 분들은 `pm2` 프로세스 매니저 사용이 익숙하실텐데, Bun도 `pm2`를 지원하므로 프로세스 관리에 참조해 보세요! (<https://bun.sh/guides/ecosystem/pm2>)
 
 ```
-pm2 start --interpreter ~/.bun/bin/bun server/index.ts
+pm2 reload --interpreter ~/.bun/bin/bun server/index.ts
 ```
 
 ### AI 기능 활성화하기
@@ -160,7 +160,7 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
 
 ### TSBOARD 업데이트
 
-> 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다. DB의 경우에도 mysqldump 프로그램을 통해 백업하시고 작업을 진행하세요!
+> 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다. DB의 경우에도 `mysqldump` 프로그램을 통해 백업하시고 작업을 진행하세요!
 
 - 설치 후 TSBOARD를 업데이트 하고자 할 땐 `git pull` 를 실행하시면 됩니다.
   - `git pull` 진행 시 여러분이 직접 수정하신 파일과, TSBOARD에서 변경된 내용이 충돌날 수 있습니다.
@@ -185,82 +185,78 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
 
 > Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
 
-- 축하합니다! 여러분은 `git clone` → `bun install` → `bun setup.ts` 과정까지 무사히 마쳤습니다.
-- 이제 보다 원할한 TSBOARD 활용을 위해, 아래의 추가적인 설정 단계를 진행해 봅시다.
+- 축하합니다! 여러분은 `git clone` → `bun install` → `bun setup.ts` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
+- 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
+- `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
+- `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
 
-  - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
-  - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
-  - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
-  <p>&nbsp;</p>
+```
+# /etc/nginx/sites-enabled/default
+#
+# TSBOARD가 권장 설치 경로에 설치되어 있고,
+# 현재 운영중인 웹사이트의 도메인이 tsboard.dev 인걸 가정하고 있습니다.
+# 아울러, tsboard.config.ts 파일의 PORT 부분을 수정하지 않은 걸 가정합니다.
+#
+server {
+  root /var/www/tsboard.git/dist; # TSBOARD설치경로/dist
 
-  ```
-  # /etc/nginx/sites-enabled/default
-  #
-  # TSBOARD가 권장 설치 경로에 설치되어 있고,
-  # 현재 운영중인 웹사이트의 도메인이 tsboard.dev 인걸 가정하고 있습니다.
-  # 아울러, tsboard.config.ts 파일의 PORT 부분을 수정하지 않은 걸 가정합니다.
-  #
-  server {
-    root /var/www/tsboard.git/dist; # TSBOARD설치경로/dist
+  index index.html index.htm;
 
-    index index.html index.htm;
+  server_name tsboard.dev; # 사용하시는 도메인 이름으로 변경 필요
 
-    server_name tsboard.dev; # 사용하시는 도메인 이름으로 변경 필요
+  # 최대 업로드 허용 크기, tsboard.config.ts 파일의 SIZE.MAX_FILE 주석 참조
+  client_max_body_size 20M;
 
-    # 최대 업로드 허용 크기, tsboard.config.ts 파일의 SIZE.MAX_FILE 주석 참조
-    client_max_body_size 20M;
-
-    location /upload {
-      root /var/www/tsboard.dev; # TSBOARD설치경로, 이 폴더 아래에 upload 폴더 위치
-      try_files $uri $uri/ =404;
-    }
-
-    location / {
-      try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
-    }
-
-    # v0.8.18부터 기존 /api 가 /tsapi 로 변경됨 (타 백엔드와 충돌 방지)
-    location /tsapi {
-      # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
-      proxy_pass http://127.0.0.1:3100/tsapi;
-      proxy_buffering off;
-      proxy_connect_timeout 300;
-      proxy_send_timeout 300;
-      proxy_read_timeout 300;
-      send_timeout 300;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Host $host;
-      proxy_cache_bypass $http_upgrade;
-    }
-
-    # 이미 SSL 설정을 하셨다면 보통 하단에 관련 내용이 나타납니다.
+  location /upload {
+    root /var/www/tsboard.dev; # TSBOARD설치경로, 이 폴더 아래에 upload 폴더 위치
+    try_files $uri $uri/ =404;
   }
-  ```
 
-  - 추가로, `apache2` 웹서버를 사용중이신 분들은 아래 내용을 참조해 주세요! (참고: <https://enginnersnack.tistory.com/15>)
-  <p>&nbsp;</p>
+  location / {
+    try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
+  }
 
-  ```
-  #
-  # /etc/apache2/site-available/000-default.conf
-  #
-  # apache2 웹서버 사용 시 TSBOARD 설정 예시입니다. 위 참고 페이지도 확인해보세요!
-  #
-  <VirtualHost *:443>
-    DocumentRoot /var/www/tsboard.git/dist  # TSBOARD 설치 경로
-    ProxyRequests Off
-    ProxyPreserveHost On
-    <Proxy *>
-      Order deny,allow
-      Allow from all
-    </Proxy>
+  # v0.8.18부터 기존 /api 가 /tsapi 로 변경됨 (타 백엔드와 충돌 방지)
+  location /tsapi {
     # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
-    ProxyPass /tsapi http://127.0.0.1:3100/tsapi
-    ProxyPassReverse /tsapi http://127.0.0.1:3100/tsapi
-  </VirtualHost>
-  ```
+    proxy_pass http://127.0.0.1:3100/tsapi;
+    proxy_buffering off;
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+    proxy_read_timeout 300;
+    send_timeout 300;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+
+  # 이미 SSL 설정을 하셨다면 보통 하단에 관련 내용이 나타납니다.
+}
+```
+
+- 추가로, `apache2` 웹서버를 사용중이신 분들은 아래 내용을 참조해 주세요! (참고: <https://enginnersnack.tistory.com/15>)
+
+```
+#
+# /etc/apache2/site-available/000-default.conf
+#
+# apache2 웹서버 사용 시 TSBOARD 설정 예시입니다. 위 참고 페이지도 확인해보세요!
+#
+<VirtualHost *:443>
+  DocumentRoot /var/www/tsboard.git/dist  # TSBOARD 설치 경로
+  ProxyRequests Off
+  ProxyPreserveHost On
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+  # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
+  ProxyPass /tsapi http://127.0.0.1:3100/tsapi
+  ProxyPassReverse /tsapi http://127.0.0.1:3100/tsapi
+</VirtualHost>
+```
 
 ## 설치가 어려운 분들께
 
@@ -290,7 +286,7 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
 
 ## 전체 구조
 
-### 프론트엔드 : Client Side Rendering
+### 프론트엔드 : Vue, VuetifyJS, Tiptap
 
 - 프론트엔드는 `Vue`, `Vuetify`, `Vue Router`, `Pinia` 그리고 에디터에 `tiptap` 이 사용됩니다.
 - `.vue` 파일에서 UI는 대부분 `Vuetify` 컴포넌트를 사용하는 걸로 구현되어 있습니다. 대부분 `<v-card>` 처럼 `v-` 접두사를 가집니다.
@@ -299,15 +295,15 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
   - 만약 기존에 게시판 목록보기 페이지인 `src/pages/board/List.vue` 을 그대로 둔 상태에서, 다른 디자인의 목록보기 페이지를 예를 들어 `src/pages/something_new_board/AwesomeList.vue` 경로에 만들었다고 합시다.
   - 게시판 목록을 새로 만든 디자인으로 보길 원한다면, 추가로 `src/router/board.ts` 파일을 열어서 `@/pages/board/List.vue` 로 적힌 부분을 모두 `@/pages/something_new_board/AwesomeList.vue` 로 수정해야 합니다.
   - TSBOARD는 Client Side Rendering 방식으로 동작합니다. 따라서 모든 접속 경로는 반드시 `src/router/index.ts` 를 통해 결정됩니다.
-- 어쩌면 가장 궁금하실 수 있는 부분인데, TSBOARD는 **Server Side Rendering을 지원하지 않습니다.** 이 선택에 대한 제 나름의 이유들은 아래와 같습니다.
+- 어쩌면 가장 궁금하실 수 있는 부분인데, TSBOARD는 **Client Side Rendering** 방식으로 동작합니다.
   - TSBOARD 개발 초기부터, 가능하면 서버의 부담을 줄이는 방향으로 개발하고자 했습니다. 브라우저 성능은 계속해서 개선되고 있고, 네트워크도 점점 빨라지면서 이제는 진짜 클라이언트가 좀 더 부담스런 작업들을 많이 해도 괜찮겠다고 생각했었거든요.
   - 그리고, SEO(Search Engine Optimization) 관련한 대책은 아래 별도의 절에서 설명드리고자 합니다.
 
 ### SEO (검색 엔진 최적화) 방안
 
-- 검색 엔진 최적화를 위해 TSBOARD는 `robots.txt` 파일에 지정된 `Sitemap` 경로를 통해 **서버에서 렌더링한 main.html 페이지를 제공**합니다. (v0.8.40 이상 버전부터 지원)
-- `public/robots.txt` 파일을 열어보면 `Sitemap` 항목에 `sitemap.xml` 경로가 지정되어 있습니다.
-  - 기본 경로는 `https://tsboard.dev/tsapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 설명드렸었습니다.
+- 검색 엔진 최적화를 위해 TSBOARD는 `public/robots.txt` 파일에 지정된 `Sitemap:` 경로를 통해 **서버에서 렌더링한 main.html 페이지를 제공**합니다. (v0.8.40 이상 버전부터 지원)
+- `public/robots.txt` 파일을 열어보면 `Sitemap:` 항목에 `sitemap.xml` 경로가 지정되어 있습니다.
+  - 기본 경로는 `https://tsboard.dev/tsapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 말씀드린 적이 있습니다!
 - 아래 `sitemap.xml` 예시 내용입니다.
 
   ```xml
@@ -345,11 +341,11 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
   </urlset>
   ```
 
-- 위 예시에서 가장 중요한 링크는 `https://tsboard.dev/tsapi/seo/main.html` 입니다. 크롤러가 해당 페이지를 방문하면, 서버에서 렌더링된 html 페이지를 만나게 됩니다.
+- 위 예시에서 가장 중요한 링크는 `https://tsboard.dev/tsapi/seo/main.html` 입니다. 크롤러가 해당 페이지를 방문하면, 여러분의 서버에서 TSBOARD가 준비한 html 페이지를 만나게 됩니다.
 - 해당 페이지에서는 `src/pages/home/HomePage.vue` 에서 보여지는 게시글들 및 댓글들이 출력됩니다. 얼마나 많이 출력해서 크롤러에게 제공할지는 `tsboard.config.ts` 의 `SEO` 항목을 통해 조절하실 수 있습니다.
-- 크롤러가 수집하는 내용 중에 게시글 링크나 사이트 링크의 경우 기존 CSR로 준비된 페이지로 링크가 걸립니다. 따라서 검색을 통해 해당 `main.html` 페이지를 열람한 사용자는 어떤 링크를 클릭하든 CSR로 만들어진 페이지로 이동할 수 있습니다.
+- 크롤러가 수집하는 내용 중에 게시글 링크나 사이트 링크의 경우 기존 페이지로 링크가 걸립니다. 따라서 검색을 통해 해당 `main.html` 페이지를 열람한 사용자는 어떤 링크를 클릭하든 원래 페이지를 방문하게 됩니다.
 
-> 결과적으로 검색 엔진 크롤러는 위의 main.html 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
+> 결과적으로 검색 엔진 크롤러는 위의 `main.html` 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
 
 ### 백엔드 : Bun & ElysiaJS
 
@@ -431,10 +427,9 @@ pm2 start --interpreter ~/.bun/bin/bun server/index.ts
   - 쇼핑몰 기능을 추가할 예정입니다.
   - 결제 모듈까지 붙여서 실제로 제품 등록 및 판매까지 가능하도록 구성할 예정입니다.
 - `v2.0.0` (~ 25.12.30)
-  - SSR 방식과 CSR 방식을 혼합하여 검색 엔진들이 보다 쉽게 데이터를 수집할 수 있도록 개발할 계획입니다.
-  - 모든 페이지가 SSR 방식으로 전환되는 것은 아닙니다. TSBOARD는 여전히 서버 부담을 최소화 하는 원래 목표를 유지하고자 합니다.
+- `v3.0.0` (~ 27)
 
-> 로드맵은 개발자의 사정에 따라 언제든지 변경될 수 있습니다. 저도 먹고 사는게 먼저라 조금 늦어지더라도 양해를 부탁드립니다. ㅎㅎ;;
+> 로드맵은 개발자의 사정에 따라 언제든지 변경될 수 있습니다!
 
 ## 잘 부탁드립니다!
 
