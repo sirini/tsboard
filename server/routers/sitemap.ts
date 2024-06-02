@@ -75,7 +75,7 @@ export const sitemap = new Elysia().group("/seo", (app) => {
           postUid: post.uid,
           page: 1,
           bunch: SEO.LIMIT.COMMENT,
-          sinceUid: (await getMaxCommentUid(post.uid)) || 0,
+          sinceUid: ((await getMaxCommentUid(post.uid)) || 0) + 1,
           accessUserUid: 0,
           pagingDirection: PAGING_DIRECTION.NEXT,
         })
@@ -86,7 +86,7 @@ export const sitemap = new Elysia().group("/seo", (app) => {
             <div class="additional">
             <span class="date">${d.year}-${d.month}-${d.day} ${d.hour}:${d.minute}:${d.second}</span> / 
             <span class="like">${reply.like} ${reply.like > 1 ? "likes" : "like"}</span> /
-            <span class="writer">written by <strong>${post.writer.name}</strong></span></div>
+            <span class="writer">written by <strong>${reply.writer.name}</strong></span></div>
           </li>`
         }
         comments += "</ul>"
