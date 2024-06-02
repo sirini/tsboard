@@ -179,6 +179,11 @@ pm2 reload --interpreter ~/.bun/bin/bun server/index.ts
   - 여러분의 터미널 프로그램이 닫혀도 TSBOARD 백엔드가 계속 동작해야 하므로, 가능하면 `pm2` 같은 프로세스 매니저 활용을 권장합니다.
   - 혹은, `tmux`나 `screen`과 같은 도구를 이용해서 해당 세션을 계속 열어두는 것도 방법입니다.
 
+### TSBOARD 실행하기
+
+- TSBOARD는 Bun 런타임을 이용해서 `server/index.ts` 를 실행하면 백엔드가 동작하게 됩니다.
+- `pm2`를 이용해서 프로세스를 관리하거나, 혹은 터미널 세션이 종료되어도 실행 상태가 계속 유지되도록 `tmux`와 같은 도구를 이용하여 `bun server/index.ts`로 실행하세요.
+
 ## 설치 후 서버 설정
 
 > TSBOARD는 보안을 위해 `SSL` 적용을 강력히 권장합니다.
