@@ -3,11 +3,13 @@
     <v-img v-if="post.cover.length > 0" height="200" cover :src="post.cover"></v-img>
 
     <v-list class="pa-0">
-      <v-list-item class="pa-2 post-title"
-        ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
-          util.unescape(post.category)
-        }}</v-chip
-        >{{ util.unescape(post.title) }}</v-list-item
+      <v-list-item class="pa-2"
+        ><v-list-item-title
+          ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
+            util.unescape(post.category)
+          }}</v-chip
+          ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
+        ></v-list-item
       >
     </v-list>
     <v-divider></v-divider>
