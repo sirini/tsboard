@@ -4,7 +4,7 @@
       density="compact"
       id="tsboardEditorToolbar"
       class="write-editor-menu"
-      :color="home.color.header"
+      :color="type === BOARD_TYPE.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
     >
       <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
         ><v-icon>mdi-format-bold</v-icon>
@@ -266,7 +266,10 @@
       </v-btn>
     </v-toolbar>
 
-    <editor-content :editor="editor"></editor-content>
+    <editor-content
+      :editor="editor"
+      :class="type === BOARD_TYPE.BLOG ? 'dark' : 'light'"
+    ></editor-content>
 
     <board-write-editor-add-image-from-d-b-dialog
       @addImageURL="addImageURL"
@@ -338,12 +341,15 @@ import BoardWriteEditorAddVideoDialog from "./BoardWriteEditorAddVideoDialog.vue
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
 import "../../../assets/board/editor.scss"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { BoardType } from "../../../interface/board"
 
 const writeEditor = useBoardEditorStore()
 const editorImage = useEditorImageStore()
 const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
+  type: BoardType
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
 const stickyPoint = ref<number>(9999)
@@ -367,8 +373,8 @@ function changeToolbarPosition(): void {
   }, 200)
 }
 
-onMounted(() => {
-  writeEditor.loadBoardConfig()
+onMounted(async () => {
+  await writeEditor.loadBoardConfig()
   window.addEventListener("scroll", changeToolbarPosition)
 })
 
@@ -509,14 +515,17 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.dark {
+  background-color: #141414;
+}
+.light {
+  background-color: #fafafa;
+}
 .write-editor-menu {
   position: sticky;
   top: 0;
   z-index: 10;
   transition: all 0.3s ease;
-  border-left: 1px #dddddd solid;
-  border-right: 1px #dddddd solid;
-  border-top: 1px #dddddd solid;
 }
 
 .sticky {

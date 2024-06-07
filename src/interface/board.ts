@@ -67,7 +67,9 @@ export type Post = ContentCommon & {
   category: Pair
   reply: number
   title: string
+  content: string
   hit: number
+  cover: string
 }
 
 export type PostView = Post & {

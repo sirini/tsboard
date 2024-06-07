@@ -1,10 +1,14 @@
 <template>
-  <v-app>
-    <home-header></home-header>
+  <v-app theme="dark">
+    <blog-header
+      :name="editor.config.name"
+      :info="editor.config.info"
+      :id="editor.id"
+    ></blog-header>
     <v-layout class="layout">
       <v-main>
         <board-write-body></board-write-body>
-        <home-footer></home-footer>
+        <blog-footer></blog-footer>
       </v-main>
     </v-layout>
     <board-write-cancel-dialog
@@ -15,35 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue"
-import { useRoute } from "vue-router"
-import { useUtilStore } from "../../store/util"
 import { useBoardEditorStore } from "../../store/board/editor"
-import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
+import BlogHeader from "../../components/blog/BlogHeader.vue"
+import BlogFooter from "../../components/blog/BlogFooter.vue"
 import BoardWriteBody from "../../components/board/write/BoardWriteBody.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
 import BoardWriteLoadingDialog from "../../components/board/write/BoardWriteLoadingDialog.vue"
-import HomeHeader from "../home/HomeHeader.vue"
-import HomeFooter from "../home/HomeFooter.vue"
 
-const route = useRoute()
-const util = useUtilStore()
 const editor = useBoardEditorStore()
-const home = useHomeStore()
-
-onMounted(async () => {
-  await editor.loadBoardConfig()
-  if (route.params.no) {
-    editor.postUid = parseInt(route.params.no as string)
-    await editor.loadOriginalPost()
-  }
-  home.setGridLayout()
-})
-
-watch(
-  () => [editor.title, editor.tags],
-  () => editor.autoSave(),
-)
+const util = useUtilStore()
 </script>
 
 <style scoped>

@@ -28,7 +28,7 @@
     <v-btn
       prepend-icon="mdi-pencil"
       variant="text"
-      @click="util.go('boardWrite', list.id)"
+      @click="util.go(util.routerName(list.config.type, ACTION_TARGET.WRITE), list.id)"
       :disabled="auth.user.uid < 1"
       >{{ TEXT[home.lang].WRITE }}</v-btn
     >
@@ -42,6 +42,7 @@ import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import BoardListSearch from "./BoardListSearch.vue"
 import { TEXT } from "../../../messages/pages/board/list"
+import { ACTION_TARGET } from "../../../../server/database/board/const"
 
 const auth = useAuthStore()
 const list = useBoardListStore()

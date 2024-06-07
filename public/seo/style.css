@@ -75,6 +75,8 @@ a {
 #tsboardContainer .comment {
   border-top: #dddddd 1px solid;
   padding: 15px;
+  max-height: 300px;
+  overflow: hidden;
 }
 
 #tsboardContainer .pa {

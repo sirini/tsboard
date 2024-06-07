@@ -131,6 +131,14 @@ watch(
   () => route.params?.id,
   () => list.resetBoardList(),
 )
+
+watch(
+  () => route.params?.page,
+  () => {
+    list.page = parseInt(route.params?.page as string)
+    list.resetBoardList()
+  },
+)
 </script>
 
 <style type="scss" scoped>

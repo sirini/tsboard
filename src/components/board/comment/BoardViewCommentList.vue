@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list :bg-color="view.config.type === BOARD_TYPE.BLOG ? '#121212' : ''">
     <v-list-item
       class="pa-0"
       :class="reply.uid !== reply.replyUid ? 'ml-8' : ''"
@@ -10,13 +10,25 @@
       <v-toolbar
         density="compact"
         class="pl-3 mt-4"
-        :color="view.post.writer.uid === reply.writer.uid ? 'orange-lighten-5' : ''"
+        :color="
+          view.post.writer.uid === reply.writer.uid
+            ? view.config.type === BOARD_TYPE.BLOG
+              ? 'grey-darken-4'
+              : 'orange-lighten-5'
+            : ''
+        "
       >
         <user-nametag
           :name="reply.writer.name"
           :uid="reply.writer.uid"
           :profile="reply.writer.profile"
-          :color="view.post.writer.uid === reply.writer.uid ? 'orange-darken-3' : ''"
+          :color="
+            view.post.writer.uid === reply.writer.uid
+              ? view.config.type === BOARD_TYPE.BLOG
+                ? 'blue-grey'
+                : 'orange-darken-3'
+              : ''
+          "
         ></user-nametag>
 
         <v-spacer></v-spacer>
@@ -24,13 +36,7 @@
         <v-chip
           :prepend-icon="reply.liked ? 'mdi-heart' : 'mdi-heart-outline'"
           @click="comment.like(reply.uid, !reply.liked)"
-          :color="
-            reply.liked
-              ? 'red'
-              : view.post.writer.uid === reply.writer.uid
-                ? 'orange-darken-3'
-                : 'blue-grey'
-          "
+          :color="reply.liked ? 'red' : 'surface-variant'"
           class="mr-2"
           >{{ reply.like }}
           <v-tooltip activator="parent" location="top">{{
@@ -104,6 +110,7 @@ import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 import "../../../assets/board/editor.scss"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-list"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 
 const auth = useAuthStore()
 const view = useBoardViewStore()

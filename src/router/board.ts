@@ -14,11 +14,6 @@ export const boardRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/board/List.vue"),
   },
   {
-    path: TSBOARD.PREFIX + "/board/:id/list/:page(\\d+)",
-    name: "boardListPage",
-    component: () => import("@/pages/board/List.vue"),
-  },
-  {
     path: TSBOARD.PREFIX + "/board/:id/:no(\\d+)",
     name: "boardView",
     component: () => import("@/pages/board/View.vue"),

@@ -123,7 +123,7 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(no: number): void {
-    util.go("galleryOpen", id.value, no)
+    util.go("galleryView", id.value, no)
   }
 
   // 검색 옵션 초기화하기

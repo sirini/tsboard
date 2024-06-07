@@ -15,7 +15,7 @@ export const galleryRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: TSBOARD.PREFIX + "/gallery/:id/:no(\\d+)",
-    name: "galleryOpen",
+    name: "galleryView",
     component: () => import("@/pages/gallery/List.vue"),
   },
   {

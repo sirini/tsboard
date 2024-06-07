@@ -19,6 +19,7 @@ import {
   TYPE_MATCH,
   INIT_POST_VIEW,
   READ_POST_KEY,
+  ACTION_TARGET,
 } from "../../../server/database/board/const"
 import { TSBOARD } from "../../../tsboard.config"
 
@@ -180,7 +181,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(TEXT[home.lang].REMOVED_POST)
     closeConfirmRemoveDialog()
-    util.go(route.name === "galleryOpen" ? "galleryList" : "boardList", id.value)
+    util.go(util.routerName(config.value.type, ACTION_TARGET.LIST), id.value)
   }
 
   // 게시글을 이미 읽었는지 확인하기

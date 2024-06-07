@@ -9,6 +9,7 @@ import { jwt } from "@elysiajs/jwt"
 import {
   getBlackList,
   getBoardConfig,
+  getCoverImage,
   getMaxPostUid,
   getPosts,
   getTotalPostCount,

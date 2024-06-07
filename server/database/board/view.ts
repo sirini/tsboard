@@ -48,6 +48,7 @@ export async function getPost(postUid: number, accessUserUid: number): Promise<P
     reply: info.reply,
     title: post.title,
     hit: post.hit,
+    cover: "",
   }
 }
 

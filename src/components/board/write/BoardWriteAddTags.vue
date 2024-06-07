@@ -34,7 +34,7 @@
         </v-list>
       </v-menu>
     </v-text-field>
-    <v-card elevation="0" class="mt-2 mb-2">
+    <v-card elevation="0" class="mt-3 mb-2" variant="text">
       <v-chip
         v-for="(tag, index) in editor.tags"
         :key="index"

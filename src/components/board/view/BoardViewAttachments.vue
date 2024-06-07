@@ -1,6 +1,6 @@
 <template>
-  <v-list-item class="pa-0 underline" v-if="view.files.length > 0">
-    <v-list density="compact">
+  <v-list-item class="pa-0" v-if="view.files.length > 0">
+    <v-list density="compact" :bg-color="view.config.type === BOARD_TYPE.BLOG ? '#121212' : ''">
       <v-list-item
         prepend-icon="mdi-download"
         v-for="(file, index) in view.files"
@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useUtilStore } from "../../../store/util"
 

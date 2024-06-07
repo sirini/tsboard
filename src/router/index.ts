@@ -6,6 +6,7 @@
 
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router"
 import { boardRoutes } from "./board"
+import { blogRoutes } from "./blog"
 import { galleryRoutes } from "./gallery"
 import { authRoutes } from "./auth"
 import { homeRoutes } from "./home"
@@ -17,6 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   ...adminRoutes,
   ...authRoutes,
   ...boardRoutes,
+  ...blogRoutes,
   ...galleryRoutes,
   ...notFoundRoute,
 ]

@@ -1,0 +1,92 @@
+<template>
+  <v-app theme="dark">
+    <blog-header :name="list.config.name" :info="list.config.info" :id="list.id"></blog-header>
+    <v-layout class="layout">
+      <v-main>
+        <v-container class="wrap">
+          <v-card elevation="0" rounded="0" class="mx-auto" variant="text" :max-width="home.width">
+            <v-row>
+              <v-col cols="12" class="text-center mt-9 mb-9">
+                <v-avatar size="150">
+                  <v-img :src="user.info.profile || TSBOARD.PREFIX + '/no-profile.svg'"></v-img>
+                </v-avatar>
+
+                <h3 class="mt-6">
+                  {{ user.info.name }}'s Blog
+                  <v-btn
+                    size="small"
+                    class="ml-2"
+                    prepend-icon="mdi-cog-outline"
+                    v-if="auth.user.admin"
+                    @click="util.go('adminBoardManager', list.id)"
+                  >
+                    {{ TEXT[home.lang].MANAGE }}
+                  </v-btn>
+                </h3>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col :cols="home.cols" v-for="(post, index) in list.posts" :key="index">
+                <blog-post-item
+                  :post="post"
+                  :type="list.config.type"
+                  :id="list.id"
+                ></blog-post-item>
+              </v-col>
+              <v-col v-if="list.posts.length < 1" class="text-center pt-6 pb-12">
+                <v-icon>mdi-alert-circle</v-icon> {{ LIST_TEXT[home.lang].EMPTY }}
+              </v-col>
+            </v-row>
+
+            <board-list-paging></board-list-paging>
+          </v-card>
+        </v-container>
+        <blog-footer></blog-footer>
+      </v-main>
+    </v-layout>
+    <user-info-dialog></user-info-dialog>
+    <send-report-dialog></send-report-dialog>
+    <manage-user-dialog></manage-user-dialog>
+  </v-app>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from "vue"
+import { useHomeStore } from "../../store/home"
+import { useBoardListStore } from "../../store/board/list"
+import { useAuthStore } from "../../store/user/auth"
+import { useUserStore } from "../../store/user/user"
+import { useUtilStore } from "../../store/util"
+import BlogHeader from "../../components/blog/BlogHeader.vue"
+import BlogFooter from "../../components/blog/BlogFooter.vue"
+import BlogPostItem from "../../components/blog/BlogPostItem.vue"
+import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
+import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
+import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
+import { TSBOARD } from "../../../tsboard.config"
+import { TEXT } from "../../messages/components/board/common/board-header"
+import { TEXT as LIST_TEXT } from "../../messages/pages/board/list"
+
+const home = useHomeStore()
+const list = useBoardListStore()
+const auth = useAuthStore()
+const user = useUserStore()
+const util = useUtilStore()
+
+onMounted(async () => {
+  home.setGridLayout()
+  await list.loadPostList()
+  user.targetUser.uid = list.config.admin.board
+  await user.loadUserInfo()
+})
+</script>
+
+<style type="scss" scoped>
+.layout {
+  margin-top: 64px;
+}
+.wrap {
+  min-height: calc(100vh - 118px);
+}
+</style>

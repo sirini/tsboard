@@ -89,7 +89,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     loadAutoSaved()
     if (config.value.type === BOARD_TYPE.GALLERY) {
-      viewRouteName.value = "galleryOpen"
+      viewRouteName.value = "galleryView"
     }
   }
 
@@ -110,10 +110,17 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
   // 임시 보관된 제목과 내용 불러오기
   function loadAutoSaved(): void {
-    const saved =
-      window.localStorage.getItem(AUTO_SAVE_KEY) ??
-      "{ title: '', content: '', contentWithSyntax: '', tags: '' }"
-    const loaded = JSON.parse(saved) as AutoSaveItems
+    const saved = window.localStorage.getItem(AUTO_SAVE_KEY)
+    let loaded: AutoSaveItems = {
+      title: "",
+      content: "",
+      contentWithSyntax: "",
+      tags: "",
+    }
+    if (saved) {
+      loaded = JSON.parse(saved) as AutoSaveItems
+    }
+
     title.value = loaded.title
     content.value = loaded.content
     contentWithSyntax.value = loaded.contentWithSyntax

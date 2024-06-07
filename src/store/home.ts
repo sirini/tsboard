@@ -98,27 +98,25 @@ export const useHomeStore = defineStore("home", () => {
 
   // 최신글 그리드 개수 및 최대 너버 지정
   function setGridLayout(): void {
-    width.value = window.innerWidth - Math.floor(window.innerWidth / 20)
     isMobile.value = false
     isTablet.value = false
     isPC.value = false
     isLarge.value = false
+    const ww = window.innerWidth
+    width.value = ww - Math.floor(ww / 20)
 
-    if (window.innerWidth < SCREEN.MOBILE.WIDTH) {
+    if (ww < SCREEN.MOBILE.WIDTH) {
       cols.value = SCREEN.MOBILE.COLS
-      width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
+      width.value = ww - Math.floor(ww / 10)
       isMobile.value = true
-    } else if (
-      window.innerWidth >= SCREEN.MOBILE.WIDTH &&
-      window.innerWidth < SCREEN.TABLET.WIDTH
-    ) {
+    } else if (ww >= SCREEN.MOBILE.WIDTH && ww < SCREEN.TABLET.WIDTH) {
       cols.value = SCREEN.TABLET.COLS
-      width.value = window.innerWidth - Math.floor(window.innerWidth / 10)
+      width.value = ww - Math.floor(ww / 10)
       isTablet.value = true
-    } else if (window.innerWidth >= SCREEN.TABLET.WIDTH && window.innerWidth < SCREEN.PC.WIDTH) {
+    } else if (ww >= SCREEN.TABLET.WIDTH && ww < SCREEN.PC.WIDTH) {
       cols.value = SCREEN.PC.COLS
       isPC.value = true
-    } else if (window.innerWidth >= SCREEN.PC.WIDTH && window.innerWidth < SCREEN.LARGE.WIDTH) {
+    } else if (ww >= SCREEN.PC.WIDTH && ww < SCREEN.LARGE.WIDTH) {
       cols.value = SCREEN.LARGE.COLS
       isLarge.value = true
     } else {

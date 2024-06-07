@@ -43,6 +43,13 @@ export const BOARD_TYPE = {
   SHOP: 3,
 }
 
+export const ACTION_TARGET = {
+  LIST: 0,
+  VIEW: 1,
+  WRITE: 2,
+  MODIFY: 3,
+}
+
 export const CONTENT_STATUS = {
   REMOVED: -1,
   NORMAL: 0,
@@ -88,7 +95,9 @@ export const INIT_POST: Post = {
   category: { uid: 0, name: "" },
   reply: 0,
   title: "",
+  content: "",
   hit: 0,
+  cover: "",
 }
 
 export const INIT_POST_VIEW: PostView = {

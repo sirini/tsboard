@@ -31,23 +31,12 @@
               <board-view-buttons></board-view-buttons>
             </v-list>
 
-            <board-view-comment-write v-if="view.post.uid > 0"></board-view-comment-write>
+            <board-view-comment-write
+              v-if="view.post.uid > 0"
+              :type="view.config.type"
+            ></board-view-comment-write>
             <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
-
-            <v-divider class="mt-12"></v-divider>
-            <v-card-actions>
-              <v-btn prepend-icon="mdi-view-list" @click="util.go('boardList', view.id)">{{
-                TEXT[home.lang].LIST
-              }}</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                prepend-icon="mdi-pencil"
-                variant="text"
-                @click="util.go('boardWrite', view.id)"
-                :disabled="auth.user.uid < 1"
-                >{{ TEXT[home.lang].WRITE }}</v-btn
-              >
-            </v-card-actions>
+            <board-view-bottom-buttons :type="view.config.type"></board-view-bottom-buttons>
           </v-card>
         </v-container>
         <home-footer></home-footer>
@@ -75,6 +64,7 @@ import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
+import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"

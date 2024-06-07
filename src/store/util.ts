@@ -5,9 +5,9 @@
  */
 
 import { ref } from "vue"
-import { NavigationFailure, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
-import { BOARD_TYPE, READ_POST_KEY } from "../../server/database/board/const"
+import { BOARD_TYPE, ACTION_TARGET } from "../../server/database/board/const"
 import { BoardType } from "../interface/board"
 
 export const useUtilStore = defineStore("util", () => {
@@ -62,21 +62,26 @@ export const useUtilStore = defineStore("util", () => {
     alert(message, "info", timeout)
   }
 
+  // 액션에 따른 라우터 이름 변환
+  function nameByAction(action: number): string {
+    if (action === ACTION_TARGET.LIST) return "List"
+    else if (action === ACTION_TARGET.WRITE) return "Write"
+    else if (action === ACTION_TARGET.MODIFY) return "Modify"
+    else return "View"
+  }
+
   // 게시판 형태에 따른 라우터 이름 반환
-  function _name(type: BoardType, isView: boolean): string {
+  function routerName(type: BoardType, action: number): string {
+    const actionName = nameByAction(action)
     switch (type) {
       case BOARD_TYPE.GALLERY:
-        if (isView === false) return "galleryList"
-        else return "galleryOpen"
+        return `gallery${actionName}`
       case BOARD_TYPE.BLOG:
-        if (isView === false) return "blogList"
-        else return "blogView"
+        return `blog${actionName}`
       case BOARD_TYPE.SHOP:
-        if (isView === false) return "shopList"
-        else return "shopView"
+        return `shop${actionName}`
       default:
-        if (isView === false) return "boardList"
-        else return "boardView"
+        return `board${actionName}`
     }
   }
 
@@ -86,7 +91,7 @@ export const useUtilStore = defineStore("util", () => {
     if ("string" === typeof target) {
       name = target
     } else {
-      name = _name(target, no > 0)
+      name = routerName(target, no > 0 ? ACTION_TARGET.VIEW : ACTION_TARGET.LIST)
     }
 
     if (id.length < 1) {
@@ -179,6 +184,7 @@ export const useUtilStore = defineStore("util", () => {
     success,
     error,
     info,
+    routerName,
     go,
     open,
     back,

@@ -4,7 +4,9 @@
       <v-col :cols="home.cols" v-for="(image, index) in view.images" :key="index">
         <v-card elevation="0">
           <v-img cover :src="image.thumbnail.small"></v-img>
-          <v-card-text class="description pa-3">{{ view.images[index].description }}</v-card-text>
+          <v-card-text class="description pa-3" v-if="view.images[index].description.length > 0">{{
+            view.images[index].description
+          }}</v-card-text>
         </v-card>
       </v-col>
     </v-row>

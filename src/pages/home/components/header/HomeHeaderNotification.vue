@@ -35,11 +35,11 @@ import { useHomeStore } from "../../../../store/home"
 import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
 import { useChatStore } from "../../../../store/user/chat"
-import { NOTICE_TYPE } from "../../../../../server/database/board/const"
+import { ACTION_TARGET, NOTICE_TYPE } from "../../../../../server/database/board/const"
 import { NoticeType, TsboardNotification } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
-import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
+import { BoardType } from "../../../../interface/board"
 
 const home = useHomeStore()
 const auth = useAuthStore()
@@ -53,15 +53,11 @@ function actionForNoti(noti: TsboardNotification): void {
   }
 
   if (noti.id.length > 0) {
-    let destination = "boardView"
-    if (noti.type === BOARD_TYPE.GALLERY) {
-      destination = "galleryOpen"
-    } else if (noti.type === BOARD_TYPE.BLOG) {
-      destination = "blogView"
-    } else if (noti.type === BOARD_TYPE.SHOP) {
-      destination = "shopView"
-    }
-    return util.go(destination, noti.id, noti.postUid)
+    return util.go(
+      util.routerName(noti.type as BoardType, ACTION_TARGET.VIEW),
+      noti.id,
+      noti.postUid,
+    )
   }
 }
 

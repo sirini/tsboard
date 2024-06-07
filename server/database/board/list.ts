@@ -193,6 +193,7 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
       viewerUid: accessUserUid,
       categoryUid: post.category_uid,
     })
+    const cover = await getCoverImage(post.uid)
 
     result.push({
       uid: post.uid,
@@ -204,7 +205,9 @@ async function makePostResult(posts: RowDataPacket[], accessUserUid: number): Pr
       category: info.category,
       reply: info.reply,
       title: post.title,
+      content: post.content,
       hit: post.hit,
+      cover,
     })
   }
   return result
@@ -401,4 +404,16 @@ export async function getBlackList(userUid: number): Promise<number[]> {
   }
 
   return result
+}
+
+// 게시글의 커버 썸네일 가져오기
+export async function getCoverImage(postUid: number): Promise<string> {
+  const [thumb] = await select(
+    `SELECT path FROM ${table}file_thumbnail WHERE post_uid = ? LIMIT 1`,
+    [postUid.toString()],
+  )
+  if (thumb) {
+    return thumb.path
+  }
+  return ""
 }

@@ -15,6 +15,8 @@ import { useAuthStore } from "../../user/auth"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
 import { TSBOARD } from "../../../../tsboard.config"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { BoardType } from "../../../interface/board"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -165,7 +167,13 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
-    admin.success(`${GENERAL.CHANGED_TYPE1} ${board.value.type} ${GENERAL.CHANGED_TYPE2}`)
+    let typeName = "게시판 (board)"
+    if (board.value.type === (BOARD_TYPE.GALLERY as BoardType)) {
+      typeName = "갤러리 (gallery)"
+    } else if (board.value.type === (BOARD_TYPE.BLOG as BoardType)) {
+      typeName = "블로그 (blog)"
+    }
+    admin.success(`${GENERAL.CHANGED_TYPE1} ${typeName} ${GENERAL.CHANGED_TYPE2}`)
   }
 
   // 한 페이지에 표시할 게시글 개수 변경하기

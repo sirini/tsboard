@@ -16,7 +16,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> 게시판 아이디는 생성 후 변경이 불가능 합니다. </v-col>
+          <v-col class="mt-2"> {{ typeName }} 아이디는 생성 후 변경이 불가능 합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -49,7 +49,7 @@
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
-            게시판은 하나의 그룹에만 소속됩니다. 그룹 관리자도 이 게시판의 관리자입니다.
+            {{ typeName }}은(는) 하나의 그룹에만 소속됩니다. 그룹 관리자도 이 게시판의 관리자입니다.
           </v-col>
         </v-row>
       </v-list-item>
@@ -73,7 +73,7 @@
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
-            게시판 이름입니다. 이 게시판을 대표할만한 이름으로 작성해 보세요.
+            {{ typeName }} 이름입니다. 이 {{ typeName }}을(를) 대표할만한 이름으로 작성해 보세요.
           </v-col>
         </v-row>
       </v-list-item>
@@ -96,7 +96,7 @@
               </v-tooltip>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> 게시판 설명을 작성해 보세요. </v-col>
+          <v-col class="mt-2"> {{ typeName }} 설명을 작성해 보세요. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -121,13 +121,30 @@
                 >갤러리
                 <v-tooltip activator="parent"
                   >업로드 된 사진들이 미리 보여지고, 별도의 이미지 뷰어를 사용하는 갤러리 형식으로
-                  사용합니다.</v-tooltip
+                  사용합니다. (글보기가 이미지 뷰어로 대체)</v-tooltip
                 >
+              </v-btn>
+              <v-btn
+                :value="BOARD_TYPE.BLOG"
+                prepend-icon="mdi-post-outline"
+                @click="general.changeType"
+                color="primary"
+                >블로그
+                <v-tooltip activator="parent">
+                  게시글 목록이 블로그 형식으로 변형되어 보여집니다. (블로그 형식은 게시판 관리자만
+                  글작성이 가능합니다)
+                </v-tooltip>
               </v-btn>
             </v-btn-toggle>
           </v-col>
           <v-col class="mt-2">
-            게시판 형태를 일반적인 게시판 형식 혹은 갤러리 형식으로 지정할 수 있습니다.</v-col
+            <span v-show="general.board.type === BOARD_TYPE.BLOG"
+              >블로그 형식은 권한 탭에서 지정된 <strong>게시판 관리자만 글을 작성</strong>할 수
+              있습니다.</span
+            >
+            <span v-show="general.board.type !== BOARD_TYPE.BLOG"
+              >페이지 형태를 일반적인 게시판, 갤러리 혹은 블로그로 지정할 수 있습니다.</span
+            ></v-col
           >
         </v-row>
       </v-list-item>
@@ -169,12 +186,12 @@
               @click:append-inner="general.updateWidth"
             >
               <v-tooltip activator="parent">
-                게시판의 최대 너비를 입력하고 우측의
+                {{ typeName }}의 최대 너비를 입력하고 우측의
                 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면 저장됩니다.
               </v-tooltip>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> 게시판의 최대 너비를 지정합니다. </v-col>
+          <v-col class="mt-2"> {{ typeName }}의 최대 너비를 지정합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -237,17 +254,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useAdminStore } from "../../../store/admin/common"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { BoardType } from "../../../interface/board"
 
 const admin = useAdminStore()
 const util = useUtilStore()
 const auth = useAuthStore()
 const general = useAdminBoardGeneralStore()
+const typeName = ref<string>("게시판")
 
 onMounted(() => {
   if (auth.user.uid !== 1) {
@@ -256,6 +275,19 @@ onMounted(() => {
   }
   general.loadGeneralConfig()
 })
+
+watch(
+  () => general.board.type,
+  (value) => {
+    if (value === (BOARD_TYPE.GALLERY as BoardType)) {
+      typeName.value = "갤러리"
+    } else if (value === (BOARD_TYPE.BLOG as BoardType)) {
+      typeName.value = "블로그"
+    } else {
+      typeName.value = "게시판"
+    }
+  },
+)
 </script>
 
 <style scoped>
