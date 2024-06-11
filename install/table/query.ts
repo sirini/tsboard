@@ -147,8 +147,7 @@ tables.push(`${create} #db#board_category (
   board_uid INT ${unnd0},
   name VARCHAR(30) ${nnde},
   ${primary},
-  KEY (board_uid),
-  CONSTRAINT fk_bc FOREIGN KEY (board_uid) REFERENCES #db#board(uid)
+  KEY (board_uid)
 ) ${engineEncode}`)
 
 // 포인트 사용 이력 보관 테이블 (action = 0 view / 1 write / 2 comment / 3 download)

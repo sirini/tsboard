@@ -22,8 +22,7 @@ import {
   getMaxImageUid,
   getSuggestionTags,
   getTotalImageCount,
-  getWriteLevel,
-  getWritePoint,
+  getWriteConfig,
   loadUploadedImages,
   modifyOriginalPost,
   removeAttachedFile,
@@ -34,7 +33,7 @@ import {
   uploadImages,
   writeNewPost,
 } from "../../database/board/editor"
-import { BOARD_CONFIG, INIT_POST_VIEW } from "../../database/board/const"
+import { BOARD_CONFIG, BOARD_TYPE, INIT_POST_VIEW } from "../../database/board/const"
 import { CountPair, Pair, PostFile } from "../../../src/interface/board"
 import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
 import { getFiles, getPost, getTags } from "../../database/board/view"
@@ -136,7 +135,8 @@ export const editor = new Elysia()
       if (images === undefined) {
         return fail(`Invalid image files.`, response)
       }
-      const writeLevel = await getWriteLevel(boardUid)
+      const writeConfig = await getWriteConfig(boardUid)
+      const writeLevel = writeConfig.level
       if (writeLevel > userLevel) {
         return fail(`Level restriction.`, response)
       }
@@ -183,7 +183,8 @@ export const editor = new Elysia()
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
-      const writeLevel = await getWriteLevel(boardUid)
+      const writeConfig = await getWriteConfig(boardUid)
+      const writeLevel = writeConfig.level
       if (writeLevel > userLevel) {
         return fail(`Level restriction.`, response)
       }
@@ -285,7 +286,9 @@ export const editor = new Elysia()
       if (categoryUid < 1 || title.trim().length < 2 || content.trim().length < 3) {
         return fail(`Invalid parameters.`, response)
       }
-      const writeLevel = await getWriteLevel(boardUid)
+
+      const writeConfig = await getWriteConfig(boardUid)
+      const writeLevel = writeConfig.level
       if (writeLevel > userLevel) {
         return fail(`Level restriction.`, response)
       }
@@ -293,12 +296,16 @@ export const editor = new Elysia()
         return fail(`You have no permission.`, response)
       }
 
+      if (writeConfig.type === BOARD_TYPE.BLOG && writeConfig.adminUid !== accessUserUid) {
+        return fail(`Only blog owner can write a new post.`, response)
+      }
+
       const updatePointResult = await updateUserPoint({
         boardUid,
         accessUserUid,
         action: "write",
       })
-      const writePoint = await getWritePoint(boardUid)
+      const writePoint = writeConfig.point
       if (updatePointResult === false && writePoint < 0) {
         return fail(`Not enough point.`, response)
       }

@@ -2,6 +2,7 @@
   <v-app theme="dark">
     <blog-header :name="list.config.name" :info="list.config.info" :id="list.id"></blog-header>
     <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto" variant="text" :max-width="home.width">
@@ -12,15 +13,27 @@
                 </v-avatar>
 
                 <h3 class="mt-6">
-                  {{ user.info.name }}'s Blog
+                  {{ user.info.name }}
+
                   <v-btn
+                    icon
                     size="small"
                     class="ml-2"
-                    prepend-icon="mdi-cog-outline"
+                    variant="text"
                     v-if="auth.user.admin"
                     @click="util.go('adminBoardManager', list.id)"
                   >
-                    {{ TEXT[home.lang].MANAGE }}
+                    <v-icon>mdi-cog-outline</v-icon>
+                    <v-tooltip activator="parent">{{ TEXT[home.lang].MANAGE }}</v-tooltip>
+                  </v-btn>
+
+                  <v-btn
+                    icon
+                    size="small"
+                    variant="text"
+                    @click="util.open(`${TSBOARD.API.URI}/tsapi/rss/${list.id}`)"
+                    ><v-icon>mdi-rss</v-icon>
+                    <v-tooltip activator="parent">{{ TEXT[home.lang].RSS }}</v-tooltip>
                   </v-btn>
                 </h3>
               </v-col>
@@ -30,6 +43,7 @@
                 <blog-post-item
                   :post="post"
                   :type="list.config.type"
+                  :useCategory="list.config.useCategory"
                   :id="list.id"
                 ></blog-post-item>
               </v-col>
@@ -57,6 +71,7 @@ import { useBoardListStore } from "../../store/board/list"
 import { useAuthStore } from "../../store/user/auth"
 import { useUserStore } from "../../store/user/user"
 import { useUtilStore } from "../../store/util"
+import SideDrawer from "../home/SideDrawer.vue"
 import BlogHeader from "../../components/blog/BlogHeader.vue"
 import BlogFooter from "../../components/blog/BlogFooter.vue"
 import BlogPostItem from "../../components/blog/BlogPostItem.vue"

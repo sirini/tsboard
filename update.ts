@@ -123,6 +123,9 @@ import { removeEmptyDir, removeFile } from "./server/util/tools"
 // await execute(`${_att}image_description ${_ac} fk_idf ${_fk} (file_uid) ${_rt}file(uid)`)
 // await execute(`${_att}image_description ${_ac} fk_idp ${_fk} (post_uid) ${_rt}post(uid)`)
 
-console.log(`v0.8.40, done.`)
+// 0.8.40 >>> 0.9.0
+await execute(`ALTER TABLE ${table}board_category DROP FOREIGN KEY fk_bc`)
+
+console.log(`v0.9.0, done.`)
 
 process.exit(0)

@@ -516,10 +516,10 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .dark {
-  background-color: #141414;
+  background-color: #191919;
 }
 .light {
-  background-color: #fafafa;
+  background-color: #f9f9f9;
 }
 .write-editor-menu {
   position: sticky;

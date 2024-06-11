@@ -2,6 +2,7 @@
   <v-app theme="dark">
     <blog-header :name="view.config.name" :info="view.config.info" :id="view.id"></blog-header>
     <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card
@@ -54,7 +55,24 @@
 
             <board-view-attachments v-if="showDownloadList"></board-view-attachments>
 
-            <v-img :src="view.images[0].thumbnail.large" v-if="view.images.length > 0"></v-img>
+            <v-carousel
+              v-if="view.images.length > 0"
+              :continuous="false"
+              :show-arrows="view.images.length > 1"
+              delimiter-icon="mdi-square-small"
+              hide-delimiter-background
+              hide-delimiters
+            >
+              <v-carousel-item
+                v-for="(image, i) in view.images"
+                :key="i"
+                :src="image.thumbnail.large"
+                cover
+                class="caro"
+              >
+                <div class="desc">{{ image.description }}</div>
+              </v-carousel-item>
+            </v-carousel>
 
             <v-list bg-color="#121212">
               <v-list-item class="mt-6 mb-12 tsboard">
@@ -99,6 +117,7 @@ import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import BlogHeader from "../../components/blog/BlogHeader.vue"
 import BlogFooter from "../../components/blog/BlogFooter.vue"
+import SideDrawer from "../home/SideDrawer.vue"
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
@@ -130,5 +149,15 @@ onMounted(() => {
 }
 .signature {
   color: #011d2b;
+}
+.caro {
+  position: relative;
+}
+.desc {
+  padding: 15px;
+  font-size: 0.9em;
+  position: absolute;
+  bottom: 0px;
+  backdrop-filter: blur(5px);
 }
 </style>

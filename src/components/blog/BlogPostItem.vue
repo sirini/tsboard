@@ -5,7 +5,7 @@
     <v-list class="pa-0">
       <v-list-item class="pa-2"
         ><v-list-item-title
-          ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.category.uid > 0">{{
+          ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="useCategory">{{
             util.unescape(post.category.name)
           }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
@@ -69,7 +69,7 @@ import { BoardType, Post } from "../../interface/board"
 import "../../assets/board/editor.scss"
 
 const util = useUtilStore()
-const props = defineProps<{ post: Post; type: BoardType; id: string }>()
+const props = defineProps<{ post: Post; type: BoardType; useCategory: boolean; id: string }>()
 </script>
 
 <style scoped>

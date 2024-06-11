@@ -5,7 +5,7 @@
  */
 
 import { table, insert, select, remove, update } from "../common"
-import { CountPair, Pair, TargetTable } from "../../../src/interface/board"
+import { BoardType, CountPair, Pair, TargetTable } from "../../../src/interface/board"
 import {
   UploadImageParams,
   WritePostParams,
@@ -20,32 +20,42 @@ import {
   resizeImage,
   saveUploadedFile,
 } from "../../util/tools"
-import { CONTENT_STATUS } from "./const"
+import { BOARD_TYPE, CONTENT_STATUS } from "./const"
 import { exists } from "node:fs/promises"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 import OpenAI from "openai"
 import sharp from "sharp"
 
-// 글작성 레벨 제한 가져오기
-export async function getWriteLevel(boardUid: number): Promise<number> {
-  const [board] = await select(`SELECT level_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid.toString(),
-  ])
-  if (!board) {
-    return 0
-  }
-  return board.level_write
+type WriteConfigResult = {
+  adminUid: number
+  type: BoardType
+  level: number
+  point: number
 }
 
-// 글작성 포인트 가져오기
-export async function getWritePoint(boardUid: number): Promise<number> {
-  const [board] = await select(`SELECT point_write FROM ${table}board WHERE uid = ? LIMIT 1`, [
-    boardUid.toString(),
-  ])
-  if (!board) {
-    return 0
+// 게시판 기본 설정값 가져오기
+export async function getWriteConfig(boardUid: number): Promise<WriteConfigResult> {
+  let result: WriteConfigResult = {
+    adminUid: 0,
+    type: BOARD_TYPE.BOARD as BoardType,
+    level: 0,
+    point: 0,
   }
-  return board.point_write
+
+  const [config] = await select(
+    `SELECT admin_uid, type, level_write, point_write FROM ${table}board WHERE uid = ? LIMIT 1`,
+    [boardUid.toString()],
+  )
+  if (config) {
+    return {
+      adminUid: config.admin_uid,
+      type: config.type as BoardType,
+      level: config.level_write,
+      point: config.point_write,
+    }
+  }
+
+  return result
 }
 
 // 본문 내 삽입용 이미지 업로드

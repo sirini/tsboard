@@ -1,7 +1,7 @@
 <template>
   <v-app-bar rounded="0" flat>
     <v-toolbar color="#121212" class="toolbar">
-      <v-btn icon @click="home.coming"><v-icon>mdi-home</v-icon></v-btn>
+      <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
         @click="util.go('blogList', id)"
         :class="home.isMobile ? 'mobile-title' : ''"
