@@ -108,7 +108,6 @@
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 import { TSBOARD } from "../../../../tsboard.config"
-import { BoardType } from "../../../interface/board"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()

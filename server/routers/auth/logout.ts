@@ -3,7 +3,7 @@
  *
  * 사용자 로그아웃 처리
  */
-import { Elysia, t } from "elysia"
+import { Elysia } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { clearUserToken } from "../../database/auth/logout"
 import { DEFAULT_TYPE_CHECK, success } from "../../util/tools"

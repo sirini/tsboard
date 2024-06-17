@@ -100,7 +100,6 @@ import ChatDialog from "../../user/ChatDialog.vue"
 import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"
-import { BoardType } from "../../../interface/board"
 
 const latest = useAdminLatestPostStore()
 const util = useUtilStore()

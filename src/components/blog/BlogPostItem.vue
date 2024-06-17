@@ -74,7 +74,7 @@ const props = defineProps<{ post: Post; type: BoardType; useCategory: boolean; i
 
 <style scoped>
 .post-content {
-  line-height: 1.6em;
+  line-height: 1.7em;
   height: 249px;
   overflow: hidden;
 }

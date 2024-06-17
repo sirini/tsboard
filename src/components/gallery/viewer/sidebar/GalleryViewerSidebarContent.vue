@@ -58,15 +58,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardViewStore } from "../../../../store/board/view"
 import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 import GalleryViewerSidebarExif from "./GalleryViewerSidebarExif.vue"
 import UserNametag from "../../../user/UserNametag.vue"
-import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 
-const view = useBoardViewStore()
 const viewer = useViewerStore()
 const home = useHomeStore()
 const util = useUtilStore()

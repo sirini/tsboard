@@ -7,7 +7,7 @@
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
 import { addBlackList, sendReport } from "../../database/user/report"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import { fail, success, EXTEND_TYPE_CHECK } from "../../util/tools"
 import { havePermission } from "../../database/board/common"
 import { checkUserVerification } from "../../database/auth/authorization"
 

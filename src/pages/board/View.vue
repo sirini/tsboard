@@ -52,7 +52,6 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useAuthStore } from "../../store/user/auth"
 import { useBoardViewStore } from "../../store/board/view"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
@@ -73,9 +72,7 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import "../../assets/board/editor.scss"
-import { TEXT } from "../../messages/pages/board/view"
 
-const auth = useAuthStore()
 const view = useBoardViewStore()
 const util = useUtilStore()
 const home = useHomeStore()

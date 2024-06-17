@@ -12,7 +12,7 @@
             variant="text"
             :max-width="view.config.width"
           >
-            <v-card-title
+            <v-card-title class="title"
               ><h1>{{ util.unescape(view.post.title) }}</h1></v-card-title
             >
             <v-card-actions class="mt-3 mb-3">
@@ -146,6 +146,9 @@ onMounted(() => {
 }
 .wrap {
   min-height: calc(100vh - 118px);
+}
+.title {
+  white-space: pre-wrap;
 }
 .signature {
   color: #011d2b;

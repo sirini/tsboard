@@ -13,7 +13,6 @@ import {
 } from "../../../../../src/interface/admin"
 import { INIT_GROUP_CONFIG } from "./const"
 import { BoardType } from "../../../../../src/interface/board"
-import { BOARD_TYPE } from "../../../board/const"
 
 // 주어진 아이디에 해당하는 그룹 설정 가져오기
 export async function getGroupConfig(id: string): Promise<AdminGroupConfig> {

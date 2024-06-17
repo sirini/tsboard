@@ -86,7 +86,6 @@ import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
 import AlertBar from "../../util/AlertBar.vue"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
