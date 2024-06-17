@@ -7,7 +7,7 @@
 import { rmdir, readdir, unlink, stat } from "node:fs/promises"
 import { join } from "node:path"
 import { exists, mkdir } from "node:fs/promises"
-import { nanoid, customAlphabet } from "nanoid"
+import { customAlphabet } from "nanoid"
 import sharp from "sharp"
 import { t } from "elysia"
 import exifr from "exifr"
@@ -54,11 +54,6 @@ export const DEFAULT_HTML_FILTER = {
 export function generateRandomCode() {
   const customId = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz")
   return customId(6)
-}
-
-// 랜덤한 문자열 반환
-export function generateRandomID(): string {
-  return nanoid()
 }
 
 interface Date {

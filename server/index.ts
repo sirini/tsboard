@@ -12,15 +12,18 @@ import { home } from "./routers/home"
 import { board } from "./routers/board"
 import { sitemap } from "./routers/sitemap"
 import { blog } from "./routers/blog"
+import { sync } from "./routers/sync"
 import { TSBOARD } from "../tsboard.config"
 
 const app = new Elysia()
   .use(cors())
   .group("/tsapi", (app) => {
-    return app.use(auth).use(admin).use(home).use(user).use(board).use(sitemap).use(blog)
+    return app.use(auth).use(admin).use(home).use(user).use(board).use(sitemap).use(blog).use(sync)
   })
   .listen(TSBOARD.SITE.API_PORT)
 
 export type App = typeof app
 
-console.log(`🚀 tsboard.server is running on ${app.server?.hostname}:${app.server?.port}`)
+console.log(
+  `🚀 TSBOARD ${TSBOARD.VERSION} is running on ${app.server?.hostname}:${app.server?.port}`,
+)

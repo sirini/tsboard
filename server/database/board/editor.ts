@@ -12,19 +12,13 @@ import {
   LoadImageParams,
   ModifyPostParams,
 } from "../../../src/interface/editor"
-import {
-  generateRandomID,
-  exif,
-  makeSavePath,
-  removeFile,
-  resizeImage,
-  saveUploadedFile,
-} from "../../util/tools"
+import { exif, makeSavePath, removeFile, resizeImage, saveUploadedFile } from "../../util/tools"
 import { BOARD_TYPE, CONTENT_STATUS } from "./const"
 import { exists } from "node:fs/promises"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
 import OpenAI from "openai"
 import sharp from "sharp"
+import { nanoid } from "nanoid"
 
 type WriteConfigResult = {
   adminUid: number
@@ -64,7 +58,7 @@ export async function uploadImages(param: UploadImageParams): Promise<string[]> 
   const savePath = await makeSavePath("images")
 
   for (const image of param.images) {
-    const newSavePath = `${savePath}/${generateRandomID()}.avif`
+    const newSavePath = `${savePath}/${nanoid()}.avif`
     const tempFilePath = await saveUploadedFile(image, `./upload/temp/images`)
 
     await resizeImage(tempFilePath, newSavePath, SIZE.CONTENT_INSERT)
@@ -210,10 +204,10 @@ export async function saveThumbnailImage(
     full: "",
   }
   const thumbPath = await makeSavePath("thumbnails")
-  const thumbSavePath = `${thumbPath}/t${generateRandomID()}.avif`
+  const thumbSavePath = `${thumbPath}/t${nanoid()}.avif`
   await resizeImage(inputFilePath, thumbSavePath, SIZE.THUMBNAIL)
 
-  const fullSavePath = `${thumbPath}/f${generateRandomID()}.avif`
+  const fullSavePath = `${thumbPath}/f${nanoid()}.avif`
   await resizeImage(inputFilePath, fullSavePath, SIZE.FULL)
 
   result.thumb = thumbSavePath.slice(1)
@@ -327,7 +321,7 @@ export async function saveAttachments(
   const savePath = await makeSavePath("attachments")
   for (const file of files) {
     const ext = file.name.split(".").pop() || ""
-    const newSavePath = `${savePath}/${generateRandomID()}.${ext}`
+    const newSavePath = `${savePath}/${nanoid()}.${ext}`
     await Bun.write(newSavePath, file)
 
     if ((await exists(newSavePath)) === true) {

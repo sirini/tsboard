@@ -6,16 +6,11 @@
 
 import { AdminUserModifyParams } from "../../../../src/interface/admin"
 import { UserModifyResult } from "../../../../src/interface/auth"
-import {
-  generateRandomID,
-  makeSavePath,
-  removeFile,
-  resizeImage,
-  saveUploadedFile,
-} from "../../../util/tools"
+import { makeSavePath, removeFile, resizeImage, saveUploadedFile } from "../../../util/tools"
 import { table, select, update } from "../../common"
 import { exists } from "node:fs/promises"
 import { SIZE } from "../../../../tsboard.config"
+import { nanoid } from "nanoid"
 
 // 기존 회원 정보 가져오기
 export async function getUserInfo(userUid: number): Promise<UserModifyResult> {
@@ -66,7 +61,7 @@ async function removeOldProfile(userUid: number): Promise<void> {
 async function updateUserProfile(userUid: number, newProfile: File): Promise<string> {
   removeOldProfile(userUid)
   const savePath = await makeSavePath("profile")
-  const newSavePath = `${savePath}/${generateRandomID()}.avif`
+  const newSavePath = `${savePath}/${nanoid()}.avif`
   const tempFilePath = await saveUploadedFile(newProfile, `./upload/temp/profile`)
 
   await resizeImage(tempFilePath, newSavePath, SIZE.PROFILE)

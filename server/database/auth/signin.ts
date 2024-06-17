@@ -8,9 +8,10 @@ import { table, select, update, insert } from "../common"
 import { User } from "../../../src/interface/auth"
 import { INIT_USER } from "./const"
 import { SHA256 } from "crypto-js"
-import { generateRandomID, makeSavePath } from "../../util/tools"
+import { makeSavePath } from "../../util/tools"
 import sharp from "sharp"
 import { NEW_MEMBER, SIZE } from "../../../tsboard.config"
+import { nanoid } from "nanoid"
 
 // 사용자 로그인 시 아이디 비번 확인 및 사용자 정보 반환
 export async function userSignIn(id: string, password: string): Promise<User> {
@@ -61,7 +62,7 @@ async function saveOAuthProfile(pictureUri: string): Promise<string> {
     const arrayBuffer = await response.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     const savePath = await makeSavePath("profile")
-    const newSavePath = `${savePath}/${generateRandomID()}.avif`
+    const newSavePath = `${savePath}/${nanoid()}.avif`
 
     await sharp(buffer).resize({ width: SIZE.PROFILE }).toFormat("avif").toFile(newSavePath)
 
@@ -85,7 +86,7 @@ export async function registerUser(id: string, name: string, pictureUri: string)
       [
         id,
         name,
-        SHA256(generateRandomID()).toString(),
+        SHA256(nanoid()).toString(),
         profile.slice(1),
         NEW_MEMBER.LEVEL.toString(),
         NEW_MEMBER.POINT.toString(),
