@@ -21,6 +21,7 @@ import { nanoid } from "nanoid"
 type SyncImage = {
   uid: number
   file: string
+  name: string
   thumb: string
   full: string
   desc: string
@@ -73,9 +74,10 @@ export const sync = new Elysia().get(
       }
 
       let images: SyncImage[] = []
-      const attachments = await select(`SELECT uid, path FROM ${table}file WHERE post_uid = ?`, [
-        post.uid,
-      ])
+      const attachments = await select(
+        `SELECT uid, name, path FROM ${table}file WHERE post_uid = ?`,
+        [post.uid],
+      )
       for (const attachment of attachments) {
         const [img] = await select(
           `SELECT path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
@@ -88,6 +90,7 @@ export const sync = new Elysia().get(
         images.push({
           uid: attachment.uid,
           file: attachment.path,
+          name: attachment.name,
           thumb: img.path,
           full: img.full_path,
           desc: info.description,
