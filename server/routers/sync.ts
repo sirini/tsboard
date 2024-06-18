@@ -18,6 +18,14 @@ import { SHA256 } from "crypto-js"
 import { CONTENT_STATUS } from "../database/board/const"
 import { nanoid } from "nanoid"
 
+type SyncImage = {
+  uid: number
+  file: string
+  thumb: string
+  full: string
+  desc: string
+}
+
 type SyncResult = {
   id: string
   no: number
@@ -25,9 +33,7 @@ type SyncResult = {
   content: string
   submitted: number
   name: string
-  files: string[]
-  thumbs: string[]
-  fulls: string[]
+  images: SyncImage[]
 }
 
 export const sync = new Elysia().get(
@@ -66,23 +72,26 @@ export const sync = new Elysia().get(
         continue
       }
 
-      let files: string[] = []
-      const attachments = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
+      let images: SyncImage[] = []
+      const attachments = await select(`SELECT uid, path FROM ${table}file WHERE post_uid = ?`, [
         post.uid,
       ])
       for (const attachment of attachments) {
-        files.push(attachment.path)
-      }
-
-      let thumbs: string[] = []
-      let fulls: string[] = []
-      const images = await select(
-        `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
-        [post.uid],
-      )
-      for (const image of images) {
-        thumbs.push(image.path)
-        fulls.push(image.full_path)
+        const [img] = await select(
+          `SELECT path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
+          [attachment.uid],
+        )
+        const [info] = await select(
+          `SELECT description FROM ${table}image_description WHERE file_uid = ? LIMIT 1`,
+          [attachment.uid],
+        )
+        images.push({
+          uid: attachment.uid,
+          file: attachment.path,
+          thumb: img.path,
+          full: img.full_path,
+          desc: info.description,
+        })
       }
 
       result.push({
@@ -92,9 +101,7 @@ export const sync = new Elysia().get(
         content: post.content,
         submitted: post.submitted,
         name: writer.name,
-        files,
-        thumbs,
-        fulls,
+        images,
       })
     }
 
