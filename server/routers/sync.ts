@@ -106,7 +106,7 @@ export const sync = new Elysia().get(
           name: attachment.name,
           thumb: img.path,
           full: img.full_path,
-          desc: info.description,
+          desc: info.description || "",
         })
       }
 
