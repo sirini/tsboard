@@ -26,6 +26,8 @@ type SyncResult = {
   submitted: number
   name: string
   files: string[]
+  thumbs: string[]
+  fulls: string[]
 }
 
 export const sync = new Elysia().get(
@@ -72,6 +74,17 @@ export const sync = new Elysia().get(
         files.push(attachment.path)
       }
 
+      let thumbs: string[] = []
+      let fulls: string[] = []
+      const images = await select(
+        `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
+        [post.uid],
+      )
+      for (const image of images) {
+        thumbs.push(image.path)
+        fulls.push(image.full_path)
+      }
+
       result.push({
         id: board.id,
         no: post.uid,
@@ -80,6 +93,8 @@ export const sync = new Elysia().get(
         submitted: post.submitted,
         name: writer.name,
         files,
+        thumbs,
+        fulls,
       })
     }
 
