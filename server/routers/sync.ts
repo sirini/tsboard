@@ -34,6 +34,7 @@ type SyncResult = {
   content: string
   submitted: number
   name: string
+  tags: string[]
   images: SyncImage[]
 }
 
@@ -73,6 +74,18 @@ export const sync = new Elysia().get(
         continue
       }
 
+      let tags: string[] = []
+      const hashtagUids = await select(
+        `SELECT hashtag_uid FROM ${table}post_hashtag WHERE post_uid = ?`,
+        [post.uid],
+      )
+      for (const huid of hashtagUids) {
+        const [tag] = await select(`SELECT name FROM ${table}hashtag WHERE uid = ? LIMIT 1`, [
+          huid.hashtag_uid,
+        ])
+        tags.push(tag.name)
+      }
+
       let images: SyncImage[] = []
       const attachments = await select(
         `SELECT uid, name, path FROM ${table}file WHERE post_uid = ?`,
@@ -104,6 +117,7 @@ export const sync = new Elysia().get(
         content: post.content,
         submitted: post.submitted,
         name: writer.name,
+        tags,
         images,
       })
     }
