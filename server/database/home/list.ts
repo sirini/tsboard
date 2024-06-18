@@ -6,7 +6,13 @@
 
 import { RowDataPacket } from "mysql2"
 import { BoardType, SearchOption } from "../../../src/interface/board"
-import { BoardLatest, LatestPost, LatestPostParams, PostItem } from "../../../src/interface/home"
+import {
+  BoardLatest,
+  BoardLatestPost,
+  LatestPost,
+  LatestPostParams,
+  PostItem,
+} from "../../../src/interface/home"
 import { table, select } from "../common"
 import {
   getCategoryInfo,
@@ -93,7 +99,7 @@ async function getSearchedPosts(param: LatestPostParams): Promise<RowDataPacket[
   return result
 }
 
-// 지정된 키 인덱스 이하의 최근 게시글들 가져오기
+// 지정된 키 인덱스 이하의 최근 포스트들 가져오기
 export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]> {
   let result: PostItem[] = []
   let posts: RowDataPacket[] = []
@@ -131,6 +137,68 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
     result.push({
       uid: post.uid,
       id: board.id,
+      type: board.type as BoardType,
+      useCategory: board.use_category > 0 ? true : false,
+      category: cat.name,
+      title: post.title,
+      content: post.content,
+      cover,
+      writer,
+      submitted: post.submitted,
+      hit: post.hit,
+      like: likeCount,
+      liked,
+      comment: commentCount,
+    })
+  }
+
+  return result
+}
+
+// 주어진 게시판 아이디에 해당하는 최근 포스트들 가져오기
+export async function getBoardLatestPosts(
+  id: string,
+  limit: number,
+  accessUserUid: number,
+): Promise<BoardLatestPost> {
+  let result: BoardLatestPost = {
+    name: "",
+    info: "",
+    posts: [] as PostItem[],
+  }
+
+  const [board] = await select(
+    `SELECT uid, type, name, info, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
+    [id],
+  )
+  if (!board) {
+    return result
+  }
+
+  result.name = board.name
+  result.info = board.info
+
+  const posts = await select(
+    `SELECT uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
+  WHERE board_uid = ? AND status = ? ORDER BY uid DESC LIMIT ?`,
+    [board.uid, CONTENT_STATUS.NORMAL.toString(), limit.toString()],
+  )
+
+  for (const post of posts) {
+    const writer = await getUserBasic(post.user_uid)
+    const cat = await getCategoryInfo(post.category_uid)
+    const commentCount = await getTotalCommentCount(post.uid)
+    const likeCount = await getPostLikeCount(post.uid)
+    const liked = await isPostViewerLiked(post.uid, accessUserUid)
+    const [file] = await select(
+      `SELECT path FROM ${table}file_thumbnail WHERE post_uid = ? LIMIT 1`,
+      [post.uid],
+    )
+    const cover = (file?.path as string) ?? ""
+
+    result.posts.push({
+      uid: post.uid,
+      id,
       type: board.type as BoardType,
       useCategory: board.use_category > 0 ? true : false,
       category: cat.name,

@@ -18,6 +18,18 @@ import { SHA256 } from "crypto-js"
 import { CONTENT_STATUS } from "../database/board/const"
 import { nanoid } from "nanoid"
 
+type SyncExif = {
+  make: string
+  model: string
+  aperture: number
+  iso: number
+  focalLength: number
+  exposure: number
+  width: number
+  height: number
+  date: number
+}
+
 type SyncImage = {
   uid: number
   file: string
@@ -25,6 +37,7 @@ type SyncImage = {
   thumb: string
   full: string
   desc: string
+  exif: SyncExif
 }
 
 type SyncResult = {
@@ -106,6 +119,35 @@ export const sync = new Elysia().get(
           desc = info.description
         }
 
+        let exif: SyncExif = {
+          make: "",
+          model: "",
+          aperture: 0,
+          iso: 0,
+          focalLength: 0,
+          exposure: 0,
+          width: 0,
+          height: 0,
+          date: 0,
+        }
+        const [_exif] = await select(
+          `SELECT make, model, aperture, iso, focal_length, exposure, width, height, date FROM ${table}exif WHERE file_uid = ? LIMIT 1`,
+          [attachment.uid],
+        )
+        if (_exif) {
+          exif = {
+            make: _exif.make,
+            model: _exif.model,
+            aperture: _exif.aperture,
+            iso: _exif.iso,
+            focalLength: _exif.focal_length,
+            exposure: _exif.exposure,
+            width: _exif.width,
+            height: _exif.height,
+            date: _exif.date,
+          }
+        }
+
         images.push({
           uid: attachment.uid,
           file: attachment.path,
@@ -113,6 +155,7 @@ export const sync = new Elysia().get(
           thumb: img.path,
           full: img.full_path,
           desc,
+          exif,
         })
       }
 

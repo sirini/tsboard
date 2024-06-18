@@ -5,33 +5,47 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-card class="mx-auto wrap app" elevation="0" rounded="0" :max-width="home.width">
-          <v-row class="mt-3 mb-12">
-            <v-col :cols="home.cols" v-if="home.isMobile || home.isTablet">
+          <tsboard-home-title></tsboard-home-title>
+
+          <v-row class="mt-3 mb-3" v-if="home.isMobile || home.isTablet">
+            <v-col>
               <v-card :color="home.color.header" class="pt-1 pb-1">
                 <home-header-search :is-small-screen="true"></home-header-search>
               </v-card>
             </v-col>
+          </v-row>
 
-            <v-col :cols="home.cols" v-if="home.isMobile === false">
-              <what-is-tsboard></what-is-tsboard>
-            </v-col>
-
-            <v-col :cols="home.cols">
-              <home-page-grid-board id="free" :limit="5"></home-page-grid-board>
-            </v-col>
-
-            <v-col :cols="home.cols">
-              <home-page-grid-board id="photo" :limit="5"></home-page-grid-board>
-            </v-col>
-
-            <v-col v-for="(post, index) in home.latestPosts" :key="index" :cols="home.cols">
-              <home-page-grid-post :post="post"></home-page-grid-post>
-            </v-col>
-
-            <v-col :cols="home.cols">
-              <load-previous-post></load-previous-post>
+          <v-list-subheader
+            ><strong class="mr-2">{{ photos.name }}</strong> {{ photos.info }}</v-list-subheader
+          >
+          <v-divider></v-divider>
+          <v-row class="mt-3 mb-3">
+            <v-col v-for="(photo, index) in photos.posts" :key="index" :cols="home.cols">
+              <home-page-grid-post :post="photo"></home-page-grid-post>
             </v-col>
           </v-row>
+
+          <v-list-subheader
+            ><strong class="mr-2">{{ frees.name }}</strong> {{ frees.info }}</v-list-subheader
+          >
+          <v-divider></v-divider>
+          <v-row class="mt-3 mb-3">
+            <v-col v-for="(free, index) in frees.posts" :key="index" :cols="home.cols">
+              <home-page-grid-post :post="free"></home-page-grid-post>
+            </v-col>
+          </v-row>
+
+          <v-list-subheader
+            ><strong class="mr-2">{{ blogs.name }}</strong> {{ blogs.info }}</v-list-subheader
+          >
+          <v-divider></v-divider>
+          <v-row class="mt-3 mb-3">
+            <v-col v-for="(blog, index) in blogs.posts" :key="index" :cols="home.cols">
+              <home-page-grid-post :post="blog"></home-page-grid-post>
+            </v-col>
+          </v-row>
+
+          <!--  -->
         </v-card>
         <home-footer></home-footer>
 
@@ -42,32 +56,29 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useHomeStore } from "../../store/home"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
-import WhatIsTsboard from "./components/static/WhatIsTsboard.vue"
-import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
-import HomePageGridBoard from "./components/list/HomePageGridBoard.vue"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import QuickButton from "./components/mobile/QuickButton.vue"
+import { BoardLatestPost, PostItem } from "../../interface/home"
+import TsboardHomeTitle from "./components/static/TsboardHomeTitle.vue"
 
 const home = useHomeStore()
-onMounted(async () => {
-  await home.loadLatestPosts()
 
-  let timer: Timer
-  window.onscroll = (event: Event) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      const scroll = window.innerHeight + window.scrollY + 50
-      if (scroll > document.body.offsetHeight) {
-        home.loadLatestPosts()
-      }
-    }, 250)
-  }
+const frees = ref<BoardLatestPost>({ name: "", info: "", posts: [] as PostItem[] })
+const photos = ref<BoardLatestPost>({ name: "", info: "", posts: [] as PostItem[] })
+const blogs = ref<BoardLatestPost>({ name: "", info: "", posts: [] as PostItem[] })
+
+onMounted(async () => {
+  home.setGridLayout()
+  const limit = 4
+  frees.value = await home.getBoardLatestPosts("free", limit * 2)
+  photos.value = await home.getBoardLatestPosts("photo", limit)
+  blogs.value = await home.getBoardLatestPosts("story", limit)
 })
 </script>
 

@@ -22,6 +22,7 @@ import {
   TsboardNotification,
   PostItem,
   VISIT_KEY,
+  BoardLatestPost,
 } from "../interface/home"
 import { NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
 import { TEXT } from "../messages/store/home"
@@ -43,7 +44,7 @@ export const useHomeStore = defineStore("home", () => {
   const dialogWidth = ref<number>(600)
   const cols = ref<number>(SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
-  const bunch = ref<number>(16)
+  const bunch = ref<number>(8)
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
@@ -149,7 +150,32 @@ export const useHomeStore = defineStore("home", () => {
     }
   }
 
-  // 특정 게시판의 최신글 목록 가져오기
+  // 지정된 게시판의 최근 포스트들 반환
+  async function getBoardLatestPosts(id: string, limit: number): Promise<BoardLatestPost> {
+    let result: BoardLatestPost = {
+      name: "",
+      info: "",
+      posts: [] as PostItem[],
+    }
+    if (id.length < 2 || limit < 1) {
+      return result
+    }
+    const response = await client.tsapi.home.latest.post.get({
+      $query: {
+        id,
+        limit,
+        accessUserUid: auth.user.uid,
+      },
+    })
+
+    if (response.data && response.data.success === true) {
+      result = response.data.result
+    }
+
+    return result
+  }
+
+  // 특정 게시판의 최신글 목록 반환
   async function getBoardLatest(id: string, limit: number): Promise<BoardLatest> {
     let result: BoardLatest = {
       name: "",
@@ -338,6 +364,7 @@ export const useHomeStore = defineStore("home", () => {
     setGridLayout,
     loadLatestPosts,
     getBoardLatest,
+    getBoardLatestPosts,
     searchPosts,
     enterSearchPosts,
     selectKeywordFromHistory,

@@ -5,9 +5,14 @@
  */
 
 import { Elysia, t } from "elysia"
-import { getBoardLatests, getLatestPost, getMaxUid } from "../../database/home/list"
+import {
+  getBoardLatestPosts,
+  getBoardLatests,
+  getLatestPost,
+  getMaxUid,
+} from "../../database/home/list"
 import { fail, success } from "../../util/tools"
-import { LatestPost } from "../../../src/interface/home"
+import { BoardLatestPost, LatestPost, PostItem } from "../../../src/interface/home"
 import { SearchOption } from "../../../src/interface/board"
 
 export const list = new Elysia()
@@ -34,6 +39,29 @@ export const list = new Elysia()
         bunch: t.Numeric(),
         option: t.Numeric(),
         keyword: t.String(),
+        accessUserUid: t.Numeric(),
+      }),
+    },
+  )
+  .get(
+    "/latest/post",
+    async ({ query: { id, limit, accessUserUid } }) => {
+      let response: BoardLatestPost = {
+        name: "",
+        info: "",
+        posts: [] as PostItem[],
+      }
+      if (id.length < 2 || limit < 1) {
+        return fail(`Invalid parameters.`, response)
+      }
+
+      response = await getBoardLatestPosts(id, limit, accessUserUid)
+      return success(response)
+    },
+    {
+      query: t.Object({
+        id: t.String(),
+        limit: t.Numeric(),
         accessUserUid: t.Numeric(),
       }),
     },

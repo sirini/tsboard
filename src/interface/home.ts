@@ -73,6 +73,12 @@ export type PostItem = LatestPost & {
   liked: boolean
 }
 
+export type BoardLatestPost = {
+  name: string
+  info: string
+  posts: PostItem[]
+}
+
 export type LatestPostParams = {
   sinceUid: number
   bunch: number
