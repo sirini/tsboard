@@ -96,17 +96,23 @@ export const sync = new Elysia().get(
           `SELECT path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
           [attachment.uid],
         )
+
+        let desc = ""
         const [info] = await select(
           `SELECT description FROM ${table}image_description WHERE file_uid = ? LIMIT 1`,
           [attachment.uid],
         )
+        if (info) {
+          desc = info.description
+        }
+
         images.push({
           uid: attachment.uid,
           file: attachment.path,
           name: attachment.name,
           thumb: img.path,
           full: img.full_path,
-          desc: info.description || "",
+          desc,
         })
       }
 
