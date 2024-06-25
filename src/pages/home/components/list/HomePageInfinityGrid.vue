@@ -16,8 +16,9 @@ import { useHomeStore } from "../../../../store/home"
 
 const home = useHomeStore()
 
-onMounted(() => {
+onMounted(async () => {
   await home.loadLatestPosts()
+  
   let timer: Timer
   window.onscroll = (event: Event) => {
     clearTimeout(timer)
