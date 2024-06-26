@@ -75,7 +75,6 @@ const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] //
 
 onMounted(async () => {
   home.setGridLayout()
-  const limit = 4
   for (const target of TARGETS) {
     boards.value.push(await home.getBoardLatestPosts(target.id, target.limit))
   }
