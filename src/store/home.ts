@@ -23,10 +23,11 @@ import {
   PostItem,
   VISIT_KEY,
   BoardLatestPost,
+  BoardPostItem,
 } from "../interface/home"
-import { NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
+import { BOARD_TYPE, NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
 import { TEXT } from "../messages/store/home"
-import { SearchOption } from "../interface/board"
+import { BoardType, SearchOption } from "../interface/board"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 
 export const useHomeStore = defineStore("home", () => {
@@ -153,9 +154,12 @@ export const useHomeStore = defineStore("home", () => {
   // 지정된 게시판의 최근 포스트들 반환
   async function getBoardLatestPosts(id: string, limit: number): Promise<BoardLatestPost> {
     let result: BoardLatestPost = {
+      id: "",
+      type: BOARD_TYPE.BOARD as BoardType,
       name: "",
       info: "",
-      posts: [] as PostItem[],
+      useCategory: false,
+      posts: [] as BoardPostItem[],
     }
     if (id.length < 2 || limit < 1) {
       return result
