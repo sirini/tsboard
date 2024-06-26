@@ -9,6 +9,7 @@ import { BoardType, SearchOption } from "../../../src/interface/board"
 import {
   BoardLatest,
   BoardLatestPost,
+  BoardPostItem,
   LatestPost,
   LatestPostParams,
   PostItem,
@@ -21,7 +22,7 @@ import {
   getUserBasic,
   isPostViewerLiked,
 } from "../board/list"
-import { CONTENT_STATUS, SEARCH_OPTION } from "../board/const"
+import { BOARD_TYPE, CONTENT_STATUS, SEARCH_OPTION } from "../board/const"
 import { getTotalCommentCount } from "../board/comment"
 
 // 가장 최신글의 고유 번호 가져오기
@@ -162,21 +163,27 @@ export async function getBoardLatestPosts(
   accessUserUid: number,
 ): Promise<BoardLatestPost> {
   let result: BoardLatestPost = {
+    id: "",
+    type: BOARD_TYPE.BOARD as BoardType,
     name: "",
     info: "",
-    posts: [] as PostItem[],
+    useCategory: false,
+    posts: [] as BoardPostItem[],
   }
 
   const [board] = await select(
-    `SELECT uid, type, name, info, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
+    `SELECT uid, id, type, name, info, use_category FROM ${table}board WHERE id = ? LIMIT 1`,
     [id],
   )
   if (!board) {
     return result
   }
 
+  result.id = board.id
+  result.type = board.type
   result.name = board.name
   result.info = board.info
+  result.useCategory = board.use_category > 0 ? true : false
 
   const posts = await select(
     `SELECT uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
@@ -198,9 +205,6 @@ export async function getBoardLatestPosts(
 
     result.posts.push({
       uid: post.uid,
-      id,
-      type: board.type as BoardType,
-      useCategory: board.use_category > 0 ? true : false,
       category: cat.name,
       title: post.title,
       content: post.content,

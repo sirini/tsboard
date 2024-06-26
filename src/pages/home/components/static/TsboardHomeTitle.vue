@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mt-3 mb-3">
+  <v-row class="mt-16 mb-16">
     <v-col :cols="home.cols < 6 ? 6 : home.cols">
       <div class="mt-8 mb-2">
         <v-chip color="blue-grey-lighten-1" variant="outlined">{{ TSBOARD.VERSION }}</v-chip>
@@ -9,14 +9,14 @@
     </v-col>
     <v-col :cols="home.cols < 6 ? 6 : home.cols" class="text-center">
       <div class="badges">
-        <v-chip color="blue-grey-lighten-3" class="mr-1">typescript</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">bun</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">elysiajs</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">mysql/mariadb</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">vue</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">vue-router</v-chip>
-        <v-chip color="blue-grey-lighten-3" class="mr-1">pinia</v-chip>
-        <v-chip color="blue-grey-lighten-3">vuetify</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">typescript</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">bun</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">elysiajs</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">mysql/mariadb</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">vue</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">vue-router</v-chip>
+        <v-chip label color="blue-grey-lighten-3" class="mr-1">pinia</v-chip>
+        <v-chip label color="blue-grey-lighten-3">vuetify</v-chip>
       </div>
 
       <div class="mt-6">
@@ -60,7 +60,7 @@ const util = useUtilStore()
   letter-spacing: 3px;
 }
 .info {
-  background: linear-gradient(to right, #90a4ae, #455a64);
+  background: linear-gradient(to right, #455a64, #90a4ae);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }

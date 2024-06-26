@@ -12,8 +12,9 @@ import {
   getMaxUid,
 } from "../../database/home/list"
 import { fail, success } from "../../util/tools"
-import { BoardLatestPost, LatestPost, PostItem } from "../../../src/interface/home"
-import { SearchOption } from "../../../src/interface/board"
+import { BoardLatestPost, BoardPostItem, LatestPost } from "../../../src/interface/home"
+import { BoardType, SearchOption } from "../../../src/interface/board"
+import { BOARD_TYPE } from "../../database/board/const"
 
 export const list = new Elysia()
   .get(
@@ -47,9 +48,12 @@ export const list = new Elysia()
     "/latest/post",
     async ({ query: { id, limit, accessUserUid } }) => {
       let response: BoardLatestPost = {
+        id: "",
+        type: BOARD_TYPE.BOARD as BoardType,
         name: "",
         info: "",
-        posts: [] as PostItem[],
+        useCategory: false,
+        posts: [] as BoardPostItem[],
       }
       if (id.length < 2 || limit < 1) {
         return fail(`Invalid parameters.`, response)

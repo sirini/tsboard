@@ -61,7 +61,9 @@
         <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close">{{
           TEXT[home.lang].CANCEL
         }}</v-btn>
-
+        <v-btn @click="editor.loadAutoSaved" prepend-icon="mdi-cached">{{
+          TEXT[home.lang].LOAD
+        }}</v-btn>
         <v-spacer></v-spacer>
 
         <v-btn

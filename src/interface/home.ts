@@ -48,11 +48,9 @@ export type GroupItem = {
   boards: BoardItem[]
 }
 
-export type LatestPost = {
+type CommonPostItem = {
   uid: number
-  type: BoardType
   category: string
-  useCategory: boolean
   title: string
   writer: Writer
   hit: number
@@ -61,22 +59,36 @@ export type LatestPost = {
   submitted: number
 }
 
+export type LatestPost = CommonPostItem & {
+  type: BoardType
+  useCategory: boolean
+}
+
 export type BoardLatest = {
   name: string
   latest: LatestPost[]
 }
 
-export type PostItem = LatestPost & {
-  id: string
+type LatestAdd = {
   content: string
   cover: string
   liked: boolean
 }
 
+export type PostItem = LatestPost &
+  LatestAdd & {
+    id: string
+  }
+
+export type BoardPostItem = CommonPostItem & LatestAdd
+
 export type BoardLatestPost = {
+  id: string
+  type: BoardType
   name: string
   info: string
-  posts: PostItem[]
+  useCategory: boolean
+  posts: BoardPostItem[]
 }
 
 export type LatestPostParams = {
