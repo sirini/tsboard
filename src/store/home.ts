@@ -30,6 +30,9 @@ import { TEXT } from "../messages/store/home"
 import { BoardType, SearchOption } from "../interface/board"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 
+export const CATEGORY_WINDOW = 1
+export const LATEST_WINDOW = 2
+
 export const useHomeStore = defineStore("home", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
@@ -57,6 +60,7 @@ export const useHomeStore = defineStore("home", () => {
   const lang = ref<LangType>(LANG.KO as LangType)
   const langName = ref<string>("한국어")
   const langIcon = ref<string>("mdi-syllabary-hangul")
+  const tab = ref<number>(CATEGORY_WINDOW)
   const color = ref({
     header: "blue-grey-darken-3",
     footer: "blue-grey-lighten-5",
@@ -206,6 +210,7 @@ export const useHomeStore = defineStore("home", () => {
     if (keyword.value.length < 2) {
       return
     }
+    tab.value = LATEST_WINDOW
     sinceUid.value = 0
     latestPosts.value = []
     loadLatestPosts()
@@ -214,7 +219,14 @@ export const useHomeStore = defineStore("home", () => {
 
   // 검색어 입력 확정 (검색어 히스토리 추가)
   function enterSearchPosts(): void {
+    if (keyword.value.length < 2) {
+      resetSearchKeyword()
+      return
+    }
     _searchPosts()
+    if (keywordHistories.value.includes(keyword.value) === true) {
+      return
+    }
     keywordHistories.value.push(keyword.value)
     if (keywordHistories.value.length > 10) {
       keywordHistories.value.splice(0, 1)
@@ -239,6 +251,7 @@ export const useHomeStore = defineStore("home", () => {
     latestPosts.value = []
     option.value = SEARCH_OPTION.TITLE as SearchOption
     keyword.value = ""
+    tab.value = CATEGORY_WINDOW
   }
 
   // 알림 정보 가져오기
@@ -362,6 +375,7 @@ export const useHomeStore = defineStore("home", () => {
     lang,
     langName,
     langIcon,
+    tab,
     color,
     coming,
     visit,
