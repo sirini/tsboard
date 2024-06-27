@@ -40,7 +40,7 @@ const boards = ref<BoardLatestPost[]>([])
 const TARGETS = [
   { id: "free", limit: 8 },
   { id: "photo", limit: 4 },
-  { id: "story", limit: 4 },
+  { id: "sirini", limit: 4 },
 ]
 const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] // BOARD, GALLERY, BLOG, SHOP
 
