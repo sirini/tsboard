@@ -32,7 +32,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: IS_DEV ? "" : TSBOARD.PREFIX,
+  base: IS_DEV ? "" : TSBOARD.PREFIX.length > 0 ? TSBOARD.PREFIX : "/",
   define: {
     "process.env": {},
   },

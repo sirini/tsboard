@@ -19,7 +19,7 @@ export const TSBOARD = {
     TITLE: "TSBOARD - 타입스크립트로 작성된 오픈소스 커뮤니티 빌더" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,
   },
-  PREFIX: "/" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
+  PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
   API: {
     URI: IS_DEV
       ? DEV_URL
