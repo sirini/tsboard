@@ -1,6 +1,11 @@
 <template>
   <v-card class="box-post" @click="util.go(type, id, post.uid)">
-    <v-img v-if="post.cover.length > 0" height="200" cover :src="post.cover"></v-img>
+    <v-img
+      v-if="post.cover.length > 0"
+      height="200"
+      cover
+      :src="TSBOARD.PREFIX + post.cover"
+    ></v-img>
 
     <v-list class="pa-0">
       <v-list-item class="pa-2"
@@ -57,7 +62,7 @@
       <v-spacer></v-spacer>
 
       <v-chip
-        :prepend-avatar="post.writer.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
+        :prepend-avatar="TSBOARD.PREFIX + (post.writer.profile || '/no-profile.svg')"
         size="small"
         color="blue-grey"
         class="mr-2"

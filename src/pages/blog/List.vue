@@ -9,7 +9,7 @@
             <v-row>
               <v-col cols="12" class="text-center mt-9 mb-9">
                 <v-avatar size="150">
-                  <v-img :src="user.info.profile || TSBOARD.PREFIX + '/no-profile.svg'"></v-img>
+                  <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
                 </v-avatar>
 
                 <h3 class="mt-6">

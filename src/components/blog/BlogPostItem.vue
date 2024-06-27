@@ -1,6 +1,11 @@
 <template>
   <v-card elevation="0" @click="util.go(type, id, post.uid)">
-    <v-img cover v-if="post.cover.length > 0" height="250" :src="post.cover"></v-img>
+    <v-img
+      cover
+      v-if="post.cover.length > 0"
+      height="250"
+      :src="TSBOARD.PREFIX + post.cover"
+    ></v-img>
 
     <v-list class="pa-0">
       <v-list-item class="pa-2"
@@ -67,6 +72,7 @@
 import { useUtilStore } from "../../store/util"
 import { BoardType, Post } from "../../interface/board"
 import "../../assets/board/editor.scss"
+import { TSBOARD } from "../../../tsboard.config";
 
 const util = useUtilStore()
 const props = defineProps<{ post: Post; type: BoardType; useCategory: boolean; id: string }>()

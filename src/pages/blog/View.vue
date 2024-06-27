@@ -66,7 +66,7 @@
               <v-carousel-item
                 v-for="(image, i) in view.images"
                 :key="i"
-                :src="image.thumbnail.large"
+                :src="TSBOARD.PREFIX + image.thumbnail.large"
                 cover
                 class="caro"
               >
@@ -128,6 +128,7 @@ import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import "../../assets/board/editor.scss"
+import { TSBOARD } from "../../../tsboard.config"
 
 const view = useBoardViewStore()
 const home = useHomeStore()

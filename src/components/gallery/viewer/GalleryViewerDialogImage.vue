@@ -4,8 +4,8 @@
       <v-img
         class="text-right"
         :src="
-          viewer.images.at(viewer.position)?.thumbnail.large ||
-          `${TSBOARD.PREFIX}/image-not-found.svg`
+          TSBOARD.PREFIX +
+          (viewer.images.at(viewer.position)?.thumbnail.large || '/image-not-found.svg')
         "
         @mousedown="viewer.mouseDown"
         @mousemove="viewer.mouseMove"

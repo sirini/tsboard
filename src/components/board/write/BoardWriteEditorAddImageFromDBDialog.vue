@@ -26,7 +26,7 @@
         <v-row no-gutters>
           <v-col v-for="(img, index) in image.loadImages" :key="index" cols="2" class="mb-3">
             <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
-              <v-img cover width="105" aspect-ratio="1/1" :src="img.name">
+              <v-img cover width="105" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img.name">
                 <div class="action">
                   <v-row no-gutters>
                     <v-col
@@ -88,6 +88,7 @@ import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const editor = useBoardEditorStore()
 const image = useEditorImageStore()

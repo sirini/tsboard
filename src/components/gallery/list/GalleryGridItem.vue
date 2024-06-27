@@ -10,7 +10,7 @@
         cover
         :height="gallery.gridSize"
         aspect-ratio="1/1"
-        :src="item.images[0].thumbnail.large || `${TSBOARD.PREFIX}/image-not-found.svg`"
+        :src="TSBOARD.PREFIX + (item.images[0].thumbnail.large || '/image-not-found.svg')"
         class="text-center vimg"
         :class="{ onHover: isHovering }"
         @click="gallery.open(item.uid)"

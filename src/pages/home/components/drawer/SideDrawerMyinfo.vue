@@ -4,7 +4,7 @@
     <v-divider></v-divider>
     <v-list-item
       @click="util.go('myinfo')"
-      :prepend-avatar="auth.user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
+      :prepend-avatar="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
       append-icon="mdi-chevron-right"
     >
       <v-list-item-title>{{ auth.user.name }}</v-list-item-title>

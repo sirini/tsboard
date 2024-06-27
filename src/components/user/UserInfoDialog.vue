@@ -12,7 +12,7 @@
 
         <v-list-item class="text-center">
           <v-avatar :size="SIZE.PROFILE">
-            <v-img :src="user.info.profile || `${TSBOARD.PREFIX}/no-profile.svg`"></v-img>
+            <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
         </v-list-item>
 

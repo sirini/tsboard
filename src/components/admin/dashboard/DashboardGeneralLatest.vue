@@ -24,9 +24,8 @@
             :key="index"
             @click="util.go(post.type, post.id, post.uid)"
             :prepend-avatar="
-              post.writer.profile.length < 1
-                ? `${TSBOARD.PREFIX}/no-profile.svg`
-                : post.writer.profile
+              TSBOARD.PREFIX +
+              (post.writer.profile.length < 1 ? '/no-profile.svg' : post.writer.profile)
             "
           >
             <v-list-item-title>{{ post.content }}</v-list-item-title>
@@ -57,9 +56,8 @@
             :key="index"
             @click="util.go(comment.type, comment.id, comment.uid)"
             :prepend-avatar="
-              comment.writer.profile.length < 1
-                ? `${TSBOARD.PREFIX}/no-profile.svg`
-                : comment.writer.profile
+              TSBOARD.PREFIX +
+              (comment.writer.profile.length < 1 ? '/no-profile.svg' : comment.writer.profile)
             "
           >
             <v-list-item-title>{{ comment.content }}</v-list-item-title>
@@ -90,9 +88,8 @@
             :key="index"
             @click="util.go('adminReportView', '', report.uid)"
             :prepend-avatar="
-              report.writer.profile.length < 1
-                ? `${TSBOARD.PREFIX}/no-profile.svg`
-                : report.writer.profile
+              TSBOARD.PREFIX +
+              (report.writer.profile.length < 1 ? '/no-profile.svg' : report.writer.profile)
             "
           >
             <v-list-item-title>{{ report.content }}</v-list-item-title>

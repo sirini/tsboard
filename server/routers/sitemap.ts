@@ -93,7 +93,7 @@ export const sitemap = new Elysia().group("/seo", (app) => {
 
         articles += `<article class="article">
             <div class="image">
-              <img src="${post.cover.length > 0 ? post.cover : "/image-not-found.svg"}" width="300" />
+              <img src="${TSBOARD.PREFIX}${post.cover.length > 0 ? post.cover : "/image-not-found.svg"}" width="300" />
             </div>
             <div class="post">
               <h2 class="title"><a href="${TSBOARD.API.URI}/${boardType}/${post.id}/${post.uid}" target="_blank" title="사용자를 위한 페이지에서 이 게시글을 열어봅니다">${post.title}</a></h2>

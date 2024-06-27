@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title
       ><v-avatar size="100" class="mt-2 mb-2 mr-3"
-        ><v-img :src="userModify.user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"></v-img
+        ><v-img :src="TSBOARD.PREFIX + (userModify.user.profile || '/no-profile.svg')"></v-img
       ></v-avatar>
       {{ userModify.user.name }} 님의 정보 수정하기
     </v-card-title>
@@ -131,7 +131,7 @@
           <v-list-item>
             <template v-slot:prepend>
               <v-avatar v-if="userModify.newProfilePreview.length > 0">
-                <v-img :src="userModify.newProfilePreview"></v-img>
+                <v-img :src="TSBOARD.PREFIX + userModify.newProfilePreview"></v-img>
               </v-avatar>
             </template>
 

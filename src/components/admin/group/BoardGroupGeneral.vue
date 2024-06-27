@@ -17,7 +17,7 @@
                   <v-list-item
                     v-for="(user, index) in general.suggestions"
                     :key="index"
-                    :prepend-avatar="user.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
+                    :prepend-avatar="TSBOARD.PREFIX + (user.profile || '/no-profile.svg')"
                     @click="general.updateGroupManager(user)"
                   >
                     {{ user.name }}
@@ -35,7 +35,9 @@
           <v-col class="mt-1">
             <v-chip
               color="blue-grey"
-              :prepend-avatar="general.group.manager.profile || `${TSBOARD.PREFIX}/no-profile.svg`"
+              :prepend-avatar="
+                TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')
+              "
               variant="tonal"
               >{{ general.group.manager.name }}
               <v-tooltip activator="parent"

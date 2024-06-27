@@ -39,7 +39,7 @@
         <v-row class="mb-1">
           <v-col v-for="(img, index) in image.uploadingImages" :key="index" cols="3">
             <v-card elevation="0" rounded="lg">
-              <v-img cover height="100" aspect-ratio="1/1" :src="img"></v-img>
+              <v-img cover height="100" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img"></v-img>
             </v-card>
           </v-col>
         </v-row>
@@ -68,6 +68,7 @@ import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
+import { TSBOARD } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()

@@ -3,7 +3,7 @@
     <v-row>
       <v-col :cols="home.cols" v-for="(image, index) in view.images" :key="index">
         <v-card elevation="0">
-          <v-img cover :src="image.thumbnail.small"></v-img>
+          <v-img cover :src="TSBOARD.PREFIX + image.thumbnail.small"></v-img>
           <v-card-text class="description pa-3" v-if="view.images[index].description.length > 0">{{
             view.images[index].description
           }}</v-card-text>
@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import { TSBOARD } from "../../../../tsboard.config"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"
 
