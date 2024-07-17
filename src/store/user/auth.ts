@@ -61,10 +61,10 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const response = await client.tsapi.auth.load.get({
         $headers: {
-          authorization: user.value.token,
+          authorization: user.value.token ?? "",
         },
         $query: {
-          userUid: user.value.uid,
+          userUid: user.value.uid ?? 0,
         },
       })
 
