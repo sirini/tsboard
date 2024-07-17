@@ -49,7 +49,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const tag = ref<string>("")
   const tags = ref<string[]>([])
   const suggestionTags = ref<CountPair[]>([])
-  const viewRouteName = ref<string>("boardView")
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
@@ -86,10 +85,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     categories.value = response.data.result.categories
     category.value = categories.value[0]
     isAdmin.value = response.data.result.isAdmin
-
-    if (config.value.type === BOARD_TYPE.GALLERY) {
-      viewRouteName.value = "galleryView"
-    }
   }
 
   // 게시글 임시 보관하기
@@ -324,7 +319,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].WRITTEN_NEW_POST)
-    util.go(viewRouteName.value, id.value, response.data.result.postUid)
+    util.go(config.value.type, id.value, response.data.result.postUid)
 
     clearVariables()
   }
@@ -366,7 +361,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     auth.updateUserToken(response.data.result.newAccessToken)
     util.success(TEXT[home.lang].MODIFIED_POST)
-    util.go(viewRouteName.value, id.value, postUid.value)
+    util.go(config.value.type, id.value, postUid.value)
 
     clearVariables()
   }

@@ -6,13 +6,13 @@
         <board-list-search></board-list-search>
       </v-menu>
     </v-btn>
-    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.loadPrevPosts">{{
+    <v-btn prepend-icon="mdi-chevron-left" :disabled="list.page < 2" @click="list.movePrevPage">{{
       TEXT[home.lang].PREV
     }}</v-btn>
     <v-btn
       append-icon="mdi-chevron-right"
       :disabled="list.page >= list.pageLength"
-      @click="list.loadNextPosts"
+      @click="list.moveNextPage"
       >{{ TEXT[home.lang].NEXT }}</v-btn
     >
 

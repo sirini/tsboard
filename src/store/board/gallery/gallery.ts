@@ -20,6 +20,7 @@ import {
   INIT_POST,
   PAGING_DIRECTION,
   TYPE_MATCH,
+  ACTION_TARGET,
 } from "../../../../server/database/board/const"
 import { BoardConfig, Post, SearchOption } from "../../../interface/board"
 import { TSBOARD } from "../../../../tsboard.config"
@@ -123,7 +124,7 @@ export const useGalleryStore = defineStore("gallery", () => {
 
   // 갤러리 뷰어 다이얼로그 열기
   function open(no: number): void {
-    util.go("galleryView", id.value, no)
+    util.go(util.routerName(config.value.type, ACTION_TARGET.VIEW), id.value, no)
   }
 
   // 검색 옵션 초기화하기

@@ -9,23 +9,28 @@ import { TSBOARD } from "../../tsboard.config"
 
 export const boardRoutes: Array<RouteRecordRaw> = [
   {
-    path: TSBOARD.PREFIX + "/board/:id",
+    path: `${TSBOARD.PREFIX}/board/:id`,
     name: "boardList",
     component: () => import("@/pages/board/List.vue"),
   },
   {
-    path: TSBOARD.PREFIX + "/board/:id/:no(\\d+)",
+    path: `${TSBOARD.PREFIX}/board/:id/:no(\\d+)`,
     name: "boardView",
     component: () => import("@/pages/board/View.vue"),
   },
   {
-    path: TSBOARD.PREFIX + "/board/:id/write",
+    path: `${TSBOARD.PREFIX}/board/:id/write`,
     name: "boardWrite",
     component: () => import("@/pages/board/Write.vue"),
   },
   {
-    path: TSBOARD.PREFIX + "/board/:id/write/:no(\\d+)",
+    path: `${TSBOARD.PREFIX}/board/:id/write/:no(\\d+)`,
     name: "boardModify",
     component: () => import("@/pages/board/Write.vue"),
+  },
+  {
+    path: `${TSBOARD.PREFIX}/board/:id/page/:page(\\d+)`,
+    name: "boardPaging",
+    component: () => import("@/pages/board/List.vue"),
   },
 ]

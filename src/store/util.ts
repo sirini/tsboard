@@ -64,10 +64,18 @@ export const useUtilStore = defineStore("util", () => {
 
   // 액션에 따른 라우터 이름 변환
   function nameByAction(action: number): string {
-    if (action === ACTION_TARGET.LIST) return "List"
-    else if (action === ACTION_TARGET.WRITE) return "Write"
-    else if (action === ACTION_TARGET.MODIFY) return "Modify"
-    else return "View"
+    switch (action) {
+      case ACTION_TARGET.LIST:
+        return "List"
+      case ACTION_TARGET.PAGING:
+        return "Paging"
+      case ACTION_TARGET.WRITE:
+        return "Write"
+      case ACTION_TARGET.MODIFY:
+        return "Modify"
+      default:
+        return "View"
+    }
   }
 
   // 게시판 형태에 따른 라우터 이름 반환
@@ -112,6 +120,11 @@ export const useUtilStore = defineStore("util", () => {
   // 외부 페이지를 새창으로 열기
   function open(url: string): void {
     window.open(url, "_blank")
+  }
+
+  // 주어진 URL로 이동
+  function move(url: string): void {
+    window.location.href = url
   }
 
   // 페이지 뒤로가기
@@ -187,6 +200,7 @@ export const useUtilStore = defineStore("util", () => {
     routerName,
     go,
     open,
+    move,
     back,
     debounce,
     date,

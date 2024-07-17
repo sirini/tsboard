@@ -43,7 +43,7 @@ export const view = new Elysia()
       jwt,
       userUid: parseInt(userUid ?? "0"),
       accessToken: authorization ?? "",
-      refreshToken: refresh.value,
+      refreshToken: refresh.value ?? "",
     })
 
     if (verification.success === true) {

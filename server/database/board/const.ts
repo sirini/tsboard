@@ -45,9 +45,10 @@ export const BOARD_TYPE = {
 
 export const ACTION_TARGET = {
   LIST: 0,
-  VIEW: 1,
-  WRITE: 2,
-  MODIFY: 3,
+  PAGING: 1,
+  VIEW: 2,
+  WRITE: 3,
+  MODIFY: 4,
 }
 
 export const CONTENT_STATUS = {

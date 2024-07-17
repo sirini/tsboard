@@ -38,7 +38,7 @@ export const load = new Elysia()
         jwt,
         userUid,
         accessToken: authorization,
-        refreshToken: refresh.value,
+        refreshToken: refresh.value ?? "",
       })
 
       if (verification.success === false) {
