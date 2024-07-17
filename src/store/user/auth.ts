@@ -75,9 +75,9 @@ export const useAuthStore = defineStore("auth", () => {
         return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
       }
 
-      user.value = response.data.result.user as User
+      user.value = response.data.result.user
       user.value.signature = util.unescape(user.value.signature)
-      updateUserToken(response.data.result.newAccessToken) // 마지막에 토큰 변경
+      updateUserToken(response.data.result.newAccessToken)
     } catch (e) {
       util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
       logout()
@@ -112,7 +112,7 @@ export const useAuthStore = defineStore("auth", () => {
     }, 1000)
   }
 
-  // 구글 OAuth 로그인 이후 결과 받아오기
+  // OAuth 로그인 이후 결과 받아오기
   async function loadOAuthUserInfo(): Promise<void> {
     const response = await client.tsapi.auth.oauth.userinfo.get()
 
@@ -123,7 +123,7 @@ export const useAuthStore = defineStore("auth", () => {
       return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
 
-    user.value = response.data.result as User
+    user.value = JSON.parse(response.data.result as string)
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
