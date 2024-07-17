@@ -45,7 +45,7 @@ export const common = new Elysia()
         jwt,
         userUid,
         accessToken: authorization,
-        refreshToken: refresh.value,
+        refreshToken: refresh.value ?? "",
       })
 
       if (verification.success === false) {
@@ -104,7 +104,7 @@ export const common = new Elysia()
         jwt,
         userUid,
         accessToken: authorization,
-        refreshToken: refresh.value,
+        refreshToken: refresh.value ?? "",
       })
 
       if (verification.success === false) {

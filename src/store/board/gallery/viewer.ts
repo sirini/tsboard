@@ -14,6 +14,7 @@ import { useUtilStore } from "../../util"
 import { useHomeStore } from "../../home"
 import { Position } from "../../../interface/gallery"
 import {
+  ACTION_TARGET,
   BOARD_CONFIG,
   INIT_POST_VIEW,
   PAGING_DIRECTION,
@@ -293,7 +294,10 @@ export const useViewerStore = defineStore("viewer", () => {
   function close(): void {
     dialog.value = false
     postUid.value = 0
-    router.push({ name: "galleryList", params: { id: id.value } })
+    router.push({
+      name: util.routerName(config.value.type, ACTION_TARGET.LIST),
+      params: { id: id.value },
+    })
   }
 
   return {

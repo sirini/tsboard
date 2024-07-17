@@ -123,7 +123,7 @@ export const useAuthStore = defineStore("auth", () => {
       return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
 
-    user.value = response.data.result
+    user.value = response.data.result as User
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
@@ -153,7 +153,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 사용자 토큰 업데이트 하기
   function updateUserToken(token: string): void {
-    if (token.length < 1) {
+    if (!token || token.length < 1) {
       return
     }
     user.value.token = token

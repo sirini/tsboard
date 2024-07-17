@@ -196,14 +196,6 @@ export async function removePost(postUid: number): Promise<void> {
   update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, ["-1", postUid.toString()])
   update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, ["-1", postUid.toString()])
 
-  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
-    postUid.toString(),
-  ])
-  for (const file of files) {
-    removeFile(`.${file.path}`)
-  }
-  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid.toString()])
-
   const thumbs = await select(
     `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
     [postUid.toString()],
@@ -213,4 +205,12 @@ export async function removePost(postUid: number): Promise<void> {
     removeFile(`.${thumb.full_path}`)
   }
   remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid.toString()])
+
+  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
+    postUid.toString(),
+  ])
+  for (const file of files) {
+    removeFile(`.${file.path}`)
+  }
+  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid.toString()])
 }

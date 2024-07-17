@@ -5,15 +5,15 @@
  */
 
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
 import type { App } from "../../../server/index"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import { BoardConfig, Pair, Post, SearchOption } from "../../interface/board"
-import { SEARCH_OPTION } from "../../../server/database/board/const"
+import { BoardConfig, BoardType, Pair, Post, SearchOption } from "../../interface/board"
+import { ACTION_TARGET, BOARD_TYPE, SEARCH_OPTION } from "../../../server/database/board/const"
 import { TEXT } from "../../messages/store/board/list"
 import {
   TYPE_MATCH,
@@ -26,6 +26,7 @@ import { TSBOARD } from "../../../tsboard.config"
 export const useBoardListStore = defineStore("boardList", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
+  const router = useRouter()
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -41,6 +42,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
+  const isFirstInit = ref<boolean>(false)
 
   // 게시글 목록 가져오기
   async function loadPostList(): Promise<void> {
@@ -100,6 +102,43 @@ export const useBoardListStore = defineStore("boardList", () => {
     pageLength.value = Math.ceil(
       response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
     )
+
+    if (pagingDirection.value === PAGING_DIRECTION.PREV) {
+      rearrangePosts()
+    }
+  }
+
+  // 게시판 목록 마운트 시점에 호출
+  function initFirstList(): void {
+    isFirstInit.value = true
+    const name = util.routerName(config.value.type, ACTION_TARGET.PAGING)
+    const pageStr = page.value.toString()
+
+    if (page.value > 1 && sinceUid.value > 0) {
+      loadPostList()
+      router.replace({ name, params: { id: id.value, page: pageStr } })
+    } else {
+      resetBoardList()
+      router.replace({ name, params: { id: id.value, page: "1" } })
+    }
+  }
+
+  // 페이징이 변경될 때마다 호출
+  function watchChangingPage(nowPage: string | string[], prevPage: string | string[]): void {
+    if (isFirstInit.value === true) {
+      isFirstInit.value = false
+    } else {
+      const now = parseInt(nowPage as string)
+      const prev = parseInt((prevPage as string) || "1")
+
+      page.value = prev < 1 ? 1 : prev
+      if (now >= prev) {
+        setNextPosts()
+      } else {
+        setPrevPosts()
+      }
+      loadPostList()
+    }
   }
 
   // 게시판 목록 초기화
@@ -111,21 +150,18 @@ export const useBoardListStore = defineStore("boardList", () => {
     home.setGridLayout()
   }
 
-  // 이전 페이지 가져오기 (공지글 먼저 올리고, 나머진 순서 반대로 해주기)
-  async function loadPrevPosts(): Promise<void> {
+  // 이전 페이지로 이동 준비
+  function setPrevPosts(): void {
     page.value -= 1
     pagingDirection.value = PAGING_DIRECTION.PREV
-    posts.value.map((post) => {
-      if (post.status === CONTENT_STATUS.NORMAL && sinceUid.value < post.uid) {
-        sinceUid.value = post.uid
-      }
-    })
-
     if (page.value < 2) {
       util.snack(TEXT[home.lang].FIRST_PAGE)
     }
+    sinceUid.value = posts.value.at(0)?.uid ?? 0
+  }
 
-    await loadPostList()
+  // 이전 페이지 가져온 후 데이터 처리 (순서 뒤집기 등)
+  function rearrangePosts(): void {
     const notices = posts.value.filter((post) => {
       return post.status === CONTENT_STATUS.NOTICE
     })
@@ -135,19 +171,32 @@ export const useBoardListStore = defineStore("boardList", () => {
     posts.value = [...notices, ...normals]
   }
 
-  // 다음 페이지 가져오기
-  async function loadNextPosts(): Promise<void> {
+  // 다음 페이지로 이동 준비
+  function setNextPosts(): void {
     page.value += 1
     pagingDirection.value = PAGING_DIRECTION.NEXT
     sinceUid.value = posts.value.at(-1)?.uid ?? 0
-
-    if (posts.value.length < config.value.rowCount) {
+    if (page.value === pageLength.value) {
       util.snack(TEXT[home.lang].LAST_PAGE)
-      sinceUid.value = 0
-      return
     }
+  }
 
-    await loadPostList()
+  // 이전 페이지 이동하기
+  function movePrevPage(): void {
+    page.value -= 1
+    router.push({
+      name: util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING),
+      params: { id: id.value, page: page.value },
+    })
+  }
+
+  // 다음 페이지 이동하기
+  function moveNextPage(): void {
+    page.value += 1
+    router.push({
+      name: util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING),
+      params: { id: id.value, page: page.value },
+    })
   }
 
   // 검색 옵션 초기화하기
@@ -213,9 +262,11 @@ export const useBoardListStore = defineStore("boardList", () => {
     keyword,
     keywordHistories,
     loadPostList,
+    initFirstList,
+    watchChangingPage,
     resetBoardList,
-    loadPrevPosts,
-    loadNextPosts,
+    movePrevPage,
+    moveNextPage,
     resetSearchKeyword,
     loadPostsByCategory,
     enterSearchKeyword,

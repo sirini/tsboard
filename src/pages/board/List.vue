@@ -21,11 +21,7 @@
                   :class="post.status === CONTENT_STATUS.NOTICE ? 'notice' : ''"
                 >
                   <template v-slot:prepend>
-                    <span class="col no text-center"
-                      ><v-icon size="small" v-if="post.liked" color="red">mdi-heart</v-icon
-                      ><v-icon size="small" v-else>mdi-heart-outline</v-icon>
-                      {{ util.num(post.like) }}</span
-                    >
+                    <span class="col no text-center">{{ post.uid }}</span>
                   </template>
 
                   <v-list-item-title
@@ -62,9 +58,32 @@
 
                     {{ util.unescape(post.title) }}
 
-                    <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.reply > 0">{{
-                      util.num(post.reply)
-                    }}</v-chip>
+                    <v-chip
+                      size="small"
+                      color="blue-grey"
+                      class="ml-2"
+                      prepend-icon="mdi-chat-outline"
+                      variant="text"
+                      v-if="post.reply > 0"
+                      >{{ util.num(post.reply) }}</v-chip
+                    >
+
+                    <v-chip
+                      size="small"
+                      prepend-icon="mdi-heart"
+                      color="red"
+                      variant="text"
+                      v-if="post.liked"
+                      >{{ util.num(post.like) }}</v-chip
+                    >
+                    <v-chip
+                      size="small"
+                      prepend-icon="mdi-heart-outline"
+                      color="blue-grey"
+                      variant="text"
+                      v-else
+                      >{{ util.num(post.like) }}</v-chip
+                    >
                   </v-list-item-title>
 
                   <template v-slot:append>
@@ -75,9 +94,7 @@
                       :profile="post.writer.profile"
                     ></user-nametag>
 
-                    <span class="col no text-center"
-                      ><v-icon size="small">mdi-eye-outline</v-icon> {{ util.num(post.hit) }}</span
-                    >
+                    <span class="col no text-center">{{ util.num(post.hit) }}</span>
                     <v-divider vertical v-if="home.isMobile === false"></v-divider>
                     <span class="col date text-center" v-if="home.isMobile === false">{{
                       util.date(post.submitted)
@@ -125,7 +142,7 @@ const util = useUtilStore()
 const home = useHomeStore()
 const auth = useAuthStore()
 
-onMounted(() => list.resetBoardList())
+onMounted(() => list.initFirstList())
 
 watch(
   () => route.params?.id,
@@ -134,9 +151,8 @@ watch(
 
 watch(
   () => route.params?.page,
-  () => {
-    list.page = parseInt(route.params?.page as string)
-    list.resetBoardList()
+  (nowPage, prevPage) => {
+    list.watchChangingPage(nowPage, prevPage)
   },
 )
 </script>
@@ -163,7 +179,7 @@ watch(
       cursor: pointer;
     }
     .no {
-      width: 60px;
+      width: 70px;
     }
     .date {
       width: 80px;
