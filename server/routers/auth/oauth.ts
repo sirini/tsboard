@@ -31,27 +31,23 @@ export const oauth = new Elysia()
     const scope = "email profile"
     const redirectURI = `${TSBOARD.API.URI}/tsapi/auth/google/callback`
     const requestURI = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.OAUTH_GOOGLE_CLIENT_ID}&redirect_uri=${redirectURI}&scope=${scope}&response_type=code&access_type=offline&prompt=select_account`
-    redirect(requestURI)
-    return
+    return redirect(requestURI)
   })
   .get(
     "/google/callback",
     async ({ jwt, cookie: { refresh, oauthUserInfo }, query: { code }, redirect }) => {
       if (!process.env.OAUTH_GOOGLE_SECRET) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       if (code.length < 1) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       const googleToken = await requestAccessToken("google", code)
       let userInfo = await requestUserInfo("google", googleToken.access_token)
       if (userInfo === null) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       if (userInfo.email) {
@@ -65,8 +61,7 @@ export const oauth = new Elysia()
         saveTokenInCookie(oauthUserInfo, JSON.stringify(googleUser), 60)
       }
 
-      redirect(`${TSBOARD.API.URI}/login/oauth`)
-      return
+      return redirect(`${TSBOARD.API.URI}/login/oauth`)
     },
     {
       query: t.Object({
@@ -77,27 +72,23 @@ export const oauth = new Elysia()
   .get("/naver/request", async ({ redirect }) => {
     const redirectURI = `${TSBOARD.API.URI}/tsapi/auth/naver/callback`
     const requestURI = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${redirectURI}&state=${nanoid()}`
-    redirect(requestURI)
-    return
+    return redirect(requestURI)
   })
   .get(
     "/naver/callback",
     async ({ jwt, cookie: { refresh, oauthUserInfo }, query: { code }, redirect }) => {
       if (!process.env.OAUTH_NAVER_SECRET) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       if (code.length < 1) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       const naverToken = await requestAccessToken("naver", code)
       let userInfo = await requestUserInfo("naver", naverToken.access_token)
       if (userInfo === null) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       userInfo = userInfo.response
@@ -116,8 +107,7 @@ export const oauth = new Elysia()
         saveTokenInCookie(oauthUserInfo, JSON.stringify(naverUser), 60)
       }
 
-      redirect(`${TSBOARD.API.URI}/login/oauth`)
-      return
+      return redirect(`${TSBOARD.API.URI}/login/oauth`)
     },
     {
       query: t.Object({
@@ -130,27 +120,23 @@ export const oauth = new Elysia()
     const scope = "account_email,profile_image,profile_nickname"
     const redirectURI = `${TSBOARD.API.URI}/tsapi/auth/kakao/callback`
     const requestURI = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.OAUTH_KAKAO_CLIENT_ID}&redirect_uri=${redirectURI}&response_type=code&scope=${scope}`
-    redirect(requestURI)
-    return
+    return redirect(requestURI)
   })
   .get(
     "/kakao/callback",
     async ({ jwt, cookie: { refresh, oauthUserInfo }, query: { code }, redirect }) => {
       if (!process.env.OAUTH_KAKAO_SECRET) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       if (code.length < 1) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       const kakaoToken = await requestAccessToken("kakao", code)
       let userInfo = await requestUserInfo("kakao", kakaoToken.access_token)
       if (userInfo === null) {
-        redirect(TSBOARD.API.URI)
-        return
+        return redirect(TSBOARD.API.URI)
       }
 
       userInfo = userInfo.kakao_account
@@ -169,8 +155,7 @@ export const oauth = new Elysia()
         saveTokenInCookie(oauthUserInfo, JSON.stringify(kakaoUser), 60)
       }
 
-      redirect(`${TSBOARD.API.URI}/login/oauth`)
-      return
+      return redirect(`${TSBOARD.API.URI}/login/oauth`)
     },
     {
       query: t.Object({
