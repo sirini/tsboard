@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="pa-6" v-if="view.images.length > 0">
+  <div class="pa-6" v-if="view.images.length > 0">
     <v-row>
       <v-col :cols="home.cols" v-for="(image, index) in view.images" :key="index">
         <v-card elevation="0">
@@ -10,7 +10,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-list-item>
+  </div>
   <v-divider v-if="view.images.length > 0"></v-divider>
 </template>
 

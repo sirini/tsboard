@@ -57,7 +57,7 @@
     "mysql2": "^3.10.3",
     "nanoid": "^5.0.7",
     "nodemailer": "^6.9.14",
-    "openai": "^4.52.7",
+    "openai": "^4.53.0",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "sanitize-html": "^2.13.0",
@@ -85,7 +85,7 @@
     "unplugin-fonts": "^1.1.1",
     "vite": "^5.2.12",
     "vite-plugin-vuetify": "^2.0.3",
-    "vue-tsc": "^2.0.19"
+    "vue-tsc": "^1.6.5"
   },
   "module": "src/index.js"
 }

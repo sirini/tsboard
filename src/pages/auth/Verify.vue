@@ -17,6 +17,7 @@
             <v-divider></v-divider>
 
             <alert-bar></alert-bar>
+
             <div class="text-center mt-9 mb-9">
               <v-otp-input
                 v-model="signup.verificationCode"

@@ -10,6 +10,7 @@ import { removeFile } from "../../util/tools"
 import { remove, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
 import { INIT_POST_VIEW, NOTICE_TYPE, CONTENT_STATUS } from "./const"
+import { removeAttachedFile, removeOriginalTags } from "./editor"
 import { getPostRelated } from "./list"
 import { statSync } from "fs"
 
@@ -196,21 +197,12 @@ export async function removePost(postUid: number): Promise<void> {
   update(`UPDATE ${table}post SET status = ? WHERE uid = ? LIMIT 1`, ["-1", postUid.toString()])
   update(`UPDATE ${table}comment SET status = ? WHERE post_uid = ?`, ["-1", postUid.toString()])
 
-  const thumbs = await select(
-    `SELECT path, full_path FROM ${table}file_thumbnail WHERE post_uid = ?`,
-    [postUid.toString()],
-  )
-  for (const thumb of thumbs) {
-    removeFile(`.${thumb.path}`)
-    removeFile(`.${thumb.full_path}`)
-  }
-  remove(`DELETE FROM ${table}file_thumbnail WHERE post_uid = ?`, [postUid.toString()])
+  removeOriginalTags(postUid)
 
-  const files = await select(`SELECT path FROM ${table}file WHERE post_uid = ?`, [
+  const files = await select(`SELECT uid FROM ${table}file WHERE post_uid = ?`, [
     postUid.toString(),
   ])
   for (const file of files) {
-    removeFile(`.${file.path}`)
+    await removeAttachedFile(file.uid)
   }
-  remove(`DELETE FROM ${table}file WHERE post_uid = ?`, [postUid.toString()])
 }

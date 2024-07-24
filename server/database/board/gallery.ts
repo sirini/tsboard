@@ -30,6 +30,10 @@ export async function getPhotoItems(postUid: number): Promise<PhotoItem[]> {
       `SELECT path, full_path FROM ${table}file_thumbnail WHERE file_uid = ? LIMIT 1`,
       [download.uid],
     )
+    if (!thumb) {
+      continue
+    }
+
     const [exif] = await select(
       `SELECT make, model, aperture, iso, focal_length, exposure, width, height, date FROM ${table}exif WHERE file_uid = ? LIMIT 1`,
       [download.uid],
@@ -120,7 +124,7 @@ export async function getPhotos(param: PostParams): Promise<GridItem[]> {
       categoryUid: post.category_uid,
     })
 
-    const images = await getPhotoItems(post.uid as number)
+    const images = await getPhotoItems(post.uid)
     result.push({
       uid: post.uid,
       writer: info.writer,

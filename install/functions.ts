@@ -191,10 +191,11 @@ export async function initDatabase(info: SetupInfo): Promise<boolean> {
   }
 
   // 관리자 초기 로그인 정보 등록하기
-  await conn.execute(`INSERT INTO ${prefix}user (id, name, password, profile, level, point, signature, signup, signin, blocked) 
-  VALUES ('${info.admin.id}', 'Admin', SHA2('${
-    info.admin.pw
-  }', 256), '', 9, 0, '', ${Date.now()}, 0, 0)`)
+  await conn.execute(
+    `UPDATE ${prefix}user SET id = '${info.admin.id}', password = SHA2('${
+      info.admin.pw
+    }', 256), signup = ${Date.now()} WHERE uid = 1 LIMIT 1`,
+  )
 
   return true
 }
