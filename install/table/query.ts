@@ -138,7 +138,9 @@ tables.push(`${create} #db#board (
   point_write INT ${nnd0},
   point_comment INT ${nnd0},
   point_download INT ${nnd0},
-  ${primary}
+  ${primary},
+  CONSTRAINT fk_bg FOREIGN KEY (group_uid) REFERENCES #db#group(uid),
+  CONSTRAINT fk_ba FOREIGN KEY (admin_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
 
 // 게시판별 카테고리들 관리 테이블
@@ -159,7 +161,8 @@ tables.push(`${create} #db#point_history (
   point INT ${nnd0},
   ${primary},
   KEY (user_uid),
-  CONSTRAINT fk_ph FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
+  CONSTRAINT fk_ph_u FOREIGN KEY (user_uid) REFERENCES #db#user(uid),
+  CONSTRAINT fk_ph_b FOREIGN KEY (board_uid) REFERENCES #db#board(uid)
 ) ${engineEncode}`)
 
 // 게시글 보관 테이블 (status = -1 삭제됨 / 0 정상 / 1 공지)
@@ -218,6 +221,7 @@ tables.push(`${create} #db#post_like (
   KEY (post_uid),
   KEY (user_uid),
   KEY (liked),
+  CONSTRAINT fk_plb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
   CONSTRAINT fk_plp FOREIGN KEY (post_uid) REFERENCES #db#post(uid),
   CONSTRAINT fk_plu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
@@ -255,6 +259,7 @@ tables.push(`${create} #db#comment_like (
   KEY (comment_uid),
   KEY (user_uid),
   KEY (liked),
+  CONSTRAINT fk_clb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
   CONSTRAINT fk_clc FOREIGN KEY (comment_uid) REFERENCES #db#comment(uid),
   CONSTRAINT fk_clu FOREIGN KEY (user_uid) REFERENCES #db#user(uid)
 ) ${engineEncode}`)
@@ -269,7 +274,8 @@ tables.push(`${create} #db#file (
   timestamp BIGINT ${unnd0},
   ${primary},
   KEY (post_uid),
-  CONSTRAINT fk_f FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
+  CONSTRAINT fk_fb FOREIGN KEY (board_uid) REFERENCES #db#board(uid),
+  CONSTRAINT fk_fp FOREIGN KEY (post_uid) REFERENCES #db#post(uid)
 ) ${engineEncode}`)
 
 // 첨부된 파일이 이미지일 때 썸네일/풀 이미지 경로 보관하는 테이블,
@@ -364,6 +370,13 @@ inserts.push(`INSERT INTO #db#group (
   id, admin_uid, timestamp
 ) VALUES (
   'boards', 1, ${Date.now()}
+)`)
+
+// 기본 관리자 추가하기
+inserts.push(`INSERT INTO #db#user (
+  id, name, password, profile, level, point, signature, signup, signin, blocked
+) VALUES (
+  'will_be_changed', 'Admin', 'will_be_changed', '', 9, 1000, '', 0, 0, 0
 )`)
 
 // 자유 게시판 생성하기

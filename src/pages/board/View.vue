@@ -7,29 +7,24 @@
         <v-container class="wrap">
           <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title class="view-title">{{
-                  util.unescape(view.post.title)
-                }}</v-list-item-title>
-              </v-list-item>
 
-              <board-view-statistics></board-view-statistics>
-              <board-view-attachments></board-view-attachments>
-              <board-view-attachment-thumbnail></board-view-attachment-thumbnail>
+            <v-card-title class="view-title">{{ util.unescape(view.post.title) }}</v-card-title>
 
-              <v-list-item class="pa-3 mb-16 tsboard">
-                <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
-              </v-list-item>
+            <board-view-statistics></board-view-statistics>
+            <board-view-attachments></board-view-attachments>
+            <board-view-attachment-thumbnail></board-view-attachment-thumbnail>
 
-              <board-view-tags :tags="view.tags"></board-view-tags>
+            <div class="mb-16 tsboard">
+              <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
+            </div>
 
-              <v-list-item class="pa-3 text-caption signature" v-if="view.post.writer.signature">
-                {{ util.unescape(view.post.writer.signature) }}
-              </v-list-item>
+            <board-view-tags :tags="view.tags"></board-view-tags>
 
-              <board-view-buttons></board-view-buttons>
-            </v-list>
+            <v-card-text class="text-caption signature" v-if="view.post.writer.signature">
+              {{ util.unescape(view.post.writer.signature) }}
+            </v-card-text>
+
+            <board-view-buttons></board-view-buttons>
 
             <board-view-comment-write
               v-if="view.post.uid > 0"

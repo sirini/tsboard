@@ -256,7 +256,7 @@ export async function saveDescriptionForImage(
   thumbnailPath: string,
 ): Promise<void> {
   if (process.env.OPENAI_API_KEY === undefined || process.env.OPENAI_API_KEY === "") {
-    return
+    return /* disabled AI features */
   }
 
   const outputPath = thumbnailPath.replace(".avif", ".jpg")
@@ -325,12 +325,16 @@ export async function saveAttachments(
     await Bun.write(newSavePath, file)
 
     if ((await exists(newSavePath)) === true) {
+      let filename = file.name
+      if (filename.length > 99) {
+        filename = `${filename.slice(0, 90)}.${ext}`
+      }
       const fileUid = await insert(
         `INSERT INTO ${table}file (board_uid, post_uid, name, path, timestamp) VALUES (?, ?, ?, ?, ?)`,
         [
           boardUid.toString(),
           postUid.toString(),
-          file.name,
+          filename,
           newSavePath.slice(1),
           Date.now().toString(),
         ],
@@ -433,9 +437,9 @@ async function removeThumbnailFile(fileUid: number): Promise<void> {
   if (!thumb) {
     return
   }
-  removeFile(`.${thumb.path}`)
-  removeFile(`.${thumb.full_path}`)
-  remove(`DELETE FROM ${table}file_thumbnail WHERE uid = ? LIMIT 1`, [thumb.uid])
+  await removeFile(`.${thumb.path}`)
+  await removeFile(`.${thumb.full_path}`)
+  await remove(`DELETE FROM ${table}file_thumbnail WHERE uid = ? LIMIT 1`, [thumb.uid])
 }
 
 // 첨부되어 있던 파일 삭제
@@ -446,11 +450,13 @@ export async function removeAttachedFile(fileUid: number): Promise<void> {
     return
   }
   if (/\.(jpg|jpeg|png|bmp|webp|gif|avif)$/i.test(file.path) === true) {
-    removeThumbnailFile(fileUid)
+    await removeThumbnailFile(fileUid)
+    await remove(`DELETE FROM ${table}image_description WHERE file_uid = ? LIMIT 1`, [fileUidQuery])
+    await remove(`DELETE FROM ${table}exif WHERE file_uid = ? LIMIT 1`, [fileUidQuery])
   }
 
-  removeFile(`.${file.path}`)
-  remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUidQuery])
+  await removeFile(`.${file.path}`)
+  await remove(`DELETE FROM ${table}file WHERE uid = ? LIMIT 1`, [fileUidQuery])
 }
 
 // 기존에 등록했던 태그들 제거 (글수정 시)

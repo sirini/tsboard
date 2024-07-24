@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="pa-0" v-if="view.files.length > 0">
+  <div v-if="view.files.length > 0">
     <v-list density="compact" :bg-color="view.config.type === BOARD_TYPE.BLOG ? '#121212' : ''">
       <v-list-item
         prepend-icon="mdi-download"
@@ -9,7 +9,7 @@
         >{{ file.name }} ({{ util.num(file.size) }}B)</v-list-item
       >
     </v-list>
-  </v-list-item>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -178,9 +178,11 @@ export const useBoardViewStore = defineStore("boardView", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
     }
+
     auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(TEXT[home.lang].REMOVED_POST)
     closeConfirmRemoveDialog()
+
     util.go(util.routerName(config.value.type, ACTION_TARGET.LIST), id.value)
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="pa-3">
+  <div class="pa-3">
     <v-chip
       variant="text"
       prepend-icon="mdi-tag-outline"
@@ -8,7 +8,7 @@
       :key="index"
       >{{ tag.name }}</v-chip
     >
-  </v-list-item>
+  </div>
 </template>
 
 <script setup lang="ts">
