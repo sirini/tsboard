@@ -24,17 +24,21 @@ import { TEXT } from "../../../messages/components/board/comment/board-view-comm
 const viewer = useViewerStore()
 const comment = useCommentStore()
 const home = useHomeStore()
+const props = defineProps<{
+  boardUid: number
+  postUid: number
+}>()
 
 // 댓글 저장하기
 async function save(): Promise<void> {
-  if (viewer.config.type === BOARD_TYPE.BOARD) {
-    comment.saveComment()
-  } else {
-    comment.boardUid = viewer.config.uid
-    comment.postUid = viewer.postUid
+  comment.boardUid = props.boardUid
+  comment.postUid = props.postUid
+
+  if (viewer.config.type === BOARD_TYPE.GALLERY) {
     comment.contentWithSyntax = comment.content.replaceAll("\n", "<br />")
-    await comment.saveComment()
-    await viewer.loadComments()
   }
+
+  await comment.saveComment()
+  await viewer.loadComments()
 }
 </script>
