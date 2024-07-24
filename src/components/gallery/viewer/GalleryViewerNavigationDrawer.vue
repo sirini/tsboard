@@ -7,7 +7,10 @@
     v-if="home.isPC || home.isLarge"
   >
     <gallery-viewer-sidebar></gallery-viewer-sidebar>
-    <board-view-comment-write-button></board-view-comment-write-button>
+    <board-view-comment-write-button
+      :board-uid="viewer.config.uid"
+      :post-uid="viewer.postUid"
+    ></board-view-comment-write-button>
 
     <v-list>
       <v-list-item class="pa-0 ml-4 mr-4">

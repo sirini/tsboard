@@ -34,6 +34,8 @@
             <board-view-comment-write
               v-if="view.post.uid > 0"
               :type="view.config.type"
+              :board-uid="view.config.uid"
+              :post-uid="view.postUid"
             ></board-view-comment-write>
             <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
             <board-view-bottom-buttons :type="view.config.type"></board-view-bottom-buttons>

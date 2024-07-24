@@ -5,7 +5,10 @@
     <v-divider></v-divider>
 
     <gallery-viewer-sidebar-comment></gallery-viewer-sidebar-comment>
-    <board-view-comment-write-button></board-view-comment-write-button>
+    <board-view-comment-write-button
+      :board-uid="viewer.config.uid"
+      :post-uid="viewer.postUid"
+    ></board-view-comment-write-button>
   </v-list>
 </template>
 
