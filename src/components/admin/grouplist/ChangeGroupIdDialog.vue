@@ -1,0 +1,37 @@
+<template>
+  <v-dialog v-model="list.changeGroupIdDialog" persistent>
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
+      <v-card-title>그룹ID 변경하기</v-card-title>
+      <v-divider></v-divider>
+      <v-card-text>
+        <v-text-field
+          v-model="list.changeGroupId"
+          hide-details
+          bg-color="white"
+          width="200"
+          variant="solo"
+          prepend-inner-icon="mdi-identifier"
+        ></v-text-field>
+      </v-card-text>
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-btn prepend-icon="mdi-close" rounded="xl" @click="list.closeChangeGroupIdDialog"
+          >닫기</v-btn
+        >
+        <v-spacer></v-spacer>
+        <v-btn prepend-icon="mdi-content-save" rounded="xl" @click="list.updateGroupId"
+          >변경하기</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script setup lang="ts">
+import { useAdminGroupListStore } from "../../../store/admin/group/list"
+import { useHomeStore } from "../../../store/home"
+
+const list = useAdminGroupListStore()
+const home = useHomeStore()
+</script>

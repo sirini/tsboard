@@ -6,7 +6,11 @@
 
 import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { createGroup, removeGroup } from "../../../../database/admin/group/list/update"
+import {
+  createGroup,
+  removeGroup,
+  updateGroupId,
+} from "../../../../database/admin/group/list/update"
 import { fail, success, EXTEND_TYPE_CHECK } from "../../../../util/tools"
 import { getUserBasic } from "../../../../database/board/list"
 import { SUPER_ADMIN_UID } from "../../../../database/auth/const"
@@ -112,6 +116,40 @@ export const update = new Elysia()
       ...EXTEND_TYPE_CHECK,
       body: t.Object({
         groupUid: t.Number(),
+      }),
+    },
+  )
+  .put(
+    "/update/group",
+    async ({ body: { groupUid, changeGroupId }, newAccessToken, accessUserUid }) => {
+      const response = {
+        newAccessToken: "",
+      }
+
+      if (accessUserUid < 1) {
+        return fail(`Unauthorized access.`, response)
+      }
+      if (groupUid < 1) {
+        return fail(`Invalid group uid.`, response)
+      }
+      if (changeGroupId.length < 2) {
+        return fail(`Invalid group id.`, response)
+      }
+
+      const result = await updateGroupId(groupUid, changeGroupId.trim())
+      if (result === false) {
+        return fail(`Duplicated group id.`, response)
+      }
+
+      return success({
+        newAccessToken,
+      })
+    },
+    {
+      ...EXTEND_TYPE_CHECK,
+      body: t.Object({
+        groupUid: t.Number(),
+        changeGroupId: t.String(),
       }),
     },
   )

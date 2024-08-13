@@ -34,3 +34,16 @@ export async function removeGroup(groupUid: number): Promise<boolean> {
   await remove(`DELETE FROM ${table}group WHERE uid = ? LIMIT 1`, [groupUidQuery])
   return true
 }
+
+// 그룹 ID 업데이트
+export async function updateGroupId(groupUid: number, newId: string): Promise<boolean> {
+  const [group] = await select(`SELECT uid FROM ${table}group WHERE id = ? LIMIT 1`, [newId])
+  if (group) {
+    return false
+  }
+  await update(`UPDATE ${table}group SET id = ? WHERE uid = ? LIMIT 1`, [
+    newId,
+    groupUid.toString(),
+  ])
+  return true
+}
