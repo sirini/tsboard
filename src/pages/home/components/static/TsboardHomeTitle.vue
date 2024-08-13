@@ -8,24 +8,13 @@
       <h3 class="copy">{{ TEXT[home.lang].COPY }}</h3>
     </v-col>
     <v-col :cols="home.cols < 6 ? 6 : home.cols" class="text-center">
-      <div class="badges">
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">typescript</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">bun</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">elysiajs</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">mysql/mariadb</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">vue</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">vue-router</v-chip>
-        <v-chip label color="blue-grey-lighten-3" class="mr-1">pinia</v-chip>
-        <v-chip label color="blue-grey-lighten-3">vuetify</v-chip>
-      </div>
-
-      <div class="mt-6">
+      <div class="mt-16">
         <v-btn
           color="blue-grey-darken-1"
           variant="outlined"
           prepend-icon="mdi-book-open-variant-outline"
           size="large"
-          class="mr-2"
+          class="mt-2 mr-3"
           @click="util.open('https://github.com/sirini/tsboard?tab=readme-ov-file#tsboard')"
           >README</v-btn
         >
@@ -34,6 +23,7 @@
           append-icon="mdi-open-in-new"
           size="large"
           elevation="0"
+          class="mt-2"
           @click="util.open('https://github.com/sirini/tsboard')"
           >GitHub</v-btn
         >
@@ -67,8 +57,5 @@ const util = useUtilStore()
 .copy {
   margin-top: 10px;
   color: #b0bec5;
-}
-.badges {
-  line-height: 3em;
 }
 </style>

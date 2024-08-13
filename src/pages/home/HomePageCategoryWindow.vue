@@ -8,9 +8,9 @@
       class="mt-6 mb-3 mr-3"
       @click="util.go(board.type, board.id)"
     >
-      <strong>{{ board.name }}</strong>
+      <strong>{{ util.unescape(board.name) }}</strong>
       <v-divider vertical class="ml-3 mr-3"></v-divider>
-      {{ board.info }}
+      {{ util.unescape(board.info) }}
     </v-chip>
 
     <v-row class="mb-3">

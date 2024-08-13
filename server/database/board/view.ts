@@ -6,7 +6,7 @@
 
 import { Pair, PostFile, PostLikeParams, PostView } from "../../../src/interface/board"
 import { NoticeType } from "../../../src/interface/home"
-import { removeFile } from "../../util/tools"
+import { isValidFile, removeFile } from "../../util/tools"
 import { remove, select, table, update } from "../common"
 import { addNotification } from "../home/notification"
 import { INIT_POST_VIEW, NOTICE_TYPE, CONTENT_STATUS } from "./const"
@@ -64,8 +64,14 @@ export async function getFiles(postUid: number): Promise<PostFile[]> {
   const files = await select(`SELECT uid, name, path FROM ${table}file WHERE post_uid = ?`, [
     postUid.toString(),
   ])
+
   for (const file of files) {
-    const stat = statSync(`.${file.path}`)
+    const filePath = `.${file.path}`
+    if ((await isValidFile(filePath)) === false) {
+      continue
+    }
+
+    const stat = statSync(filePath)
     result.push({
       uid: file.uid,
       name: file.name,
