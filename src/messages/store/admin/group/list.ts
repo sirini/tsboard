@@ -17,6 +17,7 @@ export const LIST = {
   INVALID_REMOVE_TARGET: "삭제할 그룹이 올바르게 지정되지 않았습니다.",
   FAILED_REMOVE_GROUP: "지정된 그룹을 삭제할 수 없었습니다.",
   REMOVED_GROUP: "그룹을 성공적으로 삭제하였습니다.",
+  FAILED_UPDATE_GROUP_ID: "그룹 ID를 업데이트 하지 못했습니다.",
   NO_DUPLICATE_ID: "입력하신 그룹 아이디는 사용 가능합니다.",
   MINIMUM_GROUP_COUNT: "그룹은 최소 1개 이상 존재해야 합니다.",
 }

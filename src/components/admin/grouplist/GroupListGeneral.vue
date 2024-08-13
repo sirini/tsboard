@@ -17,7 +17,7 @@
               <v-menu activator="parent">
                 <v-list>
                   <v-list-item v-for="(group, index) in list.existGroupIds" :key="index">
-                    {{ group.name }}
+                    {{ util.unescape(group.name) }}
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -37,9 +37,16 @@
       >
       <v-list-item v-for="(group, index) in list.groups" :key="index">
         <template v-slot:prepend>
-          <v-chip variant="outlined" color="blue-grey" prepend-icon="mdi-identifier">{{
-            group.id
-          }}</v-chip>
+          <v-chip
+            variant="outlined"
+            color="blue-grey"
+            prepend-icon="mdi-identifier"
+            @click="list.openChangeGroupIdDialog(group.uid, group.id)"
+            >{{ group.id }}
+            <v-tooltip activator="parent"
+              >클릭하시면 그룹ID를 변경하실 수 있는 창이 나타납니다</v-tooltip
+            >
+          </v-chip>
         </template>
 
         <v-chip
@@ -48,7 +55,7 @@
           class="ml-2"
           :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
         >
-          <strong class="ml-1">{{ group.manager.name }}</strong>
+          <strong class="ml-1">{{ util.unescape(group.manager.name) }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           <strong class="mr-1">{{ group.count }}</strong> board(s)
         </v-chip>
@@ -74,6 +81,8 @@
       </v-list-item>
     </v-list>
   </v-card>
+
+  <change-group-id-dialog></change-group-id-dialog>
 </template>
 
 <script setup lang="ts">
@@ -81,6 +90,7 @@ import { onMounted } from "vue"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 import { useUtilStore } from "../../../store/util"
 import { TSBOARD } from "../../../../tsboard.config"
+import ChangeGroupIdDialog from "./ChangeGroupIdDialog.vue"
 
 const list = useAdminGroupListStore()
 const util = useUtilStore()

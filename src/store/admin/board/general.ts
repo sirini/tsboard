@@ -12,6 +12,7 @@ import type { App } from "../../../../server/index"
 import { AdminBoardConfig, AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
+import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { INIT_BOARD_CONFIG } from "../../../../server/database/admin/board/general/const"
 import { TSBOARD } from "../../../../tsboard.config"
@@ -23,6 +24,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
+  const util = useUtilStore()
   const confirmRemoveCategoryDialog = ref<boolean>(false)
   const board = ref<AdminBoardConfig>(INIT_BOARD_CONFIG)
   const boardGroupName = ref<string>("")
@@ -51,7 +53,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
+
     board.value = response.data.result.config
+    board.value.name = util.unescape(board.value.name)
+    board.value.info = util.unescape(board.value.info)
     boardRows.value = board.value.rowCount.toString()
     boardWidth.value = board.value.width.toString()
     boardUseCategory.value = board.value.useCategory

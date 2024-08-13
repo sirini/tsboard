@@ -100,9 +100,9 @@
         </template>
 
         <v-chip variant="tonal" color="blue-grey" class="ml-2"
-          ><strong>{{ board.name }}</strong>
+          ><strong>{{ util.unescape(board.name) }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
-          {{ board.info }}
+          {{ util.unescape(board.info) }}
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           <strong class="mr-2">{{ board.total.post }}</strong> posts
           <v-divider vertical class="ml-2 mr-2"></v-divider>

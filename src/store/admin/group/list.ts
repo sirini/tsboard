@@ -26,8 +26,11 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     name: "",
   })
   const confirmRemoveGroupDialog = ref<boolean>(false)
+  const changeGroupIdDialog = ref<boolean>(false)
   const existGroupIds = ref<AdminPair[]>([])
   const newGroupId = ref<string>("")
+  const changeGroupId = ref<string>("")
+  const groupUid = ref<number>(0)
 
   // 그룹들 목록 가져오기
   async function loadGroupList(): Promise<void> {
@@ -165,11 +168,53 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     closeRemoveGroupDialog()
   }
 
+  // 그룹 ID 변경하기 다이얼로그 띄우기
+  function openChangeGroupIdDialog(uid: number, id: string): void {
+    groupUid.value = uid
+    changeGroupId.value = id
+    changeGroupIdDialog.value = true
+  }
+
+  // 그룹 ID 변경하기 다이얼로그 닫기
+  function closeChangeGroupIdDialog(): void {
+    groupUid.value = 0
+    changeGroupId.value = ""
+    changeGroupIdDialog.value = false
+  }
+
+  // 그룹 ID 변경하기
+  async function updateGroupId(): Promise<void> {
+    const response = await client.tsapi.admin.group.list.update.group.put({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        userUid: auth.user.uid,
+      },
+      groupUid: groupUid.value,
+      changeGroupId: changeGroupId.value,
+    })
+
+    if (!response.data) {
+      return admin.error(LIST.NO_RESPONSE)
+    }
+    if (response.data.success === false) {
+      return admin.error(`${LIST.FAILED_UPDATE_GROUP_ID} (${response.data.error})`)
+    }
+
+    auth.updateUserToken(response.data.result.newAccessToken)
+    await loadGroupList()
+    closeChangeGroupIdDialog()
+  }
+
   return {
     groups,
     removeGroupTarget,
     confirmRemoveGroupDialog,
+    changeGroupIdDialog,
     newGroupId,
+    changeGroupId,
+    groupUid,
     existGroupIds,
     loadGroupList,
     updateExistGroupIds,
@@ -177,5 +222,8 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     confirmRemoveGroup,
     closeRemoveGroupDialog,
     removeGroup,
+    openChangeGroupIdDialog,
+    closeChangeGroupIdDialog,
+    updateGroupId,
   }
 })
