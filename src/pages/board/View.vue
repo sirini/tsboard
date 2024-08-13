@@ -8,7 +8,7 @@
           <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
 
-            <v-card-title class="view-title">{{ util.unescape(view.post.title) }}</v-card-title>
+            <h2 class="view-title pa-2">{{ util.unescape(view.post.title) }}</h2>
 
             <board-view-statistics></board-view-statistics>
             <board-view-attachments></board-view-attachments>
@@ -90,6 +90,7 @@ onMounted(() => {
 .view-title {
   font-weight: bold;
   font-size: 1.2em;
+  line-height: 1.8em;
 }
 .signature {
   color: #90a4ae;

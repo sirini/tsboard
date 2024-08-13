@@ -18,9 +18,10 @@
                   class="list-item pa-0"
                   v-for="(post, index) in list.posts"
                   :key="index"
+                  :lines="home.isMobile ? 'three' : 'one'"
                   :class="post.status === CONTENT_STATUS.NOTICE ? 'notice' : ''"
                 >
-                  <template v-slot:prepend>
+                  <template v-slot:prepend v-if="home.isMobile === false">
                     <span class="col no text-center">{{ post.uid }}</span>
                   </template>
 
@@ -58,9 +59,41 @@
 
                     {{ util.unescape(post.title) }}
 
+                    <span v-if="home.isMobile === false">
+                      <v-chip
+                        size="small"
+                        color="blue-grey"
+                        class="ml-2"
+                        prepend-icon="mdi-chat-outline"
+                        variant="text"
+                        v-if="post.reply > 0"
+                        >{{ util.num(post.reply) }}</v-chip
+                      >
+
+                      <v-chip
+                        size="small"
+                        prepend-icon="mdi-heart"
+                        color="red"
+                        variant="text"
+                        v-if="post.liked"
+                        >{{ util.num(post.like) }}</v-chip
+                      >
+
+                      <v-chip
+                        size="small"
+                        prepend-icon="mdi-heart-outline"
+                        color="blue-grey"
+                        variant="text"
+                        v-else
+                        >{{ util.num(post.like) }}</v-chip
+                      >
+                    </span>
+                  </v-list-item-title>
+
+                  <v-list-item-subtitle v-if="home.isMobile" class="text-right mt-2">
                     <v-chip
                       size="small"
-                      color="blue-grey"
+                      :color="home.color.header"
                       class="ml-2"
                       prepend-icon="mdi-chat-outline"
                       variant="text"
@@ -76,15 +109,24 @@
                       v-if="post.liked"
                       >{{ util.num(post.like) }}</v-chip
                     >
+
                     <v-chip
                       size="small"
                       prepend-icon="mdi-heart-outline"
-                      color="blue-grey"
+                      :color="home.color.header"
                       variant="text"
-                      v-else
+                      v-if="post.liked === false"
                       >{{ util.num(post.like) }}</v-chip
                     >
-                  </v-list-item-title>
+
+                    <v-chip
+                      size="small"
+                      prepend-icon="mdi-eye-outline"
+                      :color="home.color.header"
+                      variant="text"
+                      >{{ util.num(post.hit) }}</v-chip
+                    >
+                  </v-list-item-subtitle>
 
                   <template v-slot:append>
                     <user-nametag
@@ -94,7 +136,9 @@
                       :profile="post.writer.profile"
                     ></user-nametag>
 
-                    <span class="col no text-center">{{ util.num(post.hit) }}</span>
+                    <span class="col no text-center" v-if="home.isMobile === false">{{
+                      util.num(post.hit)
+                    }}</span>
                     <v-divider vertical v-if="home.isMobile === false"></v-divider>
                     <span class="col date text-center" v-if="home.isMobile === false">{{
                       util.date(post.submitted)
