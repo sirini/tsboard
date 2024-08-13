@@ -69,6 +69,7 @@ export const view = new Elysia()
         tags: [] as Pair[],
         newAccessToken,
       }
+
       if (id.length < 2 || postUid < 1) {
         return fail(`Invalid parameters.`, response)
       }
@@ -97,6 +98,7 @@ export const view = new Elysia()
       if (response.config.level.download <= userLevel) {
         response.files = await getFiles(postUid)
       }
+
       const photos = await getPhotoItems(postUid)
       response.images = photos
 

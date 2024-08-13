@@ -163,6 +163,12 @@ export async function makeSavePath(target: string): Promise<string> {
   return savePath
 }
 
+// 파일이 경로에 존재하는지 확인
+export async function isValidFile(path: string): Promise<boolean> {
+  const file = Bun.file(path)
+  return await file.exists()
+}
+
 // 이미지 리사이즈하기
 export async function resizeImage(
   inputPath: string,
