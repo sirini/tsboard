@@ -90,7 +90,7 @@
                 {{ util.unescape(view.post.writer.signature) }}
               </v-list-item>
 
-              <board-view-buttons></board-view-buttons>
+              <board-view-buttons bg-color="#121212"></board-view-buttons>
             </v-list>
 
             <board-view-comment-write
@@ -114,23 +114,23 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
+import { TSBOARD } from "../../../tsboard.config"
+import "../../assets/board/editor.scss"
+import BlogFooter from "../../components/blog/BlogFooter.vue"
+import BlogHeader from "../../components/blog/BlogHeader.vue"
+import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
+import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
+import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
+import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
+import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
+import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
+import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
+import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import { useBoardViewStore } from "../../store/board/view"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import BlogHeader from "../../components/blog/BlogHeader.vue"
-import BlogFooter from "../../components/blog/BlogFooter.vue"
 import SideDrawer from "../home/SideDrawer.vue"
-import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
-import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
-import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
-import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
-import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
-import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
-import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import SendReportDialog from "../../components/user/SendReportDialog.vue"
-import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
-import "../../assets/board/editor.scss"
-import { TSBOARD } from "../../../tsboard.config"
 
 const view = useBoardViewStore()
 const home = useHomeStore()
@@ -154,7 +154,7 @@ onMounted(() => {
   white-space: pre-wrap;
 }
 .signature {
-  color: #011d2b;
+  color: #043e5c;
 }
 .caro {
   position: relative;

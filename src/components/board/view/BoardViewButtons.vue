@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list :bg-color="bgColor">
     <v-list-item density="compact" class="pa-0 mt-6 mb-3">
       <template v-slot:prepend>
         <v-chip
@@ -68,4 +68,7 @@ const view = useBoardViewStore()
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const props = defineProps<{
+  bgColor?: string
+}>()
 </script>
