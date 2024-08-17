@@ -4,24 +4,31 @@
  * 게시글 보기 및 댓글 보기와 관련한 상태 및 함수들
  */
 
+import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../server/index"
-import { useAuthStore } from "../user/auth"
-import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { BoardConfig, Pair, PhotoItem, PostFile, PostView } from "../../interface/board"
-import { TEXT } from "../../messages/store/board/view"
 import {
+  ACTION_TARGET,
   BOARD_CONFIG,
-  TYPE_MATCH,
   INIT_POST_VIEW,
   READ_POST_KEY,
-  ACTION_TARGET,
+  TYPE_MATCH,
 } from "../../../server/database/board/const"
+import type { App } from "../../../server/index"
 import { TSBOARD } from "../../../tsboard.config"
+import {
+  BoardConfig,
+  BoardListItem,
+  Pair,
+  PhotoItem,
+  PostFile,
+  PostView,
+} from "../../interface/board"
+import { TEXT } from "../../messages/store/board/view"
+import { useHomeStore } from "../home"
+import { useAuthStore } from "../user/auth"
+import { useUtilStore } from "../util"
 
 export const useBoardViewStore = defineStore("boardView", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -31,7 +38,10 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const home = useHomeStore()
   const confirmRemovePostDialog = ref<boolean>(false)
   const previewDialog = ref<boolean>(false)
+  const movePostDialog = ref<boolean>(false)
   const id = ref<string>("")
+  const boardListItems = ref<BoardListItem[]>([])
+  const moveTarget = ref<BoardListItem>({ uid: 0, name: "", info: "" })
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<PostView>(INIT_POST_VIEW)
@@ -170,6 +180,34 @@ export const useBoardViewStore = defineStore("boardView", () => {
     previewDialog.value = false
   }
 
+  // 게시글 이동/복사 다이얼로그 열기
+  async function openMoveDialog(): Promise<void> {
+    const response = await client.tsapi.board.move.list.get({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        boardUid: config.value.uid,
+        userUid: auth.user.uid,
+      },
+    })
+
+    if (!response.data) {
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    }
+    if (response.data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_BOARD_LISTS} (${response.data.error})`)
+    }
+
+    boardListItems.value = response.data.result.boards
+    movePostDialog.value = true
+  }
+
+  // 게시글 이동/복사 다이얼로그 닫기
+  function closeMoveDialog(): void {
+    movePostDialog.value = false
+  }
+
   // 게시글 삭제하기
   async function removePost(): Promise<void> {
     if (postUid.value < 1) {
@@ -221,10 +259,44 @@ export const useBoardViewStore = defineStore("boardView", () => {
     window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
   }
 
+  // 이동/복사할 게시판 선택
+  function selectMoveTarget(target: BoardListItem): void {
+    moveTarget.value = target
+  }
+
+  // 이동/복사 적용
+  async function applyMovePost(): Promise<void> {
+    const response = await client.tsapi.board.move.apply.put({
+      $headers: {
+        authorization: auth.user.token,
+      },
+      $query: {
+        boardUid: config.value.uid,
+        targetBoardUid: moveTarget.value.uid,
+        userUid: auth.user.uid,
+        postUid: postUid.value,
+      },
+    })
+
+    if (!response.data) {
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    }
+    if (response.data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_MOVE_POST} (${response.data.error})`)
+    }
+
+    util.snack(TEXT[home.lang].MOVE_DONE)
+    closeMoveDialog()
+    util.go(config.value.type, id.value)
+  }
+
   return {
     confirmRemovePostDialog,
     previewDialog,
+    movePostDialog,
     id,
+    boardListItems,
+    moveTarget,
     postUid,
     config,
     post,
@@ -239,8 +311,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
     closeConfirmRemoveDialog,
     openPreviewDialog,
     closePreviewDialog,
+    openMoveDialog,
+    closeMoveDialog,
     removePost,
     isAlreadyRead,
     markAsRead,
+    selectMoveTarget,
+    applyMovePost,
   }
 })

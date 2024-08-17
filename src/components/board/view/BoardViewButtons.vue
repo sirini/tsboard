@@ -22,19 +22,34 @@
       </template>
 
       <template v-slot:append>
-        <v-btn
-          prepend-icon="mdi-pencil"
-          variant="text"
-          @click="util.go('boardModify', view.id, view.postUid)"
-          :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-          >{{ TEXT[home.lang].MODIFY }}</v-btn
-        >
-        <v-btn
-          prepend-icon="mdi-trash-can"
-          variant="text"
-          @click="view.openConfirmRemoveDialog"
-          :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
-          >{{ TEXT[home.lang].REMOVE }}
+        <v-btn append-icon="mdi-chevron-down" variant="text" rounded="xl"
+          >{{ TEXT[home.lang].WORK }}
+
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item
+                prepend-icon="mdi-pencil"
+                @click="util.go('boardModify', view.id, view.postUid)"
+                :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
+              >
+                {{ TEXT[home.lang].MODIFY }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-trash-can"
+                @click="view.openConfirmRemoveDialog"
+                :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
+              >
+                {{ TEXT[home.lang].REMOVE }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-file-move-outline"
+                :disabled="!auth.user.admin"
+                @click="view.openMoveDialog"
+              >
+                {{ TEXT[home.lang].MOVE }}
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-btn>
       </template>
     </v-list-item>
@@ -42,12 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardViewStore } from "../../../store/board/view"
-import { useAuthStore } from "../../../store/user/auth"
-import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
 import UserNametag from "../../../components/user/UserNametag.vue"
 import { TEXT } from "../../../messages/pages/board/view"
+import { useBoardViewStore } from "../../../store/board/view"
+import { useHomeStore } from "../../../store/home"
+import { useAuthStore } from "../../../store/user/auth"
+import { useUtilStore } from "../../../store/util"
 
 const view = useBoardViewStore()
 const auth = useAuthStore()

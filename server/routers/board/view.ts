@@ -4,10 +4,18 @@
  * 게시글 보기 관련 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
+import { BoardListItem, Pair, PhotoItem, PostFile } from "../../../src/interface/board"
+import { checkUserVerification } from "../../database/auth/authorization"
+import { updateUserPoint } from "../../database/board/common"
+import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
+import { isAuthor } from "../../database/board/editor"
+import { getPhotoItems } from "../../database/board/gallery"
 import { getBoardConfig, getUserLevel } from "../../database/board/list"
 import {
+  applyMovePost,
+  getBoardListItems,
   getDownloadPath,
   getDownloadPermission,
   getFiles,
@@ -18,14 +26,8 @@ import {
   removePost,
   updatePostHit,
 } from "../../database/board/view"
-import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
-import { Pair, PostFile, PhotoItem } from "../../../src/interface/board"
-import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
-import { updateUserPoint } from "../../database/board/common"
 import { haveAdminPermission } from "../../database/user/manageuser"
-import { isAuthor } from "../../database/board/editor"
-import { checkUserVerification } from "../../database/auth/authorization"
-import { getPhotoItems } from "../../database/board/gallery"
+import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
 export const view = new Elysia()
   .use(
@@ -225,6 +227,59 @@ export const view = new Elysia()
         boardUid: t.Numeric(),
         postUid: t.Numeric(),
         userUid: t.Numeric(),
+      }),
+    },
+  )
+  .get(
+    "/move/list",
+    async ({ query: { boardUid }, accessUserUid, newAccessToken }) => {
+      let response = {
+        boards: [] as BoardListItem[],
+        newAccessToken,
+      }
+
+      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
+      if (isAdmin === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      response.boards = await getBoardListItems()
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        boardUid: t.Numeric(),
+        userUid: t.Numeric(),
+      }),
+    },
+  )
+  .put(
+    "/move/apply",
+    async ({ query: { boardUid, targetBoardUid, postUid }, accessUserUid, newAccessToken }) => {
+      let response = {
+        newAccessToken,
+      }
+
+      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
+      if (isAdmin === false) {
+        return fail(`Unauthorized access.`, response)
+      }
+
+      const result = await applyMovePost(postUid, targetBoardUid)
+      if (result === false) {
+        return fail(`Invalid target board.`, response)
+      }
+
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        boardUid: t.Numeric(),
+        targetBoardUid: t.Numeric(),
+        userUid: t.Numeric(),
+        postUid: t.Numeric(),
       }),
     },
   )
