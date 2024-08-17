@@ -8,7 +8,7 @@
           <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
 
-            <h2 class="view-title pa-2">{{ util.unescape(view.post.title) }}</h2>
+            <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
 
             <board-view-statistics></board-view-statistics>
             <board-view-attachments></board-view-attachments>
@@ -44,6 +44,7 @@
     <user-info-dialog></user-info-dialog>
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
+    <board-view-attachment-thumbnail-view-dialog></board-view-attachment-thumbnail-view-dialog>
   </v-app>
 </template>
 
@@ -56,6 +57,7 @@ import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
 import BoardViewAttachmentThumbnail from "../../components/board/view/BoardViewAttachmentThumbnail.vue"
+import BoardViewAttachmentThumbnailViewDialog from "../../components/board/view/BoardViewAttachmentThumbnailViewDialog.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
@@ -90,7 +92,7 @@ onMounted(() => {
 .view-title {
   font-weight: bold;
   font-size: 1.2em;
-  line-height: 1.8em;
+  line-height: 1.6em;
 }
 .signature {
   color: #90a4ae;

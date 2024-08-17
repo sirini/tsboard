@@ -30,6 +30,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const util = useUtilStore()
   const home = useHomeStore()
   const confirmRemovePostDialog = ref<boolean>(false)
+  const previewDialog = ref<boolean>(false)
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
@@ -37,6 +38,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const files = ref<PostFile[]>([])
   const images = ref<PhotoItem[]>([])
   const tags = ref<Pair[]>([])
+  const previewPath = ref<string>("")
 
   async function loadPostView(): Promise<void> {
     id.value = route.params.id as string
@@ -156,6 +158,18 @@ export const useBoardViewStore = defineStore("boardView", () => {
     confirmRemovePostDialog.value = false
   }
 
+  // 이미지 첨부파일의 썸네일 클릭 시 미리보기 열기
+  function openPreviewDialog(path: string): void {
+    previewPath.value = path
+    previewDialog.value = true
+  }
+
+  // 이미지 첨부파일 미리보기 창 닫기
+  function closePreviewDialog(): void {
+    previewPath.value = ""
+    previewDialog.value = false
+  }
+
   // 게시글 삭제하기
   async function removePost(): Promise<void> {
     if (postUid.value < 1) {
@@ -209,6 +223,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   return {
     confirmRemovePostDialog,
+    previewDialog,
     id,
     postUid,
     config,
@@ -216,11 +231,14 @@ export const useBoardViewStore = defineStore("boardView", () => {
     files,
     images,
     tags,
+    previewPath,
     loadPostView,
     like,
     download,
     openConfirmRemoveDialog,
     closeConfirmRemoveDialog,
+    openPreviewDialog,
+    closePreviewDialog,
     removePost,
     isAlreadyRead,
     markAsRead,
