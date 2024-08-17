@@ -19,6 +19,10 @@ export type PostFile = Pair & {
   size: number
 }
 
+export type BoardListItem = Pair & {
+  info: string
+}
+
 export type Writer = Pair & {
   profile: string
   signature?: string

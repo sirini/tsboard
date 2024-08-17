@@ -45,32 +45,34 @@
     <send-report-dialog></send-report-dialog>
     <manage-user-dialog></manage-user-dialog>
     <board-view-attachment-thumbnail-view-dialog></board-view-attachment-thumbnail-view-dialog>
+    <board-view-move-dialog></board-view-move-dialog>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useBoardViewStore } from "../../store/board/view"
-import { useHomeStore } from "../../store/home"
-import { useUtilStore } from "../../store/util"
+import "../../assets/board/editor.scss"
+import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
+import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
-import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
 import BoardViewAttachmentThumbnail from "../../components/board/view/BoardViewAttachmentThumbnail.vue"
 import BoardViewAttachmentThumbnailViewDialog from "../../components/board/view/BoardViewAttachmentThumbnailViewDialog.vue"
-import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
-import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
-import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
-import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
+import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
+import BoardViewMoveDialog from "../../components/board/view/BoardViewMoveDialog.vue"
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
-import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
+import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
-import HomeHeader from "../home/HomeHeader.vue"
+import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
+import { useBoardViewStore } from "../../store/board/view"
+import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
+import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
-import "../../assets/board/editor.scss"
 
 const view = useBoardViewStore()
 const util = useUtilStore()

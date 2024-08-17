@@ -17,7 +17,10 @@
                 class="d-flex child-flex pl-1 pr-1"
                 :cols="home.cols"
               >
-                <gallery-grid-item :item="image"></gallery-grid-item>
+                <gallery-grid-item :item="image" v-if="image.images.length > 0"></gallery-grid-item>
+                <v-card v-else :width="gallery.gridSize" elevation="0" class="mt-2">
+                  <v-img cover :src="TSBOARD.PREFIX + '/image-not-found.svg'"></v-img>
+                </v-card>
               </v-col>
 
               <v-col v-if="gallery.images.length < 1" class="text-center mt-12 mb-12">
@@ -53,21 +56,22 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
-import { useGalleryStore } from "../../store/board/gallery/gallery"
-import { useViewerStore } from "../../store/board/gallery/viewer"
-import { useHomeStore } from "../../store/home"
+import { TSBOARD } from "../../../tsboard.config"
+import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListPaging from "../../components/gallery/list/GalleryListPaging.vue"
 import GalleryViewerDialog from "../../components/gallery/viewer/GalleryViewerDialog.vue"
-import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
-import HomeHeader from "../home/HomeHeader.vue"
+import { TEXT } from "../../messages/pages/gallery/list"
+import { useGalleryStore } from "../../store/board/gallery/gallery"
+import { useViewerStore } from "../../store/board/gallery/viewer"
+import { useHomeStore } from "../../store/home"
 import HomeFooter from "../home/HomeFooter.vue"
+import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import QuickButton from "../home/components/mobile/QuickButton.vue"
-import { TEXT } from "../../messages/pages/gallery/list"
 
 const route = useRoute()
 const gallery = useGalleryStore()

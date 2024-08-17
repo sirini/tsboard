@@ -4,15 +4,21 @@
  * 게시글 보기에 필요한 함수들
  */
 
-import { Pair, PostFile, PostLikeParams, PostView } from "../../../src/interface/board"
+import { statSync } from "fs"
+import {
+  BoardListItem,
+  Pair,
+  PostFile,
+  PostLikeParams,
+  PostView,
+} from "../../../src/interface/board"
 import { NoticeType } from "../../../src/interface/home"
-import { isValidFile, removeFile } from "../../util/tools"
-import { remove, select, table, update } from "../common"
+import { isValidFile } from "../../util/tools"
+import { select, table, update } from "../common"
 import { addNotification } from "../home/notification"
-import { INIT_POST_VIEW, NOTICE_TYPE, CONTENT_STATUS } from "./const"
+import { CONTENT_STATUS, INIT_POST_VIEW, NOTICE_TYPE } from "./const"
 import { removeAttachedFile, removeOriginalTags } from "./editor"
 import { getPostRelated } from "./list"
-import { statSync } from "fs"
 
 // 게시글 가져오기
 export async function getPost(postUid: number, accessUserUid: number): Promise<PostView> {
@@ -211,4 +217,43 @@ export async function removePost(postUid: number): Promise<void> {
   for (const file of files) {
     await removeAttachedFile(file.uid)
   }
+}
+
+// 게시글 이동/복사를 위한 대상 게시판 목록 가져오기
+export async function getBoardListItems(): Promise<BoardListItem[]> {
+  let result: BoardListItem[] = []
+  const boards = await select(`SELECT uid, name, info FROM ${table}board`)
+  for (const board of boards) {
+    result.push({
+      uid: board.uid,
+      name: board.name,
+      info: board.info,
+    })
+  }
+
+  return result
+}
+
+// 게시글 이동/복사 실행
+export async function applyMovePost(postUid: number, targetBoardUid: number): Promise<boolean> {
+  const targetBoard = targetBoardUid.toString()
+  const postTarget = postUid.toString()
+  const [target] = await select(`SELECT uid FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    targetBoard,
+  ])
+  if (!target) {
+    return false
+  }
+  const [post] = await select(`SELECT uid FROM ${table}post WHERE uid = ? LIMIT 1`, [postTarget])
+  if (!post) {
+    return false
+  }
+
+  await update(`UPDATE ${table}post SET board_uid = ?, modified = ? WHERE uid = ? LIMIT 1`, [
+    targetBoard,
+    Date.now().toString(),
+    postTarget,
+  ])
+
+  return true
 }
