@@ -103,7 +103,7 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
   // 선택 삭제하기
   async function removePosts(): Promise<void> {
     const targets = selected.value.join(",")
-    const response = await client.tsapi.admin.latest.remove.delete({
+    const response = await client.tsapi.admin.latest.remove.post.delete({
       $headers: {
         authorization: auth.user.token,
       },

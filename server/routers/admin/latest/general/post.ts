@@ -85,7 +85,7 @@ export const post = new Elysia()
     },
   )
   .delete(
-    "/remove",
+    "/remove/post",
     async ({ query: { targets } }) => {
       const response = ""
       if (targets.length < 1) {

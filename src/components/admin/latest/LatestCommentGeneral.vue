@@ -37,33 +37,62 @@
         </template>
       </v-list-item>
 
-      <v-list-subheader>최신 댓글 모음</v-list-subheader>
+      <v-card variant="text" class="pl-4">
+        <v-row align="end">
+          <v-col cols="6"
+            ><v-checkbox
+              v-model="latest.selectAll"
+              label="전체 선택하기"
+              hide-details
+              @click="latest.selectAllComments"
+            ></v-checkbox
+          ></v-col>
+          <v-col cols="6" class="text-right"
+            ><v-btn
+              prepend-icon="mdi-trash-can"
+              variant="text"
+              class="mb-2"
+              color="red"
+              :disabled="latest.selected.length < 1"
+              @click="latest.removeComments"
+              >선택 삭제하기
+              <v-tooltip activator="parent"
+                >삭제한 댓글은 다시 되살릴 수 없습니다. 정말로 삭제하고자 할 경우에만
+                클릭해주세요!</v-tooltip
+              >
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+
       <v-divider></v-divider>
-      <v-list-item
-        v-for="(comment, index) in latest.comments"
-        :key="index"
-        class="underline"
-        @click="util.go(comment.type, comment.id, comment.uid)"
-      >
+      <v-list-item v-for="(comment, index) in latest.comments" :key="index" class="underline">
         <template v-slot:prepend>
-          <span class="date mr-3">{{ util.date(comment.date) }}</span>
+          <v-checkbox
+            v-model="latest.selected"
+            :value="comment.uid"
+            hide-details
+            class="selected"
+          ></v-checkbox>
+
           <user-nametag
             :uid="comment.writer.uid"
             :name="comment.writer.name"
             :profile="comment.writer.profile"
           ></user-nametag>
         </template>
-        <v-list-item-title
+
+        <v-list-item-title @click="util.go(comment.type, comment.id, comment.postUid)" class="title"
           ><span class="ml-3 mr-2" :class="comment.status < 0 ? 'removed' : ''">{{
             comment.content
           }}</span>
         </v-list-item-title>
-        <v-tooltip activator="parent"> 클릭하시면 이 게시글을 보러 이동 합니다. </v-tooltip>
 
         <template v-slot:append>
           <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline">{{
             comment.like
           }}</v-chip>
+          <v-chip size="small" color="blue-grey">{{ util.date(comment.date) }}</v-chip>
         </template>
       </v-list-item>
     </v-list>
@@ -81,14 +110,14 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useAdminLatestCommentStore } from "../../../store/admin/latest/comment"
 import { useUtilStore } from "../../../store/util"
-import UserNametag from "../../user/UserNametag.vue"
-import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import ChatDialog from "../../user/ChatDialog.vue"
-import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
+import SendReportDialog from "../../user/SendReportDialog.vue"
+import UserInfoDialog from "../../user/UserInfoDialog.vue"
+import UserNametag from "../../user/UserNametag.vue"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestCommentStore()
@@ -102,9 +131,8 @@ watch(
 </script>
 
 <style scoped>
-.date {
-  font-size: 0.9em;
-  color: #546e7a;
+.title {
+  cursor: pointer;
 }
 .underline {
   border-bottom: #eceff1 1px solid;
@@ -112,5 +140,6 @@ watch(
 .removed {
   color: #f44336;
   font-style: italic;
+  text-decoration: line-through;
 }
 </style>
