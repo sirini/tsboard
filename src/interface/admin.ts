@@ -170,6 +170,7 @@ export type AdminLatestPost = AdminLatestCommon & {
 export type AdminLatestComment = AdminLatestCommon & {
   content: string
   writer: AdminUserInfo
+  postUid: number
 }
 
 type AdminList = {

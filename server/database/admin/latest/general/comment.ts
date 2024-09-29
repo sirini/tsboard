@@ -11,10 +11,10 @@ import {
   AdminSearchCommon,
   AdminUserInfo,
 } from "../../../../../src/interface/admin"
-import { select, table } from "../../../common"
-import { getUserBasic } from "../../../board/list"
-import { getCommentLikeCount } from "../../../board/comment"
 import { BoardType } from "../../../../../src/interface/board"
+import { getCommentLikeCount } from "../../../board/comment"
+import { getUserBasic } from "../../../board/list"
+import { select, table } from "../../../common"
 
 // 최근 uid 값 반환하기
 export async function getMaxCommentUid(): Promise<number> {
@@ -65,6 +65,7 @@ async function makeCommentResult(comments: RowDataPacket[]): Promise<AdminLatest
       content: comment.content,
       writer: info.writer,
       status: comment.status,
+      postUid: comment.post_uid,
     })
   }
   return result

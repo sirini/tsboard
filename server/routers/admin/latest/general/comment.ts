@@ -4,14 +4,15 @@
  * 최신 댓글 톺아보기에 필요한 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
 import {
   getComments,
-  getSearchedComments,
   getMaxCommentUid,
+  getSearchedComments,
 } from "../../../../database/admin/latest/general/comment"
-import { fail, success, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { removeComment } from "../../../../database/board/comment"
+import { DEFAULT_TYPE_CHECK, fail, success } from "../../../../util/tools"
 
 export const comment = new Elysia()
   .use(
@@ -79,6 +80,28 @@ export const comment = new Elysia()
         keyword: t.String(),
         page: t.Numeric(),
         bunch: t.Numeric(),
+      }),
+    },
+  )
+  .delete(
+    "/remove/comment",
+    async ({ query: { targets } }) => {
+      const response = ""
+      if (targets.length < 1) {
+        return fail(`Targets is empty.`, response)
+      }
+
+      const uids = targets.split(",")
+      for (const uid of uids) {
+        await removeComment(parseInt(uid))
+      }
+
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        targets: t.String(),
       }),
     },
   )
