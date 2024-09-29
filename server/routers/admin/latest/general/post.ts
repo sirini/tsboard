@@ -4,14 +4,15 @@
  * 최신 글 톺아보기에 필요한 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
 import {
-  getPosts,
   getMaxPostUid,
+  getPosts,
   getSearchedPosts,
 } from "../../../../database/admin/latest/general/post"
-import { fail, success, DEFAULT_TYPE_CHECK } from "../../../../util/tools"
+import { removePost } from "../../../../database/board/view"
+import { DEFAULT_TYPE_CHECK, fail, success } from "../../../../util/tools"
 
 export const post = new Elysia()
   .use(
@@ -80,6 +81,28 @@ export const post = new Elysia()
         keyword: t.String(),
         page: t.Numeric(),
         bunch: t.Numeric(),
+      }),
+    },
+  )
+  .delete(
+    "/remove",
+    async ({ query: { targets } }) => {
+      const response = ""
+      if (targets.length < 1) {
+        return fail(`Targets is empty.`, response)
+      }
+
+      const uids = targets.split(",")
+      for (const uid of uids) {
+        await removePost(parseInt(uid))
+      }
+
+      return success(response)
+    },
+    {
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        targets: t.String(),
       }),
     },
   )
