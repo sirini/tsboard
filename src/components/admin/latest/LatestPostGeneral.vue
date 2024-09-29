@@ -38,16 +38,44 @@
         </template>
       </v-list-item>
 
-      <v-list-subheader>최신 글 모음</v-list-subheader>
+      <v-card variant="text" class="pl-4">
+        <v-row align="end">
+          <v-col cols="6"
+            ><v-checkbox
+              v-model="latest.selectAll"
+              label="전체 선택하기"
+              hide-details
+              @click="latest.selectAllPosts"
+            ></v-checkbox
+          ></v-col>
+          <v-col cols="6" class="text-right"
+            ><v-btn
+              prepend-icon="mdi-trash-can"
+              variant="text"
+              class="mb-2"
+              color="red"
+              :disabled="latest.selected.length < 1"
+              @click="latest.removePosts"
+              >선택 삭제하기
+              <v-tooltip activator="parent"
+                >삭제한 게시글은 다시 되살릴 수 없습니다. 정말로 삭제하고자 할 경우에만
+                클릭해주세요!</v-tooltip
+              >
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+
       <v-divider></v-divider>
-      <v-list-item
-        v-for="(post, index) in latest.posts"
-        :key="index"
-        class="underline"
-        @click="util.go(post.type, post.id, post.uid)"
-      >
+      <v-list-item v-for="(post, index) in latest.posts" :key="index" class="underline">
         <template v-slot:prepend>
-          <span class="date mr-3">{{ util.date(post.date) }}</span>
+          <v-checkbox
+            v-model="latest.selected"
+            :value="post.uid"
+            hide-details
+            class="selected"
+          ></v-checkbox>
+
           <user-nametag
             :uid="post.writer.uid"
             :name="post.writer.name"
@@ -55,9 +83,10 @@
           ></user-nametag>
         </template>
 
-        <v-list-item-title
+        <v-list-item-title @click="util.go(post.type, post.id, post.uid)" class="title"
           ><span class="ml-3" :class="post.status < 0 ? 'removed' : ''">{{ post.title }}</span>
         </v-list-item-title>
+
         <template v-slot:append>
           <v-chip
             size="small"
@@ -66,12 +95,7 @@
             class="ml-2 mr-1"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline">{{
-            post.like
-          }}</v-chip>
-          <v-chip size="small" color="blue-grey" class="ml-1" prepend-icon="mdi-eye-outline">{{
-            post.hit
-          }}</v-chip>
+          <v-chip size="small" color="blue-grey">{{ util.date(post.date) }}</v-chip>
         </template>
         <v-tooltip activator="parent">클릭하시면 게시글을 보러 갑니다.</v-tooltip>
       </v-list-item>
@@ -91,14 +115,14 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useAdminLatestPostStore } from "../../../store/admin/latest/post"
 import { useUtilStore } from "../../../store/util"
-import UserNametag from "../../user/UserNametag.vue"
-import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import ChatDialog from "../../user/ChatDialog.vue"
-import SendReportDialog from "../../user/SendReportDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
+import SendReportDialog from "../../user/SendReportDialog.vue"
+import UserInfoDialog from "../../user/UserInfoDialog.vue"
+import UserNametag from "../../user/UserNametag.vue"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestPostStore()
@@ -112,9 +136,8 @@ watch(
 </script>
 
 <style scoped>
-.date {
-  font-size: 0.9em;
-  color: #546e7a;
+.title {
+  cursor: pointer;
 }
 .underline {
   border-bottom: #eceff1 1px solid;
@@ -122,5 +145,6 @@ watch(
 .removed {
   color: #f44336;
   font-style: italic;
+  text-decoration: line-through;
 }
 </style>

@@ -11,10 +11,10 @@ import {
   AdminSearchCommon,
   AdminUserInfo,
 } from "../../../../../src/interface/admin"
-import { select, table } from "../../../common"
-import { getPostLikeCount, getUserBasic } from "../../../board/list"
-import { getTotalCommentCount } from "../../../board/comment"
 import { BoardType } from "../../../../../src/interface/board"
+import { getTotalCommentCount } from "../../../board/comment"
+import { getPostLikeCount, getUserBasic } from "../../../board/list"
+import { select, table } from "../../../common"
 
 // 전체 글 개수 반환하기
 export async function getMaxPostUid(): Promise<number> {
