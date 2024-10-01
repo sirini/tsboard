@@ -31,15 +31,15 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { NavigationFailure } from "vue-router"
+import { NOTICE_TYPE } from "../../../../../server/database/board/const"
+import { TSBOARD } from "../../../../../tsboard.config"
+import { NoticeType, TsboardNotification } from "../../../../interface/home"
+import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
 import { useHomeStore } from "../../../../store/home"
 import { useAuthStore } from "../../../../store/user/auth"
-import { useUtilStore } from "../../../../store/util"
 import { useChatStore } from "../../../../store/user/chat"
-import { ACTION_TARGET, NOTICE_TYPE } from "../../../../../server/database/board/const"
-import { NoticeType, TsboardNotification } from "../../../../interface/home"
-import { TSBOARD } from "../../../../../tsboard.config"
-import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
-import { BoardType } from "../../../../interface/board"
+import { useUtilStore } from "../../../../store/util"
 
 const home = useHomeStore()
 const auth = useAuthStore()
@@ -47,17 +47,15 @@ const util = useUtilStore()
 const chat = useChatStore()
 
 // 노티 클릭 시 행동 지정하기
-function actionForNoti(noti: TsboardNotification): void {
+async function actionForNoti(
+  noti: TsboardNotification,
+): Promise<NavigationFailure | void | undefined> {
   if (noti.type === NOTICE_TYPE.CHAT_MESSAGE) {
     return chat.openDialog(noti.fromUser)
   }
 
   if (noti.id.length > 0) {
-    return util.go(
-      util.routerName(noti.type as BoardType, ACTION_TARGET.VIEW),
-      noti.id,
-      noti.postUid,
-    )
+    return util.go(noti.boardType, noti.id, noti.postUid)
   }
 }
 

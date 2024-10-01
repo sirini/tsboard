@@ -7,7 +7,7 @@
 import { BoardType } from "../../../src/interface/board"
 import { AddNoticeParams, NoticeType, TsboardNotification } from "../../../src/interface/home"
 import { BOARD_TYPE } from "../board/const"
-import { table, select, insert, update } from "../common"
+import { insert, select, table, update } from "../common"
 
 // 알림 정보 추가하기
 export async function addNotification(param: AddNoticeParams): Promise<void> {
@@ -17,13 +17,12 @@ export async function addNotification(param: AddNoticeParams): Promise<void> {
 
   const [exist] = await select(
     `SELECT uid FROM ${table}notification WHERE 
-    to_uid = ? AND from_uid = ? AND type = ? AND post_uid = ? AND comment_uid = ? LIMIT 1`,
+    to_uid = ? AND from_uid = ? AND type = ? AND post_uid = ? LIMIT 1`,
     [
       param.toUid.toString(),
       param.fromUid.toString(),
       param.type.toString(),
       param.postUid.toString(),
-      param.commentUid.toString(),
     ],
   )
   if (exist) {

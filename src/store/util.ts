@@ -4,10 +4,10 @@
  * 여러 곳에서 자주 사용되는 함수들 모음
  */
 
-import { ref } from "vue"
-import { useRouter } from "vue-router"
 import { defineStore } from "pinia"
-import { BOARD_TYPE, ACTION_TARGET } from "../../server/database/board/const"
+import { ref } from "vue"
+import { NavigationFailure, useRouter } from "vue-router"
+import { ACTION_TARGET, BOARD_TYPE } from "../../server/database/board/const"
 import { BoardType } from "../interface/board"
 
 export const useUtilStore = defineStore("util", () => {
@@ -94,7 +94,11 @@ export const useUtilStore = defineStore("util", () => {
   }
 
   // 페이지 이동하기
-  function go(target: string | BoardType, id: string = "", no: number = 0): void {
+  async function go(
+    target: string | BoardType,
+    id: string = "",
+    no: number = 0,
+  ): Promise<NavigationFailure | void | undefined> {
     let name = ""
     if ("string" === typeof target) {
       name = target
@@ -103,18 +107,12 @@ export const useUtilStore = defineStore("util", () => {
     }
 
     if (id.length < 1) {
-      if (no < 1) {
-        router.push({ name })
-        return
-      }
-      router.push({ name, params: { no } })
-      return
+      return router.push({ name })
     }
     if (no < 1) {
-      router.push({ name, params: { id } })
-      return
+      return router.push({ name, params: { id } })
     }
-    router.push({ name, params: { id, no } })
+    return router.push({ name, params: { id, no } })
   }
 
   // 외부 페이지를 새창으로 열기
