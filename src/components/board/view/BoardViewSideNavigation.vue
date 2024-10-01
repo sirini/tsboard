@@ -1,6 +1,10 @@
 <template>
   <v-card elevation="0" width="32" class="navigation" rounded="lg">
-    <v-list density="compact" class="pa-0" bg-color="#eceff1">
+    <v-list
+      density="compact"
+      class="pa-0"
+      :bg-color="view.config.type != BOARD_TYPE.BLOG ? '#eceff1' : ''"
+    >
       <v-list-item class="pa-0">
         <v-btn
           icon
@@ -56,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"

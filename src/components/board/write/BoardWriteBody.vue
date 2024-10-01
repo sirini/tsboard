@@ -2,11 +2,7 @@
   <v-container class="wrap">
     <v-card class="mx-auto pa-3" :max-width="editor.config.width" :loading="editor.loading">
       <v-form fast-fail @submit.prevent>
-        <board-header
-          :name="editor.config.name"
-          :info="editor.config.info"
-          v-if="editor.config.type === BOARD_TYPE.BOARD"
-        ></board-header>
+        <board-header :name="editor.config.name" :info="editor.config.info"></board-header>
         <alert-bar></alert-bar>
 
         <v-checkbox
@@ -50,18 +46,20 @@
       </v-form>
 
       <v-divider class="mt-12"></v-divider>
-      <v-card-actions>
-        <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close">{{
+      <v-card-actions class="mt-3 pa-0">
+        <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close" size="small">{{
           TEXT[home.lang].CANCEL
         }}</v-btn>
-        <v-btn @click="editor.loadAutoSaved" prepend-icon="mdi-cached">{{
+        <v-btn @click="editor.loadAutoSaved" prepend-icon="mdi-cached" size="small">{{
           TEXT[home.lang].LOAD
         }}</v-btn>
+
         <v-spacer></v-spacer>
 
         <v-btn
           v-if="editor.postUid < 1"
-          color="primary"
+          variant="flat"
+          color="blue-grey"
           @click="editor.write"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
@@ -69,7 +67,8 @@
         >
         <v-btn
           v-else
-          color="primary"
+          variant="flat"
+          color="blue-grey"
           @click="editor.modify"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
@@ -81,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"

@@ -1,15 +1,18 @@
 <template>
   <v-divider class="mt-3"></v-divider>
-  <v-card-actions>
+  <v-card-actions class="mt-3 pa-0">
     <v-btn
       prepend-icon="mdi-view-list"
       @click="util.go(util.routerName(type, ACTION_TARGET.LIST), view.id)"
       >{{ TEXT[home.lang].LIST }}</v-btn
     >
+
     <v-spacer></v-spacer>
+
     <v-btn
       prepend-icon="mdi-pencil"
-      variant="text"
+      variant="flat"
+      color="blue-grey"
       @click="util.go(util.routerName(type, ACTION_TARGET.WRITE), view.id)"
       :disabled="auth.user.uid < 1"
       >{{ TEXT[home.lang].WRITE }}</v-btn

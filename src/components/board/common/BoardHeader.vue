@@ -2,7 +2,7 @@
   <v-card-title class="list-title"
     >{{ util.unescape(name) }}
     <span class="info ml-3 pl-3" v-if="home.isMobile === false"> {{ util.unescape(info) }}</span>
-    <div class="login">
+    <div class="login mr-3">
       <v-btn
         v-if="auth.user.uid < 1"
         prepend-icon="mdi-login-variant"
@@ -59,7 +59,6 @@ const props = defineProps<{
 .list-title {
   border-bottom: 1px #828282 solid;
 }
-
 .info {
   color: #828282;
   font-size: 0.7em;
