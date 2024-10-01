@@ -6,19 +6,19 @@
       class="write-editor-menu"
       :color="type === BOARD_TYPE.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
     >
-      <v-btn icon @click="editor?.chain().focus().toggleBold().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleBold().run()" size="small"
         ><v-icon>mdi-format-bold</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].BOLD }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleItalic().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleItalic().run()" size="small"
         ><v-icon>mdi-format-italic</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ITALIC }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleStrike().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleStrike().run()" size="small"
         ><v-icon>mdi-format-strikethrough-variant</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].STRIKE }}</v-tooltip>
       </v-btn>
-      <v-btn icon
+      <v-btn icon size="small"
         ><v-icon>mdi-format-header-1</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HEADING }}</v-tooltip>
         <v-menu open-on-hover activator="parent">
@@ -36,7 +36,7 @@
           </v-list>
         </v-menu>
       </v-btn>
-      <v-btn icon v-bind="props"
+      <v-btn icon v-bind="props" size="small"
         ><v-icon>mdi-palette</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].COLOR }}</v-tooltip>
         <v-menu open-on-hover activator="parent">
@@ -120,7 +120,7 @@
         </v-menu>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon size="small">
         <v-icon>mdi-image</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ADD_IMAGE }}</v-tooltip>
         <v-menu open-on-hover activator="parent">
@@ -150,7 +150,7 @@
         </v-menu>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon size="small">
         <v-icon>mdi-table</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].TABLE }}</v-tooltip>
         <v-menu open-on-hover activator="parent">
@@ -220,47 +220,47 @@
         </v-menu>
       </v-btn>
 
-      <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()" size="small"
         ><v-icon>mdi-format-color-highlight</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HIGHLIGHT }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleCode().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleCode().run()" size="small"
         ><v-icon>mdi-code-braces</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_LINE }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleCodeBlock().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleCodeBlock().run()" size="small"
         ><v-icon>mdi-code-braces-box</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_BLOCK }}</v-tooltip>
       </v-btn>
 
-      <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()" size="small"
         ><v-icon>mdi-format-list-bulleted-type</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNORDER_LIST }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleOrderedList().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleOrderedList().run()" size="small"
         ><v-icon>mdi-format-list-numbered</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ORDER_LIST }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleBlockquote().run()"
+      <v-btn icon @click="editor?.chain().focus().toggleBlockquote().run()" size="small"
         ><v-icon>mdi-format-quote-open</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].QUOTE }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().setHorizontalRule().run()"
+      <v-btn icon @click="editor?.chain().focus().setHorizontalRule().run()" size="small"
         ><v-icon>mdi-minus</v-icon>
         <v-tooltip activator="parent" location="top">{{
           TEXT[home.lang].HORIZONTAL_LINE
         }}</v-tooltip>
       </v-btn>
 
-      <v-btn icon @click="editor?.chain().focus().undo().run()"
+      <v-btn icon @click="editor?.chain().focus().undo().run()" size="small"
         ><v-icon>mdi-arrow-u-left-top</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNDO }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().redo().run()"
+      <v-btn icon @click="editor?.chain().focus().redo().run()" size="small"
         ><v-icon>mdi-arrow-u-right-top</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REDO }}</v-tooltip>
       </v-btn>
-      <v-btn icon @click="editor?.chain().focus().unsetAllMarks().run()"
+      <v-btn icon @click="editor?.chain().focus().unsetAllMarks().run()" size="small"
         ><v-icon>mdi-restore</v-icon>
         <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNSET }}</v-tooltip>
       </v-btn>

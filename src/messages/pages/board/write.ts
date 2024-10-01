@@ -9,7 +9,7 @@ export const TEXT = [
     SET_NOTICE: "공지글로 등록하기",
     SET_SECRET: "비밀글로 등록하기",
     FILL_TITLE: "글 제목을 입력해 주세요.",
-    CANCEL: "취소",
+    CANCEL: "작성 취소",
     LOAD: "불러오기",
     SUBMIT: "작성 완료하기",
     MODIFY: "수정 완료하기",

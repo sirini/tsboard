@@ -1,11 +1,11 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap" id="galleryContainer">
-          <v-card elevation="0" class="mx-auto" :max-width="gallery.config.width">
+          <v-card class="mx-auto pa-3" :max-width="gallery.config.width">
             <gallery-header></gallery-header>
 
             <v-divider class="mb-6"></v-divider>
@@ -35,9 +35,9 @@
               class="mt-4"
               :color="home.color.header"
               @click="gallery.loadOldPhotos"
-              prepend-icon="mdi-restore"
+              prepend-icon="mdi-download"
             >
-              {{ TEXT[home.lang].LOAD_PREV_PHOTOS }}
+              {{ TEXT[home.lang].LOAD_PREV_PHOTOS }} [{{ gallery.page }}/{{ gallery.pageLength }}]
             </v-btn>
 
             <v-divider class="mt-6"></v-divider>
@@ -110,6 +110,9 @@ watch(
 </script>
 
 <style scoped>
+.app {
+  background-color: #eceff1;
+}
 .layout {
   margin-top: 64px;
 }

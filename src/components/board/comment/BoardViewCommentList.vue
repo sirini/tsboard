@@ -1,5 +1,5 @@
 <template>
-  <v-list :bg-color="view.config.type === BOARD_TYPE.BLOG ? '#121212' : ''">
+  <v-list>
     <v-list-item
       class="pa-0"
       :class="reply.uid !== reply.replyUid ? 'ml-8' : ''"
@@ -101,16 +101,16 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useAuthStore } from "../../../store/user/auth"
-import { useBoardViewStore } from "../../../store/board/view"
-import { useCommentStore } from "../../../store/board/comment"
-import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
-import UserNametag from "../../user/UserNametag.vue"
-import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
+import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-list"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { useCommentStore } from "../../../store/board/comment"
+import { useBoardViewStore } from "../../../store/board/view"
+import { useHomeStore } from "../../../store/home"
+import { useAuthStore } from "../../../store/user/auth"
+import { useUtilStore } from "../../../store/util"
+import UserNametag from "../../user/UserNametag.vue"
+import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
 const auth = useAuthStore()
 const view = useBoardViewStore()

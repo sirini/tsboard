@@ -322,6 +322,13 @@ export const useBoardViewStore = defineStore("boardView", () => {
     })
   }
 
+  // 글보기 준비
+  function prepareViewPost(): void {
+    loadPostView()
+    home.setGridLayout()
+    window.addEventListener("scroll", updateScrollY)
+  }
+
   return {
     confirmRemovePostDialog,
     previewDialog,
@@ -358,5 +365,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
     updateScrollY,
     scrollToTop,
     scrollToBottom,
+    prepareViewPost,
   }
 })

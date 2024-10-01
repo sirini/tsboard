@@ -1,17 +1,13 @@
 <template>
-  <v-card-actions class="pa-0">
-    <v-btn prepend-icon="mdi-text-search-variant"
-      >{{ TEXT[home.lang].SEARCH }}
+  <v-card-actions class="mt-3 pa-0">
+    <v-btn icon size="small">
+      <v-icon>mdi-magnify</v-icon>
       <v-menu activator="parent" :close-on-content-click="false">
         <gallery-list-search></gallery-list-search>
       </v-menu>
+      <v-tooltip activator="parent">{{ TEXT[home.lang].SEARCH }}</v-tooltip>
     </v-btn>
 
-    <v-spacer></v-spacer>
-
-    <v-chip variant="tonal" color="blue-grey-lighten-3">
-      {{ gallery.page }} / {{ gallery.pageLength }}
-    </v-chip>
     <v-spacer></v-spacer>
 
     <v-btn
@@ -25,18 +21,20 @@
       prepend-icon="mdi-upload"
       @click="util.go('galleryWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
+      variant="flat"
+      color="blue-grey"
       >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >
   </v-card-actions>
 </template>
 
 <script setup lang="ts">
+import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
 import GalleryListSearch from "./GalleryListSearch.vue"
-import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 
 const gallery = useGalleryStore()
 const auth = useAuthStore()

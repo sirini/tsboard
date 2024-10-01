@@ -82,18 +82,11 @@ const view = useBoardViewStore()
 const util = useUtilStore()
 const home = useHomeStore()
 
-// 게시글 보기 준비
-function prepareViewPost(): void {
-  view.loadPostView()
-  home.setGridLayout()
-  window.addEventListener("scroll", view.updateScrollY)
-}
-
 watch(
   () => route.params.no,
-  () => prepareViewPost(),
+  () => view.prepareViewPost(),
 )
-onMounted(() => prepareViewPost())
+onMounted(() => view.prepareViewPost())
 onUnmounted(() => {
   window.removeEventListener("scroll", view.updateScrollY)
 })

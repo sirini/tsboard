@@ -5,17 +5,11 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card
-            elevation="0"
-            rounded="0"
-            class="mx-auto"
-            variant="text"
-            :max-width="view.config.width"
-          >
+          <v-card class="mx-auto pa-3" :max-width="view.config.width">
             <v-card-title class="title"
               ><h1>{{ util.unescape(view.post.title) }}</h1></v-card-title
             >
-            <v-card-actions class="mt-3 mb-3">
+            <v-card-actions class="pa-0">
               <v-chip
                 size="large"
                 :append-icon="showDownloadList ? 'mdi-chevron-up' : 'mdi-chevron-down'"
@@ -27,24 +21,15 @@
 
               <v-spacer></v-spacer>
 
-              <v-chip
-                size="large"
-                prepend-icon="mdi-eye-outline"
-                color="grey-darken-2"
-                variant="text"
-                >{{ util.num(view.post.hit) }}</v-chip
-              >
+              <v-chip prepend-icon="mdi-eye-outline" color="grey-darken-2" variant="text">{{
+                util.num(view.post.hit)
+              }}</v-chip>
+
+              <v-chip prepend-icon="mdi-calendar-outline" color="grey-darken-2" variant="text">{{
+                util.date(view.post.submitted)
+              }}</v-chip>
 
               <v-chip
-                size="large"
-                prepend-icon="mdi-calendar-outline"
-                color="grey-darken-2"
-                variant="text"
-                >{{ util.date(view.post.submitted) }}</v-chip
-              >
-
-              <v-chip
-                size="large"
                 prepend-icon="mdi-pencil-outline"
                 color="grey-darken-2"
                 variant="text"
@@ -74,24 +59,19 @@
               </v-carousel-item>
             </v-carousel>
 
-            <v-list bg-color="#121212">
-              <v-list-item class="mt-6 mb-12 tsboard">
-                <v-card
-                  v-html="view.post.content"
-                  elevation="0"
-                  rounded="0"
-                  variant="text"
-                ></v-card>
-              </v-list-item>
+            <v-divider></v-divider>
 
-              <board-view-tags :tags="view.tags"></board-view-tags>
+            <div class="tsboard">
+              <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
+            </div>
 
-              <v-list-item class="pa-3 text-caption signature" v-if="view.post.writer.signature">
-                {{ util.unescape(view.post.writer.signature) }}
-              </v-list-item>
+            <board-view-tags :tags="view.tags"></board-view-tags>
 
-              <board-view-buttons bg-color="#121212"></board-view-buttons>
-            </v-list>
+            <div class="pa-3 text-caption signature" v-if="view.post.writer.signature">
+              {{ util.unescape(view.post.writer.signature) }}
+            </div>
+
+            <board-view-buttons bg-color="#121212"></board-view-buttons>
 
             <board-view-comment-write
               v-if="view.post.uid > 0"
@@ -102,6 +82,7 @@
             <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
             <board-view-bottom-buttons :type="view.config.type"></board-view-bottom-buttons>
           </v-card>
+          <board-view-side-navigation></board-view-side-navigation>
         </v-container>
         <blog-footer></blog-footer>
       </v-main>
@@ -113,7 +94,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref, watch } from "vue"
+import { useRoute } from "vue-router"
 import { TSBOARD } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
 import BlogFooter from "../../components/blog/BlogFooter.vue"
@@ -123,24 +105,25 @@ import BoardViewCommentWrite from "../../components/board/comment/BoardViewComme
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
 import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
+import BoardViewSideNavigation from "../../components/board/view/BoardViewSideNavigation.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import { useBoardViewStore } from "../../store/board/view"
-import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import SideDrawer from "../home/SideDrawer.vue"
 
+const route = useRoute()
 const view = useBoardViewStore()
-const home = useHomeStore()
 const util = useUtilStore()
 const showDownloadList = ref<boolean>(false)
 
-onMounted(() => {
-  view.loadPostView()
-  home.setGridLayout()
-})
+watch(
+  () => route.params.no,
+  () => view.prepareViewPost(),
+)
+onMounted(() => view.prepareViewPost())
 </script>
 
 <style type="scss" scoped>
@@ -154,7 +137,7 @@ onMounted(() => {
   white-space: pre-wrap;
 }
 .signature {
-  color: #043e5c;
+  color: #686868;
 }
 .caro {
   position: relative;
