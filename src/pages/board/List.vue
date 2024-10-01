@@ -1,11 +1,11 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="list.config.width">
+          <v-card class="mx-auto board pa-3" :max-width="list.config.width">
             <board-header :name="list.config.name" :info="list.config.info"></board-header>
 
             <v-card-text class="pa-0">
@@ -30,7 +30,7 @@
                     @click="util.go('boardView', list.id, post.uid)"
                   >
                     <v-icon
-                      size="small"
+                      size="x-small"
                       color="blue-grey"
                       class="mr-2"
                       v-if="post.status === CONTENT_STATUS.NOTICE"
@@ -39,7 +39,7 @@
 
                     <span v-if="post.status === CONTENT_STATUS.SECRET">
                       <v-icon
-                        size="small"
+                        size="x-small"
                         color="blue-grey"
                         class="mr-2"
                         v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
@@ -50,7 +50,7 @@
 
                     <v-chip
                       v-if="list.config.useCategory && post.status === CONTENT_STATUS.NORMAL"
-                      size="small"
+                      size="x-small"
                       color="blue-grey"
                       class="mr-2"
                       @click="list.loadPostsByCategory(post.category.uid)"
@@ -61,7 +61,7 @@
 
                     <span v-if="home.isMobile === false">
                       <v-chip
-                        size="small"
+                        size="x-small"
                         color="blue-grey"
                         class="ml-2"
                         prepend-icon="mdi-chat-outline"
@@ -71,7 +71,7 @@
                       >
 
                       <v-chip
-                        size="small"
+                        size="x-small"
                         prepend-icon="mdi-heart"
                         color="red"
                         variant="text"
@@ -80,7 +80,7 @@
                       >
 
                       <v-chip
-                        size="small"
+                        size="x-small"
                         prepend-icon="mdi-heart-outline"
                         color="blue-grey"
                         variant="text"
@@ -92,7 +92,7 @@
 
                   <v-list-item-subtitle v-if="home.isMobile" class="text-right mt-2">
                     <v-chip
-                      size="small"
+                      size="x-small"
                       :color="home.color.header"
                       class="ml-2"
                       prepend-icon="mdi-chat-outline"
@@ -102,7 +102,7 @@
                     >
 
                     <v-chip
-                      size="small"
+                      size="x-small"
                       prepend-icon="mdi-heart"
                       color="red"
                       variant="text"
@@ -111,7 +111,7 @@
                     >
 
                     <v-chip
-                      size="small"
+                      size="x-small"
                       prepend-icon="mdi-heart-outline"
                       :color="home.color.header"
                       variant="text"
@@ -120,12 +120,20 @@
                     >
 
                     <v-chip
-                      size="small"
+                      size="x-small"
                       prepend-icon="mdi-eye-outline"
                       :color="home.color.header"
                       variant="text"
                       >{{ util.num(post.hit) }}</v-chip
                     >
+
+                    <user-nametag
+                      :uid="post.writer.uid"
+                      :name="post.writer.name"
+                      :profile="post.writer.profile"
+                      class="ml-1 mr-1"
+                      size="x-small"
+                    ></user-nametag>
                   </v-list-item-subtitle>
 
                   <template v-slot:append>
@@ -134,6 +142,7 @@
                       :uid="post.writer.uid"
                       :name="post.writer.name"
                       :profile="post.writer.profile"
+                      size="x-small"
                     ></user-nametag>
 
                     <span class="col no text-center" v-if="home.isMobile === false">{{
@@ -161,24 +170,24 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
-import { useBoardListStore } from "../../store/board/list"
-import { useUtilStore } from "../../store/util"
-import { useHomeStore } from "../../store/home"
-import { useAuthStore } from "../../store/user/auth"
+import { CONTENT_STATUS } from "../../../server/database/board/const"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
-import UserNametag from "../../components/user/UserNametag.vue"
-import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
-import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
-import HomeHeader from "../home/HomeHeader.vue"
+import SendReportDialog from "../../components/user/SendReportDialog.vue"
+import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
+import UserNametag from "../../components/user/UserNametag.vue"
+import { TEXT } from "../../messages/pages/board/list"
+import { useBoardListStore } from "../../store/board/list"
+import { useHomeStore } from "../../store/home"
+import { useAuthStore } from "../../store/user/auth"
+import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
+import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import QuickButton from "../home/components/mobile/QuickButton.vue"
-import { CONTENT_STATUS } from "../../../server/database/board/const"
-import { TEXT } from "../../messages/pages/board/list"
 
 const route = useRoute()
 const list = useBoardListStore()
@@ -202,6 +211,9 @@ watch(
 </script>
 
 <style type="scss" scoped>
+.app {
+  background-color: #eceff1;
+}
 .layout {
   margin-top: 64px;
 }

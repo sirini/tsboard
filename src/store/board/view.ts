@@ -7,7 +7,7 @@
 import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { NavigationFailure, useRoute } from "vue-router"
 import {
   ACTION_TARGET,
   BOARD_CONFIG,
@@ -43,14 +43,19 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const boardListItems = ref<BoardListItem[]>([])
   const moveTarget = ref<BoardListItem>({ uid: 0, name: "", info: "" })
   const postUid = ref<number>(0)
+  const prevPostUid = ref<number>(0)
+  const nextPostUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const post = ref<PostView>(INIT_POST_VIEW)
   const files = ref<PostFile[]>([])
   const images = ref<PhotoItem[]>([])
   const tags = ref<Pair[]>([])
   const previewPath = ref<string>("")
+  const scrollY = ref<number>(0)
+  const innerHeight = ref<number>(0)
+  const scrollHeight = ref<number>(0)
 
-  async function loadPostView(): Promise<void> {
+  async function loadPostView(): Promise<NavigationFailure | void | undefined> {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 
@@ -86,6 +91,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
       post.value.content = TEXT[home.lang].FAILED_CONTENT
       files.value = []
       images.value = []
+      prevPostUid.value = 0
+      nextPostUid.value = 0
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
@@ -98,6 +105,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     tags.value = response.data.result.tags
     files.value = response.data.result.files
     images.value = response.data.result.images
+    prevPostUid.value = response.data.result.prevPostUid
+    nextPostUid.value = response.data.result.nextPostUid
 
     auth.user.admin =
       response.data.result.config.admin.group === auth.user.uid ||
@@ -259,12 +268,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
     window.localStorage.setItem(READ_POST_KEY, JSON.stringify(postUids))
   }
 
-  // 이동/복사할 게시판 선택
+  // 이동할 게시판 선택
   function selectMoveTarget(target: BoardListItem): void {
     moveTarget.value = target
   }
 
-  // 이동/복사 적용
+  // 이동 적용
   async function applyMovePost(): Promise<void> {
     const response = await client.tsapi.board.move.apply.put({
       $headers: {
@@ -290,6 +299,29 @@ export const useBoardViewStore = defineStore("boardView", () => {
     util.go(config.value.type, id.value)
   }
 
+  // 현재 스크롤 위치 업데이트하기
+  function updateScrollY(): void {
+    scrollY.value = window.scrollY
+    innerHeight.value = window.innerHeight
+    scrollHeight.value = document.body.scrollHeight
+  }
+
+  // 페이지 상단으로 스크롤
+  function scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
+
+  // 페이지 하단으로 스크롤
+  function scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    })
+  }
+
   return {
     confirmRemovePostDialog,
     previewDialog,
@@ -298,12 +330,17 @@ export const useBoardViewStore = defineStore("boardView", () => {
     boardListItems,
     moveTarget,
     postUid,
+    prevPostUid,
+    nextPostUid,
     config,
     post,
     files,
     images,
     tags,
     previewPath,
+    scrollY,
+    innerHeight,
+    scrollHeight,
     loadPostView,
     like,
     download,
@@ -318,5 +355,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     markAsRead,
     selectMoveTarget,
     applyMovePost,
+    updateScrollY,
+    scrollToTop,
+    scrollToBottom,
   }
 })

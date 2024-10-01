@@ -4,24 +4,26 @@
  * 게시판 목록보기와 관련한 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
+import { ref } from "vue"
+import { NavigationFailure, useRoute, useRouter } from "vue-router"
+import {
+  ACTION_TARGET,
+  BOARD_CONFIG,
+  BOARD_TYPE,
+  CONTENT_STATUS,
+  PAGING_DIRECTION,
+  SEARCH_OPTION,
+  TYPE_MATCH,
+} from "../../../server/database/board/const"
 import type { App } from "../../../server/index"
+import { TSBOARD } from "../../../tsboard.config"
+import { BoardConfig, BoardType, Pair, Post, SearchOption } from "../../interface/board"
+import { TEXT } from "../../messages/store/board/list"
+import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { BoardConfig, BoardType, Pair, Post, SearchOption } from "../../interface/board"
-import { ACTION_TARGET, BOARD_TYPE, SEARCH_OPTION } from "../../../server/database/board/const"
-import { TEXT } from "../../messages/store/board/list"
-import {
-  TYPE_MATCH,
-  BOARD_CONFIG,
-  PAGING_DIRECTION,
-  CONTENT_STATUS,
-} from "../../../server/database/board/const"
-import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardListStore = defineStore("boardList", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -45,7 +47,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const isFirstInit = ref<boolean>(false)
 
   // 게시글 목록 가져오기
-  async function loadPostList(): Promise<void> {
+  async function loadPostList(): Promise<NavigationFailure | void | undefined> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
       return util.snack(TEXT[home.lang].NO_BOARD_ID)

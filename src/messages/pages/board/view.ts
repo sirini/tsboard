@@ -19,6 +19,10 @@ export const TEXT = [
     MOVE_INFO: "이 글을 이동합니다",
     CLOSE: "닫기",
     APPLY: "적용하기",
+    GO_TOP: "페이지 상단으로 스크롤을 이동합니다.",
+    GO_NEXT: "다음 게시글을 보러 이동합니다.",
+    GO_PREV: "이전 게시글을 보러 이동합니다.",
+    GO_BOTTOM: "페이지 하단으로 스크롤을 이동합니다.",
   },
   /* LANG.EN */ {
     LIST: "View List",
@@ -34,6 +38,10 @@ export const TEXT = [
     MOVE_INFO: "Move this post",
     CLOSE: "Close",
     APPLY: "Apply",
+    GO_TOP: "Scroll to the top of the page.",
+    GO_NEXT: "Go to the next post.",
+    GO_PREV: "Go to the previous post.",
+    GO_BOTTOM: "Scroll to the bottom of the page.",
   },
   /* LANG.CN */ {
     LIST: "查看列表",
@@ -49,6 +57,10 @@ export const TEXT = [
     MOVE_INFO: "将此文章移动",
     CLOSE: "关闭",
     APPLY: "应用",
+    GO_TOP: "滚动到页面顶部。",
+    GO_NEXT: "跳转到下一篇文章。",
+    GO_PREV: "跳转到上一篇文章。",
+    GO_BOTTOM: "滚动到页面底部。",
   },
 ]
 Object.freeze(TEXT)

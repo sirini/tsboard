@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-card class="mx-auto wrap app pb-12" elevation="0" rounded="0" :max-width="home.width">
-          <tsboard-home-title></tsboard-home-title>
+          <home-title></home-title>
 
           <v-row class="mt-3 mb-3" v-if="home.isMobile || home.isTablet">
             <v-col>
@@ -42,14 +42,14 @@
 
 <script setup lang="ts">
 import { useHomeStore } from "../../store/home"
-import HomeHeader from "./HomeHeader.vue"
-import HomeFooter from "./HomeFooter.vue"
-import SideDrawer from "./SideDrawer.vue"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import QuickButton from "./components/mobile/QuickButton.vue"
-import TsboardHomeTitle from "./components/static/TsboardHomeTitle.vue"
+import HomeTitle from "./components/static/TsboardHomeTitle.vue"
+import HomeFooter from "./HomeFooter.vue"
+import HomeHeader from "./HomeHeader.vue"
 import HomePageCategoryWindow from "./HomePageCategoryWindow.vue"
 import HomePageLatestWindow from "./HomePageLatestWindow.vue"
+import SideDrawer from "./SideDrawer.vue"
 
 const home = useHomeStore()
 </script>

@@ -1,8 +1,9 @@
 <template>
-  <v-list :bg-color="bgColor">
+  <v-list>
     <v-list-item density="compact" class="pa-0 mt-6 mb-3">
       <template v-slot:prepend>
         <v-chip
+          size="small"
           class="mr-2"
           :disabled="auth.user.uid < 1"
           :prepend-icon="view.post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
@@ -17,16 +18,16 @@
           :profile="view.post.writer.profile"
           :uid="view.post.writer.uid"
           :name="view.post.writer.name"
-          :size="'default'"
+          size="small"
         ></user-nametag>
       </template>
 
       <template v-slot:append>
-        <v-btn append-icon="mdi-chevron-down" variant="text" rounded="xl"
+        <v-btn append-icon="mdi-chevron-down" variant="text" rounded="xl" size="small"
           >{{ TEXT[home.lang].WORK }}
 
           <v-menu activator="parent">
-            <v-list>
+            <v-list density="compact">
               <v-list-item
                 prepend-icon="mdi-pencil"
                 @click="util.go('boardModify', view.id, view.postUid)"

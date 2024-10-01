@@ -3,16 +3,10 @@
  *
  * 뷰어 다이얼로그에서 이미지 대상으로 하는 상호작용 처리
  */
+import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { useAuthStore } from "../../user/auth"
-import { useBoardViewStore } from "../view"
-import { useUtilStore } from "../../util"
-import { useHomeStore } from "../../home"
-import { Position } from "../../../interface/gallery"
+import { NavigationFailure, useRoute, useRouter } from "vue-router"
 import {
   ACTION_TARGET,
   BOARD_CONFIG,
@@ -20,10 +14,16 @@ import {
   PAGING_DIRECTION,
   TYPE_MATCH,
 } from "../../../../server/database/board/const"
-import { TEXT } from "../../../messages/store/board/gallery"
-import { BoardConfig, Comment, Pair, PhotoItem, PostView } from "../../../interface/board"
-import * as COMMENT from "../../../messages/store/board/comment"
+import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
+import { BoardConfig, Comment, Pair, PhotoItem, PostView } from "../../../interface/board"
+import { Position } from "../../../interface/gallery"
+import * as COMMENT from "../../../messages/store/board/comment"
+import { TEXT } from "../../../messages/store/board/gallery"
+import { useHomeStore } from "../../home"
+import { useAuthStore } from "../../user/auth"
+import { useUtilStore } from "../../util"
+import { useBoardViewStore } from "../view"
 
 export const useViewerStore = defineStore("viewer", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -66,7 +66,7 @@ export const useViewerStore = defineStore("viewer", () => {
   ]
 
   // 게시글 불러오기
-  async function loadPost(): Promise<void> {
+  async function loadPost(): Promise<NavigationFailure | void | undefined> {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 

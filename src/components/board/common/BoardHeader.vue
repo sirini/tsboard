@@ -8,6 +8,7 @@
         prepend-icon="mdi-login-variant"
         variant="text"
         @click="util.go('login')"
+        size="small"
         >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
@@ -15,6 +16,7 @@
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
+        size="small"
         >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
@@ -22,6 +24,7 @@
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', list.id)"
+        size="small"
         >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>
@@ -36,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../../store/user/auth"
-import { useBoardListStore } from "../../../store/board/list"
-import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/board/common/board-header"
+import { useBoardListStore } from "../../../store/board/list"
+import { useHomeStore } from "../../../store/home"
+import { useAuthStore } from "../../../store/user/auth"
+import { useUtilStore } from "../../../store/util"
 
 const auth = useAuthStore()
 const list = useBoardListStore()
@@ -63,7 +66,7 @@ const props = defineProps<{
 }
 .login {
   position: absolute;
-  top: 10px;
+  top: 20px;
   right: 0px;
 }
 </style>
