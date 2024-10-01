@@ -16,7 +16,7 @@
     "@elysiajs/jwt": "^1.1.0",
     "@elysiajs/static": "^1.1.0",
     "@mdi/font": "7.4.47",
-    "@tiptap/extension-blockquote": "^2.6.4",
+    "@tiptap/extension-blockquote": "^2.8.0",
     "@tiptap/extension-bold": "^2.6.4",
     "@tiptap/extension-bullet-list": "^2.6.4",
     "@tiptap/extension-code": "^2.6.4",

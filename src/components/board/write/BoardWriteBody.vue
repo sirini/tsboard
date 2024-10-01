@@ -1,13 +1,6 @@
 <template>
   <v-container class="wrap">
-    <v-card
-      elevation="0"
-      rounded="0"
-      class="mx-auto"
-      :max-width="editor.config.width"
-      :loading="editor.loading"
-      variant="text"
-    >
+    <v-card class="mx-auto pa-3" :max-width="editor.config.width" :loading="editor.loading">
       <v-form fast-fail @submit.prevent>
         <board-header
           :name="editor.config.name"
@@ -88,18 +81,18 @@
 </template>
 
 <script setup lang="ts">
+import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
-import { useAuthStore } from "../../../store/user/auth"
 import { useHomeStore } from "../../../store/home"
-import BoardHeader from "../common/BoardHeader.vue"
-import BoardWriteSelectCategory from "../../board/write/BoardWriteSelectCategory.vue"
-import BoardWriteSelectAttachments from "../../board/write/BoardWriteSelectAttachments.vue"
+import { useAuthStore } from "../../../store/user/auth"
+import BoardWriteAddTags from "../../board/write/BoardWriteAddTags.vue"
 import BoardWriteAttachments from "../../board/write/BoardWriteAttachments.vue"
 import BoardWriteEditor from "../../board/write/BoardWriteEditor.vue"
-import BoardWriteAddTags from "../../board/write/BoardWriteAddTags.vue"
+import BoardWriteSelectAttachments from "../../board/write/BoardWriteSelectAttachments.vue"
+import BoardWriteSelectCategory from "../../board/write/BoardWriteSelectCategory.vue"
 import AlertBar from "../../util/AlertBar.vue"
-import { TEXT } from "../../../messages/pages/board/write"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
+import BoardHeader from "../common/BoardHeader.vue"
 
 const editor = useBoardEditorStore()
 const auth = useAuthStore()

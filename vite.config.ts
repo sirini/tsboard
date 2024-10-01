@@ -1,11 +1,12 @@
 // Plugins
 import vue from "@vitejs/plugin-vue"
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 import ViteFonts from "unplugin-fonts/vite"
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 
 // Utilities
-import { defineConfig } from "vite"
 import { fileURLToPath, URL } from "node:url"
+import * as sass from "sass"
+import { defineConfig } from "vite"
 
 // TSBOARD Configuration
 import { IS_DEV, LOCALHOST, PORT_DEV, PORT_DEV_VITE, TSBOARD } from "./tsboard.config"
@@ -49,6 +50,18 @@ export default defineConfig({
       "/tsapi": {
         target: `${LOCALHOST}:${PORT_DEV}`,
         changeOrigin: true,
+      },
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: "modern",
+        importers: [new sass.NodePackageImporter()],
+      },
+      sass: {
+        api: "modern",
+        importers: [new sass.NodePackageImporter()],
       },
     },
   },

@@ -4,26 +4,26 @@
  * 갤러리 동작과 관련한 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { useRoute } from "vue-router"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { useAuthStore } from "../../user/auth"
-import { useUtilStore } from "../../util"
-import { useHomeStore } from "../../home"
-import { GridItem } from "../../../interface/gallery"
-import { TEXT } from "../../../messages/store/board/gallery"
+import { defineStore } from "pinia"
+import { ref } from "vue"
+import { NavigationFailure, useRoute } from "vue-router"
 import {
-  SEARCH_OPTION,
+  ACTION_TARGET,
   BOARD_CONFIG,
   INIT_POST,
   PAGING_DIRECTION,
+  SEARCH_OPTION,
   TYPE_MATCH,
-  ACTION_TARGET,
 } from "../../../../server/database/board/const"
-import { BoardConfig, Post, SearchOption } from "../../../interface/board"
+import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
+import { BoardConfig, Post, SearchOption } from "../../../interface/board"
+import { GridItem } from "../../../interface/gallery"
+import { TEXT } from "../../../messages/store/board/gallery"
+import { useHomeStore } from "../../home"
+import { useAuthStore } from "../../user/auth"
+import { useUtilStore } from "../../util"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -46,7 +46,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const keywordHistories = ref<string[]>([])
 
   // 갤러리 사진들 불러오기
-  async function loadPhotoList(): Promise<void> {
+  async function loadPhotoList(): Promise<NavigationFailure | void | undefined> {
     id.value = route.params.id as string
     if (id.value.length < 2) {
       util.snack(TEXT[home.lang].NO_BOARD_ID)

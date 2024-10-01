@@ -20,6 +20,7 @@ import {
   getDownloadPermission,
   getFiles,
   getPost,
+  getPrevNextPostUid,
   getTags,
   isBannedByWriter,
   likePost,
@@ -69,6 +70,8 @@ export const view = new Elysia()
         images: [] as PhotoItem[],
         files: [] as PostFile[],
         tags: [] as Pair[],
+        prevPostUid: 0,
+        nextPostUid: 0,
         newAccessToken,
       }
 
@@ -125,6 +128,9 @@ export const view = new Elysia()
       }
 
       response.tags = await getTags(postUid)
+      const neighbor = await getPrevNextPostUid(response.config.uid, postUid)
+      response.prevPostUid = neighbor.prevPostUid
+      response.nextPostUid = neighbor.nextPostUid
       return success(response)
     },
     {

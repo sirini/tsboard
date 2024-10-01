@@ -230,7 +230,6 @@ export async function getBoardListItems(): Promise<BoardListItem[]> {
       info: board.info,
     })
   }
-
   return result
 }
 
@@ -254,6 +253,31 @@ export async function applyMovePost(postUid: number, targetBoardUid: number): Pr
     Date.now().toString(),
     postTarget,
   ])
-
   return true
+}
+
+// 현재 보고 있는 게시글의 이전/다음 글 번호 가져오기
+export async function getPrevNextPostUid(
+  boardUid: number,
+  nowPostUid: number,
+): Promise<{ prevPostUid: number; nextPostUid: number }> {
+  let result = { prevPostUid: 0, nextPostUid: 0 }
+  const board = boardUid.toString()
+  const now = nowPostUid.toString()
+
+  const [prev] = await select(
+    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != -1 AND uid < ? ORDER BY uid DESC LIMIT 1`,
+    [board, now],
+  )
+  if (prev) {
+    result.prevPostUid = prev.uid
+  }
+  const [next] = await select(
+    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != -1 AND uid > ? ORDER BY uid ASC LIMIT 1`,
+    [board, now],
+  )
+  if (next) {
+    result.nextPostUid = next.uid
+  }
+  return result
 }

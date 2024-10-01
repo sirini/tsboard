@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-item class="view_info underline">
+    <v-list-item class="underline">
       <template v-slot:prepend>
         <span class="mr-2 text-caption" v-if="view.config.useCategory"
           ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardViewStore } from "../../../store/board/view"
-import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/pages/board/view"
+import { useBoardViewStore } from "../../../store/board/view"
+import { useHomeStore } from "../../../store/home"
+import { useUtilStore } from "../../../store/util"
 
 const view = useBoardViewStore()
 const util = useUtilStore()

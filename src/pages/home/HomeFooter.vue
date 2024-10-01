@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
+import { TEXT } from "../../messages/pages/home/home-footer"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import { TEXT } from "../../messages/pages/home/home-footer"
 
 const home = useHomeStore()
 const util = useUtilStore()
@@ -32,8 +32,7 @@ const util = useUtilStore()
 
 <style type="scss" scoped>
 .footer {
-  min-height: 48px;
+  min-height: 64px;
   padding: 0;
-  border-top: #cfd8dc 1px solid;
 }
 </style>

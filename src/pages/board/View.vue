@@ -1,11 +1,11 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card elevation="0" rounded="0" class="mx-auto board" :max-width="view.config.width">
+          <v-card class="mx-auto board pa-3" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
 
             <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
@@ -35,6 +35,7 @@
             <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
             <board-view-bottom-buttons :type="view.config.type"></board-view-bottom-buttons>
           </v-card>
+          <board-view-side-navigation></board-view-side-navigation>
         </v-container>
         <home-footer></home-footer>
       </v-main>
@@ -50,7 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, onUnmounted, watch } from "vue"
+import { useRoute } from "vue-router"
 import "../../assets/board/editor.scss"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
@@ -62,6 +64,7 @@ import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomB
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
 import BoardViewMoveDialog from "../../components/board/view/BoardViewMoveDialog.vue"
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
+import BoardViewSideNavigation from "../../components/board/view/BoardViewSideNavigation.vue"
 import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
@@ -74,17 +77,32 @@ import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 
+const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
 const home = useHomeStore()
 
-onMounted(() => {
+// 게시글 보기 준비
+function prepareViewPost(): void {
   view.loadPostView()
   home.setGridLayout()
+  window.addEventListener("scroll", view.updateScrollY)
+}
+
+watch(
+  () => route.params.no,
+  () => prepareViewPost(),
+)
+onMounted(() => prepareViewPost())
+onUnmounted(() => {
+  window.removeEventListener("scroll", view.updateScrollY)
 })
 </script>
 
 <style scoped>
+.app {
+  background-color: #eceff1;
+}
 .layout {
   margin-top: 64px;
 }
@@ -96,6 +114,7 @@ onMounted(() => {
   font-size: 1.2em;
   line-height: 1.6em;
 }
+
 .signature {
   color: #90a4ae;
 }
