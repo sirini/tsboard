@@ -153,26 +153,24 @@ const auth = useAuthStore()
 </script>
 
 <style scoped>
-.board {
-  .notice {
-    background-color: #f9f9f9;
-  }
-  .list-item {
-    border-bottom: 1px #ddd solid;
+.notice {
+  background-color: #f9f9f9;
+}
+.list-item {
+  border-bottom: 1px #ddd solid;
 
-    .col {
-      color: #828282;
-      font-size: 0.85em;
-    }
-    .pointer {
-      cursor: pointer;
-    }
-    .no {
-      width: 70px;
-    }
-    .date {
-      width: 80px;
-    }
+  .col {
+    color: #828282;
+    font-size: 0.85em;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+  .no {
+    width: 70px;
+  }
+  .date {
+    width: 80px;
   }
 }
 </style>

@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto board pa-3" :max-width="list.config.width">
+          <v-card class="mx-auto pa-3" :max-width="list.config.width">
             <board-header :name="list.config.name" :info="list.config.info"></board-header>
             <v-card-text class="pa-0">
               <v-list class="pa-0">
