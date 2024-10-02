@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list density="compact">
     <v-list-item
       prepend-icon="mdi-syllabary-hangul"
       @click="home.changeUserLanguage(LANG.KO as LangType)"
@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { LANG, LangType } from "../../../../interface/home"
 import { useHomeStore } from "../../../../store/home"
-import { LangType, LANG } from "../../../../interface/home"
 
 const home = useHomeStore()
 </script>

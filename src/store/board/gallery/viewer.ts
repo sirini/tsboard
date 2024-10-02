@@ -38,8 +38,8 @@ export const useViewerStore = defineStore("viewer", () => {
   const startPos = ref<Position>({ x: 0, y: 0 })
   const transPos = ref<Position>({ x: 0, y: 0 })
   const scale = ref<number>(1.0)
-  const drawerWidth = ref<number>(350)
-  const drawerPosition = ref<"left" | "right" | "bottom">("right")
+  const drawerWidth = ref<number>(300)
+  const drawerPosition = ref<"left" | "right" | "bottom">("left")
   const targetDom = "#tsboardViewerPreview"
   const zoomSpeed = 0.25
   const zoomMax = 20.0
@@ -58,6 +58,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const position = ref<number>(0)
   const mobileColor = ref<string>("grey-darken-4")
   const isViewContent = ref<boolean>(false)
+  const latestLimit = 5
   const textRule = [
     (value: any) => {
       if (value.length > 2) return true
@@ -89,6 +90,7 @@ export const useViewerStore = defineStore("viewer", () => {
         postUid: postUid.value,
         needUpdateHit,
         userUid: auth.user.uid,
+        latestLimit,
       },
     })
 

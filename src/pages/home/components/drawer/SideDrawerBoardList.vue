@@ -6,9 +6,8 @@
     v-for="(group, index) in home.sidebarLinks"
     :key="index"
   >
-    <v-list>
+    <v-list density="compact">
       <v-list-subheader>{{ group.group }}</v-list-subheader>
-
       <v-divider></v-divider>
 
       <v-list-item

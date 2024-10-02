@@ -113,7 +113,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   // 게시판 목록 마운트 시점에 호출
   function initFirstList(): void {
     isFirstInit.value = true
-    const name = util.routerName(config.value.type, ACTION_TARGET.PAGING)
+    const name = util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING)
     const pageStr = page.value.toString()
 
     if (page.value > 1 && sinceUid.value > 0) {

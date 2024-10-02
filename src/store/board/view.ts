@@ -24,6 +24,8 @@ import {
   PhotoItem,
   PostFile,
   PostView,
+  WriterLatestComment,
+  WriterLatestPost,
 } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/view"
 import { useHomeStore } from "../home"
@@ -54,6 +56,9 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const scrollY = ref<number>(0)
   const innerHeight = ref<number>(0)
   const scrollHeight = ref<number>(0)
+  const latestLimit = 5
+  const writerPosts = ref<WriterLatestPost[]>([])
+  const writerComments = ref<WriterLatestComment[]>([])
 
   async function loadPostView(): Promise<NavigationFailure | void | undefined> {
     id.value = route.params.id as string
@@ -78,6 +83,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
         postUid: postUid.value,
         needUpdateHit,
         userUid: auth.user.uid,
+        latestLimit,
       },
     })
 
@@ -107,6 +113,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     images.value = response.data.result.images
     prevPostUid.value = response.data.result.prevPostUid
     nextPostUid.value = response.data.result.nextPostUid
+    writerPosts.value = response.data.result.writerPosts
+    writerComments.value = response.data.result.writerComments
 
     auth.user.admin =
       response.data.result.config.admin.group === auth.user.uid ||
@@ -348,6 +356,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
     scrollY,
     innerHeight,
     scrollHeight,
+    writerPosts,
+    writerComments,
     loadPostView,
     like,
     download,

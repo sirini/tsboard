@@ -1,7 +1,8 @@
 <template>
-  <v-list-item class="pt-2 pb-2">
+  <v-list-item class="pb-2" v-if="viewer.tags.length > 0">
     <v-chip
       variant="text"
+      size="small"
       prepend-icon="mdi-tag-outline"
       v-for="(tag, index) in viewer.tags"
       :key="index"

@@ -23,7 +23,7 @@
       </template>
 
       <template v-slot:append>
-        <v-btn append-icon="mdi-chevron-down" variant="text" rounded="xl" size="small"
+        <v-btn append-icon="mdi-chevron-down" variant="outlined" rounded="xl" size="small"
           >{{ TEXT[home.lang].WORK }}
 
           <v-menu activator="parent">

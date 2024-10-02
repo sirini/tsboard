@@ -5,27 +5,24 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto board pa-3" :max-width="view.config.width">
+          <v-card class="mx-auto pa-3" :max-width="view.config.width">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
-
             <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
 
             <board-view-statistics></board-view-statistics>
             <board-view-attachments></board-view-attachments>
             <board-view-attachment-thumbnail></board-view-attachment-thumbnail>
 
-            <div class="mb-16 tsboard">
+            <div class="tsboard">
               <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
             </div>
 
             <board-view-tags :tags="view.tags"></board-view-tags>
-
             <v-card-text class="text-caption signature" v-if="view.post.writer.signature">
               {{ util.unescape(view.post.writer.signature) }}
             </v-card-text>
-
+            <board-view-writer-post-comment></board-view-writer-post-comment>
             <board-view-buttons></board-view-buttons>
-
             <board-view-comment-write
               v-if="view.post.uid > 0"
               :type="view.config.type"
@@ -67,6 +64,7 @@ import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemo
 import BoardViewSideNavigation from "../../components/board/view/BoardViewSideNavigation.vue"
 import BoardViewStatistics from "../../components/board/view/BoardViewStatistics.vue"
 import BoardViewTags from "../../components/board/view/BoardViewTags.vue"
+import BoardViewWriterPostComment from "../../components/board/view/BoardViewWriterPostComment.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
@@ -100,7 +98,7 @@ onUnmounted(() => {
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .view-title {
   font-weight: bold;

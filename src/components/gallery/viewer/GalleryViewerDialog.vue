@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="viewer.dialog">
-    <v-card rounded="0">
+  <v-dialog id="tsboardGalleryViewer" v-model="viewer.dialog" theme="dark">
+    <v-card>
       <gallery-viewer-dialog-content v-if="viewer.isViewContent"></gallery-viewer-dialog-content>
       <gallery-viewer-dialog-image v-else></gallery-viewer-dialog-image>
     </v-card>
@@ -15,16 +15,16 @@
 <script setup lang="ts">
 import { watch } from "vue"
 import { useRoute } from "vue-router"
+import "../../../assets/board/editor.scss"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../store/home"
-import GalleryViewerDialogImage from "./GalleryViewerDialogImage.vue"
-import GalleryViewerDialogContent from "./GalleryViewerDialogContent.vue"
-import UserInfoDialog from "../../user/UserInfoDialog.vue"
-import ChatDialog from "../../user/ChatDialog.vue"
-import SendReportDialog from "../../user/SendReportDialog.vue"
-import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
-import "../../../assets/board/editor.scss"
+import ChatDialog from "../../user/ChatDialog.vue"
+import ManageUserDialog from "../../user/ManageUserDialog.vue"
+import SendReportDialog from "../../user/SendReportDialog.vue"
+import UserInfoDialog from "../../user/UserInfoDialog.vue"
+import GalleryViewerDialogContent from "./GalleryViewerDialogContent.vue"
+import GalleryViewerDialogImage from "./GalleryViewerDialogImage.vue"
 
 const route = useRoute()
 const viewer = useViewerStore()
@@ -72,7 +72,7 @@ watch(
 
 /** 다이얼로그 배경 조정 */
 .v-overlay--active {
-  animation: tsboardCustomOverlay 1s ease-in forwards;
+  animation: tsboardCustomOverlay 0.5s ease-in forwards;
 }
 @keyframes tsboardCustomOverlay {
   from {

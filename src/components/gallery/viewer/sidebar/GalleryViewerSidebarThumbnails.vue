@@ -1,16 +1,18 @@
 <template>
-  <v-list-item class="pt-2 pb-2">
-    <v-row no-gutters>
-      <v-col v-for="(image, index) in viewer.images" :key="index" cols="3">
-        <v-img
-          cover
-          height="80"
-          :src="TSBOARD.PREFIX + image.thumbnail.small"
-          :class="viewer.position === index ? 'selected' : 'deselected'"
-          @click="viewer.position = index"
-        ></v-img>
-      </v-col>
-    </v-row>
+  <v-list-item class="pb-5">
+    <v-card elevation="0">
+      <v-row no-gutters>
+        <v-col v-for="(image, index) in viewer.images" :key="index" cols="3">
+          <v-img
+            cover
+            height="80"
+            :src="TSBOARD.PREFIX + image.thumbnail.small"
+            :class="viewer.position === index ? 'selected' : 'deselected'"
+            @click="viewer.position = index"
+          ></v-img>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-list-item>
 </template>
 
@@ -23,14 +25,11 @@ const viewer = useViewerStore()
 
 <style scoped>
 .selected {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-radius: 5px;
   transition: all 0.3s ease;
 }
 .deselected {
   background-color: black;
-  opacity: 0.3;
+  opacity: 0.1;
   transition: all 0.3s ease;
 }
 </style>

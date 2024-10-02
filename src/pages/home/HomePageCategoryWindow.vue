@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
+import { BoardLatestPost } from "../../interface/home"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import { BoardLatestPost } from "../../interface/home"
 import HomePageBoardLatestGrid from "./components/list/HomePageBoardLatestGrid.vue"
 
 const home = useHomeStore()
@@ -40,7 +40,7 @@ const boards = ref<BoardLatestPost[]>([])
 const TARGETS = [
   { id: "free", limit: 8 },
   { id: "photo", limit: 4 },
-  { id: "sirini", limit: 4 },
+  { id: "blog", limit: 4 },
 ]
 const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] // BOARD, GALLERY, BLOG, SHOP
 
