@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list density="compact">
     <v-list-subheader>Language</v-list-subheader>
     <v-divider></v-divider>
     <v-list-item :prepend-icon="home.langIcon" append-icon="mdi-chevron-down" @click=""

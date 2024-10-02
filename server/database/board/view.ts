@@ -6,19 +6,24 @@
 
 import { statSync } from "fs"
 import {
+  BoardEssential,
   BoardListItem,
+  BoardType,
   Pair,
   PostFile,
   PostLikeParams,
   PostView,
+  WriterLatestComment,
+  WriterLatestPost,
 } from "../../../src/interface/board"
 import { NoticeType } from "../../../src/interface/home"
 import { isValidFile } from "../../util/tools"
 import { select, table, update } from "../common"
 import { addNotification } from "../home/notification"
+import { getCommentLikeCount, getTotalCommentCount } from "./comment"
 import { CONTENT_STATUS, INIT_POST_VIEW, NOTICE_TYPE } from "./const"
 import { removeAttachedFile, removeOriginalTags } from "./editor"
-import { getPostRelated } from "./list"
+import { getPostLikeCount, getPostRelated } from "./list"
 
 // 게시글 가져오기
 export async function getPost(postUid: number, accessUserUid: number): Promise<PostView> {
@@ -264,20 +269,75 @@ export async function getPrevNextPostUid(
   let result = { prevPostUid: 0, nextPostUid: 0 }
   const board = boardUid.toString()
   const now = nowPostUid.toString()
+  const removed = CONTENT_STATUS.REMOVED.toString()
 
   const [prev] = await select(
-    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != -1 AND uid < ? ORDER BY uid DESC LIMIT 1`,
-    [board, now],
+    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != ? AND uid < ? ORDER BY uid DESC LIMIT 1`,
+    [board, removed, now],
   )
   if (prev) {
     result.prevPostUid = prev.uid
   }
   const [next] = await select(
-    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != -1 AND uid > ? ORDER BY uid ASC LIMIT 1`,
-    [board, now],
+    `SELECT uid FROM ${table}post WHERE board_uid = ? AND status != ? AND uid > ? ORDER BY uid ASC LIMIT 1`,
+    [board, removed, now],
   )
   if (next) {
     result.nextPostUid = next.uid
   }
+  return result
+}
+
+// 게시판 이름 가져오기
+export async function getBoardEssentialInfo(boardUid: number): Promise<BoardEssential> {
+  const [board] = await select(`SELECT id, type, name FROM ${table}board WHERE uid = ? LIMIT 1`, [
+    boardUid.toString(),
+  ])
+  return {
+    id: board.id,
+    type: board.type as BoardType,
+    name: board.name,
+  }
+}
+
+// 현재 보고 있는 게시글의 작성자가 남겼던 최근 글/댓글들 가져오기
+export async function getWriterLatestPostComment(
+  writerUid: number,
+  limitation: number,
+): Promise<{ posts: WriterLatestPost[]; comments: WriterLatestComment[] }> {
+  let result = { posts: [] as WriterLatestPost[], comments: [] as WriterLatestComment[] }
+  const writer = writerUid.toString()
+  const limit = limitation.toString()
+  const removed = CONTENT_STATUS.REMOVED.toString()
+
+  const posts = await select(
+    `SELECT uid, board_uid, title, submitted FROM ${table}post WHERE user_uid = ? AND status != ? ORDER BY uid DESC LIMIT ?`,
+    [writer, removed, limit],
+  )
+  for (const post of posts) {
+    result.posts.push({
+      board: await getBoardEssentialInfo(post.board_uid),
+      postUid: post.uid,
+      title: post.title,
+      reply: await getTotalCommentCount(post.uid),
+      like: await getPostLikeCount(post.uid),
+      submitted: post.submitted,
+    })
+  }
+
+  const comments = await select(
+    `SELECT uid, board_uid, post_uid, content, submitted FROM ${table}comment WHERE user_uid = ? AND status != ? ORDER BY uid DESC LIMIT ?`,
+    [writer, removed, limit],
+  )
+  for (const comment of comments) {
+    result.comments.push({
+      board: await getBoardEssentialInfo(comment.board_uid),
+      postUid: comment.post_uid,
+      like: await getCommentLikeCount(comment.uid),
+      submitted: comment.submitted,
+      content: comment.content,
+    })
+  }
+
   return result
 }

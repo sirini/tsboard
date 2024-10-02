@@ -16,6 +16,7 @@
             class="mr-2"
             readonly
             append-inner-icon="mdi-chevron-down"
+            width="120"
           >
             <v-menu activator="parent">
               <v-list>
@@ -110,10 +111,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useHomeStore } from "../../../../store/home"
-import { SearchOption } from "../../../../interface/board"
 import { SEARCH_OPTION } from "../../../../../server/database/board/const"
+import { SearchOption } from "../../../../interface/board"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-search"
+import { useHomeStore } from "../../../../store/home"
 
 const home = useHomeStore()
 const optionTitle = ref<string>(TEXT[home.lang].TITLE)

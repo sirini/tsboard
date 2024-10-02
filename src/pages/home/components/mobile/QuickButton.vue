@@ -1,8 +1,8 @@
 <template>
-  <v-btn icon class="write" size="x-large" color="blue-grey" elevation="0">
+  <v-btn icon class="write" size="x-large" color="blue-grey">
     <v-icon>mdi-pencil</v-icon>
     <v-menu activator="parent">
-      <v-list bg-color="blue-grey" class="mb-6">
+      <v-list bg-color="blue-grey" class="mb-3">
         <v-list-item
           prepend-icon="mdi-message-text"
           @click="util.go('boardWrite', QUICK_BUTTONS.WRITE)"
@@ -19,10 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import { useUtilStore } from "../../../../store/util"
-import { useHomeStore } from "../../../../store/home"
-import { TEXT } from "../../../../messages/pages/home/components/mobile/quick-button"
 import { QUICK_BUTTONS } from "../../../../../tsboard.config"
+import { TEXT } from "../../../../messages/pages/home/components/mobile/quick-button"
+import { useHomeStore } from "../../../../store/home"
+import { useUtilStore } from "../../../../store/util"
 
 const util = useUtilStore()
 const home = useHomeStore()

@@ -81,6 +81,28 @@ export type PostView = Post & {
   modified: number
 }
 
+export type BoardEssential = {
+  id: string
+  type: BoardType
+  name: string
+}
+
+type WriterLatestCommon = {
+  board: BoardEssential
+  postUid: number
+  like: number
+  submitted: number
+}
+
+export type WriterLatestComment = WriterLatestCommon & {
+  content: string
+}
+
+export type WriterLatestPost = WriterLatestCommon & {
+  reply: number
+  title: string
+}
+
 type PostCommentParams = {
   page: number
   bunch: number

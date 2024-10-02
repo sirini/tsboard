@@ -6,7 +6,14 @@
 
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
-import { BoardListItem, Pair, PhotoItem, PostFile } from "../../../src/interface/board"
+import {
+  BoardListItem,
+  Pair,
+  PhotoItem,
+  PostFile,
+  WriterLatestComment,
+  WriterLatestPost,
+} from "../../../src/interface/board"
 import { checkUserVerification } from "../../database/auth/authorization"
 import { updateUserPoint } from "../../database/board/common"
 import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
@@ -22,6 +29,7 @@ import {
   getPost,
   getPrevNextPostUid,
   getTags,
+  getWriterLatestPostComment,
   isBannedByWriter,
   likePost,
   removePost,
@@ -63,7 +71,12 @@ export const view = new Elysia()
   })
   .get(
     "/view",
-    async ({ query: { id, postUid, needUpdateHit }, accessUserUid, userLevel, newAccessToken }) => {
+    async ({
+      query: { id, postUid, needUpdateHit, latestLimit },
+      accessUserUid,
+      userLevel,
+      newAccessToken,
+    }) => {
       let response = {
         config: BOARD_CONFIG,
         post: INIT_POST_VIEW,
@@ -73,6 +86,8 @@ export const view = new Elysia()
         prevPostUid: 0,
         nextPostUid: 0,
         newAccessToken,
+        writerPosts: [] as WriterLatestPost[],
+        writerComments: [] as WriterLatestComment[],
       }
 
       if (id.length < 2 || postUid < 1) {
@@ -128,9 +143,15 @@ export const view = new Elysia()
       }
 
       response.tags = await getTags(postUid)
+
       const neighbor = await getPrevNextPostUid(response.config.uid, postUid)
       response.prevPostUid = neighbor.prevPostUid
       response.nextPostUid = neighbor.nextPostUid
+
+      const writer = await getWriterLatestPostComment(response.post.writer.uid, latestLimit)
+      response.writerPosts = writer.posts
+      response.writerComments = writer.comments
+
       return success(response)
     },
     {
@@ -142,6 +163,7 @@ export const view = new Elysia()
         postUid: t.Numeric(),
         needUpdateHit: t.Numeric(),
         userUid: t.Numeric(),
+        latestLimit: t.Numeric(),
       }),
     },
   )

@@ -1,37 +1,49 @@
 <template>
-  <v-toolbar density="compact" :color="color ? color : ''">
-    <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0">
+  <v-toolbar density="compact">
+    <v-chip
+      pill
+      prepend-icon="mdi-heart"
+      @click="viewer.like(!viewer.post.liked)"
+      :color="liked ? 'red' : ''"
+      class="ml-2 mr-2 pl-4 pr-4"
+      size="small"
+    >
+      {{ postLike }}
+      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
+    </v-chip>
+
+    <v-btn icon @click="viewer.prev" :disabled="viewer.position === 0" size="small">
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].PREV_TOOLTIP }}</v-tooltip>
     </v-btn>
 
-    <v-btn icon @click="viewer.next" :disabled="viewer.position + 1 === viewer.images.length">
+    <v-btn
+      icon
+      @click="viewer.next"
+      :disabled="viewer.position + 1 === viewer.images.length"
+      size="small"
+    >
       <v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].NEXT_TOOLTIP }}</v-tooltip>
     </v-btn>
 
-    <v-btn icon @click="viewer.isViewContent = !viewer.isViewContent" v-if="home.isMobile">
+    <v-btn
+      icon
+      @click="viewer.isViewContent = !viewer.isViewContent"
+      v-if="home.isMobile"
+      size="small"
+    >
       <v-icon>mdi-swap-horizontal</v-icon>
       <v-tooltip activator="parent">{{
         viewer.isViewContent ? TEXT[home.lang].VIEW_PHOTO : TEXT[home.lang].VIEW_CONTENT
       }}</v-tooltip></v-btn
     >
 
-    <v-chip
-      pill
-      prepend-icon="mdi-heart"
-      @click="viewer.like(!viewer.post.liked)"
-      :color="liked ? 'red' : ''"
-      class="ml-2 mr-2"
-    >
-      {{ postLike }}
-      <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].LIKE_TOOLTIP }}</v-tooltip>
-    </v-chip>
-
     <v-btn
       icon
       @click="view.download(viewer.images[viewer.position].file.uid)"
       :disabled="auth.user.uid < 1"
+      size="small"
     >
       <v-icon>mdi-download</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].DOWNLOAD }}</v-tooltip>
@@ -39,7 +51,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon @click="isOpenMenu = !isOpenMenu">
+    <v-btn icon @click="isOpenMenu = !isOpenMenu" size="small">
       <v-icon>mdi-dots-vertical</v-icon>
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
         <v-list density="compact">
@@ -78,12 +90,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 import { useViewerStore } from "../../../store/board/gallery/viewer"
 import { useBoardViewStore } from "../../../store/board/view"
+import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
-import { useHomeStore } from "../../../store/home"
-import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
 const view = useBoardViewStore()
@@ -95,7 +107,6 @@ const props = defineProps<{
   postUid: number
   writerUid: number
   liked: boolean
-  color?: string
 }>()
 const isOpenMenu = ref<boolean>(false)
 

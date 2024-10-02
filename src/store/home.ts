@@ -4,31 +4,31 @@
  * 웹사이트 내에서 활용 가능한 각종 함수들
  */
 
+import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
+import { BOARD_TYPE, NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
 import type { App } from "../../server/index"
-import { useAuthStore } from "./user/auth"
-import { useUtilStore } from "./util"
+import { SCREEN, TSBOARD } from "../../tsboard.config"
+import { BoardType, SearchOption } from "../interface/board"
 import {
   BoardLatest,
+  BoardLatestPost,
+  BoardPostItem,
   GroupItem,
   LANG,
   LANG_KEY,
   LangType,
   LatestPost,
   NoticeType,
-  TsboardNotification,
   PostItem,
+  TsboardNotification,
   VISIT_KEY,
-  BoardLatestPost,
-  BoardPostItem,
 } from "../interface/home"
-import { BOARD_TYPE, NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
 import { TEXT } from "../messages/store/home"
-import { BoardType, SearchOption } from "../interface/board"
-import { SCREEN, TSBOARD } from "../../tsboard.config"
+import { useAuthStore } from "./user/auth"
+import { useUtilStore } from "./util"
 
 export const CATEGORY_WINDOW = 1
 export const LATEST_WINDOW = 2
@@ -42,7 +42,7 @@ export const useHomeStore = defineStore("home", () => {
   const notifications = ref<TsboardNotification[]>([])
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<GroupItem[]>([])
-  const sidebarWidth = ref<number>(300)
+  const sidebarWidth = ref<number>(250)
   const width = ref<number>(SCREEN.PC.WIDTH)
   const staticWidth = ref<number>(SCREEN.TABLET.WIDTH)
   const dialogWidth = ref<number>(600)

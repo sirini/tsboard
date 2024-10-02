@@ -7,9 +7,6 @@
         <v-container class="wrap" id="galleryContainer">
           <v-card class="mx-auto pa-3" :max-width="gallery.config.width">
             <gallery-header></gallery-header>
-
-            <v-divider class="mb-6"></v-divider>
-
             <v-row no-gutters>
               <v-col
                 v-for="(image, index) in gallery.images"

@@ -25,6 +25,7 @@
     <v-btn prepend-icon="mdi-list-box-outline" @click="list.init" v-if="home.isMobile === false">{{
       TEXT[home.lang].LIST
     }}</v-btn>
+
     <v-btn
       prepend-icon="mdi-pencil"
       @click="util.go(util.routerName(list.config.type, ACTION_TARGET.WRITE), list.id)"

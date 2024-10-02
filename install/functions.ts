@@ -4,10 +4,10 @@
  * 설치 진행에 필요한 유틸 함수들 모음
  */
 const fs = require("fs")
-import mysql from "mysql2/promise"
-import { tables, inserts } from "./table/query"
-import { env, foundEnv } from "./messages"
 import chalk from "chalk"
+import mysql from "mysql2/promise"
+import { env, foundEnv } from "./messages"
+import { inserts, tables } from "./table/query"
 const log = console.log
 
 // .env 파일이 이미 있으면 설치 중단할지 물어보기
@@ -166,13 +166,13 @@ export async function initDatabase(info: SetupInfo): Promise<boolean> {
     })
   } catch (e) {
     console.table(info.db)
-    console.log(chalk.red.bold("데이터베이스에 연결할 수 없었습니다. 설치를 중단합니다..."))
-    console.log(
+    log(chalk.red.bold("데이터베이스에 연결할 수 없었습니다. 설치를 중단합니다..."))
+    log(
       `MySQL(MariaDB) 접속 정보를 다시 확인하셔서 ${chalk.blue.bold(
         "bun setup.ts",
       )} 를 실행해 주세요!`,
     )
-    console.log(`\n\n[DEBUG] Error: ${e}\n\n`)
+    log(`\n\n[DEBUG] Error: ${e}\n\n`)
     return false
   }
   await conn.execute(

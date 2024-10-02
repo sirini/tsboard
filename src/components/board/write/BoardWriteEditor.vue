@@ -1,275 +1,289 @@
 <template>
   <div v-if="editor">
-    <v-toolbar
-      density="compact"
-      id="tsboardEditorToolbar"
-      class="write-editor-menu"
-      :color="type === BOARD_TYPE.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
-    >
-      <v-btn icon @click="editor?.chain().focus().toggleBold().run()" size="small"
-        ><v-icon>mdi-format-bold</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].BOLD }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleItalic().run()" size="small"
-        ><v-icon>mdi-format-italic</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ITALIC }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleStrike().run()" size="small"
-        ><v-icon>mdi-format-strikethrough-variant</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].STRIKE }}</v-tooltip>
-      </v-btn>
-      <v-btn icon size="small"
-        ><v-icon>mdi-format-header-1</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HEADING }}</v-tooltip>
-        <v-menu open-on-hover activator="parent">
-          <v-list>
-            <v-list-item
-              @click="editor?.chain().focus().toggleHeading({ level }).run()"
-              v-for="(level, index) in headingLevels"
-              :key="index"
-            >
-              <template v-slot:prepend>
-                <v-icon>mdi-format-header-{{ level }}</v-icon>
-              </template>
-              <v-list-item-title>H{{ level }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
-      <v-btn icon v-bind="props" size="small"
-        ><v-icon>mdi-palette</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].COLOR }}</v-tooltip>
-        <v-menu open-on-hover activator="parent">
-          <v-list density="compact">
-            <v-list-item @click="editor?.chain().focus().setColor('#F44336').run()">
-              <v-list-item-title><span style="color: #f44336">◼︎ Red</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#E91E63').run()">
-              <v-list-item-title><span style="color: #e91e63">◼︎ Pink</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#9C27B0').run()">
-              <v-list-item-title><span style="color: #9c27b0">◼︎ Purple</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#673AB7').run()">
-              <v-list-item-title
-                ><span style="color: #673ab7">◼︎ Deep purple</span></v-list-item-title
+    <v-card elevation="0">
+      <v-toolbar
+        density="compact"
+        id="tsboardEditorToolbar"
+        class="write-editor-menu"
+        :color="type === BOARD_TYPE.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
+      >
+        <v-btn icon @click="editor?.chain().focus().toggleBold().run()" size="small"
+          ><v-icon>mdi-format-bold</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].BOLD }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleItalic().run()" size="small"
+          ><v-icon>mdi-format-italic</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ITALIC }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleStrike().run()" size="small"
+          ><v-icon>mdi-format-strikethrough-variant</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].STRIKE }}</v-tooltip>
+        </v-btn>
+        <v-btn icon size="small"
+          ><v-icon>mdi-format-header-1</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HEADING }}</v-tooltip>
+          <v-menu open-on-hover activator="parent">
+            <v-list>
+              <v-list-item
+                @click="editor?.chain().focus().toggleHeading({ level }).run()"
+                v-for="(level, index) in headingLevels"
+                :key="index"
               >
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#3F51B5').run()">
-              <v-list-item-title><span style="color: #3f51b5">◼︎ Indigo</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#2196F3').run()">
-              <v-list-item-title><span style="color: #2196f3">◼︎ Blue</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#03A9F4').run()">
-              <v-list-item-title
-                ><span style="color: #03a9f4">◼︎ Light blue</span></v-list-item-title
+                <template v-slot:prepend>
+                  <v-icon>mdi-format-header-{{ level }}</v-icon>
+                </template>
+                <v-list-item-title>H{{ level }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+        <v-btn icon v-bind="props" size="small"
+          ><v-icon>mdi-palette</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].COLOR }}</v-tooltip>
+          <v-menu open-on-hover activator="parent">
+            <v-list density="compact">
+              <v-list-item @click="editor?.chain().focus().setColor('#F44336').run()">
+                <v-list-item-title><span style="color: #f44336">◼︎ Red</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#E91E63').run()">
+                <v-list-item-title><span style="color: #e91e63">◼︎ Pink</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#9C27B0').run()">
+                <v-list-item-title
+                  ><span style="color: #9c27b0">◼︎ Purple</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#673AB7').run()">
+                <v-list-item-title
+                  ><span style="color: #673ab7">◼︎ Deep purple</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#3F51B5').run()">
+                <v-list-item-title
+                  ><span style="color: #3f51b5">◼︎ Indigo</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#2196F3').run()">
+                <v-list-item-title><span style="color: #2196f3">◼︎ Blue</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#03A9F4').run()">
+                <v-list-item-title
+                  ><span style="color: #03a9f4">◼︎ Light blue</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#00BCD4').run()">
+                <v-list-item-title><span style="color: #00bcd4">◼︎ Cyan</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#009688').run()">
+                <v-list-item-title><span style="color: #009688">◼︎ Teal</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#4CAF50').run()">
+                <v-list-item-title><span style="color: #4caf50">◼︎ Green</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#8BC34A').run()">
+                <v-list-item-title
+                  ><span style="color: #8bc34a">◼︎ Light green</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#CDDC39').run()">
+                <v-list-item-title><span style="color: #cddc39">◼︎ Lime</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#FFEB3B').run()">
+                <v-list-item-title
+                  ><span style="color: #ffeb3b">◼︎ Yellow</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#FFC107').run()">
+                <v-list-item-title><span style="color: #ffc107">◼︎ Amber</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#FF9800').run()">
+                <v-list-item-title
+                  ><span style="color: #ff9800">◼︎ Orange</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#FF5722').run()">
+                <v-list-item-title
+                  ><span style="color: #ff5722">◼︎ Deep orange</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#795548').run()">
+                <v-list-item-title><span style="color: #795548">◼︎ Brown</span></v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#607D8B').run()">
+                <v-list-item-title
+                  ><span style="color: #607d8b">◼︎ Blue grey</span></v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="editor?.chain().focus().setColor('#9E9E9E').run()">
+                <v-list-item-title><span style="color: #9e9e9e">◼︎ Grey</span></v-list-item-title>
+              </v-list-item>
+              <v-divider></v-divider>
+              <v-list-item @click="editor?.chain().focus().unsetColor().run()">
+                <v-list-item-title
+                  ><span style="color: #000000"
+                    >◼︎ {{ TEXT[home.lang].DEFAULT }} (Black)</span
+                  ></v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+
+        <v-btn icon size="small">
+          <v-icon>mdi-image</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ADD_IMAGE }}</v-tooltip>
+          <v-menu open-on-hover activator="parent">
+            <v-list density="compact">
+              <v-list-item
+                prepend-icon="mdi-image-plus"
+                @click="editorImage.uploadImageDialog = true"
               >
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#00BCD4').run()">
-              <v-list-item-title><span style="color: #00bcd4">◼︎ Cyan</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#009688').run()">
-              <v-list-item-title><span style="color: #009688">◼︎ Teal</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#4CAF50').run()">
-              <v-list-item-title><span style="color: #4caf50">◼︎ Green</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#8BC34A').run()">
-              <v-list-item-title
-                ><span style="color: #8bc34a">◼︎ Light green</span></v-list-item-title
+                {{ TEXT[home.lang].UPLOAD_IMAGE }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-image-search-outline"
+                @click="editorImage.addImageFromDBDialog = true"
               >
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#CDDC39').run()">
-              <v-list-item-title><span style="color: #cddc39">◼︎ Lime</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#FFEB3B').run()">
-              <v-list-item-title><span style="color: #ffeb3b">◼︎ Yellow</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#FFC107').run()">
-              <v-list-item-title><span style="color: #ffc107">◼︎ Amber</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#FF9800').run()">
-              <v-list-item-title><span style="color: #ff9800">◼︎ Orange</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#FF5722').run()">
-              <v-list-item-title
-                ><span style="color: #ff5722">◼︎ Deep orange</span></v-list-item-title
+                {{ TEXT[home.lang].ADD_EXIST_IMAGE }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-link-variant-plus"
+                @click="writeEditor.addImageURLDialog = true"
               >
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#795548').run()">
-              <v-list-item-title><span style="color: #795548">◼︎ Brown</span></v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#607D8B').run()">
-              <v-list-item-title
-                ><span style="color: #607d8b">◼︎ Blue grey</span></v-list-item-title
+                {{ TEXT[home.lang].ADD_EXTERNAL_IMAGE }}
+              </v-list-item>
+              <v-list-item prepend-icon="mdi-youtube" @click="writeEditor.addVideoURLDialog = true">
+                {{ TEXT[home.lang].ADD_YOUTUBE }}
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+
+        <v-btn icon size="small">
+          <v-icon>mdi-table</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].TABLE }}</v-tooltip>
+          <v-menu open-on-hover activator="parent">
+            <v-list density="compact">
+              <v-list-item
+                prepend-icon="mdi-table-plus"
+                @click="writeEditor.addTableDialog = true"
+                >{{ TEXT[home.lang].ADD_TABLE }}</v-list-item
               >
-            </v-list-item>
-            <v-list-item @click="editor?.chain().focus().setColor('#9E9E9E').run()">
-              <v-list-item-title><span style="color: #9e9e9e">◼︎ Grey</span></v-list-item-title>
-            </v-list-item>
-            <v-divider></v-divider>
-            <v-list-item @click="editor?.chain().focus().unsetColor().run()">
-              <v-list-item-title
-                ><span style="color: #000000"
-                  >◼︎ {{ TEXT[home.lang].DEFAULT }} (Black)</span
-                ></v-list-item-title
+              <v-list-item
+                prepend-icon="mdi-table-column-plus-before"
+                @click="editor?.chain().focus().addColumnBefore().run()"
+                >{{ TEXT[home.lang].ADD_BEFORE_COLUMN }}</v-list-item
               >
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
+              <v-list-item
+                prepend-icon="mdi-table-column-plus-after"
+                @click="editor?.chain().focus().addColumnAfter().run()"
+                >{{ TEXT[home.lang].ADD_AFTER_COLUMN }}</v-list-item
+              >
+              <v-list-item
+                prepend-icon="mdi-table-column-remove"
+                @click="editor?.chain().focus().deleteColumn().run()"
+              >
+                {{ TEXT[home.lang].REMOVE_COLUMN }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-row-plus-before"
+                @click="editor?.chain().focus().addRowBefore().run()"
+              >
+                {{ TEXT[home.lang].ADD_BEFORE_ROW }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-row-plus-after"
+                @click="editor?.chain().focus().addRowAfter().run()"
+              >
+                {{ TEXT[home.lang].ADD_AFTER_ROW }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-row-remove"
+                @click="editor?.chain().focus().deleteRow().run()"
+              >
+                {{ TEXT[home.lang].REMOVE_ROW }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-remove"
+                @click="editor?.chain().focus().deleteTable().run()"
+              >
+                {{ TEXT[home.lang].REMOVE_TABLE }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-merge-cells"
+                @click="editor?.chain().focus().mergeCells().run()"
+              >
+                {{ TEXT[home.lang].MERGE_CELL }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-split-cell"
+                @click="editor?.chain().focus().splitCell().run()"
+              >
+                {{ TEXT[home.lang].SPLIT_CELL }}
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-table-edit"
+                @click="editor?.chain().focus().toggleHeaderCell().run()"
+              >
+                {{ TEXT[home.lang].TOGGLE_HEADER_CELL }}
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
 
-      <v-btn icon size="small">
-        <v-icon>mdi-image</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ADD_IMAGE }}</v-tooltip>
-        <v-menu open-on-hover activator="parent">
-          <v-list density="compact">
-            <v-list-item
-              prepend-icon="mdi-image-plus"
-              @click="editorImage.uploadImageDialog = true"
-            >
-              {{ TEXT[home.lang].UPLOAD_IMAGE }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-image-search-outline"
-              @click="editorImage.addImageFromDBDialog = true"
-            >
-              {{ TEXT[home.lang].ADD_EXIST_IMAGE }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-link-variant-plus"
-              @click="writeEditor.addImageURLDialog = true"
-            >
-              {{ TEXT[home.lang].ADD_EXTERNAL_IMAGE }}
-            </v-list-item>
-            <v-list-item prepend-icon="mdi-youtube" @click="writeEditor.addVideoURLDialog = true">
-              {{ TEXT[home.lang].ADD_YOUTUBE }}
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()" size="small"
+          ><v-icon>mdi-format-color-highlight</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HIGHLIGHT }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleCode().run()" size="small"
+          ><v-icon>mdi-code-braces</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_LINE }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleCodeBlock().run()" size="small"
+          ><v-icon>mdi-code-braces-box</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_BLOCK }}</v-tooltip>
+        </v-btn>
 
-      <v-btn icon size="small">
-        <v-icon>mdi-table</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].TABLE }}</v-tooltip>
-        <v-menu open-on-hover activator="parent">
-          <v-list density="compact">
-            <v-list-item prepend-icon="mdi-table-plus" @click="writeEditor.addTableDialog = true">{{
-              TEXT[home.lang].ADD_TABLE
-            }}</v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-column-plus-before"
-              @click="editor?.chain().focus().addColumnBefore().run()"
-              >{{ TEXT[home.lang].ADD_BEFORE_COLUMN }}</v-list-item
-            >
-            <v-list-item
-              prepend-icon="mdi-table-column-plus-after"
-              @click="editor?.chain().focus().addColumnAfter().run()"
-              >{{ TEXT[home.lang].ADD_AFTER_COLUMN }}</v-list-item
-            >
-            <v-list-item
-              prepend-icon="mdi-table-column-remove"
-              @click="editor?.chain().focus().deleteColumn().run()"
-            >
-              {{ TEXT[home.lang].REMOVE_COLUMN }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-row-plus-before"
-              @click="editor?.chain().focus().addRowBefore().run()"
-            >
-              {{ TEXT[home.lang].ADD_BEFORE_ROW }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-row-plus-after"
-              @click="editor?.chain().focus().addRowAfter().run()"
-            >
-              {{ TEXT[home.lang].ADD_AFTER_ROW }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-row-remove"
-              @click="editor?.chain().focus().deleteRow().run()"
-            >
-              {{ TEXT[home.lang].REMOVE_ROW }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-remove"
-              @click="editor?.chain().focus().deleteTable().run()"
-            >
-              {{ TEXT[home.lang].REMOVE_TABLE }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-merge-cells"
-              @click="editor?.chain().focus().mergeCells().run()"
-            >
-              {{ TEXT[home.lang].MERGE_CELL }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-split-cell"
-              @click="editor?.chain().focus().splitCell().run()"
-            >
-              {{ TEXT[home.lang].SPLIT_CELL }}
-            </v-list-item>
-            <v-list-item
-              prepend-icon="mdi-table-edit"
-              @click="editor?.chain().focus().toggleHeaderCell().run()"
-            >
-              {{ TEXT[home.lang].TOGGLE_HEADER_CELL }}
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()" size="small"
+          ><v-icon>mdi-format-list-bulleted-type</v-icon>
+          <v-tooltip activator="parent" location="top">{{
+            TEXT[home.lang].UNORDER_LIST
+          }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleOrderedList().run()" size="small"
+          ><v-icon>mdi-format-list-numbered</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ORDER_LIST }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().toggleBlockquote().run()" size="small"
+          ><v-icon>mdi-format-quote-open</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].QUOTE }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().setHorizontalRule().run()" size="small"
+          ><v-icon>mdi-minus</v-icon>
+          <v-tooltip activator="parent" location="top">{{
+            TEXT[home.lang].HORIZONTAL_LINE
+          }}</v-tooltip>
+        </v-btn>
 
-      <v-btn icon @click="editor?.chain().focus().toggleHighlight().run()" size="small"
-        ><v-icon>mdi-format-color-highlight</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].HIGHLIGHT }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleCode().run()" size="small"
-        ><v-icon>mdi-code-braces</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_LINE }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleCodeBlock().run()" size="small"
-        ><v-icon>mdi-code-braces-box</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].CODE_BLOCK }}</v-tooltip>
-      </v-btn>
+        <v-btn icon @click="editor?.chain().focus().undo().run()" size="small"
+          ><v-icon>mdi-arrow-u-left-top</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNDO }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().redo().run()" size="small"
+          ><v-icon>mdi-arrow-u-right-top</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REDO }}</v-tooltip>
+        </v-btn>
+        <v-btn icon @click="editor?.chain().focus().unsetAllMarks().run()" size="small"
+          ><v-icon>mdi-restore</v-icon>
+          <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNSET }}</v-tooltip>
+        </v-btn>
+      </v-toolbar>
 
-      <v-btn icon @click="editor?.chain().focus().toggleBulletList().run()" size="small"
-        ><v-icon>mdi-format-list-bulleted-type</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNORDER_LIST }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleOrderedList().run()" size="small"
-        ><v-icon>mdi-format-list-numbered</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].ORDER_LIST }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().toggleBlockquote().run()" size="small"
-        ><v-icon>mdi-format-quote-open</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].QUOTE }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().setHorizontalRule().run()" size="small"
-        ><v-icon>mdi-minus</v-icon>
-        <v-tooltip activator="parent" location="top">{{
-          TEXT[home.lang].HORIZONTAL_LINE
-        }}</v-tooltip>
-      </v-btn>
-
-      <v-btn icon @click="editor?.chain().focus().undo().run()" size="small"
-        ><v-icon>mdi-arrow-u-left-top</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNDO }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().redo().run()" size="small"
-        ><v-icon>mdi-arrow-u-right-top</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].REDO }}</v-tooltip>
-      </v-btn>
-      <v-btn icon @click="editor?.chain().focus().unsetAllMarks().run()" size="small"
-        ><v-icon>mdi-restore</v-icon>
-        <v-tooltip activator="parent" location="top">{{ TEXT[home.lang].UNSET }}</v-tooltip>
-      </v-btn>
-    </v-toolbar>
-
-    <editor-content
-      :editor="editor"
-      :class="type === BOARD_TYPE.BLOG ? 'dark' : 'light'"
-    ></editor-content>
+      <editor-content
+        :editor="editor"
+        :class="type === BOARD_TYPE.BLOG ? 'dark' : 'light'"
+      ></editor-content>
+    </v-card>
 
     <board-write-editor-add-image-from-d-b-dialog
       @addImageURL="addImageURL"
@@ -329,7 +343,7 @@ import py from "highlight.js/lib/languages/python"
 import rs from "highlight.js/lib/languages/rust"
 import ts from "highlight.js/lib/languages/typescript"
 import { all, createLowlight } from "lowlight"
-import { onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { onBeforeUnmount, onMounted, watch } from "vue"
 import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
 import { BoardType } from "../../../interface/board"
@@ -352,25 +366,27 @@ const props = defineProps<{
   type: BoardType
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
-const stickyPoint = ref<number>(9999)
 
 // 스크롤 움직임에 따라 에디터 툴바 위치도 조정
 let scrollTimer: any = null
+let stickyScrollY = -1
 function changeToolbarPosition(): void {
   clearTimeout(scrollTimer)
   scrollTimer = setTimeout(() => {
-    const toolbar = document.querySelector("#tsboardEditorToolbar") as HTMLDivElement
+    const toolbar = document.querySelector<HTMLDivElement>("#tsboardEditorToolbar")
     if (!toolbar) return
 
-    if (window.scrollY > stickyPoint.value) {
+    toolbar.style.width = `${Math.min(window.innerWidth - 32, writeEditor.config.width)}px`
+    const toolbarRect = toolbar.getBoundingClientRect()
+    if (toolbarRect.top < 74 && stickyScrollY < 0) {
       toolbar.classList.add("sticky")
-      toolbar.style.width = `${writeEditor.config.width}px`
-    } else {
-      toolbar.classList.remove("sticky")
-      toolbar.style.width = ""
-      stickyPoint.value = toolbar.offsetTop
+      stickyScrollY = window.scrollY
     }
-  }, 200)
+    if (stickyScrollY > window.scrollY) {
+      toolbar.classList.remove("sticky")
+      stickyScrollY = -1
+    }
+  }, 100)
 }
 
 onMounted(async () => {
@@ -525,14 +541,15 @@ onBeforeUnmount(() => {
   position: sticky;
   top: 0;
   z-index: 10;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
-
 .sticky {
   position: fixed;
   top: 64px;
   z-index: 100;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  opacity: 0.8;
+  opacity: 0.9;
+  margin-left: -12px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 </style>

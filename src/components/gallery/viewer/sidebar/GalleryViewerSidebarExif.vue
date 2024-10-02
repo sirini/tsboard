@@ -1,7 +1,7 @@
 <template>
-  <v-card elevation="0" variant="tonal" color="blue-grey" class="mt-2 mb-2">
+  <v-card elevation="0" class="mt-2 mb-2" variant="tonal">
     <v-card-text class="pa-0">
-      <v-table density="compact" :theme="home.isMobile ? 'dark' : 'light'">
+      <v-table density="compact" class="text-caption">
         <tbody>
           <tr>
             <td>{{ TEXT[home.lang].MAKER }}</td>
@@ -45,10 +45,10 @@
 </template>
 
 <script setup lang="ts">
+import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 import { useViewerStore } from "../../../../store/board/gallery/viewer"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
-import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 
 const viewer = useViewerStore()
 const home = useHomeStore()
