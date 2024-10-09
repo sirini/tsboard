@@ -4,23 +4,18 @@
  * 게시판, 갤러리 등에서 공통으로 사용하는 글쓰기의 상태 및 함수들
  */
 
+import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
+import { AUTO_SAVE_KEY, BOARD_CONFIG, CONTENT_STATUS } from "../../../server/database/board/const"
 import type { App } from "../../../server/index"
+import { SIZE, TSBOARD } from "../../../tsboard.config"
+import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
+import { TEXT } from "../../messages/store/board/editor"
+import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { TEXT } from "../../messages/store/board/editor"
-import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
-import {
-  BOARD_TYPE,
-  AUTO_SAVE_KEY,
-  BOARD_CONFIG,
-  CONTENT_STATUS,
-} from "../../../server/database/board/const"
-import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -232,8 +227,13 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     let result: File[] = []
     const targets = (event?.target as HTMLInputElement).files
     if (targets) {
+      let totalSize = 0
       const arr = Array.from(targets)
       for (const f of arr) {
+        totalSize += f.size
+        if (totalSize > SIZE.MAX_FILE) {
+          break
+        }
         result.push(f)
       }
     }

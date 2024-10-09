@@ -107,10 +107,29 @@ export type AdminDashboardStat = {
   today: number
 }
 
-export type AdminDate = {
-  today: number
-  yesterday: number
-  daybefore: number
+export type AdminDashboardTableName =
+  | "user_access_log"
+  | "user"
+  | "post"
+  | "comment"
+  | "file"
+  | "image"
+export type AdminDashboardTableColumn = "timestamp" | "signup" | "submitted"
+
+export type AdminDashboardStatusItem = {
+  date: number
+  visit: number
+}
+
+export type AdminDashboardStatus = {
+  history: AdminDashboardStatusItem[]
+  total: number
+}
+
+export type AdminDashboardResult = {
+  total: number
+  labels: string[]
+  values: number[]
 }
 
 export type AdminUser = AdminPair & {

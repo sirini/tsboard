@@ -4,17 +4,17 @@
  * 에디터의 본문 이미지 업로드 / 기존 이미지 불러오기 관련 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
+import { ref } from "vue"
 import type { App } from "../../../server/index"
+import { SIZE, TSBOARD } from "../../../tsboard.config"
+import { Pair } from "../../interface/board"
+import { TEXT } from "../../messages/store/board/editor"
+import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
 import { useBoardEditorStore } from "./editor"
-import { TEXT } from "../../messages/store/board/editor"
-import { Pair } from "../../interface/board"
-import { SIZE, TSBOARD } from "../../../tsboard.config"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -26,6 +26,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const addImageFromDBDialog = ref<boolean>(false)
   const showRemoveImageInfo = ref<boolean>(false)
   const disableReloadButton = ref<boolean>(false)
+  const uploading = ref<boolean>(false)
   const removeImageTarget = ref<Pair>({ uid: 0, name: "" })
   const boardUid = ref<number>(0)
   const files = ref<File[]>([])
@@ -49,26 +50,31 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 본문에 삽입할 이미지들 선택 및 업로드
   async function uploadImageFiles(event: MouseEvent): Promise<void> {
-    files.value = editor.getFiles(event)
-    const response = await client.tsapi.board.upload.images.post({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      boardUid: boardUid.value,
-      images: files.value,
-    })
+    uploading.value = true
+    try {
+      files.value = editor.getFiles(event)
+      const response = await client.tsapi.board.upload.images.post({
+        $headers: {
+          authorization: auth.user.token,
+        },
+        $query: {
+          userUid: auth.user.uid,
+        },
+        boardUid: boardUid.value,
+        images: files.value,
+      })
 
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
+      if (!response.data) {
+        return util.snack(TEXT[home.lang].NO_RESPONSE)
+      }
+      if (response.data.success === false) {
+        return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
+      }
+      auth.updateUserToken(response.data.result.newAccessToken)
+      uploadedImages.value = response.data.result.uploadedImages
+    } finally {
+      uploading.value = false
     }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
-    }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    uploadedImages.value = response.data.result.uploadedImages
   }
 
   // 기존에 업로드한 이미지들 가져오기
@@ -143,6 +149,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
       return util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
     }
     auth.updateUserToken(response.data.result.newAccessToken)
+    util.snack(TEXT[home.lang].REMOVED_IMAGE)
   }
 
   return {
@@ -150,6 +157,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     addImageFromDBDialog,
     showRemoveImageInfo,
     disableReloadButton,
+    uploading,
     removeImageTarget,
     boardUid,
     files,

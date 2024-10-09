@@ -13,10 +13,10 @@ const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
 export const TSBOARD = {
-  VERSION: "v0.9.7",
+  VERSION: "v0.9.8",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
-    TITLE: "TSBOARD - 타입스크립트로 작성된 오픈소스 커뮤니티 빌더" /*** 수정 필요 ***/,
+    TITLE: "TSBOARD | Type Safety Community Builder" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,
@@ -53,10 +53,10 @@ export const AUTH = {
 
 export const SIZE = {
   PROFILE: 256 /* px */,
-  CONTENT_INSERT: 480 /* px */,
+  CONTENT_INSERT: 640 /* px */,
   THUMBNAIL: 512 /* px */,
-  FULL: 2016 /* px, for gallery */,
-  MAX_FILE: 99999999 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
+  FULL: 2400 /* px, for gallery */,
+  MAX_FILE: 104857600 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
 }
 
 export const OAUTH = {

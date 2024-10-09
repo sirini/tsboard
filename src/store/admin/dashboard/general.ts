@@ -4,15 +4,20 @@
  * 각종 기본적인 수치 데이터들의 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
+import { ref } from "vue"
 import type { App } from "../../../../server/index"
-import { useAdminStore } from "../common"
-import { useAuthStore } from "../../user/auth"
-import { AdminDashboardStat, AdminLatest, AdminReportLatest, AdminUserInfo } from "../../../interface/admin"
-import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 import { TSBOARD } from "../../../../tsboard.config"
+import {
+  AdminDashboardResult,
+  AdminLatest,
+  AdminReportLatest,
+  AdminUserInfo,
+} from "../../../interface/admin"
+import { GENERAL } from "../../../messages/store/admin/dashboard/general"
+import { useAuthStore } from "../../user/auth"
+import { useAdminStore } from "../common"
 
 type Today = {
   year: string
@@ -24,12 +29,12 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const visit = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
-  const member = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
-  const post = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
-  const reply = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
-  const file = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
-  const image = ref<AdminDashboardStat>({ total: 0, yesterday: 0, today: 0 })
+  const visit = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
+  const member = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
+  const post = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
+  const reply = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
+  const file = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
+  const image = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
   const posts = ref<AdminLatest[]>([])
   const comments = ref<AdminLatest[]>([])
   const reports = ref<AdminReportLatest[]>([])
@@ -61,12 +66,26 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
     }
-    visit.value = response.data.result.visit
-    member.value = response.data.result.member
-    post.value = response.data.result.post
-    reply.value = response.data.result.reply
-    file.value = response.data.result.file
-    image.value = response.data.result.image
+    const items = [
+      { target: member.value, data: response.data.result.member },
+      { target: post.value, data: response.data.result.post },
+      { target: reply.value, data: response.data.result.reply },
+      { target: file.value, data: response.data.result.file },
+      { target: image.value, data: response.data.result.image },
+      { target: visit.value, data: response.data.result.visit },
+    ]
+    for (const item of items) {
+      item.target.labels = []
+      item.target.values = []
+      item.target.total = item.data.total
+      for (const history of item.data.history.reverse()) {
+        const d = new Date(history.date)
+        const month = (d.getMonth() + 1).toString().padStart(2, "0")
+        const day = d.getDate().toString().padStart(2, "0")
+        item.target.labels.push(`${month}/${day}`)
+        item.target.values.push(history.visit)
+      }
+    }
   }
 
   // 최신 글/댓글/신고 가져오기

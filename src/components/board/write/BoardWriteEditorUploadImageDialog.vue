@@ -1,6 +1,11 @@
 <template>
   <v-dialog v-model="image.uploadImageDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
+    <v-card
+      :max-width="home.dialogWidth"
+      class="mx-auto"
+      :color="home.color.header"
+      :loading="image.uploading"
+    >
       <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
       <v-divider></v-divider>
 
@@ -24,7 +29,7 @@
           <template v-slot:selection="{ fileNames }">
             <template v-for="fileName in fileNames" :key="fileName">
               <v-chip
-                size="small"
+                size="x-small"
                 label
                 color="primary"
                 prepend-icon="mdi-image"
@@ -37,7 +42,7 @@
         </v-file-input>
 
         <v-row class="mb-1">
-          <v-col v-for="(img, index) in image.uploadingImages" :key="index" cols="3">
+          <v-col v-for="(img, index) in image.uploadedImages" :key="index" cols="3">
             <v-card elevation="0" rounded="lg">
               <v-img cover height="100" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img"></v-img>
             </v-card>
@@ -47,11 +52,11 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="image.uploadImageDialog = false">{{
+        <v-btn prepend-icon="mdi-close" @click="close" :disabled="image.uploading">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add"
+        <v-btn @click="add" :disabled="image.uploading"
           >{{ TEXT[home.lang].UPLOAD_AND_INSERT }}
           <v-icon class="ml-2">mdi-chevron-right</v-icon></v-btn
         >
@@ -62,13 +67,13 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
+import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
-import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
+import { useUtilStore } from "../../../store/util"
 import AlertBar from "../../util/AlertBar.vue"
-import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()
@@ -96,7 +101,13 @@ function add(): void {
     emits("addImageURL", src)
   }
   image.uploadingImages = []
-  util.success("사진을 작성중인 본문에 추가 하였습니다")
+}
+
+// 업로드하기 다이얼로그 닫기
+function close(): void {
+  image.uploadingImages = []
+  image.uploadedImages = []
+  image.uploadImageDialog = false
 }
 </script>
 

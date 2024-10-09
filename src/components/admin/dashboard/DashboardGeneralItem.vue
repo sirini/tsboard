@@ -10,6 +10,7 @@
               rounded="xl"
               elevation="0"
               @click="util.go('adminBoardGroup')"
+              size="small"
               >관리
               <v-tooltip activator="parent"> 클릭하시면 그룹 관리 페이지로 이동합니다. </v-tooltip>
             </v-btn>
@@ -60,6 +61,7 @@
               rounded="xl"
               elevation="0"
               @click="util.go('adminUser')"
+              size="small"
               >관리
               <v-tooltip activator="parent"> 클릭하시면 회원 관리 페이지로 이동합니다. </v-tooltip>
             </v-btn>
@@ -86,9 +88,9 @@
 </template>
 
 <script setup lang="ts">
+import { TSBOARD } from "../../../../tsboard.config"
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
@@ -97,7 +99,7 @@ const util = useUtilStore()
 <style scoped>
 .more {
   position: absolute;
-  top: 6px;
+  top: 8px;
   right: 5px;
 }
 

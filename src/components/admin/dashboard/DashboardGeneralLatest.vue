@@ -6,10 +6,11 @@
           >최신 글
           <div class="more">
             <v-btn
-              prepend-icon="mdi-magnify"
+              append-icon="mdi-chevron-right"
               rounded="xl"
               elevation="0"
               @click="util.go('adminLatestPost')"
+              size="small"
               >더 보기
               <v-tooltip activator="parent"
                 >클릭하시면 최신 글들을 모아 둔 관리 화면으로 이동합니다.</v-tooltip
@@ -41,10 +42,11 @@
           >최신 댓글
           <div class="more">
             <v-btn
-              prepend-icon="mdi-magnify"
+              append-icon="mdi-chevron-right"
               rounded="xl"
               elevation="0"
               @click="util.go('adminLatestComment')"
+              size="small"
               >더 보기</v-btn
             >
           </div>
@@ -60,7 +62,7 @@
               (comment.writer.profile.length < 1 ? '/no-profile.svg' : comment.writer.profile)
             "
           >
-            <v-list-item-title>{{ comment.content }}</v-list-item-title>
+            <v-list-item-title v-html="comment.content"></v-list-item-title>
             <v-tooltip activator="parent">댓글을 확인하러 갑니다.</v-tooltip>
           </v-list-item>
         </v-list>
@@ -73,10 +75,11 @@
           >최근 신고
           <div class="more">
             <v-btn
-              prepend-icon="mdi-magnify"
+              append-icon="mdi-chevron-right"
               rounded="xl"
               elevation="0"
               @click="util.go('adminReport')"
+              size="small"
               >더 보기</v-btn
             >
           </div>
@@ -102,9 +105,9 @@
 </template>
 
 <script setup lang="ts">
+import { TSBOARD } from "../../../../tsboard.config"
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
@@ -113,7 +116,7 @@ const util = useUtilStore()
 <style scoped>
 .more {
   position: absolute;
-  top: 6px;
+  top: 8px;
   right: 5px;
 }
 

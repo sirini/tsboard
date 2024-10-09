@@ -69,7 +69,6 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import { useBoardViewStore } from "../../store/board/view"
-import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
@@ -78,10 +77,9 @@ import SideDrawer from "../home/SideDrawer.vue"
 const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
-const home = useHomeStore()
 
 watch(
-  () => route.params.no,
+  () => route.params?.no,
   () => view.prepareViewPost(),
 )
 onMounted(() => view.prepareViewPost())
