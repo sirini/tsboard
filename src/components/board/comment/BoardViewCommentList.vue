@@ -103,7 +103,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, watch } from "vue"
+import { useRoute } from "vue-router"
 import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-list"
@@ -115,6 +116,7 @@ import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 
+const route = useRoute()
 const auth = useAuthStore()
 const view = useBoardViewStore()
 const comment = useCommentStore()
@@ -122,6 +124,10 @@ const util = useUtilStore()
 const home = useHomeStore()
 
 onMounted(() => comment.loadCommentList())
+watch(
+  () => route.params?.no,
+  () => comment.loadCommentList(),
+)
 </script>
 
 <style scoped>

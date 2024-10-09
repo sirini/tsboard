@@ -4,19 +4,14 @@
  * 글작성용 에디터에 필요한 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
 import sanitizeHtml from "sanitize-html"
-import { getUserLevel } from "../../database/board/list"
-import { getBoardConfig } from "../../database/board/list"
-import {
-  fail,
-  refineText,
-  success,
-  DEFAULT_TYPE_CHECK,
-  EXTEND_TYPE_CHECK,
-  DEFAULT_HTML_FILTER,
-} from "../../util/tools"
+import { CountPair, Pair, PostFile } from "../../../src/interface/board"
+import { SIZE } from "../../../tsboard.config"
+import { checkUserVerification } from "../../database/auth/authorization"
+import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
+import { BOARD_CONFIG, BOARD_TYPE, INIT_POST_VIEW } from "../../database/board/const"
 import {
   getCategories,
   getMaxImageUid,
@@ -33,13 +28,17 @@ import {
   uploadImages,
   writeNewPost,
 } from "../../database/board/editor"
-import { BOARD_CONFIG, BOARD_TYPE, INIT_POST_VIEW } from "../../database/board/const"
-import { CountPair, Pair, PostFile } from "../../../src/interface/board"
-import { checkPermission, havePermission, updateUserPoint } from "../../database/board/common"
+import { getBoardConfig, getUserLevel } from "../../database/board/list"
 import { getFiles, getPost, getTags } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
-import { SIZE } from "../../../tsboard.config"
-import { checkUserVerification } from "../../database/auth/authorization"
+import {
+  DEFAULT_HTML_FILTER,
+  DEFAULT_TYPE_CHECK,
+  EXTEND_TYPE_CHECK,
+  fail,
+  refineText,
+  success,
+} from "../../util/tools"
 
 const writeBody = {
   boardUid: t.Numeric(),
@@ -129,8 +128,8 @@ export const editor = new Elysia()
         uploadedImages: [],
       }
 
-      if (accessUserUid < 1) {
-        return fail(`Please log in.`, response)
+      if (boardUid < 1 || accessUserUid < 1) {
+        return fail(`Invalid parameters.`, response)
       }
       if (images === undefined) {
         return fail(`Invalid image files.`, response)

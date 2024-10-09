@@ -93,9 +93,10 @@
             color="blue-grey"
             prepend-icon="mdi-comment-outline"
             class="ml-2 mr-1"
+            variant="text"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" color="blue-grey">{{ util.date(post.date) }}</v-chip>
+          <v-chip size="small" color="blue-grey" variant="text">{{ util.date(post.date) }}</v-chip>
         </template>
         <v-tooltip activator="parent">클릭하시면 게시글을 보러 갑니다.</v-tooltip>
       </v-list-item>

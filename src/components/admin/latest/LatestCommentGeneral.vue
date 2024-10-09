@@ -83,16 +83,20 @@
         </template>
 
         <v-list-item-title @click="util.go(comment.type, comment.id, comment.postUid)" class="title"
-          ><span class="ml-3 mr-2" :class="comment.status < 0 ? 'removed' : ''">{{
-            comment.content
-          }}</span>
+          ><div
+            class="ml-3 mr-2"
+            :class="comment.status < 0 ? 'removed' : ''"
+            v-html="comment.content"
+          ></div>
         </v-list-item-title>
 
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline">{{
+          <v-chip size="small" color="blue-grey" variant="text" prepend-icon="mdi-heart-outline">{{
             comment.like
           }}</v-chip>
-          <v-chip size="small" color="blue-grey">{{ util.date(comment.date) }}</v-chip>
+          <v-chip size="small" color="blue-grey" variant="text">{{
+            util.date(comment.date)
+          }}</v-chip>
         </template>
       </v-list-item>
     </v-list>

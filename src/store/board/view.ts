@@ -335,6 +335,10 @@ export const useBoardViewStore = defineStore("boardView", () => {
     loadPostView()
     home.setGridLayout()
     window.addEventListener("scroll", updateScrollY)
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
   }
 
   return {

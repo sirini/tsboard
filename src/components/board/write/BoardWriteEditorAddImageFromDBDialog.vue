@@ -17,16 +17,16 @@
               TEXT[home.lang].CANCEL_REMOVE
             }}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn prepend-icon="mdi-trash-can" @click="remove">{{
+            <v-btn prepend-icon="mdi-trash-can" @click="remove" color="red">{{
               TEXT[home.lang].CONFIRM_REMOVE
             }}</v-btn>
           </v-card-actions>
         </v-card>
 
         <v-row no-gutters>
-          <v-col v-for="(img, index) in image.loadImages" :key="index" cols="2" class="mb-3">
-            <v-card elevation="0" rounded="lg" class="mt-2 mr-2">
-              <v-img cover width="105" aspect-ratio="1/1" :src="TSBOARD.PREFIX + img.name">
+          <v-col v-for="(img, index) in image.loadImages" :key="index" cols="3">
+            <v-card elevation="0" rounded="lg" class="ma-1">
+              <v-img cover aspect-ratio="1/1" :src="TSBOARD.PREFIX + img.name">
                 <div class="action">
                   <v-row no-gutters>
                     <v-col
@@ -82,13 +82,13 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
+import { TSBOARD } from "../../../../tsboard.config"
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
-import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
+import { useUtilStore } from "../../../store/util"
 import AlertBar from "../../util/AlertBar.vue"
-import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const editor = useBoardEditorStore()
 const image = useEditorImageStore()
@@ -112,16 +112,16 @@ watch(
 // 기존에 업로드한 이미지 추가하기
 function add(src: string): void {
   emits("addImageURL", src)
+  util.snack(TEXT[home.lang].ADD_TO_CONTENT)
 }
 
 // 업로드한 이미지 삭제하기 (작성중인 본문에서도 제거)
-function remove(): void {
+async function remove(): Promise<void> {
   emits("removeImage", image.removeImageTarget.name)
-  image.removeUploadedImage(image.removeImageTarget.uid)
+  await image.removeUploadedImage(image.removeImageTarget.uid)
   image.loadImages = image.loadImages.filter((value) => {
     return value.uid !== image.removeImageTarget.uid
   })
-  util.snack("REMOVED_IMAGE")
   image.clearRemoveTarget()
 }
 </script>
@@ -129,8 +129,7 @@ function remove(): void {
 <style scoped>
 .action {
   display: flex;
-  width: 101px;
-  height: 101px;
+  height: 120px;
   justify-content: center;
   align-items: end;
 }

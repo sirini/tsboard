@@ -5,23 +5,16 @@
  */
 
 import { Elysia } from "elysia"
-import { getVisitStat, getStatistic } from "../../../../database/admin/dashboard/general/statistic"
+import { getStatistic } from "../../../../database/admin/dashboard/general/statistic"
 import { success } from "../../../../util/tools"
 
 export const statistic = new Elysia().get("/load/statistic", async () => {
-  const now = new Date()
-  const day = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const today = day.getTime()
-  const yesterday = new Date(day).setDate(day.getDate() - 1)
-  const daybefore = new Date(day).setDate(day.getDate() - 2)
-
-  const date = { today, yesterday, daybefore }
-  const visit = await getVisitStat(date)
-  const member = await getStatistic(date, "user", "signup")
-  const post = await getStatistic(date, "post", "submitted")
-  const reply = await getStatistic(date, "comment", "submitted")
-  const file = await getStatistic(date, "file", "timestamp")
-  const image = await getStatistic(date, "image", "timestamp")
+  const visit = await getStatistic("user_access_log", "timestamp", 7)
+  const member = await getStatistic("user", "signup", 7)
+  const post = await getStatistic("post", "submitted", 7)
+  const reply = await getStatistic("comment", "submitted", 7)
+  const file = await getStatistic("file", "timestamp", 7)
+  const image = await getStatistic("image", "timestamp", 7)
 
   return success({
     visit,
