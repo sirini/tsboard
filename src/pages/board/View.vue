@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto pa-3" :max-width="view.config.width">
+          <v-card class="mx-auto pa-3" :max-width="view.config.width" :loading="view.loading">
             <board-header :name="view.config.name" :info="view.config.info"></board-header>
             <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
 

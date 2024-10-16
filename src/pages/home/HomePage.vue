@@ -17,7 +17,7 @@
 
           <v-divider v-else></v-divider>
 
-          <v-tabs v-model="home.tab" align-tabs="center" color="blue-grey">
+          <v-tabs v-model="home.tab" align-tabs="center" :color="home.color.header">
             <v-tab :value="1">CATEGORY</v-tab>
             <v-tab :value="2">LATEST</v-tab>
           </v-tabs>

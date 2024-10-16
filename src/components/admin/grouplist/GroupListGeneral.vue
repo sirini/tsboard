@@ -39,7 +39,7 @@
         <template v-slot:prepend>
           <v-chip
             variant="outlined"
-            color="blue-grey"
+            :color="home.color.header"
             prepend-icon="mdi-identifier"
             @click="list.openChangeGroupIdDialog(group.uid, group.id)"
             >{{ group.id }}
@@ -51,7 +51,7 @@
 
         <v-chip
           variant="tonal"
-          color="blue-grey"
+          :color="home.color.header"
           class="ml-2"
           :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
         >
@@ -87,13 +87,15 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useAdminGroupListStore } from "../../../store/admin/group/list"
-import { useUtilStore } from "../../../store/util"
 import { TSBOARD } from "../../../../tsboard.config"
+import { useAdminGroupListStore } from "../../../store/admin/group/list"
+import { useHomeStore } from "../../../store/home"
+import { useUtilStore } from "../../../store/util"
 import ChangeGroupIdDialog from "./ChangeGroupIdDialog.vue"
 
 const list = useAdminGroupListStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => list.loadGroupList())
 </script>

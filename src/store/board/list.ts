@@ -32,6 +32,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
+  const loading = ref<boolean>(false)
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const isAdmin = ref<boolean>(false)
@@ -48,65 +49,70 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 게시글 목록 가져오기
   async function loadPostList(): Promise<NavigationFailure | void | undefined> {
-    id.value = route.params.id as string
-    if (id.value.length < 2) {
-      return util.snack(TEXT[home.lang].NO_BOARD_ID)
-    }
-    const response = await client.tsapi.board.list.get({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        id: id.value,
-        page: page.value,
-        pagingDirection: pagingDirection.value,
-        sinceUid: sinceUid.value,
-        option: option.value as number,
-        keyword: keyword.value,
-        userUid: auth.user.uid,
-      },
-    })
+    loading.value = true
+    try {
+      id.value = route.params.id as string
+      if (id.value.length < 2) {
+        return util.snack(TEXT[home.lang].NO_BOARD_ID)
+      }
+      const response = await client.tsapi.board.list.get({
+        $headers: {
+          authorization: auth.user.token,
+        },
+        $query: {
+          id: id.value,
+          page: page.value,
+          pagingDirection: pagingDirection.value,
+          sinceUid: sinceUid.value,
+          option: option.value as number,
+          keyword: keyword.value,
+          userUid: auth.user.uid,
+        },
+      })
 
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+      if (!response.data) {
+        return util.snack(TEXT[home.lang].NO_RESPONSE)
+      }
+      if (response.data.success === false) {
+        config.value = response.data.result.config
+        return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
+      }
+      auth.updateUserToken(response.data.result.newAccessToken)
       config.value = response.data.result.config
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
-    }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    config.value = response.data.result.config
-    isAdmin.value = response.data.result.isAdmin
+      isAdmin.value = response.data.result.isAdmin
 
-    if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
-      return util.go(TYPE_MATCH[config.value.type].name)
-    }
-
-    response.data.result.posts.map((post): void => {
-      if (response.data.result.blackList.includes(post.writer.uid) === true) {
-        post.uid = 0
-        post.writer.uid = 0
-        post.writer.name = "X"
-        post.like = 0
-        post.liked = false
-        post.title = TEXT[home.lang].BLACKLIST_POST
-        return
+      if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
+        return util.go(TYPE_MATCH[config.value.type].name)
       }
-    })
 
-    posts.value = response.data.result.posts
-    let noticeCount = 0
-    posts.value.map((post) => {
-      if (post.status === CONTENT_STATUS.NOTICE) {
-        noticeCount += 1
+      response.data.result.posts.map((post): void => {
+        if (response.data.result.blackList.includes(post.writer.uid) === true) {
+          post.uid = 0
+          post.writer.uid = 0
+          post.writer.name = "X"
+          post.like = 0
+          post.liked = false
+          post.title = TEXT[home.lang].BLACKLIST_POST
+          return
+        }
+      })
+
+      posts.value = response.data.result.posts
+      let noticeCount = 0
+      posts.value.map((post) => {
+        if (post.status === CONTENT_STATUS.NOTICE) {
+          noticeCount += 1
+        }
+      })
+      pageLength.value = Math.ceil(
+        response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
+      )
+
+      if (pagingDirection.value === PAGING_DIRECTION.PREV) {
+        rearrangePosts()
       }
-    })
-    pageLength.value = Math.ceil(
-      response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
-    )
-
-    if (pagingDirection.value === PAGING_DIRECTION.PREV) {
-      rearrangePosts()
+    } finally {
+      loading.value = false
     }
   }
 
@@ -126,20 +132,17 @@ export const useBoardListStore = defineStore("boardList", () => {
   }
 
   // 페이징이 변경될 때마다 호출
-  function watchChangingPage(nowPage: string | string[], prevPage: string | string[]): void {
+  async function watchChangingPage(now: number, prev: number): Promise<void> {
     if (isFirstInit.value === true) {
       isFirstInit.value = false
     } else {
-      const now = parseInt(nowPage as string)
-      const prev = parseInt((prevPage as string) || "1")
-
       page.value = prev < 1 ? 1 : prev
       if (now >= prev) {
         setNextPosts()
       } else {
         setPrevPosts()
       }
-      loadPostList()
+      await loadPostList()
     }
   }
 
@@ -253,6 +256,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   }
 
   return {
+    loading,
     id,
     config,
     isAdmin,

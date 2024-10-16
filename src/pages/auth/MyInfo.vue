@@ -21,7 +21,7 @@
               <v-list-item class="pa-0 text-center">
                 <v-chip
                   size="x-large"
-                  color="blue-grey"
+                  :color="home.color.header"
                   class="mt-9 mb-9"
                   :prepend-avatar="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
                 >
@@ -131,15 +131,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import { TSBOARD } from "../../../tsboard.config"
+import AlertBar from "../../components/util/AlertBar.vue"
+import { TEXT } from "../../messages/pages/auth/my-info"
+import { useHomeStore } from "../../store/home"
 import { useAuthStore } from "../../store/user/auth"
 import { useSignupStore } from "../../store/user/signup"
 import { useUtilStore } from "../../store/util"
-import { useHomeStore } from "../../store/home"
-import { TSBOARD } from "../../../tsboard.config"
-import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
-import AlertBar from "../../components/util/AlertBar.vue"
-import { TEXT } from "../../messages/pages/auth/my-info"
+import HomeHeader from "../home/HomeHeader.vue"
 
 const auth = useAuthStore()
 const signup = useSignupStore()

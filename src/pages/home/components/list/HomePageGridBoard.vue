@@ -17,18 +17,22 @@
           @click="util.go(post.type, id, post.uid)"
         >
           <template v-slot:prepend>
-            <v-chip size="small" color="blue-grey" v-if="post.useCategory">{{
+            <v-chip size="small" :color="home.color.header" v-if="post.useCategory">{{
               util.unescape(post.category)
             }}</v-chip>
 
-            <v-chip size="small" color="blue-grey" prepend-icon="mdi-heart-outline" v-else>{{
-              util.num(post.like)
-            }}</v-chip>
+            <v-chip
+              size="small"
+              :color="home.color.header"
+              prepend-icon="mdi-heart-outline"
+              v-else
+              >{{ util.num(post.like) }}</v-chip
+            >
           </template>
 
           <v-list-item-title class="pl-2 pr-2 post-title"
             >{{ util.unescape(post.title) }}
-            <v-chip size="small" color="blue-grey" class="ml-2" v-if="post.comment > 0">{{
+            <v-chip size="small" :color="home.color.header" class="ml-2" v-if="post.comment > 0">{{
               util.num(post.comment)
             }}</v-chip></v-list-item-title
           >
@@ -39,12 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { useUtilStore } from "../../../../store/util"
-import { useHomeStore } from "../../../../store/home"
-import { BoardLatest, LatestPost } from "../../../../interface/home"
+import { onMounted, ref } from "vue"
 import { BOARD_TYPE } from "../../../../../server/database/board/const"
 import { BoardType } from "../../../../interface/board"
+import { BoardLatest, LatestPost } from "../../../../interface/home"
+import { useHomeStore } from "../../../../store/home"
+import { useUtilStore } from "../../../../store/util"
 
 const util = useUtilStore()
 const home = useHomeStore()

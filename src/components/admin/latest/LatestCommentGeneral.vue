@@ -91,10 +91,14 @@
         </v-list-item-title>
 
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" variant="text" prepend-icon="mdi-heart-outline">{{
-            comment.like
-          }}</v-chip>
-          <v-chip size="small" color="blue-grey" variant="text">{{
+          <v-chip
+            size="small"
+            :color="home.color.header"
+            variant="text"
+            prepend-icon="mdi-heart-outline"
+            >{{ comment.like }}</v-chip
+          >
+          <v-chip size="small" :color="home.color.header" variant="text">{{
             util.date(comment.date)
           }}</v-chip>
         </template>
@@ -116,6 +120,7 @@
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
 import { useAdminLatestCommentStore } from "../../../store/admin/latest/comment"
+import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import ChatDialog from "../../user/ChatDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
@@ -126,6 +131,7 @@ import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => latest.loadLatestComments())
 watch(

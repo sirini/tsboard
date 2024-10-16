@@ -13,7 +13,7 @@
     <v-list-item-title class="pointer ml-2 mr-2" @click="util.go('boardView', list.id, post.uid)">
       <v-icon
         size="x-small"
-        color="blue-grey"
+        :color="home.color.header"
         class="mr-2"
         v-if="post.status === CONTENT_STATUS.NOTICE"
         >mdi-bullhorn-variant-outline</v-icon
@@ -22,18 +22,18 @@
       <span v-if="post.status === CONTENT_STATUS.SECRET">
         <v-icon
           size="x-small"
-          color="blue-grey"
+          :color="home.color.header"
           class="mr-2"
           v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
           >mdi-lock-open-outline</v-icon
         >
-        <v-icon size="small" color="blue-grey" class="mr-2" v-else>mdi-lock</v-icon>
+        <v-icon size="small" :color="home.color.header" class="mr-2" v-else>mdi-lock</v-icon>
       </span>
 
       <v-chip
         v-if="list.config.useCategory && post.status === CONTENT_STATUS.NORMAL"
         size="x-small"
-        color="blue-grey"
+        :color="home.color.header"
         class="mr-2"
         @click="list.loadPostsByCategory(post.category.uid)"
         >{{ post.category.name }}</v-chip
@@ -44,7 +44,7 @@
       <span v-if="home.isMobile === false">
         <v-chip
           size="x-small"
-          color="blue-grey"
+          :color="home.color.header"
           class="ml-2"
           prepend-icon="mdi-chat-outline"
           variant="text"
@@ -64,7 +64,7 @@
         <v-chip
           size="x-small"
           prepend-icon="mdi-heart-outline"
-          color="blue-grey"
+          :color="home.color.header"
           variant="text"
           v-else
           >{{ util.num(post.like) }}</v-chip

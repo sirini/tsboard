@@ -59,7 +59,7 @@
         <v-btn
           v-if="editor.postUid < 1"
           variant="flat"
-          color="blue-grey"
+          :color="home.color.header"
           @click="editor.write"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
@@ -68,7 +68,7 @@
         <v-btn
           v-else
           variant="flat"
-          color="blue-grey"
+          :color="home.color.header"
           @click="editor.modify"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"

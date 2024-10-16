@@ -16,7 +16,7 @@
           <v-chip
             size="small"
             label
-            color="blue-grey"
+            :color="home.color.header"
             prepend-icon="mdi-upload"
             class="mt-1 mr-1 mb-1"
           >
@@ -29,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
+import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
-import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()

@@ -10,6 +10,10 @@ export const env = `#
 # TSBOARD 서버쪽 설정 파일
 #
 
+# GOAPI 백엔드용
+GOAPI_VERSION=1.0.0
+GOAPI_PORT=3003
+
 # 데이터베이스 세팅 (각 서버 설정에 맞게 변경 필요)
 DB_HOST=#dbhost#
 DB_USER=#dbuser#
@@ -112,32 +116,4 @@ ${chalk.bold("이제 거의 다 왔습니다.")}\n
 ${chalk.bgBlack.bold("https://github.com/sirini/tsboard")}
 
 혹은, 도움이 필요할땐 언제든지 ${chalk.yellow.bold("tsboard.dev")} 에 방문해 주세요!
-
----------
-Thanks to
----------
-
-TSBOARD exists thanks to the wonderful results created by various open source communities. 
-We extend our unreserved praise to all the open source communities 
-that have contributed to the projects listed below.
-
-MySQL(MariaDB)
-Node.js
-Bun
-ElysiaJS
-mysql2
-Sharp
-Nodemailer
-Vite
-Vue
-Vuetify
-Vue Router
-Pinia
-Tiptap
-Crypto-js
-Highlight.js
-Sanitize-html
-nanoid
-Chalk
-...and TypeScript!
 `

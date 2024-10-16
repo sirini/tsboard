@@ -23,7 +23,7 @@
         <v-list-item class="pa-0">
           <v-alert
             variant="tonal"
-            color="blue-grey"
+            :color="home.color.header"
             icon="mdi-information"
             class="text-caption"
             :text="TEXT[home.lang].BLACKLIST_INFO"
@@ -67,11 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import { useReportStore } from "../../store/user/report"
-import { useHomeStore } from "../../store/home"
 import { TSBOARD } from "../../../tsboard.config"
-import AlertBar from "../util/AlertBar.vue"
 import { TEXT } from "../../messages/components/board/user/send-report-dialog"
+import { useHomeStore } from "../../store/home"
+import { useReportStore } from "../../store/user/report"
+import AlertBar from "../util/AlertBar.vue"
 
 const report = useReportStore()
 const home = useHomeStore()

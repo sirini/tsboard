@@ -15,7 +15,7 @@
             @click="util.go(post.board.type, post.board.id, post.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" color="blue-grey" label>{{
+              <v-chip size="x-small" :color="home.color.header" label>{{
                 util.unescape(post.board.name)
               }}</v-chip>
             </template>
@@ -25,14 +25,14 @@
               <v-chip
                 size="x-small"
                 variant="text"
-                color="blue-grey"
+                :color="home.color.header"
                 :prepend-icon="post.reply > 0 ? 'mdi-comment' : 'mdi-comment-outline'"
                 >{{ post.reply }}</v-chip
               >
               <v-chip
                 size="x-small"
                 variant="text"
-                color="blue-grey"
+                :color="home.color.header"
                 :prepend-icon="post.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ post.like }}</v-chip
               >
@@ -52,7 +52,7 @@
             @click="util.go(comment.board.type, comment.board.id, comment.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" color="blue-grey" label>{{
+              <v-chip size="x-small" :color="home.color.header" label>{{
                 util.unescape(comment.board.name)
               }}</v-chip>
             </template>
@@ -62,7 +62,7 @@
               <v-chip
                 size="x-small"
                 variant="text"
-                color="blue-grey"
+                :color="home.color.header"
                 :prepend-icon="comment.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ comment.like }}</v-chip
               >
@@ -82,9 +82,11 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useBoardViewStore } from "../../../store/board/view"
+import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 
 const view = useBoardViewStore()
 const util = useUtilStore()
+const home = useHomeStore()
 const tab = ref<number>(0)
 </script>

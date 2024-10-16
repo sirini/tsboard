@@ -5,7 +5,7 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto pa-3" :max-width="list.config.width">
+          <v-card class="mx-auto pa-3" :max-width="list.config.width" :loading="list.loading">
             <board-header :name="list.config.name" :info="list.config.info"></board-header>
             <v-card-text class="pa-0">
               <v-list class="pa-0">
@@ -60,7 +60,7 @@ watch(
 watch(
   () => route.params?.page,
   (nowPage, prevPage) => {
-    list.watchChangingPage(nowPage, prevPage)
+    list.watchChangingPage(parseInt(nowPage as string), parseInt(prevPage as string))
   },
 )
 </script>

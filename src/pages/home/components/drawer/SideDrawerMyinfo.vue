@@ -13,7 +13,7 @@
     </v-list-item>
 
     <v-list-item class="text-center mt-2">
-      <v-chip color="blue-grey" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
+      <v-chip :color="home.color.header" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
         {{ auth.user.level }}
         <v-divider vertical class="ml-2 mr-2"></v-divider>
         {{ auth.user.point }}
@@ -31,11 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "../../../../store/user/auth"
-import { useUtilStore } from "../../../../store/util"
-import { useHomeStore } from "../../../../store/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import { TEXT } from "../../../../messages/pages/home/components/drawer/side-drawer-myinfo"
+import { useHomeStore } from "../../../../store/home"
+import { useAuthStore } from "../../../../store/user/auth"
+import { useUtilStore } from "../../../../store/util"
 
 const auth = useAuthStore()
 const util = useUtilStore()

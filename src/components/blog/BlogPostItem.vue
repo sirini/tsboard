@@ -10,7 +10,7 @@
     <v-list class="pa-0">
       <v-list-item class="pa-2"
         ><v-list-item-title
-          ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="useCategory">{{
+          ><v-chip size="small" class="mr-2" label :color="home.color.header" v-if="useCategory">{{
             util.unescape(post.category.name)
           }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
@@ -69,12 +69,14 @@
 </template>
 
 <script setup lang="ts">
-import { useUtilStore } from "../../store/util"
-import { BoardType, Post } from "../../interface/board"
+import { TSBOARD } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
-import { TSBOARD } from "../../../tsboard.config";
+import { BoardType, Post } from "../../interface/board"
+import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 
 const util = useUtilStore()
+const home = useHomeStore()
 const props = defineProps<{ post: Post; type: BoardType; useCategory: boolean; id: string }>()
 </script>
 

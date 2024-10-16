@@ -10,9 +10,13 @@
     <v-list class="pa-0">
       <v-list-item class="pa-2"
         ><v-list-item-title
-          ><v-chip size="small" class="mr-2" label color="blue-grey" v-if="post.useCategory">{{
-            util.unescape(post.category)
-          }}</v-chip
+          ><v-chip
+            size="small"
+            class="mr-2"
+            label
+            :color="home.color.header"
+            v-if="post.useCategory"
+            >{{ util.unescape(post.category) }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
         ></v-list-item
       >
@@ -64,7 +68,7 @@
       <v-chip
         :prepend-avatar="TSBOARD.PREFIX + (post.writer.profile || '/no-profile.svg')"
         size="small"
-        color="blue-grey"
+        :color="home.color.header"
         class="mr-2"
         label
         >{{ util.unescape(post.writer.name) }}</v-chip
@@ -74,11 +78,11 @@
 </template>
 
 <script setup lang="ts">
-import { useHomeStore } from "../../../../store/home"
-import { useUtilStore } from "../../../../store/util"
-import { PostItem } from "../../../../interface/home"
 import { TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"
+import { PostItem } from "../../../../interface/home"
+import { useHomeStore } from "../../../../store/home"
+import { useUtilStore } from "../../../../store/util"
 
 const home = useHomeStore()
 const util = useUtilStore()

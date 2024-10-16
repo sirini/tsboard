@@ -71,7 +71,7 @@
               TSBOARD.PREFIX +
               (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
             "
-            color="blue-grey"
+            :color="home.color.header"
             class="mt-1"
             size="small"
             >{{ list.from.name }}</v-chip
@@ -106,16 +106,18 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted } from "vue"
+import { onMounted, watch } from "vue"
+import { TSBOARD } from "../../../../tsboard.config"
 import { useAdminReportStore } from "../../../store/admin/report/common"
+import { useHomeStore } from "../../../store/home"
 import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
-import { TSBOARD } from "../../../../tsboard.config"
 import Paging from "../common/AdminBottomPaging.vue"
 
 const report = useAdminReportStore()
 const manage = useManageUserStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => report.loadReports())
 watch(

@@ -4,7 +4,7 @@
       label
       :prepend-icon="ICONS[board.type]"
       size="large"
-      color="blue-grey"
+      :color="home.color.header"
       class="mt-6 mb-3 mr-3"
       @click="util.go(board.type, board.id)"
     >
