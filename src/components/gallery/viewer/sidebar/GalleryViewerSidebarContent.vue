@@ -30,7 +30,7 @@
 
       <v-chip
         size="x-small"
-        color="blue-grey"
+        :color="home.color.header"
         class="ml-2"
         :append-icon="showExif ? 'mdi-chevron-up' : 'mdi-chevron-down'"
         @click="showExif = !showExif"
@@ -49,7 +49,7 @@
   </v-list-item>
 
   <v-list-item class="pt-2 pb-3" v-if="viewer.images[viewer.position]?.description">
-    <v-card elevation="0" variant="tonal" color="blue-grey">
+    <v-card elevation="0" variant="tonal" :color="home.color.header">
       <v-card-text class="text-caption">{{
         viewer.images[viewer.position]?.description
       }}</v-card-text></v-card

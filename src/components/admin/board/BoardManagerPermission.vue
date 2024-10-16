@@ -34,7 +34,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              color="blue-grey"
+              :color="home.color.header"
               :prepend-avatar="
                 TSBOARD.PREFIX + (permission.board.admin.profile || '/no-profile.svg')
               "
@@ -96,15 +96,17 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { useAdminStore } from "../../../store/admin/common"
-import { useAuthStore } from "../../../store/user/auth"
-import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
-import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
-import { ACTION_TYPE } from "../../../interface/admin"
 import { TSBOARD } from "../../../../tsboard.config"
+import { ACTION_TYPE } from "../../../interface/admin"
+import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
+import { useAdminStore } from "../../../store/admin/common"
+import { useHomeStore } from "../../../store/home"
+import { useAuthStore } from "../../../store/user/auth"
+import BoardManagerPermissionItem from "./BoardManagerPermissionItem.vue"
 
 const admin = useAdminStore()
 const auth = useAuthStore()
+const home = useHomeStore()
 const permission = useAdminBoardPermissionStore()
 onMounted(() => {
   if (auth.user.uid !== 1) {

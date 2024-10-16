@@ -7,11 +7,16 @@
       </v-menu>
       <v-tooltip activator="parent">{{ TEXT[home.lang].SEARCH }}</v-tooltip>
     </v-btn>
-    <v-btn icon :disabled="list.page < 2" @click="list.movePrevPage" size="small">
+    <v-btn icon :disabled="list.page < 2 || list.loading" @click="list.movePrevPage" size="small">
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].PREV }}</v-tooltip>
     </v-btn>
-    <v-btn icon :disabled="list.page >= list.pageLength" @click="list.moveNextPage" size="small">
+    <v-btn
+      icon
+      :disabled="list.page >= list.pageLength || list.loading"
+      @click="list.moveNextPage"
+      size="small"
+    >
       <v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].NEXT }}</v-tooltip>
     </v-btn>
@@ -30,7 +35,7 @@
       prepend-icon="mdi-pencil"
       @click="util.go(util.routerName(list.config.type, ACTION_TARGET.WRITE), list.id)"
       :disabled="auth.user.uid < 1"
-      color="blue-grey"
+      :color="home.color.header"
       variant="flat"
       >{{ TEXT[home.lang].WRITE }}</v-btn
     >

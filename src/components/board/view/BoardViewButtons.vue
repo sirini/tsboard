@@ -49,6 +49,12 @@
               >
                 {{ TEXT[home.lang].MOVE }}
               </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-clipboard-text-multiple-outline"
+                :disabled="auth.user.uid < 1"
+                @click="view.copyToClipboard"
+                >{{ TEXT[home.lang].COPY_TO_CLIPBOARD }}</v-list-item
+              >
             </v-list>
           </v-menu>
         </v-btn>

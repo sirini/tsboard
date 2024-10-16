@@ -12,7 +12,7 @@
     <v-btn
       prepend-icon="mdi-pencil"
       variant="flat"
-      color="blue-grey"
+      :color="home.color.header"
       @click="util.go(util.routerName(type, ACTION_TARGET.WRITE), view.id)"
       :disabled="auth.user.uid < 1"
       >{{ TEXT[home.lang].WRITE }}</v-btn

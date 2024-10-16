@@ -2,7 +2,7 @@
   <v-card max-width="500">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="list.option" size="small" group color="blue-grey">
+        <v-btn-toggle v-model="list.option" size="small" group :color="home.color.header">
           <v-btn :value="SEARCH_OPTION.TITLE">{{ TEXT[home.lang].TITLE }}</v-btn>
           <v-btn :value="SEARCH_OPTION.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH_OPTION.WRITER">{{ TEXT[home.lang].WRITER }}</v-btn>
@@ -40,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardListStore } from "../../../store/board/list"
-import { useHomeStore } from "../../../store/home"
 import { SEARCH_OPTION } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/pages/board/list"
+import { useBoardListStore } from "../../../store/board/list"
+import { useHomeStore } from "../../../store/home"
 
 const list = useBoardListStore()
 const home = useHomeStore()

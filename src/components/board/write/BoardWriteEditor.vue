@@ -1,6 +1,6 @@
 <template>
   <div v-if="editor">
-    <v-card elevation="0">
+    <v-card elevation="0" v-show="writeEditor.isEditorMode">
       <v-toolbar
         density="compact"
         id="tsboardEditorToolbar"
@@ -24,6 +24,44 @@
         :editor="editor"
         :class="type === BOARD_TYPE.BLOG ? 'dark' : 'light'"
       ></editor-content>
+    </v-card>
+
+    <v-card elevation="0" v-show="writeEditor.isEditorMode == false">
+      <v-textarea
+        v-model="writeEditor.contentHTML"
+        rows="8"
+        auto-grow
+        variant="outlined"
+        :placeholder="TEXT[home.lang].HTML"
+      ></v-textarea>
+    </v-card>
+
+    <v-card elevation="0" rounded="0">
+      <v-btn
+        prepend-icon="mdi-note-text-outline"
+        :color="home.color.header"
+        variant="text"
+        size="small"
+        @click="writeEditor.isEditorMode = true"
+        >editor</v-btn
+      >
+      <v-btn
+        prepend-icon="mdi-code-block-tags"
+        :color="home.color.header"
+        variant="text"
+        size="small"
+        @click="writeEditor.isEditorMode = false"
+        >html</v-btn
+      >
+      <v-btn
+        prepend-icon="mdi-check"
+        :color="home.color.header"
+        v-show="writeEditor.isEditorMode === false"
+        class="ml-2"
+        size="small"
+        @click="writeEditor.applyHTMLContent(editor)"
+        >apply</v-btn
+      >
     </v-card>
 
     <board-write-editor-add-image-from-d-b-dialog
@@ -89,6 +127,7 @@ import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
 import { BoardType } from "../../../interface/board"
 import { TableOption, VideoURL } from "../../../interface/editor"
+import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useHomeStore } from "../../../store/home"
@@ -184,7 +223,7 @@ const editor = useEditor({
     Gapcursor,
     History,
     Highlight,
-    Image,
+    Image.configure({ inline: true }),
     Youtube,
     Color,
     TextStyle,

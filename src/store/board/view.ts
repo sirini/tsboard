@@ -38,6 +38,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
+  const loading = ref<boolean>(false)
   const confirmRemovePostDialog = ref<boolean>(false)
   const previewDialog = ref<boolean>(false)
   const movePostDialog = ref<boolean>(false)
@@ -61,64 +62,69 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const writerComments = ref<WriterLatestComment[]>([])
 
   async function loadPostView(): Promise<NavigationFailure | void | undefined> {
-    id.value = route.params.id as string
-    postUid.value = parseInt(route.params.no as string)
+    loading.value = true
+    try {
+      id.value = route.params.id as string
+      postUid.value = parseInt(route.params.no as string)
 
-    if (id.value.length < 2) {
-      return util.snack(TEXT[home.lang].NO_BOARD_ID)
-    }
+      if (id.value.length < 2) {
+        return util.snack(TEXT[home.lang].NO_BOARD_ID)
+      }
 
-    let needUpdateHit = 0
-    if (isAlreadyRead(postUid.value) === false) {
-      markAsRead(postUid.value)
-      needUpdateHit = 1
-    }
+      let needUpdateHit = 0
+      if (isAlreadyRead(postUid.value) === false) {
+        markAsRead(postUid.value)
+        needUpdateHit = 1
+      }
 
-    const response = await client.tsapi.board.view.get({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        id: id.value,
-        postUid: postUid.value,
-        needUpdateHit,
-        userUid: auth.user.uid,
-        latestLimit,
-      },
-    })
+      const response = await client.tsapi.board.view.get({
+        $headers: {
+          authorization: auth.user.token,
+        },
+        $query: {
+          id: id.value,
+          postUid: postUid.value,
+          needUpdateHit,
+          userUid: auth.user.uid,
+          latestLimit,
+        },
+      })
 
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+      if (!response.data) {
+        return util.snack(TEXT[home.lang].NO_RESPONSE)
+      }
+      if (response.data.success === false) {
+        config.value = response.data.result.config
+        post.value = INIT_POST_VIEW
+        post.value.title = TEXT[home.lang].FAILED_TITLE
+        post.value.content = TEXT[home.lang].FAILED_CONTENT
+        files.value = []
+        images.value = []
+        prevPostUid.value = 0
+        nextPostUid.value = 0
+        return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
+      }
+      auth.updateUserToken(response.data.result.newAccessToken)
       config.value = response.data.result.config
-      post.value = INIT_POST_VIEW
-      post.value.title = TEXT[home.lang].FAILED_TITLE
-      post.value.content = TEXT[home.lang].FAILED_CONTENT
-      files.value = []
-      images.value = []
-      prevPostUid.value = 0
-      nextPostUid.value = 0
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
-    }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    config.value = response.data.result.config
 
-    if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-      return util.go(TYPE_MATCH[config.value.type].name)
-    }
-    post.value = response.data.result.post
-    tags.value = response.data.result.tags
-    files.value = response.data.result.files
-    images.value = response.data.result.images
-    prevPostUid.value = response.data.result.prevPostUid
-    nextPostUid.value = response.data.result.nextPostUid
-    writerPosts.value = response.data.result.writerPosts
-    writerComments.value = response.data.result.writerComments
+      if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
+        return util.go(TYPE_MATCH[config.value.type].name)
+      }
+      post.value = response.data.result.post
+      tags.value = response.data.result.tags
+      files.value = response.data.result.files
+      images.value = response.data.result.images
+      prevPostUid.value = response.data.result.prevPostUid
+      nextPostUid.value = response.data.result.nextPostUid
+      writerPosts.value = response.data.result.writerPosts
+      writerComments.value = response.data.result.writerComments
 
-    auth.user.admin =
-      response.data.result.config.admin.group === auth.user.uid ||
-      response.data.result.config.admin.board === auth.user.uid
+      auth.user.admin =
+        response.data.result.config.admin.group === auth.user.uid ||
+        response.data.result.config.admin.board === auth.user.uid
+    } finally {
+      loading.value = false
+    }
   }
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
@@ -341,7 +347,16 @@ export const useBoardViewStore = defineStore("boardView", () => {
     })
   }
 
+  // 본문 내용을 클립보드에 복사하기
+  function copyToClipboard(): void {
+    navigator.clipboard
+      .writeText(util.unescape(post.value.content))
+      .then(() => util.snack(TEXT[home.lang].COPIED_CLIPBOARD))
+      .catch(() => util.snack(TEXT[home.lang].FAILED_CLIPBOARD))
+  }
+
   return {
+    loading,
     confirmRemovePostDialog,
     previewDialog,
     movePostDialog,
@@ -380,5 +395,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
     scrollToTop,
     scrollToBottom,
     prepareViewPost,
+    copyToClipboard,
   }
 })

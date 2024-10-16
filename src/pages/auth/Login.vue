@@ -42,7 +42,7 @@
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-2" variant="tonal" color="blue-grey">
+              <v-card class="mt-2 mb-2" variant="tonal" :color="home.color.header">
                 <v-card-text class="text-medium-emphasis text-caption">
                   {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
@@ -124,16 +124,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
-import { useAuthStore } from "../../store/user/auth"
-import { useUtilStore } from "../../store/util"
-import { useHomeStore } from "../../store/home"
-import HomeHeader from "../home/HomeHeader.vue"
-import HomeFooter from "../home/HomeFooter.vue"
+import { OAUTH, TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
-import { OAUTH, TSBOARD } from "../../../tsboard.config"
+import { useHomeStore } from "../../store/home"
+import { useAuthStore } from "../../store/user/auth"
+import { useUtilStore } from "../../store/util"
+import HomeFooter from "../home/HomeFooter.vue"
+import HomeHeader from "../home/HomeHeader.vue"
 
 const route = useRoute()
 const auth = useAuthStore()

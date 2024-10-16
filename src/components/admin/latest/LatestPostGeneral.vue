@@ -90,13 +90,15 @@
         <template v-slot:append>
           <v-chip
             size="small"
-            color="blue-grey"
+            :color="home.color.header"
             prepend-icon="mdi-comment-outline"
             class="ml-2 mr-1"
             variant="text"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" color="blue-grey" variant="text">{{ util.date(post.date) }}</v-chip>
+          <v-chip size="small" :color="home.color.header" variant="text">{{
+            util.date(post.date)
+          }}</v-chip>
         </template>
         <v-tooltip activator="parent">클릭하시면 게시글을 보러 갑니다.</v-tooltip>
       </v-list-item>
@@ -118,6 +120,7 @@
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
 import { useAdminLatestPostStore } from "../../../store/admin/latest/post"
+import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import ChatDialog from "../../user/ChatDialog.vue"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
@@ -128,6 +131,7 @@ import Paging from "../common/AdminBottomPaging.vue"
 
 const latest = useAdminLatestPostStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => latest.loadLatestPosts())
 watch(

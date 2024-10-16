@@ -22,7 +22,7 @@
       @click="util.go('galleryWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
       variant="flat"
-      color="blue-grey"
+      :color="home.color.header"
       >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >
   </v-card-actions>

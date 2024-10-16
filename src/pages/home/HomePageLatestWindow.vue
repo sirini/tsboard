@@ -1,5 +1,11 @@
 <template>
-  <v-chip label prepend-icon="mdi-update" size="large" color="blue-grey" class="mt-6 mb-3 mr-3">
+  <v-chip
+    label
+    prepend-icon="mdi-update"
+    size="large"
+    :color="home.color.header"
+    class="mt-6 mb-3 mr-3"
+  >
     <strong>{{ home.keyword.length > 0 ? `Search for: ${home.keyword}` : "Latest posts" }}</strong>
   </v-chip>
   <v-row>

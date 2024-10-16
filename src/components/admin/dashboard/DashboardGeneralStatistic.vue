@@ -4,7 +4,10 @@
       <v-card class="mt-3 title">
         <template v-slot:title>방문자수</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-account-arrow-right-outline"
+          <v-chip
+            size="small"
+            :color="home.color.header"
+            prepend-icon="mdi-account-arrow-right-outline"
             >오늘 {{ dashboard.visit.values.at(-1) || 0 }}명</v-chip
           >
         </template>
@@ -41,7 +44,10 @@
       <v-card class="mt-3 title">
         <template v-slot:title>회원 수</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-account-multiple-plus-outline"
+          <v-chip
+            size="small"
+            :color="home.color.header"
+            prepend-icon="mdi-account-multiple-plus-outline"
             >오늘 {{ dashboard.member.values.at(-1) || 0 }}명</v-chip
           >
         </template>
@@ -80,7 +86,7 @@
       <v-card class="mt-3 title">
         <template v-slot:title>게시글</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-note-plus-outline"
+          <v-chip size="small" :color="home.color.header" prepend-icon="mdi-note-plus-outline"
             >오늘 {{ dashboard.post.values.at(-1) || 0 }}개</v-chip
           >
         </template>
@@ -115,7 +121,7 @@
       <v-card class="mt-3 title">
         <template v-slot:title>댓글</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-chat-plus-outline"
+          <v-chip size="small" :color="home.color.header" prepend-icon="mdi-chat-plus-outline"
             >오늘 {{ dashboard.reply.values.at(-1) || 0 }}개</v-chip
           >
         </template>
@@ -148,7 +154,7 @@
       <v-card class="mt-3 title">
         <template v-slot:title>첨부파일</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-file-plus-outline"
+          <v-chip size="small" :color="home.color.header" prepend-icon="mdi-file-plus-outline"
             >오늘 {{ dashboard.file.values.at(-1) || 0 }}개</v-chip
           >
         </template>
@@ -181,7 +187,7 @@
       <v-card class="mt-3 title">
         <template v-slot:title>본문 내 이미지</template>
         <template v-slot:append>
-          <v-chip size="small" color="blue-grey" prepend-icon="mdi-image-plus-outline"
+          <v-chip size="small" :color="home.color.header" prepend-icon="mdi-image-plus-outline"
             >오늘 {{ dashboard.image.values.at(-1) || 0 }}개</v-chip
           >
         </template>
@@ -214,11 +220,12 @@
 
 <script setup lang="ts">
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
+import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 
 const dashboard = useAdminDashboardStore()
 const util = useUtilStore()
-const today = dashboard.today()
+const home = useHomeStore()
 </script>
 
 <style scoped>

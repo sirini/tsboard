@@ -34,7 +34,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              color="blue-grey"
+              :color="home.color.header"
               :prepend-avatar="
                 TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')
               "
@@ -89,7 +89,7 @@
           <v-chip
             prepend-icon="mdi-identifier"
             variant="outlined"
-            color="blue-grey"
+            :color="home.color.header"
             @click="util.go(board.type, board.id)"
           >
             {{ board.id }}
@@ -99,7 +99,7 @@
           </v-chip>
         </template>
 
-        <v-chip variant="tonal" color="blue-grey" class="ml-2"
+        <v-chip variant="tonal" :color="home.color.header" class="ml-2"
           ><strong>{{ util.unescape(board.name) }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           {{ util.unescape(board.info) }}
@@ -135,17 +135,19 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { TSBOARD } from "../../../../tsboard.config"
 import { useAdminStore } from "../../../store/admin/common"
-import { useAuthStore } from "../../../store/user/auth"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
+import { useHomeStore } from "../../../store/home"
+import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import ConfirmRemoveBoardDialog from "./ConfirmRemoveBoardDialog.vue"
-import { TSBOARD } from "../../../../tsboard.config"
 
 const admin = useAdminStore()
 const auth = useAuthStore()
 const general = useAdminGroupGeneralStore()
 const util = useUtilStore()
+const home = useHomeStore()
 
 onMounted(() => {
   if (auth.user.uid !== 1) {

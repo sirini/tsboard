@@ -5,6 +5,7 @@
  */
 
 import { edenTreaty } from "@elysiajs/eden"
+import { Editor } from "@tiptap/vue-3"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
@@ -28,6 +29,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const addVideoURLDialog = ref<boolean>(false)
   const addTableDialog = ref<boolean>(false)
   const loading = ref<boolean>(false)
+  const isEditorMode = ref<boolean>(true)
   const id = ref<string>("")
   const postUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
@@ -41,6 +43,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const title = ref<string>("")
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
+  const contentHTML = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
   const suggestionTags = ref<CountPair[]>([])
@@ -393,6 +396,13 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     util.success(TEXT[home.lang].REMOVED_FILE)
   }
 
+  // HTML 태그 직접 적용해서 에디터에 넣기
+  function applyHTMLContent(editor: Editor): void {
+    editor.chain().focus().insertContent(contentHTML.value).run()
+    contentHTML.value = ""
+    isEditorMode.value = true
+  }
+
   return {
     id,
     config,
@@ -407,10 +417,12 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     addVideoURLDialog,
     addTableDialog,
     loading,
+    isEditorMode,
     files,
     attachedFiles,
     title,
     content,
+    contentHTML,
     tag,
     tags,
     textRule,
@@ -431,5 +443,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     write,
     modify,
     removeAttachedFile,
+    applyHTMLContent,
   }
 })

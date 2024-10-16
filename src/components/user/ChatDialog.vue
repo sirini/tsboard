@@ -35,7 +35,7 @@
                 :max-width="Math.floor(home.dialogWidth * 0.5)"
                 variant="tonal"
                 rounded="xl"
-                color="blue-grey"
+                :color="home.color.header"
                 class="ml-3"
               >
                 <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
@@ -88,13 +88,13 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
+import { TSBOARD } from "../../../tsboard.config"
+import { TEXT } from "../../messages/components/board/user/chat-dialog"
+import { useHomeStore } from "../../store/home"
 import { useAuthStore } from "../../store/user/auth"
 import { useChatStore } from "../../store/user/chat"
-import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import { TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../util/AlertBar.vue"
-import { TEXT } from "../../messages/components/board/user/chat-dialog"
 
 const auth = useAuthStore()
 const chat = useChatStore()

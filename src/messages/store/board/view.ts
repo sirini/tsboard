@@ -19,6 +19,8 @@ export const TEXT = [
     FAILED_LOAD_BOARD_LISTS: "이 게시글을 옮길 대상 게시판 목록을 불러오지 못했습니다.",
     FAILED_MOVE_POST: "이 게시글에 대한 옮기기/복사하기 작업을 하지 못했습니다.",
     MOVE_DONE: "이 게시글을 성공적으로 옮겼습니다.",
+    COPIED_CLIPBOARD: "본문 내용을 성공적으로 클립보드에 복사하였습니다.",
+    FAILED_CLIPBOARD: "본문 내용을 클립보드에 복사하지 못했습니다.",
   },
   /* LANG.EN */ {
     NO_BOARD_ID: "The board ID is incorrect. This is an invalid access.",
@@ -36,6 +38,8 @@ export const TEXT = [
     FAILED_LOAD_BOARD_LISTS: "Failed to load the list of boards to move this post to.",
     FAILED_MOVE_POST: "Failed to move/copy this post.",
     MOVE_DONE: "You have successfully moved this post.",
+    COPIED_CLIPBOARD: "The content has been successfully copied to the clipboard.",
+    FAILED_CLIPBOARD: "Failed to copy the content to the clipboard.",
   },
   /* LANG.CN */ {
     NO_BOARD_ID: "看板ID不正确。这是一次无效的访问。",
@@ -50,6 +54,8 @@ export const TEXT = [
     FAILED_LOAD_BOARD_LISTS: "无法加载要移动此帖子到的目标板块列表。",
     FAILED_MOVE_POST: "未能完成此帖子的移动/复制操作。",
     MOVE_DONE: "已成功移动此帖子。",
+    COPIED_CLIPBOARD: "已成功将内容复制到剪贴板。",
+    FAILED_CLIPBOARD: "未能将内容复制到剪贴板。",
   },
 ]
 Object.freeze(TEXT)
