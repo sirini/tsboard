@@ -29,7 +29,7 @@ export const BOARD_CONFIG: BoardConfig = {
   name: "",
   info: "",
   rowCount: 0,
-  width: 0,
+  width: 1000,
   useCategory: false,
   category: [{ uid: 0, name: "" }],
   level: { list: 0, view: 0, write: 0, comment: 0, download: 0 },
