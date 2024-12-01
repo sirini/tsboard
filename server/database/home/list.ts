@@ -14,7 +14,8 @@ import {
   LatestPostParams,
   PostItem,
 } from "../../../src/interface/home"
-import { table, select } from "../common"
+import { getTotalCommentCount } from "../board/comment"
+import { BOARD_TYPE, CONTENT_STATUS, SEARCH_OPTION } from "../board/const"
 import {
   getCategoryInfo,
   getHashtagUids,
@@ -22,8 +23,7 @@ import {
   getUserBasic,
   isPostViewerLiked,
 } from "../board/list"
-import { BOARD_TYPE, CONTENT_STATUS, SEARCH_OPTION } from "../board/const"
-import { getTotalCommentCount } from "../board/comment"
+import { select, table } from "../common"
 
 // 가장 최신글의 고유 번호 가져오기
 export async function getMaxUid(): Promise<number> {
@@ -107,9 +107,9 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
 
   if (param.keyword.length < 1) {
     posts = await select(
-      `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
-    WHERE status = ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
-      [CONTENT_STATUS.NORMAL.toString(), param.sinceUid.toString(), param.bunch.toString()],
+      `SELECT uid, board_uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+      FROM ${table}post WHERE status != ? AND uid < ? ORDER BY uid DESC LIMIT ?`,
+      [CONTENT_STATUS.REMOVED.toString(), param.sinceUid.toString(), param.bunch.toString()],
     )
   } else {
     posts = await getSearchedPosts(param)
@@ -146,7 +146,9 @@ export async function getLatestPost(param: LatestPostParams): Promise<PostItem[]
       cover,
       writer,
       submitted: post.submitted,
+      modified: post.modified,
       hit: post.hit,
+      status: post.status,
       like: likeCount,
       liked,
       comment: commentCount,
@@ -186,9 +188,9 @@ export async function getBoardLatestPosts(
   result.useCategory = board.use_category > 0 ? true : false
 
   const posts = await select(
-    `SELECT uid, user_uid, category_uid, title, content, submitted, hit FROM ${table}post 
-  WHERE board_uid = ? AND status = ? ORDER BY uid DESC LIMIT ?`,
-    [board.uid, CONTENT_STATUS.NORMAL.toString(), limit.toString()],
+    `SELECT uid, user_uid, category_uid, title, content, submitted, modified, hit, status 
+    FROM ${table}post WHERE board_uid = ? AND status != ? ORDER BY uid DESC LIMIT ?`,
+    [board.uid, CONTENT_STATUS.REMOVED.toString(), limit.toString()],
   )
 
   for (const post of posts) {
@@ -211,7 +213,9 @@ export async function getBoardLatestPosts(
       cover,
       writer,
       submitted: post.submitted,
+      modified: post.modified,
       hit: post.hit,
+      status: post.status,
       like: likeCount,
       liked,
       comment: commentCount,
@@ -237,9 +241,9 @@ export async function getBoardLatests(id: string, limit: number): Promise<BoardL
 
   result.name = board.name
   const posts = await select(
-    `SELECT uid, user_uid, category_uid, title, submitted, hit FROM ${table}post 
-  WHERE board_uid = ? AND status = ? ORDER BY uid DESC LIMIT ?`,
-    [board.uid, CONTENT_STATUS.NORMAL.toString(), limit.toString()],
+    `SELECT uid, user_uid, category_uid, title, submitted, modified, hit, status FROM ${table}post 
+  WHERE board_uid = ? AND status != ? ORDER BY uid DESC LIMIT ?`,
+    [board.uid, CONTENT_STATUS.REMOVED.toString(), limit.toString()],
   )
   for (const post of posts) {
     const writer = await getUserBasic(post.user_uid)
@@ -255,7 +259,9 @@ export async function getBoardLatests(id: string, limit: number): Promise<BoardL
       title: post.title,
       writer,
       submitted: post.submitted,
+      modified: post.modified,
       hit: post.hit,
+      status: post.status,
       like: likeCount,
       comment: commentCount,
     })

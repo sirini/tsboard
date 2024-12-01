@@ -1,12 +1,11 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
-import { ChatHistory, ChatItem } from "../../../src/interface/user"
 import { checkUserVerification } from "../../database/auth/authorization"
 import { havePermission } from "../../database/board/common"
-import { getChatHistory, getChatList, isBannedByOther, saveNewChat } from "../../database/user/chat"
-import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
+import { isBannedByOther, saveNewChat } from "../../database/user/chat"
+import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const chatRouter = new Elysia()
+export const saveRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -31,45 +30,8 @@ export const chatRouter = new Elysia()
       accessUserUid,
     }
   })
-  .get(
-    "/load/chat/list",
-    async ({ query: { limit }, accessUserUid }) => {
-      let response: ChatItem[] = []
-      if (accessUserUid < 1) {
-        return fail(`Please log in.`, response)
-      }
-      const list = await getChatList(accessUserUid, limit)
-      return success(list)
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        limit: t.Numeric(),
-        userUid: t.Numeric(),
-      }),
-    },
-  )
-  .get(
-    "/load/chat/history",
-    async ({ query: { userUid, limit }, accessUserUid }) => {
-      let response: ChatHistory[] = []
-      if (userUid < 1 || accessUserUid < 1) {
-        return fail(`Invalid parameters.`, response)
-      }
-
-      response = await getChatHistory(accessUserUid, userUid, limit)
-      return success(response)
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        userUid: t.Numeric(),
-        limit: t.Numeric(),
-      }),
-    },
-  )
   .post(
-    "/save/chat",
+    "/save",
     async ({ body: { targetUserUid, message }, accessUserUid }) => {
       let response = 0
 

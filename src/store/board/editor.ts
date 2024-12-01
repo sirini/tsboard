@@ -122,7 +122,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await client.tsapi.board.load.post.get({
+    const response = await client.tsapi.editor.load.post.get({
       $headers: {
         authorization: auth.user.token,
       },

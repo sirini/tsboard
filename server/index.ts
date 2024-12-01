@@ -5,6 +5,7 @@ import { admin } from "./routers/admin"
 import { auth } from "./routers/auth"
 import { blogRssRouter } from "./routers/blog"
 import { boardRouter } from "./routers/board"
+import { chatRouter } from "./routers/chat"
 import { commentRouter } from "./routers/comment"
 import { editorRouter } from "./routers/editor"
 import { home } from "./routers/home"
@@ -25,6 +26,7 @@ const app = new Elysia()
       .use(sitemapRouter)
       .use(blogRssRouter)
       .use(syncRouter)
+      .use(chatRouter)
   })
   .listen(TSBOARD.SITE.API_PORT)
 

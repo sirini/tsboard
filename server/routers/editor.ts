@@ -10,13 +10,13 @@ import { uploadImagesRouter } from "./editor/uploadimages"
 import { writeRouter } from "./editor/write"
 
 export const editorRouter = new Elysia().group("/editor", (app) => {
-  return app.use(loadPostRouter)
-    .use(removeAttachedRouter)
-    .use(modifyRouter)
-    .use(writeRouter)
-    .use(configRouter)
-    .use(uploadImagesRouter)
+  return app.use(configRouter)
     .use(loadImagesRouter)
+    .use(loadPostRouter)
+    .use(modifyRouter)
+    .use(removeAttachedRouter)
     .use(removeImageRouter)
     .use(tagSuggestionRouter)
+    .use(uploadImagesRouter)
+    .use(writeRouter)
 })

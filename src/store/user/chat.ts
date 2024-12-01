@@ -4,16 +4,16 @@
  * 사용자간의 1:1 채팅 스토어
  */
 
-import { ref } from "vue"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
+import { ref } from "vue"
 import type { App } from "../../../server/index"
-import { ChatHistory, ChatItem, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
-import { useAuthStore } from "./auth"
-import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { TEXT } from "../../messages/store/user/chat"
 import { TSBOARD } from "../../../tsboard.config"
+import { ChatHistory, ChatItem, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
+import { TEXT } from "../../messages/store/user/chat"
+import { useHomeStore } from "../home"
+import { useUtilStore } from "../util"
+import { useAuthStore } from "./auth"
 
 export const useChatStore = defineStore("chat", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -31,7 +31,7 @@ export const useChatStore = defineStore("chat", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.user.load.chat.list.get({
+    const response = await client.tsapi.chat.list.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -66,7 +66,7 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.user.load.chat.history.get({
+    const response = await client.tsapi.chat.history.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -93,7 +93,7 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.user.save.chat.post({
+    const response = await client.tsapi.chat.save.post({
       $headers: {
         authorization: auth.user.token,
       },

@@ -62,6 +62,8 @@ type CommonPostItem = {
 export type LatestPost = CommonPostItem & {
   type: BoardType
   useCategory: boolean
+  modified: number
+  status: number
 }
 
 export type BoardLatest = {
@@ -73,6 +75,8 @@ type LatestAdd = {
   content: string
   cover: string
   liked: boolean
+  modified: number
+  status: number
 }
 
 export type PostItem = LatestPost &
