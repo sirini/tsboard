@@ -8,22 +8,22 @@ import { boardRouter } from "./routers/board"
 import { chatRouter } from "./routers/chat"
 import { commentRouter } from "./routers/comment"
 import { editorRouter } from "./routers/editor"
-import { home } from "./routers/home"
-import { sitemapRouter } from "./routers/sitemap"
+import { homeRouter } from "./routers/home"
+import { seoRouter } from "./routers/seo"
 import { syncRouter } from "./routers/sync"
-import { user } from "./routers/user"
+import { userRouter } from "./routers/user"
 
 const app = new Elysia()
   .use(cors())
   .group("/tsapi", (app) => {
     return app.use(auth)
       .use(admin)
-      .use(home)
-      .use(user)
+      .use(homeRouter)
+      .use(userRouter)
       .use(boardRouter)
       .use(editorRouter)
       .use(commentRouter)
-      .use(sitemapRouter)
+      .use(seoRouter)
       .use(blogRssRouter)
       .use(syncRouter)
       .use(chatRouter)

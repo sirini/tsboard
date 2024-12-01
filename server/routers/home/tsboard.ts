@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia"
 import { addAccessLog } from "../../database/home/visit"
 
-export const visitRouter = new Elysia()
+export const tsboardTestRouter = new Elysia()
   .get(
     "/visit",
     async ({ query: { userUid } }) => {
@@ -14,3 +14,12 @@ export const visitRouter = new Elysia()
       }),
     },
   )
+  .get("/tsboard", async () => {
+    return {
+      success: true,
+      officialWebsite: `tsboard.dev`,
+      version: process.env.VERSION ?? "",
+      license: "MIT",
+      Github: "github.com/sirini/tsboard"
+    }
+  })

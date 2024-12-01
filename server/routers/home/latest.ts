@@ -1,12 +1,11 @@
 import { Elysia, t } from "elysia"
 import { BoardType, SearchOption } from "../../../src/interface/board"
-import { BoardLatestPost, BoardPostItem, LatestPost } from "../../../src/interface/home"
+import { BoardLatestPost, BoardPostItem } from "../../../src/interface/home"
 import { BOARD_TYPE } from "../../database/board/const"
 import {
   getBoardLatestPosts,
-  getBoardLatests,
   getLatestPost,
-  getMaxUid,
+  getMaxUid
 } from "../../database/home/list"
 import { fail, success } from "../../util/tools"
 
@@ -61,27 +60,6 @@ export const listRouter = new Elysia()
         id: t.String(),
         limit: t.Numeric(),
         accessUserUid: t.Numeric(),
-      }),
-    },
-  )
-  .get(
-    "/latest/board",
-    async ({ query: { id, limit } }) => {
-      let response = {
-        name: "",
-        latest: [] as LatestPost[],
-      }
-      if (id.length < 2 || limit < 1) {
-        return fail(`Invalid parameters.`, response)
-      }
-
-      response = await getBoardLatests(id, limit)
-      return success(response)
-    },
-    {
-      query: t.Object({
-        id: t.String(),
-        limit: t.Numeric(),
       }),
     },
   )
