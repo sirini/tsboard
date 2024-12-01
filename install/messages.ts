@@ -10,17 +10,27 @@ export const env = `#
 # TSBOARD 서버쪽 설정 파일
 #
 
-# GOAPI 백엔드용
-GOAPI_VERSION=1.0.0
+# 백엔드 서버
+GOAPI_VERSION=1.0.0-beta1
 GOAPI_PORT=3003
+GOAPI_URL=https://tsboard.dev
+GOAPI_TITLE=TSBOARD
 
-# 데이터베이스 세팅 (각 서버 설정에 맞게 변경 필요)
+GOAPI_PROFILE_SIZE=256
+GOAPI_CONTENT_INSERT_SIZE=640
+GOAPI_THUMBNAIL_SIZE=512
+GOAPI_FULL_SIZE=2400
+GOAPI_FILE_SIZE_LIMIT=104857600
+
+# 데이터베이스 세팅 (DB_UNIX_SOCKET 경로를 모를 경우 공란 유지)
 DB_HOST=#dbhost#
 DB_USER=#dbuser#
 DB_PASS=#dbpass#
 DB_NAME=#dbname#
 DB_TABLE_PREFIX=#dbprefix#
-DB_SOCK=#dbsock#
+DB_UNIX_SOCKET=#dbsock#
+DB_MAX_IDLE=10
+DB_MAX_OPEN=10
 
 # JWT 설정
 JWT_SECRET_KEY=#jwtsecret#
@@ -31,22 +41,22 @@ ADMIN_PW=#adminpw#
 
 # 구글 앱비밀번호 for GMAIL 발송
 # 참고) https://velog.io/@seul06/nodemailer
-GMAIL_ID=yourgmailaddress@gmail.com
+GMAIL_ID=
 GMAIL_APP_PASSWORD=
 
-# 구글 OAuth 클라이언트
+# 구글 OAuth 클라이언트 (없다면 공란 유지)
 OAUTH_GOOGLE_CLIENT_ID=
 OAUTH_GOOGLE_SECRET=
 
-# 네이버 OAuth 클라이언트
+# 네이버 OAuth 클라이언트 (없다면 공란 유지)
 OAUTH_NAVER_CLIENT_ID=
 OAUTH_NAVER_SECRET=
 
-# 카카오 OAuth 클라이언트
+# 카카오 OAuth 클라이언트 (없다면 공란 유지)
 OAUTH_KAKAO_CLIENT_ID=
 OAUTH_KAKAO_SECRET=
 
-# OpenAI API Key
+# OpenAI API Key (없다면 공란 유지)
 OPENAI_API_KEY=
 `
 

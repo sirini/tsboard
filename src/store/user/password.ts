@@ -4,16 +4,16 @@
  * 사용자 비밀번호 초기화 관련 상태 및 함수들
  */
 
-import { ref } from "vue"
+import { edenTreaty } from "@elysiajs/eden"
 import { SHA256 } from "crypto-js"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
+import { ref } from "vue"
 import type { App } from "../../../server/index"
-import { useAuthStore } from "./auth"
-import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { TEXT } from "../../messages/store/user/auth"
 import { TSBOARD } from "../../../tsboard.config"
+import { TEXT } from "../../messages/store/user/auth"
+import { useHomeStore } from "../home"
+import { useUtilStore } from "../util"
+import { useAuthStore } from "./auth"
 
 export const usePasswordStore = defineStore("password", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -61,7 +61,7 @@ export const usePasswordStore = defineStore("password", () => {
       return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
 
-    const response = await client.tsapi.auth.change.password.post({
+    const response = await client.tsapi.user.change.password.post({
       target,
       code,
       password: SHA256(auth.password).toString(),

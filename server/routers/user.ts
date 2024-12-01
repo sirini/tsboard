@@ -5,11 +5,12 @@
  */
 
 import { Elysia } from "elysia"
-import { manageUser } from "./user/manageuser"
-import { userInfo } from "./user/userinfo"
+import { updatePassword } from "./user/changepassword"
 import { chat } from "./user/chat"
+import { manageUser } from "./user/manageuser"
 import { report } from "./user/report"
+import { userInfo } from "./user/userinfo"
 
 export const user = new Elysia().group("/user", (app) => {
-  return app.use(manageUser).use(userInfo).use(chat).use(report)
+  return app.use(manageUser).use(userInfo).use(chat).use(report).use(updatePassword)
 })
