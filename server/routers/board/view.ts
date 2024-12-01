@@ -1,35 +1,28 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import {
-  BoardListItem,
   Pair,
   PhotoItem,
   PostFile,
   WriterLatestComment,
-  WriterLatestPost,
+  WriterLatestPost
 } from "../../../src/interface/board"
 import { checkUserVerification } from "../../database/auth/authorization"
 import { updateUserPoint } from "../../database/board/common"
 import { BOARD_CONFIG, CONTENT_STATUS, INIT_POST_VIEW } from "../../database/board/const"
-import { isAuthor } from "../../database/board/editor"
 import { getPhotoItems } from "../../database/board/gallery"
 import { getBoardConfig, getUserLevel } from "../../database/board/list"
 import {
-  applyMovePost,
-  getBoardListItems,
-  getDownloadPath,
-  getDownloadPermission,
   getFiles,
   getPost,
   getPrevNextPostUid,
   getTags,
   getWriterLatestPostComment,
   isBannedByWriter,
-  removePost,
   updatePostHit
 } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
-import { DEFAULT_TYPE_CHECK, fail, success } from "../../util/tools"
+import { fail, success } from "../../util/tools"
 
 export const viewRouter = new Elysia()
   .use(
@@ -157,126 +150,6 @@ export const viewRouter = new Elysia()
         needUpdateHit: t.Numeric(),
         userUid: t.Numeric(),
         latestLimit: t.Numeric(),
-      }),
-    },
-  )
-  .get(
-    "/download",
-    async ({ query: { boardUid, fileUid }, accessUserUid, userLevel }) => {
-      const response = {
-        name: "",
-        path: "",
-      }
-      const permission = await getDownloadPermission(boardUid)
-      if (permission.level > userLevel) {
-        return fail(`Level restriction.`, response)
-      }
-
-      const download = await getDownloadPath(fileUid)
-      const file = Bun.file(download.path)
-      if ((await file.exists()) === false) {
-        return fail(`File not found.`, response)
-      }
-
-      const updatePointResult = await updateUserPoint({
-        boardUid,
-        accessUserUid,
-        action: "download",
-      })
-      if (updatePointResult === false && permission.point < 0) {
-        return fail(`Not enough point.`, response)
-      }
-
-      return success({
-        name: download.name,
-        path: download.path,
-      })
-    },
-    {
-      query: t.Object({
-        boardUid: t.Numeric(),
-        fileUid: t.Numeric(),
-        userUid: t.Numeric(),
-      }),
-    },
-  )
-  .delete(
-    "/remove/post",
-    async ({ query: { boardUid, postUid }, accessUserUid, newAccessToken }) => {
-      let response = {
-        newAccessToken,
-      }
-      if (postUid < 1) {
-        return fail(`Invalid parameter.`, response)
-      }
-      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
-      const isWriter = await isAuthor(postUid, accessUserUid, "post")
-      if (isAdmin === false && isWriter === false) {
-        return fail(`You are neither the author nor the administrator.`, response)
-      }
-
-      removePost(postUid)
-      return success(response)
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        boardUid: t.Numeric(),
-        postUid: t.Numeric(),
-        userUid: t.Numeric(),
-      }),
-    },
-  )
-  .get(
-    "/move/list",
-    async ({ query: { boardUid }, accessUserUid, newAccessToken }) => {
-      let response = {
-        boards: [] as BoardListItem[],
-        newAccessToken,
-      }
-
-      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
-      if (isAdmin === false) {
-        return fail(`Unauthorized access.`, response)
-      }
-
-      response.boards = await getBoardListItems()
-      return success(response)
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        boardUid: t.Numeric(),
-        userUid: t.Numeric(),
-      }),
-    },
-  )
-  .put(
-    "/move/apply",
-    async ({ query: { boardUid, targetBoardUid, postUid }, accessUserUid, newAccessToken }) => {
-      let response = {
-        newAccessToken,
-      }
-
-      const isAdmin = await haveAdminPermission(accessUserUid, boardUid)
-      if (isAdmin === false) {
-        return fail(`Unauthorized access.`, response)
-      }
-
-      const result = await applyMovePost(postUid, targetBoardUid)
-      if (result === false) {
-        return fail(`Invalid target board.`, response)
-      }
-
-      return success(response)
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        boardUid: t.Numeric(),
-        targetBoardUid: t.Numeric(),
-        userUid: t.Numeric(),
-        postUid: t.Numeric(),
       }),
     },
   )
