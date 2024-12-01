@@ -3,9 +3,10 @@ import { TSBOARD } from "../../../tsboard.config"
 import { select, table } from "../../database/common"
 import { generateDate } from "../../util/tools"
 
-export const sitemapRouter = new Elysia().group("/seo", (app) => {
-  return app
-    .get("/sitemap.xml", async ({ set }) => {
+export const sitemapRouter = new Elysia()
+  .get(
+    "/sitemap.xml",
+    async ({ set }) => {
       set.headers["Content-Type"] = "application/xml"
 
       const date = generateDate()
@@ -21,5 +22,5 @@ export const sitemapRouter = new Elysia().group("/seo", (app) => {
       xml += "</urlset>"
 
       return xml
-    })
-})
+    }
+  )

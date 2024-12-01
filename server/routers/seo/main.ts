@@ -6,9 +6,10 @@ import { getTags } from "../../database/board/view"
 import { getLatestPost, getMaxUid } from "../../database/home/list"
 import { generateDate } from "../../util/tools"
 
-export const mainRouter = new Elysia().group("/seo", (app) => {
-  return app
-    .get("/main.html", async ({ set }) => {
+export const mainRouter = new Elysia()
+  .get(
+    "/main.html",
+    async ({ set }) => {
       set.headers["Content-Type"] = "text/html"
       const file = Bun.file("./public/seo/template/main.html")
       let text = await file.text()
@@ -91,5 +92,5 @@ export const mainRouter = new Elysia().group("/seo", (app) => {
 
       text = text.replace("#ARTICLES#", articles)
       return text
-    })
-})
+    }
+  )
