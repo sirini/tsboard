@@ -10,7 +10,7 @@ import { admin } from "./routers/admin"
 import { auth } from "./routers/auth"
 import { blogRssRouter } from "./routers/blog"
 import { board } from "./routers/board"
-import { comment } from "./routers/comment"
+import { commentRouter } from "./routers/comment"
 import { home } from "./routers/home"
 import { sitemapRouter } from "./routers/sitemap"
 import { syncRouter } from "./routers/sync"
@@ -24,7 +24,7 @@ const app = new Elysia()
       .use(home)
       .use(user)
       .use(board)
-      .use(comment)
+      .use(commentRouter)
       .use(sitemapRouter)
       .use(blogRssRouter)
       .use(syncRouter)

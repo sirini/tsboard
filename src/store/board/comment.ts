@@ -47,7 +47,7 @@ export const useCommentStore = defineStore("comment", () => {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 
-    const response = await client.tsapi.comment.comment.get({
+    const response = await client.tsapi.comment.list.get({
       $headers: {
         authorization: auth.user.token,
       },
