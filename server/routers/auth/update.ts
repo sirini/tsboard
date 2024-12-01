@@ -1,9 +1,3 @@
-/**
- * server/routers/auth/myinfo
- *
- * 내 정보 수정하기 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { getUserInfo, modifyUserInfo } from "../../database/admin/user/modify"

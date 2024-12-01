@@ -1,9 +1,3 @@
-/**
- * server/util/sendmail
- *
- * 메일 보내기에 필요한 함수
- */
-
 import { createTransport } from "nodemailer"
 import { MailOptions } from "nodemailer/lib/json-transport"
 

@@ -1,9 +1,3 @@
-/**
- * server/routers/auth/signin
- *
- * 사용자 로그인 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { AUTH } from "../../../tsboard.config"

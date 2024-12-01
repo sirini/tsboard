@@ -1,9 +1,3 @@
-/**
- * server/routers/auth/resetpassword
- *
- * 비밀번호 초기화 처리
- */
-
 import { Elysia, t } from "elysia"
 import { LangType } from "../../../src/interface/home"
 import {

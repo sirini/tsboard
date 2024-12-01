@@ -53,7 +53,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     uploading.value = true
     try {
       files.value = editor.getFiles(event)
-      const response = await client.tsapi.board.upload.images.post({
+      const response = await client.tsapi.editor.upload.images.post({
         $headers: {
           authorization: auth.user.token,
         },
@@ -79,7 +79,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지들 가져오기
   async function loadUploadedImages(isAppend: boolean): Promise<void> {
-    const response = await client.tsapi.board.load.images.get({
+    const response = await client.tsapi.editor.load.images.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -132,7 +132,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지 제거
   async function removeUploadedImage(imageUid: number): Promise<void> {
-    const response = await client.tsapi.board.remove.image.delete({
+    const response = await client.tsapi.editor.remove.image.delete({
       $headers: {
         authorization: auth.user.token,
       },

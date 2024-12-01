@@ -1,9 +1,3 @@
-/**
- * server/routers/auth/oauth
- *
- * 소셜 로그인 후 리다이렉션 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { nanoid } from "nanoid"

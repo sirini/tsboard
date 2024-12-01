@@ -1,17 +1,18 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { checkPermission } from "../../database/board/common"
 import {
-  likeComment
-} from "../../database/board/comment"
+  removeAttachedFile
+} from "../../database/board/editor"
 import { getUserLevel } from "../../database/board/list"
 import {
-  EXTEND_TYPE_CHECK,
+  DEFAULT_TYPE_CHECK,
   fail,
   success
 } from "../../util/tools"
 
-export const likeRouter = new Elysia()
+export const removeAttachedRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -42,31 +43,33 @@ export const likeRouter = new Elysia()
       newAccessToken,
     }
   })
-  .patch(
-    "/like",
-    async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
-      const response = ""
-
-      if (boardUid < 1 || commentUid < 1 || liked > 1 || liked < 0) {
-        return fail(`Invalid parameters.`, response)
+  .delete(
+    "/remove/attached",
+    async ({ query: { boardUid, postUid, fileUid }, accessUserUid }) => {
+      let response = ""
+      if (fileUid < 1) {
+        return fail(`Invalid parameter.`, response)
       }
-      if (accessUserUid < 1) {
-        return fail(`Please log in.`, response)
-      }
-      likeComment({
-        boardUid,
-        commentUid,
+      const checked = await checkPermission({
         accessUserUid,
-        liked,
+        boardUid,
+        postUid,
+        action: "write_post",
+        target: "post",
       })
+      if (checked.result === false) {
+        return fail(checked.error, response)
+      }
+      removeAttachedFile(fileUid)
       return success(response)
     },
     {
-      ...EXTEND_TYPE_CHECK,
-      body: t.Object({
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
         boardUid: t.Numeric(),
-        commentUid: t.Numeric(),
-        liked: t.Numeric(),
+        postUid: t.Numeric(),
+        fileUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

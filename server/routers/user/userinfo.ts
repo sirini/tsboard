@@ -1,9 +1,3 @@
-/**
- * server/routers/user/userinfo
- *
- * 회원 기본 정보 열람하기, 비회원도 가능
- */
-
 import { Elysia, t } from "elysia"
 import { USER_OPEN_INFO } from "../../database/user/const"
 import { getUserOpenInfo } from "../../database/user/userinfo"

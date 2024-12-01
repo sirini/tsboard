@@ -1,11 +1,13 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"
-import { havePermission } from "../../database/board/common"
-import { addBlackList, sendReport } from "../../database/user/report"
+import { getUserLevel } from "../../database/board/list"
+import {
+  likePost
+} from "../../database/board/view"
 import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const reportRouter = new Elysia()
+export const likeRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -14,6 +16,7 @@ export const reportRouter = new Elysia()
   )
   .resolve(async ({ jwt, headers: { authorization }, cookie: { refresh }, query: { userUid } }) => {
     let accessUserUid = 0
+    let userLevel = 0
     let newAccessToken = ""
 
     const verification = await checkUserVerification({
@@ -25,42 +28,37 @@ export const reportRouter = new Elysia()
 
     if (verification.success === true) {
       accessUserUid = verification.accessUserUid
+      userLevel = await getUserLevel(accessUserUid)
       newAccessToken = verification.newAccessToken
     }
 
     return {
       accessUserUid,
+      userLevel,
       newAccessToken,
     }
   })
-  .post(
-    "/report",
-    async ({
-      body: { targetUserUid, content, checkedBlackList },
-      accessUserUid,
-      newAccessToken,
-    }) => {
-      let response = {
-        newAccessToken,
+  .patch(
+    "/like",
+    async ({ body: { boardUid, postUid, liked }, accessUserUid }) => {
+      const response = ""
+      if (accessUserUid < 1) {
+        return fail(`Please log in.`, response)
       }
-      if (targetUserUid < 1 || content.length < 2 || checkedBlackList < 0 || checkedBlackList > 1) {
-        return fail(`Invalid parameters.`, response)
-      }
-      if ((await havePermission(accessUserUid, "send_report")) === false) {
-        return fail(`You have no permission.`, response)
-      }
-      if (checkedBlackList === 1) {
-        addBlackList(accessUserUid, targetUserUid)
-      }
-      sendReport(accessUserUid, targetUserUid, content)
+      likePost({
+        boardUid,
+        postUid,
+        accessUserUid,
+        liked,
+      })
       return success(response)
     },
     {
       ...EXTEND_TYPE_CHECK,
       body: t.Object({
-        targetUserUid: t.Numeric(),
-        content: t.String(),
-        checkedBlackList: t.Numeric(),
+        boardUid: t.Numeric(),
+        postUid: t.Numeric(),
+        liked: t.Numeric(),
       }),
     },
   )

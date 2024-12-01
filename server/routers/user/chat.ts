@@ -1,9 +1,3 @@
-/**
- * server/routers/user/chat
- *
- * 채팅 관련 라우팅 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { ChatHistory, ChatItem } from "../../../src/interface/user"

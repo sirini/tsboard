@@ -1,9 +1,3 @@
-/**
- * server/routers/user/manageuser
- *
- * 회원 관리 기능과 관련된 라우팅 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"

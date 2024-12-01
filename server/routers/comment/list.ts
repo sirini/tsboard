@@ -1,9 +1,3 @@
-/**
- * server/routers/board/comment
- *
- * 댓글 관련 라우팅 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { Comment } from "../../../src/interface/board"

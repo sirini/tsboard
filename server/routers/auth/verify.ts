@@ -1,9 +1,3 @@
-/**
- * server/routers/auth/signup
- *
- * 신규 회원 가입하기 처리
- */
-
 import { Elysia, t } from "elysia"
 import { TEXT } from "../../../src/messages/mail/welcome"
 import {

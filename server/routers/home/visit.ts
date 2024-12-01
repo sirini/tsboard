@@ -1,9 +1,3 @@
-/**
- * server/routers/home/visit
- *
- * 사용자 방문 기록하기
- */
-
 import { Elysia, t } from "elysia"
 import { TSBOARD } from "../../../tsboard.config"
 import { addAccessLog } from "../../database/home/visit"

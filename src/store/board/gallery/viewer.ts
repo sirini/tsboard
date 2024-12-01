@@ -148,7 +148,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 댓글 불러오기
   async function loadComments(): Promise<void> {
-    const response = await client.tsapi.board.comment.get({
+    const response = await client.tsapi.comment.list.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -174,7 +174,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.like.post.patch({
+    const response = await client.tsapi.board.like.patch({
       $headers: {
         authorization: auth.user.token,
       },

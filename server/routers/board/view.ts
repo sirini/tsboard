@@ -1,9 +1,3 @@
-/**
- * server/routers/board/view
- *
- * 게시글 보기 관련 라우팅 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import {
@@ -31,12 +25,11 @@ import {
   getTags,
   getWriterLatestPostComment,
   isBannedByWriter,
-  likePost,
   removePost,
-  updatePostHit,
+  updatePostHit
 } from "../../database/board/view"
 import { haveAdminPermission } from "../../database/user/manageuser"
-import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
+import { DEFAULT_TYPE_CHECK, fail, success } from "../../util/tools"
 
 export const viewRouter = new Elysia()
   .use(
@@ -164,30 +157,6 @@ export const viewRouter = new Elysia()
         needUpdateHit: t.Numeric(),
         userUid: t.Numeric(),
         latestLimit: t.Numeric(),
-      }),
-    },
-  )
-  .patch(
-    "/like/post",
-    async ({ body: { boardUid, postUid, liked }, accessUserUid }) => {
-      const response = ""
-      if (accessUserUid < 1) {
-        return fail(`Please log in.`, response)
-      }
-      likePost({
-        boardUid,
-        postUid,
-        accessUserUid,
-        liked,
-      })
-      return success(response)
-    },
-    {
-      ...EXTEND_TYPE_CHECK,
-      body: t.Object({
-        boardUid: t.Numeric(),
-        postUid: t.Numeric(),
-        liked: t.Numeric(),
       }),
     },
   )

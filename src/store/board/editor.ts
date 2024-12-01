@@ -62,7 +62,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await client.tsapi.board.config.get({
+    const response = await client.tsapi.editor.config.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -163,14 +163,13 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await client.tsapi.board.tag.suggestion.get({
+    const response = await client.tsapi.editor.tag.suggestion.get({
       $headers: {
         authorization: auth.user.token,
       },
       $query: {
         tag: tag.value,
         limit: 5,
-        userUid: auth.user.uid,
       },
     })
 
@@ -295,7 +294,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const response = await client.tsapi.board.write.post({
+    const response = await client.tsapi.editor.write.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -336,7 +335,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const response = await client.tsapi.board.modify.patch({
+    const response = await client.tsapi.editor.modify.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -374,7 +373,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (fileUid < 1) {
       return
     }
-    const response = await client.tsapi.board.remove.attached.delete({
+    const response = await client.tsapi.editor.remove.attached.delete({
       $headers: {
         authorization: auth.user.token,
       },

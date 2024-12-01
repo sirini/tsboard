@@ -1,9 +1,3 @@
-/**
- * server/routers/user
- *
- * 회원 관리, 쪽지, 신고 등의 라우팅 처리
- */
-
 import { Elysia } from "elysia"
 import { updatePasswordRouter } from "./user/changepassword"
 import { chatRouter } from "./user/chat"

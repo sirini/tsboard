@@ -1,8 +1,3 @@
-/**
- * server/routers/auth/logout
- *
- * 사용자 로그아웃 처리
- */
 import { jwt } from "@elysiajs/jwt"
 import { Elysia } from "elysia"
 import { clearUserToken } from "../../database/auth/logout"

@@ -1,9 +1,3 @@
-/**
- * server/routers/sitemap
- *
- * SEO 최적화를 위한 사이트맵 및 크롤러를 위한 서버 생성 페이지들
- */
-
 import { Elysia } from "elysia"
 import { TEXT } from "../../src/messages/pages/home/about"
 import { POLICY, SEO, TSBOARD } from "../../tsboard.config"

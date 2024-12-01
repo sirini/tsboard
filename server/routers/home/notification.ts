@@ -1,9 +1,3 @@
-/**
- * server/routers/home/notification
- *
- * 알림 내역 가져오기, 읽음 표시하기 등 라우팅
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { TsboardNotification } from "../../../src/interface/home"

@@ -1,9 +1,3 @@
-/**
- * server/routers/board/list
- *
- * 게시판 목록보기 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { Post, SearchOption } from "../../../src/interface/board"

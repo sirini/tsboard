@@ -2,16 +2,16 @@ import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"
 import {
-  likeComment
-} from "../../database/board/comment"
+  removeUploadedImage
+} from "../../database/board/editor"
 import { getUserLevel } from "../../database/board/list"
 import {
-  EXTEND_TYPE_CHECK,
+  DEFAULT_TYPE_CHECK,
   fail,
   success
 } from "../../util/tools"
 
-export const likeRouter = new Elysia()
+export const removeImageRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -42,31 +42,32 @@ export const likeRouter = new Elysia()
       newAccessToken,
     }
   })
-  .patch(
-    "/like",
-    async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
-      const response = ""
-
-      if (boardUid < 1 || commentUid < 1 || liked > 1 || liked < 0) {
-        return fail(`Invalid parameters.`, response)
+  .delete(
+    "/remove/image",
+    async ({ query: { imageUid }, accessUserUid, newAccessToken }) => {
+      const response = {
+        newAccessToken,
       }
       if (accessUserUid < 1) {
         return fail(`Please log in.`, response)
       }
-      likeComment({
-        boardUid,
-        commentUid,
-        accessUserUid,
-        liked,
+      if (imageUid < 1) {
+        return fail(`Invalid image uid.`, response)
+      }
+
+      const removeImageResult = await removeUploadedImage(imageUid, accessUserUid)
+      if (removeImageResult === false) {
+        return fail(`Unable to remove image (${imageUid})`, response)
+      }
+      return success({
+        newAccessToken,
       })
-      return success(response)
     },
     {
-      ...EXTEND_TYPE_CHECK,
-      body: t.Object({
-        boardUid: t.Numeric(),
-        commentUid: t.Numeric(),
-        liked: t.Numeric(),
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        imageUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )

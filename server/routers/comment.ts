@@ -1,9 +1,3 @@
-/**
- * server/routers/comment
- *
- * 댓글에 대한 여러 라우팅 처리
- */
-
 import { Elysia } from "elysia"
 import { likeRouter } from "./comment/like"
 import { listRouter } from "./comment/list"

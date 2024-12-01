@@ -129,7 +129,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.like.post.patch({
+    const response = await client.tsapi.board.like.patch({
       $headers: {
         authorization: auth.user.token,
       },

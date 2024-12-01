@@ -1,13 +1,7 @@
-/**
- * server/routers/admin
- *
- * 관리화면에 연관된 라우팅 처리
- */
-
-import { Elysia } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { dashboard } from "./admin/dashboard"
+import { Elysia } from "elysia"
 import { board } from "./admin/board"
+import { dashboard } from "./admin/dashboard"
 import { group } from "./admin/group"
 import { latest } from "./admin/latest"
 import { report } from "./admin/report"

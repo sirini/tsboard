@@ -1,18 +1,12 @@
-/**
- * server/util/tools
- *
- * 서버단에서 활용할 함수들 정의
- */
-
-import { rmdir, readdir, unlink, stat } from "node:fs/promises"
-import { join } from "node:path"
-import { exists, mkdir } from "node:fs/promises"
-import { customAlphabet } from "nanoid"
-import sharp from "sharp"
 import { t } from "elysia"
 import exifr from "exifr"
+import { customAlphabet } from "nanoid"
+import { exists, mkdir, readdir, rmdir, stat, unlink } from "node:fs/promises"
+import { join } from "node:path"
 import sanitizeHtml from "sanitize-html"
+import sharp from "sharp"
 import { Exif } from "../../src/interface/gallery"
+import { SIZE } from "../../tsboard.config"
 import { EXIF_APERTURE_FACTOR, EXIF_EXPOSURE_FACTOR, INIT_EXIF } from "../database/board/const"
 
 // 헤더 쿠키 유효성 체크하는 코드
@@ -48,6 +42,24 @@ export const DEFAULT_HTML_FILTER = {
   exclusiveFilter: function (frame: any) {
     return frame.tag === "iframe" && !frame.attribs.src.includes("youtube.com")
   },
+}
+
+// 글작성(수정) 라우터에서 공통적으로 필요한 폼 검사
+export const WRITE_TYPE_CHECK = {
+  boardUid: t.Numeric(),
+  isNotice: t.Numeric(),
+  isSecret: t.Numeric(),
+  categoryUid: t.Numeric(),
+  title: t.String(),
+  content: t.String(),
+  tags: t.String(),
+  attachments: t.Optional(
+    t.Files({
+      type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
+      maxSize: SIZE.MAX_FILE,
+      error: "Invalid file type or exceed file size.",
+    }),
+  ),
 }
 
 // 랜덤 문자 6개 반환하는 함수, 인증 코드로 활용한다

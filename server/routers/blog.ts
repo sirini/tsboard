@@ -1,9 +1,3 @@
-/**
- * server/routers/blog
- *
- * 블로그 관련 처리
- */
-
 import { Elysia } from "elysia"
 import { TSBOARD } from "../../tsboard.config"
 import { CONTENT_STATUS } from "../database/board/const"

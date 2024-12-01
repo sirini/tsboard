@@ -1,9 +1,3 @@
-/**
- * server/routers/user/changepassword
- *
- * 비밀번호 변경 처리
- */
-
 import { Elysia, t } from "elysia"
 import {
   changePassword

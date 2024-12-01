@@ -1,9 +1,3 @@
-/**
- * server/routers/home/list
- *
- * 첫화면 최신글 보기 등 라우팅
- */
-
 import { Elysia, t } from "elysia"
 import { BoardType, SearchOption } from "../../../src/interface/board"
 import { BoardLatestPost, BoardPostItem, LatestPost } from "../../../src/interface/home"

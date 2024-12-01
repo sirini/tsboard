@@ -1,9 +1,3 @@
-/**
- * server/routers/board/gallery
- *
- * 갤러리 목록보기와 관련된 라우팅 처리
- */
-
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { PhotoItem, SearchOption } from "../../../src/interface/board"
