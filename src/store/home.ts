@@ -13,18 +13,16 @@ import type { App } from "../../server/index"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 import { BoardType, SearchOption } from "../interface/board"
 import {
-  BoardLatest,
   BoardLatestPost,
   BoardPostItem,
   GroupItem,
   LANG,
   LANG_KEY,
   LangType,
-  LatestPost,
   NoticeType,
   PostItem,
   TsboardNotification,
-  VISIT_KEY,
+  VISIT_KEY
 } from "../interface/home"
 import { TEXT } from "../messages/store/home"
 import { useAuthStore } from "./user/auth"
@@ -183,28 +181,6 @@ export const useHomeStore = defineStore("home", () => {
     return result
   }
 
-  // 특정 게시판의 최신글 목록 반환
-  async function getBoardLatest(id: string, limit: number): Promise<BoardLatest> {
-    let result: BoardLatest = {
-      name: "",
-      latest: [] as LatestPost[],
-    }
-    if (id.length < 2 || limit < 1) {
-      return result
-    }
-    const response = await client.tsapi.home.latest.board.get({
-      $query: {
-        id,
-        limit,
-      },
-    })
-
-    if (response.data && response.data.success === true) {
-      result = response.data.result
-    }
-    return result
-  }
-
   // 전체 게시글 검색하기
   function _searchPosts(): void {
     if (keyword.value.length < 2) {
@@ -259,7 +235,7 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.home.load.notification.get({
+    const response = await client.tsapi.noti.load.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -285,7 +261,7 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.home.checked.notification.patch({
+    const response = await client.tsapi.noti.checked.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -381,7 +357,6 @@ export const useHomeStore = defineStore("home", () => {
     visit,
     setGridLayout,
     loadLatestPosts,
-    getBoardLatest,
     getBoardLatestPosts,
     searchPosts,
     enterSearchPosts,

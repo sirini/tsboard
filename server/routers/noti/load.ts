@@ -2,10 +2,10 @@ import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { TsboardNotification } from "../../../src/interface/home"
 import { checkUserVerification } from "../../database/auth/authorization"
-import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
-import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
+import { getNotifications } from "../../database/home/notification"
+import { DEFAULT_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const notificationRouter = new Elysia()
+export const notiLoadRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -31,7 +31,7 @@ export const notificationRouter = new Elysia()
     }
   })
   .get(
-    "/load/notification",
+    "/load",
     async ({ accessUserUid, query: { limit } }) => {
       let response = [] as TsboardNotification[]
       if (accessUserUid < 1 || limit < 1) {
@@ -48,17 +48,4 @@ export const notificationRouter = new Elysia()
         userUid: t.Numeric(),
       }),
     },
-  )
-  .patch(
-    "/checked/notification",
-    async ({ accessUserUid }) => {
-      const response = ""
-      if (accessUserUid < 1) {
-        return fail(`Invalid parameter.`, response)
-      }
-
-      checkedAllNotifications(accessUserUid)
-      return success(response)
-    },
-    EXTEND_TYPE_CHECK,
   )

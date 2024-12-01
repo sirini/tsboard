@@ -9,6 +9,7 @@ import { chatRouter } from "./routers/chat"
 import { commentRouter } from "./routers/comment"
 import { editorRouter } from "./routers/editor"
 import { homeRouter } from "./routers/home"
+import { notiRouter } from "./routers/noti"
 import { seoRouter } from "./routers/seo"
 import { syncRouter } from "./routers/sync"
 import { userRouter } from "./routers/user"
@@ -27,6 +28,7 @@ const app = new Elysia()
       .use(blogRssRouter)
       .use(syncRouter)
       .use(chatRouter)
+      .use(notiRouter)
   })
   .listen(TSBOARD.SITE.API_PORT)
 
