@@ -5,17 +5,14 @@
  */
 
 import { Elysia, t } from "elysia"
+import { LangType } from "../../../src/interface/home"
 import {
+  addNewUser,
   isDuplicatedEmail,
   isDuplicatedName,
-  addNewUser,
-  sendVerificationMail,
-  verify,
+  sendVerificationMail
 } from "../../database/auth/signup"
-import { sendMail } from "../../util/sendmail"
 import { fail, success } from "../../util/tools"
-import { TEXT } from "../../../src/messages/mail/welcome"
-import { LangType } from "../../../src/interface/home"
 
 export const signUp = new Elysia()
   .post(
@@ -53,63 +50,6 @@ export const signUp = new Elysia()
         email: t.String(),
         password: t.String(),
         name: t.String(),
-        lang: t.Numeric(),
-      }),
-    },
-  )
-  .post(
-    "/checkemail",
-    async ({ body: { email } }) => {
-      const response = ""
-      if ((await isDuplicatedEmail(email.trim())) === true) {
-        return fail(`Duplicated email address.`, response)
-      }
-      return success(response)
-    },
-    {
-      body: t.Object({
-        email: t.String(),
-      }),
-    },
-  )
-  .post(
-    "/checkname",
-    async ({ body: { name, userUid } }) => {
-      const response = ""
-      if ((await isDuplicatedName(userUid, name.trim())) === true) {
-        return fail(`Duplicated name.`, response)
-      }
-      return success(response)
-    },
-    {
-      body: t.Object({
-        name: t.String(),
-        userUid: t.Number(),
-      }),
-    },
-  )
-  .post(
-    "/verify",
-    async ({ body: { target, code, user, lang } }) => {
-      const response = ""
-      const result = await verify(target, code, user)
-      if (result) {
-        const subject = TEXT[lang].SUBJECT.replaceAll("#name#", user.name)
-        const html = TEXT[lang].HTML.replaceAll("#name#", user.name)
-        sendMail(user.email, subject, html)
-        return success(response)
-      }
-      return fail(`Invalid code.`, response)
-    },
-    {
-      body: t.Object({
-        target: t.Number(),
-        code: t.String(),
-        user: t.Object({
-          email: t.String(),
-          name: t.String(),
-          password: t.String(),
-        }),
         lang: t.Numeric(),
       }),
     },

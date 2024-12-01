@@ -4,16 +4,14 @@
  * 내 정보 수정하기 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { isDuplicatedName } from "../../database/auth/signup"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
-import { getUser } from "../../database/auth/myinfo"
+import { Elysia, t } from "elysia"
 import { getUserInfo, modifyUserInfo } from "../../database/admin/user/modify"
-import { INIT_USER } from "../../database/auth/const"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { isDuplicatedName } from "../../database/auth/signup"
+import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const myInfo = new Elysia()
+export const updateUserInfo = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -41,33 +39,6 @@ export const myInfo = new Elysia()
       newAccessToken,
     }
   })
-  .get(
-    "/load",
-    async ({ query: { userUid }, newAccessToken, accessUserUid }) => {
-      const response = {
-        newAccessToken,
-        user: INIT_USER,
-      }
-
-      if (accessUserUid < 1) {
-        return fail(`Unauthorized access.`, response)
-      }
-      if (userUid < 1) {
-        return fail(`Invalid user uid.`, response)
-      }
-      const user = await getUser(userUid)
-      return success({
-        newAccessToken,
-        user,
-      })
-    },
-    {
-      ...DEFAULT_TYPE_CHECK,
-      query: t.Object({
-        userUid: t.Numeric(),
-      }),
-    },
-  )
   .patch(
     "/update",
     async ({ body: { name, password, signature, profile }, newAccessToken, accessUserUid }) => {
