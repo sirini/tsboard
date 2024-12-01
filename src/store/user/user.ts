@@ -4,16 +4,16 @@
  * 정보 보기, 회원 관리 (관리자용) 관련 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../server/index"
-import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { TEXT } from "../../messages/store/user/user"
-import { INIT_USER_BASIC, UserBasicInfo, UserOpenInfo } from "../../interface/user"
+import { defineStore } from "pinia"
+import { ref } from "vue"
 import { USER_OPEN_INFO } from "../../../server/database/user/const"
+import type { App } from "../../../server/index"
 import { TSBOARD } from "../../../tsboard.config"
+import { INIT_USER_BASIC, UserBasicInfo, UserOpenInfo } from "../../interface/user"
+import { TEXT } from "../../messages/store/user/user"
+import { useHomeStore } from "../home"
+import { useUtilStore } from "../util"
 
 export const useUserStore = defineStore("user", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -39,7 +39,7 @@ export const useUserStore = defineStore("user", () => {
 
   // 회원 기본 정보 가져오기
   async function loadUserInfo(): Promise<void> {
-    const response = await client.tsapi.user.load.user.info.get({
+    const response = await client.tsapi.user.load.info.get({
       $query: {
         targetUserUid: targetUser.value.uid,
       },

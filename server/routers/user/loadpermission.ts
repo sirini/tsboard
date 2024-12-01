@@ -1,14 +1,14 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"
-import { NO_TABLE_TARGET } from "../../database/user/const"
+import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "../../database/user/const"
 import {
-  haveAdminPermission,
-  updateUserPermission
+  getUserPermission,
+  haveAdminPermission
 } from "../../database/user/manageuser"
-import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
+import { DEFAULT_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const manageUserRouter = new Elysia()
+export const loadPermissionRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
@@ -43,48 +43,27 @@ export const manageUserRouter = new Elysia()
       newAccessToken,
     }
   })
-  .post(
-    "/manage/user",
-    async ({
-      body: { userUid, writePost, writeComment, sendChatMessage, sendReport, login, response },
-      accessUserUid,
-      newAccessToken,
-    }) => {
-      const res = {
+  .get(
+    "/load/permission",
+    async ({ newAccessToken, query: { targetUserUid } }) => {
+      let response = {
         newAccessToken: "",
+        permission: USER_PERMISSION_PARAMS,
       }
-      if (userUid < 1) {
-        return fail(`Invalid target user.`, res)
+      if (targetUserUid < 1) {
+        return fail(`Invalid target user uid.`, response)
       }
-      if (response.length < 3) {
-        return fail(`Invalid content.`, res)
-      }
-      await updateUserPermission(
-        {
-          writePost,
-          writeComment,
-          sendChatMessage,
-          sendReport,
-          login,
-          userUid,
-          response,
-        },
-        accessUserUid,
-      )
+      const permission = await getUserPermission(targetUserUid)
       return success({
         newAccessToken,
+        permission,
       })
     },
     {
-      ...EXTEND_TYPE_CHECK,
-      body: t.Object({
-        userUid: t.Number(),
-        writePost: t.Boolean(),
-        writeComment: t.Boolean(),
-        sendChatMessage: t.Boolean(),
-        sendReport: t.Boolean(),
-        login: t.Boolean(),
-        response: t.String(),
+      ...DEFAULT_TYPE_CHECK,
+      query: t.Object({
+        targetUserUid: t.Numeric(),
+        userUid: t.Numeric(),
       }),
     },
   )
