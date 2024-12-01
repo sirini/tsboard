@@ -17,19 +17,13 @@
 
 ## TSBOARD란 무엇인가요?
 
-TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌더입니다.
-
-## 왜 만들었나요?
-
-- 저는 웹 프로그램을 `PHP`로 시작했고, 제로보드와 그누보드 시절을 겪은 (이제는 아재) 개발자입니다.
-- 10년 넘게 웹 개발을 안하다가, 우연히 TypeScript 언어를 만나 코딩의 즐거움을 만끽했습니다.
-- 그래서 이왕이면 이 언어로 재밌는 프로젝트를 해보고 싶어서 시작하게 되었습니다.
+TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제작할 수 있는 엔진입니다.
 
 ## TSBOARD만의 장점은 무엇인가요?
 
-- TSBOARD는 프론트엔드와 백엔드 모두 `TypeScript` 언어로 작성되어 **타입 안정성을 보장**합니다.
 - 프론트엔드는 `Vue` 와 `Vuetify` 로 제작되어 있어 유려하면서도 빠른 UI 개발이 가능합니다.
 - JS/TS 런타임으로 `Bun`, 웹 프레임워크로 Bun 기반의 `ElysiaJS`를 선택하여 **보다 빠른 동작이 가능**합니다.
+- v1.0 이후부터 제공될 예정인 `GOAPI` 백엔드를 통해 더 큰 규모의 커뮤니티 사이트도 운영하실 수 있습니다.
 
 > TSBOARD는 사용자분들을 위한 자체 커뮤니티를 <https://tsboard.dev/> 사이트에서 운영하고 있습니다.
 > 사용하시면서 궁금한 점, 어려운 점들은 위 사이트에서 편하게 문의해 주시면 됩니다.
@@ -48,20 +42,15 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
 
 - TSBOARD는 **JS/TS 런타임으로 Bun** (<https://bun.sh>)을 필요로 합니다.
 - 또한, 보다 안정적인 패키징 관리를 위해 `Node.js` (및 `npm`) 설치도 권장하고 있습니다.
-  - 원래 `Bun`은 패키지 관리까지 올인원으로 지원하므로, **향후 Bun만 필요할 것**입니다.
-- Cafe24등 웹호스팅 업체의 서비스를 이용하실 예정이라면, 아래 사항들을 참조해 주세요.
-  - PHP 게시판이나 워드프레스 설치 등으로 우리가 흔히 접하는 웹호스팅에선 활용이 어렵습니다.
-  - 웹호스팅이 아닌, **서버 호스팅의 경우 사용이 가능**합니다.
-  - 단, 가상 CPU로 운영되는 (보통 저렴한) 가상 서버 서비스에서는 제대로 동작하지 않습니다.
+- Bun 런타임 최신 버전 (v1.1.37 이후)에서는 가상 서버 호스팅 등에서도 문제 없이 동작합니다.
 
-> AWS, Azure, GCP에서는 Bun 사용에 문제가 없는 것으로 알려져 있습니다. 만약 사용하시는 클라우드 플랫폼에서 설치가 안되시는 분들은 <https://tsboard.dev> 사이트로 제보 부탁드립니다!
+> TSBOARD는 v1.0 이후부터 Bun 런타임이 아닌, `Go` 언어로 재작성된 별도의 바이너리 파일로 서버를 실행합니다.
+> 변경된 백엔드 실행 방법은 추후 이 곳 문서에 v1.0 배포와 함께 업데이트됩니다.
 
 ## 미리 알아두어야 할 사항들
 
 - MySQL(Mariadb) 계정이 데이터베이스 생성 권한을 가지고 있어야 합니다.
   - TSBOARD는 설치 과정에서 새로운 데이터베이스 (기본 `tsboard`)를 생성합니다.
-  - 만약 MySQL(Mariadb) 접속 계정에 해당 권한이 없다면 설치는 실패합니다.
-  - 잘 모르시겠다면 역시 **설치가 어려운 분들께** 항목을 읽어주세요.
 
 ## 설치 진행 안내
 
@@ -72,8 +61,7 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - 설치 시 패키지 의존성 관련 메시지들이 나올 수 있습니다. (`curl`, `unzip` 등) 먼저 설치해주세요.
   - 설치 후 `source .bashrc` 등을 추가적으로 실행해 `Bun` 환경변수를 등록 후, `bun --help` 를 실행해 봅니다.
 
-> Bun은 믿기지 않을 정도로 빠른 성능을 보여줍니다만, 그 대신 가상 CPU상에서의 동작은 보장하지 않습니다.
-> TSBOARD는 빠르게 동작하는 것을 목표로 개발되어 있으며, Bun이 설치되지 않은 서버에서는 동작하지 않는 점 다시 알려드립니다.
+> TSBOARD v1.0 출시 이후에는 Bun 런타임에 대한 의존성이 삭제될 예정입니다.
 
 ### TSBOARD 설치
 
@@ -91,7 +79,6 @@ TSBOARD는 Type Safety BOARD로, TypeScript 언어로 작성된 커뮤니티 빌
   - `bun setup.ts` 과정에서 문제가 발생하신 경우, 깃허브 이슈 혹은 <https://tsboard.dev> 로 알려주세요!
 - TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
   - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 **대부분의 설정**들이 들어 있습니다.
-  - `SITE`, `QUICK_BUTTONS` 그리고 `API` 항목 등을 확인하시고, 그 밖에 다른 항목들도 업데이트 해주세요.
 - `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
   - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
@@ -101,12 +88,10 @@ Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
 ```
 
 - `src/pages/home/HomePage.vue` 파일을 에디터로 열어 본인 사이트에 맞게 미리 수정해 주세요.
-  - 기본적으로 여러분의 커뮤니티 사이트에는 `WhatIsTsboard.vue` 내용이 필요 없으므로, 아래 내용은 제거하시면 됩니다.
 
-```html
-<v-col :cols="home.cols" v-if="home.isMobile === false">
-  <what-is-tsboard></what-is-tsboard>
-</v-col>
+```typescript
+// HomeTitle 부분을 본인의 사이트에 맞게 수정하셔야 합니다
+import HomeTitle from "./components/static/TsboardHomeTitle.vue"
 ```
 
 - 이제 수정해야 할 것들을 모두 완료하였습니다. TSBOARD를 `build` 합니다!
@@ -121,6 +106,14 @@ Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
   - 비밀번호 초기화도 등록된 메일로 직접 가능하므로, 가능하면 기능 활성화를 권장합니다.
   - TSBOARD 설치 경로에 `.env` 파일을 열어서 본인의 구글 계정과 앱 비밀번호를 등록해주세요.
 
+```
+# .env
+# 구글 앱비밀번호 for GMAIL 발송
+# 참고) https://velog.io/@seul06/nodemailer
+GMAIL_ID=yourgmailaddress@gmail.com
+GMAIL_APP_PASSWORD=passwordfromgoog
+```
+
 > 구글 계정 고객센터에 등록된 이 글을 통해 앱 비밀번호를 어떻게 얻을 수 있는지 확인 하실 수 있습니다. <https://support.google.com/accounts/answer/185833?hl=ko>
 
 ### 소셜 로그인 활성화하기
@@ -131,10 +124,20 @@ Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
   - 추가로, `tsboard.config.ts` 파일에서 `OAUTH` 항목을 통해 사용할 소셜 로그인을 개별적으로 선택하실 수 있습니다. (사용을 원치 않으시면 `IS_READY` 항목을 `false` 로 변경 후 저장하시면 됩니다.)
     - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 혹은 `bun run build` 를 통해 프로젝트를 `build` 해주세요!
     - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `bun server/index.ts` 로 백엔드를 실행해 주세요.
-    - 백엔드 서버를 시작하기 전, 반드시 기존에 동작중인 백엔드 서버는 종료해 주세요. `Node.js` 를 주로 사용하신 분들은 `pm2` 프로세스 매니저 사용이 익숙하실텐데, Bun도 `pm2`를 지원하므로 프로세스 관리에 참조해 보세요! (<https://bun.sh/guides/ecosystem/pm2>)
 
 ```
-pm2 reload --interpreter ~/.bun/bin/bun server/index.ts
+# .env
+# 구글 OAuth 클라이언트
+OAUTH_GOOGLE_CLIENT_ID=your_google_client_id_from_https://console.cloud.google.com
+OAUTH_GOOGLE_SECRET=your_google_client_secret_from_https://console.cloud.google.com
+
+# 네이버 OAuth 클라이언트
+OAUTH_NAVER_CLIENT_ID=your_naver_client_id_from_https://developers.naver.com
+OAUTH_NAVER_SECRET=your_naver_client_secret_from_https://developers.naver.com
+
+# 카카오 OAuth 클라이언트
+OAUTH_KAKAO_CLIENT_ID=your_kakao_client_id_from_https://developers.kakao.com
+OAUTH_KAKAO_SECRET=your_kakao_client_secret_from_https://developers.kakao.com
 ```
 
 ### AI 기능 활성화하기
@@ -145,6 +148,12 @@ pm2 reload --interpreter ~/.bun/bin/bun server/index.ts
   - 이 기능은 소셜 로그인처럼 원하실 경우에 사용하시면 됩니다. (OpenAI의 API Key 값이 필요합니다.)
   - 기능 활성화를 위해서는 `.env` 파일에 `OPENAI_API_KEY` 부분을 업데이트 하셔야 합니다.
   - OpenAI의 API 발급은 무료가 아닙니다! TSBOARD는 OpenAI가 제공하는 기능을 활용할 뿐입니다.
+
+```
+# .env
+# OpenAI API Key
+OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
+```
 
 ### 개발 모드로 실행하기
 
@@ -173,16 +182,14 @@ pm2 reload --interpreter ~/.bun/bin/bun server/index.ts
   - `src/pages/home/HomePage.vue` 파일에 반영하신 작업들이 있을 경우 마찬가지로 다시 확인해 보세요.
   - 이 밖에 수정하신 파일들이 `git pull` 이후에도 제대로 변경사항을 유지하고 있는지 확인이 필요합니다.
 - 업데이트에 따라서 간혹 `bun update.ts` 실행을 요구할 때가 있습니다. 이때는 터미널에서 한 번 실행하시면 됩니다.
-  - 실행 전에 에디터로 `update.ts` 파일을 열어서 어떤 변경사항들이 있는지 확인해보세요.
-  - 이전 업데이트는 주석으로 실행되지 않도록 처리되어 있습니다. 만약 해당 업데이트를 반영하지 않았다면, 해당 부분만 주석을 해제하고 저장한 뒤 실행하시면 됩니다.
-- `build` 이후에는 백엔드 프로세스를 다시 실행해야 합니다. 실행중인 `bun` 프로세스를 종료하고 다시 `bun server/index.ts` 혹은 `pm2` 를 이용해서 `reload` 해주세요.
-  - 여러분의 터미널 프로그램이 닫혀도 TSBOARD 백엔드가 계속 동작해야 하므로, 가능하면 `pm2` 같은 프로세스 매니저 활용을 권장합니다.
-  - 혹은, `tmux`나 `screen`과 같은 도구를 이용해서 해당 세션을 계속 열어두는 것도 방법입니다.
 
-### TSBOARD 실행하기
+### TSBOARD 백엔드 실행하기
 
 - TSBOARD는 Bun 런타임을 이용해서 `server/index.ts` 를 실행하면 백엔드가 동작하게 됩니다.
 - `pm2`를 이용해서 프로세스를 관리하거나, 혹은 터미널 세션이 종료되어도 실행 상태가 계속 유지되도록 `tmux`와 같은 도구를 이용하여 `bun server/index.ts`로 실행하세요.
+
+> TSBOARD v1.0 이후부터는 `bun` 런타임을 이용하지 않고, 함께 제공되는 `goapi` 바이너리를 실행하여 백엔드를 구동합니다.
+> 서버의 운영체제에 따라, `goapi_linux`, `goapi_win.exe` 혹은 `goapi_mac` 중 하나를 실행하시면 됩니다.
 
 ## 설치 후 서버 설정
 
@@ -265,13 +272,6 @@ server {
 
 ## 설치가 어려운 분들께
 
-### 대신 설치 요청하기
-
-- **TSBOARD 설치를 대신** 도와드리겠습니다.
-  - 본인이 운영하시는 서버가 있으시고, `SSH` 접속 권한을 공유해 주실 수 있으시다면 `sirini@gmail.com` 으로 요청 메일을 보내주세요.
-  - 단, 서버에 미리 `Node.js` 와 `Bun` 은 설치해 두셔야 합니다. **두 런타임 설치가 안되어 있으면 도움을 드리기 어렵습니다!**
-  - 기존에 운영하시는 서비스를 TSBOARD로 전환하길 원하시는 분들은 <https://tsboard.dev> 사이트에 관련 내용들을 공유해주세요. (기존에 어떤 게시판을 쓰셨는지, 따로 커스텀 하신 건 있으신지 등, v0.8.18부터 제공되는 `converter.sample.ts` 파일도 참고해 보세요!)
-
 ### 문의하러가기
 
 - 설치 과정에서의 어려움을 이겨내고자 하는 여러분들을 응웝합니다!
@@ -325,12 +325,6 @@ server {
     <lastmod>2024-06-02</lastmod>
   </url>
   <url>
-    <loc>https://tsboard.dev/tsapi/seo/policy.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2024-06-02</lastmod>
-  </url>
-  <url>
     <loc>https://tsboard.dev/board/free</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -351,7 +345,7 @@ server {
 
 > 결과적으로 검색 엔진 크롤러는 위의 `main.html` 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
 
-### 백엔드 : Bun & ElysiaJS
+### [v1.0 이전] 백엔드 : Bun & ElysiaJS
 
 - TSBOARD의 빠른 퍼포먼스와 타입 안정성은 `Bun` 과 `ElysiaJS` 덕분입니다.
   - 특히 TSBOARD는 `ElysiaJS` 의 공식 플러그인인 `edenTreaty` 에 크게 의존하고 있습니다.
@@ -359,10 +353,20 @@ server {
 - 백엔드 구조는 단순합니다. `routers` 에서 API 경로 라우팅을, `database` 에서 CRUD 작업을 담당합니다.
   - 라우팅 처리는 모두 `server/routers/` 경로 아래에 있는 파일들을 확인하시면 됩니다.
   - 데이터베이스 관련 처리들은 모두 `server/database/` 경로 아래에 마찬가지로 정리되어 있습니다.
-  - 최상위 폴더명을 제외하면 `routers` 와 `database` 내부의 폴더 구조나 파일명이 (대부분) 동일합니다. 이는 의도한 것으로, 동일한 폴더명 아래에 있는 동일한 파일명은 서로 같은 목적을 위해 작성된 코드이며 단지 역할에 따라 위치만 달리한 것을 의미합니다.
 - TSBOARD는 전통적인 RDBMS이자 가장 많이 쓰이는 MySQL(Mariadb)를 사용합니다.
-  - 또한 내부적으로 SQL을 활용하며, `Prisma` 는 사용하지 않습니다. 물론 특별한 이유는 없고 저는 DB 작업에 여전히 SQL 쿼리가 더 편하기 때문입니다.
-  - 모든 쿼리문은 `server/database/common.ts` 에 정의된 4개의 함수 (`select`, `update`, `insert`, `remove`) 를 통해서 할 수 있습니다. 이는 의도한 것으로, 쿼리 실행에 불필요한 `try { ... } catch { ... } finally { ... }` 반복을 줄이고 싶어서 입니다.
+  - 모든 쿼리문은 `server/database/common.ts` 에 정의된 4개의 함수 (`select`, `update`, `insert`, `remove`) 를 통해서 할 수 있습니다.
+
+### [v1.0 이후] 백엔드 : Go (Fiber v3)
+
+- TSBOARD는 v1.0부터 `Go` 언어로 작성된 `goapi` 백엔드를 사용합니다.
+  - 이를 통해, 백엔드에서 Bun과 같은 JS/TS 런타임에 대한 의존성을 줄이고, 어디서나 동작 가능하도록 지원하고자 합니다.
+  - 또한 더 효율적으로 서버 자원을 활용할 수 있도록 개선하고, 안정성을 개선하고자 합니다.
+  - 현재까지의 자체 벤치마크 결과는 아래와 같습니다.
+    - 기존 `Bun` 런타임 기반 백엔드를 100%로 놓고 볼 때, **동작 속도는 90% ~ 95% 수준**입니다. 대부분의 작업이 DB 입출력과 관계가 있어서 속도 측면에서는 오히려 기존 `Bun` 런타임이 우세합니다. 성능 향상을 위한 추가적인 튜닝은 v1.0 출시 후 진행 예정입니다.
+    - CPU 사용량은 동시 접속 100명 이상 기준으로 약 300%~500% 가까이 나옵니다.
+    - 메모리는 위 경우 약 60% ~ 70% 수준이며, 고부하 조건이 아닐 때는 메모리 점유일이 20% ~ 30% 수준까지 떨어집니다. 
+
+> Go언어로 재작성된 백엔드는 https://github.com/sirini/goapi 에서 전체 코드를 확인해 보실 수 있습니다.
 
 ## DB 테이블
 
@@ -420,18 +424,21 @@ server {
 
 ## 로드맵
 
-- `v0.8.z` (현재)
-- `v0.9.0` (~ 24.09.30)
+- `v0.8.z` (초기 버전)
+- `v0.9.z` (**현재**)
   - 블로그 기능 추가 및 개선 작업이 반영됩니다.
   - CSR 방식 기반에서 SEO를 좀 더 개선하기 위한 추가 작업들이 반영됩니다.
-- `v1.0.0` (~ 24.12.30)
-  - 블로그 기능 안정화 후 공개 예정입니다.
-  - 채팅은 실시간 채팅을 지원할 예정입니다. (현재는 쪽지처럼 동작합니다.)
-- `v1.5.0` (~ 25.06.30)
-  - 쇼핑몰 기능을 추가할 예정입니다.
-  - 결제 모듈까지 붙여서 실제로 제품 등록 및 판매까지 가능하도록 구성할 예정입니다.
-- `v2.0.0` (~ 25.12.30)
-- `v3.0.0` (~ 27)
+- `v1.0.0` (24.12.30)
+  - 백엔드를 `Bun` 런타임에서 `Go` 언어로 재작성한 자체 바이너리 파일로 대체합니다.
+- `v1.0.z`
+  - 백엔드 서버의 안정성 및 속도 개선을 위한 튜닝을 진행합니다.
+- `v1.1.0`
+  - 더 다양한 게시판/블로그/갤러리 테마를 제공합니다.
+- `1.2.0`
+  - 쇼핑몰 테마를 제공합니다. 기본적인 재고 현황/관리 등도 추가됩니다.
+  - 토스, 네이버페이와 연동합니다.
+- `2.0.0`
+  - TBD
 
 > 로드맵은 개발자의 사정에 따라 언제든지 변경될 수 있습니다!
 
