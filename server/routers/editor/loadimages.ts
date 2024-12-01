@@ -1,6 +1,5 @@
 import { jwt } from "@elysiajs/jwt"
 import { Elysia, t } from "elysia"
-import { SIZE } from "../../../tsboard.config"
 import { checkUserVerification } from "../../database/auth/authorization"
 import {
   getMaxImageUid,
@@ -14,23 +13,6 @@ import {
   fail,
   success
 } from "../../util/tools"
-
-const writeBody = {
-  boardUid: t.Numeric(),
-  isNotice: t.Numeric(),
-  isSecret: t.Numeric(),
-  categoryUid: t.Numeric(),
-  title: t.String(),
-  content: t.String(),
-  tags: t.String(),
-  attachments: t.Optional(
-    t.Files({
-      type: ["application/pdf", "application/zip", "audio", "font", "image", "video"],
-      maxSize: SIZE.MAX_FILE,
-      error: "Invalid file type or exceed file size.",
-    }),
-  ),
-}
 
 export const loadImagesRouter = new Elysia()
   .use(

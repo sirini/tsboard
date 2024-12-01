@@ -12,7 +12,6 @@ import {
   success
 } from "../../util/tools"
 
-
 export const loadPostRouter = new Elysia()
   .use(
     jwt({
