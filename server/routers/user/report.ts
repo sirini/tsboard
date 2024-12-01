@@ -4,14 +4,14 @@
  * 회원 신고하기 관련 라우팅
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { addBlackList, sendReport } from "../../database/user/report"
-import { fail, success, EXTEND_TYPE_CHECK } from "../../util/tools"
-import { havePermission } from "../../database/board/common"
+import { Elysia, t } from "elysia"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { havePermission } from "../../database/board/common"
+import { addBlackList, sendReport } from "../../database/user/report"
+import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const report = new Elysia()
+export const reportRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

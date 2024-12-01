@@ -11,12 +11,12 @@
  *   ※ 수집 대상 : 글제목 / 글내용 / 첨부파일 / 게시판 ID / 게시글 번호 / 작성시간 / 작성자명
  */
 
-import { Elysia, t } from "elysia"
-import { table, select } from "../database/common"
-import { success, fail } from "../util/tools"
 import { SHA256 } from "crypto-js"
-import { CONTENT_STATUS } from "../database/board/const"
+import { Elysia, t } from "elysia"
 import { nanoid } from "nanoid"
+import { CONTENT_STATUS } from "../database/board/const"
+import { select, table } from "../database/common"
+import { fail, success } from "../util/tools"
 
 type SyncExif = {
   make: string
@@ -51,7 +51,7 @@ type SyncResult = {
   images: SyncImage[]
 }
 
-export const sync = new Elysia().get(
+export const syncRouter = new Elysia().get(
   "/sync",
   async ({ query: { key, limit } }) => {
     let result: SyncResult[] = []

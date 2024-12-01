@@ -5,6 +5,9 @@
  */
 
 import { Elysia, t } from "elysia"
+import { BoardType, SearchOption } from "../../../src/interface/board"
+import { BoardLatestPost, BoardPostItem, LatestPost } from "../../../src/interface/home"
+import { BOARD_TYPE } from "../../database/board/const"
 import {
   getBoardLatestPosts,
   getBoardLatests,
@@ -12,11 +15,8 @@ import {
   getMaxUid,
 } from "../../database/home/list"
 import { fail, success } from "../../util/tools"
-import { BoardLatestPost, BoardPostItem, LatestPost } from "../../../src/interface/home"
-import { BoardType, SearchOption } from "../../../src/interface/board"
-import { BOARD_TYPE } from "../../database/board/const"
 
-export const list = new Elysia()
+export const listRouter = new Elysia()
   .get(
     "/latest",
     async ({ query: { sinceUid, bunch, option, keyword, accessUserUid } }) => {

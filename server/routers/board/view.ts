@@ -38,7 +38,7 @@ import {
 import { haveAdminPermission } from "../../database/user/manageuser"
 import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const view = new Elysia()
+export const viewRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

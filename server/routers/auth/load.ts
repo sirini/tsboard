@@ -11,7 +11,7 @@ import { INIT_USER } from "../../database/auth/const"
 import { getUser } from "../../database/auth/myinfo"
 import { DEFAULT_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const loadUserInfo = new Elysia()
+export const loadUserInfoRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

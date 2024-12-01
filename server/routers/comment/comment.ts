@@ -35,7 +35,7 @@ import {
   success,
 } from "../../util/tools"
 
-export const comment = new Elysia()
+export const commentRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

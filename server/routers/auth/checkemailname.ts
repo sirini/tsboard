@@ -11,7 +11,7 @@ import {
 } from "../../database/auth/signup"
 import { fail, success } from "../../util/tools"
 
-export const checkEmailName = new Elysia()
+export const checkEmailNameRouter = new Elysia()
   .post(
     "/checkemail",
     async ({ body: { email } }) => {

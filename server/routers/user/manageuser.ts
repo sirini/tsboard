@@ -4,18 +4,18 @@
  * 회원 관리 기능과 관련된 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import { Elysia, t } from "elysia"
+import { checkUserVerification } from "../../database/auth/authorization"
+import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "../../database/user/const"
 import {
   getUserPermission,
   haveAdminPermission,
   updateUserPermission,
 } from "../../database/user/manageuser"
-import { NO_TABLE_TARGET, USER_PERMISSION_PARAMS } from "../../database/user/const"
-import { checkUserVerification } from "../../database/auth/authorization"
+import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const manageUser = new Elysia()
+export const manageUserRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

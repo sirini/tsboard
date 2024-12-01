@@ -10,7 +10,7 @@ import {
 } from "../../database/auth/resetpassword"
 import { fail, success } from "../../util/tools"
 
-export const updatePassword = new Elysia()
+export const updatePasswordRouter = new Elysia()
   .post(
     "/change/password",
     async ({ body: { target, code, password } }) => {

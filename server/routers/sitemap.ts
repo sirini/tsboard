@@ -5,16 +5,16 @@
  */
 
 import { Elysia } from "elysia"
-import { POLICY, SEO, TSBOARD } from "../../tsboard.config"
-import { select, table } from "../database/common"
-import { generateDate } from "../util/tools"
-import { getLatestPost, getMaxUid } from "../database/home/list"
-import { BOARD_TYPE, PAGING_DIRECTION } from "../database/board/const"
 import { TEXT } from "../../src/messages/pages/home/about"
+import { POLICY, SEO, TSBOARD } from "../../tsboard.config"
 import { getComments, getMaxCommentUid } from "../database/board/comment"
+import { BOARD_TYPE, PAGING_DIRECTION } from "../database/board/const"
 import { getTags } from "../database/board/view"
+import { select, table } from "../database/common"
+import { getLatestPost, getMaxUid } from "../database/home/list"
+import { generateDate } from "../util/tools"
 
-export const sitemap = new Elysia().group("/seo", (app) => {
+export const sitemapRouter = new Elysia().group("/seo", (app) => {
   return app
     .get("/sitemap.xml", async ({ set }) => {
       set.headers["Content-Type"] = "application/xml"

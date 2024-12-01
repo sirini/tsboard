@@ -57,7 +57,7 @@ const writeBody = {
   ),
 }
 
-export const editor = new Elysia()
+export const editorRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

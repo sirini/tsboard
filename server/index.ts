@@ -8,12 +8,12 @@ import { Elysia } from "elysia"
 import { TSBOARD } from "../tsboard.config"
 import { admin } from "./routers/admin"
 import { auth } from "./routers/auth"
-import { blog } from "./routers/blog"
+import { blogRssRouter } from "./routers/blog"
 import { board } from "./routers/board"
-import { commentRouter } from "./routers/comment"
+import { comment } from "./routers/comment"
 import { home } from "./routers/home"
-import { sitemap } from "./routers/sitemap"
-import { sync } from "./routers/sync"
+import { sitemapRouter } from "./routers/sitemap"
+import { syncRouter } from "./routers/sync"
 import { user } from "./routers/user"
 
 const app = new Elysia()
@@ -24,10 +24,10 @@ const app = new Elysia()
       .use(home)
       .use(user)
       .use(board)
-      .use(commentRouter)
-      .use(sitemap)
-      .use(blog)
-      .use(sync)
+      .use(comment)
+      .use(sitemapRouter)
+      .use(blogRssRouter)
+      .use(syncRouter)
   })
   .listen(TSBOARD.SITE.API_PORT)
 

@@ -5,11 +5,11 @@
  */
 
 import { Elysia } from "elysia"
-import { editor } from "./board/editor"
-import { gallery } from "./board/gallery"
-import { list } from "./board/list"
-import { view } from "./board/view"
+import { editorRouter } from "./board/editor"
+import { galleryRouter } from "./board/gallery"
+import { listRouter } from "./board/list"
+import { viewRouter } from "./board/view"
 
 export const board = new Elysia().group("/board", (app) => {
-  return app.use(list).use(view).use(editor).use(gallery)
+  return app.use(listRouter).use(viewRouter).use(editorRouter).use(galleryRouter)
 })

@@ -4,23 +4,23 @@
  * 소셜 로그인 후 리다이렉션 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { registerUser } from "../../database/auth/signin"
-import { saveTokens } from "../../database/auth/authorization"
-import { TSBOARD } from "../../../tsboard.config"
-import { getUser } from "../../database/auth/myinfo"
-import { INIT_USER } from "../../database/auth/const"
-import { fail, success } from "../../util/tools"
+import { Elysia, t } from "elysia"
 import { nanoid } from "nanoid"
+import { TSBOARD } from "../../../tsboard.config"
+import { saveTokens } from "../../database/auth/authorization"
+import { INIT_USER } from "../../database/auth/const"
+import { getUser } from "../../database/auth/myinfo"
 import {
   generateAccessRefreshToken,
   requestAccessToken,
   requestUserInfo,
   saveTokenInCookie,
 } from "../../database/auth/oauth"
+import { registerUser } from "../../database/auth/signin"
+import { fail, success } from "../../util/tools"
 
-export const oauth = new Elysia()
+export const oauthRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

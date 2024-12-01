@@ -12,7 +12,7 @@ import {
 import { sendMail } from "../../util/sendmail"
 import { fail, success } from "../../util/tools"
 
-export const verifyCode = new Elysia()
+export const verifyCodeRouter = new Elysia()
   .post(
     "/verify",
     async ({ body: { target, code, user, lang } }) => {

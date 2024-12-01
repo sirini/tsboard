@@ -4,14 +4,14 @@
  * 알림 내역 가져오기, 읽음 표시하기 등 라우팅
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import { Elysia, t } from "elysia"
 import { TsboardNotification } from "../../../src/interface/home"
-import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { checkedAllNotifications, getNotifications } from "../../database/home/notification"
+import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const notification = new Elysia()
+export const notificationRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

@@ -4,8 +4,11 @@
  * 게시판 목록보기 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
+import { Post, SearchOption } from "../../../src/interface/board"
+import { checkUserVerification } from "../../database/auth/authorization"
+import { BOARD_CONFIG } from "../../database/board/const"
 import {
   getBlackList,
   getBoardConfig,
@@ -14,13 +17,10 @@ import {
   getTotalPostCount,
   getUserLevel,
 } from "../../database/board/list"
-import { fail, success } from "../../util/tools"
-import { BOARD_CONFIG } from "../../database/board/const"
-import { Post, SearchOption } from "../../../src/interface/board"
-import { checkUserVerification } from "../../database/auth/authorization"
 import { haveAdminPermission } from "../../database/user/manageuser"
+import { fail, success } from "../../util/tools"
 
-export const list = new Elysia()
+export const listRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

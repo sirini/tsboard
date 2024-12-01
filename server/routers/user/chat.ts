@@ -4,15 +4,15 @@
  * 채팅 관련 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success, DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK } from "../../util/tools"
+import { Elysia, t } from "elysia"
 import { ChatHistory, ChatItem } from "../../../src/interface/user"
-import { getChatHistory, getChatList, isBannedByOther, saveNewChat } from "../../database/user/chat"
-import { havePermission } from "../../database/board/common"
 import { checkUserVerification } from "../../database/auth/authorization"
+import { havePermission } from "../../database/board/common"
+import { getChatHistory, getChatList, isBannedByOther, saveNewChat } from "../../database/user/chat"
+import { DEFAULT_TYPE_CHECK, EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const chat = new Elysia()
+export const chatRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

@@ -11,7 +11,7 @@ import { checkUserVerification } from "../../database/auth/authorization"
 import { isDuplicatedName } from "../../database/auth/signup"
 import { EXTEND_TYPE_CHECK, fail, success } from "../../util/tools"
 
-export const updateUserInfo = new Elysia()
+export const updateUserInfoRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

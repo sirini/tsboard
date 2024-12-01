@@ -5,10 +5,10 @@
  */
 
 import { Elysia, t } from "elysia"
-import { addAccessLog } from "../../database/home/visit"
 import { TSBOARD } from "../../../tsboard.config"
+import { addAccessLog } from "../../database/home/visit"
 
-export const visit = new Elysia()
+export const visitRouter = new Elysia()
   .get(
     "/visit",
     async ({ query: { userUid } }) => {

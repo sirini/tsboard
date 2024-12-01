@@ -5,10 +5,10 @@
  */
 
 import { Elysia } from "elysia"
-import { getBoardConfig } from "../database/board/list"
 import { TSBOARD } from "../../tsboard.config"
-import { select, table } from "../database/common"
 import { CONTENT_STATUS } from "../database/board/const"
+import { getBoardConfig } from "../database/board/list"
+import { select, table } from "../database/common"
 
 function dateForRSS(date: Date) {
   const utcString = date.toUTCString()
@@ -27,7 +27,7 @@ function truncateText(text: string, maxLength: number = 200) {
   }
 }
 
-export const blog = new Elysia().get("/rss/:id", async ({ params: { id }, set }) => {
+export const blogRssRouter = new Elysia().get("/rss/:id", async ({ params: { id }, set }) => {
   set.headers["Content-Type"] = "application/rss+xml; charset=UTF-8"
   const config = await getBoardConfig(id)
   const file = Bun.file("./public/blog/rss.template.xml")

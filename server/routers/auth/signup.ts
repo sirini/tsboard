@@ -14,7 +14,7 @@ import {
 } from "../../database/auth/signup"
 import { fail, success } from "../../util/tools"
 
-export const signUp = new Elysia()
+export const signUpRouter = new Elysia()
   .post(
     "/signup",
     async ({ body: { email, password, name, lang } }) => {

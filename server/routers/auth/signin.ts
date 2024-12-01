@@ -4,15 +4,15 @@
  * 사용자 로그인 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { userSignIn } from "../../database/auth/signin"
-import { saveTokens } from "../../database/auth/authorization"
-import { fail, success } from "../../util/tools"
-import { INIT_USER } from "../../database/auth/const"
+import { Elysia, t } from "elysia"
 import { AUTH } from "../../../tsboard.config"
+import { saveTokens } from "../../database/auth/authorization"
+import { INIT_USER } from "../../database/auth/const"
+import { userSignIn } from "../../database/auth/signin"
+import { fail, success } from "../../util/tools"
 
-export const signIn = new Elysia()
+export const signInRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

@@ -5,11 +5,11 @@
  */
 
 import { Elysia } from "elysia"
-import { visit } from "./home/visit"
-import { notification } from "./home/notification"
-import { sidebar } from "./home/sidebar"
-import { list } from "./home/list"
+import { listRouter } from "./home/list"
+import { notificationRouter } from "./home/notification"
+import { sidebarRouter } from "./home/sidebar"
+import { visitRouter } from "./home/visit"
 
 export const home = new Elysia().group("/home", (app) => {
-  return app.use(visit).use(notification).use(sidebar).use(list)
+  return app.use(visitRouter).use(notificationRouter).use(sidebarRouter).use(listRouter)
 })

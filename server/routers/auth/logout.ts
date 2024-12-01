@@ -3,12 +3,12 @@
  *
  * 사용자 로그아웃 처리
  */
-import { Elysia } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia } from "elysia"
 import { clearUserToken } from "../../database/auth/logout"
 import { DEFAULT_TYPE_CHECK, success } from "../../util/tools"
 
-export const logout = new Elysia()
+export const logoutRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",

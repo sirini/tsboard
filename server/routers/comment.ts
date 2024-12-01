@@ -5,8 +5,8 @@
  */
 
 import { Elysia } from "elysia"
-import { comment } from "./comment/comment"
+import { commentRouter } from "./comment/comment"
 
-export const commentRouter = new Elysia().group("/comment", (app) => {
-  return app.use(comment)
+export const comment = new Elysia().group("/comment", (app) => {
+  return app.use(commentRouter)
 })

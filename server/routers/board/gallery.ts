@@ -4,22 +4,22 @@
  * 갤러리 목록보기와 관련된 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
-import { fail, success } from "../../util/tools"
-import { BOARD_CONFIG } from "../../database/board/const"
+import { Elysia, t } from "elysia"
+import { PhotoItem, SearchOption } from "../../../src/interface/board"
 import { GridItem } from "../../../src/interface/gallery"
+import { checkUserVerification } from "../../database/auth/authorization"
+import { BOARD_CONFIG } from "../../database/board/const"
+import { getPhotoItems, getPhotos } from "../../database/board/gallery"
 import {
   getBoardConfig,
   getMaxPostUid,
   getTotalPostCount,
   getUserLevel,
 } from "../../database/board/list"
-import { getPhotoItems, getPhotos } from "../../database/board/gallery"
-import { PhotoItem, SearchOption } from "../../../src/interface/board"
-import { checkUserVerification } from "../../database/auth/authorization"
+import { fail, success } from "../../util/tools"
 
-export const gallery = new Elysia()
+export const galleryRouter = new Elysia()
   .use(
     jwt({
       name: "jwt",
