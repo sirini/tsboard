@@ -4,10 +4,11 @@
  * 댓글 관련 라우팅 처리
  */
 
-import { Elysia, t } from "elysia"
 import { jwt } from "@elysiajs/jwt"
+import { Elysia, t } from "elysia"
 import sanitizeHtml from "sanitize-html"
-import { getUserLevel } from "../../database/board/list"
+import { Comment } from "../../../src/interface/board"
+import { checkUserVerification } from "../../database/auth/authorization"
 import {
   getBoardUid,
   getComments,
@@ -21,19 +22,18 @@ import {
   saveNewComment,
   saveReplyComment,
 } from "../../database/board/comment"
+import { checkUserPermission, havePermission, updateUserPoint } from "../../database/board/common"
+import { CONTENT_STATUS } from "../../database/board/const"
+import { getUserLevel } from "../../database/board/list"
+import { isBannedByWriter } from "../../database/board/view"
+import { haveAdminPermission } from "../../database/user/manageuser"
 import {
-  fail,
-  success,
+  DEFAULT_HTML_FILTER,
   DEFAULT_TYPE_CHECK,
   EXTEND_TYPE_CHECK,
-  DEFAULT_HTML_FILTER,
+  fail,
+  success,
 } from "../../util/tools"
-import { checkUserPermission, havePermission, updateUserPoint } from "../../database/board/common"
-import { Comment } from "../../../src/interface/board"
-import { isBannedByWriter } from "../../database/board/view"
-import { checkUserVerification } from "../../database/auth/authorization"
-import { CONTENT_STATUS } from "../../database/board/const"
-import { haveAdminPermission } from "../../database/user/manageuser"
 
 export const comment = new Elysia()
   .use(
@@ -129,7 +129,7 @@ export const comment = new Elysia()
     },
   )
   .patch(
-    "/like/comment",
+    "/like",
     async ({ body: { boardUid, commentUid, liked }, accessUserUid }) => {
       const response = ""
 
@@ -157,7 +157,7 @@ export const comment = new Elysia()
     },
   )
   .post(
-    "/new/comment",
+    "/write",
     async ({ body: { boardUid, postUid, content }, accessUserUid, newAccessToken }) => {
       const response = { newCommentUid: 0, newAccessToken: "" }
 
@@ -202,7 +202,7 @@ export const comment = new Elysia()
     },
   )
   .post(
-    "/reply/comment",
+    "/reply",
     async ({
       body: { boardUid, postUid, replyTargetUid, content },
       accessUserUid,
@@ -252,7 +252,7 @@ export const comment = new Elysia()
     },
   )
   .patch(
-    "/modify/comment",
+    "/modify",
     async ({
       body: { boardUid, postUid, modifyTargetUid, content },
       accessUserUid,
@@ -298,7 +298,7 @@ export const comment = new Elysia()
     },
   )
   .delete(
-    "/remove/comment",
+    "/remove",
     async ({ query: { boardUid, removeTargetUid }, accessUserUid, newAccessToken }) => {
       const response = { newAccessToken, isChangeStatus: false }
 

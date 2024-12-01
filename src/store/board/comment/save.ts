@@ -4,17 +4,17 @@
  * 댓글 추가, 수정, 답글 달기 관련 상태 및 함수들
  */
 
-import { ref } from "vue"
-import { defineStore } from "pinia"
 import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { useUtilStore } from "../../util"
-import { useAuthStore } from "../../user/auth"
-import { useHomeStore } from "../../home"
-import { TEXT } from "../../../messages/store/board/comment"
+import { defineStore } from "pinia"
+import { ref } from "vue"
 import { INIT_COMMENT } from "../../../../server/database/board/const"
-import { Comment } from "../../../interface/board"
+import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
+import { Comment } from "../../../interface/board"
+import { TEXT } from "../../../messages/store/board/comment"
+import { useHomeStore } from "../../home"
+import { useAuthStore } from "../../user/auth"
+import { useUtilStore } from "../../util"
 
 type SaveNewCommentParams = {
   boardUid: number
@@ -40,7 +40,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   // 새 댓글 작성하기
   async function newComment(param: SaveNewCommentParams): Promise<Comment> {
     let result: Comment = INIT_COMMENT
-    const response = await client.tsapi.board.new.comment.post({
+    const response = await client.tsapi.comment.write.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -87,7 +87,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   async function replyComment(param: SaveReplyCommentParams): Promise<Comment> {
     let result = INIT_COMMENT
 
-    const response = await client.tsapi.board.reply.comment.post({
+    const response = await client.tsapi.comment.reply.post({
       $headers: {
         authorization: auth.user.token,
       },
@@ -133,7 +133,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
 
   // 기존 댓글 수정하기
   async function modifyComment(param: SaveModifyCommentParams): Promise<void> {
-    const response = await client.tsapi.board.modify.comment.patch({
+    const response = await client.tsapi.comment.modify.patch({
       $headers: {
         authorization: auth.user.token,
       },
