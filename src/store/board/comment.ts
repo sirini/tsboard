@@ -4,19 +4,19 @@
  * 게시판, 갤러리의 댓글 상태 및 함수들
  */
 
+import { edenTreaty } from "@elysiajs/eden"
+import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
+import { PAGING_DIRECTION } from "../../../server/database/board/const"
 import type { App } from "../../../server/index"
-import { useAuthStore } from "../user/auth"
-import { useUtilStore } from "../util"
-import { useHomeStore } from "../home"
-import { useCommentSaveStore } from "./comment/save"
+import { TSBOARD } from "../../../tsboard.config"
 import { Comment } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/comment"
-import { PAGING_DIRECTION } from "../../../server/database/board/const"
-import { TSBOARD } from "../../../tsboard.config"
+import { useHomeStore } from "../home"
+import { useAuthStore } from "../user/auth"
+import { useUtilStore } from "../util"
+import { useCommentSaveStore } from "./comment/save"
 
 export const useCommentStore = defineStore("comment", () => {
   const client = edenTreaty<App>(TSBOARD.API.URI)
@@ -47,7 +47,7 @@ export const useCommentStore = defineStore("comment", () => {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 
-    const response = await client.tsapi.board.comment.get({
+    const response = await client.tsapi.comment.comment.get({
       $headers: {
         authorization: auth.user.token,
       },
@@ -106,7 +106,7 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
   async function like(commentUid: number, isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.like.comment.patch({
+    const response = await client.tsapi.comment.like.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -227,7 +227,7 @@ export const useCommentStore = defineStore("comment", () => {
       return util.snack(TEXT[home.lang].INVALID_REMOVE_TARGET)
     }
 
-    const response = await client.tsapi.board.remove.comment.delete({
+    const response = await client.tsapi.comment.remove.delete({
       $headers: {
         authorization: auth.user.token,
       },
