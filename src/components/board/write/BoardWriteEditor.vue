@@ -1,6 +1,6 @@
 <template>
   <div v-if="editor">
-    <v-card elevation="0" v-show="writeEditor.isEditorMode">
+    <v-card elevation="0" v-show="writeEditor.isEditorMode" id="tsboardEditorBox">
       <v-toolbar
         density="compact"
         id="tsboardEditorToolbar"
@@ -114,6 +114,7 @@ import Youtube from "@tiptap/extension-youtube"
 import { EditorContent, useEditor } from "@tiptap/vue-3"
 import cpp from "highlight.js/lib/languages/cpp"
 import css from "highlight.js/lib/languages/css"
+import go from "highlight.js/lib/languages/go"
 import java from "highlight.js/lib/languages/java"
 import js from "highlight.js/lib/languages/javascript"
 import kt from "highlight.js/lib/languages/kotlin"
@@ -161,10 +162,12 @@ let stickyScrollY = -1
 function changeToolbarPosition(): void {
   clearTimeout(scrollTimer)
   scrollTimer = setTimeout(() => {
+    const editorBox = document.querySelector<HTMLDivElement>("#tsboardEditorBox")
+    if (!editorBox) return
     const toolbar = document.querySelector<HTMLDivElement>("#tsboardEditorToolbar")
     if (!toolbar) return
 
-    toolbar.style.width = `${Math.min(window.innerWidth - 32, writeEditor.config.width)}px`
+    toolbar.style.width = `${Math.min(editorBox.clientWidth + 20, writeEditor.config.width)}px`
     const toolbarRect = toolbar.getBoundingClientRect()
     if (toolbarRect.top < 74 && stickyScrollY < 0) {
       toolbar.classList.add("sticky")
@@ -174,7 +177,7 @@ function changeToolbarPosition(): void {
       toolbar.classList.remove("sticky")
       stickyScrollY = -1
     }
-  }, 100)
+  }, 50)
 }
 
 onMounted(async () => {
@@ -201,6 +204,7 @@ lowlight.register("java", java)
 lowlight.register("cpp", cpp)
 lowlight.register("php", php)
 lowlight.register("rs", rs)
+lowlight.register("go", go)
 
 const editor = useEditor({
   content: props.modelValue,

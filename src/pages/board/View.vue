@@ -22,7 +22,7 @@
               {{ util.unescape(view.post.writer.signature) }}
             </v-card-text>
             <board-view-writer-post-comment></board-view-writer-post-comment>
-            <board-view-buttons></board-view-buttons>
+            <board-view-buttons board-type="board"></board-view-buttons>
             <board-view-comment-write
               v-if="view.post.uid > 0"
               :type="view.config.type"

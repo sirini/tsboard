@@ -30,7 +30,7 @@
             <v-list density="compact">
               <v-list-item
                 prepend-icon="mdi-pencil"
-                @click="util.go('boardModify', view.id, view.postUid)"
+                @click="util.go(`${props.boardType}Modify`, view.id, view.postUid)"
                 :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
               >
                 {{ TEXT[home.lang].MODIFY }}
@@ -77,5 +77,6 @@ const util = useUtilStore()
 const home = useHomeStore()
 const props = defineProps<{
   bgColor?: string
+  boardType: string
 }>()
 </script>

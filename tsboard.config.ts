@@ -1,7 +1,7 @@
 /**
  * tsboard.config
  *
- * TSBOARD 기본 설정 파일
+ * TSBOARD 기본 설정 파일, v1.0 이후부터는 .env로 통합됩니다
  */
 
 export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
@@ -13,10 +13,10 @@ const DEV_URL = `${LOCALHOST}:${PORT_DEV_VITE}`
 const PROD_URL = "https://tsboard.dev" /*** 수정 필요 ***/
 
 export const TSBOARD = {
-  VERSION: "v0.9.10",
+  VERSION: "v0.9.11",
   SITE: {
     NAME: "TSBOARD" /*** 수정 필요 ***/,
-    TITLE: "TSBOARD | Type Safety Community Builder" /*** 수정 필요 ***/,
+    TITLE: "TSBOARD | Building websites is so easy" /*** 수정 필요 ***/,
     API_PORT: IS_DEV ? PORT_DEV : PORT_PROD,
   },
   PREFIX: "" /*** TSBOARD 설치 경로가 root 가 아닐 경우 앞쪽 경로 작성, 예: "/tsboard" */,

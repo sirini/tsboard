@@ -41,11 +41,11 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 ## TSBOARD 설치에 적합한 서버 환경
 
 - TSBOARD는 **JS/TS 런타임으로 Bun** (<https://bun.sh>)을 필요로 합니다.
-- 또한, 보다 안정적인 패키징 관리를 위해 `Node.js` (및 `npm`) 설치도 권장하고 있습니다.
-- Bun 런타임 최신 버전 (v1.1.37 이후)에서는 가상 서버 호스팅 등에서도 문제 없이 동작합니다.
+- Bun 런타임 최신 버전 (v1.1.31 이후)에서는 가상 서버 호스팅 등에서도 문제 없이 동작합니다.
 
 > TSBOARD는 v1.0 이후부터 Bun 런타임이 아닌, `Go` 언어로 재작성된 별도의 바이너리 파일로 서버를 실행합니다.
 > 변경된 백엔드 실행 방법은 추후 이 곳 문서에 v1.0 배포와 함께 업데이트됩니다.
+> v1.0 이후 Bun 런타임은 필요하지 않습니다. 대신, 프론트엔드를 위해 여전히 `Node.js`는 사전 설치되어 있어야 합니다.
 
 ## 미리 알아두어야 할 사항들
 
@@ -71,8 +71,7 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `setup.ts` 파일이 존재합니다.
 - TSBOARD가 의존하는 패키지들을 내려받습니다.
   - 권장 설치 경로에 설치하셨다면, `/var/www/tsboard.git/` 폴더 위치에서 **의존성 패키지들을 설치**합니다.
-  - 이 패키지들은 (Node.js 가 설치되어 있는 경우) `npm i` 혹은 `npm install` 로 설치합니다.
-  - Bun 만 설치하신 경우, `bun install` 로 동일하게 설치하실 수 있습니다.
+  - `npm install` 로 설치하실 수 있습니다. (TSBOARD는 `Node.js`가 사용하시는 서버에 사전 설치되어 있어야 합니다!)
 - `bun setup.ts` 를 실행하여 화면의 안내에 따라 **TSBOARD 설치**를 진행합니다.
   - 이 때 MySQL(Mariadb)의 접속 정보 및 관리자 아이디와 비밀번호를 입력하게 됩니다.
   - 접속 정보가 올바르고 DB 생성 (및 테이블 생성) 권한이 있다면, 문제없이 DB/Table들이 생성됩니다.
@@ -96,8 +95,7 @@ import HomeTitle from "./components/static/TsboardHomeTitle.vue"
 
 - 이제 수정해야 할 것들을 모두 완료하였습니다. TSBOARD를 `build` 합니다!
   - 여러분이 받으신 TSBOARD는 이제 `vite` 를 통해 `build` 가 가능합니다.
-  - (Node.js 설치 시) `npm run build` 혹은 `bun run build` 를 실행하여 `build` 를 진행합니다.
-  - 이 때 TSBOARD의 프론트엔드 코드들(TypeScript)이 JavaScript로 변환되며, 파일들도 최적화됩니다.
+  - `npm run build` 를 실행합니다. 빌드가 정상적으로 완료되면, tsboard 폴더 안에 `dist` 폴더가 생성됩니다.
 
 ### 메일 발송 기능 활성화하기
 
@@ -122,7 +120,7 @@ GMAIL_APP_PASSWORD=passwordfromgoog
   - 해당 로그인 서비스 제공업체에서 요구하는 개발자 등록 및 OAuth 클라이언트 ID, 비밀번호등은 직접 준비하셔야 합니다.
   - 이미 해당 정보들을 가지고 계신 분들은 `.env` 파일에서 ID, Secret 정보를 입력하시면 사용 가능합니다.
   - 추가로, `tsboard.config.ts` 파일에서 `OAUTH` 항목을 통해 사용할 소셜 로그인을 개별적으로 선택하실 수 있습니다. (사용을 원치 않으시면 `IS_READY` 항목을 `false` 로 변경 후 저장하시면 됩니다.)
-    - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 혹은 `bun run build` 를 통해 프로젝트를 `build` 해주세요!
+    - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 를 통해 프로젝트를 `build` 해주세요!
     - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `bun server/index.ts` 로 백엔드를 실행해 주세요.
 
 ```
@@ -177,7 +175,7 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
   - 변경사항이 많이 따라가기 어려울 때는, 작업하신 내용을 먼저 백업한 이후 하나씩 `merge` 해주세요.
   - `git stash` 명령어를 통해 따로 작업하신 내용을 잠시 치운 후, 변경사항을 업데이트하고 다시 이전 작업을 반영하는 방법도 있습니다.
   - 가능하면 `git pull` 명령어를 통해 변경사항을 수시로 업데이트 할 수 있도록 관리해 주세요!
-- `git pull` 이후에는 `npm run build` 혹은 `bun run build` 명령어로 프로젝트를 `build` 합니다!
+- `git pull` 이후에는 `npm run build` 명령어로 프로젝트를 `build` 합니다!
   - 빌드 하기 전에 `tsboard.config.ts` 파일이나 `index.html` 혹은 `public/robots.txt` 가 제대로 수정되었는지 확인해 보세요!
   - `src/pages/home/HomePage.vue` 파일에 반영하신 작업들이 있을 경우 마찬가지로 다시 확인해 보세요.
   - 이 밖에 수정하신 파일들이 `git pull` 이후에도 제대로 변경사항을 유지하고 있는지 확인이 필요합니다.
@@ -197,7 +195,7 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 
 > Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
 
-- 축하합니다! 여러분은 `git clone` → `bun install` → `bun setup.ts` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
+- 축하합니다! 여러분은 `git clone` → `npm install` → `bun setup.ts` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
 - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
 - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
 - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
@@ -367,6 +365,7 @@ server {
     - 메모리는 위 경우 약 60% ~ 70% 수준이며, 고부하 조건이 아닐 때는 메모리 점유일이 20% ~ 30% 수준까지 떨어집니다. 
 
 > Go언어로 재작성된 백엔드는 https://github.com/sirini/goapi 에서 전체 코드를 확인해 보실 수 있습니다.
+> 백엔드를 `goapi`로 전환한 이후에는 Bun 런타임에 대한 의존성은 더 이상 없습니다. 대신, 프론트엔드를 위해 여전히 `Node.js`가 필요합니다. (`npm run build`, `npm i` 등 사용)
 
 ## DB 테이블
 

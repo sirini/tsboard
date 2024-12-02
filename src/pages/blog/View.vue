@@ -71,7 +71,7 @@
               {{ util.unescape(view.post.writer.signature) }}
             </div>
 
-            <board-view-buttons bg-color="#121212"></board-view-buttons>
+            <board-view-buttons bg-color="#121212" board-type="blog"></board-view-buttons>
 
             <board-view-comment-write
               v-if="view.post.uid > 0"
