@@ -37,10 +37,11 @@ const home = useHomeStore()
 const util = useUtilStore()
 
 const boards = ref<BoardLatestPost[]>([])
+/*** 아래 TARGETS는 사이트에 맞게 수정 필요 ***/
 const TARGETS = [
   { id: "free", limit: 8 },
+  { id: "sirini", limit: 8 },
   { id: "photo", limit: 4 },
-  { id: "blog", limit: 4 },
 ]
 const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] // BOARD, GALLERY, BLOG, SHOP
 
