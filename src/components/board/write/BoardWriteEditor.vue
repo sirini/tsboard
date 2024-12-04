@@ -167,7 +167,7 @@ function changeToolbarPosition(): void {
     const toolbar = document.querySelector<HTMLDivElement>("#tsboardEditorToolbar")
     if (!toolbar) return
 
-    toolbar.style.width = `${Math.min(editorBox.clientWidth + 20, writeEditor.config.width)}px`
+    toolbar.style.width = `${Math.min(editorBox.clientWidth + 25, writeEditor.config.width)}px`
     const toolbarRect = toolbar.getBoundingClientRect()
     if (toolbarRect.top < 74 && stickyScrollY < 0) {
       toolbar.classList.add("sticky")
@@ -343,7 +343,7 @@ onBeforeUnmount(() => {
   z-index: 100;
   opacity: 0.9;
   margin-left: -12px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 </style>
