@@ -1,8 +1,8 @@
 <template>
-  <v-row class="mt-16 mb-16">
+  <v-row class="mt-6 mb-16">
     <v-col :cols="home.cols < 6 ? 6 : home.cols">
       <div class="mt-8 mb-2">
-        <v-chip color="blue-grey-lighten-1" variant="outlined">{{ TSBOARD.VERSION }}</v-chip>
+        <v-chip color="blue-grey-lighten-1" variant="tonal" size="small">{{ TSBOARD.VERSION }}</v-chip>
       </div>
       <h1 class="info">{{ TEXT[home.lang].INFO }}</h1>
       <h3 class="copy">{{ TEXT[home.lang].COPY }}</h3>

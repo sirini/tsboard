@@ -46,7 +46,7 @@ export const useHomeStore = defineStore("home", () => {
   const dialogWidth = ref<number>(600)
   const cols = ref<number>(SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
-  const bunch = ref<number>(8)
+  const bunch = ref<number>(12)
   const latestPosts = ref<PostItem[]>([])
   const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
   const keyword = ref<string>("")
