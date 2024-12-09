@@ -172,7 +172,7 @@ tables.push(`${create} #db#post (
   user_uid INT ${unnd0},
   category_uid INT ${unnd0},
   title VARCHAR(300) ${nnde},
-  content VARCHAR(10000) ${nnde},
+  content TEXT,
   submitted BIGINT ${unnd0},
   modified BIGINT ${unnd0},
   hit INT ${unnd0},
