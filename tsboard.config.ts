@@ -4,7 +4,7 @@
  * TSBOARD 기본 설정 파일, v1.0 이후부터는 .env로 통합됩니다
  */
 
-export const IS_DEV = true // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
+export const IS_DEV = false // 개발중일 때 true 로 설정 후 저장, 프로덕션에서는 false
 export const PORT_DEV_VITE = 3000
 export const PORT_DEV = 3200
 export const PORT_PROD = 3100
