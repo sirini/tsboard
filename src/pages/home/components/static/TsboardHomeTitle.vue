@@ -11,21 +11,22 @@
       <div class="mt-16">
         <v-btn
           color="blue-grey-darken-1"
-          variant="outlined"
-          prepend-icon="mdi-book-open-variant-outline"
+          append-icon="mdi-open-in-new"
           size="large"
-          class="mt-2 mr-3"
-          @click="util.open('https://github.com/sirini/tsboard?tab=readme-ov-file#tsboard')"
-          >README</v-btn
+          variant="outlined"
+          elevation="0"
+          class="mt-3"
+          @click="util.open('https://github.com/sirini/tsboard')"
+          >TSBOARD</v-btn
         >
         <v-btn
           color="blue-grey-darken-1"
+          variant="outlined"
           append-icon="mdi-open-in-new"
           size="large"
-          elevation="0"
-          class="mt-2"
-          @click="util.open('https://github.com/sirini/tsboard')"
-          >GitHub</v-btn
+          class="mt-3 ml-3"
+          @click="util.open('https://github.com/sirini/goapi')"
+          >GOAPI</v-btn
         >
       </div>
     </v-col>
