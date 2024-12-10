@@ -1,6 +1,6 @@
 <template>
   <v-row class="mt-6" no-gutters>
-    <v-col>
+    <v-col :cols="colsBoard">
       <v-card class="ma-1">
         <v-list class="pa-0">
           <v-list-item append-icon="mdi-chevron-right" @click="util.go(free.type, free.id)">
@@ -45,7 +45,7 @@
         </v-list>
       </v-card>
     </v-col>
-    <v-col>
+    <v-col :cols="colsBoard">
       <v-card class="ma-1">
         <v-list class="pa-0">
           <v-list-item append-icon="mdi-chevron-right" @click="util.go(blog.type, blog.id)">
@@ -109,7 +109,7 @@
 
           <v-list-item>
             <v-row no-gutters>
-              <v-col v-for="(post, index) in gallery.posts" :key="index">
+              <v-col v-for="(post, index) in gallery.posts" :key="index" :cols="colsPhoto">
                 <v-card
                   class="mt-2 mb-2"
                   @click="util.go(gallery.type, gallery.id, post.uid)"
@@ -154,9 +154,21 @@ const util = useUtilStore()
 const free = ref<BoardLatestPost>(INIT)
 const blog = ref<BoardLatestPost>(INIT)
 const gallery = ref<BoardLatestPost>(INIT)
+const colsBoard = ref<number>(6)
+const colsPhoto = ref<number>(2)
 
 onMounted(async () => {
   home.setGridLayout()
+  if (home.isMobile) {
+    colsBoard.value = 12
+    colsPhoto.value = 6
+  } else if (home.isTablet) {
+    colsBoard.value = 6
+    colsPhoto.value = 3
+  } else {
+    colsBoard.value = 6
+    colsPhoto.value = 2
+  }
 
   /*** 아래 변수들은 사이트에 맞게 수정 필요 ***/
   free.value = await home.getBoardLatestPosts("free", 10)

@@ -2,7 +2,9 @@
   <v-row class="mt-6 mb-16">
     <v-col :cols="home.cols < 6 ? 6 : home.cols">
       <div class="mt-8 mb-2">
-        <v-chip color="blue-grey-lighten-1" variant="tonal" size="small">{{ TSBOARD.VERSION }}</v-chip>
+        <v-chip color="blue-grey-lighten-1" variant="tonal" size="small">{{
+          TSBOARD.VERSION
+        }}</v-chip>
       </div>
       <h1 class="info">{{ TEXT[home.lang].INFO }}</h1>
       <h3 class="copy">{{ TEXT[home.lang].COPY }}</h3>
@@ -12,8 +14,7 @@
         <v-btn
           color="blue-grey-darken-1"
           append-icon="mdi-open-in-new"
-          size="large"
-          variant="outlined"
+          size="x-large"
           elevation="0"
           class="mt-3"
           @click="util.open('https://github.com/sirini/tsboard')"
@@ -23,7 +24,7 @@
           color="blue-grey-darken-1"
           variant="outlined"
           append-icon="mdi-open-in-new"
-          size="large"
+          size="x-large"
           class="mt-3 ml-3"
           @click="util.open('https://github.com/sirini/goapi')"
           >GOAPI</v-btn
