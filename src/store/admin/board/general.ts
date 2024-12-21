@@ -104,7 +104,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     if (newName.length < 2) {
       return admin.error(GENERAL.TOO_SHORT_CATEGORY)
     }
-    const response = await client.tsapi.admin.board.general.update.name.patch({
+    const response = await client.tsapi.admin.board.general.change.name.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -131,7 +131,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     if (newInfo.length < 2) {
       return admin.error(GENERAL.TOO_SHORT_NAME)
     }
-    const response = await client.tsapi.admin.board.general.update.info.patch({
+    const response = await client.tsapi.admin.board.general.change.info.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -189,7 +189,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardRows.value = "20"
       return
     }
-    const response = await client.tsapi.admin.board.general.update.rows.patch({
+    const response = await client.tsapi.admin.board.general.change.rows.patch({
       $headers: {
         authorization: auth.user.token,
       },
@@ -218,7 +218,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       boardWidth.value = "1000"
       return
     }
-    const response = await client.tsapi.admin.board.general.update.width.patch({
+    const response = await client.tsapi.admin.board.general.change.width.patch({
       $headers: {
         authorization: auth.user.token,
       },

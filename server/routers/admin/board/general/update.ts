@@ -78,7 +78,7 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/update/name",
+    "/change/name",
     async ({ body: { boardUid, newName }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
@@ -102,7 +102,7 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/update/info",
+    "/change/info",
     async ({ body: { boardUid, newInfo }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
@@ -150,7 +150,7 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/update/rows",
+    "/change/rows",
     async ({ body: { boardUid, newRows }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
@@ -174,7 +174,7 @@ export const update = new Elysia()
     },
   )
   .patch(
-    "/update/width",
+    "/change/width",
     async ({ body: { boardUid, newWidth }, newAccessToken, accessUserUid }) => {
       const response = {
         newAccessToken,
