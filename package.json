@@ -48,6 +48,7 @@
     "@tiptap/pm": "^2.10.3",
     "@tiptap/vue-3": "^2.10.3",
     "@vue/language-core": "^2.1.10",
+    "alova": "^3.2.7",
     "chalk": "^5.3.0",
     "core-js": "^3.38.1",
     "crypto-js": "^4.2.0",
