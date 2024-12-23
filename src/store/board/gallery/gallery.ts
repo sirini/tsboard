@@ -55,7 +55,7 @@ export const useGalleryStore = defineStore("gallery", () => {
 
     const response = await client.tsapi.board.photo.list.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -75,7 +75,7 @@ export const useGalleryStore = defineStore("gallery", () => {
       config.value = response.data.result.config
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {

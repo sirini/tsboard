@@ -57,7 +57,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       }
       const response = await client.tsapi.board.list.get({
         $headers: {
-          authorization: auth.user.token,
+          Authorization: `Bearer ${auth.user.token}`,
         },
         $query: {
           id: id.value,
@@ -77,7 +77,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         config.value = response.data.result.config
         return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
       }
-      auth.updateUserToken(response.data.result.newAccessToken)
+
       config.value = response.data.result.config
       isAdmin.value = response.data.result.isAdmin
 

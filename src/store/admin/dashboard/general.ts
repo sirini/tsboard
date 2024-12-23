@@ -1,23 +1,15 @@
-/**
- * store/admin/dashboard/general
- *
- * 각종 기본적인 수치 데이터들의 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
-import {
-  AdminDashboardResult,
-  AdminLatest,
-  AdminReportLatest,
-  AdminUserInfo,
-} from "../../../interface/admin"
 import { GENERAL } from "../../../messages/store/admin/dashboard/general"
 import { useAuthStore } from "../../user/auth"
 import { useAdminStore } from "../common"
+import axios from "axios"
+import { BoardWriter, Pair } from "../../../interface/board_interface"
+import {
+  AdminDashboardLatestContent,
+  AdminDashboardStatistic,
+} from "../../../interface/admin_interface"
 
 type Today = {
   year: string
@@ -26,21 +18,20 @@ type Today = {
 }
 
 export const useAdminDashboardStore = defineStore("adminDashboard", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const visit = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const member = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const post = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const reply = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const file = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const image = ref<AdminDashboardResult>({ total: 0, labels: [], values: [] })
-  const posts = ref<AdminLatest[]>([])
-  const comments = ref<AdminLatest[]>([])
-  const reports = ref<AdminReportLatest[]>([])
-  const groups = ref<string[]>([])
-  const boards = ref<string[]>([])
-  const members = ref<AdminUserInfo[]>([])
+  const visit = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const member = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const post = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const reply = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const file = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const image = ref({ total: 0, labels: [] as string[], values: [] as number[] })
+  const posts = ref<AdminDashboardLatestContent[]>([])
+  const comments = ref<AdminDashboardLatestContent[]>([])
+  const reports = ref<AdminDashboardLatestContent[]>([])
+  const groups = ref<Pair[]>([])
+  const boards = ref<Pair[]>([])
+  const members = ref<BoardWriter[]>([])
 
   // 현재 연월일 반환
   function today(): Today {
@@ -57,27 +48,30 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 간단 통계 데이터 가져오기
   async function loadStatistics(): Promise<void> {
-    const response = await client.tsapi.admin.dashboard.general.load.statistic.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/dashboard/general/load/statistic`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
     })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
     }
+
     const items = [
-      { target: member.value, data: response.data.result.member },
-      { target: post.value, data: response.data.result.post },
-      { target: reply.value, data: response.data.result.reply },
-      { target: file.value, data: response.data.result.file },
-      { target: image.value, data: response.data.result.image },
-      { target: visit.value, data: response.data.result.visit },
+      { target: member.value, data: response.data.result.member as AdminDashboardStatistic },
+      { target: post.value, data: response.data.result.post as AdminDashboardStatistic },
+      { target: reply.value, data: response.data.result.reply as AdminDashboardStatistic },
+      { target: file.value, data: response.data.result.file as AdminDashboardStatistic },
+      { target: image.value, data: response.data.result.image as AdminDashboardStatistic },
+      { target: visit.value, data: response.data.result.visit as AdminDashboardStatistic },
     ]
+
     for (const item of items) {
       item.target.labels = []
       item.target.values = []
       item.target.total = item.data.total
+
       for (const history of item.data.history.reverse()) {
         const d = new Date(history.date)
         const month = (d.getMonth() + 1).toString().padStart(2, "0")
@@ -90,11 +84,11 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 최신 글/댓글/신고 가져오기
   async function loadLatests(): Promise<void> {
-    const response = await client.tsapi.admin.dashboard.general.load.latest.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/dashboard/general/load/latest`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         limit: 5,
       },
     })
@@ -102,18 +96,19 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
     }
-    posts.value = response.data.result.posts
-    comments.value = response.data.result.comments
-    reports.value = response.data.result.reports
+
+    posts.value = response.data.result.posts as AdminDashboardLatestContent[]
+    comments.value = response.data.result.comments as AdminDashboardLatestContent[]
+    reports.value = response.data.result.reports as AdminDashboardLatestContent[]
   }
 
   // 그룹/게시판/회원 최신 목록 가져오기
   async function loadItems(): Promise<void> {
-    const response = await client.tsapi.admin.dashboard.general.load.item.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/dashboard/general/load/item`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         limit: 5,
       },
     })
@@ -121,9 +116,9 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
     }
-    groups.value = response.data.result.groups
-    boards.value = response.data.result.boards
-    members.value = response.data.result.members
+    groups.value = response.data.result.groups as Pair[]
+    boards.value = response.data.result.boards as Pair[]
+    members.value = response.data.result.members as BoardWriter[]
   }
 
   return {

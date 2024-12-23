@@ -33,7 +33,7 @@ export const useChatStore = defineStore("chat", () => {
     }
     const response = await client.tsapi.chat.list.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         limit: 10,
@@ -68,7 +68,7 @@ export const useChatStore = defineStore("chat", () => {
 
     const response = await client.tsapi.chat.history.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: targetUser.value.uid,
@@ -95,7 +95,7 @@ export const useChatStore = defineStore("chat", () => {
 
     const response = await client.tsapi.chat.save.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,

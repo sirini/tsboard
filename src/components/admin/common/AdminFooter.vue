@@ -3,7 +3,7 @@
     <v-card elevation="0" class="mx-auto" :color="home.color.admin.footer">
       <v-card-actions>
         <v-btn class="mx-3 tsboard" rounded="xl" @click="util.open('https://tsboard.dev')">
-          TSBOARD.dev - {{ TSBOARD.VERSION }}
+          TSBOARD.dev
           <v-tooltip activator="parent" location="top">
             클릭하시면 TSBOARD 공식 사이트로 이동합니다! 이곳에서 궁금하신 내용을 물어보거나, 다른
             사용자분들의 팁들을 배워 보실 수 있습니다!

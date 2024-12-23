@@ -1,22 +1,14 @@
-/**
- * store/admin/latest/post
- *
- * 최신 글 조회 및 관리에 필요한 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
-import { AdminLatestPost } from "../../../interface/admin"
 import { POST } from "../../../messages/store/admin/latest/post"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { useAdminStore } from "../common"
+import axios from "axios"
+import { AdminLatestPost, AdminLatestPostResult } from "../../../interface/admin_interface"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -32,11 +24,11 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
 
   // 최신 글 목록 가져오기
   async function loadLatestPosts(): Promise<void> {
-    const response = await client.tsapi.admin.latest.post.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/latest/post`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         page: page.value,
         bunch: bunch.value,
       },
@@ -48,8 +40,10 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (response.data.success === false) {
       return admin.error(POST.FAILED_LOAD)
     }
-    pageLength.value = Math.ceil(response.data.result.maxPostUid / bunch.value)
-    posts.value = response.data.result.posts
+
+    const result = response.data.result as AdminLatestPostResult
+    pageLength.value = Math.ceil(result.maxUid / bunch.value)
+    posts.value = result.posts
     admin.success(POST.LOADED_POST)
   }
 
@@ -64,11 +58,12 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (keyword.value.length < 2) {
       return
     }
-    const response = await client.tsapi.admin.latest.search.post.get({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.get(`${TSBOARD.API}/admin/latest/search/post`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         option: option.value,
         keyword: keyword.value,
         page: page.value,
@@ -79,8 +74,10 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
     if (!response.data) {
       return admin.error(POST.NO_RESPONSE)
     }
-    pageLength.value = Math.ceil(response.data.result.maxPostUid / bunch.value)
-    posts.value = response.data.result.posts
+
+    const result = response.data.result as AdminLatestPostResult
+    pageLength.value = Math.ceil(result.maxUid / bunch.value)
+    posts.value = result.posts
   }
   const updateLatestPosts = util.debounce(_updateLatestPosts, 250)
 
@@ -103,11 +100,11 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
   // 선택 삭제하기
   async function removePosts(): Promise<void> {
     const targets = selected.value.join(",")
-    const response = await client.tsapi.admin.latest.remove.post.delete({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.delete(`${TSBOARD.API}/admin/latest/remove/post`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         targets,
       },
     })

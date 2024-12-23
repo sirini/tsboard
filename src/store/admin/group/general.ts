@@ -1,52 +1,42 @@
-/**
- * store/admin/group/general
- *
- * 게시판 그룹 관리자 페이지에서 일반 부분에 필요한 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import {
-  AdminPair,
-  AdminGroupList,
-  AdminGroupConfig,
-  AdminUserInfo,
-} from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/group/general"
-import { INIT_GROUP_CONFIG } from "../../../../server/database/admin/group/general/const"
 import { TSBOARD } from "../../../../tsboard.config"
-import { BoardType } from "../../../interface/board"
+import axios from "axios"
+import {
+  ADMIN_GROUP_BOARD_STATUS,
+  ADMIN_GROUP_CONFIG,
+  AdminGroupBoardItem,
+  AdminGroupConfig,
+} from "../../../interface/admin_interface"
+import { Board, BoardWriter, Pair, Triple } from "../../../interface/board_interface"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const group = ref<AdminGroupConfig>(INIT_GROUP_CONFIG)
-  const removeBoardTarget = ref<AdminPair>({ uid: 0, name: "" })
+  const group = ref<AdminGroupConfig>(ADMIN_GROUP_CONFIG)
+  const removeBoardTarget = ref<Pair>({ uid: 0, name: "" })
   const confirmRemoveBoardDialog = ref<boolean>(false)
-  const boards = ref<AdminGroupList[]>([])
-  const existBoardIds = ref<AdminPair[]>([])
-  const suggestions = ref<AdminUserInfo[]>([])
+  const boards = ref<AdminGroupBoardItem[]>([])
+  const existBoardIds = ref<Triple[]>([])
+  const suggestions = ref<BoardWriter[]>([])
   const newGroupManager = ref<string>("")
   const newBoardId = ref<string>("")
 
   // 지정된 그룹의 설정값 불러오기
   async function loadGeneralConfig(): Promise<void> {
-    const response = await client.tsapi.admin.group.general.load.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/group/general/load`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: route.params.id as string,
-        userUid: auth.user.uid,
       },
     })
 
@@ -56,9 +46,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (response.data.success === false) {
       return admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    group.value = response.data.result.config
-    boards.value = response.data.result.boards
+
+    group.value = response.data.result.config as AdminGroupConfig
+    group.value.id = route.params.id as string
+
+    boards.value = response.data.result.boards as AdminGroupBoardItem[]
     admin.success(GENERAL.LOADED_CONFIG)
   }
 
@@ -67,11 +59,12 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (newGroupManager.value.length < 2) {
       return
     }
-    const response = await client.tsapi.admin.group.general.candidates.get({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.get(`${TSBOARD.API}/admin/group/general/candidates`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         name: newGroupManager.value,
         limit: 5,
       },
@@ -83,11 +76,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (response.data.success === false) {
       return
     }
-    if (response.data.result.candidates.length < 1) {
-      suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES, profile: "" }]
+    if (response.data.result.length < 1) {
+      suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES, profile: "", signature: "" }]
       return
     }
-    suggestions.value = response.data.result.candidates
+    suggestions.value = response.data.result as BoardWriter[]
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 
@@ -96,11 +89,12 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (newBoardId.value.length < 2) {
       return
     }
-    const response = await client.tsapi.admin.group.general.boardids.get({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.get(`${TSBOARD.API}/admin/group/general/boardids`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: newBoardId.value,
         limit: 5,
       },
@@ -112,11 +106,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (response.data.success === false) {
       return
     }
-    if (response.data.result.ids.length < 1) {
-      existBoardIds.value = [{ uid: 0, name: GENERAL.NO_DUPLICATE_ID }]
+    if (response.data.result.length < 1) {
+      existBoardIds.value = [{ uid: 0, id: "", name: GENERAL.NO_DUPLICATE_ID }]
       return
     }
-    existBoardIds.value = response.data.result.ids
+    existBoardIds.value = response.data.result as Triple[]
   }
   const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)
 
@@ -131,16 +125,19 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       newBoardId.value = ""
       return
     }
-    const response = await client.tsapi.admin.group.general.create.board.post({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.post(
+      `${TSBOARD.API}/admin/group/general/create/board`,
+      {
+        groupUid: group.value.uid,
+        newId,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      groupUid: group.value.uid,
-      newId,
-    })
+    )
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -148,42 +145,40 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (response.data.success === false) {
       return admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
 
     boards.value.push({
       uid: response.data.result.uid as number,
       id: newId,
-      type: response.data.result.type as BoardType,
+      type: response.data.result.type as Board,
       name: response.data.result.name as string,
       info: response.data.result.info as string,
       manager: {
         uid: response.data.result.manager.uid as number,
         name: response.data.result.manager.name as string,
         profile: "",
+        signature: "",
       },
-      total: {
-        post: 0,
-        comment: 0,
-        file: 0,
-        image: 0,
-      },
+      count: 0,
+      total: ADMIN_GROUP_BOARD_STATUS,
     })
     admin.success(`[${newId}] ${GENERAL.ADDED_NEW_BOARD}`)
     newBoardId.value = ""
   }
 
   // 선택한 회원을 그룹 관리자로 지정하기
-  async function updateGroupManager(user: AdminPair): Promise<void> {
-    const response = await client.tsapi.admin.group.general.change.admin.patch({
-      $headers: {
-        authorization: auth.user.token,
+  async function updateGroupManager(user: Pair): Promise<void> {
+    const response = await axios.patch(
+      `${TSBOARD.API}/admin/group/general/change/admin`,
+      {
+        groupUid: group.value.uid,
+        targetUserUid: user.uid,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      groupUid: group.value.uid,
-      targetUserUid: user.uid,
-    })
+    )
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -191,7 +186,6 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
     if (response.data.success === false) {
       return admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
 
     group.value.manager.uid = user.uid
     group.value.manager.name = user.name
@@ -218,11 +212,11 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return admin.error(GENERAL.INVALID_REMOVE_TARGET)
     }
 
-    const response = await client.tsapi.admin.group.general.remove.board.delete({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.delete(`${TSBOARD.API}/admin/group/general/remove/board`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: removeBoardTarget.value.uid,
         userUid: auth.user.uid,
       },

@@ -42,7 +42,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
     let result: Comment = INIT_COMMENT
     const response = await client.tsapi.comment.write.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -61,7 +61,6 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       return result
     }
 
-    auth.updateUserToken(response.data.result.newAccessToken)
     const newUid = response.data.result.newCommentUid
     result = {
       uid: newUid,
@@ -89,7 +88,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
 
     const response = await client.tsapi.comment.reply.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -109,7 +108,6 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       return result
     }
 
-    auth.updateUserToken(response.data.result.newAccessToken)
     const newUid = response.data.result.newCommentUid
     result = {
       uid: newUid,
@@ -135,7 +133,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   async function modifyComment(param: SaveModifyCommentParams): Promise<void> {
     const response = await client.tsapi.comment.modify.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -151,7 +149,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.snack(TEXT[home.lang].MODIFIED_COMMENT)
   }
 

@@ -42,7 +42,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
   async function loadUserPermission(): Promise<void> {
     const response = await client.tsapi.user.load.permission.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         targetUserUid: targetUser.value.uid,
@@ -67,7 +67,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
     }
     const response = await client.tsapi.user.manage.user.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -87,7 +87,7 @@ export const useManageUserStore = defineStore("manageuser", () => {
     if (response.data.success === false) {
       return util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.success(TEXT[home.lang].ACTION_TAKEN)
     closeManageUser()
   }

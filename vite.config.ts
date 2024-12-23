@@ -9,7 +9,7 @@ import * as sass from "sass"
 import { defineConfig } from "vite"
 
 // TSBOARD Configuration
-import { IS_DEV, LOCALHOST, PORT_DEV, PORT_DEV_VITE, TSBOARD } from "./tsboard.config"
+import { IS_DEV, LOCALHOST, API_PORT, VITE_PORT, TSBOARD } from "./tsboard.config"
 
 export default defineConfig({
   plugins: [
@@ -44,11 +44,11 @@ export default defineConfig({
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
   server: {
-    port: PORT_DEV_VITE,
+    port: VITE_PORT,
     proxy: {
       /* 쿠키가 정상적으로 동작하려면, 반드시 proxy 설정으로 API 호출 필요 */
-      "/tsapi": {
-        target: `${LOCALHOST}:${PORT_DEV}`,
+      "/goapi": {
+        target: `${LOCALHOST}:${API_PORT}`,
         changeOrigin: true,
       },
     },

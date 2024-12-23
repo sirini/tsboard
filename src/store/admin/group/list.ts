@@ -1,45 +1,32 @@
-/**
- * store/admin/group/list
- *
- * 게시판 그룹 목록 관리에 필요한 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { AdminPair, AdminGroupConfig } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { LIST } from "../../../messages/store/admin/group/list"
 import { TSBOARD } from "../../../../tsboard.config"
+import axios from "axios"
+import { AdminGroupConfig } from "../../../interface/admin_interface"
+import { BoardWriter, Pair } from "../../../interface/board_interface"
 
 export const useAdminGroupListStore = defineStore("adminGroupList", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
   const groups = ref<AdminGroupConfig[]>([])
-  const removeGroupTarget = ref<AdminPair>({
-    uid: 0,
-    name: "",
-  })
+  const removeGroupTarget = ref<Pair>({ uid: 0, name: "" })
   const confirmRemoveGroupDialog = ref<boolean>(false)
   const changeGroupIdDialog = ref<boolean>(false)
-  const existGroupIds = ref<AdminPair[]>([])
+  const existGroupIds = ref<Pair[]>([])
   const newGroupId = ref<string>("")
   const changeGroupId = ref<string>("")
   const groupUid = ref<number>(0)
 
   // 그룹들 목록 가져오기
   async function loadGroupList(): Promise<void> {
-    const response = await client.tsapi.admin.group.list.load.get({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        userUid: auth.user.uid,
+    const response = await axios.get(`${TSBOARD.API}/admin/group/list/load`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
     })
 
@@ -49,8 +36,8 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    groups.value = response.data.result.groups
+
+    groups.value = response.data.result as AdminGroupConfig[]
   }
 
   // 새 그룹 생성을 위해 아이디를 입력할 때 기존 그룹 아이디를 보여주기
@@ -58,11 +45,12 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (newGroupId.value.length < 2) {
       return
     }
-    const response = await client.tsapi.admin.group.list.groupids.get({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.get(`${TSBOARD.API}/admin/group/list/groupids`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: newGroupId.value,
         limit: 5,
       },
@@ -74,11 +62,11 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return
     }
-    if (response.data.result.ids.length < 1) {
+    if (response.data.result.length < 1) {
       existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
       return
     }
-    existGroupIds.value = response.data.result.ids
+    existGroupIds.value = response.data.result as Pair[]
   }
   const updateExistGroupIds = util.debounce(_updateExistGroupIds, 250)
 
@@ -94,15 +82,18 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       newGroupId.value = ""
       return
     }
-    const response = await client.tsapi.admin.group.list.create.group.post({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.post(
+      `${TSBOARD.API}/admin/group/list/create/group`,
+      {
+        newId,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      newId,
-    })
+    )
 
     if (!response.data) {
       return admin.error(LIST.NO_RESPONSE)
@@ -110,12 +101,12 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     groups.value.push({
-      uid: response.data.result.uid,
-      id: newId,
+      uid: response.data.result.uid as number,
+      id: response.data.result.id as string,
       count: 0,
-      manager: response.data.result.manager,
+      manager: response.data.result.manager as BoardWriter,
     })
     admin.success(LIST.ADDED_NEW_GROUP)
     newGroupId.value = ""
@@ -142,14 +133,14 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (groups.value.length < 2) {
       return admin.error(LIST.MINIMUM_GROUP_COUNT)
     }
-    const response = await client.tsapi.admin.group.list.remove.group.delete({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.delete(`${TSBOARD.API}/admin/group/list/remove/group`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
-        userUid: auth.user.uid,
+      params: {
+        groupUid: removeGroupTarget.value.uid,
       },
-      groupUid: removeGroupTarget.value.uid,
     })
 
     if (!response.data) {
@@ -158,7 +149,6 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
     if (response.data.success === false) {
       return admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
 
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
       return group.uid !== removeGroupTarget.value.uid
@@ -184,16 +174,18 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
 
   // 그룹 ID 변경하기
   async function updateGroupId(): Promise<void> {
-    const response = await client.tsapi.admin.group.list.update.group.put({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.put(
+      `${TSBOARD.API}/admin/group/list/update/group`,
+      {
+        groupUid: groupUid.value,
+        changeGroupId: changeGroupId.value,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      groupUid: groupUid.value,
-      changeGroupId: changeGroupId.value,
-    })
+    )
 
     if (!response.data) {
       return admin.error(LIST.NO_RESPONSE)
@@ -202,7 +194,6 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       return admin.error(`${LIST.FAILED_UPDATE_GROUP_ID} (${response.data.error})`)
     }
 
-    auth.updateUserToken(response.data.result.newAccessToken)
     await loadGroupList()
     closeChangeGroupIdDialog()
   }

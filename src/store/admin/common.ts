@@ -1,9 +1,3 @@
-/**
- * store/admin/common
- *
- * 관리자 페이지에서 공통으로 사용되는 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import { AdminBreadcrumb } from "../../interface/admin"

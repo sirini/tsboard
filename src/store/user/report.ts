@@ -49,7 +49,7 @@ export const useReportStore = defineStore("report", () => {
 
     const response = await client.tsapi.user.report.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -65,7 +65,7 @@ export const useReportStore = defineStore("report", () => {
     if (response.data.success === false) {
       return util.error(`${TEXT[home.lang].FAILED_REPORT} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.success(TEXT[home.lang].REPORTED_USER)
     closeDialog()
   }

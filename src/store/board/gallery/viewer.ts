@@ -83,7 +83,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
     const response = await client.tsapi.board.view.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -103,7 +103,7 @@ export const useViewerStore = defineStore("viewer", () => {
       util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
       return close()
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     config.value = response.data.result.config
 
     if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
@@ -124,7 +124,7 @@ export const useViewerStore = defineStore("viewer", () => {
 
     const response = await client.tsapi.board.photo.view.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -150,7 +150,7 @@ export const useViewerStore = defineStore("viewer", () => {
   async function loadComments(): Promise<void> {
     const response = await client.tsapi.comment.list.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -176,7 +176,7 @@ export const useViewerStore = defineStore("viewer", () => {
   async function like(isLike: boolean): Promise<void> {
     const response = await client.tsapi.board.like.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,

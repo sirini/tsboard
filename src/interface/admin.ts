@@ -17,6 +17,10 @@ export type AdminPair = {
   name: string
 }
 
+export type AdminTriple = AdminPair & {
+  id: string
+}
+
 export type AdminUserInfo = AdminPair & {
   profile: string
 }

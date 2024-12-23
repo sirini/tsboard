@@ -49,7 +49,7 @@ export const useCommentStore = defineStore("comment", () => {
 
     const response = await client.tsapi.comment.list.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -108,7 +108,7 @@ export const useCommentStore = defineStore("comment", () => {
   async function like(commentUid: number, isLike: boolean): Promise<void> {
     const response = await client.tsapi.comment.like.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -229,7 +229,7 @@ export const useCommentStore = defineStore("comment", () => {
 
     const response = await client.tsapi.comment.remove.delete({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: boardUid.value,

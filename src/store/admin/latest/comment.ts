@@ -1,22 +1,14 @@
-/**
- * store/admin/latest/comment
- *
- * 최신 댓글 조회 및 관리에 필요한 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
-import { AdminLatestComment } from "../../../interface/admin"
 import { COMMENT } from "../../../messages/store/admin/latest/comment"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { useAdminStore } from "../common"
+import axios from "axios"
+import { AdminLatestComment, AdminLatestCommentResult } from "../../../interface/admin_interface"
 
 export const useAdminLatestCommentStore = defineStore("adminLatestComment", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -31,11 +23,11 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
 
   // 최신 댓글 목록 가져오기
   async function loadLatestComments(): Promise<void> {
-    const response = await client.tsapi.admin.latest.comment.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/latest/comment`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         page: page.value,
         bunch: bunch.value,
       },
@@ -47,8 +39,10 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     if (response.data.success === false) {
       return admin.error(COMMENT.FAILED_LOAD)
     }
-    pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
-    comments.value = response.data.result.comments
+
+    const result = response.data.result as AdminLatestCommentResult
+    pageLength.value = Math.ceil(result.maxUid / bunch.value)
+    comments.value = result.comments
     admin.success(COMMENT.LOADED_COMMENT)
   }
 
@@ -63,22 +57,26 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     if (keyword.value.length < 2) {
       return
     }
-    const response = await client.tsapi.admin.latest.search.comment.get({
-      $headers: {
-        authorization: auth.user.token,
+
+    const response = await axios.get(`${TSBOARD.API}/admin/latest/search/comment`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         option: option.value,
         keyword: keyword.value,
         page: page.value,
         bunch: bunch.value,
       },
     })
+
     if (!response.data) {
       return admin.error(COMMENT.NO_RESPONSE)
     }
-    pageLength.value = Math.ceil(response.data.result.maxCommentUid / bunch.value)
-    comments.value = response.data.result.comments
+
+    const result = response.data.result as AdminLatestCommentResult
+    pageLength.value = Math.ceil(result.maxUid / bunch.value)
+    comments.value = result.comments
   }
   const updateLatestComments = util.debounce(_updateLatestComments, 250)
 
@@ -101,11 +99,11 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
   // 선택 삭제하기
   async function removeComments(): Promise<void> {
     const targets = selected.value.join(",")
-    const response = await client.tsapi.admin.latest.remove.comment.delete({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.delete(`${TSBOARD.API}/admin/latest/remove/comment`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         targets,
       },
     })

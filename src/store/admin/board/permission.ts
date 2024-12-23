@@ -1,39 +1,32 @@
-/**
- * store/admin/board/permission
- *
- * 게시판 관리자 페이지에서 권한 부분에 필요한 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { AdminBoardPermission, AdminPair } from "../../../interface/admin"
+import { AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { PERMISSION } from "../../../messages/store/admin/board/permission"
-import { BOARD_PERMISSION } from "../../../../server/database/admin/group/general/const"
 import { TSBOARD } from "../../../../tsboard.config"
+import axios from "axios"
+import { ADMIN_BOARD_LEVEL_POLICY, AdminBoardLevelPolicy } from "../../../interface/admin_interface"
+import { BoardWriter } from "../../../interface/board_interface"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const suggestions = ref<AdminPair[]>([])
-  const board = ref<AdminBoardPermission>(BOARD_PERMISSION)
+  const suggestions = ref<BoardWriter[]>([])
+  const board = ref<AdminBoardLevelPolicy>(ADMIN_BOARD_LEVEL_POLICY)
   const boardNewAdmin = ref<string>("")
 
   // 게시판 권한 설정 불러오기
   async function loadPermissionConfig(): Promise<void> {
-    const response = await client.tsapi.admin.board.permission.load.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/board/permission/load`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: route.params.id as string,
         userUid: auth.user.uid,
       },
@@ -45,59 +38,66 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
     if (response.data.success === false) {
       return admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    board.value = response.data.result.permission
+
+    board.value = response.data.result as AdminBoardLevelPolicy
     admin.success(PERMISSION.LOADED_PERMISSION)
   }
 
   // 회원 이름(닉네임)을 입력할 때마다 하단에 검색해서 보여주기
   async function _updateBoardManagerSuggestion(): Promise<void> {
-    const response = await client.tsapi.admin.board.permission.candidates.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/board/permission/candidates`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         name: boardNewAdmin.value,
         limit: 5,
       },
     })
+
     if (!response.data) {
       return admin.error(PERMISSION.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return
     }
-    if (response.data.result.candidates.length < 1) {
-      suggestions.value = [{ uid: 0, name: PERMISSION.EMPTY_CANDIDATES }]
+    if (response.data.result.length < 1) {
+      suggestions.value = [
+        { uid: 0, name: PERMISSION.EMPTY_CANDIDATES, profile: "", signature: "" },
+      ]
       return
     }
-    suggestions.value = response.data.result.candidates
+    suggestions.value = response.data.result as BoardWriter[]
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
   // 선택한 회원을 관리자로 지정하기
   async function updateBoardManager(user: AdminPair): Promise<void> {
-    const response = await client.tsapi.admin.board.permission.change.admin.patch({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.patch(
+      `${TSBOARD.API}/admin/board/permission/change/admin`,
+      {
+        boardUid: board.value.uid,
+        targetUserUid: user.uid,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: board.value.uid,
-      targetUserUid: user.uid,
-    })
+    )
+
     if (!response.data) {
       return admin.error(PERMISSION.NO_RESPONSE)
     }
     if (response.data.success === false) {
       return admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     board.value.admin = {
       uid: user.uid,
       name: user.name,
       profile: "",
+      signature: "",
     }
     admin.success(`${user.name} ${PERMISSION.UPDATED_BOARD_ADMIN}`)
   }
@@ -144,16 +144,23 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 액세스 권한 변경
   async function updateAllPermissions(): Promise<boolean> {
-    const response = await client.tsapi.admin.board.permission.update.levels.patch({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.patch(
+      `${TSBOARD.API}/admin/board/permission/update/levels`,
+      {
+        boardUid: board.value.uid,
+        list: board.value.level.list,
+        view: board.value.level.view,
+        write: board.value.level.write,
+        comment: board.value.level.comment,
+        download: board.value.level.download,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: board.value.uid,
-      levels: board.value.level,
-    })
+    )
+
     if (!response.data) {
       admin.error(PERMISSION.NO_RESPONSE)
       return false
@@ -162,7 +169,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
       admin.error(`${PERMISSION.UNABLE_UPDATE_LEVEL} (${response.data.error})`)
       return false
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     return true
   }
 

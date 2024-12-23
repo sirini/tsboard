@@ -1,41 +1,37 @@
-/**
- * store/admin/board/point
- *
- * 게시글 열람, 글작성 등에 소비되는(혹은 충전되는) 포인트 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../../server/index"
-import { AdminPoint } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { POINT } from "../../../messages/store/admin/board/point"
-import { INIT_POINT_CONFIG } from "../../../../server/database/admin/board/point/const"
 import { TSBOARD } from "../../../../tsboard.config"
+import axios from "axios"
+import { ADMIN_BOARD_POINT_POLICY, AdminBoardPointPolicy } from "../../../interface/admin_interface"
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
   const admin = useAdminStore()
   const auth = useAuthStore()
-  const client = edenTreaty<App>(TSBOARD.API.URI)
-  const board = ref<AdminPoint>(INIT_POINT_CONFIG)
+  const board = ref<AdminBoardPointPolicy>(ADMIN_BOARD_POINT_POLICY)
   const boardView = ref<string>("0")
   const boardWrite = ref<string>("0")
   const boardComment = ref<string>("0")
   const boardDownload = ref<string>("0")
+  const payment = ref({
+    view: false,
+    write: false,
+    comment: false,
+    download: false,
+  })
 
   // 게시판 포인트 설정 불러오기
   async function loadPointConfig(): Promise<void> {
-    const response = await client.tsapi.admin.board.point.load.get({
-      $headers: {
-        authorization: auth.user.token,
+    const response = await axios.get(`${TSBOARD.API}/admin/board/point/load`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: route.params.id as string,
-        userUid: auth.user.uid,
       },
     })
 
@@ -45,25 +41,38 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
     if (response.data.success === false) {
       return admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
-    board.value = response.data.result.point
-    boardView.value = board.value.view.amount.toString()
-    boardWrite.value = board.value.write.amount.toString()
-    boardComment.value = board.value.comment.amount.toString()
-    boardDownload.value = board.value.download.amount.toString()
+
+    const point = response.data.result as AdminBoardPointPolicy
+    board.value = {
+      uid: point.uid,
+      view: point.view,
+      write: point.write,
+      comment: point.comment,
+      download: point.download,
+    }
+
+    payment.value.view = board.value.view < 0 ? true : false
+    payment.value.write = board.value.write < 0 ? true : false
+    payment.value.comment = board.value.comment < 0 ? true : false
+    payment.value.download = board.value.download < 0 ? true : false
+
+    boardView.value = Math.abs(board.value.view).toString()
+    boardWrite.value = Math.abs(board.value.write).toString()
+    boardComment.value = Math.abs(board.value.comment).toString()
+    boardDownload.value = Math.abs(board.value.download).toString()
 
     admin.success(POINT.LOADED_POINT)
   }
 
   // 글 보기 포인트 정책 업데이트
   async function updateViewPoint(isPayment: boolean, amount: string): Promise<void> {
-    board.value.view.isPayment = isPayment
-    board.value.view.amount = parseInt(amount)
+    payment.value.view = isPayment
+    board.value.view = parseInt(amount) * (isPayment ? -1 : 1)
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `${POINT.ACTION_VIEW} ${board.value.view.amount} ${
-          board.value.view.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        `${POINT.ACTION_VIEW} ${amount} ${
+          isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
         } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
@@ -71,13 +80,13 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 글 작성 포인트 정책 업데이트
   async function updateWritePoint(isPayment: boolean, amount: string): Promise<void> {
-    board.value.write.isPayment = isPayment
-    board.value.write.amount = parseInt(amount)
+    payment.value.write = isPayment
+    board.value.write = parseInt(amount) * (isPayment ? -1 : 1)
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `${POINT.ACTION_WRITE} ${board.value.write.amount} ${
-          board.value.write.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        `${POINT.ACTION_WRITE} ${amount} ${
+          isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
         } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
@@ -85,13 +94,13 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 댓글 쓰기 포인트 정책 업데이트
   async function updateCommentPoint(isPayment: boolean, amount: string): Promise<void> {
-    board.value.comment.isPayment = isPayment
-    board.value.comment.amount = parseInt(amount)
+    payment.value.comment = isPayment
+    board.value.comment = parseInt(amount) * (isPayment ? -1 : 1)
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `${POINT.ACTION_COMMENT} ${board.value.comment.amount} ${
-          board.value.comment.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        `${POINT.ACTION_COMMENT} ${amount} ${
+          isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
         } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
@@ -99,13 +108,13 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 다운로드 포인트 정책 업데이트
   async function updateDownloadPoint(isPayment: boolean, amount: string): Promise<void> {
-    board.value.download.isPayment = isPayment
-    board.value.download.amount = parseInt(amount)
+    payment.value.download = isPayment
+    board.value.download = parseInt(amount) * (isPayment ? -1 : 1)
 
     if ((await updateAllPoints()) === true) {
       admin.success(
-        `${POINT.ACTION_DOWNLOAD} ${board.value.download.amount} ${
-          board.value.download.isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
+        `${POINT.ACTION_DOWNLOAD} ${amount} ${
+          isPayment ? POINT.RESULT_DECREASE : POINT.RESULT_INCREASE
         } ${POINT.UPDATED_ACTION_RESULT}`,
       )
     }
@@ -113,21 +122,21 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 포인트 처리
   async function updateAllPoints(): Promise<boolean> {
-    const response = await client.tsapi.admin.board.point.update.points.patch({
-      $headers: {
-        authorization: auth.user.token,
-      },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      boardUid: board.value.uid,
-      points: {
+    const response = await axios.patch(
+      `${TSBOARD.API}/admin/board/point/update/points`,
+      {
+        boardUid: board.value.uid,
         view: board.value.view,
         write: board.value.write,
         comment: board.value.comment,
         download: board.value.download,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      },
+    )
 
     if (!response.data) {
       admin.error(POINT.NO_RESPONSE)
@@ -137,7 +146,7 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       admin.error(`${POINT.UNABLE_UPDATE_POINT} (${response.data.error})`)
       return false
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     return true
   }
 

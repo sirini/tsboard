@@ -55,7 +55,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
       files.value = editor.getFiles(event)
       const response = await client.tsapi.editor.upload.images.post({
         $headers: {
-          authorization: auth.user.token,
+          Authorization: `Bearer ${auth.user.token}`,
         },
         $query: {
           userUid: auth.user.uid,
@@ -70,7 +70,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
       if (response.data.success === false) {
         return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
       }
-      auth.updateUserToken(response.data.result.newAccessToken)
+
       uploadedImages.value = response.data.result.uploadedImages
     } finally {
       uploading.value = false
@@ -81,7 +81,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   async function loadUploadedImages(isAppend: boolean): Promise<void> {
     const response = await client.tsapi.editor.load.images.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: boardUid.value,
@@ -115,7 +115,6 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         lastImageUid.value = image.uid
       }
     })
-    auth.updateUserToken(response.data.result.newAccessToken)
   }
 
   // 이미지 삭제하기 준비
@@ -134,7 +133,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   async function removeUploadedImage(imageUid: number): Promise<void> {
     const response = await client.tsapi.editor.remove.image.delete({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         imageUid,
@@ -148,7 +147,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.snack(TEXT[home.lang].REMOVED_IMAGE)
   }
 

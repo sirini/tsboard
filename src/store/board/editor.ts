@@ -64,7 +64,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const response = await client.tsapi.editor.config.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         id: id.value,
@@ -78,7 +78,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     config.value = response.data.result.config
     categories.value = response.data.result.categories
     category.value = categories.value[0]
@@ -124,7 +124,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     const response = await client.tsapi.editor.load.post.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,
@@ -139,7 +139,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     category.value = response.data.result.post.category
     attachedFiles.value = response.data.result.files
     title.value = util.unescape(response.data.result.post.title)
@@ -165,7 +165,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const response = await client.tsapi.editor.tag.suggestion.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         tag: tag.value,
@@ -296,7 +296,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const response = await client.tsapi.editor.write.post({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -319,7 +319,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
       return clearVariables()
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.success(TEXT[home.lang].WRITTEN_NEW_POST)
     util.go(config.value.type, id.value, response.data.result.postUid)
 
@@ -337,7 +337,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const response = await client.tsapi.editor.modify.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -361,7 +361,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${response.data.error})`)
       return clearVariables()
     }
-    auth.updateUserToken(response.data.result.newAccessToken)
+
     util.success(TEXT[home.lang].MODIFIED_POST)
     util.go(config.value.type, id.value, postUid.value)
 
@@ -375,7 +375,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     const response = await client.tsapi.editor.remove.attached.delete({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,

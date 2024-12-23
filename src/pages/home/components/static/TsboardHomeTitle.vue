@@ -3,7 +3,7 @@
     <v-col :cols="home.cols < 6 ? 6 : home.cols">
       <div class="mt-8 mb-2">
         <v-chip color="blue-grey-lighten-1" variant="tonal" size="small">{{
-          TSBOARD.VERSION
+          version
         }}</v-chip>
       </div>
       <h1 class="info">{{ TEXT[home.lang].INFO }}</h1>
@@ -42,6 +42,7 @@ import { TSBOARD } from "../../../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()
+const version = process.env.VERSION
 </script>
 
 <style scoped>

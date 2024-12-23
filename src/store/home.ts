@@ -22,7 +22,7 @@ import {
   NoticeType,
   PostItem,
   TsboardNotification,
-  VISIT_KEY
+  VISIT_KEY,
 } from "../interface/home"
 import { TEXT } from "../messages/store/home"
 import { useAuthStore } from "./user/auth"
@@ -237,7 +237,7 @@ export const useHomeStore = defineStore("home", () => {
     }
     const response = await client.tsapi.noti.load.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         limit: 10,
@@ -263,7 +263,7 @@ export const useHomeStore = defineStore("home", () => {
     }
     const response = await client.tsapi.noti.checked.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,

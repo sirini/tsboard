@@ -79,7 +79,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
       const response = await client.tsapi.board.view.get({
         $headers: {
-          authorization: auth.user.token,
+          Authorization: `Bearer ${auth.user.token}`,
         },
         $query: {
           id: id.value,
@@ -104,7 +104,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
         nextPostUid.value = 0
         return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
       }
-      auth.updateUserToken(response.data.result.newAccessToken)
+
       config.value = response.data.result.config
 
       if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
@@ -131,7 +131,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   async function like(isLike: boolean): Promise<void> {
     const response = await client.tsapi.board.like.patch({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         userUid: auth.user.uid,
@@ -155,7 +155,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   async function download(fileUid: number): Promise<void> {
     const response = await client.tsapi.board.download.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,
@@ -207,7 +207,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   async function openMoveDialog(): Promise<void> {
     const response = await client.tsapi.board.move.list.get({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,
@@ -238,7 +238,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     }
     const response = await client.tsapi.board.remove.post.delete({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,
@@ -254,7 +254,6 @@ export const useBoardViewStore = defineStore("boardView", () => {
       return util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
     }
 
-    auth.updateUserToken(response.data.result.newAccessToken)
     util.snack(TEXT[home.lang].REMOVED_POST)
     closeConfirmRemoveDialog()
 
@@ -291,7 +290,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
   async function applyMovePost(): Promise<void> {
     const response = await client.tsapi.board.move.apply.put({
       $headers: {
-        authorization: auth.user.token,
+        Authorization: `Bearer ${auth.user.token}`,
       },
       $query: {
         boardUid: config.value.uid,
