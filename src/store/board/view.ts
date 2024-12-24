@@ -1,39 +1,31 @@
-/**
- * store/board/view
- *
- * 게시글 보기 및 댓글 보기와 관련한 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRoute } from "vue-router"
-import {
-  ACTION_TARGET,
-  BOARD_CONFIG,
-  INIT_POST_VIEW,
-  READ_POST_KEY,
-  TYPE_MATCH,
-} from "../../../server/database/board/const"
-import type { App } from "../../../server/index"
 import { TSBOARD } from "../../../tsboard.config"
-import {
-  BoardConfig,
-  BoardListItem,
-  Pair,
-  PhotoItem,
-  PostFile,
-  PostView,
-  WriterLatestComment,
-  WriterLatestPost,
-} from "../../interface/board"
 import { TEXT } from "../../messages/store/board/view"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import {
+  BOARD_ACTION,
+  BOARD_CONFIG,
+  BOARD_LIST_ITEM,
+  BoardAttachedImage,
+  BoardAttachment,
+  BoardConfig,
+  BoardItem,
+  BoardListItem,
+  BoardViewDownloadResult,
+  BoardViewResult,
+  BoardWriterLatestComment,
+  BoardWriterLatestPost,
+  CONVERT_BOARD_TYPE,
+  Pair,
+} from "../../interface/board_interface"
+import axios from "axios"
+import { READ_POST_KEY } from "../../interface/post_interface"
 
 export const useBoardViewStore = defineStore("boardView", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -43,24 +35,25 @@ export const useBoardViewStore = defineStore("boardView", () => {
   const previewDialog = ref<boolean>(false)
   const movePostDialog = ref<boolean>(false)
   const id = ref<string>("")
-  const boardListItems = ref<BoardListItem[]>([])
-  const moveTarget = ref<BoardListItem>({ uid: 0, name: "", info: "" })
+  const boardListItems = ref<BoardItem[]>([])
+  const moveTarget = ref<BoardItem>({ uid: 0, name: "", info: "" })
   const postUid = ref<number>(0)
   const prevPostUid = ref<number>(0)
   const nextPostUid = ref<number>(0)
   const config = ref<BoardConfig>(BOARD_CONFIG)
-  const post = ref<PostView>(INIT_POST_VIEW)
-  const files = ref<PostFile[]>([])
-  const images = ref<PhotoItem[]>([])
+  const post = ref<BoardListItem>(BOARD_LIST_ITEM)
+  const files = ref<BoardAttachment[]>([])
+  const images = ref<BoardAttachedImage[]>([])
   const tags = ref<Pair[]>([])
   const previewPath = ref<string>("")
   const scrollY = ref<number>(0)
   const innerHeight = ref<number>(0)
   const scrollHeight = ref<number>(0)
   const latestLimit = 5
-  const writerPosts = ref<WriterLatestPost[]>([])
-  const writerComments = ref<WriterLatestComment[]>([])
+  const writerPosts = ref<BoardWriterLatestPost[]>([])
+  const writerComments = ref<BoardWriterLatestComment[]>([])
 
+  // 게시글 불러오기
   async function loadPostView(): Promise<NavigationFailure | void | undefined> {
     loading.value = true
     try {
@@ -77,15 +70,14 @@ export const useBoardViewStore = defineStore("boardView", () => {
         needUpdateHit = 1
       }
 
-      const response = await client.tsapi.board.view.get({
-        $headers: {
+      const response = await axios.get(`${TSBOARD.API}/board/view`, {
+        headers: {
           Authorization: `Bearer ${auth.user.token}`,
         },
-        $query: {
+        params: {
           id: id.value,
           postUid: postUid.value,
           needUpdateHit,
-          userUid: auth.user.uid,
           latestLimit,
         },
       })
@@ -95,7 +87,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
       }
       if (response.data.success === false) {
         config.value = response.data.result.config
-        post.value = INIT_POST_VIEW
+        post.value = BOARD_LIST_ITEM
         post.value.title = TEXT[home.lang].FAILED_TITLE
         post.value.content = TEXT[home.lang].FAILED_CONTENT
         files.value = []
@@ -105,23 +97,23 @@ export const useBoardViewStore = defineStore("boardView", () => {
         return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
       }
 
-      config.value = response.data.result.config
+      const result = response.data.result as BoardViewResult
+      config.value = result.config
 
-      if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-        return util.go(TYPE_MATCH[config.value.type].name)
+      if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
+        return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
       }
-      post.value = response.data.result.post
-      tags.value = response.data.result.tags
-      files.value = response.data.result.files
-      images.value = response.data.result.images
-      prevPostUid.value = response.data.result.prevPostUid
-      nextPostUid.value = response.data.result.nextPostUid
-      writerPosts.value = response.data.result.writerPosts
-      writerComments.value = response.data.result.writerComments
+      post.value = result.post
+      tags.value = result.tags
+      files.value = result.files
+      images.value = result.images
+      prevPostUid.value = result.prevPostUid
+      nextPostUid.value = result.nextPostUid
+      writerPosts.value = result.writerPosts
+      writerComments.value = result.writerComments
 
       auth.user.admin =
-        response.data.result.config.admin.group === auth.user.uid ||
-        response.data.result.config.admin.board === auth.user.uid
+        result.config.admin.group === auth.user.uid || result.config.admin.board === auth.user.uid
     } finally {
       loading.value = false
     }
@@ -129,17 +121,19 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.like.patch({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+    const response = await axios.patch(
+      `${TSBOARD.API}/board/like`,
+      {
+        boardUid: config.value.uid,
+        postUid: postUid.value,
+        liked: isLike ? 1 : 0,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: config.value.uid,
-      postUid: postUid.value,
-      liked: isLike ? 1 : 0,
-    })
+    )
 
     if (response.data && response.data.success === true) {
       post.value.liked = isLike
@@ -153,14 +147,13 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 첨부파일 다운로드하기
   async function download(fileUid: number): Promise<void> {
-    const response = await client.tsapi.board.download.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/board/download`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: config.value.uid,
         fileUid,
-        userUid: auth.user.uid,
       },
     })
 
@@ -171,9 +164,10 @@ export const useBoardViewStore = defineStore("boardView", () => {
       return util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${response.data.error})`)
     }
 
+    const result = response.data.result as BoardViewDownloadResult
     const link = document.createElement("a")
-    link.href = `${TSBOARD.API.URI}/${response.data.result.path}`
-    link.download = response.data.result.name
+    link.href = `${TSBOARD.SITE.URL}/${result.path}`
+    link.download = result.name
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -205,13 +199,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글 이동/복사 다이얼로그 열기
   async function openMoveDialog(): Promise<void> {
-    const response = await client.tsapi.board.move.list.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/board/move/list`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: config.value.uid,
-        userUid: auth.user.uid,
       },
     })
 
@@ -222,7 +215,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_BOARD_LISTS} (${response.data.error})`)
     }
 
-    boardListItems.value = response.data.result.boards
+    boardListItems.value = response.data.result as BoardItem[]
     movePostDialog.value = true
   }
 
@@ -236,14 +229,14 @@ export const useBoardViewStore = defineStore("boardView", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await client.tsapi.board.remove.post.delete({
-      $headers: {
+
+    const response = await axios.delete(`${TSBOARD.API}/board/remove/post`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: config.value.uid,
         postUid: postUid.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -257,7 +250,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
     util.snack(TEXT[home.lang].REMOVED_POST)
     closeConfirmRemoveDialog()
 
-    util.go(util.routerName(config.value.type, ACTION_TARGET.LIST), id.value)
+    util.go(util.routerName(config.value.type, BOARD_ACTION.LIST), id.value)
   }
 
   // 게시글을 이미 읽었는지 확인하기
@@ -282,23 +275,25 @@ export const useBoardViewStore = defineStore("boardView", () => {
   }
 
   // 이동할 게시판 선택
-  function selectMoveTarget(target: BoardListItem): void {
+  function selectMoveTarget(target: BoardItem): void {
     moveTarget.value = target
   }
 
   // 이동 적용
   async function applyMovePost(): Promise<void> {
-    const response = await client.tsapi.board.move.apply.put({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-      $query: {
+    const response = await axios.put(
+      `${TSBOARD.API}/board/move/apply`,
+      {
         boardUid: config.value.uid,
         targetBoardUid: moveTarget.value.uid,
-        userUid: auth.user.uid,
         postUid: postUid.value,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      },
+    )
 
     if (!response.data) {
       return util.snack(TEXT[home.lang].NO_RESPONSE)

@@ -8,6 +8,7 @@ const PROD_URL = "https://tsboard.dev" // <<< [수정 필요] 본인 사이트�
 export const TSBOARD = {
   SITE: {
     NAME: "TSBOARD" /* <<< [수정 필요] 본인 사이트 이름 입력 */,
+    URL: IS_DEV ? DEV_URL : PROD_URL,
   },
   PREFIX: "" /* <<< [수정 필요] 설치 경로가 root 가 아닐 시 수정, 예: "/tsboard" */,
   API: (IS_DEV ? DEV_URL : PROD_URL) + "/goapi",

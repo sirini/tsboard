@@ -1,25 +1,17 @@
-/**
- * store/comment
- *
- * 게시판, 갤러리의 댓글 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { PAGING_DIRECTION } from "../../../server/database/board/const"
-import type { App } from "../../../server/index"
-import { TSBOARD } from "../../../tsboard.config"
-import { Comment } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/comment"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useCommentSaveStore } from "./comment/save"
+import { CommentListResult, CommentResult } from "../../interface/comment_interface"
+import { PAGE, Paging } from "../../interface/board_interface"
+import axios from "axios"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useCommentStore = defineStore("comment", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -36,10 +28,10 @@ export const useCommentStore = defineStore("comment", () => {
   const contentWithSyntax = ref<string>("")
   const button = ref<string>(TEXT[home.lang].BUTTON_NEW)
   const confirmRemoveCommentDialog = ref<boolean>(false)
-  const comments = ref<Comment[]>([])
+  const comments = ref<CommentResult[]>([])
   const page = ref<number>(1)
   const pageLength = ref<number>(1)
-  const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
+  const pagingDirection = ref<Paging>(PAGE.NEXT as Paging)
   const bunch = ref<number>(100)
 
   // 기존 댓글 불러오기
@@ -47,18 +39,17 @@ export const useCommentStore = defineStore("comment", () => {
     id.value = route.params.id as string
     postUid.value = parseInt(route.params.no as string)
 
-    const response = await client.tsapi.comment.list.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/comment/list`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: id.value,
         postUid: postUid.value,
         page: page.value,
         pagingDirection: pagingDirection.value,
         bunch: bunch.value,
         sinceUid: sinceUid.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -70,9 +61,11 @@ export const useCommentStore = defineStore("comment", () => {
       pageLength.value = 1
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
-    boardUid.value = response.data.result.boardUid
-    comments.value = response.data.result.comments
-    pageLength.value = Math.ceil(response.data.result.totalCommentCount / bunch.value)
+
+    const result = response.data.result as CommentListResult
+    boardUid.value = result.boardUid
+    comments.value = result.comments
+    pageLength.value = Math.ceil(result.totalCommentCount / bunch.value)
   }
 
   // 댓글에 답글달기 시 대상 지정
@@ -106,20 +99,22 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
   async function like(commentUid: number, isLike: boolean): Promise<void> {
-    const response = await client.tsapi.comment.like.patch({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+    const response = await axios.patch(
+      `${TSBOARD.API}/comment/like`,
+      {
+        boardUid: boardUid.value,
+        commentUid,
+        liked: isLike ? 1 : 0,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: boardUid.value,
-      commentUid,
-      liked: isLike ? 1 : 0,
-    })
+    )
 
     if (response.data && response.data.success === true) {
-      comments.value.map((comment) => {
+      comments.value.map((comment: CommentResult) => {
         if (comment.uid === commentUid) {
           comment.liked = isLike
           if (isLike) {
@@ -152,12 +147,13 @@ export const useCommentStore = defineStore("comment", () => {
   // 기존 댓글 수정하기
   async function modifyExistComment(): Promise<void> {
     await save.modifyComment({
-      modifyTargetUid: modifyTarget.value,
+      targetUid: modifyTarget.value,
       boardUid: boardUid.value,
       postUid: postUid.value,
       content: contentWithSyntax.value,
     })
-    comments.value.map((comment) => {
+
+    comments.value.map((comment: CommentResult) => {
       if (comment.uid === modifyTarget.value) {
         comment.content = contentWithSyntax.value
         return
@@ -169,11 +165,12 @@ export const useCommentStore = defineStore("comment", () => {
   async function saveReplyComment(): Promise<void> {
     let targetIndex = 0
     const comment = await save.replyComment({
-      replyTargetUid: replyTarget.value,
+      targetUid: replyTarget.value,
       boardUid: boardUid.value,
       postUid: postUid.value,
       content: contentWithSyntax.value,
     })
+
     if (comment.uid > 0) {
       comments.value.map((comment, index) => {
         if (comment.uid === replyTarget.value) {
@@ -227,14 +224,13 @@ export const useCommentStore = defineStore("comment", () => {
       return util.snack(TEXT[home.lang].INVALID_REMOVE_TARGET)
     }
 
-    const response = await client.tsapi.comment.remove.delete({
-      $headers: {
+    const response = await axios.delete(`${TSBOARD.API}/comment/remove`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: boardUid.value,
         removeTargetUid: removeTarget.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -246,11 +242,11 @@ export const useCommentStore = defineStore("comment", () => {
     }
 
     if (response.data.result.isChangeStatus === true) {
-      comments.value = comments.value.filter((comment) => {
+      comments.value = comments.value.filter((comment: CommentResult) => {
         return removeTarget.value !== comment.uid
       })
     } else {
-      comments.value.map((comment) => {
+      comments.value.map((comment: CommentResult) => {
         if (removeTarget.value === comment.uid) {
           comment.content = TEXT[home.lang].NOTE_REMOVED_COMMENT
           return

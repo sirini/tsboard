@@ -1,32 +1,30 @@
-/**
- * store/viewer
- *
- * 뷰어 다이얼로그에서 이미지 대상으로 하는 상호작용 처리
- */
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRoute, useRouter } from "vue-router"
-import {
-  ACTION_TARGET,
-  BOARD_CONFIG,
-  INIT_POST_VIEW,
-  PAGING_DIRECTION,
-  TYPE_MATCH,
-} from "../../../../server/database/board/const"
-import type { App } from "../../../../server/index"
-import { TSBOARD } from "../../../../tsboard.config"
-import { BoardConfig, Comment, Pair, PhotoItem, PostView } from "../../../interface/board"
-import { Position } from "../../../interface/gallery"
 import * as COMMENT from "../../../messages/store/board/comment"
 import { TEXT } from "../../../messages/store/board/gallery"
 import { useHomeStore } from "../../home"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { useBoardViewStore } from "../view"
+import { PhotoItem, Position } from "../../../interface/post_interface"
+import {
+  BOARD_ACTION,
+  BOARD_CONFIG,
+  BOARD_LIST_ITEM,
+  BoardConfig,
+  BoardListItem,
+  BoardViewResult,
+  CONVERT_BOARD_TYPE,
+  PAGE,
+  Paging,
+  Pair,
+} from "../../../interface/board_interface"
+import { CommentListResult, CommentResult } from "../../../interface/comment_interface"
+import axios from "axios"
+import { TSBOARD } from "../../../../tsboard.config"
 
 export const useViewerStore = defineStore("viewer", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
@@ -48,12 +46,14 @@ export const useViewerStore = defineStore("viewer", () => {
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const postUid = ref<number>(0)
   const sinceUid = ref<number>(0)
-  const post = ref<PostView>(INIT_POST_VIEW)
+  const post = ref<BoardListItem>(BOARD_LIST_ITEM)
   const images = ref<PhotoItem[]>([])
   const tags = ref<Pair[]>([])
-  const comments = ref<Comment[]>([])
+  const comments = ref<CommentResult[]>([])
   const page = ref<number>(1)
-  const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
+  const pagingDirection = ref<Paging>(PAGE.NEXT as Paging)
+  const prevPostUid = ref<number>(0)
+  const nextPostUid = ref<number>(0)
   const bunch = ref<number>(100)
   const position = ref<number>(0)
   const mobileColor = ref<string>("grey-darken-4")
@@ -81,15 +81,14 @@ export const useViewerStore = defineStore("viewer", () => {
       needUpdateHit = 1
     }
 
-    const response = await client.tsapi.board.view.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/board/view`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: id.value,
         postUid: postUid.value,
         needUpdateHit,
-        userUid: auth.user.uid,
         latestLimit,
       },
     })
@@ -106,13 +105,16 @@ export const useViewerStore = defineStore("viewer", () => {
 
     config.value = response.data.result.config
 
-    if (route.path.includes(TYPE_MATCH[config.value.type].path) === false) {
-      return util.go(TYPE_MATCH[config.value.type].name)
+    if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
+      return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
     }
 
-    post.value = response.data.result.post
-    tags.value = response.data.result.tags
+    const result = response.data.result as BoardViewResult
+    post.value = result.post
+    tags.value = result.tags
     position.value = 0
+    prevPostUid.value = result.prevPostUid
+    nextPostUid.value = result.nextPostUid
   }
 
   // 사진들 불러오기
@@ -122,14 +124,13 @@ export const useViewerStore = defineStore("viewer", () => {
       return util.snack(TEXT[home.lang].NO_BOARD_ID)
     }
 
-    const response = await client.tsapi.board.photo.view.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/board/photo/view`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: id.value,
         no: postUid.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -148,18 +149,17 @@ export const useViewerStore = defineStore("viewer", () => {
 
   // 댓글 불러오기
   async function loadComments(): Promise<void> {
-    const response = await client.tsapi.comment.list.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/comment/list`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: id.value,
         postUid: postUid.value,
         page: page.value,
         pagingDirection: pagingDirection.value,
         bunch: bunch.value,
         sinceUid: sinceUid.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -169,22 +169,25 @@ export const useViewerStore = defineStore("viewer", () => {
     if (response.data.success === false) {
       return util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
     }
-    comments.value = response.data.result.comments
+    const result = response.data.result as CommentListResult
+    comments.value = result.comments
   }
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await client.tsapi.board.like.patch({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+    const response = await axios.patch(
+      `${TSBOARD.API}/board/like`,
+      {
+        boardUid: config.value.uid,
+        postUid: postUid.value,
+        liked: isLike ? 1 : 0,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: config.value.uid,
-      postUid: postUid.value,
-      liked: isLike ? 1 : 0,
-    })
+    )
 
     if (response.data && response.data.success === true) {
       post.value.liked = isLike
@@ -297,7 +300,7 @@ export const useViewerStore = defineStore("viewer", () => {
     dialog.value = false
     postUid.value = 0
     router.push({
-      name: util.routerName(config.value.type, ACTION_TARGET.LIST),
+      name: util.routerName(config.value.type, BOARD_ACTION.LIST),
       params: { id: id.value },
     })
   }
@@ -311,6 +314,8 @@ export const useViewerStore = defineStore("viewer", () => {
     sinceUid,
     postUid,
     post,
+    prevPostUid,
+    nextPostUid,
     comments,
     images,
     tags,

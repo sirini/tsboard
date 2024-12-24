@@ -1,25 +1,26 @@
-/**
- * store/editor
- *
- * 게시판, 갤러리 등에서 공통으로 사용하는 글쓰기의 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { Editor } from "@tiptap/vue-3"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { AUTO_SAVE_KEY, BOARD_CONFIG, CONTENT_STATUS } from "../../../server/database/board/const"
-import type { App } from "../../../server/index"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
-import { AutoSaveItems, BoardConfig, CountPair, Pair, PostFile } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/editor"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import axios from "axios"
+import {
+  BOARD_CONFIG,
+  BoardAttachment,
+  BoardConfig,
+  EditorConfigResult,
+  EditorLoadPostResult,
+  EditorTagItem,
+  Pair,
+  STATUS,
+} from "../../interface/board_interface"
+import { AUTO_SAVE_KEY, AutoSaved } from "../../interface/post_interface"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
@@ -39,14 +40,14 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const category = ref<Pair>({ uid: 0, name: "" })
   const categories = ref<Pair[]>([])
   const files = ref<File[]>([])
-  const attachedFiles = ref<PostFile[]>([])
+  const attachedFiles = ref<BoardAttachment[]>([])
   const title = ref<string>("")
   const content = ref<string>("")
   const contentWithSyntax = ref<string>("")
   const contentHTML = ref<string>("")
   const tag = ref<string>("")
   const tags = ref<string[]>([])
-  const suggestionTags = ref<CountPair[]>([])
+  const suggestionTags = ref<EditorTagItem[]>([])
   const textRule = [
     (value: any) => {
       if (value?.length > 1) return true
@@ -62,13 +63,12 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await client.tsapi.editor.config.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/editor/config`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         id: id.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -79,10 +79,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
     }
 
-    config.value = response.data.result.config
-    categories.value = response.data.result.categories
+    const result = response.data.result as EditorConfigResult
+    config.value = result.config
+    categories.value = result.categories
     category.value = categories.value[0]
-    isAdmin.value = response.data.result.isAdmin
+    isAdmin.value = result.isAdmin
   }
 
   // 게시글 임시 보관하기
@@ -91,7 +92,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (tags.value.length > 0) {
       hashtags = tags.value.join(",")
     }
-    const saved: AutoSaveItems = {
+    const saved: AutoSaved = {
       title: title.value,
       content: content.value,
       contentWithSyntax: contentWithSyntax.value,
@@ -107,7 +108,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const loaded = JSON.parse(saved) as AutoSaveItems
+    const loaded = JSON.parse(saved) as AutoSaved
     title.value = loaded.title
     content.value = loaded.content
     contentWithSyntax.value = loaded.contentWithSyntax
@@ -122,14 +123,14 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (postUid.value < 1) {
       return
     }
-    const response = await client.tsapi.editor.load.post.get({
-      $headers: {
+
+    const response = await axios.get(`${TSBOARD.API}/editor/load/post`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: config.value.uid,
         postUid: postUid.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -140,14 +141,15 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
     }
 
-    category.value = response.data.result.post.category
-    attachedFiles.value = response.data.result.files
-    title.value = util.unescape(response.data.result.post.title)
-    contentWithSyntax.value = response.data.result.post.content
-    content.value = response.data.result.post.content.replaceAll("<br />", "")
-    tags.value = response.data.result.tags.map((tag) => tag.name)
-    isNotice.value = response.data.result.post.status === CONTENT_STATUS.NOTICE ? true : false
-    isSecret.value = response.data.result.post.status === CONTENT_STATUS.SECRET ? true : false
+    const result = response.data.result as EditorLoadPostResult
+    category.value = result.post.category
+    attachedFiles.value = result.files
+    title.value = util.unescape(result.post.title)
+    contentWithSyntax.value = result.post.content
+    content.value = result.post.content.replaceAll("<br />", "")
+    tags.value = result.tags.map((tag: Pair) => tag.name)
+    isNotice.value = result.post.status === STATUS.NOTICE
+    isSecret.value = result.post.status === STATUS.SECRET
 
     util.snack(TEXT[home.lang].LOADED_ORIGINAL_POST)
   }
@@ -163,11 +165,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return
     }
 
-    const response = await client.tsapi.editor.tag.suggestion.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/editor/tag/suggestion`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         tag: tag.value,
         limit: 5,
       },
@@ -179,7 +181,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
     }
-    suggestionTags.value = response.data.result.suggestions
+    suggestionTags.value = response.data.suggestions as EditorTagItem[]
   }
   const updateTagSuggestion = util.debounce(_updateTagSuggestion, 250)
 
@@ -294,21 +296,23 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const response = await client.tsapi.editor.write.post({
-      $headers: {
+    const fd = new FormData()
+    fd.append("boardUid", config.value.uid.toString())
+    fd.append("isNotice", isNotice.value ? "1" : "0")
+    fd.append("isSecret", isSecret.value ? "1" : "0")
+    fd.append("categoryUid", category.value.uid.toString())
+    fd.append("title", title.value)
+    fd.append("content", contentWithSyntax.value)
+    fd.append("tags", tags.value.join(","))
+
+    for (const file of files.value) {
+      fd.append("attachments", file)
+    }
+
+    const response = await axios.post(`${TSBOARD.API}/editor/write`, fd, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      boardUid: config.value.uid,
-      isNotice: isNotice.value ? 1 : 0,
-      isSecret: isSecret.value ? 1 : 0,
-      categoryUid: category.value.uid,
-      title: title.value,
-      content: contentWithSyntax.value,
-      attachments: files.value,
-      tags: tags.value.join(","),
     })
 
     if (!response.data) {
@@ -321,7 +325,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
 
     util.success(TEXT[home.lang].WRITTEN_NEW_POST)
-    util.go(config.value.type, id.value, response.data.result.postUid)
+    util.go(config.value.type, id.value, response.data.result as number)
 
     clearVariables()
   }
@@ -335,22 +339,24 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const response = await client.tsapi.editor.modify.patch({
-      $headers: {
+    const fd = new FormData()
+    fd.append("postUid", postUid.value.toString())
+    fd.append("boardUid", config.value.uid.toString())
+    fd.append("isNotice", isNotice.value ? "1" : "0")
+    fd.append("isSecret", isSecret.value ? "1" : "0")
+    fd.append("categoryUid", category.value.uid.toString())
+    fd.append("title", title.value)
+    fd.append("content", contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"))
+    fd.append("tags", tags.value.join(","))
+
+    for (const file of files.value) {
+      fd.append("attachments", file)
+    }
+
+    const response = await axios.patch(`${TSBOARD.API}/editor/modify`, fd, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      postUid: postUid.value,
-      boardUid: config.value.uid,
-      isNotice: isNotice.value ? 1 : 0,
-      isSecret: isSecret.value ? 1 : 0,
-      categoryUid: category.value.uid,
-      title: title.value,
-      content: contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"),
-      attachments: files.value,
-      tags: tags.value.join(","),
     })
 
     if (!response.data) {
@@ -373,15 +379,15 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (fileUid < 1) {
       return
     }
-    const response = await client.tsapi.editor.remove.attached.delete({
-      $headers: {
+
+    const response = await axios.delete(`${TSBOARD.API}/editor/remove/attached`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: config.value.uid,
         postUid: postUid.value,
         fileUid,
-        userUid: auth.user.uid,
       },
     })
 
@@ -391,7 +397,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (response.data.success === false) {
       return util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${response.data.error})`)
     }
-    attachedFiles.value = attachedFiles.value.filter((file) => file.uid !== fileUid)
+    attachedFiles.value = attachedFiles.value.filter(
+      (file: BoardAttachment) => file.uid !== fileUid,
+    )
     util.success(TEXT[home.lang].REMOVED_FILE)
   }
 

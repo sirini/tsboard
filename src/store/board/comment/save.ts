@@ -1,56 +1,40 @@
-/**
- * store/board/comment/save
- *
- * 댓글 추가, 수정, 답글 달기 관련 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { INIT_COMMENT } from "../../../../server/database/board/const"
-import type { App } from "../../../../server/index"
 import { TSBOARD } from "../../../../tsboard.config"
-import { Comment } from "../../../interface/board"
 import { TEXT } from "../../../messages/store/board/comment"
 import { useHomeStore } from "../../home"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
-
-type SaveNewCommentParams = {
-  boardUid: number
-  postUid: number
-  content: string
-}
-
-type SaveReplyCommentParams = SaveNewCommentParams & {
-  replyTargetUid: number
-}
-
-type SaveModifyCommentParams = SaveNewCommentParams & {
-  modifyTargetUid: number
-}
+import axios from "axios"
+import {
+  COMMENT_RESULT,
+  CommentNewParameter,
+  CommentResult,
+  CommentTargetParameter,
+} from "../../../interface/comment_interface"
 
 export const useCommentSaveStore = defineStore("commentSave", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()
   const content = ref<string>("")
 
   // 새 댓글 작성하기
-  async function newComment(param: SaveNewCommentParams): Promise<Comment> {
-    let result: Comment = INIT_COMMENT
-    const response = await client.tsapi.comment.write.post({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+  async function newComment(param: CommentNewParameter): Promise<CommentResult> {
+    let result: CommentResult = COMMENT_RESULT
+    const response = await axios.post(
+      `${TSBOARD.API}/comment/write`,
+      {
+        boardUid: param.boardUid,
+        postUid: param.postUid,
+        content: param.content,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      boardUid: param.boardUid,
-      postUid: param.postUid,
-      content: param.content,
-    })
+    )
 
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
@@ -61,9 +45,8 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       return result
     }
 
-    const newUid = response.data.result.newCommentUid
     result = {
-      uid: newUid,
+      uid: response.data.result,
       writer: {
         uid: auth.user.uid,
         name: auth.user.name,
@@ -75,7 +58,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       submitted: Date.now(),
       modified: 0,
       status: 0,
-      replyUid: newUid,
+      replyUid: response.data.result,
       postUid: param.postUid,
     }
     util.snack(TEXT[home.lang].SAVED_NEW_COMMENT)
@@ -83,21 +66,22 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   }
 
   // 답글 작성하기
-  async function replyComment(param: SaveReplyCommentParams): Promise<Comment> {
-    let result = INIT_COMMENT
-
-    const response = await client.tsapi.comment.reply.post({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+  async function replyComment(param: CommentTargetParameter): Promise<CommentResult> {
+    let result: CommentResult = COMMENT_RESULT
+    const response = await axios.post(
+      `${TSBOARD.API}/comment/reply`,
+      {
+        replyTargetUid: param.targetUid,
+        boardUid: param.boardUid,
+        postUid: param.postUid,
+        content: param.content,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      replyTargetUid: param.replyTargetUid,
-      boardUid: param.boardUid,
-      postUid: param.postUid,
-      content: param.content,
-    })
+    )
 
     if (!response.data) {
       util.snack(TEXT[home.lang].NO_RESPONSE)
@@ -108,9 +92,8 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       return result
     }
 
-    const newUid = response.data.result.newCommentUid
     result = {
-      uid: newUid,
+      uid: response.data.result,
       writer: {
         uid: auth.user.uid,
         name: auth.user.name,
@@ -122,7 +105,7 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
       submitted: Date.now(),
       modified: 0,
       status: 0,
-      replyUid: param.replyTargetUid,
+      replyUid: param.targetUid,
       postUid: param.postUid,
     }
     util.snack(TEXT[home.lang].REPLIED_NEW_COMMENT)
@@ -130,19 +113,22 @@ export const useCommentSaveStore = defineStore("commentSave", () => {
   }
 
   // 기존 댓글 수정하기
-  async function modifyComment(param: SaveModifyCommentParams): Promise<void> {
-    const response = await client.tsapi.comment.modify.patch({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+  async function modifyComment(param: CommentTargetParameter): Promise<void> {
+    const response = await axios.patch(
+      `${TSBOARD.API}/comment/modify`,
+      {
+        modifyTargetUid: param.targetUid,
+        boardUid: param.boardUid,
+        postUid: param.postUid,
+        content: param.content,
       },
-      $query: {
-        userUid: auth.user.uid,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      modifyTargetUid: param.modifyTargetUid,
-      boardUid: param.boardUid,
-      postUid: param.postUid,
-      content: param.content,
-    })
+    )
+
     if (!response.data) {
       return util.snack(TEXT[home.lang].NO_RESPONSE)
     }

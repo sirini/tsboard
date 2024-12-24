@@ -1,32 +1,30 @@
-/**
- * store/board/list
- *
- * 게시판 목록보기와 관련한 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRoute, useRouter } from "vue-router"
-import {
-  ACTION_TARGET,
-  BOARD_CONFIG,
-  BOARD_TYPE,
-  CONTENT_STATUS,
-  PAGING_DIRECTION,
-  SEARCH_OPTION,
-  TYPE_MATCH,
-} from "../../../server/database/board/const"
-import type { App } from "../../../server/index"
-import { TSBOARD } from "../../../tsboard.config"
-import { BoardConfig, BoardType, Pair, Post, SearchOption } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/list"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import {
+  BOARD,
+  BOARD_ACTION,
+  BOARD_CONFIG,
+  Board,
+  BoardConfig,
+  BoardListItem,
+  BoardListResult,
+  CONVERT_BOARD_TYPE,
+  PAGE,
+  Paging,
+  Pair,
+  SEARCH,
+  STATUS,
+  Search,
+} from "../../interface/board_interface"
+import axios from "axios"
+import { TSBOARD } from "../../../tsboard.config"
 
 export const useBoardListStore = defineStore("boardList", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
@@ -36,13 +34,13 @@ export const useBoardListStore = defineStore("boardList", () => {
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const isAdmin = ref<boolean>(false)
-  const posts = ref<Post[]>([])
+  const posts = ref<BoardListItem[]>([])
   const categories = ref<Pair[]>([])
   const page = ref<number>(1)
   const pageLength = ref<number>(1)
   const sinceUid = ref<number>(0)
-  const pagingDirection = ref<number>(PAGING_DIRECTION.NEXT)
-  const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
+  const pagingDirection = ref<Paging>(PAGE.NEXT as Paging)
+  const option = ref<Search>(SEARCH.TITLE as Search)
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
   const isFirstInit = ref<boolean>(false)
@@ -55,18 +53,18 @@ export const useBoardListStore = defineStore("boardList", () => {
       if (id.value.length < 2) {
         return util.snack(TEXT[home.lang].NO_BOARD_ID)
       }
-      const response = await client.tsapi.board.list.get({
-        $headers: {
+
+      const response = await axios.get(`${TSBOARD.API}/board/list`, {
+        headers: {
           Authorization: `Bearer ${auth.user.token}`,
         },
-        $query: {
+        params: {
           id: id.value,
           page: page.value,
           pagingDirection: pagingDirection.value,
           sinceUid: sinceUid.value,
-          option: option.value as number,
+          option: option.value,
           keyword: keyword.value,
-          userUid: auth.user.uid,
         },
       })
 
@@ -78,14 +76,15 @@ export const useBoardListStore = defineStore("boardList", () => {
         return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
       }
 
-      config.value = response.data.result.config
-      isAdmin.value = response.data.result.isAdmin
+      const result = response.data.result as BoardListResult
+      config.value = result.config
+      isAdmin.value = result.isAdmin
 
-      if (route.path.includes(TYPE_MATCH[config.value.type as number].path) === false) {
-        return util.go(TYPE_MATCH[config.value.type].name)
+      if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type as number].path) === false) {
+        return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
       }
 
-      response.data.result.posts.map((post): void => {
+      result.posts.map((post: BoardListItem): void => {
         if (response.data.result.blackList.includes(post.writer.uid) === true) {
           post.uid = 0
           post.writer.uid = 0
@@ -97,10 +96,10 @@ export const useBoardListStore = defineStore("boardList", () => {
         }
       })
 
-      posts.value = response.data.result.posts
+      posts.value = result.posts
       let noticeCount = 0
-      posts.value.map((post) => {
-        if (post.status === CONTENT_STATUS.NOTICE) {
+      posts.value.map((post: BoardListItem) => {
+        if (post.status === STATUS.NOTICE) {
           noticeCount += 1
         }
       })
@@ -108,7 +107,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
       )
 
-      if (pagingDirection.value === PAGING_DIRECTION.PREV) {
+      if (pagingDirection.value === (PAGE.PREV as Paging)) {
         rearrangePosts()
       }
     } finally {
@@ -119,7 +118,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   // 게시판 목록 마운트 시점에 호출
   function initFirstList(): void {
     isFirstInit.value = true
-    const name = util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING)
+    const name = util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING)
     const pageStr = page.value.toString()
 
     if (page.value > 1 && sinceUid.value > 0) {
@@ -150,7 +149,8 @@ export const useBoardListStore = defineStore("boardList", () => {
   async function resetBoardList(): Promise<void> {
     sinceUid.value = 0
     page.value = 1
-    pagingDirection.value = PAGING_DIRECTION.NEXT
+    pagingDirection.value = PAGE.NEXT as Paging
+
     await loadPostList()
     home.setGridLayout()
   }
@@ -158,55 +158,62 @@ export const useBoardListStore = defineStore("boardList", () => {
   // 이전 페이지로 이동 준비
   function setPrevPosts(): void {
     page.value -= 1
-    pagingDirection.value = PAGING_DIRECTION.PREV
-    if (page.value < 2) {
+    const _page = page.value - 1
+    pagingDirection.value = PAGE.PREV as Paging
+
+    if (_page < 2) {
       util.snack(TEXT[home.lang].FIRST_PAGE)
     }
+    page.value = _page
     sinceUid.value = posts.value.at(0)?.uid ?? 0
   }
 
   // 이전 페이지 가져온 후 데이터 처리 (순서 뒤집기 등)
   function rearrangePosts(): void {
-    const notices = posts.value.filter((post) => {
-      return post.status === CONTENT_STATUS.NOTICE
+    const notices = posts.value.filter((post: BoardListItem) => {
+      return post.status === STATUS.NOTICE
     })
-    const normals = posts.value.reverse().filter((post) => {
-      return post.status === CONTENT_STATUS.NORMAL
+    const normals = posts.value.reverse().filter((post: BoardListItem) => {
+      return post.status === STATUS.NORMAL
     })
     posts.value = [...notices, ...normals]
   }
 
   // 다음 페이지로 이동 준비
   function setNextPosts(): void {
-    page.value += 1
-    pagingDirection.value = PAGING_DIRECTION.NEXT
-    sinceUid.value = posts.value.at(-1)?.uid ?? 0
-    if (page.value === pageLength.value) {
+    const _page = page.value + 1
+    pagingDirection.value = PAGE.NEXT as Paging
+
+    if (_page === pageLength.value) {
       util.snack(TEXT[home.lang].LAST_PAGE)
     }
+    page.value = _page
+    sinceUid.value = posts.value.at(-1)?.uid ?? 0
   }
 
   // 이전 페이지 이동하기
   function movePrevPage(): void {
-    page.value -= 1
+    const _page = page.value - 1
     router.push({
-      name: util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING),
-      params: { id: id.value, page: page.value },
+      name: util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING),
+      params: { id: id.value, page: _page },
     })
+    page.value = _page
   }
 
   // 다음 페이지 이동하기
   function moveNextPage(): void {
-    page.value += 1
+    const _page = page.value + 1
     router.push({
-      name: util.routerName(BOARD_TYPE.BOARD as BoardType, ACTION_TARGET.PAGING),
-      params: { id: id.value, page: page.value },
+      name: util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING),
+      params: { id: id.value, page: _page },
     })
+    page.value = _page
   }
 
   // 검색 옵션 초기화하기
   function resetSearchKeyword(): void {
-    option.value = SEARCH_OPTION.TITLE as SearchOption
+    option.value = SEARCH.TITLE as Search
     keyword.value = ""
   }
 
@@ -220,7 +227,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   // 카테고리 번호에 해당하는 게시글들 가져오기
   function loadPostsByCategory(categoryUid: number): void {
     clearVariables()
-    option.value = SEARCH_OPTION.CATEGORY as SearchOption
+    option.value = SEARCH.CATEGORY as Search
     keyword.value = categoryUid.toString()
     loadPostList()
   }

@@ -1,23 +1,15 @@
-/**
- * store/board/editor/image
- *
- * 에디터의 본문 이미지 업로드 / 기존 이미지 불러오기 관련 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../server/index"
 import { SIZE, TSBOARD } from "../../../tsboard.config"
-import { Pair } from "../../interface/board"
 import { TEXT } from "../../messages/store/board/editor"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useBoardEditorStore } from "./editor"
+import axios from "axios"
+import { EditorInsertImageResult, Pair } from "../../interface/board_interface"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -53,15 +45,18 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     uploading.value = true
     try {
       files.value = editor.getFiles(event)
-      const response = await client.tsapi.editor.upload.images.post({
-        $headers: {
+
+      const fd = new FormData()
+      fd.append("boardUid", boardUid.value.toString())
+
+      for (const file of files.value) {
+        fd.append("images", file)
+      }
+
+      const response = await axios.post(`${TSBOARD.API}/editor/upload/images`, fd, {
+        headers: {
           Authorization: `Bearer ${auth.user.token}`,
         },
-        $query: {
-          userUid: auth.user.uid,
-        },
-        boardUid: boardUid.value,
-        images: files.value,
       })
 
       if (!response.data) {
@@ -71,7 +66,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
       }
 
-      uploadedImages.value = response.data.result.uploadedImages
+      uploadedImages.value = response.data.result as string[]
     } finally {
       uploading.value = false
     }
@@ -79,15 +74,14 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지들 가져오기
   async function loadUploadedImages(isAppend: boolean): Promise<void> {
-    const response = await client.tsapi.editor.load.images.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/editor/load/images`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         boardUid: boardUid.value,
         lastUid: isAppend ? lastImageUid.value : 0,
         bunch: bunch.value,
-        userUid: auth.user.uid,
       },
     })
 
@@ -97,20 +91,22 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${response.data.error})`)
     }
-    if (response.data.result.images.length < 1) {
+
+    const result = response.data.result as EditorInsertImageResult
+    if (result.images.length < 1) {
       util.snack(TEXT[home.lang].EMPTY_IMAGES)
       disableReloadButton.value = true
       return
     }
     if (isAppend) {
-      loadImages.value.push(...response.data.result.images)
+      loadImages.value.push(...result.images)
     } else {
-      loadImages.value = response.data.result.images
+      loadImages.value = result.images
     }
 
-    totalImageCount.value = response.data.result.totalImageCount
-    lastImageUid.value = response.data.result.maxImageUid
-    loadImages.value.map((image) => {
+    totalImageCount.value = result.totalImageCount
+    lastImageUid.value = result.maxImageUid
+    loadImages.value.map((image: Pair) => {
       if (lastImageUid.value > image.uid) {
         lastImageUid.value = image.uid
       }
@@ -131,13 +127,12 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
   // 기존에 업로드한 이미지 제거
   async function removeUploadedImage(imageUid: number): Promise<void> {
-    const response = await client.tsapi.editor.remove.image.delete({
-      $headers: {
+    const response = await axios.delete(`${TSBOARD.API}/editor/remove/image`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         imageUid,
-        userUid: auth.user.uid,
       },
     })
 
