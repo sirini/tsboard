@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useAuthStore } from "../../../store/user/auth"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"

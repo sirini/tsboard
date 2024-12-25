@@ -21,7 +21,7 @@
           <v-list-item
             v-for="(group, index) in dashboard.groups"
             :key="index"
-            @click="util.go('adminBoardGroupManager', group)"
+            @click="util.go('adminBoardGroupManager', group.name)"
           >
             <v-list-item-title>{{ group }}</v-list-item-title>
             <v-tooltip activator="parent">
@@ -40,7 +40,7 @@
           <v-list-item
             v-for="(board, index) in dashboard.boards"
             :key="index"
-            @click="util.go('adminBoardManager', board)"
+            @click="util.go('adminBoardManager', board.name)"
           >
             <v-list-item-title>{{ board }}</v-list-item-title>
             <v-tooltip activator="parent">

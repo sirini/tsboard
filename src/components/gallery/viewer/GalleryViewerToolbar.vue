@@ -91,7 +91,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"

@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/board/write/gallery-upload-cancel-dialog"
 

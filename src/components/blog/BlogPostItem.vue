@@ -45,7 +45,7 @@
         size="small"
         class="ml-1"
         label
-        >{{ util.num(post.reply) }}</v-chip
+        >{{ util.num(post.comment) }}</v-chip
       >
 
       <v-chip
@@ -71,13 +71,13 @@
 <script setup lang="ts">
 import { TSBOARD } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
-import { BoardType, Post } from "../../interface/board"
+import { Board, BoardListItem } from "../../interface/board_interface"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 
 const util = useUtilStore()
 const home = useHomeStore()
-const props = defineProps<{ post: Post; type: BoardType; useCategory: boolean; id: string }>()
+const props = defineProps<{ post: BoardListItem; type: Board; useCategory: boolean; id: string }>()
 </script>
 
 <style scoped>

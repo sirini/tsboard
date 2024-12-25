@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-write-button"
+import { BOARD } from "../../../interface/board_interface"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()
@@ -34,7 +34,7 @@ async function save(): Promise<void> {
   comment.boardUid = props.boardUid
   comment.postUid = props.postUid
 
-  if (viewer.config.type === BOARD_TYPE.GALLERY) {
+  if (viewer.config.type === BOARD.GALLERY) {
     comment.contentWithSyntax = comment.content.replaceAll("\n", "<br />")
   }
 

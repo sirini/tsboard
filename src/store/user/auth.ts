@@ -1,29 +1,20 @@
-/**
- * store/auth
- *
- * 로그인, 내 정보 수정 등 사용자 관련 상태 및 함수들
- */
-
 import { SHA256 } from "crypto-js"
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import { User } from "../../interface/auth"
 import { TEXT } from "../../messages/store/user/auth"
-import { INIT_USER, USER_INFO_KEY } from "./const"
 import { TSBOARD } from "../../../tsboard.config"
+import axios from "axios"
+import { MY_INFO_RESULT, MyInfoResult, USER_INFO_KEY } from "../../interface/user_interface"
 
 export const useAuthStore = defineStore("auth", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const util = useUtilStore()
   const home = useHomeStore()
   const password = ref<string>("")
   const checkedPassword = ref<string>("")
   const newProfile = ref<File | undefined>(undefined)
-  const user = ref<User>(INIT_USER)
+  const user = ref<MyInfoResult>(MY_INFO_RESULT)
   loadUserInfo()
 
   // 아이디(이메일) 입력란 체크
@@ -57,31 +48,29 @@ export const useAuthStore = defineStore("auth", () => {
       return
     }
 
-    user.value = JSON.parse(savedUserInfo) as User
-    try {
-      const response = await client.tsapi.auth.load.get({
-        $headers: {
-          authorization: user.value.token ?? "",
-        },
-        $query: {
-          userUid: user.value.uid ?? 0,
-        },
-      })
+    user.value = JSON.parse(savedUserInfo) as MyInfoResult
+    if (user.value.uid < 1) {
+      try {
+        const response = await axios.get(`${TSBOARD.API}/auth/load`, {
+          headers: {
+            Authorization: `Bearer ${user.value.token}`,
+          },
+        })
 
-      if (!response.data) {
-        return util.error(TEXT[home.lang].NO_RESPONSE)
-      }
-      if (response.data.success === false) {
-        return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
-      }
+        if (!response.data) {
+          return util.error(TEXT[home.lang].NO_RESPONSE)
+        }
+        if (response.data.success === false) {
+          return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+        }
 
-      user.value = response.data.result.user
-      user.value.signature = util.unescape(user.value.signature)
-      updateUserToken(response.data.result.newAccessToken)
-    } catch (e) {
-      util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
-      logout()
-      util.go("home")
+        user.value = response.data.result as MyInfoResult
+        user.value.signature = util.unescape(user.value.signature)
+      } catch (e) {
+        util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
+        logout()
+        util.go("home")
+      }
     }
   }
 
@@ -90,10 +79,12 @@ export const useAuthStore = defineStore("auth", () => {
     if (util.filters.email.test(user.value.id) === false) {
       return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
-    const response = await client.tsapi.auth.signin.post({
-      id: user.value.id.trim(),
-      password: SHA256(password.value).toString(),
-    })
+
+    const fd = new FormData()
+    fd.append("id", user.value.id.trim())
+    fd.append("password", SHA256(password.value).toString())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/signin`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)
@@ -101,20 +92,18 @@ export const useAuthStore = defineStore("auth", () => {
     if (response.data.success === false) {
       return util.error(TEXT[home.lang].INVALID_ID_PW)
     }
-    user.value = response.data.result.user
+
+    user.value = response.data.result as MyInfoResult
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
-    util.success(`${TEXT[home.lang].WELCOME_USER}, ${user.value.name}!`, 2000)
     password.value = ""
-    setTimeout(() => {
-      util.go("home")
-    }, 1000)
+    util.go("home")
   }
 
   // OAuth 로그인 이후 결과 받아오기
   async function loadOAuthUserInfo(): Promise<void> {
-    const response = await client.tsapi.auth.oauth.userinfo.get()
+    const response = await axios.get(`${TSBOARD.API}/auth/oauth/userinfo`)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
@@ -123,24 +112,24 @@ export const useAuthStore = defineStore("auth", () => {
       return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
     }
 
-    user.value = JSON.parse(response.data.result as string)
+    user.value = response.data.result as MyInfoResult
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
-    util.success(`${TEXT[home.lang].WELCOME_USER}, ${user.value.name}!`, 2000)
-    setTimeout(() => {
-      util.go("home")
-    }, 1000)
+    util.go("home")
   }
 
   // 사용자 로그아웃 하기
   async function logout(): Promise<void> {
-    const token = user.value.token
-    client.tsapi.auth.logout.post({
-      $headers: {
-        authorization: token,
+    axios.post(
+      `${TSBOARD.API}/auth/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
       },
-    })
+    )
     user.value.uid = 0
     user.value.admin = false
     user.value.token = ""
@@ -183,17 +172,19 @@ export const useAuthStore = defineStore("auth", () => {
       return util.error(TEXT[home.lang].INVALID_PASSWORD)
     }
 
-    const response = await client.tsapi.auth.update.patch({
-      $headers: {
-        authorization: user.value.token,
+    const fd = new FormData()
+    fd.append("name", user.value.name)
+    fd.append("password", password.value.length < 1 ? "" : SHA256(password.value).toString())
+    fd.append("signature", user.value.signature)
+
+    if (newProfile.value) {
+      fd.append("profile", newProfile.value)
+    }
+
+    const response = await axios.patch(`${TSBOARD.API}/auth/update`, fd, {
+      headers: {
+        Authorization: `Bearer ${user.value.token}`,
       },
-      $query: {
-        userUid: user.value.uid,
-      },
-      name: user.value.name,
-      password: password.value.length < 1 ? "" : SHA256(password.value).toString(),
-      signature: user.value.signature,
-      profile: newProfile.value,
     })
 
     if (!response.data) {
@@ -202,7 +193,7 @@ export const useAuthStore = defineStore("auth", () => {
     if (response.data.success === false) {
       return util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${response.data.error})`)
     }
-    updateUserToken(response.data.result.newAccessToken)
+
     loadUserInfo()
     password.value = ""
     checkedPassword.value = ""

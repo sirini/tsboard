@@ -1,15 +1,14 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { TSBOARD } from "../../../../tsboard.config"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import axios from "axios"
-import { BOARD_CONFIG, Board, BoardConfig, Pair } from "../../../interface/board_interface"
+import { BOARD, BOARD_CONFIG, Board, BoardConfig, Pair } from "../../../interface/board_interface"
+import { AdminBoardResult } from "../../../interface/admin_interface"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -24,7 +23,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
   const boardUseCategory = ref<boolean>(true)
-  const boardRemoveCategory = ref<AdminPair>({ uid: 0, name: "" })
+  const boardRemoveCategory = ref<Pair>({ uid: 0, name: "" })
 
   // 게시판 일반 설정 불러오기
   async function loadGeneralConfig(): Promise<void> {
@@ -44,8 +43,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
     }
 
-    groups.value = response.data.result.groups as Pair[]
-    board.value = response.data.result.config as BoardConfig
+    const result = response.data.result as AdminBoardResult
+    groups.value = result.groups
+    board.value = result.config
+
     board.value.name = util.unescape(board.value.name)
     board.value.info = util.unescape(board.value.info)
     boardRows.value = board.value.rowCount.toString()
@@ -64,19 +65,16 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   }
 
   // 그룹 변경하기
-  async function changeGroup(group: AdminPair): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/group`,
-      {
-        boardUid: board.value.uid,
-        groupUid: group.uid,
+  async function changeGroup(group: Pair): Promise<void> {
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("groupUid", group.uid.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/group`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -98,18 +96,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(GENERAL.TOO_SHORT_CATEGORY)
     }
 
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/name`,
-      {
-        boardUid: board.value.uid,
-        newName,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newName", newName)
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/name`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -128,18 +123,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(GENERAL.TOO_SHORT_NAME)
     }
 
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/info`,
-      {
-        boardUid: board.value.uid,
-        newInfo,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newInfo", newInfo)
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/info`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -153,18 +145,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 게시판 타입 변경하기
   async function changeType(): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/type`,
-      {
-        boardUid: board.value.uid,
-        newType: board.value.type as number,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newType", board.value.type.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/type`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -174,11 +163,11 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     }
 
     let typeName = "게시판 (board)"
-    if (board.value.type === (BOARD_TYPE.GALLERY as Board)) {
+    if (board.value.type === (BOARD.GALLERY as Board)) {
       typeName = "갤러리 (gallery)"
-    } else if (board.value.type === (BOARD_TYPE.BLOG as Board)) {
+    } else if (board.value.type === (BOARD.BLOG as Board)) {
       typeName = "블로그 (blog)"
-    } else if (board.value.type === (BOARD_TYPE.SHOP as Board)) {
+    } else if (board.value.type === (BOARD.SHOP as Board)) {
       typeName = "쇼핑몰 (shop)"
     }
 
@@ -194,18 +183,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
 
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/rows`,
-      {
-        boardUid: board.value.uid,
-        newRows,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newrows", newRows.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/rows`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -226,18 +212,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return
     }
 
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/change/width`,
-      {
-        boardUid: board.value.uid,
-        newWidth,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newWidth", newWidth.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/width`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -257,18 +240,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       return admin.error(GENERAL.TOO_SHORT_CATEGORY)
     }
 
-    const response = await axios.post(
-      `${TSBOARD.API}/admin/board/general/add/category`,
-      {
-        boardUid: board.value.uid,
-        newCategory,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("newCategory", newCategory)
+
+    const response = await axios.post(`${TSBOARD.API}/admin/board/general/add/category`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -327,18 +307,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 카테고리 사용 여부 설정하기
   async function useCategory(): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/general/use/category`,
-      {
-        boardUid: board.value.uid,
-        useCategory: boardUseCategory.value === true ? 1 : 0,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("useCategory", boardUseCategory.value ? "1" : "0")
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/general/use/category`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -351,6 +328,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   }
 
   return {
+    groups,
     board,
     boardGroupName,
     boardRows,

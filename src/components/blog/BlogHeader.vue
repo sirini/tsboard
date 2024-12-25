@@ -3,7 +3,7 @@
     <v-toolbar color="#121212">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
-        @click="util.go(BOARD_TYPE.BLOG as BoardType, id)"
+        @click="util.go(BOARD.BLOG as Board, id)"
         :class="home.isMobile ? 'mobile-title' : ''"
       >
         <span class="title">
@@ -24,8 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { BOARD_TYPE } from "../../../server/database/board/const"
-import { BoardType } from "../../interface/board"
+import { BOARD, Board } from "../../interface/board_interface"
 import HomeHeaderLogin from "../../pages/home/components/header/HomeHeaderLogin.vue"
 import HomeHeaderNotification from "../../pages/home/components/header/HomeHeaderNotification.vue"
 import { useHomeStore } from "../../store/home"

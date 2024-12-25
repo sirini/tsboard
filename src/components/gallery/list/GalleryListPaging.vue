@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
-import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"

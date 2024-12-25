@@ -90,8 +90,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
         post.value = BOARD_LIST_ITEM
         post.value.title = TEXT[home.lang].FAILED_TITLE
         post.value.content = TEXT[home.lang].FAILED_CONTENT
-        files.value = []
-        images.value = []
+        files.value = [] as BoardAttachment[]
+        images.value = [] as BoardAttachedImage[]
         prevPostUid.value = 0
         nextPostUid.value = 0
         return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
@@ -121,19 +121,16 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 게시글에 좋아요 추가 (혹은 취소) 하기
   async function like(isLike: boolean): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/board/like`,
-      {
-        boardUid: config.value.uid,
-        postUid: postUid.value,
-        liked: isLike ? 1 : 0,
+    const fd = new FormData()
+    fd.append("boardUid", config.value.uid.toString())
+    fd.append("postUid", postUid.value.toString())
+    fd.append("liked", isLike ? "1" : "0")
+
+    const response = await axios.patch(`${TSBOARD.API}/board/like`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (response.data && response.data.success === true) {
       post.value.liked = isLike
@@ -281,19 +278,16 @@ export const useBoardViewStore = defineStore("boardView", () => {
 
   // 이동 적용
   async function applyMovePost(): Promise<void> {
-    const response = await axios.put(
-      `${TSBOARD.API}/board/move/apply`,
-      {
-        boardUid: config.value.uid,
-        targetBoardUid: moveTarget.value.uid,
-        postUid: postUid.value,
+    const fd = new FormData()
+    fd.append("boardUid", config.value.uid.toString())
+    fd.append("postUid", postUid.value.toString())
+    fd.append("targetBoardUid", moveTarget.value.uid.toString())
+
+    const response = await axios.put(`${TSBOARD.API}/board/move/apply`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return util.snack(TEXT[home.lang].NO_RESPONSE)

@@ -1,12 +1,6 @@
-/**
- * interface/editor
- *
- * 글작성, 수정과 관련된 인터페이스
- */
-
-import { CommonPairParam } from "./board"
-
-export type WritePostParams = CommonPairParam & {
+export type WritePostParams = {
+  boardUid: number
+  accessUserUid: number
   categoryUid: number
   title: string
   content: string
@@ -30,11 +24,15 @@ export type TableOption = {
   withHeaderRow: boolean
 }
 
-export type UploadImageParams = CommonPairParam & {
+export type UploadImageParams = {
+  boardUid: number
+  accessUserUid: number
   images: File[]
 }
 
-export type LoadImageParams = CommonPairParam & {
+export type LoadImageParams = {
+  boardUid: number
+  accessUserUid: number
   lastUid: number
   bunch: number
   maxUid: number

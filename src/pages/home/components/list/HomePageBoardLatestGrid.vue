@@ -11,7 +11,7 @@
       <v-list-item class="pa-2"
         ><v-list-item-title
           ><v-chip size="small" class="mr-2" label :color="home.color.header" v-if="useCategory">{{
-            util.unescape(post.category)
+            util.unescape(post.category.name)
           }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
         ></v-list-item
@@ -76,18 +76,18 @@
 <script setup lang="ts">
 import { TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"
-import { BoardType } from "../../../../interface/board"
-import { BoardPostItem } from "../../../../interface/home"
+import { Board } from "../../../../interface/board_interface"
+import { BoardHomePostItem } from "../../../../interface/home_interface"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 
 const home = useHomeStore()
 const util = useUtilStore()
 const props = defineProps<{
-  type: BoardType
+  type: Board
   id: string
   useCategory: boolean
-  post: BoardPostItem
+  post: BoardHomePostItem
 }>()
 </script>
 

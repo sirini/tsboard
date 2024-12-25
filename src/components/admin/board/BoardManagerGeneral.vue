@@ -35,7 +35,7 @@
               <v-menu activator="parent" open-on-hover>
                 <v-list>
                   <v-list-item
-                    v-for="(group, index) in general.board.groups"
+                    v-for="(group, index) in general.groups"
                     :key="index"
                     @click="general.changeGroup(group)"
                   >
@@ -106,7 +106,7 @@
           <v-col cols="4">
             <v-btn-toggle v-model="general.board.type" mandatory>
               <v-btn
-                :value="BOARD_TYPE.BOARD"
+                :value="BOARD.DEFAULT"
                 prepend-icon="mdi-table-large"
                 @click="general.changeType"
                 color="primary"
@@ -114,7 +114,7 @@
                 <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
               </v-btn>
               <v-btn
-                :value="BOARD_TYPE.GALLERY"
+                :value="BOARD.GALLERY"
                 prepend-icon="mdi-view-gallery-outline"
                 @click="general.changeType"
                 color="primary"
@@ -125,7 +125,7 @@
                 >
               </v-btn>
               <v-btn
-                :value="BOARD_TYPE.BLOG"
+                :value="BOARD.BLOG"
                 prepend-icon="mdi-post-outline"
                 @click="general.changeType"
                 color="primary"
@@ -138,11 +138,11 @@
             </v-btn-toggle>
           </v-col>
           <v-col class="mt-2">
-            <span v-show="general.board.type === BOARD_TYPE.BLOG"
+            <span v-show="general.board.type === BOARD.BLOG"
               >블로그 형식은 권한 탭에서 지정된 <strong>게시판 관리자만 글을 작성</strong>할 수
               있습니다.</span
             >
-            <span v-show="general.board.type !== BOARD_TYPE.BLOG"
+            <span v-show="general.board.type !== BOARD.BLOG"
               >페이지 형태를 일반적인 게시판, 갤러리 혹은 블로그로 지정할 수 있습니다.</span
             ></v-col
           >
@@ -210,7 +210,7 @@
               <v-menu activator="parent" open-on-hover>
                 <v-list>
                   <v-list-item
-                    v-for="(category, index) in general.board.categories"
+                    v-for="(category, index) in general.board.category"
                     :key="index"
                     @click=""
                   >
@@ -259,8 +259,7 @@ import { useAdminStore } from "../../../store/admin/common"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
-import { BoardType } from "../../../interface/board"
+import { BOARD, Board } from "../../../interface/board_interface"
 
 const admin = useAdminStore()
 const util = useUtilStore()
@@ -279,9 +278,9 @@ onMounted(() => {
 watch(
   () => general.board.type,
   (value) => {
-    if (value === (BOARD_TYPE.GALLERY as BoardType)) {
+    if (value === (BOARD.GALLERY as Board)) {
       typeName.value = "갤러리"
-    } else if (value === (BOARD_TYPE.BLOG as BoardType)) {
+    } else if (value === (BOARD.BLOG as Board)) {
       typeName.value = "블로그"
     } else {
       typeName.value = "게시판"

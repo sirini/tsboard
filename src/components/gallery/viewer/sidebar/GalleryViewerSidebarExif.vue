@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 

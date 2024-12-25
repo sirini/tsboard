@@ -20,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-remove-dialog"
+import { BOARD } from "../../../interface/board_interface"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()
@@ -32,7 +32,7 @@ const home = useHomeStore()
 
 // 댓글 삭제하기
 async function remove(): Promise<void> {
-  if (viewer.config.type === BOARD_TYPE.BOARD) {
+  if (viewer.config.type === BOARD.DEFAULT) {
     comment.removeComment()
   } else {
     await comment.removeComment()

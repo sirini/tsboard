@@ -126,18 +126,15 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
       return
     }
 
-    const response = await axios.post(
-      `${TSBOARD.API}/admin/group/general/create/board`,
-      {
-        groupUid: group.value.uid,
-        newId,
+    const fd = new FormData()
+    fd.append("groupUid", group.value.uid.toString())
+    fd.append("newId", newId)
+
+    const response = await axios.post(`${TSBOARD.API}/admin/group/general/create/board`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
@@ -167,18 +164,15 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
 
   // 선택한 회원을 그룹 관리자로 지정하기
   async function updateGroupManager(user: Pair): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/group/general/change/admin`,
-      {
-        groupUid: group.value.uid,
-        targetUserUid: user.uid,
+    const fd = new FormData()
+    fd.append("groupUid", group.value.uid.toString())
+    fd.append("targetUserUid", user.uid.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/group/general/change/admin`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)

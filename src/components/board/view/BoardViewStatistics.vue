@@ -26,7 +26,7 @@
         <v-divider vertical></v-divider>
         <span class="ml-3 text-caption"
           ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon>
-          {{ view.post.reply }}</span
+          {{ view.post.comment }}</span
         >
       </template>
     </v-list-item>

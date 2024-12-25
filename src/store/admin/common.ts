@@ -1,6 +1,6 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { AdminBreadcrumb } from "../../interface/admin"
+import { AdminBreadcrumb } from "../../interface/admin_interface"
 
 export const useAdminStore = defineStore("admin", () => {
   const snackbar = ref<boolean>(false)

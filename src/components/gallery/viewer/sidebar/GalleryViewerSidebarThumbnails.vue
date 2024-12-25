@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { TSBOARD } from "../../../../../tsboard.config"
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../../store/board/gallery.viewer"
 
 const viewer = useViewerStore()
 </script>

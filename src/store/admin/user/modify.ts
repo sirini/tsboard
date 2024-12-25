@@ -26,10 +26,11 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
       return
     }
 
-    const response = await axios.post(`${TSBOARD.API}/auth/checkname`, {
-      name: user.value.name,
-      userUid: user.value.uid,
-    })
+    const fd = new FormData()
+    fd.append("name", user.value.name)
+    fd.append("userUid", user.value.uid.toString())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/checkname`, fd)
 
     if (!response.data) {
       return util.error(MODIFY.NO_RESPONSE)

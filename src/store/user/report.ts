@@ -1,29 +1,21 @@
-/**
- * store/user/report
- *
- * 신고 관련 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../server/index"
 import { useAuthStore } from "./auth"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
-import { INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { TEXT } from "../../messages/store/user/user"
 import { TSBOARD } from "../../../tsboard.config"
+import { USER_BASIC_INFO, UserBasicInfo } from "../../interface/user_interface"
+import axios from "axios"
 
 export const useReportStore = defineStore("report", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
   const dialog = ref<boolean>(false)
   const content = ref<string>("")
   const checkedBlackList = ref<boolean>(false)
-  const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
+  const targetUser = ref<UserBasicInfo>(USER_BASIC_INFO)
 
   // 사용자 신고하기 다이얼로그 열기
   function openDialog(user: UserBasicInfo): void {
@@ -33,7 +25,7 @@ export const useReportStore = defineStore("report", () => {
 
   // 사용자 신고하기 다이얼로그 닫기
   function closeDialog(): void {
-    targetUser.value = INIT_USER_BASIC
+    targetUser.value = USER_BASIC_INFO
     checkedBlackList.value = false
     dialog.value = false
   }
@@ -47,17 +39,19 @@ export const useReportStore = defineStore("report", () => {
       return util.error(TEXT[home.lang].INVALID_TEXT_LENGTH)
     }
 
-    const response = await client.tsapi.user.report.post({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+    const fd = new FormData()
+    fd.append("targetUserUid", targetUser.value.uid.toString())
+    fd.append("content", content.value)
+    fd.append("checkedBlackList", checkedBlackList.value ? "1" : "0")
+
+    const response = await axios.post(
+      `${TSBOARD.API}/user/report`, fd,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      targetUserUid: targetUser.value.uid,
-      content: content.value,
-      checkedBlackList: checkedBlackList.value ? 1 : 0,
-    })
+    )
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)

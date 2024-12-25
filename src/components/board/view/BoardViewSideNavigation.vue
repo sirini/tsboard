@@ -3,7 +3,7 @@
     <v-list
       density="compact"
       class="pa-0"
-      :bg-color="view.config.type != BOARD_TYPE.BLOG ? '#eceff1' : ''"
+      :bg-color="view.config.type != BOARD.BLOG ? '#eceff1' : ''"
     >
       <v-list-item class="pa-0">
         <v-btn
@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { BOARD_TYPE } from "../../../../server/database/board/const"
+import { BOARD } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"

@@ -27,7 +27,7 @@ export type GalleryGridItem = {
   writer: BoardWriter
   comment: number
   title: string
-  images: BoardAttachedImage
+  images: BoardAttachedImage[]
 }
 
 // 갤러리 리스트 반환 타입 정의

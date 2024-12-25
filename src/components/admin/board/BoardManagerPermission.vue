@@ -21,7 +21,7 @@
                   >
                     {{ user.name }}
                     <v-tooltip activator="parent" location="right">
-                      이 회원을 {{ permission.board.id }} 게시판 관리자로 지정합니다.
+                      이 회원을 게시판 관리자로 지정합니다.
                     </v-tooltip>
                   </v-list-item>
                 </v-list>
@@ -49,7 +49,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
-          :type="ACTION_TYPE.LIST"
+          :type="ADMIN_ACTION.LIST"
           :auth-user-only="false"
           @update="(level: number) => permission.updateListPermission(level)"
         ></board-manager-permission-item>
@@ -58,7 +58,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
-          :type="ACTION_TYPE.VIEW"
+          :type="ADMIN_ACTION.VIEW"
           :auth-user-only="false"
           @update="(level: number) => permission.updateViewPermission(level)"
         ></board-manager-permission-item>
@@ -67,7 +67,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
-          :type="ACTION_TYPE.WRITE"
+          :type="ADMIN_ACTION.WRITE"
           :auth-user-only="true"
           @update="(level: number) => permission.updateWritePermission(level)"
         ></board-manager-permission-item>
@@ -76,7 +76,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-permission-item
-          :type="ACTION_TYPE.COMMENT"
+          :type="ADMIN_ACTION.COMMENT"
           :auth-user-only="true"
           @update="(level: number) => permission.updateCommentPermission(level)"
         ></board-manager-permission-item>
@@ -85,7 +85,7 @@
 
       <v-list-item class="mt-2 mb-1">
         <board-manager-permission-item
-          :type="ACTION_TYPE.DOWNLOAD"
+          :type="ADMIN_ACTION.DOWNLOAD"
           :auth-user-only="true"
           @update="(level: number) => permission.updateDownloadPermission(level)"
         ></board-manager-permission-item>
@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { TSBOARD } from "../../../../tsboard.config"
-import { ACTION_TYPE } from "../../../interface/admin"
+import { ADMIN_ACTION } from "../../../interface/admin_interface"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import { useAdminStore } from "../../../store/admin/common"
 import { useHomeStore } from "../../../store/home"

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/gallery/viewer/gallery-viewer"
 import GalleryViewerSidebar from "./sidebar/GalleryViewerSidebar.vue"

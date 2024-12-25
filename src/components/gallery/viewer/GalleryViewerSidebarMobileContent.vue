@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import GalleryViewerSidebarTag from "./sidebar/GalleryViewerSidebarTag.vue"
 import GalleryViewerSidebarComment from "./sidebar/GalleryViewerSidebarComment.vue"
 import BoardViewCommentWriteButton from "../../board/comment/BoardViewCommentWriteButton.vue"

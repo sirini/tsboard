@@ -143,7 +143,7 @@ const visible = ref<boolean>(false)
 
 // OAuth 로그인하기
 function oauthLogin(service: string): void {
-  location.href = `${TSBOARD.API.URI}/tsapi/auth/${service}/request`
+  location.href = `${TSBOARD.API}/auth/${service}/request`
 }
 
 // OAuth 로그인 성공 시 처리

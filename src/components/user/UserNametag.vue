@@ -53,7 +53,7 @@
               profile,
             })
           "
-          v-if="auth.user.uid === SUPER_ADMIN_UID"
+          v-if="auth.user.uid === 1"
           >{{ TEXT[home.lang].MANAGE_USER }}</v-list-item
         >
       </v-list>
@@ -71,7 +71,6 @@ import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
 import { TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/user-nametag"
-import { SUPER_ADMIN_UID } from "../../../server/database/auth/const"
 
 const auth = useAuthStore()
 const user = useUserStore()

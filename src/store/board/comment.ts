@@ -5,8 +5,13 @@ import { TEXT } from "../../messages/store/board/comment"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
-import { useCommentSaveStore } from "./comment/save"
-import { CommentListResult, CommentResult } from "../../interface/comment_interface"
+import {
+  COMMENT_RESULT,
+  CommentListResult,
+  CommentNewParameter,
+  CommentResult,
+  CommentTargetParameter,
+} from "../../interface/comment_interface"
 import { PAGE, Paging } from "../../interface/board_interface"
 import axios from "axios"
 import { TSBOARD } from "../../../tsboard.config"
@@ -15,7 +20,6 @@ export const useCommentStore = defineStore("comment", () => {
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const save = useCommentSaveStore()
   const home = useHomeStore()
   const id = ref<string>("")
   const boardUid = ref<number>(0)
@@ -99,19 +103,16 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글에 좋아요 추가 (혹은 취소) 하기
   async function like(commentUid: number, isLike: boolean): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/comment/like`,
-      {
-        boardUid: boardUid.value,
-        commentUid,
-        liked: isLike ? 1 : 0,
+    const fd = new FormData()
+    fd.append("boardUid", boardUid.value.toString())
+    fd.append("commentUid", commentUid.toString())
+    fd.append("liked", isLike ? "1" : "0")
+
+    const response = await axios.patch(`${TSBOARD.API}/comment/like`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (response.data && response.data.success === true) {
       comments.value.map((comment: CommentResult) => {
@@ -134,7 +135,7 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 새 댓글 추가하기
   async function saveNewComment(): Promise<void> {
-    const comment = await save.newComment({
+    const comment = await newComment({
       boardUid: boardUid.value,
       postUid: postUid.value,
       content: contentWithSyntax.value,
@@ -146,7 +147,7 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 기존 댓글 수정하기
   async function modifyExistComment(): Promise<void> {
-    await save.modifyComment({
+    await modifyComment({
       targetUid: modifyTarget.value,
       boardUid: boardUid.value,
       postUid: postUid.value,
@@ -164,7 +165,7 @@ export const useCommentStore = defineStore("comment", () => {
   // 기존 댓글에 답글달기
   async function saveReplyComment(): Promise<void> {
     let targetIndex = 0
-    const comment = await save.replyComment({
+    const comment = await replyComment({
       targetUid: replyTarget.value,
       boardUid: boardUid.value,
       postUid: postUid.value,
@@ -256,6 +257,118 @@ export const useCommentStore = defineStore("comment", () => {
 
     util.snack(TEXT[home.lang].REMOVED_COMMENT)
     closeRemoveCommentDialog()
+  }
+
+  // 새 댓글 작성하기
+  async function newComment(param: CommentNewParameter): Promise<CommentResult> {
+    let result: CommentResult = COMMENT_RESULT
+
+    const fd = new FormData()
+    fd.append("boardUid", param.boardUid.toString())
+    fd.append("postUid", param.postUid.toString())
+    fd.append("content", param.content)
+
+    const response = await axios.post(`${TSBOARD.API}/comment/write`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(TEXT[home.lang].NO_RESPONSE)
+      return result
+    }
+    if (response.data.success === false) {
+      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+      return result
+    }
+
+    result = {
+      uid: response.data.result,
+      writer: {
+        uid: auth.user.uid,
+        name: auth.user.name,
+        profile: auth.user.profile,
+      },
+      content: param.content,
+      like: 0,
+      liked: false,
+      submitted: Date.now(),
+      modified: 0,
+      status: 0,
+      replyUid: response.data.result,
+      postUid: param.postUid,
+    }
+    util.snack(TEXT[home.lang].SAVED_NEW_COMMENT)
+    return result
+  }
+
+  // 답글 작성하기
+  async function replyComment(param: CommentTargetParameter): Promise<CommentResult> {
+    let result: CommentResult = COMMENT_RESULT
+
+    const fd = new FormData()
+    fd.append("replyTargetUid", param.targetUid.toString())
+    fd.append("postUid", param.boardUid.toString())
+    fd.append("content", param.content)
+
+    const response = await axios.post(`${TSBOARD.API}/comment/reply`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    })
+
+    if (!response.data) {
+      util.snack(TEXT[home.lang].NO_RESPONSE)
+      return result
+    }
+    if (response.data.success === false) {
+      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+      return result
+    }
+
+    result = {
+      uid: response.data.result,
+      writer: {
+        uid: auth.user.uid,
+        name: auth.user.name,
+        profile: auth.user.profile,
+      },
+      content: param.content,
+      like: 0,
+      liked: false,
+      submitted: Date.now(),
+      modified: 0,
+      status: 0,
+      replyUid: param.targetUid,
+      postUid: param.postUid,
+    }
+    util.snack(TEXT[home.lang].REPLIED_NEW_COMMENT)
+    return result
+  }
+
+  // 기존 댓글 수정하기
+  async function modifyComment(param: CommentTargetParameter): Promise<void> {
+    const fd = new FormData()
+    fd.append("modifyTargetUid", param.targetUid.toString())
+    fd.append("boardUid", param.boardUid.toString())
+    fd.append("postUid", param.postUid.toString())
+    fd.append("content", param.content)
+
+    const response = await axios.patch(`${TSBOARD.API}/comment/modify`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    })
+
+    if (!response.data) {
+      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    }
+    if (response.data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
+    }
+
+    util.snack(TEXT[home.lang].MODIFIED_COMMENT)
   }
 
   return {

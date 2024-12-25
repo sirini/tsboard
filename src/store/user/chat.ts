@@ -1,22 +1,15 @@
-/**
- * store/user/chat
- *
- * 사용자간의 1:1 채팅 스토어
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../server/index"
 import { TSBOARD } from "../../../tsboard.config"
-import { ChatHistory, ChatItem, INIT_USER_BASIC, UserBasicInfo } from "../../interface/user"
 import { TEXT } from "../../messages/store/user/chat"
 import { useHomeStore } from "../home"
 import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
+import axios from "axios"
+import { ChatHistory, ChatItem } from "../../interface/chat_interface"
+import { USER_BASIC_INFO, UserBasicInfo } from "../../interface/user_interface"
 
 export const useChatStore = defineStore("chat", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -24,20 +17,20 @@ export const useChatStore = defineStore("chat", () => {
   const list = ref<ChatItem[]>([])
   const history = ref<ChatHistory[]>([])
   const message = ref<string>("")
-  const targetUser = ref<UserBasicInfo>(INIT_USER_BASIC)
+  const targetUser = ref<UserBasicInfo>(USER_BASIC_INFO)
 
   // 채팅 목록 불러오기
   async function loadChatList(): Promise<void> {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.chat.list.get({
-      $headers: {
+
+    const response = await axios.get(`${TSBOARD.API}/chat/list`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
+      params: {
         limit: 10,
-        userUid: auth.user.uid,
       },
     })
 
@@ -56,7 +49,7 @@ export const useChatStore = defineStore("chat", () => {
 
   // 채팅창 닫기
   function closeDialog(): void {
-    targetUser.value = INIT_USER_BASIC
+    targetUser.value = USER_BASIC_INFO
     dialog.value = false
   }
 
@@ -66,13 +59,13 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.chat.history.get({
-      $headers: {
+    const response = await axios.get(`${TSBOARD.API}/chat/history`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
-        userUid: targetUser.value.uid,
+      params: {
         limit: 20,
+        targetUserUid: targetUser.value.uid,
       },
     })
 
@@ -93,16 +86,18 @@ export const useChatStore = defineStore("chat", () => {
       return
     }
 
-    const response = await client.tsapi.chat.save.post({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+    const fd = new FormData()
+    fd.append("targetUserUid", targetUser.value.uid.toString())
+    fd.append("message", message.value)
+
+    const response = await axios.post(
+      `${TSBOARD.API}/chat/save`, fd,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      $query: {
-        userUid: auth.user.uid,
-      },
-      targetUserUid: targetUser.value.uid,
-      message: message.value,
-    })
+    )
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)

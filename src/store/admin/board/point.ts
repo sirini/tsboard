@@ -51,10 +51,10 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
       download: point.download,
     }
 
-    payment.value.view = board.value.view < 0 ? true : false
-    payment.value.write = board.value.write < 0 ? true : false
-    payment.value.comment = board.value.comment < 0 ? true : false
-    payment.value.download = board.value.download < 0 ? true : false
+    payment.value.view = board.value.view < 0
+    payment.value.write = board.value.write < 0
+    payment.value.comment = board.value.comment < 0
+    payment.value.download = board.value.download < 0
 
     boardView.value = Math.abs(board.value.view).toString()
     boardWrite.value = Math.abs(board.value.write).toString()
@@ -122,21 +122,18 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
 
   // 포인트 처리
   async function updateAllPoints(): Promise<boolean> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/point/update/points`,
-      {
-        boardUid: board.value.uid,
-        view: board.value.view,
-        write: board.value.write,
-        comment: board.value.comment,
-        download: board.value.download,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("view", board.value.view.toString())
+    fd.append("write", board.value.write.toString())
+    fd.append("comment", board.value.comment.toString())
+    fd.append("download", board.value.download.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/point/update/points`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       admin.error(POINT.NO_RESPONSE)

@@ -83,17 +83,14 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
       return
     }
 
-    const response = await axios.post(
-      `${TSBOARD.API}/admin/group/list/create/group`,
-      {
-        newId,
+    const fd = new FormData()
+    fd.append("newId", newId)
+
+    const response = await axios.post(`${TSBOARD.API}/admin/group/list/create/group`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(LIST.NO_RESPONSE)
@@ -174,18 +171,15 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
 
   // 그룹 ID 변경하기
   async function updateGroupId(): Promise<void> {
-    const response = await axios.put(
-      `${TSBOARD.API}/admin/group/list/update/group`,
-      {
-        groupUid: groupUid.value,
-        changeGroupId: changeGroupId.value,
+    const fd = new FormData()
+    fd.append("groupUid", groupUid.value.toString())
+    fd.append("changeGroupId", changeGroupId.value)
+
+    const response = await axios.put(`${TSBOARD.API}/admin/group/list/update/group`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(LIST.NO_RESPONSE)

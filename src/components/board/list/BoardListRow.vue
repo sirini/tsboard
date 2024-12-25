@@ -4,7 +4,7 @@
     v-for="(post, index) in list.posts"
     :key="index"
     :lines="home.isMobile ? 'two' : 'one'"
-    :class="post.status === CONTENT_STATUS.NOTICE ? 'notice' : ''"
+    :class="post.status === STATUS.NOTICE ? 'notice' : ''"
   >
     <template v-slot:prepend v-if="home.isMobile === false">
       <span class="col no text-center">{{ post.uid }}</span>
@@ -15,11 +15,11 @@
         size="x-small"
         :color="home.color.header"
         class="mr-2"
-        v-if="post.status === CONTENT_STATUS.NOTICE"
+        v-if="post.status === STATUS.NOTICE"
         >mdi-bullhorn-variant-outline</v-icon
       >
 
-      <span v-if="post.status === CONTENT_STATUS.SECRET">
+      <span v-if="post.status === STATUS.SECRET">
         <v-icon
           size="x-small"
           :color="home.color.header"
@@ -31,7 +31,7 @@
       </span>
 
       <v-chip
-        v-if="list.config.useCategory && post.status === CONTENT_STATUS.NORMAL"
+        v-if="list.config.useCategory && post.status === STATUS.NORMAL"
         size="x-small"
         :color="home.color.header"
         class="mr-2"
@@ -48,8 +48,8 @@
           class="ml-2"
           prepend-icon="mdi-chat-outline"
           variant="text"
-          v-if="post.reply > 0"
-          >{{ util.num(post.reply) }}</v-chip
+          v-if="post.comment > 0"
+          >{{ util.num(post.comment) }}</v-chip
         >
 
         <v-chip
@@ -87,8 +87,8 @@
         class="ml-2"
         prepend-icon="mdi-chat-outline"
         variant="text"
-        v-if="post.reply > 0"
-        >{{ util.num(post.reply) }}</v-chip
+        v-if="post.comment > 0"
+        >{{ util.num(post.comment) }}</v-chip
       >
 
       <v-chip
@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { CONTENT_STATUS } from "../../../../server/database/board/const"
+import { STATUS } from "../../../interface/board_interface"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"

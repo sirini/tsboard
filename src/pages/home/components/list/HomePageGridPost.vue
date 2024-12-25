@@ -16,7 +16,7 @@
             label
             :color="home.color.header"
             v-if="post.useCategory"
-            >{{ util.unescape(post.category) }}</v-chip
+            >{{ util.unescape(post.category.name) }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
         ></v-list-item
       >
@@ -80,14 +80,14 @@
 <script setup lang="ts">
 import { TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"
-import { PostItem } from "../../../../interface/home"
+import { BoardHomePostItem } from "../../../../interface/home_interface"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 
 const home = useHomeStore()
 const util = useUtilStore()
 const props = defineProps<{
-  post: PostItem
+  post: BoardHomePostItem
 }>()
 </script>
 

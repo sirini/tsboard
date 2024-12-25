@@ -4,17 +4,40 @@ import {
   Board,
   BoardActionLevel,
   BoardActionPoint,
+  BoardConfig,
   BoardWriter,
   Pair,
   Status,
 } from "./board_interface"
-import { UserBasicInfo } from "./user"
+import { UserBasicInfo } from "./user_interface"
+
+// 관리화면용 활동 타입 정의
+export const ADMIN_ACTION = {
+  LIST: 0,
+  VIEW: 1,
+  WRITE: 2,
+  COMMENT: 3,
+  DOWNLOAD: 4,
+}
+
+// 관리화면 상단 경로 표시줄용 타입
+export type AdminBreadcrumb = {
+  title: string
+  href: string
+  disabled: boolean
+}
 
 // 게시판 레벨 제한 반환 타입 정의
 export type AdminBoardLevelPolicy = {
   uid: number
   admin: BoardWriter
   level: BoardActionLevel
+}
+
+// 게시판 설정 반환값 정의
+export type AdminBoardResult = {
+  config: BoardConfig
+  groups: Pair[]
 }
 
 // 게시판 레벨 제한 기본값 정의
@@ -188,7 +211,7 @@ export type AdminReportResult = {
 export type AdminUserItem = UserBasicInfo & {
   id: string
   level: number
-  poiont: number
+  point: number
   signup: number
 }
 

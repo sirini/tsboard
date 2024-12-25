@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../../store/board/gallery.viewer"
 
 const viewer = useViewerStore()
 </script>

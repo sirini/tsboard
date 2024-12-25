@@ -1,22 +1,14 @@
-/**
- * store/password
- *
- * 사용자 비밀번호 초기화 관련 상태 및 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { SHA256 } from "crypto-js"
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import type { App } from "../../../server/index"
 import { TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/store/user/auth"
 import { useHomeStore } from "../home"
 import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
+import axios from "axios"
 
 export const usePasswordStore = defineStore("password", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
@@ -27,13 +19,13 @@ export const usePasswordStore = defineStore("password", () => {
     if (util.filters.email.test(auth.user.id) === false) {
       return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
-
     loading.value = true
 
-    const response = await client.tsapi.auth.reset.password.post({
-      email: auth.user.id,
-      lang: home.lang as number,
-    })
+    const fd = new FormData()
+    fd.append("email", auth.user.id)
+    fd.append("lang", home.lang.toString())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/reset/password`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)
@@ -61,11 +53,13 @@ export const usePasswordStore = defineStore("password", () => {
       return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
 
-    const response = await client.tsapi.user.change.password.post({
-      target,
-      code,
-      password: SHA256(auth.password).toString(),
-    })
+    const fd = new FormData()
+    fd.append("target", target.toString())
+    fd.append("code", code)
+    fd.append("password", SHA256(auth.password).toString())
+
+    const response = await axios.post(`${TSBOARD.API}/user/change/password`, fd)
+
     if (response.data!.success === false) {
       return util.error(TEXT[home.lang].UNABLE_CHANGE_PASSWORD)
     }

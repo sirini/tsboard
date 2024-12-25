@@ -5,7 +5,7 @@
         density="compact"
         id="tsboardEditorToolbar"
         class="write-editor-menu"
-        :color="type === BOARD_TYPE.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
+        :color="type === BOARD.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
       >
         <board-write-toolbar-bold-italic-strike-highlight
           :editor="editor"
@@ -22,7 +22,7 @@
 
       <editor-content
         :editor="editor"
-        :class="type === BOARD_TYPE.BLOG ? 'dark' : 'light'"
+        :class="type === BOARD.BLOG ? 'dark' : 'light'"
       ></editor-content>
     </v-card>
 
@@ -124,14 +124,13 @@ import rs from "highlight.js/lib/languages/rust"
 import ts from "highlight.js/lib/languages/typescript"
 import { all, createLowlight } from "lowlight"
 import { onBeforeUnmount, onMounted, watch } from "vue"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
-import { BoardType } from "../../../interface/board"
 import { TableOption, VideoURL } from "../../../interface/editor"
 import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
 import { useHomeStore } from "../../../store/home"
+import { Board, BOARD } from "../../../interface/board_interface"
 import BoardWriteEditorAddImageDialog from "./BoardWriteEditorAddImageDialog.vue"
 import BoardWriteEditorAddImageFromDBDialog from "./BoardWriteEditorAddImageFromDBDialog.vue"
 import BoardWriteEditorAddTableDialog from "./BoardWriteEditorAddTableDialog.vue"
@@ -152,7 +151,7 @@ const editorImage = useEditorImageStore()
 const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
-  type: BoardType
+  type: Board
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
 

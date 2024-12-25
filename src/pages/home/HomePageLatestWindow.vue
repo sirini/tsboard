@@ -30,7 +30,7 @@ const home = useHomeStore()
 onMounted(async () => {
   await home.loadLatestPosts()
 
-  let timer: Timer
+  let timer: any
   window.onscroll = (event: Event) => {
     clearTimeout(timer)
     timer = setTimeout(() => {

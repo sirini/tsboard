@@ -1,14 +1,7 @@
-/**
- * store/util
- *
- * 여러 곳에서 자주 사용되는 함수들 모음
- */
-
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRouter } from "vue-router"
-import { ACTION_TARGET, BOARD_TYPE } from "../../server/database/board/const"
-import { BoardType } from "../interface/board"
+import { BOARD, Board, BOARD_ACTION } from "../interface/board_interface"
 
 export const useUtilStore = defineStore("util", () => {
   const router = useRouter()
@@ -65,13 +58,13 @@ export const useUtilStore = defineStore("util", () => {
   // 액션에 따른 라우터 이름 변환
   function nameByAction(action: number): string {
     switch (action) {
-      case ACTION_TARGET.LIST:
+      case BOARD_ACTION.LIST:
         return "List"
-      case ACTION_TARGET.PAGING:
+      case BOARD_ACTION.PAGING:
         return "Paging"
-      case ACTION_TARGET.WRITE:
+      case BOARD_ACTION.WRITE:
         return "Write"
-      case ACTION_TARGET.MODIFY:
+      case BOARD_ACTION.MODIFY:
         return "Modify"
       default:
         return "View"
@@ -79,14 +72,14 @@ export const useUtilStore = defineStore("util", () => {
   }
 
   // 게시판 형태에 따른 라우터 이름 반환
-  function routerName(type: BoardType, action: number): string {
+  function routerName(type: Board, action: number): string {
     const actionName = nameByAction(action)
     switch (type) {
-      case BOARD_TYPE.GALLERY:
+      case BOARD.GALLERY:
         return `gallery${actionName}`
-      case BOARD_TYPE.BLOG:
+      case BOARD.BLOG:
         return `blog${actionName}`
-      case BOARD_TYPE.SHOP:
+      case BOARD.SHOP:
         return `shop${actionName}`
       default:
         return `board${actionName}`
@@ -95,7 +88,7 @@ export const useUtilStore = defineStore("util", () => {
 
   // 페이지 이동하기
   async function go(
-    target: string | BoardType,
+    target: string | Board,
     id: string = "",
     no: number = 0,
   ): Promise<NavigationFailure | void | undefined> {
@@ -103,7 +96,7 @@ export const useUtilStore = defineStore("util", () => {
     if ("string" === typeof target) {
       name = target
     } else {
-      name = routerName(target, no > 0 ? ACTION_TARGET.VIEW : ACTION_TARGET.LIST)
+      name = routerName(target, no > 0 ? BOARD_ACTION.VIEW : BOARD_ACTION.LIST)
     }
 
     if (id.length < 1) {

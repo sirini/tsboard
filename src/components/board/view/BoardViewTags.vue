@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { Pair } from "../../../interface/board"
+import { Pair } from "../../../interface/board_interface"
 
 const props = defineProps<{
   tags: Pair[]

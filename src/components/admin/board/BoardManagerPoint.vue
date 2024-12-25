@@ -3,7 +3,7 @@
     <v-list>
       <v-list-item class="mb-2">
         <board-manager-point-item
-          :type="ACTION_TYPE.VIEW"
+          :type="ADMIN_ACTION.VIEW"
           @update="(isPayment: boolean, amount: string) => point.updateViewPoint(isPayment, amount)"
         ></board-manager-point-item>
       </v-list-item>
@@ -11,7 +11,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-point-item
-          :type="ACTION_TYPE.WRITE"
+          :type="ADMIN_ACTION.WRITE"
           @update="
             (isPayment: boolean, amount: string) => point.updateWritePoint(isPayment, amount)
           "
@@ -21,7 +21,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-point-item
-          :type="ACTION_TYPE.COMMENT"
+          :type="ADMIN_ACTION.COMMENT"
           @update="
             (isPayment: boolean, amount: string) => point.updateCommentPoint(isPayment, amount)
           "
@@ -31,7 +31,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <board-manager-point-item
-          :type="ACTION_TYPE.DOWNLOAD"
+          :type="ADMIN_ACTION.DOWNLOAD"
           @update="
             (isPayment: boolean, amount: string) => point.updateDownloadPoint(isPayment, amount)
           "
@@ -48,7 +48,7 @@ import { useAdminStore } from "../../../store/admin/common"
 import { useAuthStore } from "../../../store/user/auth"
 import { useAdminBoardPointStore } from "../../../store/admin/board/point"
 import BoardManagerPointItem from "./BoardManagerPointItem.vue"
-import { ACTION_TYPE } from "../../../interface/admin"
+import { ADMIN_ACTION } from "../../../interface/admin_interface"
 
 const admin = useAdminStore()
 const auth = useAuthStore()

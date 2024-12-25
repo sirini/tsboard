@@ -1,45 +1,36 @@
-/**
- * store/home
- *
- * 웹사이트 내에서 활용 가능한 각종 함수들
- */
-
-import { edenTreaty } from "@elysiajs/eden"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { BOARD_TYPE, NOTICE_TYPE, SEARCH_OPTION } from "../../server/database/board/const"
-import type { App } from "../../server/index"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
-import { BoardType, SearchOption } from "../interface/board"
-import {
-  BoardLatestPost,
-  BoardPostItem,
-  GroupItem,
-  LANG,
-  LANG_KEY,
-  LangType,
-  NoticeType,
-  PostItem,
-  TsboardNotification,
-  VISIT_KEY,
-} from "../interface/home"
 import { TEXT } from "../messages/store/home"
 import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
+import axios from "axios"
+import {
+  BOARD_HOME_POST_RESULT,
+  BoardHomePostItem,
+  BoardHomePostResult,
+  HomeLang,
+  HomeNotice,
+  HomeSidebarGroupResult,
+  LANG,
+  LANG_KEY,
+  VISIT_KEY,
+} from "../interface/home_interface"
+import { SEARCH, Search } from "../interface/board_interface"
+import { NOTICE, NotificationItem } from "../interface/noti_interface"
 
 export const CATEGORY_WINDOW = 1
 export const LATEST_WINDOW = 2
 
 export const useHomeStore = defineStore("home", () => {
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const route = useRoute()
   const auth = useAuthStore()
   const util = useUtilStore()
   const drawer = ref<boolean>(false)
-  const notifications = ref<TsboardNotification[]>([])
+  const notifications = ref<NotificationItem[]>([])
   const haveNewNotification = ref<boolean>(false)
-  const sidebarLinks = ref<GroupItem[]>([])
+  const sidebarLinks = ref<HomeSidebarGroupResult[]>([])
   const sidebarWidth = ref<number>(250)
   const width = ref<number>(SCREEN.PC.WIDTH)
   const staticWidth = ref<number>(SCREEN.TABLET.WIDTH)
@@ -47,15 +38,15 @@ export const useHomeStore = defineStore("home", () => {
   const cols = ref<number>(SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)
-  const latestPosts = ref<PostItem[]>([])
-  const option = ref<SearchOption>(SEARCH_OPTION.TITLE as SearchOption)
+  const latestPosts = ref<BoardHomePostItem[]>([])
+  const option = ref<Search>(SEARCH.TITLE as Search)
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
   const isMobile = ref<boolean>(false)
   const isTablet = ref<boolean>(false)
   const isPC = ref<boolean>(true)
   const isLarge = ref<boolean>(false)
-  const lang = ref<LangType>(LANG.KO as LangType)
+  const lang = ref<HomeLang>(LANG.KO as HomeLang)
   const langName = ref<string>("한국어")
   const langIcon = ref<string>("mdi-syllabary-hangul")
   const tab = ref<number>(CATEGORY_WINDOW)
@@ -67,7 +58,6 @@ export const useHomeStore = defineStore("home", () => {
       footer: "blue-grey-lighten-5",
     },
   })
-
   loadUserLanguage()
 
   // 첫화면 갱신하기
@@ -93,8 +83,9 @@ export const useHomeStore = defineStore("home", () => {
       return
     }
     window.localStorage.setItem(VISIT_KEY, today)
-    client.tsapi.home.visit.get({
-      $query: {
+
+    axios.get(`${TSBOARD.API}/home/visit`, {
+      params: {
         userUid: auth.user.uid,
       },
     })
@@ -133,41 +124,36 @@ export const useHomeStore = defineStore("home", () => {
   // 최신글 목록 가져오기
   async function loadLatestPosts(): Promise<void> {
     setGridLayout()
-    const response = await client.tsapi.home.latest.get({
-      $query: {
+
+    const response = await axios.get(`${TSBOARD.API}/home/latest`, {
+      params: {
         sinceUid: sinceUid.value,
         bunch: bunch.value,
-        option: option.value as number,
+        option: option.value,
         keyword: keyword.value,
         accessUserUid: auth.user.uid,
       },
     })
 
     if (response.data && response.data.success === true) {
+      const result = response.data.result as BoardHomePostItem[]
       if (sinceUid.value < 1) {
-        latestPosts.value = response.data.result
+        latestPosts.value = result
       } else {
-        latestPosts.value.push(...response.data.result)
+        latestPosts.value.push(...result)
       }
       sinceUid.value = latestPosts.value.at(-1)?.uid ?? 0
     }
   }
 
   // 지정된 게시판의 최근 포스트들 반환
-  async function getBoardLatestPosts(id: string, limit: number): Promise<BoardLatestPost> {
-    let result: BoardLatestPost = {
-      id: "",
-      type: BOARD_TYPE.BOARD as BoardType,
-      name: "",
-      info: "",
-      useCategory: false,
-      posts: [] as BoardPostItem[],
-    }
+  async function getBoardLatestPosts(id: string, limit: number): Promise<BoardHomePostResult> {
     if (id.length < 2 || limit < 1) {
-      return result
+      return BOARD_HOME_POST_RESULT
     }
-    const response = await client.tsapi.home.latest.post.get({
-      $query: {
+
+    const response = await axios.get(`${TSBOARD.API}/home/latest/post`, {
+      params: {
         id,
         limit,
         accessUserUid: auth.user.uid,
@@ -175,10 +161,9 @@ export const useHomeStore = defineStore("home", () => {
     })
 
     if (response.data && response.data.success === true) {
-      result = response.data.result
+      return response.data.result as BoardHomePostResult
     }
-
-    return result
+    return BOARD_HOME_POST_RESULT
   }
 
   // 전체 게시글 검색하기
@@ -225,7 +210,7 @@ export const useHomeStore = defineStore("home", () => {
   function clearVariables(): void {
     sinceUid.value = 0
     latestPosts.value = []
-    option.value = SEARCH_OPTION.TITLE as SearchOption
+    option.value = SEARCH.TITLE as Search
     keyword.value = ""
     tab.value = CATEGORY_WINDOW
   }
@@ -235,18 +220,15 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.noti.load.get({
-      $headers: {
+
+    const response = await axios.get(`${TSBOARD.API}/noti/load`, {
+      headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
-      $query: {
-        limit: 10,
-        userUid: auth.user.uid,
-      },
     })
-
     if (response.data && response.data.success === true && response.data.result.length > 0) {
-      notifications.value = response.data.result
+      const result = response.data.result as NotificationItem[]
+      notifications.value = result
       notifications.value.map((noti) => {
         if (noti.checked === false) {
           haveNewNotification.value = true
@@ -261,30 +243,32 @@ export const useHomeStore = defineStore("home", () => {
     if (auth.user.uid < 1) {
       return
     }
-    const response = await client.tsapi.noti.checked.patch({
-      $headers: {
-        Authorization: `Bearer ${auth.user.token}`,
+
+    const response = await axios.patch(
+      `${TSBOARD.API}/noti/checked`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
       },
-      $query: {
-        userUid: auth.user.uid,
-      },
-    })
+    )
   }
 
   // 알림 내용 해석하기
-  function translateNotification(type: NoticeType): string {
+  function translateNotification(type: HomeNotice): string {
     let result = ""
     switch (type) {
-      case NOTICE_TYPE.LIKE_POST as NoticeType:
+      case NOTICE.LIKE_POST as HomeNotice:
         result = TEXT[lang.value].LIKE_POST
         break
-      case NOTICE_TYPE.LIKE_COMMENT as NoticeType:
+      case NOTICE.LIKE_COMMENT as HomeNotice:
         result = TEXT[lang.value].LIKE_COMMENT
         break
-      case NOTICE_TYPE.LEAVE_COMMENT as NoticeType:
+      case NOTICE.LEAVE_COMMENT as HomeNotice:
         result = TEXT[lang.value].LEAVE_COMMENT
         break
-      case NOTICE_TYPE.REPLY_COMMENT as NoticeType:
+      case NOTICE.REPLY_COMMENT as HomeNotice:
         result = TEXT[lang.value].REPLY_COMMENT
         break
       default:
@@ -295,18 +279,18 @@ export const useHomeStore = defineStore("home", () => {
 
   // 사이드바 링크들 가져오기
   async function loadSidebarLinks(): Promise<void> {
-    const response = await client.tsapi.home.sidebar.links.get()
+    const response = await axios.get(`${TSBOARD.API}/home/sidebar/links`)
     if (response.data && response.data.success === true) {
-      sidebarLinks.value = response.data.result
+      sidebarLinks.value = response.data.result as HomeSidebarGroupResult[]
     }
   }
 
   // 선택한 언어의 이름과 대표 아이콘 반환
   function updateLanguageInfo(): void {
-    if (lang.value === (LANG.EN as LangType)) {
+    if (lang.value === (LANG.EN as HomeLang)) {
       langName.value = "English"
       langIcon.value = "mdi-alphabetical-variant"
-    } else if (lang.value === (LANG.CN as LangType)) {
+    } else if (lang.value === (LANG.CN as HomeLang)) {
       langName.value = "中文"
       langIcon.value = "mdi-ideogram-cjk"
     } else {
@@ -316,7 +300,7 @@ export const useHomeStore = defineStore("home", () => {
   }
 
   // 언어 변경하기
-  function changeUserLanguage(type: LangType): void {
+  function changeUserLanguage(type: HomeLang): void {
     lang.value = type
     window.localStorage.setItem(LANG_KEY, lang.value.toString())
     updateLanguageInfo()
@@ -325,7 +309,7 @@ export const useHomeStore = defineStore("home", () => {
   // 기존에 선택된 언어 불러오기
   function loadUserLanguage(): void {
     const type = window.localStorage.getItem(LANG_KEY) ?? "0"
-    lang.value = parseInt(type) as LangType
+    lang.value = parseInt(type) as HomeLang
     updateLanguageInfo()
   }
 

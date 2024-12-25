@@ -3,10 +3,10 @@
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="gallery.option" size="small" group>
-          <v-btn :value="SEARCH_OPTION.TITLE">{{ TEXT[home.lang].PHOTO_TITLE }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.WRITER">{{ TEXT[home.lang].PHOTOGRAPHER }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.TAG">{{ TEXT[home.lang].TAG }}</v-btn>
+          <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].PHOTO_TITLE }}</v-btn>
+          <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
+          <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].PHOTOGRAPHER }}</v-btn>
+          <v-btn :value="SEARCH.TAG">{{ TEXT[home.lang].TAG }}</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
@@ -40,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from "../../../store/board/gallery/gallery"
+import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
-import { SEARCH_OPTION } from "../../../../server/database/board/const"
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
+import { SEARCH } from "../../../interface/board_interface"
 
 const gallery = useGalleryStore()
 const home = useHomeStore()

@@ -3,10 +3,10 @@
     <v-list>
       <v-list-item>
         <v-btn-toggle v-model="list.option" size="small" group :color="home.color.header">
-          <v-btn :value="SEARCH_OPTION.TITLE">{{ TEXT[home.lang].TITLE }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.WRITER">{{ TEXT[home.lang].WRITER }}</v-btn>
-          <v-btn :value="SEARCH_OPTION.TAG">{{ TEXT[home.lang].TAG }}</v-btn>
+          <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].TITLE }}</v-btn>
+          <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
+          <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].WRITER }}</v-btn>
+          <v-btn :value="SEARCH.TAG">{{ TEXT[home.lang].TAG }}</v-btn>
         </v-btn-toggle>
       </v-list-item>
 
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { SEARCH_OPTION } from "../../../../server/database/board/const"
+import { SEARCH } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/list"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"

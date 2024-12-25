@@ -14,7 +14,10 @@
                 class="d-flex child-flex pl-1 pr-1"
                 :cols="home.cols"
               >
-                <gallery-grid-item :item="image" v-if="image.images.length > 0"></gallery-grid-item>
+                <gallery-grid-item
+                  :item="image"
+                  v-if="image.images[0].file.uid > 0"
+                ></gallery-grid-item>
                 <v-card v-else :width="gallery.gridSize" elevation="0" class="mt-2">
                   <v-img cover :src="TSBOARD.PREFIX + '/image-not-found.svg'"></v-img>
                 </v-card>
@@ -62,8 +65,8 @@ import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
 import GalleryListPaging from "../../components/gallery/list/GalleryListPaging.vue"
 import GalleryViewerDialog from "../../components/gallery/viewer/GalleryViewerDialog.vue"
 import { TEXT } from "../../messages/pages/gallery/list"
-import { useGalleryStore } from "../../store/board/gallery/gallery"
-import { useViewerStore } from "../../store/board/gallery/viewer"
+import { useGalleryStore } from "../../store/board/gallery"
+import { useViewerStore } from "../../store/board/gallery.viewer"
 import { useHomeStore } from "../../store/home"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"

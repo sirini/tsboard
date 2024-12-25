@@ -21,49 +21,37 @@
             <v-menu activator="parent">
               <v-list>
                 <v-list-item
-                  @click="selectSearchOption(SEARCH_OPTION.TITLE as SearchOption)"
-                  :class="home.option === (SEARCH_OPTION.TITLE as SearchOption) ? 'selected' : ''"
+                  @click="selectSearchOption(SEARCH.TITLE as Search)"
+                  :class="home.option === (SEARCH.TITLE as Search) ? 'selected' : ''"
                   >{{ TEXT[home.lang].TITLE }}
-                  <template
-                    v-slot:append
-                    v-if="home.option === (SEARCH_OPTION.TITLE as SearchOption)"
-                  >
+                  <template v-slot:append v-if="home.option === (SEARCH.TITLE as Search)">
                     <v-icon>mdi-check</v-icon>
                   </template>
                 </v-list-item>
 
                 <v-list-item
-                  @click="selectSearchOption(SEARCH_OPTION.CONTENT as SearchOption)"
-                  :class="home.option === (SEARCH_OPTION.CONTENT as SearchOption) ? 'selected' : ''"
+                  @click="selectSearchOption(SEARCH.CONTENT as Search)"
+                  :class="home.option === (SEARCH.CONTENT as Search) ? 'selected' : ''"
                   >{{ TEXT[home.lang].CONTENT }}
-                  <template
-                    v-slot:append
-                    v-if="home.option === (SEARCH_OPTION.CONTENT as SearchOption)"
-                  >
+                  <template v-slot:append v-if="home.option === (SEARCH.CONTENT as Search)">
                     <v-icon>mdi-check</v-icon>
                   </template>
                 </v-list-item>
 
                 <v-list-item
-                  @click="selectSearchOption(SEARCH_OPTION.WRITER as SearchOption)"
-                  :class="home.option === (SEARCH_OPTION.WRITER as SearchOption) ? 'selected' : ''"
+                  @click="selectSearchOption(SEARCH.WRITER as Search)"
+                  :class="home.option === (SEARCH.WRITER as Search) ? 'selected' : ''"
                   >{{ TEXT[home.lang].WRITER }}
-                  <template
-                    v-slot:append
-                    v-if="home.option === (SEARCH_OPTION.WRITER as SearchOption)"
-                  >
+                  <template v-slot:append v-if="home.option === (SEARCH.WRITER as Search)">
                     <v-icon>mdi-check</v-icon>
                   </template>
                 </v-list-item>
 
                 <v-list-item
-                  @click="selectSearchOption(SEARCH_OPTION.TAG as SearchOption)"
-                  :class="home.option === (SEARCH_OPTION.TAG as SearchOption) ? 'selected' : ''"
+                  @click="selectSearchOption(SEARCH.TAG as Search)"
+                  :class="home.option === (SEARCH.TAG as Search) ? 'selected' : ''"
                   >{{ TEXT[home.lang].TAG }}
-                  <template
-                    v-slot:append
-                    v-if="home.option === (SEARCH_OPTION.TAG as SearchOption)"
-                  >
+                  <template v-slot:append v-if="home.option === (SEARCH.TAG as Search)">
                     <v-icon>mdi-check</v-icon>
                   </template>
                 </v-list-item>
@@ -111,8 +99,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { SEARCH_OPTION } from "../../../../../server/database/board/const"
-import { SearchOption } from "../../../../interface/board"
+import { SEARCH, Search } from "../../../../interface/board_interface"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-search"
 import { useHomeStore } from "../../../../store/home"
 
@@ -123,13 +110,13 @@ const props = defineProps<{
 }>()
 
 // 검색 옵션 선택하기
-function selectSearchOption(option: SearchOption): void {
+function selectSearchOption(option: Search): void {
   home.option = option
-  if (option === (SEARCH_OPTION.TITLE as SearchOption)) {
+  if (option === (SEARCH.TITLE as Search)) {
     optionTitle.value = TEXT[home.lang].TITLE
-  } else if (option === (SEARCH_OPTION.CONTENT as SearchOption)) {
+  } else if (option === (SEARCH.CONTENT as Search)) {
     optionTitle.value = TEXT[home.lang].CONTENT
-  } else if (option === (SEARCH_OPTION.WRITER as SearchOption)) {
+  } else if (option === (SEARCH.WRITER as Search)) {
     optionTitle.value = TEXT[home.lang].WRITER
   } else {
     optionTitle.value = TEXT[home.lang].TAG

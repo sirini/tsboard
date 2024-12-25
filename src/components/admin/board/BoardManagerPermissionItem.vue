@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
-import { ACTION_TYPE } from "../../../interface/admin"
+import { ADMIN_ACTION } from "../../../interface/admin_interface"
 
 const prop = defineProps<{
   type: number
@@ -59,16 +59,16 @@ function updateLevel(level: number): void {
 watch(
   () => permission.board,
   () => {
-    if (prop.type === ACTION_TYPE.LIST) {
+    if (prop.type === ADMIN_ACTION.LIST) {
       action.value = "글 목록 보기"
       item.value = permission.board.level.list
-    } else if (prop.type === ACTION_TYPE.VIEW) {
+    } else if (prop.type === ADMIN_ACTION.VIEW) {
       action.value = "글 보기"
       item.value = permission.board.level.view
-    } else if (prop.type === ACTION_TYPE.WRITE) {
+    } else if (prop.type === ADMIN_ACTION.WRITE) {
       action.value = "글 작성"
       item.value = permission.board.level.write
-    } else if (prop.type === ACTION_TYPE.COMMENT) {
+    } else if (prop.type === ADMIN_ACTION.COMMENT) {
       action.value = "댓글 작성"
       item.value = permission.board.level.comment
     } else {

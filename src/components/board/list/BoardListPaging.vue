@@ -33,7 +33,7 @@
 
     <v-btn
       prepend-icon="mdi-pencil"
-      @click="util.go(util.routerName(list.config.type, ACTION_TARGET.WRITE), list.id)"
+      @click="util.go(util.routerName(list.config.type, BOARD_ACTION.WRITE), list.id)"
       :disabled="auth.user.uid < 1"
       :color="home.color.header"
       variant="flat"
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ACTION_TARGET } from "../../../../server/database/board/const"
+import { BOARD_ACTION } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/list"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"

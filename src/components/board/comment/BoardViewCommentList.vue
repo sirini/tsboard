@@ -12,7 +12,7 @@
         rounded="lg"
         :color="
           view.post.writer.uid === reply.writer.uid
-            ? view.config.type === BOARD_TYPE.BLOG
+            ? view.config.type === BOARD.BLOG
               ? 'grey-darken-4'
               : 'orange-lighten-5'
             : ''
@@ -24,7 +24,7 @@
           :profile="reply.writer.profile"
           :color="
             view.post.writer.uid === reply.writer.uid
-              ? view.config.type === BOARD_TYPE.BLOG
+              ? view.config.type === BOARD.BLOG
                 ? 'blue-grey'
                 : 'orange-darken-3'
               : ''
@@ -105,7 +105,6 @@
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
-import { BOARD_TYPE } from "../../../../server/database/board/const"
 import "../../../assets/board/editor.scss"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-list"
 import { useCommentStore } from "../../../store/board/comment"
@@ -115,6 +114,7 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
+import { BOARD } from "../../../interface/board_interface"
 
 const route = useRoute()
 const auth = useAuthStore()

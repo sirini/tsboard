@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../../store/board/gallery.viewer"
 import { useCommentStore } from "../../../../store/board/comment"
 import { useHomeStore } from "../../../../store/home"
 import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"

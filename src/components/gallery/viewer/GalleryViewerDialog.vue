@@ -16,7 +16,7 @@
 import { watch } from "vue"
 import { useRoute } from "vue-router"
 import "../../../assets/board/editor.scss"
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../store/home"
 import BoardViewCommentRemoveDialog from "../../board/comment/BoardViewCommentRemoveDialog.vue"
 import ChatDialog from "../../user/ChatDialog.vue"

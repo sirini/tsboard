@@ -3,19 +3,22 @@
     <v-col :cols="colsBoard">
       <v-card class="ma-1">
         <v-list class="pa-0">
-          <v-list-item append-icon="mdi-chevron-right" @click="util.go(free.type, free.id)">
+          <v-list-item
+            append-icon="mdi-chevron-right"
+            @click="util.go(free.config.type, free.config.id)"
+          >
             <v-list-item-title>
-              <strong>{{ free.name }}</strong>
+              <strong>{{ free.config.name }}</strong>
             </v-list-item-title>
 
             <v-tooltip activator="parent" location="bottom">
-              {{ free.info }}
+              {{ free.config.info }}
             </v-tooltip>
           </v-list-item>
 
           <v-divider></v-divider>
 
-          <v-list-item v-for="(post, index) in free.posts" :key="index">
+          <v-list-item v-for="(post, index) in free.items" :key="index">
             <template v-slot:prepend>
               <v-chip
                 size="small"
@@ -25,7 +28,10 @@
               >
             </template>
 
-            <v-list-item-title class="ml-2 link" @click="util.go(free.type, free.id, post.uid)">
+            <v-list-item-title
+              class="ml-2 link"
+              @click="util.go(free.config.type, free.config.id, post.uid)"
+            >
               {{ post.title }}
               <v-chip
                 variant="text"
@@ -48,19 +54,22 @@
     <v-col :cols="colsBoard">
       <v-card class="ma-1">
         <v-list class="pa-0">
-          <v-list-item append-icon="mdi-chevron-right" @click="util.go(blog.type, blog.id)">
+          <v-list-item
+            append-icon="mdi-chevron-right"
+            @click="util.go(blog.config.type, blog.config.id)"
+          >
             <v-list-item-title>
-              <strong>{{ blog.name }}</strong>
+              <strong>{{ blog.config.name }}</strong>
             </v-list-item-title>
 
             <v-tooltip activator="parent" location="bottom">
-              {{ blog.info }}
+              {{ blog.config.info }}
             </v-tooltip>
           </v-list-item>
 
           <v-divider></v-divider>
 
-          <v-list-item v-for="(post, index) in blog.posts" :key="index">
+          <v-list-item v-for="(post, index) in blog.items" :key="index">
             <template v-slot:prepend>
               <v-chip
                 size="small"
@@ -70,7 +79,10 @@
               >
             </template>
 
-            <v-list-item-title class="ml-2 link" @click="util.go(blog.type, blog.id, post.uid)">
+            <v-list-item-title
+              class="ml-2 link"
+              @click="util.go(blog.config.type, blog.config.id, post.uid)"
+            >
               {{ post.title }}
               <v-chip
                 variant="text"
@@ -96,12 +108,15 @@
     <v-col>
       <v-card class="ma-1">
         <v-list class="pa-0">
-          <v-list-item append-icon="mdi-chevron-right" @click="util.go(gallery.type, gallery.id)">
+          <v-list-item
+            append-icon="mdi-chevron-right"
+            @click="util.go(gallery.config.type, gallery.config.id)"
+          >
             <v-list-item-title
-              ><strong>{{ gallery.name }}</strong></v-list-item-title
+              ><strong>{{ gallery.config.name }}</strong></v-list-item-title
             >
             <v-tooltip activator="parent" location="bottom">
-              {{ gallery.info }}
+              {{ gallery.config.info }}
             </v-tooltip>
           </v-list-item>
 
@@ -109,10 +124,10 @@
 
           <v-list-item>
             <v-row no-gutters>
-              <v-col v-for="(post, index) in gallery.posts" :key="index" :cols="colsPhoto">
+              <v-col v-for="(post, index) in gallery.items" :key="index" :cols="colsPhoto">
                 <v-card
                   class="mt-2 mb-2"
-                  @click="util.go(gallery.type, gallery.id, post.uid)"
+                  @click="util.go(gallery.config.type, gallery.config.id, post.uid)"
                   variant="text"
                 >
                   <v-img
@@ -136,26 +151,18 @@
 import { ref, onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
-import { BoardLatestPost, BoardPostItem } from "../../interface/home"
-import { BOARD_TYPE } from "../../../server/database/board/const"
-import { BoardType } from "../../interface/board"
+import { BOARD_HOME_POST_RESULT, BoardHomePostResult } from "../../interface/home_interface"
 import { TSBOARD } from "../../../tsboard.config"
 
-const INIT: BoardLatestPost = {
-  id: "",
-  type: BOARD_TYPE.BOARD as BoardType,
-  name: "",
-  info: "",
-  useCategory: false,
-  posts: [] as BoardPostItem[],
-}
 const home = useHomeStore()
 const util = useUtilStore()
-const free = ref<BoardLatestPost>(INIT)
-const blog = ref<BoardLatestPost>(INIT)
-const gallery = ref<BoardLatestPost>(INIT)
 const colsBoard = ref<number>(6)
 const colsPhoto = ref<number>(2)
+
+// 아래 부분 [수정 필요]
+const free = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
+const blog = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
+const gallery = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
 
 onMounted(async () => {
   home.setGridLayout()

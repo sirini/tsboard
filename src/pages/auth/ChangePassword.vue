@@ -108,4 +108,3 @@ function change(): void {
   font-size: 0.7em;
 }
 </style>
-../../store/user/password

@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useViewerStore } from "../../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 import UserNametag from "../../../user/UserNametag.vue"

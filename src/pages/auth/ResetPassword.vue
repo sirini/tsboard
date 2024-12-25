@@ -88,4 +88,3 @@ const home = useHomeStore()
   font-size: 0.7em;
 }
 </style>
-../../store/user/password

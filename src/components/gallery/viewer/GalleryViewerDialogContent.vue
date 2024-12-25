@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from "../../../store/board/gallery/viewer"
+import { useViewerStore } from "../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../store/home"
 import GalleryViewerSidebarMobileContent from "./GalleryViewerSidebarMobileContent.vue"
 import GalleryViewerToolbar from "./GalleryViewerToolbar.vue"

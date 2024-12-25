@@ -1,27 +1,20 @@
-/**
- * store/signup
- *
- * 회원 가입 관련 상태 및 함수들
- */
-
 import { ref } from "vue"
 import { SHA256 } from "crypto-js"
 import { defineStore } from "pinia"
 import { useRouter } from "vue-router"
-import { edenTreaty } from "@elysiajs/eden"
-import type { App } from "../../../server/index"
 import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
 import { useHomeStore } from "../home"
 import { TEXT } from "../../messages/store/user/auth"
 import { TSBOARD } from "../../../tsboard.config"
+import axios from "axios"
+import { SignupResult } from "../../interface/auth_interface"
 
 export const useSignupStore = defineStore("signup", () => {
   const router = useRouter()
   const util = useUtilStore()
   const auth = useAuthStore()
   const home = useHomeStore()
-  const client = edenTreaty<App>(TSBOARD.API.URI)
   const verificationCode = ref<string>("")
   const loading = ref<boolean>(false)
 
@@ -31,9 +24,10 @@ export const useSignupStore = defineStore("signup", () => {
       return util.error(TEXT[home.lang].INVALID_EMAIL)
     }
 
-    const response = await client.tsapi.auth.checkemail.post({
-      email: auth.user.id.trim(),
-    })
+    const fd = new FormData()
+    fd.append("email", auth.user.id.trim())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/checkemail`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)
@@ -52,10 +46,10 @@ export const useSignupStore = defineStore("signup", () => {
       return util.error(TEXT[home.lang].INVALID_NAME)
     }
 
-    const response = await client.tsapi.auth.checkname.post({
-      name: auth.user.name.trim(),
-      userUid: auth.user.uid,
-    })
+    const fd = new FormData()
+    fd.append("name", auth.user.name.trim())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/checkname`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)
@@ -79,18 +73,19 @@ export const useSignupStore = defineStore("signup", () => {
     if (auth.password !== auth.checkedPassword) {
       return util.error(TEXT[home.lang].DIFFERENT_PASSWORD)
     }
-    if (auth.user.name.length < 3) {
+    if (auth.user.name.length < 2) {
       return util.error(TEXT[home.lang].INVALID_NAME)
     }
 
     loading.value = true
 
-    const response = await client.tsapi.auth.signup.post({
-      email: auth.user.id,
-      password: SHA256(auth.password).toString(),
-      name: auth.user.name,
-      lang: home.lang as number,
-    })
+    const fd = new FormData()
+    fd.append("email", auth.user.id)
+    fd.append("password", SHA256(auth.password).toString())
+    fd.append("name", auth.user.name.trim())
+    fd.append("lang", home.lang.toString())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/signup`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)
@@ -100,16 +95,18 @@ export const useSignupStore = defineStore("signup", () => {
       loading.value = false
       return
     }
-    if (response.data.result.sendmail === false) {
+
+    const result = response.data.result as SignupResult
+
+    if (result.sendmail === false) {
       util.success(TEXT[home.lang].SIGNUP_COMPLETE)
-      setTimeout(() => {
-        util.go("login")
-      }, 5000)
+      util.go("login")
       loading.value = false
       return
     }
+
     util.success(`${auth.user.id} ${TEXT[home.lang].SENT_VERIFICATION}`)
-    router.push({ name: "verify", params: { target: response.data.result.target } })
+    router.push({ name: "verify", params: { target: result.target } })
     loading.value = false
   }
 
@@ -137,16 +134,15 @@ export const useSignupStore = defineStore("signup", () => {
       return
     }
 
-    const response = await client.tsapi.auth.verify.post({
-      target,
-      code: verificationCode.value,
-      user: {
-        email: auth.user.id,
-        name: auth.user.name,
-        password: SHA256(auth.password).toString(),
-      },
-      lang: home.lang as number,
-    })
+    const fd = new FormData()
+    fd.append("target", target.toString())
+    fd.append("code", verificationCode.value)
+    fd.append("email", auth.user.id.trim())
+    fd.append("name", auth.user.name.trim())
+    fd.append("password", SHA256(auth.password).toString())
+    fd.append("lang", home.lang.toString())
+
+    const response = await axios.post(`${TSBOARD.API}/auth/verify`, fd)
 
     if (!response.data) {
       return util.error(TEXT[home.lang].NO_RESPONSE)

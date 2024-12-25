@@ -16,7 +16,7 @@
         >
           {{ util.unescape(noti.fromUser.name) }} {{ home.translateNotification(noti.type) }}
 
-          <template v-slot:append v-if="noti.type !== (NOTICE_TYPE.CHAT_MESSAGE as NoticeType)">
+          <template v-slot:append v-if="noti.type !== (NOTICE.CHAT_MESSAGE as HomeNotice)">
             <v-icon>mdi-chevron-right</v-icon>
           </template>
         </v-list-item>
@@ -32,9 +32,9 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { NavigationFailure } from "vue-router"
-import { NOTICE_TYPE } from "../../../../../server/database/board/const"
 import { TSBOARD } from "../../../../../tsboard.config"
-import { NoticeType, TsboardNotification } from "../../../../interface/home"
+import { HomeNotice } from "../../../../interface/home_interface"
+import { NOTICE, NotificationItem } from "../../../../interface/noti_interface"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-notification"
 import { useHomeStore } from "../../../../store/home"
 import { useAuthStore } from "../../../../store/user/auth"
@@ -48,9 +48,9 @@ const chat = useChatStore()
 
 // 노티 클릭 시 행동 지정하기
 async function actionForNoti(
-  noti: TsboardNotification,
+  noti: NotificationItem,
 ): Promise<NavigationFailure | void | undefined> {
-  if (noti.type === NOTICE_TYPE.CHAT_MESSAGE) {
+  if (noti.type === NOTICE.CHAT_MESSAGE) {
     return chat.openDialog(noti.fromUser)
   }
 

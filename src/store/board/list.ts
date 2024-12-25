@@ -85,7 +85,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       }
 
       result.posts.map((post: BoardListItem): void => {
-        if (response.data.result.blackList.includes(post.writer.uid) === true) {
+        if (result.blackList.includes(post.writer.uid) === true) {
           post.uid = 0
           post.writer.uid = 0
           post.writer.name = "X"

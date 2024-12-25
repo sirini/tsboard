@@ -1,7 +1,6 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { defineStore } from "pinia"
-import { AdminPair } from "../../../interface/admin"
 import { useAdminStore } from "../common"
 import { useAuthStore } from "../../user/auth"
 import { useUtilStore } from "../../util"
@@ -9,7 +8,7 @@ import { PERMISSION } from "../../../messages/store/admin/board/permission"
 import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { ADMIN_BOARD_LEVEL_POLICY, AdminBoardLevelPolicy } from "../../../interface/admin_interface"
-import { BoardWriter } from "../../../interface/board_interface"
+import { BoardWriter, Pair } from "../../../interface/board_interface"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
@@ -72,19 +71,16 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
   // 선택한 회원을 관리자로 지정하기
-  async function updateBoardManager(user: AdminPair): Promise<void> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/permission/change/admin`,
-      {
-        boardUid: board.value.uid,
-        targetUserUid: user.uid,
+  async function updateBoardManager(user: Pair): Promise<void> {
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("targetUserUid", user.uid.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/permission/change/admin`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       return admin.error(PERMISSION.NO_RESPONSE)
@@ -144,22 +140,19 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
 
   // 액세스 권한 변경
   async function updateAllPermissions(): Promise<boolean> {
-    const response = await axios.patch(
-      `${TSBOARD.API}/admin/board/permission/update/levels`,
-      {
-        boardUid: board.value.uid,
-        list: board.value.level.list,
-        view: board.value.level.view,
-        write: board.value.level.write,
-        comment: board.value.level.comment,
-        download: board.value.level.download,
+    const fd = new FormData()
+    fd.append("boardUid", board.value.uid.toString())
+    fd.append("list", board.value.level.list.toString())
+    fd.append("view", board.value.level.view.toString())
+    fd.append("write", board.value.level.write.toString())
+    fd.append("comment", board.value.level.comment.toString())
+    fd.append("download", board.value.level.download.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/admin/board/permission/update/levels`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      },
-    )
+    })
 
     if (!response.data) {
       admin.error(PERMISSION.NO_RESPONSE)

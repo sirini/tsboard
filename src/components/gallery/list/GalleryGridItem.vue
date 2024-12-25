@@ -31,7 +31,7 @@
           {{ item.like }}</span
         >
         <span class="icon"
-          ><v-icon size="small">mdi-comment-multiple-outline</v-icon> {{ item.reply }}</span
+          ><v-icon size="small">mdi-comment-multiple-outline</v-icon> {{ item.comment }}</span
         >
       </v-card>
     </v-card>
@@ -39,13 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from "../../../store/board/gallery/gallery"
-import { GridItem } from "../../../interface/gallery"
+import { useGalleryStore } from "../../../store/board/gallery"
 import { TSBOARD } from "../../../../tsboard.config"
+import { GalleryGridItem } from "../../../interface/post_interface"
 
 const gallery = useGalleryStore()
 const props = defineProps<{
-  item: GridItem
+  item: GalleryGridItem
 }>()
 </script>
 

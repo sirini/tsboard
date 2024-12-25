@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useAdminBoardPointStore } from "../../../store/admin/board/point"
-import { ACTION_TYPE } from "../../../interface/admin"
+import { ADMIN_ACTION } from "../../../interface/admin_interface"
 
 const prop = defineProps<{
   type: number
@@ -68,22 +68,22 @@ function setToZero(): void {
 watch(
   () => point.board,
   () => {
-    if (prop.type === ACTION_TYPE.VIEW) {
+    if (prop.type === ADMIN_ACTION.VIEW) {
       action.value = "글 보기"
-      isPayment.value = point.board.view.isPayment
-      amount.value = point.board.view.amount.toString()
-    } else if (prop.type === ACTION_TYPE.WRITE) {
+      isPayment.value = point.board.view < 0
+      amount.value = Math.abs(point.board.view).toString()
+    } else if (prop.type === ADMIN_ACTION.WRITE) {
       action.value = "글 작성"
-      isPayment.value = point.board.write.isPayment
-      amount.value = point.board.write.amount.toString()
-    } else if (prop.type === ACTION_TYPE.COMMENT) {
+      isPayment.value = point.board.write < 0
+      amount.value = Math.abs(point.board.write).toString()
+    } else if (prop.type === ADMIN_ACTION.COMMENT) {
       action.value = "댓글 작성"
-      isPayment.value = point.board.comment.isPayment
-      amount.value = point.board.comment.amount.toString()
+      isPayment.value = point.board.comment < 0
+      amount.value = Math.abs(point.board.comment).toString()
     } else {
       action.value = "다운로드"
-      isPayment.value = point.board.download.isPayment
-      amount.value = point.board.download.amount.toString()
+      isPayment.value = point.board.download < 0
+      amount.value = Math.abs(point.board.download).toString()
     }
   },
 )
