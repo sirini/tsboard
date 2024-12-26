@@ -100,13 +100,12 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - 이 파일이 삭제되면 TSBOARD는 다시 설치 화면부터 나타납니다.
 - `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
-  - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
-- 위 작업이 모두 완료되었다면, `npm run build` 명령어로 빌드하세요.
-  - `dist/` 폴더 위치에 위 설정값들이 반영된 각종 파일들이 생성됩니다.
 
-```
-Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
-```
+  - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
+
+  ```
+  Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
+  ```
 
 - `src/pages/home/HomePage.vue` 파일을 에디터로 열어 본인 사이트에 맞게 미리 수정해 주세요.
 
@@ -117,7 +116,7 @@ import HomeTitle from "./components/static/TsboardHomeTitle.vue"
 
 - 이제 수정해야 할 것들을 모두 완료하였습니다. TSBOARD를 `build` 합니다!
   - 여러분이 받으신 TSBOARD는 이제 `vite` 를 통해 `build` 가 가능합니다.
-  - `npm run build` 를 실행합니다. 빌드가 정상적으로 완료되면, tsboard 폴더 안에 `dist` 폴더가 생성됩니다.
+  - `npm run build` 를 실행합니다. 빌드가 정상적으로 완료되면, tsboard 폴더 안에 `dist/` 폴더가 생성됩니다.
 
 ### 메일 발송 기능 활성화하기
 
