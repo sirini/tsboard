@@ -138,7 +138,7 @@ export const BOARD_CONFIG: BoardConfig = {
   name: "",
   info: "",
   rowCount: 0,
-  width: 0,
+  width: 1000,
   useCategory: false,
   category: [] as Pair[],
   level: BOARD_ACTION_LEVEL,

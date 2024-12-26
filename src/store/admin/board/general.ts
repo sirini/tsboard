@@ -185,7 +185,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
     const fd = new FormData()
     fd.append("boardUid", board.value.uid.toString())
-    fd.append("newrows", newRows.toString())
+    fd.append("newRows", newRows.toString())
 
     const response = await axios.patch(`${TSBOARD.API}/admin/board/general/change/rows`, fd, {
       headers: {

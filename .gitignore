@@ -5,6 +5,11 @@ bun.lockb
 /upload
 test.ts
 
+# ignore binaries
+goapi-linux
+goapi-mac
+goapi-win.exe
+
 # local env files
 .env
 .env.local

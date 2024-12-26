@@ -23,9 +23,9 @@
             :key="index"
             @click="util.go('adminBoardGroupManager', group.name)"
           >
-            <v-list-item-title>{{ group }}</v-list-item-title>
+            <v-list-item-title>{{ group.name }}</v-list-item-title>
             <v-tooltip activator="parent">
-              클릭하시면 {{ group }} 그룹 관리 페이지로 이동합니다.
+              클릭하시면 {{ group.name }} 그룹 관리 페이지로 이동합니다.
             </v-tooltip>
           </v-list-item>
         </v-list>
@@ -42,9 +42,9 @@
             :key="index"
             @click="util.go('adminBoardManager', board.name)"
           >
-            <v-list-item-title>{{ board }}</v-list-item-title>
+            <v-list-item-title>{{ board.name }}</v-list-item-title>
             <v-tooltip activator="parent">
-              클릭하시면 {{ board }} 게시판 관리 페이지로 이동합니다.
+              클릭하시면 {{ board.name }} 게시판 관리 페이지로 이동합니다.
             </v-tooltip>
           </v-list-item>
         </v-list>

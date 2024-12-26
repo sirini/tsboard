@@ -309,25 +309,28 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       fd.append("attachments", file)
     }
 
-    const response = await axios.post(`${TSBOARD.API}/editor/write`, fd, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    })
+    try {
+      const response = await axios.post(`${TSBOARD.API}/editor/write`, fd, {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      })
 
-    if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return clearVariables()
+      if (!response.data) {
+        util.error(TEXT[home.lang].NO_RESPONSE)
+        return
+      }
+      if (response.data.success === false) {
+        util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
+        return
+      }
+
+      const postUid = response.data.result as number
+      util.success(TEXT[home.lang].WRITTEN_NEW_POST)
+      await util.go(config.value.type, id.value, postUid)
+    } finally {
+      clearVariables()
     }
-    if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
-      return clearVariables()
-    }
-
-    util.success(TEXT[home.lang].WRITTEN_NEW_POST)
-    util.go(config.value.type, id.value, response.data.result as number)
-
-    clearVariables()
   }
 
   // 글 수정하기
