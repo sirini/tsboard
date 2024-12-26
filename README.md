@@ -100,13 +100,7 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - 이 파일이 삭제되면 TSBOARD는 다시 설치 화면부터 나타납니다.
 - `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
-
   - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
-
-  ```
-  Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
-  ```
-
 - `src/pages/home/HomePage.vue` 파일을 에디터로 열어 본인 사이트에 맞게 미리 수정해 주세요.
 
 ```typescript
