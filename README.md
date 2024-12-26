@@ -101,6 +101,8 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 - `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
   - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
+- 위 작업이 모두 완료되었다면, `npm run build` 명령어로 빌드하세요.
+  - `dist/` 폴더 위치에 위 설정값들이 반영된 각종 파일들이 생성됩니다.
 
 ```
 Sitemap: https://tsboard.dev/tsapi/seo/sitemap.xml
