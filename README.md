@@ -282,8 +282,8 @@ server {
     Allow from all
   </Proxy>
   # tsboard.config.ts 에서 PORT_PROD 값과 아래 3003 이 동일해야 함
-  ProxyPass /goapi http://127.0.0.1:3003/tsapi
-  ProxyPassReverse /goapi http://127.0.0.1:3003/tsapi
+  ProxyPass /goapi http://127.0.0.1:3003/goapi
+  ProxyPassReverse /goapi http://127.0.0.1:3003/goapi
 </VirtualHost>
 ```
 
