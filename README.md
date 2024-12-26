@@ -49,7 +49,7 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 - 백엔드는 사전에 컴파일된 바이너리 파일이 제공되며, 서버에 `libvips` 라이브러리가 설치되어 있어야 합니다.
   - `libvips`는 이미지 파일의 크기를 줄이거나, 포맷을 변경하는 등의 작업에 사용됩니다.
   - TSBOARD가 자체적으로 제공하는 `goapi-linux` 와 같은 바이너리는 `libvips` 라이브러리가 필요합니다.
-  - 만약 서버를 직접 운영중이시라면, 쉽게 설치 하실 수 있습니다. 호스팅 업체를 이용하신다면, `libvips` 설치를 요청해보세요.
+  - 만약 서버를 직접 운영중이시라면, 쉽게 설치 하실 수 있습니다. 호스팅 사용자는 `libvips` 설치를 요청해보세요.
     - Ubuntu linux : `sudo apt install libvips-dev`
     - Mac : `brew install vips`
     - Windows : `choco install vips`
