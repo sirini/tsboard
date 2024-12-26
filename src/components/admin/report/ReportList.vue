@@ -39,33 +39,10 @@
         </template>
       </v-list-item>
 
-      <v-list-subheader>신고 내용 목록 (신고 대상 / 신고 내용 / 신고자)</v-list-subheader>
+      <v-list-subheader>신고 내용 목록 (신고자 / 신고 내용 / 신고 대상)</v-list-subheader>
       <v-divider></v-divider>
       <v-list-item v-for="(list, index) in report.reports" :key="index" class="underline">
-        <template v-slot:prepend>
-          <v-chip
-            :prepend-avatar="
-              TSBOARD.PREFIX + (list.to.profile.length < 1 ? '/no-profile.svg' : list.to.profile)
-            "
-            color="red"
-            class="mt-1"
-            size="small"
-            >{{ list.to.name }}</v-chip
-          ></template
-        >
-
-        <div class="ml-2 mr-2">
-          {{ list.request }}
-          <v-card class="mt-2 mb-2 pa-0 response" v-if="report.isSolved" elevation="0">
-            <v-icon color="success" class="mr-2 mb-1" size="small">mdi-check-circle</v-icon
-            >{{ list.response }}
-          </v-card>
-          <v-chip v-else label color="blue-grey-lighten-3" size="small">{{
-            util.date(list.date)
-          }}</v-chip>
-        </div>
-
-        <template v-slot:append
+        <template v-slot:prepend
           ><v-chip
             :prepend-avatar="
               TSBOARD.PREFIX +
@@ -75,6 +52,29 @@
             class="mt-1"
             size="small"
             >{{ list.from.name }}</v-chip
+          >
+        </template>
+
+        <div class="ml-2 mr-2">
+          {{ list.request }}
+          <v-card class="mt-2 mb-2 pa-0 response" v-if="report.isSolved" elevation="0">
+            <v-icon color="success" class="mr-2 mb-1" size="small">mdi-check-circle</v-icon
+            >{{ list.response }}
+          </v-card>
+          <v-chip v-else color="blue-grey-lighten-3" size="x-small" class="ml-2">{{
+            util.date(list.date)
+          }}</v-chip>
+        </div>
+
+        <template v-slot:append>
+          <v-chip
+            :prepend-avatar="
+              TSBOARD.PREFIX + (list.to.profile.length < 1 ? '/no-profile.svg' : list.to.profile)
+            "
+            color="red"
+            class="mt-1"
+            size="small"
+            >{{ list.to.name }}</v-chip
           >
           <v-btn
             elevation="0"

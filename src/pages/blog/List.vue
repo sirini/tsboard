@@ -102,6 +102,6 @@ onMounted(async () => {
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 </style>

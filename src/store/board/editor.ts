@@ -170,7 +170,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
       params: {
-        tag: tag.value,
+        tag: encodeURIComponent(tag.value),
         limit: 5,
       },
     })
@@ -181,7 +181,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     if (response.data.success === false) {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
     }
-    suggestionTags.value = response.data.suggestions as EditorTagItem[]
+    suggestionTags.value = response.data.result as EditorTagItem[]
   }
   const updateTagSuggestion = util.debounce(_updateTagSuggestion, 250)
 
@@ -236,6 +236,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       for (const f of arr) {
         totalSize += f.size
         if (totalSize > SIZE.MAX_FILE) {
+          util.info(TEXT[home.lang].EXCEED_FILESIZE_LIMIT)
           break
         }
         result.push(f)
@@ -304,7 +305,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     fd.append("title", title.value)
     fd.append("content", contentWithSyntax.value)
     fd.append("tags", tags.value.join(","))
-
     for (const file of files.value) {
       fd.append("attachments", file)
     }
@@ -312,6 +312,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     try {
       const response = await axios.post(`${TSBOARD.API}/editor/write`, fd, {
         headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${auth.user.token}`,
         },
       })

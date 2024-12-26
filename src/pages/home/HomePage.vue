@@ -16,24 +16,24 @@
           </v-row>
 
           <v-tabs v-model="home.tab" align-tabs="center" :color="home.color.header">
-            <v-tab :value="1">COLUMN</v-tab>
-            <v-tab :value="2">CATEGORY</v-tab>
+            <v-tab :value="1">CATEGORY</v-tab>
+            <v-tab :value="2">COLUMN</v-tab>
             <v-tab :value="3">LATEST</v-tab>
           </v-tabs>
 
           <v-tabs-window v-model="home.tab">
             <v-tabs-window-item :value="1">
-              <home-page-column-window></home-page-column-window>
+              <home-page-category-window></home-page-category-window>
             </v-tabs-window-item>
             <v-tabs-window-item :value="2">
-              <home-page-category-window></home-page-category-window>
+              <home-page-column-window></home-page-column-window>
             </v-tabs-window-item>
             <v-tabs-window-item :value="3">
               <home-page-latest-window></home-page-latest-window>
             </v-tabs-window-item>
           </v-tabs-window>
         </v-card>
-        
+
         <home-footer></home-footer>
 
         <quick-button v-if="home.isMobile"></quick-button>

@@ -15,7 +15,8 @@ export const useAuthStore = defineStore("auth", () => {
   const checkedPassword = ref<string>("")
   const newProfile = ref<File | undefined>(undefined)
   const user = ref<MyInfoResult>(MY_INFO_RESULT)
-  loadUserInfo()
+
+  loadUserInfoFromStorage()
 
   // 아이디(이메일) 입력란 체크
   const emailRule = [
@@ -41,36 +42,42 @@ export const useAuthStore = defineStore("auth", () => {
     },
   ]
 
-  // 기존에 로그인 한 사용자라면 스토리지 공간에서 정보 가져오기
-  async function loadUserInfo(): Promise<void> {
+  // 로컬 스토리지에 보관한 사용자 정보 꺼내오기
+  function loadUserInfoFromStorage(): void {
     const savedUserInfo = window.localStorage.getItem(USER_INFO_KEY)
     if (!savedUserInfo) {
       return
     }
-
     user.value = JSON.parse(savedUserInfo) as MyInfoResult
-    if (user.value.uid < 1) {
-      try {
-        const response = await axios.get(`${TSBOARD.API}/auth/load`, {
-          headers: {
-            Authorization: `Bearer ${user.value.token}`,
-          },
-        })
+  }
 
-        if (!response.data) {
-          return util.error(TEXT[home.lang].NO_RESPONSE)
-        }
-        if (response.data.success === false) {
-          return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
-        }
+  // 기존에 로그인 한 사용자의 정보를 서버에서 가져오기
+  async function loadUserInfo(): Promise<void> {
+    try {
+      const response = await axios.get(`${TSBOARD.API}/auth/load`, {
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
+      })
 
-        user.value = response.data.result as MyInfoResult
-        user.value.signature = util.unescape(user.value.signature)
-      } catch (e) {
-        util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
-        logout()
-        util.go("home")
+      if (!response.data) {
+        return util.error(TEXT[home.lang].NO_RESPONSE)
       }
+      if (response.data.success === false) {
+        return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+      }
+
+      const accessToken = user.value.token
+      const refreshToken = user.value.refresh
+      user.value = response.data.result as MyInfoResult
+      user.value.signature = util.unescape(user.value.signature)
+      user.value.token = accessToken
+      user.value.refresh = refreshToken
+      window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
+    } catch (e) {
+      util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
+      logout()
+      util.go("home")
     }
   }
 
@@ -176,7 +183,6 @@ export const useAuthStore = defineStore("auth", () => {
     fd.append("name", user.value.name)
     fd.append("password", password.value.length < 1 ? "" : SHA256(password.value).toString())
     fd.append("signature", user.value.signature)
-
     if (newProfile.value) {
       fd.append("profile", newProfile.value)
     }
@@ -194,7 +200,7 @@ export const useAuthStore = defineStore("auth", () => {
       return util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${response.data.error})`)
     }
 
-    loadUserInfo()
+    await loadUserInfo()
     password.value = ""
     checkedPassword.value = ""
     util.success(TEXT[home.lang].MYINFO_SUCCESS)

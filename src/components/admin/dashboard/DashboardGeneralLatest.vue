@@ -62,7 +62,7 @@
               (comment.writer.profile.length < 1 ? '/no-profile.svg' : comment.writer.profile)
             "
           >
-            <v-list-item-title v-html="comment.content"></v-list-item-title>
+            <v-list-item-title>{{ comment.content.slice(0, 100) }}</v-list-item-title>
             <v-tooltip activator="parent">댓글을 확인하러 갑니다.</v-tooltip>
           </v-list-item>
         </v-list>

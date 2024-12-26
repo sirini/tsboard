@@ -8,7 +8,7 @@ import axios from "axios"
 import { BoardWriter, Pair } from "../../../interface/board_interface"
 import {
   AdminDashboardLatestContent,
-  AdminDashboardStatistic,
+  AdminDashboardStatisticResult,
 } from "../../../interface/admin_interface"
 
 type Today = {
@@ -52,19 +52,26 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
+      params: {
+        limit: 7 /* days */,
+      },
     })
 
     if (!response.data) {
       return admin.error(GENERAL.NO_RESPONSE)
     }
+    if (response.data.success === false) {
+      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${response.data.error})`)
+    }
 
+    const result = response.data.result as AdminDashboardStatisticResult
     const items = [
-      { target: member.value, data: response.data.result.member as AdminDashboardStatistic },
-      { target: post.value, data: response.data.result.post as AdminDashboardStatistic },
-      { target: reply.value, data: response.data.result.reply as AdminDashboardStatistic },
-      { target: file.value, data: response.data.result.file as AdminDashboardStatistic },
-      { target: image.value, data: response.data.result.image as AdminDashboardStatistic },
-      { target: visit.value, data: response.data.result.visit as AdminDashboardStatistic },
+      { target: member.value, data: result.member },
+      { target: post.value, data: result.post },
+      { target: reply.value, data: result.reply },
+      { target: file.value, data: result.file },
+      { target: image.value, data: result.image },
+      { target: visit.value, data: result.visit },
     ]
 
     for (const item of items) {

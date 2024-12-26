@@ -6,6 +6,7 @@ const DEV_URL = `${LOCALHOST}:${VITE_PORT}`
 const PROD_URL = "https://tsboard.dev" // <<< [수정 필요] 본인 사이트의 도메인 입력
 
 export const TSBOARD = {
+  VERSION: "v1.0.0-beta",
   SITE: {
     NAME: "TSBOARD" /* <<< [수정 필요] 본인 사이트 이름 입력 */,
     URL: IS_DEV ? DEV_URL : PROD_URL,
@@ -25,7 +26,8 @@ export const SIZE = {
   CONTENT_INSERT: 640 /* px */,
   THUMBNAIL: 512 /* px */,
   FULL: 2400 /* px, for gallery */,
-  MAX_FILE: 104857600 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
+  MAX_FILE:
+    1024 * 1024 * 100 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
 }
 
 // <<< [수정 필요] 소셜 로그인 중 어떤 걸 사용할지 지정, .env 파일에서 각 소셜 로그인 별 클라이언트 ID, Secret 설정 필요

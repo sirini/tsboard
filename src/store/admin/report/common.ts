@@ -7,13 +7,14 @@ import { COMMON } from "../../../messages/store/admin/report/common"
 import { TSBOARD } from "../../../../tsboard.config"
 import { AdminReportItem, AdminReportResult } from "../../../interface/admin_interface"
 import axios from "axios"
+import { SEARCH, Search } from "../../../interface/board_interface"
 
 export const useAdminReportStore = defineStore("adminReport", () => {
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
   const isSolved = ref<boolean>(false)
-  const option = ref<"from" | "request" | "to">("request")
+  const option = ref<Search>(SEARCH.REPORT.FROM as Search)
   const keyword = ref<string>("")
   const page = ref<number>(1)
   const pageLength = ref<number>(5)

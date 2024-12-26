@@ -131,7 +131,7 @@ onMounted(() => view.prepareViewPost())
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .title {
   white-space: pre-wrap;

@@ -13,7 +13,6 @@
   - 새로 작성된 백엔드는 `Go` 언어와 `Fiber` 웹프레임워크 기반으로 완전히 새롭게 작성되었습니다.
   - `tsboard.git` 폴더 최상단 경로에 `.env` 파일이 위치한 곳을 보시면 아래의 실행 파일들이 있습니다.
     - `goapi-linux` : 리눅스에서 실행 가능한 바이너리 파일입니다.
-    - `goapi-win.exe` : 윈도우에서 실행 가능한 바이너리 파일입니다. (정식 버전 이후 제공 예정)
     - `goapi-mac` : 맥에서 실행 가능한 바이너리 파일입니다. (Apple Silicon 기준)
   - 위 실행 파일 중 본인의 서버 OS에 맞는 것을 실행하시면 됩니다.
     - 서버에 터미널로 원격 접속하시는 경우 `tmux`와 같은 터미널 세션 관리 프로그램으로 실행하시는 걸 권장합니다.
@@ -31,7 +30,7 @@
   - 공식 문서: <https://www.libvips.org/install.html>
   - Ubuntu linux : `sudo apt install libvips-dev`
   - Mac : `brew install vips`
-  - Windows : `choco install vips`
+  - Windows는 WSL2 (Windows Subsystem for Linux) 환경에서 사용을 권장합니다.
 
 > `libvips`가 설치되어 있지 않은 서버에서는 TSBOARD 백엔드 실행이 실패합니다.
 > 사용하시는 서버가 호스팅 업체에서 제공하는 임대 서버일 경우, `libvips` 라이브러리 설치를 요청해보세요!
