@@ -1,4 +1,4 @@
-export const IS_DEV = true // 프로덕션에서는 false, 개발 단계에서만 true
+export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
 export const VITE_PORT = 3000
 export const API_PORT = 3003
 export const LOCALHOST = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
@@ -28,6 +28,7 @@ export const SIZE = {
   MAX_FILE: 104857600 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
 }
 
+// <<< [수정 필요] 소셜 로그인 중 어떤 걸 사용할지 지정, .env 파일에서 각 소셜 로그인 별 클라이언트 ID, Secret 설정 필요
 export const OAUTH = {
   IS_READY: true,
   USE: {

@@ -12,9 +12,9 @@
 - 그러나, 보다 확장성있는 고성능 백엔드를 개발하여 이 `server/` 이하 경로는 v1.0.0부터 사용하지 않습니다.
   - 새로 작성된 백엔드는 `Go` 언어와 `Fiber` 웹프레임워크 기반으로 완전히 새롭게 작성되었습니다.
   - `tsboard.git` 폴더 최상단 경로에 `.env` 파일이 위치한 곳을 보시면 아래의 실행 파일들이 있습니다.
-    - `goapi_linux_x64` : 리눅스에서 실행 가능한 바이너리 파일입니다.
-    - `goapi_win_x64.exe` : 윈도우에서 실행 가능한 바이너리 파일입니다.
-    - `goapi_mac_arm` : 맥에서 실행 가능한 바이너리 파일입니다. (Apple Silicon 기준)
+    - `goapi-linux` : 리눅스에서 실행 가능한 바이너리 파일입니다.
+    - `goapi-win.exe` : 윈도우에서 실행 가능한 바이너리 파일입니다. (정식 버전 이후 제공 예정)
+    - `goapi-mac` : 맥에서 실행 가능한 바이너리 파일입니다. (Apple Silicon 기준)
   - 위 실행 파일 중 본인의 서버 OS에 맞는 것을 실행하시면 됩니다.
     - 서버에 터미널로 원격 접속하시는 경우 `tmux`와 같은 터미널 세션 관리 프로그램으로 실행하시는 걸 권장합니다.
     - 바이너리 파일들의 실행을 위해 서버에 `Go` 언어 툴체인/컴파일러를 따로 설치하실 필요는 없습니다.
@@ -29,12 +29,15 @@
 - 그러나, TSBOARD에서 이미지 리사이즈, 파일 형식 변환 등을 사용하기 위해 `libvips`가 필요합니다.
 - `libvips`를 사용하시는 서버에 설치하기 위해서는 아래의 안내를 참조해 주세요.
   - 공식 문서: <https://www.libvips.org/install.html>
-  - Ubuntu: `sudo apt-get install libvips-dev`
-  - Mac: `brew install vips`
+  - Ubuntu linux : `sudo apt install libvips-dev`
+  - Mac : `brew install vips`
+  - Windows : `choco install vips`
 
 > `libvips`가 설치되어 있지 않은 서버에서는 TSBOARD 백엔드 실행이 실패합니다.
+> 사용하시는 서버가 호스팅 업체에서 제공하는 임대 서버일 경우, `libvips` 라이브러리 설치를 요청해보세요!
 
 ---
 
 1. Go언어로 갑니다! (Goodbye, Bun!) <https://tsboard.dev/blog/sirini/38>
 2. Go vs Bun, Go 언어는 정말 JS 런타임보다 빠를까? <https://tsboard.dev/blog/sirini/41>
+3. TSBOARD README.md <https://github.com/sirini/tsboard?tab=readme-ov-file#tsboard>

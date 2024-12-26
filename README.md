@@ -22,8 +22,7 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 ## TSBOARD만의 장점은 무엇인가요?
 
 - 프론트엔드는 `Vue` 와 `Vuetify` 로 제작되어 있어 유려하면서도 빠른 UI 개발이 가능합니다.
-- JS/TS 런타임으로 `Bun`, 웹 프레임워크로 Bun 기반의 `ElysiaJS`를 선택하여 **보다 빠른 동작이 가능**합니다.
-- v1.0 이후부터 제공될 예정인 `GOAPI` 백엔드를 통해 더 큰 규모의 커뮤니티 사이트도 운영하실 수 있습니다.
+- Go언어로 완전히 새롭게 재작성된 `GOAPI` 백엔드로 보다 안정적인 서비스와 고가용성을 보장합니다.
 
 > TSBOARD는 사용자분들을 위한 자체 커뮤니티를 <https://tsboard.dev/> 사이트에서 운영하고 있습니다.
 > 사용하시면서 궁금한 점, 어려운 점들은 위 사이트에서 편하게 문의해 주시면 됩니다.
@@ -40,44 +39,63 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 
 ## TSBOARD 설치에 적합한 서버 환경
 
-- TSBOARD는 **JS/TS 런타임으로 Bun** (<https://bun.sh>)을 필요로 합니다.
-- Bun 런타임 최신 버전 (v1.1.31 이후)에서는 가상 서버 호스팅 등에서도 문제 없이 동작합니다.
-
-> TSBOARD는 v1.0 이후부터 Bun 런타임이 아닌, `Go` 언어로 재작성된 별도의 바이너리 파일로 서버를 실행합니다.
-> 변경된 백엔드 실행 방법은 추후 이 곳 문서에 v1.0 배포와 함께 업데이트됩니다.
-> v1.0 이후 Bun 런타임은 필요하지 않습니다. 대신, 프론트엔드를 위해 여전히 `Node.js`는 사전 설치되어 있어야 합니다.
+- 프론트엔드는 Vue3 + Vuetify 기반이며, `vite`로 컴파일을 진행합니다. (**Node.js 설치** 필요)
+  - v1.0.0 이전 버전에 요구되었던 JS/TS 런타임 `Bun`은 더 이상 필요하지 않습니다.
+  - Node.js는 `npm` 사용을 위해 설치가 필요하며, v22 버전 이상 최신 버전을 권장합니다.
+  - 주로 사용하는 `npm` 명령어는 아래와 같습니다.
+    - `npm install` : TSBOARD 프로젝트를 내려받은 후 필요한 라이브러리를 서버에 내려 받는데 사용합니다.
+    - `npm run dev` : TSBOARD를 개발/수정 할 때 필요한 간이 서버를 `vite`로 띄우기 위해 사용합니다.
+    - `npm run build` : TSBOARD의 프론트엔드를 `vite`로 컴파일 하기 위해 사용합니다.
+- 백엔드는 사전에 컴파일된 바이너리 파일이 제공되며, 서버에 `libvips` 라이브러리가 설치되어 있어야 합니다.
+  - `libvips`는 이미지 파일의 크기를 줄이거나, 포맷을 변경하는 등의 작업에 사용됩니다.
+  - TSBOARD가 자체적으로 제공하는 `goapi-linux` 와 같은 바이너리는 `libvips` 라이브러리가 필요합니다.
+  - 만약 서버를 직접 운영중이시라면, 쉽게 설치 하실 수 있습니다. 호스팅 업체를 이용하신다면, `libvips` 설치를 요청해보세요.
+    - Ubuntu linux : `sudo apt install libvips-dev`
+    - Mac : `brew install vips`
+    - Windows : `choco install vips`
+- 추천하는 운영 환경은 아래와 같습니다.
+  - OS : Ubuntu linux (혹은 linux server), 22.04 이후
+  - CPU : 2 core 이상, core수가 많을수록 TSBOARD가 이제 더 잘 활용합니다.
+  - RAM : 2GB 이상, 동시접속자가 많을 경우 `goapi`가 ~300MB까지 필요로 할 수 있습니다.
+  - DBMS : `MySQL` 혹은 `Mariadb` 최신 버전
 
 ## 미리 알아두어야 할 사항들
 
-- MySQL(Mariadb) 계정이 데이터베이스 생성 권한을 가지고 있어야 합니다.
+- MySQL(Mariadb) 계정이 데이터베이스 생성 권한을 가지고 있거나, 혹은 미리 생성해두어야 합니다.
   - TSBOARD는 설치 과정에서 새로운 데이터베이스 (기본 `tsboard`)를 생성합니다.
+  - 설치 과정에서 데이터베이스 이름은 변경 가능합니다. 단, 미리 생성해 두셨거나, 사용자 계정이 생성 권한을 가지고 있어야 합니다.
+- `libvips` 라이브러리가 설치되어 있지 않은 서버에서는 TSBOARD 백엔드가 동작하지 않습니다.
 
 ## 설치 진행 안내
-
-### Bun 설치
-
-- Bun은 <https://bun.sh/> 사이트에서 `Bun`은 무엇인지, 어떻게 설치하는지 등을 확인하실 수 있습니다.
-  - 먼저, `curl -fsSL https://bun.sh/install | bash` 명령어로 `Bun`을 설치합니다.
-  - 설치 시 패키지 의존성 관련 메시지들이 나올 수 있습니다. (`curl`, `unzip` 등) 먼저 설치해주세요.
-  - 설치 후 `source .bashrc` 등을 추가적으로 실행해 `Bun` 환경변수를 등록 후, `bun --help` 를 실행해 봅니다.
-
-> TSBOARD v1.0 출시 이후에는 Bun 런타임에 대한 의존성이 삭제될 예정입니다.
 
 ### TSBOARD 설치
 
 - TSBOARD는 별도의 설치 파일들을 제공하지 않으며, **Git을 통해 설치 및 업데이트를 제공**합니다.
   - 먼저, `git clone https://github.com/sirini/tsboard tsboard.git` 을 실행합니다.
   - 권장하는 설치 경로는 `/var/www/` 하위 경로입니다. `/root/` 는 추천하지 않습니다.
-  - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `setup.ts` 파일이 존재합니다.
+  - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `goapi-linux` 파일이 존재합니다.
 - TSBOARD가 의존하는 패키지들을 내려받습니다.
   - 권장 설치 경로에 설치하셨다면, `/var/www/tsboard.git/` 폴더 위치에서 **의존성 패키지들을 설치**합니다.
-  - `npm install` 로 설치하실 수 있습니다. (TSBOARD는 `Node.js`가 사용하시는 서버에 사전 설치되어 있어야 합니다!)
-- `bun setup.ts` 를 실행하여 화면의 안내에 따라 **TSBOARD 설치**를 진행합니다.
+  - `npm install` 로 설치하실 수 있습니다.
+- 사용하시는 서버의 OS에 맞춰 `goapi-linux` 처럼 백엔드 바이너리 파일을 실행합니다. (실행 권한을 주셔야 할 수도 있습니다)
+  - 처음 실행할 경우, 설치 안내가 나타나며 몇가지 정보를 요청드립니다.
   - 이 때 MySQL(Mariadb)의 접속 정보 및 관리자 아이디와 비밀번호를 입력하게 됩니다.
   - 접속 정보가 올바르고 DB 생성 (및 테이블 생성) 권한이 있다면, 문제없이 DB/Table들이 생성됩니다.
-  - `bun setup.ts` 과정에서 문제가 발생하신 경우, 깃허브 이슈 혹은 <https://tsboard.dev> 로 알려주세요!
+  - 설치가 완료되면, `.env` 파일이 새로 생성되며 해당 파일에 주요 설정값들이 저장됩니다.
 - TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
-  - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 **대부분의 설정**들이 들어 있습니다.
+  - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 설정들이 들어 있습니다.
+  - `<<< [수정 필요]` 라고 적힌 부분은 본인의 사이트에 맞게 수정하셔야 하는 부분입니다.
+    - `PROD_URL` : 본인의 웹사이트 도메인으로 변경
+    - `TSBOARD.SITE.NAME` : 본인의 웹사이트 이름으로 변경
+    - `TSBOARD.PREFIX` : TSBOARD가 특정 폴더 하위로 접근이 필요할 경우 앞쪽 폴더명 추가 (대부분은 빈 칸)
+    - `QUICK_BUTTONS.WRITE` : 모바일에서 새 글 작성 버튼 클릭 시 이동할 게시판 ID로 수정
+    - `QUICK_BUTTONS.UPLOAD` : 모바일에서 새 사진 업로드 버튼 클릭 시 이동할 갤러리 ID로 수정
+    - `OAUTH.IS_READY` : 소셜 로그인을 사용할 경우 true 설정 (`.env` 파일에서 각 소셜 로그인 별 API 정보 기입 필요)
+    - `POLICY.NAME` : 사이트 관리자 이름으로 변경 필요
+    - `POLICY.EMAIL` : 사이트 관리자의 이메일 주소로 변경 필요
+- 새로 생성된 `.env` 파일을 마찬가지로 `vi`등으로 열어서 `tsboard.config.ts` 설정과 맞춰 수정해 줍니다.
+  - `.env` 파일일에는 `tsboard.config.ts` 와 중복되는 설정 항목들이 있습니다. 각각 백엔드와 프론트엔드에서 동일하게 설정됩니다.
+  - `.env` 파일 속 내용이 외부로 유출되지 않도록 각별히 주의해주세요. 이 파일이 삭제되면 TSBOARD는 다시 설치 화면부터 나타납니다.
 - `index.html` 파일도 에디터로 열어서 `<title>` 태그에 본인의 사이트 이름으로 변경해주세요.
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
   - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
@@ -101,7 +119,7 @@ import HomeTitle from "./components/static/TsboardHomeTitle.vue"
 
 - TSBOARD는 구글 계정의 앱 비밀번호 기능을 이용하여 `GMAIL` 발송이 가능합니다.
   - 메일 발송을 통해 최초 회원가입 시 이메일 인증을 진행할 수 있습니다.
-  - 비밀번호 초기화도 등록된 메일로 직접 가능하므로, 가능하면 기능 활성화를 권장합니다.
+  - 비밀번호 초기화도 등록된 메일로 직접 가능하므로, 가능하면 **기능 활성화를 권장**합니다.
   - TSBOARD 설치 경로에 `.env` 파일을 열어서 본인의 구글 계정과 앱 비밀번호를 등록해주세요.
 
 ```
@@ -121,7 +139,7 @@ GMAIL_APP_PASSWORD=passwordfromgoog
   - 이미 해당 정보들을 가지고 계신 분들은 `.env` 파일에서 ID, Secret 정보를 입력하시면 사용 가능합니다.
   - 추가로, `tsboard.config.ts` 파일에서 `OAUTH` 항목을 통해 사용할 소셜 로그인을 개별적으로 선택하실 수 있습니다. (사용을 원치 않으시면 `IS_READY` 항목을 `false` 로 변경 후 저장하시면 됩니다.)
     - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 를 통해 프로젝트를 `build` 해주세요!
-    - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `bun server/index.ts` 로 백엔드를 실행해 주세요.
+    - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `goapi-linux`로 백엔드를 실행해 주세요.
 
 ```
 # .env
@@ -156,13 +174,17 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 ### 개발 모드로 실행하기
 
 > 이 안내는 Visual Studio Code (vscode)를 이미 사용해 보신 분들을 대상으로 합니다.
+> Go 언어로 작성된 백엔드도 직접 수정을 원하실 경우 <https://github.com/sirini/goapi> 프로젝트를 clone 하셔서 수정하시면 됩니다.
+> 이 때 Go 언어 툴체인/컴파일러가 사용하시는 기기에 미리 설치되어 있어야 합니다.
 
 - TSBOARD를 본인의 Linux PC or Mac 에 먼저 설치하여 개발 모드로 사용해 보실 수도 있습니다.
   - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
   - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEV` 항목을 `true` 로 수정합니다.
-    - `LOCALHOST` 항목을 `localhost` 으로 수정해 주세요.
   - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
-  - 다른 터미널을 열고 `npm run dev:server` 를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
+  - 다른 터미널을 열고 `goapi-linux`를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
+    - Linux가 아닌 다른 운영체제를 사용하실 경우, 예를 들어 Mac일 경우 `goapi-mac`을 실행해 주세요.
+    - 경우에 따라서, 백엔드 바이너리 파일을 실행하기 위한 실행 권한 부여를 하셔야 할 수 있습니다.
+      - `chmod +x ./goapi-linux`
   - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
 
 ### TSBOARD 업데이트
@@ -179,16 +201,13 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
   - 빌드 하기 전에 `tsboard.config.ts` 파일이나 `index.html` 혹은 `public/robots.txt` 가 제대로 수정되었는지 확인해 보세요!
   - `src/pages/home/HomePage.vue` 파일에 반영하신 작업들이 있을 경우 마찬가지로 다시 확인해 보세요.
   - 이 밖에 수정하신 파일들이 `git pull` 이후에도 제대로 변경사항을 유지하고 있는지 확인이 필요합니다.
-- 업데이트에 따라서 간혹 `bun update.ts` 실행을 요구할 때가 있습니다. 이때는 터미널에서 한 번 실행하시면 됩니다.
 
 ### TSBOARD 백엔드 실행하기
 
-- TSBOARD는 Bun 런타임을 이용해서 `server/index.ts` 를 실행하면 백엔드가 동작하게 됩니다.
-- `pm2`를 이용해서 프로세스를 관리하거나, 혹은 터미널 세션이 종료되어도 실행 상태가 계속 유지되도록 `tmux`와 같은 도구를 이용하여 `bun server/index.ts`로 실행하세요.
-
-> TSBOARD v1.0 이후부터는 `bun` 런타임을 이용하지 않고, 함께 제공되는 `goapi` 바이너리를 실행하여 백엔드를 구동합니다.
-> 서버의 운영체제에 따라, `goapi-linux`, `goapi-win.exe` 혹은 `goapi-mac` 중 하나를 실행하시면 됩니다.
-> (모든 바이너리는 64bit 기준으로 준비되어 있습니다. 사용하시는 서버가 32bit CPU를 사용할 경우 사용이 불가합니다.)
+- 사용하시는 서버의 운영체제에 맞춰서 미리 컴파일된 바이너리 파일을 실행하시면 됩니다.
+- `goapi-linux` 처럼 실행하시면 되며, 가급적 `tmux` 나 `screen` 과 같은 별도의 세션 관리 프로그램을 통해서 실행을 권장합니다.
+  - 그냥 실행하시면, 터미널을 닫으실 경우 TSBOARD의 백엔드 서버도 바로 종료됩니다!
+- 경우에 따라, 바이너리 파일에 실행 권한을 부여해 주셔야 할 수도 있습니다: `chmod +x ./goapi-linux` 처럼요!
 
 ## 설치 후 서버 설정
 
@@ -196,7 +215,7 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 
 > Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
 
-- 축하합니다! 여러분은 `git clone` → `npm install` → `bun setup.ts` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
+- 축하합니다! 여러분은 `git clone` → `npm install` → `./goapi-linux` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
 - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
 - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
 - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
@@ -206,10 +225,12 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 #
 # TSBOARD가 권장 설치 경로에 설치되어 있고,
 # 현재 운영중인 웹사이트의 도메인이 tsboard.dev 인걸 가정하고 있습니다.
-# 아울러, tsboard.config.ts 파일의 PORT 부분을 수정하지 않은 걸 가정합니다.
+# 아울러, tsboard.config.ts 파일에서는 API_PORT 값이 3003으로 되어 있는 걸 가정하고 있습니다.
+# .env 파일에서도 GOAPI_PORT 값이 3003으로 되어 있는 걸 가정하고 있습니다.
+# (만약 포트 번호 변경이 필요하다면, API_PORT, GOAPI_PORT 둘 다 동일한 값으로 저장하셔야 합니다!)
 #
 server {
-  root /var/www/tsboard.git/dist; # TSBOARD설치경로/dist
+  root /var/www/tsboard.git/dist; # TSBOARD_설치경로_예시/dist
 
   index index.html index.htm;
 
@@ -219,7 +240,7 @@ server {
   client_max_body_size 20M;
 
   location /upload {
-    root /var/www/tsboard.dev; # TSBOARD설치경로, 이 폴더 아래에 upload 폴더 위치
+    root /var/www/tsboard.dev; # TSBOARD_설치경로_예시, 이 폴더 아래에 upload 폴더 위치
     try_files $uri $uri/ =404;
   }
 
@@ -227,10 +248,10 @@ server {
     try_files $uri $uri/ /index.html; # Vue Router 활용을 위한 설정 (CSR)
   }
 
-  # v0.8.18부터 기존 /api 가 /tsapi 로 변경됨 (타 백엔드와 충돌 방지)
-  location /tsapi {
-    # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
-    proxy_pass http://127.0.0.1:3100/tsapi;
+  # v1.0.0부터 기존 /tsapi 가 /goapi 로 변경됨 (타 백엔드와 충돌 방지)
+  location /goapi {
+    # tsboard.config.ts 에서 PORT_PROD 값과 아래 3003과 동일해야 함
+    proxy_pass http://127.0.0.1:3003/goapi;
     proxy_buffering off;
     proxy_connect_timeout 300;
     proxy_send_timeout 300;
@@ -256,16 +277,16 @@ server {
 # apache2 웹서버 사용 시 TSBOARD 설정 예시입니다. 위 참고 페이지도 확인해보세요!
 #
 <VirtualHost *:443>
-  DocumentRoot /var/www/tsboard.git/dist  # TSBOARD 설치 경로
+  DocumentRoot /var/www/tsboard.git/dist  # TSBOARD_설치경로_예시/dist
   ProxyRequests Off
   ProxyPreserveHost On
   <Proxy *>
     Order deny,allow
     Allow from all
   </Proxy>
-  # tsboard.config.ts 에서 PORT_PROD 값과 아래 3100 이 동일해야 함
-  ProxyPass /tsapi http://127.0.0.1:3100/tsapi
-  ProxyPassReverse /tsapi http://127.0.0.1:3100/tsapi
+  # tsboard.config.ts 에서 PORT_PROD 값과 아래 3003 이 동일해야 함
+  ProxyPass /goapi http://127.0.0.1:3003/tsapi
+  ProxyPassReverse /goapi http://127.0.0.1:3003/tsapi
 </VirtualHost>
 ```
 
@@ -290,7 +311,7 @@ server {
 
 ## 전체 구조
 
-### 프론트엔드 : Vue, VuetifyJS, Tiptap
+### 프론트엔드 : Vue, Vuetify, Tiptap, Pinia, Vue Router
 
 - 프론트엔드는 `Vue`, `Vuetify`, `Vue Router`, `Pinia` 그리고 에디터에 `tiptap` 이 사용됩니다.
 - `.vue` 파일에서 UI는 대부분 `Vuetify` 컴포넌트를 사용하는 걸로 구현되어 있습니다. 대부분 `<v-card>` 처럼 `v-` 접두사를 가집니다.
@@ -306,19 +327,19 @@ server {
 ### SEO (검색 엔진 최적화) 방안
 
 - 검색 엔진 최적화를 위해 TSBOARD는 `public/robots.txt` 파일에 지정된 `Sitemap:` 경로를 통해 **서버에서 렌더링한 main.html 페이지를 제공**합니다. (v0.8.40 이상 버전부터 지원)
-  - 기본 경로는 `https://tsboard.dev/tsapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 말씀드린 적이 있습니다!
+  - 기본 경로는 `https://tsboard.dev/goapi/seo/sitemap.xml` 이며, 설치 안내에서 `tsboard.dev` 부분을 본인의 도메인으로 수정해야 한다고 말씀드린 적이 있습니다!
 - 아래 `sitemap.xml` 예시 내용입니다.
 
   ```xml
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tsboard.dev/tsapi/seo/main.html</loc>
+    <loc>https://tsboard.dev/goapi/seo/main.html</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <lastmod>2024-06-02</lastmod>
   </url>
   <url>
-    <loc>https://tsboard.dev/tsapi/seo/about.html</loc>
+    <loc>https://tsboard.dev/goapi/seo/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <lastmod>2024-06-02</lastmod>
@@ -338,24 +359,13 @@ server {
   </urlset>
   ```
 
-- 위 예시에서 가장 중요한 링크는 `https://tsboard.dev/tsapi/seo/main.html` 입니다. 크롤러가 해당 페이지를 방문하면, 여러분의 서버에서 TSBOARD가 준비한 html 페이지를 만나게 됩니다.
+- 위 예시에서 가장 중요한 링크는 `https://tsboard.dev/goapi/seo/main.html` 입니다. 크롤러가 해당 페이지를 방문하면, 여러분의 서버에서 TSBOARD가 준비한 html 페이지를 만나게 됩니다.
 - 해당 페이지에서는 `src/pages/home/HomePage.vue` 에서 보여지는 게시글들 및 댓글들이 출력됩니다. 얼마나 많이 출력해서 크롤러에게 제공할지는 `tsboard.config.ts` 의 `SEO` 항목을 통해 조절하실 수 있습니다.
 - 크롤러가 수집하는 내용 중에 게시글 링크나 사이트 링크의 경우 기존 페이지로 링크가 걸립니다. 따라서 검색을 통해 해당 `main.html` 페이지를 열람한 사용자는 어떤 링크를 클릭하든 원래 페이지를 방문하게 됩니다.
 
 > 결과적으로 검색 엔진 크롤러는 위의 `main.html` 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
 
-### [v1.0 이전] 백엔드 : Bun & ElysiaJS
-
-- TSBOARD의 빠른 퍼포먼스와 타입 안정성은 `Bun` 과 `ElysiaJS` 덕분입니다.
-  - 특히 TSBOARD는 `ElysiaJS` 의 공식 플러그인인 `edenTreaty` 에 크게 의존하고 있습니다.
-  - `edenTreaty` 를 통해, TSBOARD는 프론트엔드의 스토어에서부터 서버까지 견고한 타입 안정성을 가집니다.
-- 백엔드 구조는 단순합니다. `routers` 에서 API 경로 라우팅을, `database` 에서 CRUD 작업을 담당합니다.
-  - 라우팅 처리는 모두 `server/routers/` 경로 아래에 있는 파일들을 확인하시면 됩니다.
-  - 데이터베이스 관련 처리들은 모두 `server/database/` 경로 아래에 마찬가지로 정리되어 있습니다.
-- TSBOARD는 전통적인 RDBMS이자 가장 많이 쓰이는 MySQL(Mariadb)를 사용합니다.
-  - 모든 쿼리문은 `server/database/common.ts` 에 정의된 4개의 함수 (`select`, `update`, `insert`, `remove`) 를 통해서 할 수 있습니다.
-
-### [v1.0 이후] 백엔드 : Go (Fiber v3)
+### 백엔드 : Go, Fiber v3, go-mysql-driver, bimg
 
 - TSBOARD는 v1.0부터 `Go` 언어로 작성된 `goapi` 백엔드를 사용합니다.
   - 이를 통해, 백엔드에서 Bun과 같은 JS/TS 런타임에 대한 의존성을 줄이고, 어디서나 동작 가능하도록 지원하고자 합니다.
@@ -366,11 +376,10 @@ server {
     - 메모리는 위 경우 약 60% ~ 70% 수준이며, 고부하 조건이 아닐 때는 메모리 점유일이 20% ~ 30% 수준까지 떨어집니다.
 
 > Go언어로 재작성된 백엔드는 https://github.com/sirini/goapi 에서 전체 코드를 확인해 보실 수 있습니다.
-> 백엔드를 `goapi`로 전환한 이후에는 Bun 런타임에 대한 의존성은 더 이상 없습니다. 대신, 프론트엔드를 위해 여전히 `Node.js`가 필요합니다. (`npm run build`, `npm i` 등 사용)
+> 이미지 처리에 사용되는 `bimg`가 `libvips` 라이브러리를 사용합니다. 이로 인해, 서버에 `libvips` 라이브러리를 사전에 설치해 두셔야 합니다.
 
 ## DB 테이블
 
-- 테이블 구조는 `install/table/query.ts` 파일을 통해 확인 하실 수 있습니다.
 - TSBOARD는 기본적으로 정규화된 테이블 구조를 지향하지만, `SELECT` 쿼리의 횟수를 줄이기 위해서나 혹은 데이터 관리를 보다 편하게 하기 위해 일부 중복된 데이터를 가지도록 구성되어 있습니다.
   - 예를 들어, `post` / `post_hashtag` / `post_like` / `comment_like` / `file` / `image` 테이블에서 공통적으로 들어가는 `board_uid` 컬럼의 경우 게시판 단위로 통계를 뽑아보거나, 삭제 등의 처리를 보다 편하게 하기 위해 사실은 없어도 되는 컬럼을 일부로 추가한 것입니다.
   - 정수 크기만큼의 비용을 추가로 지불하고, 대신 관리의 편의성을 높인 셈입니다.
@@ -379,6 +388,39 @@ server {
   - TSBOARD는 테이블들의 인덱스에 비용을 좀 더 지불하고, 대신 테이블 자체를 게시판 생성에 맞춰 더 만들거나 줄이지 않음으로서 전체 검색이나 게시글 이동과 같은 기능을 쉽게 구현하고자 현재 구조를 선택하게 되었습니다.
   - `post`, `comment` 테이블이 하나로 고정되지만, 보관하는 데이터의 대부분은 사실 외부 키이며 나머지도 대부분 크기가 고정된 정수형 컬럼입니다. 이를 통해 테이블에 가해지는 부담을 줄였습니다.
   - 이러한 디자인을 선택한 대신, 보다 극한의 인덱스 활용을 위해 TSBOARD는 게시글을 삭제해도 실제로 `DELETE` 작업 대신 상태값만 변경하는 식으로 해서 인덱스가 항상 hit 되도록 하였습니다. 결과적으로 TSBOARD는 게시판을 얼마나 많이 만들더라도 DB에 가해지는 부담없이 **여전히 빠르게 동작 가능**합니다.
+
+```
+# 전체 테이블 목록은 아래와 같습니다. (`tsb_` 부분은 설치 단계에서 변경 가능)
+
++-----------------------+
+| TSBOARD Table list    |
++-----------------------+
+| tsb_board             |
+| tsb_board_category    |
+| tsb_chat              |
+| tsb_comment           |
+| tsb_comment_like      |
+| tsb_exif              |
+| tsb_file              |
+| tsb_file_thumbnail    |
+| tsb_group             |
+| tsb_hashtag           |
+| tsb_image             |
+| tsb_image_description |
+| tsb_notification      |
+| tsb_point_history     |
+| tsb_post              |
+| tsb_post_hashtag      |
+| tsb_post_like         |
+| tsb_report            |
+| tsb_user              |
+| tsb_user_access_log   |
+| tsb_user_black_list   |
+| tsb_user_permission   |
+| tsb_user_token        |
+| tsb_user_verification |
++-----------------------+
+```
 
 > `v0.8.40` 이상 버전부터 TSBOARD의 테이블 간 의존 관계를 명확히 하도록 외래 키(FOREIGN KEY) 설정이 적용되었습니다.
 
@@ -425,10 +467,10 @@ server {
 ## 로드맵
 
 - `v0.8.z` (초기 버전)
-- `v0.9.z` (**현재**)
+- `v0.9.z`
   - 블로그 기능 추가 및 개선 작업이 반영됩니다.
   - CSR 방식 기반에서 SEO를 좀 더 개선하기 위한 추가 작업들이 반영됩니다.
-- `v1.0.0` (24.12.30)
+- `v1.0.0` (**현재**)
   - 백엔드를 `Bun` 런타임에서 `Go` 언어로 재작성한 자체 바이너리 파일로 대체합니다.
 - `v1.0.z`
   - 백엔드 서버의 안정성 및 속도 개선을 위한 튜닝을 진행합니다.
@@ -447,3 +489,5 @@ server {
 - 테스트도 많이 해보시고, 불편한 점은 언제든지 말씀해주세요!
 - 웹 생태계에 작게나마 보탬이 될 수 있으면 좋겠습니다.
 - 언젠가 TSBOARD로 만들어진 멋진 커뮤니티를 만나는 그 날을 꿈꿔봅니다!
+
+> 궁금하신 점이 있으시다면 언제든지 <https://tsboard.dev> 사이트에 와주세요!
