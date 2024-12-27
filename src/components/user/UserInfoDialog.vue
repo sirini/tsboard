@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="user.userInfoDialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="info ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -18,7 +18,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="home.color.header" class="mr-3">{{
+            <v-chip size="small" :color="COLOR.HOME.HEADER" class="mr-3">{{
               TEXT[home.lang].NAME
             }}</v-chip>
             <span class="text-caption">{{ util.unescape(user.info.name) }}</span>
@@ -34,7 +34,7 @@
             >
             <v-chip
               size="small"
-              :color="home.color.header"
+              :color="COLOR.HOME.HEADER"
               prepend-icon="mdi-check-decagram"
               v-if="user.info.admin"
               >{{ TEXT[home.lang].ADMIN }}</v-chip
@@ -46,7 +46,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="home.color.header">{{ TEXT[home.lang].LEVEL }}</v-chip>
+            <v-chip size="small" :color="COLOR.HOME.HEADER">{{ TEXT[home.lang].LEVEL }}</v-chip>
           </template>
           <template v-slot:append> Lv. {{ user.info.level }} </template>
         </v-list-item>
@@ -55,7 +55,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="home.color.header" class="mr-3">{{
+            <v-chip size="small" :color="COLOR.HOME.HEADER" class="mr-3">{{
               TEXT[home.lang].SIGNATURE
             }}</v-chip>
           </template>
@@ -71,7 +71,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="home.color.header">{{
+            <v-chip size="small" :color="COLOR.HOME.HEADER">{{
               TEXT[home.lang].SIGNUP_DATE
             }}</v-chip></template
           >
@@ -84,7 +84,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="home.color.header">{{
+            <v-chip size="small" :color="COLOR.HOME.HEADER">{{
               TEXT[home.lang].SIGNIN_DATE
             }}</v-chip></template
           >
@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { SIZE, TSBOARD } from "../../../tsboard.config"
+import { COLOR, SIZE, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/user-info-dialog"
 import { useHomeStore } from "../../store/home"
 import { useUserStore } from "../../store/user/user"

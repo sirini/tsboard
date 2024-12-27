@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
@@ -24,13 +24,14 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import UserModify from "../../components/admin/user/UserModify.vue"
 
 const route = useRoute()
 const admin = useAdminStore()
+const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("회원 목록", `${TSBOARD.PREFIX}/admin/user`)
@@ -38,9 +39,6 @@ admin.addBreadcrumbs("회원 정보 수정", `${TSBOARD.PREFIX}/admin/user/${rou
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .admin {
   margin-top: 100px;
 }

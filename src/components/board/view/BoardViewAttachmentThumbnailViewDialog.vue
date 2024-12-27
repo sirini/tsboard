@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="view.previewDialog">
-    <v-card :color="home.color.header">
+    <v-card :color="COLOR.HOME.HEADER">
       <v-img :src="view.previewPath" cover></v-img>
       <v-btn icon variant="tonal" class="close" @click="view.closePreviewDialog">
         <v-icon>mdi-close</v-icon>
@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { useHomeStore } from "../../../store/home"
 import { useBoardViewStore } from "../../../store/board/view"
+import { COLOR } from "../../../../tsboard.config"
 
 const home = useHomeStore()
 const view = useBoardViewStore()

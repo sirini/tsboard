@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="dark">
+  <v-app :theme="COLOR.BLOG.THEME">
     <blog-header :name="view.config.name" :info="view.config.info" :id="view.id"></blog-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -96,7 +96,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
 import BlogFooter from "../../components/blog/BlogFooter.vue"
 import BlogHeader from "../../components/blog/BlogHeader.vue"

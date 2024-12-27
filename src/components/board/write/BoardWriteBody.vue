@@ -39,6 +39,7 @@
         <board-write-editor
           v-model="editor.content"
           :type="editor.config.type"
+          :loading="false"
           @updateRealHtml="(html: string) => editor.updateRealHtml(html)"
         ></board-write-editor>
 
@@ -59,7 +60,7 @@
         <v-btn
           v-if="editor.postUid < 1"
           variant="flat"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           @click="editor.write"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
@@ -68,7 +69,7 @@
         <v-btn
           v-else
           variant="flat"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           @click="editor.modify"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
@@ -80,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"

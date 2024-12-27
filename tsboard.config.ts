@@ -40,6 +40,29 @@ export const OAUTH = {
   },
 }
 
+// 사이트의 기본 컬러셋 지정
+export const COLOR = {
+  HOME: {
+    THEME: "light",
+    HEADER: "#009688",
+    FOOTER: "#E0F2F1",
+    BACKGROUND: "#E0F2F1",
+  },
+  ADMIN: {
+    THEME: "light",
+    HEADER: "#FFC107",
+    FOOTER: "#FFF8E1",
+    BACKGROUND: "#FFF8E1",
+  },
+  BLOG: {
+    THEME: "dark",
+    HEADER: "#121212",
+    FOOTER: "#121212",
+    BACKGROUND: "#121212",
+  },
+}
+
+// 브라우저 크기 별 사이즈 정의
 export const SCREEN = {
   MOBILE: { WIDTH: 480, COLS: 12 },
   TABLET: { WIDTH: 768, COLS: 6 },

@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -8,7 +8,7 @@
             rounded="lg"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             :loading="password.loading"
           >
             <v-card-title class="reset_password_title">
@@ -63,17 +63,16 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/reset-password"
+import { COLOR } from "../../../tsboard.config"
 
 const auth = useAuthStore()
 const password = usePasswordStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

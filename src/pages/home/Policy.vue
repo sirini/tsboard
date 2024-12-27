@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -8,7 +8,7 @@
           <v-card
             class="mx-auto mt-12 mb-12"
             :max-width="home.staticWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title>개인정보 처리방침</v-card-title>
             <v-divider></v-divider>
@@ -124,18 +124,16 @@
 
 <script setup lang="ts">
 import { useHomeStore } from "../../store/home"
-import { TSBOARD, POLICY } from "../../../tsboard.config"
+import { TSBOARD, POLICY, COLOR } from "../../../tsboard.config"
 import HomeHeader from "../../pages/home/HomeHeader.vue"
 import HomeFooter from "../../pages/home/HomeFooter.vue"
 import SideDrawer from "../../pages/home/SideDrawer.vue"
 
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

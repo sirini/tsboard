@@ -22,13 +22,14 @@
       @click="util.go('galleryWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
       variant="flat"
-      :color="home.color.header"
+      :color="COLOR.HOME.HEADER"
       >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >
   </v-card-actions>
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"

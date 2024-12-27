@@ -1,6 +1,6 @@
 <template>
   <v-app-bar rounded="0" flat>
-    <v-toolbar color="#121212">
+    <v-toolbar :color="COLOR.BLOG.HEADER">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
         @click="util.go(BOARD.BLOG as Board, id)"
@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../tsboard.config"
 import { BOARD, Board } from "../../interface/board_interface"
 import HomeHeaderLogin from "../../pages/home/components/header/HomeHeaderLogin.vue"
 import HomeHeaderNotification from "../../pages/home/components/header/HomeHeaderNotification.vue"

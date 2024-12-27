@@ -48,7 +48,7 @@
               TSBOARD.PREFIX + (user.profile.length < 1 ? '/no-profile.svg' : user.profile)
             "
             append-icon="mdi-email-outline"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             size="small"
             >{{ user.name }} <v-divider vertical class="ml-3 mr-3"></v-divider>
             {{ user.id }}
@@ -59,7 +59,7 @@
           <v-chip
             prepend-icon="mdi-alpha-l"
             append-icon="mdi-alpha-p"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             size="small"
             class="ml-2 mr-2"
           >

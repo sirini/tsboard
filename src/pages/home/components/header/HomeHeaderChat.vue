@@ -12,7 +12,7 @@
           @click="chat.openDialog(item.sender)"
         >
           <template v-slot:append>
-            <v-chip :color="home.color.header" class="ml-3" size="small">{{
+            <v-chip :color="COLOR.HOME.HEADER" class="ml-3" size="small">{{
               util.date(item.timestamp)
             }}</v-chip>
           </template>
@@ -32,7 +32,7 @@ import { useHomeStore } from "../../../../store/home"
 import { useAuthStore } from "../../../../store/user/auth"
 import { useUtilStore } from "../../../../store/util"
 import { useChatStore } from "../../../../store/user/chat"
-import { TSBOARD } from "../../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../../tsboard.config"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-chat"
 
 const home = useHomeStore()

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="chat.dialog" persistent>
-    <v-card class="mx-auto" :width="home.dialogWidth" :color="home.color.header">
+    <v-card class="mx-auto" :width="home.dialogWidth" :color="COLOR.HOME.HEADER">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="note ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -35,7 +35,7 @@
                 :max-width="Math.floor(home.dialogWidth * 0.5)"
                 variant="tonal"
                 rounded="xl"
-                :color="home.color.header"
+                :color="COLOR.HOME.HEADER"
                 class="ml-3"
               >
                 <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>
@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/chat-dialog"
 import { useHomeStore } from "../../store/home"
 import { useAuthStore } from "../../store/user/auth"

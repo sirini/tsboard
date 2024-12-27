@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -8,7 +8,7 @@
             rounded="lg"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title class="signup_title">
               {{ TEXT[home.lang].TITLE }}
@@ -62,12 +62,14 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/verify"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 // 메일 재발송하기
 function retrySendMail(): void {
@@ -77,9 +79,6 @@ function retrySendMail(): void {
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

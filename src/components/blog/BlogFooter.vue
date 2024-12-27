@@ -1,7 +1,7 @@
 <template>
   <v-divider></v-divider>
-  <v-footer class="footer" color="#121212">
-    <v-card elevation="0" rounded="0" class="mx-auto" color="#121212">
+  <v-footer class="footer" :color="COLOR.BLOG.FOOTER">
+    <v-card elevation="0" rounded="0" class="mx-auto" :color="COLOR.BLOG.FOOTER">
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">{{
@@ -26,6 +26,7 @@
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import { TEXT } from "../../messages/pages/home/home-footer"
+import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()

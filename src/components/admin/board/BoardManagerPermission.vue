@@ -34,7 +34,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              :color="home.color.header"
+              :color="COLOR.HOME.HEADER"
               :prepend-avatar="
                 TSBOARD.PREFIX + (permission.board.admin.profile || '/no-profile.svg')
               "

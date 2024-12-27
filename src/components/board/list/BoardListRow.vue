@@ -13,7 +13,7 @@
     <v-list-item-title class="pointer ml-2 mr-2" @click="util.go('boardView', list.id, post.uid)">
       <v-icon
         size="x-small"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         class="mr-2"
         v-if="post.status === STATUS.NOTICE"
         >mdi-bullhorn-variant-outline</v-icon
@@ -22,18 +22,18 @@
       <span v-if="post.status === STATUS.SECRET">
         <v-icon
           size="x-small"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           class="mr-2"
           v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
           >mdi-lock-open-outline</v-icon
         >
-        <v-icon size="small" :color="home.color.header" class="mr-2" v-else>mdi-lock</v-icon>
+        <v-icon size="small" :color="COLOR.HOME.HEADER" class="mr-2" v-else>mdi-lock</v-icon>
       </span>
 
       <v-chip
         v-if="list.config.useCategory && post.status === STATUS.NORMAL"
         size="x-small"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         class="mr-2"
         @click="list.loadPostsByCategory(post.category.uid)"
         >{{ post.category.name }}</v-chip
@@ -44,7 +44,7 @@
       <span v-if="home.isMobile === false">
         <v-chip
           size="x-small"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           class="ml-2"
           prepend-icon="mdi-chat-outline"
           variant="text"
@@ -64,7 +64,7 @@
         <v-chip
           size="x-small"
           prepend-icon="mdi-heart-outline"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           variant="text"
           v-else
           >{{ util.num(post.like) }}</v-chip
@@ -83,7 +83,7 @@
 
       <v-chip
         size="x-small"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         class="ml-2"
         prepend-icon="mdi-chat-outline"
         variant="text"
@@ -103,7 +103,7 @@
       <v-chip
         size="x-small"
         prepend-icon="mdi-heart-outline"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         v-if="post.liked === false"
         >{{ util.num(post.like) }}</v-chip
@@ -112,7 +112,7 @@
       <v-chip
         size="x-small"
         prepend-icon="mdi-eye-outline"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         >{{ util.num(post.hit) }}</v-chip
       >
@@ -139,6 +139,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { STATUS } from "../../../interface/board_interface"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"

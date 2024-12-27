@@ -34,7 +34,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              :color="home.color.header"
+              :color="COLOR.HOME.HEADER"
               :prepend-avatar="
                 TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')
               "
@@ -89,7 +89,7 @@
           <v-chip
             prepend-icon="mdi-identifier"
             variant="outlined"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             @click="util.go(board.type, board.id)"
           >
             {{ board.id }}
@@ -99,7 +99,7 @@
           </v-chip>
         </template>
 
-        <v-chip variant="tonal" :color="home.color.header" class="ml-2"
+        <v-chip variant="tonal" :color="COLOR.HOME.HEADER" class="ml-2"
           ><strong>{{ util.unescape(board.name) }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           {{ util.unescape(board.info) }}

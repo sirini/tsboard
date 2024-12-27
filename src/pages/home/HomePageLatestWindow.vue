@@ -3,7 +3,7 @@
     label
     prepend-icon="mdi-update"
     size="large"
-    :color="home.color.header"
+    :color="COLOR.HOME.HEADER"
     class="mt-6 mb-3 mr-3"
   >
     <strong>{{ home.keyword.length > 0 ? `Search for: ${home.keyword}` : "Latest posts" }}</strong>
@@ -24,6 +24,7 @@ import { onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
 

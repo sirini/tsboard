@@ -2,6 +2,7 @@
   <board-write-editor
     v-model="comment.content"
     :type="type"
+    :loading="comment.loading"
     @updateRealHtml="(html: string) => comment.updateRealHtml(html)"
   ></board-write-editor>
 

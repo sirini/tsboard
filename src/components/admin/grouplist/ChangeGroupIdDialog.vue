@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="list.changeGroupIdDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
       <v-card-title>그룹ID 변경하기</v-card-title>
       <v-divider></v-divider>
       <v-card-text>

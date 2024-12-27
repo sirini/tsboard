@@ -3,7 +3,7 @@
     <v-card
       :max-width="home.dialogWidth"
       class="mx-auto"
-      :color="home.color.header"
+      :color="COLOR.HOME.HEADER"
       :loading="image.uploading"
     >
       <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import { watch } from "vue"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"

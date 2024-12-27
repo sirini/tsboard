@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -73,10 +73,12 @@ import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 watch(
   () => route.params?.no,
@@ -89,9 +91,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

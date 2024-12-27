@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useAdminStore } from "../../store/admin/common"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import GroupListGeneral from "../../components/admin/grouplist/GroupListGeneral.vue"
@@ -37,12 +37,10 @@ const admin = useAdminStore()
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("게시판 그룹 목록", `${TSBOARD.PREFIX}/admin/board`)
+const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .admin {
   margin-top: 100px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="dark">
+  <v-app :theme="COLOR.BLOG.THEME">
     <blog-header :name="list.config.name" :info="list.config.info" :id="list.id"></blog-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -79,7 +79,7 @@ import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/common/board-header"
 import { TEXT as LIST_TEXT } from "../../messages/pages/board/list"
 

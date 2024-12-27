@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addVideoURLDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="COLOR.HOME.HEADER">
       <v-card-title>{{ TEXT[home.lang].TITLE_YOUTUBE }}</v-card-title>
       <v-divider></v-divider>
 
@@ -60,6 +60,7 @@ import { useUtilStore } from "../../../store/util"
 import { VideoURL } from "../../../interface/editor"
 import AlertBar from "../../util/AlertBar.vue"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
+import { COLOR } from "../../../../tsboard.config"
 
 const editor = useBoardEditorStore()
 const home = useHomeStore()

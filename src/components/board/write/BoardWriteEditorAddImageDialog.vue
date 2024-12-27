@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addImageURLDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="COLOR.HOME.HEADER">
       <v-card-title>{{ TEXT[home.lang].TITLE_EXTERNAL_IMAGE }}</v-card-title>
       <v-divider></v-divider>
 
@@ -35,6 +35,7 @@ import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
 import AlertBar from "../../util/AlertBar.vue"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
+import { COLOR } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()

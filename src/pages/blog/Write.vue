@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="dark">
+  <v-app :theme="COLOR.BLOG.THEME">
     <blog-header
       :name="editor.config.name"
       :info="editor.config.info"
@@ -29,6 +29,7 @@ import BoardWriteLoadingDialog from "../../components/board/write/BoardWriteLoad
 import { useBoardEditorStore } from "../../store/board/editor"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const editor = useBoardEditorStore()

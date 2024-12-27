@@ -49,7 +49,7 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         Authorization: `Bearer ${auth.user.token}`,
       },
       params: {
-        name: boardNewAdmin.value,
+        name: encodeURIComponent(boardNewAdmin.value),
         limit: 5,
       },
     })

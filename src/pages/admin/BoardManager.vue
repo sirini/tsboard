@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
@@ -55,7 +55,7 @@ import { onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminBoardGeneralStore } from "../../store/admin/board/general"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import BoardManagerGeneral from "../../components/admin/board/BoardManagerGeneral.vue"
@@ -67,6 +67,7 @@ const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
 const menu = ref<"normal" | "permission" | "point">("normal")
+const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
 
 // 상단 메뉴 준비하기
 function prepareBreadcrumbs(): void {
@@ -95,9 +96,6 @@ watch(
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .admin {
   margin-top: 100px;
 }

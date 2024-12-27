@@ -64,7 +64,7 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
       },
       params: {
         option: option.value,
-        keyword: keyword.value,
+        keyword: encodeURIComponent(keyword.value),
         page: page.value,
         bunch: bunch.value,
       },

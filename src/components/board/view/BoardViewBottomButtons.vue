@@ -12,7 +12,7 @@
     <v-btn
       prepend-icon="mdi-pencil"
       variant="flat"
-      :color="home.color.header"
+      :color="COLOR.HOME.HEADER"
       @click="util.go(util.routerName(type, BOARD_ACTION.WRITE), view.id)"
       :disabled="auth.user.uid < 1"
       >{{ TEXT[home.lang].WRITE }}</v-btn
@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { Board, BOARD_ACTION } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"

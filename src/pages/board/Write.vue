@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -25,11 +25,13 @@ import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 onMounted(async () => {
   await editor.loadBoardConfig()
@@ -47,9 +49,6 @@ watch(
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

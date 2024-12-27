@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -45,10 +45,12 @@ import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import QuickButton from "../home/components/mobile/QuickButton.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const list = useBoardListStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 onMounted(() => list.initFirstList())
 
@@ -66,9 +68,6 @@ watch(
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

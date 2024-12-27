@@ -3,9 +3,9 @@
     elevation="0"
     rounded="0"
     :width="isSmallScreen ? home.width : 500"
-    :color="home.color.header"
+    :color="COLOR.HOME.HEADER"
   >
-    <v-list :bg-color="home.color.header">
+    <v-list :bg-color="COLOR.HOME.HEADER">
       <v-list-item>
         <template v-slot:prepend>
           <v-text-field
@@ -65,7 +65,7 @@
           hide-details
           variant="outlined"
           density="compact"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           :placeholder="TEXT[home.lang].PLACEHOLDER"
           prepend-inner-icon="mdi-restore"
           @click:prepend-inner="home.resetSearchKeyword"
@@ -102,6 +102,7 @@ import { ref } from "vue"
 import { SEARCH, Search } from "../../../../interface/board_interface"
 import { TEXT } from "../../../../messages/pages/home/components/header/home-header-search"
 import { useHomeStore } from "../../../../store/home"
+import { COLOR } from "../../../../../tsboard.config"
 
 const home = useHomeStore()
 const optionTitle = ref<string>(TEXT[home.lang].TITLE)

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -8,7 +8,7 @@
           <v-card
             class="mx-auto mt-12 mb-12"
             :max-width="home.staticWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title>
               404 Not Found
@@ -46,9 +46,11 @@ import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
 import { TEXT } from "../../messages/pages/home/not-found"
+import { COLOR } from "../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>

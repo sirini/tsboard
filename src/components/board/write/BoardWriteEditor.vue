@@ -1,6 +1,11 @@
 <template>
   <div v-if="editor">
-    <v-card elevation="0" v-show="writeEditor.isEditorMode" id="tsboardEditorBox">
+    <v-card
+      elevation="0"
+      v-show="writeEditor.isEditorMode"
+      id="tsboardEditorBox"
+      :loading="loading"
+    >
       <v-toolbar
         density="compact"
         id="tsboardEditorToolbar"
@@ -39,7 +44,7 @@
     <v-card elevation="0" rounded="0">
       <v-btn
         prepend-icon="mdi-note-text-outline"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         size="small"
         @click="writeEditor.isEditorMode = true"
@@ -47,7 +52,7 @@
       >
       <v-btn
         prepend-icon="mdi-code-block-tags"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         size="small"
         @click="writeEditor.isEditorMode = false"
@@ -55,7 +60,7 @@
       >
       <v-btn
         prepend-icon="mdi-check"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         v-show="writeEditor.isEditorMode === false"
         class="ml-2"
         size="small"
@@ -145,6 +150,7 @@ import BoardWriteToolbarHeading from "./toolbar/BoardWriteToolbarHeading.vue"
 import BoardWriteToolbarList from "./toolbar/BoardWriteToolbarList.vue"
 import BoardWriteToolbarQuoteLine from "./toolbar/BoardWriteToolbarQuoteLine.vue"
 import BoardWriteToolbarUndoRedoReset from "./toolbar/BoardWriteToolbarUndoRedoReset.vue"
+import { COLOR } from "../../../../tsboard.config"
 
 const writeEditor = useBoardEditorStore()
 const editorImage = useEditorImageStore()
@@ -152,10 +158,11 @@ const home = useHomeStore()
 const props = defineProps<{
   modelValue: string
   type: Board
+  loading: boolean
 }>()
 const emits = defineEmits(["update:modelValue", "updateRealHtml"])
 
-// 스크롤 움직임에 따라 에디터 툴바 위치도 조정
+// 스크롤 움직임에 따라 에디터 툴바 위치 및 크기 조정
 let scrollTimer: any = null
 let stickyScrollY = -1
 function changeToolbarPosition(): void {
@@ -166,7 +173,7 @@ function changeToolbarPosition(): void {
     const toolbar = document.querySelector<HTMLDivElement>("#tsboardEditorToolbar")
     if (!toolbar) return
 
-    toolbar.style.width = `${Math.min(editorBox.clientWidth + 25, writeEditor.config.width)}px`
+    toolbar.style.width = `${Math.min(editorBox.clientWidth + 25, writeEditor.config.width - 25)}px`
     const toolbarRect = toolbar.getBoundingClientRect()
     if (toolbarRect.top < 74 && stickyScrollY < 0) {
       toolbar.classList.add("sticky")
@@ -341,7 +348,6 @@ onBeforeUnmount(() => {
   top: 64px;
   z-index: 100;
   opacity: 0.9;
-  margin-left: -12px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }

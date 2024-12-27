@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="report.dialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="report ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -23,7 +23,7 @@
         <v-list-item class="pa-0">
           <v-alert
             variant="tonal"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             icon="mdi-information"
             class="text-caption"
             :text="TEXT[home.lang].BLACKLIST_INFO"
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/send-report-dialog"
 import { useHomeStore } from "../../store/home"
 import { useReportStore } from "../../store/user/report"

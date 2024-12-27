@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
@@ -35,17 +35,16 @@ import { useAdminStore } from "../../store/admin/common"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import DashboardGeneral from "../../components/admin/dashboard/DashboardGeneral.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const admin = useAdminStore()
 const menu = ref<"normal" | "stat">("normal")
+const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .admin {
   margin-top: 100px;
 }

@@ -4,7 +4,7 @@
       label
       :prepend-icon="ICONS[result.config.type]"
       size="large"
-      :color="home.color.header"
+      :color="COLOR.HOME.HEADER"
       class="mt-6 mb-3 mr-3"
       @click="util.go(result.config.type, result.config.id)"
     >
@@ -32,6 +32,7 @@ import { BoardHomePostResult } from "../../interface/home_interface"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomePageBoardLatestGrid from "./components/list/HomePageBoardLatestGrid.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()

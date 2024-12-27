@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="box-static"
-    :color="home.color.header"
+    :color="COLOR.HOME.HEADER"
     @click="home.loadLatestPosts"
     variant="text"
   >
@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../../tsboard.config"
 import { useHomeStore } from "../../../../store/home"
 
 const home = useHomeStore()

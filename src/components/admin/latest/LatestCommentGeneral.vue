@@ -93,12 +93,12 @@
         <template v-slot:append>
           <v-chip
             size="small"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             variant="text"
             prepend-icon="mdi-heart-outline"
             >{{ comment.like }}</v-chip
           >
-          <v-chip size="small" :color="home.color.header" variant="text">{{
+          <v-chip size="small" :color="COLOR.HOME.HEADER" variant="text">{{
             util.date(comment.date)
           }}</v-chip>
         </template>

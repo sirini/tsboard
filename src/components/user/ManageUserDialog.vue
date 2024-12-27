@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="manage.manageUserDialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="home.color.header">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
       <v-card-title
         ><span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="manage ml-3">{{ TEXT[home.lang].INFO }}</span>
@@ -21,7 +21,7 @@
         <v-list-subheader class="mt-3">{{ TEXT[home.lang].ACTION }}</v-list-subheader>
         <v-divider></v-divider>
         <v-alert
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           variant="tonal"
           icon="mdi-information"
           class="text-caption"
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/manage-user-dialog"
 import { useHomeStore } from "../../store/home"
 import { useManageUserStore } from "../../store/user/manageuser"

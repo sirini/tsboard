@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="comment.confirmRemoveCommentDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
       <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">
@@ -25,6 +25,7 @@ import { useCommentStore } from "../../../store/board/comment"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/board/comment/board-view-comment-remove-dialog"
 import { BOARD } from "../../../interface/board_interface"
+import { COLOR } from "../../../../tsboard.config"
 
 const viewer = useViewerStore()
 const comment = useCommentStore()

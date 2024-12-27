@@ -55,7 +55,7 @@ export const useGalleryStore = defineStore("gallery", () => {
         pagingDirection: pagingDirection.value,
         sinceUid: sinceUid.value,
         option: option.value as number,
-        keywork: keyword.value,
+        keyword: encodeURIComponent(keyword.value),
       },
     })
 

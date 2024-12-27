@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -8,7 +8,7 @@
             class="mx-auto"
             rounded="lg"
             :max-width="home.dialogWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title>
               {{ TEXT[home.lang].TITLE }}
@@ -21,7 +21,7 @@
               <v-list-item class="pa-0 text-center">
                 <v-chip
                   size="x-large"
-                  :color="home.color.header"
+                  :color="COLOR.HOME.HEADER"
                   class="mt-9 mb-9"
                   :prepend-avatar="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
                 >
@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/my-info"
 import { useHomeStore } from "../../store/home"
@@ -145,14 +145,12 @@ const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 const visible = ref<boolean>(false)
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
   background-color: #eceff1;

@@ -14,7 +14,7 @@
             size="small"
             class="mr-2"
             label
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             v-if="post.useCategory"
             >{{ util.unescape(post.category.name) }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
@@ -34,7 +34,7 @@
     <v-card-actions class="pa-0">
       <v-chip
         prepend-icon="mdi-eye-outline"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         size="small"
         class="ml-2"
@@ -44,7 +44,7 @@
 
       <v-chip
         prepend-icon="mdi-chat-outline"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         variant="text"
         size="small"
         class="ml-1"
@@ -55,7 +55,7 @@
       <v-chip
         class="ml-1"
         :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
-        :color="post.liked ? 'red' : home.color.header"
+        :color="post.liked ? 'red' : COLOR.HOME.HEADER"
         variant="text"
         size="small"
         label
@@ -68,7 +68,7 @@
       <v-chip
         :prepend-avatar="TSBOARD.PREFIX + (post.writer.profile || '/no-profile.svg')"
         size="small"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         class="mr-2"
         label
         >{{ util.unescape(post.writer.name) }}</v-chip
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { TSBOARD } from "../../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../../tsboard.config"
 import "../../../../assets/board/editor.scss"
 import { BoardHomePostItem } from "../../../../interface/home_interface"
 import { useHomeStore } from "../../../../store/home"

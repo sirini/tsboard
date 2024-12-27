@@ -21,6 +21,7 @@ export const useCommentStore = defineStore("comment", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
+  const loading = ref<boolean>(false)
   const id = ref<string>("")
   const boardUid = ref<number>(0)
   const postUid = ref<number>(0)
@@ -262,89 +263,99 @@ export const useCommentStore = defineStore("comment", () => {
   // 새 댓글 작성하기
   async function newComment(param: CommentNewParameter): Promise<CommentResult> {
     let result: CommentResult = COMMENT_RESULT
+    loading.value = true
 
     const fd = new FormData()
     fd.append("boardUid", param.boardUid.toString())
     fd.append("postUid", param.postUid.toString())
     fd.append("content", param.content)
 
-    const response = await axios.post(`${TSBOARD.API}/comment/write`, fd, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    })
+    try {
+      const response = await axios.post(`${TSBOARD.API}/comment/write`, fd, {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      })
 
-    if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return result
-    }
-    if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
-      return result
-    }
+      if (!response.data) {
+        util.snack(TEXT[home.lang].NO_RESPONSE)
+        return result
+      }
+      if (response.data.success === false) {
+        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+        return result
+      }
 
-    result = {
-      uid: response.data.result,
-      writer: {
-        uid: auth.user.uid,
-        name: auth.user.name,
-        profile: auth.user.profile,
-      },
-      content: param.content,
-      like: 0,
-      liked: false,
-      submitted: Date.now(),
-      modified: 0,
-      status: 0,
-      replyUid: response.data.result,
-      postUid: param.postUid,
+      result = {
+        uid: response.data.result,
+        writer: {
+          uid: auth.user.uid,
+          name: auth.user.name,
+          profile: auth.user.profile,
+        },
+        content: param.content,
+        like: 0,
+        liked: false,
+        submitted: Date.now(),
+        modified: 0,
+        status: 0,
+        replyUid: response.data.result,
+        postUid: param.postUid,
+      }
+      util.snack(TEXT[home.lang].SAVED_NEW_COMMENT)
+      return result
+    } finally {
+      loading.value = false
     }
-    util.snack(TEXT[home.lang].SAVED_NEW_COMMENT)
-    return result
   }
 
   // 답글 작성하기
   async function replyComment(param: CommentTargetParameter): Promise<CommentResult> {
     let result: CommentResult = COMMENT_RESULT
+    loading.value = true
 
     const fd = new FormData()
     fd.append("replyTargetUid", param.targetUid.toString())
     fd.append("postUid", param.boardUid.toString())
     fd.append("content", param.content)
 
-    const response = await axios.post(`${TSBOARD.API}/comment/reply`, fd, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    })
+    try {
+      const response = await axios.post(`${TSBOARD.API}/comment/reply`, fd, {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      })
 
-    if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return result
-    }
-    if (response.data.success === false) {
-      util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
-      return result
-    }
+      if (!response.data) {
+        util.snack(TEXT[home.lang].NO_RESPONSE)
+        return result
+      }
+      if (response.data.success === false) {
+        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+        return result
+      }
 
-    result = {
-      uid: response.data.result,
-      writer: {
-        uid: auth.user.uid,
-        name: auth.user.name,
-        profile: auth.user.profile,
-      },
-      content: param.content,
-      like: 0,
-      liked: false,
-      submitted: Date.now(),
-      modified: 0,
-      status: 0,
-      replyUid: param.targetUid,
-      postUid: param.postUid,
+      result = {
+        uid: response.data.result,
+        writer: {
+          uid: auth.user.uid,
+          name: auth.user.name,
+          profile: auth.user.profile,
+        },
+        content: param.content,
+        like: 0,
+        liked: false,
+        submitted: Date.now(),
+        modified: 0,
+        status: 0,
+        replyUid: param.targetUid,
+        postUid: param.postUid,
+      }
+      util.snack(TEXT[home.lang].REPLIED_NEW_COMMENT)
+      return result
+    } finally {
+      loading.value = false
     }
-    util.snack(TEXT[home.lang].REPLIED_NEW_COMMENT)
-    return result
   }
 
   // 기존 댓글 수정하기
@@ -372,6 +383,7 @@ export const useCommentStore = defineStore("comment", () => {
   }
 
   return {
+    loading,
     id,
     boardUid,
     postUid,

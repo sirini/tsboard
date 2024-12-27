@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -33,7 +33,7 @@
               elevation="0"
               variant="text"
               class="mt-4"
-              :color="home.color.header"
+              :color="COLOR.HOME.HEADER"
               @click="gallery.loadOldPhotos"
               prepend-icon="mdi-download"
             >
@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import BoardViewRemovePostDialog from "../../components/board/view/BoardViewRemovePostDialog.vue"
 import GalleryHeader from "../../components/gallery/common/GalleryHeader.vue"
 import GalleryGridItem from "../../components/gallery/list/GalleryGridItem.vue"
@@ -77,6 +77,7 @@ const route = useRoute()
 const gallery = useGalleryStore()
 const viewer = useViewerStore()
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 // 뷰어 띄우기
 function openViewerDialog(): void {
@@ -110,9 +111,6 @@ watch(
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

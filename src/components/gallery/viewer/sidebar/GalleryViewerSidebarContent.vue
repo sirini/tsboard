@@ -30,7 +30,7 @@
 
       <v-chip
         size="x-small"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         class="ml-2"
         :append-icon="showExif ? 'mdi-chevron-up' : 'mdi-chevron-down'"
         @click="showExif = !showExif"
@@ -49,7 +49,7 @@
   </v-list-item>
 
   <v-list-item class="pt-2 pb-3" v-if="viewer.images[viewer.position]?.description">
-    <v-card elevation="0" variant="tonal" :color="home.color.header">
+    <v-card elevation="0" variant="tonal" :color="COLOR.HOME.HEADER">
       <v-card-text class="text-caption">{{
         viewer.images[viewer.position]?.description
       }}</v-card-text></v-card
@@ -64,6 +64,7 @@ import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"
 import UserNametag from "../../../user/UserNametag.vue"
 import GalleryViewerSidebarExif from "./GalleryViewerSidebarExif.vue"
+import { COLOR } from "../../../../../tsboard.config"
 
 const viewer = useViewerStore()
 const home = useHomeStore()

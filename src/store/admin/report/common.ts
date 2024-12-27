@@ -65,7 +65,7 @@ export const useAdminReportStore = defineStore("adminReport", () => {
       },
       params: {
         option: option.value,
-        keyword: keyword.value,
+        keyword: encodeURIComponent(keyword.value),
         page: page.value,
         bunch: bunch.value,
         isSolved: isSolved.value ? 1 : 0,

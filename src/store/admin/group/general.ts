@@ -65,7 +65,7 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
       params: {
-        name: newGroupManager.value,
+        name: encodeURIComponent(newGroupManager.value),
         limit: 5,
       },
     })

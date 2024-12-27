@@ -39,7 +39,7 @@
         <template v-slot:prepend>
           <v-chip
             variant="outlined"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             prepend-icon="mdi-identifier"
             @click="list.openChangeGroupIdDialog(group.uid, group.id)"
             >{{ group.id }}
@@ -51,7 +51,7 @@
 
         <v-chip
           variant="tonal"
-          :color="home.color.header"
+          :color="COLOR.HOME.HEADER"
           class="ml-2"
           :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
         >

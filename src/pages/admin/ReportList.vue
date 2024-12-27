@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
       <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
@@ -41,7 +41,7 @@
 import { ref } from "vue"
 import { useAdminStore } from "../../store/admin/common"
 import { useAdminReportStore } from "../../store/admin/report/common"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AdminHeader from "../../components/admin/common/AdminHeader.vue"
 import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import ReportList from "../../components/admin/report/ReportList.vue"
@@ -50,6 +50,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 const admin = useAdminStore()
 const report = useAdminReportStore()
 const menu = ref<string>("waiting")
+const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("신고 내역", `${TSBOARD.PREFIX}/admin/report`)
@@ -67,9 +68,6 @@ function setSolvedOption(isSolved: boolean): void {
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .admin {
   margin-top: 100px;
 }

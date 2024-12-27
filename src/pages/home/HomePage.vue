@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
@@ -9,13 +9,13 @@
 
           <v-row class="mt-3 mb-3" v-if="home.isMobile || home.isTablet">
             <v-col>
-              <v-card :color="home.color.header" class="pt-1 pb-1">
+              <v-card :color="COLOR.HOME.HEADER" class="pt-1 pb-1">
                 <home-header-search :is-small-screen="true"></home-header-search>
               </v-card>
             </v-col>
           </v-row>
 
-          <v-tabs v-model="home.tab" align-tabs="center" :color="home.color.header">
+          <v-tabs v-model="home.tab" align-tabs="center" :color="COLOR.HOME.HEADER">
             <v-tab :value="1">CATEGORY</v-tab>
             <v-tab :value="2">COLUMN</v-tab>
             <v-tab :value="3">LATEST</v-tab>
@@ -53,14 +53,13 @@ import HomePageColumnWindow from "./HomePageColumnWindow.vue"
 import HomePageCategoryWindow from "./HomePageCategoryWindow.vue"
 import HomePageLatestWindow from "./HomePageLatestWindow.vue"
 import SideDrawer from "./SideDrawer.vue"
+import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .wrap {
   min-height: calc(100vh - 118px);
 }

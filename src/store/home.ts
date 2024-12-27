@@ -50,14 +50,6 @@ export const useHomeStore = defineStore("home", () => {
   const langName = ref<string>("한국어")
   const langIcon = ref<string>("mdi-syllabary-hangul")
   const tab = ref<number>(CATEGORY_WINDOW)
-  const color = ref({
-    header: "blue-grey-darken-3",
-    footer: "blue-grey-lighten-5",
-    admin: {
-      header: "blue-grey-lighten-5",
-      footer: "blue-grey-lighten-5",
-    },
-  })
   loadUserLanguage()
 
   // 첫화면 갱신하기
@@ -130,7 +122,7 @@ export const useHomeStore = defineStore("home", () => {
         sinceUid: sinceUid.value,
         bunch: bunch.value,
         option: option.value,
-        keyword: keyword.value,
+        keyword: encodeURIComponent(keyword.value),
         accessUserUid: auth.user.uid,
       },
     })
@@ -336,7 +328,6 @@ export const useHomeStore = defineStore("home", () => {
     langName,
     langIcon,
     tab,
-    color,
     coming,
     visit,
     setGridLayout,

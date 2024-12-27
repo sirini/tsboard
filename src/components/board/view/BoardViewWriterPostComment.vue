@@ -15,7 +15,7 @@
             @click="util.go(post.board.type, post.board.id, post.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" :color="home.color.header" label>{{
+              <v-chip size="x-small" :color="COLOR.HOME.HEADER" label>{{
                 util.unescape(post.board.name)
               }}</v-chip>
             </template>
@@ -25,14 +25,14 @@
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="home.color.header"
+                :color="COLOR.HOME.HEADER"
                 :prepend-icon="post.reply > 0 ? 'mdi-comment' : 'mdi-comment-outline'"
                 >{{ post.reply }}</v-chip
               >
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="home.color.header"
+                :color="COLOR.HOME.HEADER"
                 :prepend-icon="post.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ post.like }}</v-chip
               >
@@ -52,7 +52,7 @@
             @click="util.go(comment.board.type, comment.board.id, comment.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" :color="home.color.header" label>{{
+              <v-chip size="x-small" :color="COLOR.HOME.HEADER" label>{{
                 util.unescape(comment.board.name)
               }}</v-chip>
             </template>
@@ -62,7 +62,7 @@
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="home.color.header"
+                :color="COLOR.HOME.HEADER"
                 :prepend-icon="comment.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ comment.like }}</v-chip
               >
@@ -84,6 +84,7 @@ import { ref } from "vue"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
+import { COLOR } from "../../../../tsboard.config"
 
 const view = useBoardViewStore()
 const util = useUtilStore()

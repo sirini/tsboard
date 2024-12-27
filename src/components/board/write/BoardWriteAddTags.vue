@@ -25,7 +25,7 @@
             >
 
             <template v-slot:append>
-              <v-chip :color="home.color.header">{{ util.num(tag.count) }}</v-chip>
+              <v-chip :color="COLOR.HOME.HEADER">{{ util.num(tag.count) }}</v-chip>
             </template>
           </v-list-item>
           <v-list-item v-show="editor.suggestionTags.length < 1 && editor.tag.length > 2">
@@ -38,7 +38,7 @@
       <v-chip
         v-for="(tag, index) in editor.tags"
         :key="index"
-        :color="home.color.header"
+        :color="COLOR.HOME.HEADER"
         @click="editor.removeTag(tag)"
         class="mt-1 ml-1"
         prepend-icon="mdi-tag-remove-outline"
@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"

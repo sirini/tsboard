@@ -1,6 +1,6 @@
 <template>
-  <v-footer class="footer" :color="home.color.footer">
-    <v-card elevation="0" rounded="0" class="mx-auto" :color="home.color.footer">
+  <v-footer class="footer" :color="COLOR.HOME.FOOTER">
+    <v-card elevation="0" rounded="0" class="mx-auto" :color="COLOR.HOME.FOOTER">
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">{{
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../tsboard.config"
 import { TEXT } from "../../messages/pages/home/home-footer"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"

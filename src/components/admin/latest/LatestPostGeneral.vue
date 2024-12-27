@@ -90,13 +90,13 @@
         <template v-slot:append>
           <v-chip
             size="small"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             prepend-icon="mdi-comment-outline"
             class="ml-2 mr-1"
             variant="text"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" :color="home.color.header" variant="text">{{
+          <v-chip size="small" :color="COLOR.HOME.HEADER" variant="text">{{
             util.date(post.date)
           }}</v-chip>
         </template>

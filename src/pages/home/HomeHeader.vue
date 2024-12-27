@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar rounded="0" flat :color="home.color.header" class="appbar">
-    <v-toolbar :color="home.color.header">
+  <v-app-bar rounded="0" flat :color="COLOR.HOME.HEADER" class="appbar">
+    <v-toolbar :color="COLOR.HOME.HEADER">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
         @click="home.coming"
@@ -34,7 +34,7 @@ import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import HomeHeaderSelectLanguage from "./components/header/HomeHeaderSelectLanguage.vue"
 import HomeHeaderLogin from "./components/header/HomeHeaderLogin.vue"
 import HomeHeaderNotification from "./components/header/HomeHeaderNotification.vue"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 
 const route = useRoute()
 const home = useHomeStore()
@@ -43,6 +43,9 @@ const home = useHomeStore()
 <style scoped type="scss">
 .appbar {
   border-bottom: #cfd8dc 1px solid;
+}
+.toolbar {
+  backdrop-filter: blur(5px);
 }
 .title {
   cursor: pointer;

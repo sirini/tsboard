@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -8,7 +8,7 @@
             rounded="lg"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title class="change_password_title">
               {{ TEXT[home.lang].TITLE }}
@@ -75,6 +75,7 @@ import HomeHeader from "../home/HomeHeader.vue"
 import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/change-password"
+import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
 const auth = useAuthStore()
@@ -82,6 +83,7 @@ const password = usePasswordStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 // 비밀번호 변경하기
 function change(): void {
@@ -91,9 +93,6 @@ function change(): void {
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

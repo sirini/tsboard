@@ -48,7 +48,7 @@
               TSBOARD.PREFIX +
               (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
             "
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
             class="mt-1"
             size="small"
             >{{ list.from.name }}</v-chip

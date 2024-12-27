@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="view.movePostDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="home.color.header">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
       <v-card-title>{{ TEXT[home.lang].MOVE }}</v-card-title>
       <v-divider></v-divider>
-      <v-list :bg-color="home.color.header">
+      <v-list :bg-color="COLOR.HOME.HEADER">
         <v-list-item>{{ TEXT[home.lang].MOVE_INFO }}</v-list-item>
         <v-list-item>
           <v-text-field
@@ -17,7 +17,7 @@
             append-inner-icon="mdi-chevron-down"
           >
             <v-menu activator="parent">
-              <v-list :bg-color="home.color.header" density="compact">
+              <v-list :bg-color="COLOR.HOME.HEADER" density="compact">
                 <v-list-item
                   v-for="(board, index) in view.boardListItems"
                   :key="index"
@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"

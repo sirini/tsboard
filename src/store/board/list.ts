@@ -64,7 +64,7 @@ export const useBoardListStore = defineStore("boardList", () => {
           pagingDirection: pagingDirection.value,
           sinceUid: sinceUid.value,
           option: option.value,
-          keyword: keyword.value,
+          keyword: encodeURIComponent(keyword.value),
         },
       })
 
@@ -260,6 +260,8 @@ export const useBoardListStore = defineStore("boardList", () => {
     clearVariables()
     resetSearchKeyword()
     resetBoardList()
+
+    util.go(config.value.type, config.value.id)
   }
 
   return {

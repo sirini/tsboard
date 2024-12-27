@@ -1,5 +1,5 @@
 <template>
-  <v-app class="app">
+  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <v-main>
@@ -8,7 +8,7 @@
             rounded="lg"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="home.color.header"
+            :color="COLOR.HOME.HEADER"
           >
             <v-card-title class="login_title"
               >{{ TEXT[home.lang].TITLE }}
@@ -42,7 +42,7 @@
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-2" variant="tonal" :color="home.color.header">
+              <v-card class="mt-2 mb-2" variant="tonal" :color="COLOR.HOME.HEADER">
                 <v-card-text class="text-medium-emphasis text-caption">
                   {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
@@ -126,7 +126,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
-import { OAUTH, TSBOARD } from "../../../tsboard.config"
+import { COLOR, OAUTH, TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
 import { useHomeStore } from "../../store/home"
@@ -140,6 +140,7 @@ const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
+const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
 
 // OAuth 로그인하기
 function oauthLogin(service: string): void {
@@ -155,9 +156,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.app {
-  background-color: #eceff1;
-}
 .layout {
   margin-top: 64px;
 }

@@ -2,7 +2,7 @@
   <v-card max-width="500">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="list.option" size="small" group :color="home.color.header">
+        <v-btn-toggle v-model="list.option" size="small" group :color="COLOR.HOME.HEADER">
           <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].TITLE }}</v-btn>
           <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].WRITER }}</v-btn>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { SEARCH } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/list"
 import { useBoardListStore } from "../../../store/board/list"
