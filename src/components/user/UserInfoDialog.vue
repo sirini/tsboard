@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="user.userInfoDialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.MAIN" rounded="xl">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="info ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -10,7 +10,7 @@
       <v-list>
         <alert-bar></alert-bar>
 
-        <v-list-item class="text-center">
+        <v-list-item class="text-center mt-5 mb-5">
           <v-avatar :size="SIZE.PROFILE">
             <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
@@ -18,7 +18,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="COLOR.HOME.HEADER" class="mr-3">{{
+            <v-chip size="small" :color="COLOR.HOME.MAIN" class="mr-3">{{
               TEXT[home.lang].NAME
             }}</v-chip>
             <span class="text-caption">{{ util.unescape(user.info.name) }}</span>
@@ -34,7 +34,7 @@
             >
             <v-chip
               size="small"
-              :color="COLOR.HOME.HEADER"
+              :color="COLOR.HOME.MAIN"
               prepend-icon="mdi-check-decagram"
               v-if="user.info.admin"
               >{{ TEXT[home.lang].ADMIN }}</v-chip
@@ -46,7 +46,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="COLOR.HOME.HEADER">{{ TEXT[home.lang].LEVEL }}</v-chip>
+            <v-chip size="small" :color="COLOR.HOME.MAIN">{{ TEXT[home.lang].LEVEL }}</v-chip>
           </template>
           <template v-slot:append> Lv. {{ user.info.level }} </template>
         </v-list-item>
@@ -55,7 +55,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="COLOR.HOME.HEADER" class="mr-3">{{
+            <v-chip size="small" :color="COLOR.HOME.MAIN" class="mr-3">{{
               TEXT[home.lang].SIGNATURE
             }}</v-chip>
           </template>
@@ -71,7 +71,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="COLOR.HOME.HEADER">{{
+            <v-chip size="small" :color="COLOR.HOME.MAIN">{{
               TEXT[home.lang].SIGNUP_DATE
             }}</v-chip></template
           >
@@ -84,7 +84,7 @@
 
         <v-list-item>
           <template v-slot:prepend>
-            <v-chip size="small" :color="COLOR.HOME.HEADER">{{
+            <v-chip size="small" :color="COLOR.HOME.MAIN">{{
               TEXT[home.lang].SIGNIN_DATE
             }}</v-chip></template
           >
@@ -96,7 +96,7 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="user.closeDialog">{{
+        <v-btn block prepend-icon="mdi-close" @click="user.closeDialog" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
       </v-card-actions>
@@ -119,7 +119,6 @@ const util = useUtilStore()
 
 <style scoped>
 .info {
-  color: #78909c;
   font-size: 0.65em;
 }
 

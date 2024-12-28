@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>회원 정보</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
@@ -31,7 +31,7 @@ import UserModify from "../../components/admin/user/UserModify.vue"
 
 const route = useRoute()
 const admin = useAdminStore()
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("회원 목록", `${TSBOARD.PREFIX}/admin/user`)

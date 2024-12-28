@@ -5,10 +5,16 @@
       <v-divider></v-divider>
       <v-list-item class="mt-3 mb-3">
         <template v-slot:prepend>
-          <v-btn-toggle v-model="report.option" mandatory class="mt-1">
-            <v-btn value="from">신고자명</v-btn>
-            <v-btn value="request">내용</v-btn>
-            <v-btn value="to">대상자명</v-btn>
+          <v-btn-toggle
+            v-model="report.option"
+            mandatory
+            class="mt-1"
+            rounded="pill"
+            :color="COLOR.ADMIN.MAIN"
+          >
+            <v-btn :value="SEARCH.REPORT.FROM">신고자명</v-btn>
+            <v-btn :value="SEARCH.REPORT.REQUEST">내용</v-btn>
+            <v-btn :value="SEARCH.REPORT.TO">대상자명</v-btn>
           </v-btn-toggle>
         </template>
 
@@ -19,6 +25,7 @@
           class="ml-5 mt-1 mr-1"
           prepend-inner-icon="mdi-restore"
           append-inner-icon="mdi-magnify"
+          rounded="pill"
           @keyup="report.updateReports"
           @click:prepend-inner="report.resetKeyword"
           @click:append-inner="report.updateReports"
@@ -33,7 +40,8 @@
             v-model="report.bunch"
             variant="outlined"
             hide-details
-            class="mt-1"
+            class="mt-1 ml-2"
+            rounded="pill"
             :items="[5, 10, 15, 20, 25, 30, 40, 50, 100]"
           ></v-select>
         </template>
@@ -48,7 +56,7 @@
               TSBOARD.PREFIX +
               (list.from.profile.length < 1 ? '/no-profile.svg' : list.from.profile)
             "
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             class="mt-1"
             size="small"
             >{{ list.from.name }}</v-chip
@@ -61,7 +69,7 @@
             <v-icon color="success" class="mr-2 mb-1" size="small">mdi-check-circle</v-icon
             >{{ list.response }}
           </v-card>
-          <v-chip v-else color="blue-grey-lighten-3" size="x-small" class="ml-2">{{
+          <v-chip v-else :color="COLOR.ADMIN.MAIN" size="x-small" class="ml-2">{{
             util.date(list.date)
           }}</v-chip>
         </div>
@@ -107,17 +115,16 @@
 
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { useAdminReportStore } from "../../../store/admin/report/common"
-import { useHomeStore } from "../../../store/home"
 import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
 import Paging from "../common/AdminBottomPaging.vue"
+import { SEARCH } from "../../../interface/board_interface"
 
 const report = useAdminReportStore()
 const manage = useManageUserStore()
 const util = useUtilStore()
-const home = useHomeStore()
 
 onMounted(() => report.loadReports())
 watch(

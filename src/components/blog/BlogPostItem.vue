@@ -1,16 +1,16 @@
 <template>
-  <v-card elevation="0" @click="util.go(type, id, post.uid)">
+  <v-card elevation="0" @click="util.go(type, id, post.uid)" rounded="xl">
     <v-img
       cover
       v-if="post.cover.length > 0"
-      height="250"
+      height="220"
       :src="TSBOARD.PREFIX + post.cover"
     ></v-img>
 
     <v-list class="pa-0">
       <v-list-item class="pa-2"
         ><v-list-item-title
-          ><v-chip size="small" class="mr-2" label :color="COLOR.HOME.HEADER" v-if="useCategory">{{
+          ><v-chip size="small" class="mr-2" :color="COLOR.HOME.MAIN" v-if="useCategory">{{
             util.unescape(post.category.name)
           }}</v-chip
           ><strong>{{ util.unescape(post.title) }}</strong></v-list-item-title
@@ -34,7 +34,6 @@
         color="grey-darken-2"
         size="small"
         class="ml-2"
-        label
         >{{ util.num(post.hit) }}</v-chip
       >
 
@@ -44,7 +43,6 @@
         color="grey-darken-2"
         size="small"
         class="ml-1"
-        label
         >{{ util.num(post.comment) }}</v-chip
       >
 
@@ -54,14 +52,13 @@
         :color="post.liked ? 'red' : 'grey-darken-2'"
         variant="text"
         size="small"
-        label
       >
         {{ util.num(post.like) }}
       </v-chip>
 
       <v-spacer></v-spacer>
 
-      <v-chip class="mr-1" variant="text" color="grey-darken-2" size="small" label>{{
+      <v-chip class="mr-1" variant="text" color="grey-darken-2" size="small">{{
         util.date(post.submitted)
       }}</v-chip>
     </v-card-actions>

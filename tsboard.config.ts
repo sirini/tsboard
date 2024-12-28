@@ -1,4 +1,4 @@
-export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
+export const IS_DEV = true // 프로덕션에서는 false, 개발 단계에서만 true
 export const VITE_PORT = 3000
 export const API_PORT = 3003
 export const LOCALHOST = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
@@ -44,21 +44,43 @@ export const OAUTH = {
 export const COLOR = {
   HOME: {
     THEME: "light",
-    HEADER: "#009688",
-    FOOTER: "#E0F2F1",
-    BACKGROUND: "#E0F2F1",
+    MAIN: "#424242",
+    TOOLBAR: "#424242",
+    FOOTER: "#FAFAFA",
+    BACKGROUND: "#FAFAFA",
   },
   ADMIN: {
     THEME: "light",
-    HEADER: "#FFC107",
-    FOOTER: "#FFF8E1",
-    BACKGROUND: "#FFF8E1",
+    MAIN: "#795548",
+    TOOLBAR: "#EFEBE9",
+    FOOTER: "#EFEBE9",
+    BACKGROUND: "#EFEBE9",
   },
   BLOG: {
     THEME: "dark",
-    HEADER: "#121212",
+    MAIN: "#121212",
+    TOOLBAR: "#121212",
     FOOTER: "#121212",
     BACKGROUND: "#121212",
+  },
+  GALLERY: {
+    THEME: "light",
+    MAIN: "#121212",
+    TOOLBAR: "#121212",
+    FOOTER: "#121212",
+    BACKGROUND: "#121212",
+  },
+  COMMENT: {
+    TOOLBAR: {
+      BLOG: "#1c1c1c",
+      BOARD_WRITER: "#FFF3E0",
+      BLOG_WRITER: "#121212",
+    },
+    NAMETAG: {
+      BLOG: "#9E9E9E",
+      BOARD_WRITER: "#EF6C00",
+      BLOG_WRITER: "#525252",
+    },
   },
 }
 

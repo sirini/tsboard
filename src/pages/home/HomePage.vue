@@ -1,21 +1,27 @@
 <template>
-  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
+  <v-app :theme="COLOR.HOME.THEME" :style="bgColor">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
-        <v-card class="mx-auto wrap app pb-12" elevation="0" rounded="0" :max-width="home.width">
+        <v-card
+          class="mx-auto wrap pb-12"
+          elevation="0"
+          rounded="0"
+          :max-width="home.width"
+          :style="bgColor"
+        >
           <home-title></home-title>
 
           <v-row class="mt-3 mb-3" v-if="home.isMobile || home.isTablet">
             <v-col>
-              <v-card :color="COLOR.HOME.HEADER" class="pt-1 pb-1">
+              <v-card :color="COLOR.HOME.MAIN" class="pt-1 pb-1">
                 <home-header-search :is-small-screen="true"></home-header-search>
               </v-card>
             </v-col>
           </v-row>
 
-          <v-tabs v-model="home.tab" align-tabs="center" :color="COLOR.HOME.HEADER">
+          <v-tabs v-model="home.tab" align-tabs="center" :color="COLOR.HOME.MAIN">
             <v-tab :value="1">CATEGORY</v-tab>
             <v-tab :value="2">COLUMN</v-tab>
             <v-tab :value="3">LATEST</v-tab>
@@ -46,7 +52,7 @@
 import { useHomeStore } from "../../store/home"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import QuickButton from "./components/mobile/QuickButton.vue"
-import HomeTitle from "./components/static/TsboardHomeTitle.vue"
+import HomeTitle from "./components/static/HomeTitle.vue"
 import HomeFooter from "./HomeFooter.vue"
 import HomeHeader from "./HomeHeader.vue"
 import HomePageColumnWindow from "./HomePageColumnWindow.vue"
@@ -56,12 +62,12 @@ import SideDrawer from "./SideDrawer.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .layout {
   margin-top: 64px;

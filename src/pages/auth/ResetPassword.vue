@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             :loading="password.loading"
           >
             <v-card-title class="reset_password_title">
@@ -27,6 +27,7 @@
                   prepend-inner-icon="mdi-email-outline"
                   :rules="auth.emailRule"
                   :label="TEXT[home.lang].FILL_EMAIL"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
               <v-card class="mt-2 mb-6" variant="tonal">
@@ -38,13 +39,16 @@
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')" rounded="pill">{{
                 TEXT[home.lang].LOGIN
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="password.askResetPassword">{{
-                TEXT[home.lang].ASK_RESET
-              }}</v-btn>
+              <v-btn
+                append-icon="mdi-chevron-right"
+                @click="password.askResetPassword"
+                rounded="pill"
+                >{{ TEXT[home.lang].ASK_RESET }}</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-container>
@@ -69,7 +73,7 @@ const auth = useAuthStore()
 const password = usePasswordStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -77,7 +81,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

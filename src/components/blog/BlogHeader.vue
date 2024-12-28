@@ -1,6 +1,6 @@
 <template>
   <v-app-bar rounded="0" flat>
-    <v-toolbar :color="COLOR.BLOG.HEADER">
+    <v-toolbar :color="COLOR.BLOG.TOOLBAR">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
         @click="util.go(BOARD.BLOG as Board, id)"

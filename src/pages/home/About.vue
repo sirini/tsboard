@@ -6,9 +6,20 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            class="mx-auto mt-12 mb-12"
+            class="mx-auto pa-5"
             :max-width="home.staticWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
+            variant="tonal"
+            rounded="pill"
+          >
+            <strong>ABOUT TSBOARD.DEV</strong>
+          </v-card>
+
+          <v-card
+            class="mx-auto mt-5 mb-12"
+            :max-width="home.staticWidth"
+            :color="COLOR.HOME.MAIN"
+            rounded="xl"
           >
             <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
             <v-divider></v-divider>
@@ -22,31 +33,14 @@
               <v-btn
                 prepend-icon="mdi-link-variant"
                 @click="util.open('https://github.com/sirini/tsboard')"
-                >Github
+                >TSBOARD
                 <v-tooltip activator="parent">{{ TEXT[home.lang].GITHUB_TOOLTIP }}</v-tooltip>
               </v-btn>
-              <v-spacer></v-spacer>
               <v-btn
-                prepend-icon="mdi-link"
-                class="mr-2"
-                @click="util.open('https://www.typescriptlang.org/ko/')"
-                >TS
-              </v-btn>
-              <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.open('https://ko.vuejs.org')">Vue </v-btn>
-              <v-btn
-                prepend-icon="mdi-link"
-                class="mr-2"
-                @click="util.open('https://vuetifyjs.com')"
-                >Vuetify
-              </v-btn>
-              <v-btn prepend-icon="mdi-link" class="mr-2" @click="util.open('https://tiptap.dev')"
-                >Tiptap
-              </v-btn>
-              <v-divider vertical></v-divider>
-              <v-btn prepend-icon="mdi-link" @click="util.open('https://bun.sh')">Bun </v-btn>
-              <v-btn prepend-icon="mdi-link" @click="util.open('https://elysiajs.com')"
-                >Elysia
+                prepend-icon="mdi-link-variant"
+                @click="util.open('https://github.com/sirini/goapi')"
+                >GOAPI
+                <v-tooltip activator="parent">{{ TEXT[home.lang].GITHUB_TOOLTIP }}</v-tooltip>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -68,7 +62,7 @@ import { COLOR } from "../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -76,7 +70,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .about {
   font-size: 1em;

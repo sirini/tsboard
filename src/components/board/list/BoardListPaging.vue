@@ -22,21 +22,28 @@
     </v-btn>
 
     <v-spacer></v-spacer>
+
     <v-chip variant="tonal" color="blue-grey-lighten-3" v-if="home.isMobile === false" size="small"
       >{{ list.page }} / {{ list.pageLength }}
     </v-chip>
+
     <v-spacer v-if="home.isMobile === false"></v-spacer>
 
-    <v-btn prepend-icon="mdi-list-box-outline" @click="list.init" v-if="home.isMobile === false">{{
-      TEXT[home.lang].LIST
-    }}</v-btn>
+    <v-btn
+      prepend-icon="mdi-list-box-outline"
+      @click="list.init"
+      v-if="home.isMobile === false"
+      rounded="pill"
+      >{{ TEXT[home.lang].LIST }}</v-btn
+    >
 
     <v-btn
       prepend-icon="mdi-pencil"
       @click="util.go(util.routerName(list.config.type, BOARD_ACTION.WRITE), list.id)"
       :disabled="auth.user.uid < 1"
-      :color="COLOR.HOME.HEADER"
+      :color="COLOR.HOME.MAIN"
       variant="flat"
+      rounded="pill"
       >{{ TEXT[home.lang].WRITE }}</v-btn
     >
   </v-card-actions>

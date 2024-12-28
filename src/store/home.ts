@@ -34,7 +34,7 @@ export const useHomeStore = defineStore("home", () => {
   const sidebarWidth = ref<number>(250)
   const width = ref<number>(SCREEN.PC.WIDTH)
   const staticWidth = ref<number>(SCREEN.TABLET.WIDTH)
-  const dialogWidth = ref<number>(600)
+  const dialogWidth = ref<number>(500)
   const cols = ref<number>(SCREEN.PC.COLS)
   const sinceUid = ref<number>(0)
   const bunch = ref<number>(12)

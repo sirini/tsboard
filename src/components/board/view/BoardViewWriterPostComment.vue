@@ -15,7 +15,7 @@
             @click="util.go(post.board.type, post.board.id, post.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" :color="COLOR.HOME.HEADER" label>{{
+              <v-chip size="x-small" :color="COLOR.HOME.MAIN" label>{{
                 util.unescape(post.board.name)
               }}</v-chip>
             </template>
@@ -25,14 +25,14 @@
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="COLOR.HOME.HEADER"
-                :prepend-icon="post.reply > 0 ? 'mdi-comment' : 'mdi-comment-outline'"
-                >{{ post.reply }}</v-chip
+                :color="COLOR.HOME.MAIN"
+                :prepend-icon="post.comment > 0 ? 'mdi-comment' : 'mdi-comment-outline'"
+                >{{ post.comment }}</v-chip
               >
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="COLOR.HOME.HEADER"
+                :color="COLOR.HOME.MAIN"
                 :prepend-icon="post.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ post.like }}</v-chip
               >
@@ -52,17 +52,17 @@
             @click="util.go(comment.board.type, comment.board.id, comment.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" :color="COLOR.HOME.HEADER" label>{{
+              <v-chip size="x-small" :color="COLOR.HOME.MAIN">{{
                 util.unescape(comment.board.name)
               }}</v-chip>
             </template>
 
             <v-list-item-title class="text-caption ml-2"
-              >{{ util.unescape(comment.content) }}
+              >{{ util.stripTags(util.unescape(comment.content)) }}
               <v-chip
                 size="x-small"
                 variant="text"
-                :color="COLOR.HOME.HEADER"
+                :color="COLOR.HOME.MAIN"
                 :prepend-icon="comment.like > 0 ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ comment.like }}</v-chip
               >

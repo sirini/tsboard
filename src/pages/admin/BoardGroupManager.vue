@@ -2,9 +2,8 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>{{ general.group.id }} 그룹 관리</v-card-title>
-        <v-divider></v-divider>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
@@ -40,7 +39,7 @@ const general = useAdminGroupGeneralStore()
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("게시판 그룹 목록", `${TSBOARD.PREFIX}/admin/board`)
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 onMounted(() => {
   if (route.params?.id.length > 1) {

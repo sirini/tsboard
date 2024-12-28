@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>신고 목록</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
@@ -50,7 +50,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 const admin = useAdminStore()
 const report = useAdminReportStore()
 const menu = ref<string>("waiting")
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("신고 내역", `${TSBOARD.PREFIX}/admin/report`)

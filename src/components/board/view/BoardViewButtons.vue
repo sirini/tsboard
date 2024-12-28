@@ -7,7 +7,7 @@
           class="mr-2"
           :disabled="auth.user.uid < 1"
           :prepend-icon="view.post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
-          :color="view.post.liked ? 'red' : 'blue-grey'"
+          :color="view.post.liked ? 'red' : ''"
           @click="view.like(!view.post.liked)"
         >
           {{ util.num(view.post.like) }}
@@ -23,14 +23,20 @@
       </template>
 
       <template v-slot:append>
-        <v-btn append-icon="mdi-chevron-down" variant="outlined" rounded="xl" size="small"
+        <v-btn append-icon="mdi-chevron-down" variant="outlined" rounded="pill" size="small"
           >{{ TEXT[home.lang].WORK }}
 
           <v-menu activator="parent">
-            <v-list density="compact">
+            <v-list density="compact" rounded="xl">
               <v-list-item
                 prepend-icon="mdi-pencil"
-                @click="util.go(`${props.boardType}Modify`, view.id, view.postUid)"
+                @click="
+                  util.go(
+                    `${util.routerName(view.config.type as Board, BOARD_ACTION.MODIFY)}`,
+                    view.id,
+                    view.postUid,
+                  )
+                "
                 :disabled="auth.user.uid !== view.post.writer.uid && !auth.user.admin"
               >
                 {{ TEXT[home.lang].MODIFY }}
@@ -65,6 +71,7 @@
 
 <script setup lang="ts">
 import UserNametag from "../../../components/user/UserNametag.vue"
+import { Board, BOARD_ACTION } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useHomeStore } from "../../../store/home"
@@ -75,8 +82,4 @@ const view = useBoardViewStore()
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const props = defineProps<{
-  bgColor?: string
-  boardType: string
-}>()
 </script>

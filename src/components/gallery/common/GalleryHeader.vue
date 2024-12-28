@@ -1,6 +1,12 @@
 <template>
-  <v-card-title
-    >{{ gallery.config.name }}
+  <v-card
+    class="mx-auto pa-5"
+    :max-width="config.width"
+    :color="COLOR.HOME.MAIN"
+    variant="tonal"
+    rounded="pill"
+  >
+    <strong>{{ gallery.config.name }}</strong>
     <span class="info ml-3 pl-3" v-if="home.isMobile === false">{{
       util.unescape(gallery.config.info)
     }}</span>
@@ -18,7 +24,6 @@
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
-        size="small"
         >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
@@ -26,11 +31,10 @@
         variant="text"
         @click="util.go('adminBoardManager', gallery.id)"
         v-if="auth.user.admin"
-        size="small"
         >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>
-  </v-card-title>
+  </v-card>
 
   <v-snackbar v-model="util.snackbar" :timeout="util.snackbarTimeout">
     {{ util.snackbarText }}
@@ -41,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
+import { BoardConfig } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/components/gallery/common/gallery-header"
 import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
@@ -51,16 +57,18 @@ const auth = useAuthStore()
 const gallery = useGalleryStore()
 const util = useUtilStore()
 const home = useHomeStore()
+const props = defineProps<{
+  config: BoardConfig
+}>()
 </script>
 
 <style scoped>
 .info {
   color: #828282;
-  font-size: 0.7em;
 }
 .login {
   position: absolute;
-  top: 20px;
+  top: 13px;
   right: 0px;
 }
 </style>

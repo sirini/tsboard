@@ -1,12 +1,12 @@
 <template>
-  <v-chip class="pointer" :size="size || 'small'" :color="color || 'blue-grey'">
+  <v-chip class="pointer" :size="size || 'small'" :color="color || COLOR.HOME.MAIN">
     <v-avatar start>
       <v-img :src="TSBOARD.PREFIX + (profile || '/no-profile.svg')"></v-img>
     </v-avatar>
     {{ util.unescape(name) }}
 
     <v-menu activator="parent">
-      <v-list density="compact">
+      <v-list density="compact" rounded="xl">
         <v-list-item
           prepend-icon="mdi-card-account-details-outline"
           @click="
@@ -69,7 +69,7 @@ import { useChatStore } from "../../store/user/chat"
 import { useManageUserStore } from "../../store/user/manageuser"
 import { useUtilStore } from "../../store/util"
 import { useHomeStore } from "../../store/home"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/user-nametag"
 
 const auth = useAuthStore()

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="3">
-      <v-btn-toggle v-model="isPayment" mandatory>
+      <v-btn-toggle v-model="isPayment" mandatory rounded="pill">
         <v-btn color="blue" :value="false"
           >충전
           <v-tooltip activator="parent"
@@ -29,6 +29,7 @@
         density="compact"
         hide-details
         append-inner-icon="mdi-content-save"
+        rounded="pill"
         @click:append-inner="emit('update', isPayment, amount)"
         @keyup.enter="emit('update', isPayment, amount)"
       >

@@ -10,7 +10,8 @@
         density="compact"
         id="tsboardEditorToolbar"
         class="write-editor-menu"
-        :color="type === BOARD.BLOG ? 'grey-darken-4' : 'blue-grey-darken-2'"
+        :color="type === BOARD.BLOG ? COLOR.BLOG.TOOLBAR : COLOR.HOME.TOOLBAR"
+        rounded="pill"
       >
         <board-write-toolbar-bold-italic-strike-highlight
           :editor="editor"
@@ -25,26 +26,29 @@
         <board-write-toolbar-undo-redo-reset :editor="editor"></board-write-toolbar-undo-redo-reset>
       </v-toolbar>
 
-      <editor-content
-        :editor="editor"
-        :class="type === BOARD.BLOG ? 'dark' : 'light'"
-      ></editor-content>
+      <editor-content :editor="editor" class="mt-3"></editor-content>
     </v-card>
 
-    <v-card elevation="0" v-show="writeEditor.isEditorMode == false">
+    <v-card
+      elevation="0"
+      v-show="writeEditor.isEditorMode == false"
+      class="inputHtmlArea"
+      rounded="xl"
+    >
       <v-textarea
         v-model="writeEditor.contentHTML"
         rows="8"
         auto-grow
-        variant="outlined"
         :placeholder="TEXT[home.lang].HTML"
+        rounded="xl"
+        variant="outlined"
       ></v-textarea>
     </v-card>
 
     <v-card elevation="0" rounded="0">
       <v-btn
         prepend-icon="mdi-note-text-outline"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         variant="text"
         size="small"
         @click="writeEditor.isEditorMode = true"
@@ -52,7 +56,7 @@
       >
       <v-btn
         prepend-icon="mdi-code-block-tags"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         variant="text"
         size="small"
         @click="writeEditor.isEditorMode = false"
@@ -60,10 +64,12 @@
       >
       <v-btn
         prepend-icon="mdi-check"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         v-show="writeEditor.isEditorMode === false"
         class="ml-2"
         size="small"
+        rounded="pill"
+        variant="tonal"
         @click="writeEditor.applyHTMLContent(editor)"
         >apply</v-btn
       >
@@ -130,7 +136,7 @@ import ts from "highlight.js/lib/languages/typescript"
 import { all, createLowlight } from "lowlight"
 import { onBeforeUnmount, onMounted, watch } from "vue"
 import "../../../assets/board/editor.scss"
-import { TableOption, VideoURL } from "../../../interface/editor"
+import { TableOption, VideoURL } from "../../../interface/editor_interface"
 import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useEditorImageStore } from "../../../store/board/image"
@@ -331,11 +337,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.dark {
-  background-color: #191919;
-}
-.light {
-  background-color: #f9f9f9;
+.inputHtmlArea {
+  margin-bottom: 14px;
 }
 .write-editor-menu {
   position: sticky;
@@ -345,10 +348,7 @@ onBeforeUnmount(() => {
 }
 .sticky {
   position: fixed;
-  top: 64px;
+  top: 72px;
   z-index: 100;
-  opacity: 0.9;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
 }
 </style>

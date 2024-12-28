@@ -5,8 +5,13 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto pa-3" :max-width="view.config.width" :loading="view.loading">
-            <board-header :name="view.config.name" :info="view.config.info"></board-header>
+          <board-header :config="view.config"></board-header>
+          <v-card
+            class="mx-auto mt-5 pa-3"
+            :max-width="view.config.width"
+            :loading="view.loading"
+            rounded="xl"
+          >
             <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
 
             <board-view-statistics></board-view-statistics>
@@ -22,7 +27,7 @@
               {{ util.unescape(view.post.writer.signature) }}
             </v-card-text>
             <board-view-writer-post-comment></board-view-writer-post-comment>
-            <board-view-buttons board-type="board"></board-view-buttons>
+            <board-view-buttons></board-view-buttons>
             <board-view-comment-write
               v-if="view.post.uid > 0"
               :type="view.config.type"
@@ -78,7 +83,7 @@ import { COLOR } from "../../../tsboard.config"
 const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 watch(
   () => route.params?.no,

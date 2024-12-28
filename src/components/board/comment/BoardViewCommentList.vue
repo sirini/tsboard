@@ -2,33 +2,21 @@
   <v-list>
     <v-list-item
       class="pa-0"
-      :class="reply.uid !== reply.replyUid ? 'ml-4' : ''"
       v-for="(reply, index) in comment.comments"
+      :class="reply.uid !== reply.replyUid ? 'ml-12' : ''"
       :key="index"
     >
       <v-toolbar
         density="compact"
         class="pl-3 mt-4"
-        rounded="lg"
-        :color="
-          view.post.writer.uid === reply.writer.uid
-            ? view.config.type === BOARD.BLOG
-              ? 'grey-darken-4'
-              : 'orange-lighten-5'
-            : ''
-        "
+        rounded="pill"
+        :color="setToolbarColor(view.post.writer.uid, reply.writer.uid)"
       >
         <user-nametag
           :name="reply.writer.name"
           :uid="reply.writer.uid"
           :profile="reply.writer.profile"
-          :color="
-            view.post.writer.uid === reply.writer.uid
-              ? view.config.type === BOARD.BLOG
-                ? 'blue-grey'
-                : 'orange-darken-3'
-              : ''
-          "
+          :color="setNametagColor(view.post.writer.uid, reply.writer.uid)"
           size="small"
         ></user-nametag>
 
@@ -37,7 +25,7 @@
         <v-chip
           :prepend-icon="reply.liked ? 'mdi-heart' : 'mdi-heart-outline'"
           @click="comment.like(reply.uid, !reply.liked)"
-          :color="reply.liked ? 'red' : 'surface-variant'"
+          :color="reply.liked ? 'red' : ''"
           class="mr-2"
           size="small"
           >{{ reply.like }}
@@ -51,6 +39,7 @@
           icon
           size="small"
           @click="comment.setReplyComment(reply.uid, reply.content)"
+          rounded="pill"
           ><v-icon size="small">mdi-reply</v-icon>
           <v-tooltip activator="parent" location="top">{{
             TEXT[home.lang].REPLY_TOOLTIP
@@ -115,6 +104,7 @@ import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 import BoardViewCommentRemoveDialog from "./BoardViewCommentRemoveDialog.vue"
 import { BOARD } from "../../../interface/board_interface"
+import { COLOR } from "../../../../tsboard.config"
 
 const route = useRoute()
 const auth = useAuthStore()
@@ -128,6 +118,34 @@ watch(
   () => route.params?.no,
   () => comment.loadCommentList(),
 )
+
+// 댓글의 툴바 색상을 상황에 맞게 변경하기
+function setToolbarColor(writerUid: number, commenterUid: number): string {
+  let color = COLOR.HOME.TOOLBAR
+  if (view.config.type === BOARD.BLOG) {
+    color = COLOR.COMMENT.TOOLBAR.BLOG
+    if (writerUid === commenterUid) {
+      color = COLOR.COMMENT.TOOLBAR.BLOG_WRITER
+    }
+  } else if (writerUid === commenterUid) {
+    color = COLOR.COMMENT.TOOLBAR.BOARD_WRITER
+  }
+  return color
+}
+
+// 댓글 작성자의 네임택 색상을 상황에 맞게 변경하기
+function setNametagColor(writerUid: number, commenterUid: number): string {
+  let color = COLOR.HOME.TOOLBAR
+  if (view.config.type === BOARD.BLOG) {
+    color = COLOR.COMMENT.NAMETAG.BLOG
+    if (writerUid === commenterUid) {
+      color = COLOR.COMMENT.NAMETAG.BLOG_WRITER
+    }
+  } else if (writerUid === commenterUid) {
+    color = COLOR.COMMENT.NAMETAG.BOARD_WRITER
+  }
+  return color
+}
 </script>
 
 <style scoped>

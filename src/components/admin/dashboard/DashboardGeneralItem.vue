@@ -1,8 +1,8 @@
 <template>
   <v-row no-gutters>
     <v-col class="pa-1">
-      <v-card class="mt-3 mb-3">
-        <v-card-title class="title">
+      <v-card class="mt-3 mb-3" :color="COLOR.ADMIN.MAIN" rounded="xl">
+        <v-card-title>
           그룹 목록
           <div class="more">
             <v-btn
@@ -11,6 +11,7 @@
               elevation="0"
               @click="util.go('adminBoardGroup')"
               size="small"
+              :color="COLOR.ADMIN.MAIN"
               >관리
               <v-tooltip activator="parent"> 클릭하시면 그룹 관리 페이지로 이동합니다. </v-tooltip>
             </v-btn>
@@ -33,7 +34,7 @@
     </v-col>
 
     <v-col class="pa-1">
-      <v-card class="mt-3 mb-3">
+      <v-card class="mt-3 mb-3" :color="COLOR.ADMIN.MAIN" rounded="xl">
         <v-card-title class="title"> 게시판 목록 </v-card-title>
         <v-divider></v-divider>
         <v-list density="compact">
@@ -52,7 +53,7 @@
     </v-col>
 
     <v-col class="pa-1">
-      <v-card class="mt-3 mb-3">
+      <v-card class="mt-3 mb-3" :color="COLOR.ADMIN.MAIN" rounded="xl">
         <v-card-title class="title"
           >회원 목록
           <div class="more">
@@ -62,6 +63,7 @@
               elevation="0"
               @click="util.go('adminUser')"
               size="small"
+              :color="COLOR.ADMIN.MAIN"
               >관리
               <v-tooltip activator="parent"> 클릭하시면 회원 관리 페이지로 이동합니다. </v-tooltip>
             </v-btn>
@@ -88,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
 import { useUtilStore } from "../../../store/util"
 
@@ -100,10 +102,6 @@ const util = useUtilStore()
 .more {
   position: absolute;
   top: 8px;
-  right: 5px;
-}
-
-.title {
-  border-top: #607d8b 2px solid;
+  right: 10px;
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
   <div v-for="(result, index) in results" :key="index">
     <v-chip
-      label
       :prepend-icon="ICONS[result.config.type]"
       size="large"
-      :color="COLOR.HOME.HEADER"
+      :color="COLOR.HOME.MAIN"
       class="mt-6 mb-3 mr-3"
       @click="util.go(result.config.type, result.config.id)"
     >

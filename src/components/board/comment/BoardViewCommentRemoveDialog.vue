@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="comment.confirmRemoveCommentDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.MAIN">
       <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">

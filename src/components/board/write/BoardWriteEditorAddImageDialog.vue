@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addImageURLDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="xl" :color="COLOR.HOME.MAIN">
       <v-card-title>{{ TEXT[home.lang].TITLE_EXTERNAL_IMAGE }}</v-card-title>
       <v-divider></v-divider>
 

@@ -48,7 +48,7 @@
               TSBOARD.PREFIX + (user.profile.length < 1 ? '/no-profile.svg' : user.profile)
             "
             append-icon="mdi-email-outline"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             size="small"
             >{{ user.name }} <v-divider vertical class="ml-3 mr-3"></v-divider>
             {{ user.id }}
@@ -59,7 +59,7 @@
           <v-chip
             prepend-icon="mdi-alpha-l"
             append-icon="mdi-alpha-p"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             size="small"
             class="ml-2 mr-2"
           >
@@ -109,7 +109,7 @@ import { useAdminUserStore } from "../../../store/admin/user/common"
 import { useManageUserStore } from "../../../store/user/manageuser"
 import { useUtilStore } from "../../../store/util"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import ManageUserDialog from "../../user/ManageUserDialog.vue"
 import Paging from "../common/AdminBottomPaging.vue"
 

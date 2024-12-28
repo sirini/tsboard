@@ -9,7 +9,7 @@
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">{{
           TEXT[home.lang].ABOUT
         }}</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('license')">{{
+        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('copyright')">{{
           TEXT[home.lang].LICENSE
         }}</v-btn>
         <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('policy')">{{

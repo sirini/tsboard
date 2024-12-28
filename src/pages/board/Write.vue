@@ -31,7 +31,7 @@ const route = useRoute()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 onMounted(async () => {
   await editor.loadBoardConfig()

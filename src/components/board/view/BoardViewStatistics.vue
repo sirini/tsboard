@@ -6,13 +6,10 @@
           ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
           {{ view.post.category.name }}</span
         >
-        <v-divider vertical v-if="view.config.useCategory" class="mr-2"></v-divider>
-
         <span class="mr-2 text-caption" v-if="home.isMobile === false"
           >{{ TEXT[home.lang].SUBMITTED }}: {{ util.date(view.post.submitted, true, true) }}</span
         >
 
-        <v-divider vertical v-if="view.post.modified > 0 && home.isMobile === false"></v-divider>
         <span class="ml-2 mr-2 text-caption" v-if="view.post.modified > 0"
           >{{ TEXT[home.lang].MODIFIED }}: {{ util.date(view.post.modified, true, true) }}</span
         >
@@ -23,7 +20,6 @@
           ><v-icon size="small" class="mr-2">mdi-eye-outline</v-icon>
           {{ util.num(view.post.hit) }}</span
         >
-        <v-divider vertical></v-divider>
         <span class="ml-3 text-caption"
           ><v-icon size="small" class="mr-2">mdi-comment-outline</v-icon>
           {{ view.post.comment }}</span

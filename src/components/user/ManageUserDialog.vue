@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="manage.manageUserDialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.MAIN" rounded="xl">
       <v-card-title
         ><span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="manage ml-3">{{ TEXT[home.lang].INFO }}</span>
@@ -8,7 +8,7 @@
       <v-divider></v-divider>
 
       <v-list>
-        <alert-bar></alert-bar>
+        <alert-bar class="ml-2 mr-2"></alert-bar>
         <v-list-subheader>{{ TEXT[home.lang].TARGET }}</v-list-subheader>
         <v-divider></v-divider>
         <v-list-item
@@ -21,11 +21,12 @@
         <v-list-subheader class="mt-3">{{ TEXT[home.lang].ACTION }}</v-list-subheader>
         <v-divider></v-divider>
         <v-alert
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           variant="tonal"
           icon="mdi-information"
-          class="text-caption"
+          class="text-caption ma-3"
           :text="TEXT[home.lang].ACTION_INFO"
+          rounded="pill"
         ></v-alert>
 
         <v-list-item class="pa-0 pl-3">
@@ -92,6 +93,7 @@
             variant="outlined"
             counter
             auto-grow
+            rounded="xl"
           >
           </v-textarea>
         </v-list-item>
@@ -99,11 +101,11 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="manage.closeManageUser">{{
+        <v-btn prepend-icon="mdi-close" @click="manage.closeManageUser" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn append-icon="mdi-chevron-right" @click="manage.manageUser">{{
+        <v-btn append-icon="mdi-chevron-right" @click="manage.manageUser" rounded="pill">{{
           TEXT[home.lang].SUBMIT
         }}</v-btn>
       </v-card-actions>
@@ -128,7 +130,6 @@ const rules: any = [
 
 <style scoped>
 .manage {
-  color: #78909c;
   font-size: 0.65em;
 }
 

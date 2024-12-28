@@ -43,7 +43,6 @@ export const useBoardListStore = defineStore("boardList", () => {
   const option = ref<Search>(SEARCH.TITLE as Search)
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
-  const isFirstInit = ref<boolean>(false)
 
   // 게시글 목록 가져오기
   async function loadPostList(): Promise<NavigationFailure | void | undefined> {
@@ -117,7 +116,6 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 게시판 목록 마운트 시점에 호출
   function initFirstList(): void {
-    isFirstInit.value = true
     const name = util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING)
     const pageStr = page.value.toString()
 
@@ -127,21 +125,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     } else {
       resetBoardList()
       router.replace({ name, params: { id: id.value, page: "1" } })
-    }
-  }
-
-  // 페이징이 변경될 때마다 호출
-  async function watchChangingPage(now: number, prev: number): Promise<void> {
-    if (isFirstInit.value === true) {
-      isFirstInit.value = false
-    } else {
-      page.value = prev < 1 ? 1 : prev
-      if (now >= prev) {
-        setNextPosts()
-      } else {
-        setPrevPosts()
-      }
-      await loadPostList()
     }
   }
 
@@ -155,19 +138,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     home.setGridLayout()
   }
 
-  // 이전 페이지로 이동 준비
-  function setPrevPosts(): void {
-    page.value -= 1
-    const _page = page.value - 1
-    pagingDirection.value = PAGE.PREV as Paging
-
-    if (_page < 2) {
-      util.snack(TEXT[home.lang].FIRST_PAGE)
-    }
-    page.value = _page
-    sinceUid.value = posts.value.at(0)?.uid ?? 0
-  }
-
   // 이전 페이지 가져온 후 데이터 처리 (순서 뒤집기 등)
   function rearrangePosts(): void {
     const notices = posts.value.filter((post: BoardListItem) => {
@@ -179,36 +149,46 @@ export const useBoardListStore = defineStore("boardList", () => {
     posts.value = [...notices, ...normals]
   }
 
+  // 이전 페이지로 이동 준비
+  function setPrevPosts(): void {
+    page.value -= 1
+    pagingDirection.value = PAGE.PREV as Paging
+
+    if (page.value < 2) {
+      util.snack(TEXT[home.lang].FIRST_PAGE)
+    }
+    sinceUid.value = posts.value.at(0)?.uid ?? 0
+  }
+
   // 다음 페이지로 이동 준비
   function setNextPosts(): void {
-    const _page = page.value + 1
+    page.value += 1
     pagingDirection.value = PAGE.NEXT as Paging
 
-    if (_page === pageLength.value) {
+    if (page.value === pageLength.value) {
       util.snack(TEXT[home.lang].LAST_PAGE)
     }
-    page.value = _page
     sinceUid.value = posts.value.at(-1)?.uid ?? 0
   }
 
   // 이전 페이지 이동하기
   function movePrevPage(): void {
-    const _page = page.value - 1
+    setPrevPosts()
     router.push({
-      name: util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING),
-      params: { id: id.value, page: _page },
+      name: util.routerName(config.value.type as Board, BOARD_ACTION.PAGING),
+      params: { id: id.value, page: page.value },
     })
-    page.value = _page
+    loadPostList()
   }
 
   // 다음 페이지 이동하기
   function moveNextPage(): void {
-    const _page = page.value + 1
+    setNextPosts()
     router.push({
-      name: util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING),
-      params: { id: id.value, page: _page },
+      name: util.routerName(config.value.type as Board, BOARD_ACTION.PAGING),
+      params: { id: id.value, page: page.value },
     })
-    page.value = _page
+    loadPostList()
   }
 
   // 검색 옵션 초기화하기
@@ -278,7 +258,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     keywordHistories,
     loadPostList,
     initFirstList,
-    watchChangingPage,
     resetBoardList,
     movePrevPage,
     moveNextPage,

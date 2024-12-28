@@ -5,6 +5,7 @@
       class="mx-auto my-1"
       :width="gallery.gridSize"
       :elevation="isHovering ? 6 : 0"
+      rounded="xl"
     >
       <v-img
         cover

@@ -3,8 +3,9 @@
     <v-card
       :max-width="home.dialogWidth"
       class="mx-auto"
-      :color="COLOR.HOME.HEADER"
+      :color="COLOR.HOME.MAIN"
       :loading="image.uploading"
+      rounded="xl"
     >
       <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
       <v-divider></v-divider>

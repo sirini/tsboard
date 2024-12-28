@@ -28,4 +28,9 @@ export const blogRoutes: Array<RouteRecordRaw> = [
     name: "blogModify",
     component: () => import("@/pages/blog/Write.vue"),
   },
+  {
+    path: `${TSBOARD.PREFIX}/blog/:id/page/:page(\\d+)`,
+    name: "blogPaging",
+    component: () => import("@/pages/blog/List.vue"),
+  },
 ]

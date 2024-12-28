@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.addTableDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="xl" :color="COLOR.HOME.MAIN">
       <v-card-title>{{ TEXT[home.lang].TITLE_TABLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
@@ -49,7 +49,7 @@
 import { ref } from "vue"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
-import { TableOption } from "../../../interface/editor"
+import { TableOption } from "../../../interface/editor_interface"
 import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
 import { COLOR } from "../../../../tsboard.config"
 

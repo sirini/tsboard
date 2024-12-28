@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             :loading="signup.loading"
           >
             <v-card-title
@@ -30,6 +30,7 @@
                   append-inner-icon="mdi-check-circle-outline"
                   @click:append-inner="signup.checkEmail"
                   @blur="signup.checkEmail"
+                  rounded="pill"
                 >
                 </v-text-field>
               </v-list-item>
@@ -44,6 +45,7 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -57,6 +59,7 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -69,10 +72,11 @@
                   append-inner-icon="mdi-check-circle-outline"
                   @click:append-inner="signup.checkName"
                   :rules="auth.nameRule"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-6" variant="tonal" :color="COLOR.HOME.HEADER">
+              <v-card class="mt-2 mb-6" variant="tonal" :color="COLOR.HOME.MAIN">
                 <v-card-text class="text-medium-emphasis text-caption">
                   {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
@@ -81,11 +85,11 @@
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')" rounded="pill">{{
                 TEXT[home.lang].LOGIN
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="signup.submit">{{
+              <v-btn append-icon="mdi-chevron-right" @click="signup.submit" rounded="pill">{{
                 TEXT[home.lang].SUBMIT
               }}</v-btn>
             </v-card-actions>
@@ -114,7 +118,7 @@ const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -122,7 +126,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

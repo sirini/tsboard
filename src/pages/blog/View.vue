@@ -1,11 +1,11 @@
 <template>
-  <v-app :theme="COLOR.BLOG.THEME">
+  <v-app :theme="COLOR.BLOG.THEME" :style="bgColor">
     <blog-header :name="view.config.name" :info="view.config.info" :id="view.id"></blog-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto pa-3" :max-width="view.config.width">
+          <v-card class="mx-auto pa-3" :max-width="view.config.width" rounded="xl">
             <v-card-title class="title"
               ><h1>{{ util.unescape(view.post.title) }}</h1></v-card-title
             >
@@ -40,26 +40,25 @@
 
             <board-view-attachments v-if="showDownloadList"></board-view-attachments>
 
-            <v-carousel
-              v-if="view.images.length > 0"
-              :continuous="false"
-              :show-arrows="view.images.length > 1"
-              delimiter-icon="mdi-square-small"
-              hide-delimiter-background
-              hide-delimiters
-            >
-              <v-carousel-item
-                v-for="(image, i) in view.images"
-                :key="i"
-                :src="TSBOARD.PREFIX + image.thumbnail.large"
-                cover
-                class="caro"
+            <v-card v-if="view.images.length > 0" rounded="xl">
+              <v-carousel
+                :continuous="false"
+                :show-arrows="view.images.length > 1"
+                delimiter-icon="mdi-square-small"
+                hide-delimiter-background
+                hide-delimiters
               >
-                <div class="desc">{{ image.description }}</div>
-              </v-carousel-item>
-            </v-carousel>
+                <v-carousel-item
+                  v-for="(image, i) in view.images"
+                  :key="i"
+                  cover
+                  :src="TSBOARD.PREFIX + image.thumbnail.large"
+                >
+                </v-carousel-item>
+              </v-carousel>
+            </v-card>
 
-            <v-divider></v-divider>
+            <v-divider v-else></v-divider>
 
             <div class="tsboard">
               <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
@@ -71,7 +70,7 @@
               {{ util.unescape(view.post.writer.signature) }}
             </div>
 
-            <board-view-buttons bg-color="#121212" board-type="blog"></board-view-buttons>
+            <board-view-buttons></board-view-buttons>
 
             <board-view-comment-write
               v-if="view.post.uid > 0"
@@ -118,6 +117,7 @@ const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
 const showDownloadList = ref<boolean>(false)
+const bgColor = `background-color: ${COLOR.BLOG.BACKGROUND}`
 
 watch(
   () => route.params.no,
@@ -138,15 +138,5 @@ onMounted(() => view.prepareViewPost())
 }
 .signature {
   color: #686868;
-}
-.caro {
-  position: relative;
-}
-.desc {
-  padding: 15px;
-  font-size: 0.9em;
-  position: absolute;
-  bottom: 0px;
-  backdrop-filter: blur(5px);
 }
 </style>

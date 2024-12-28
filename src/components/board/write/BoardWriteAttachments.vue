@@ -2,7 +2,6 @@
   <v-list-item class="pa-0 pl-10">
     <v-chip
       size="small"
-      label
       color="warning"
       prepend-icon="mdi-file-remove-outline"
       class="mt-1 mr-1 mb-1"

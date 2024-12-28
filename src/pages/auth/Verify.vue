@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title class="signup_title">
               {{ TEXT[home.lang].TITLE }}
@@ -34,6 +34,7 @@
                 v-if="auth.user.id.length > 0"
                 :disabled="signup.verificationCode.length > 5"
                 @click="retrySendMail"
+                rounded="pill"
                 >{{ TEXT[home.lang].RETRY }}</v-btn
               >
               <v-spacer></v-spacer>
@@ -41,6 +42,7 @@
                 append-icon="mdi-chevron-right"
                 :disabled="signup.verificationCode.length < 6"
                 @click="signup.verify(parseInt(route.params.target as string))"
+                rounded="pill"
                 >{{ TEXT[home.lang].CONFIRM }}</v-btn
               >
             </v-card-actions>
@@ -69,7 +71,7 @@ const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 // 메일 재발송하기
 function retrySendMail(): void {
@@ -83,7 +85,7 @@ function retrySendMail(): void {
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

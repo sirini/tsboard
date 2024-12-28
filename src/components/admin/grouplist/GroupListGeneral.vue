@@ -9,6 +9,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-plus-circle-outline"
               @keyup="list.updateExistGroupIds"
               @click:append-inner="list.createNewGroup"
@@ -39,7 +40,7 @@
         <template v-slot:prepend>
           <v-chip
             variant="outlined"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.ADMIN.MAIN"
             prepend-icon="mdi-identifier"
             @click="list.openChangeGroupIdDialog(group.uid, group.id)"
             >{{ group.id }}
@@ -51,7 +52,7 @@
 
         <v-chip
           variant="tonal"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.ADMIN.MAIN"
           class="ml-2"
           :prepend-avatar="TSBOARD.PREFIX + (group.manager.profile || '/no-profile.svg')"
         >
@@ -87,7 +88,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"

@@ -6,9 +6,9 @@
         <v-container class="wrap">
           <v-card
             class="mx-auto"
-            rounded="lg"
+            rounded="xl"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title>
               {{ TEXT[home.lang].TITLE }}
@@ -21,7 +21,7 @@
               <v-list-item class="pa-0 text-center">
                 <v-chip
                   size="x-large"
-                  :color="COLOR.HOME.HEADER"
+                  :color="COLOR.HOME.MAIN"
                   class="mt-9 mb-9"
                   :prepend-avatar="TSBOARD.PREFIX + (auth.user.profile || '/no-profile.svg')"
                 >
@@ -44,6 +44,7 @@
                   :label="TEXT[home.lang].FILL_NAME"
                   append-inner-icon="mdi-check-circle-outline"
                   @click:append-inner="signup.checkName"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
 
@@ -56,6 +57,7 @@
                   accept="image/*"
                   :label="TEXT[home.lang].CHOOSE_PROFILE"
                   @change="auth.selectProfileImage"
+                  rounded="pill"
                 ></v-file-input>
               </v-list-item>
 
@@ -68,6 +70,7 @@
                   counter
                   rows="2"
                   auto-grow
+                  rounded="xl"
                 ></v-textarea>
               </v-list-item>
 
@@ -93,6 +96,7 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
 
@@ -107,17 +111,18 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
             </v-list>
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-chevron-left" @click="util.back">{{
+              <v-btn prepend-icon="mdi-chevron-left" @click="util.back" rounded="pill">{{
                 TEXT[home.lang].BACK
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="auth.updateMyInfo">{{
+              <v-btn append-icon="mdi-chevron-right" @click="auth.updateMyInfo" rounded="pill">{{
                 TEXT[home.lang].SAVE
               }}</v-btn>
             </v-card-actions>
@@ -145,7 +150,7 @@ const auth = useAuthStore()
 const signup = useSignupStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 const visible = ref<boolean>(false)
 </script>
@@ -156,7 +161,7 @@ const visible = ref<boolean>(false)
   background-color: #eceff1;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

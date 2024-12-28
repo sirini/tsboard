@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title
               >{{ TEXT[home.lang].TITLE }}
@@ -27,17 +27,17 @@
             <v-divider></v-divider>
             <v-card-actions v-if="auth.user.uid > 0">
               <v-spacer></v-spacer>
-              <v-btn @click="auth.logout" append-icon="mdi-chevron-right">{{
+              <v-btn @click="auth.logout" append-icon="mdi-chevron-right" rounded="pill">{{
                 TEXT[home.lang].LOGOUT
               }}</v-btn>
             </v-card-actions>
 
             <v-card-actions v-else>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')" rounded="pill">{{
                 TEXT[home.lang].LOGIN
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="util.go('home')">{{
+              <v-btn append-icon="mdi-chevron-right" @click="util.go('home')" rounded="pill">{{
                 TEXT[home.lang].HOME
               }}</v-btn>
             </v-card-actions>
@@ -61,7 +61,7 @@ import { COLOR } from "../../../tsboard.config"
 const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -69,7 +69,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

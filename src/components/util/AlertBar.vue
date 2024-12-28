@@ -4,7 +4,7 @@
     :type="util.alertType"
     :text="util.alertText"
     variant="tonal"
-    rounded="0"
+    rounded="xl"
     closable
     @click.close="util.alertbar = false"
   ></v-alert>

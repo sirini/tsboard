@@ -5,7 +5,13 @@
       <v-divider></v-divider>
       <v-list-item class="mt-3 mb-3">
         <template v-slot:prepend>
-          <v-btn-toggle v-model="latest.option" mandatory class="mt-1">
+          <v-btn-toggle
+            v-model="latest.option"
+            mandatory
+            class="mt-1"
+            rounded="pill"
+            :color="COLOR.ADMIN.MAIN"
+          >
             <v-btn value="content">내용</v-btn>
           </v-btn-toggle></template
         >
@@ -17,6 +23,7 @@
           class="ml-5 mt-1 mr-1"
           prepend-inner-icon="mdi-restore"
           append-inner-icon="mdi-magnify"
+          rounded="pill"
           @keyup="latest.updateLatestComments"
           @click:prepend-inner="latest.resetKeyword"
           @click:append-inner="latest.updateLatestComments"
@@ -31,7 +38,8 @@
             v-model="latest.bunch"
             variant="outlined"
             hide-details
-            class="mt-1"
+            class="mt-1 ml-2"
+            rounded="pill"
             :items="[5, 10, 15, 20, 25, 30, 40, 50, 100]"
           ></v-select>
         </template>
@@ -93,12 +101,12 @@
         <template v-slot:append>
           <v-chip
             size="small"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             variant="text"
             prepend-icon="mdi-heart-outline"
             >{{ comment.like }}</v-chip
           >
-          <v-chip size="small" :color="COLOR.HOME.HEADER" variant="text">{{
+          <v-chip size="small" :color="COLOR.HOME.MAIN" variant="text">{{
             util.date(comment.date)
           }}</v-chip>
         </template>
@@ -128,6 +136,7 @@ import SendReportDialog from "../../user/SendReportDialog.vue"
 import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import UserNametag from "../../user/UserNametag.vue"
 import Paging from "../common/AdminBottomPaging.vue"
+import { COLOR } from "../../../../tsboard.config"
 
 const latest = useAdminLatestCommentStore()
 const util = useUtilStore()

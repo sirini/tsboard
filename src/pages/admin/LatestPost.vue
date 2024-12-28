@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>최신 글 톺아보기</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
@@ -31,7 +31,7 @@ import AdminFooter from "../../components/admin/common/AdminFooter.vue"
 import LatestPostGeneral from "../../components/admin/latest/LatestPostGeneral.vue"
 
 const admin = useAdminStore()
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("최신 글", `${TSBOARD.PREFIX}/admin/latest/post`)

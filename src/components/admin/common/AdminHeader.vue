@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat rounded="0" :color="home.color.admin.header" class="appbar">
+  <v-app-bar flat rounded="0" :color="COLOR.ADMIN.TOOLBAR">
     <v-card class="mx-auto" elevation="0" rounded="0" :width="admin.width">
-      <v-toolbar :color="home.color.admin.header">
+      <v-toolbar :color="COLOR.ADMIN.TOOLBAR">
         <v-btn @click="util.go('admin')" prepend-icon="mdi-cog-outline" rounded="xl"
           >Admin
           <v-tooltip activator="parent">클릭하시면 관리화면 첫 페이지로 이동합니다</v-tooltip>
@@ -28,15 +28,9 @@
 import { useUtilStore } from "../../../store/util"
 import { useAdminStore } from "../../../store/admin/common"
 import { useHomeStore } from "../../../store/home"
+import { COLOR } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const admin = useAdminStore()
 const home = useHomeStore()
 </script>
-
-<style scoped>
-.appbar {
-  border-bottom: 1px #dddddd solid;
-  opacity: 0.8;
-}
-</style>

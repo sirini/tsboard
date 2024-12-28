@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="chat.dialog" persistent>
-    <v-card class="mx-auto" :width="home.dialogWidth" :color="COLOR.HOME.HEADER">
+    <v-card class="mx-auto" :width="home.dialogWidth" :color="COLOR.HOME.MAIN">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="note ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -35,7 +35,7 @@
                 :max-width="Math.floor(home.dialogWidth * 0.5)"
                 variant="tonal"
                 rounded="xl"
-                :color="COLOR.HOME.HEADER"
+                :color="COLOR.HOME.MAIN"
                 class="ml-3"
               >
                 <v-card-text>{{ util.unescape(msg.message) }}</v-card-text>

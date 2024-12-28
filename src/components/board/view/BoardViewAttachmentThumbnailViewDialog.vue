@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="view.previewDialog">
-    <v-card :color="COLOR.HOME.HEADER">
+    <v-card :color="COLOR.HOME.MAIN">
       <v-img :src="view.previewPath" cover></v-img>
       <v-btn icon variant="tonal" class="close" @click="view.closePreviewDialog">
         <v-icon>mdi-close</v-icon>

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.confirmWriteCancelDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.MAIN" rounded="xl">
       <v-card-title>{{ TEXT[home.lang].TITLE_CONFIRM }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
@@ -9,11 +9,11 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog">{{
+        <v-btn prepend-icon="mdi-pencil" @click="editor.closeWriteCancelDialog" rounded="pill">{{
           TEXT[home.lang].CANCEL_REMOVE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel">{{
+        <v-btn prepend-icon="mdi-trash-can" @click="confirmCancel" rounded="pill">{{
           TEXT[home.lang].CONFIRM_REMOVE
         }}</v-btn>
       </v-card-actions>

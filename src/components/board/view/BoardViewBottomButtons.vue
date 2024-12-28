@@ -4,6 +4,7 @@
     <v-btn
       prepend-icon="mdi-view-list"
       @click="util.go(util.routerName(type, BOARD_ACTION.LIST), view.id)"
+      rounded="pill"
       >{{ TEXT[home.lang].LIST }}</v-btn
     >
 
@@ -12,9 +13,10 @@
     <v-btn
       prepend-icon="mdi-pencil"
       variant="flat"
-      :color="COLOR.HOME.HEADER"
+      :color="COLOR.HOME.MAIN"
       @click="util.go(util.routerName(type, BOARD_ACTION.WRITE), view.id)"
       :disabled="auth.user.uid < 1"
+      rounded="pill"
       >{{ TEXT[home.lang].WRITE }}</v-btn
     >
   </v-card-actions>

@@ -1,8 +1,8 @@
 <template>
-  <v-btn icon class="write" size="x-large" :color="COLOR.HOME.HEADER">
+  <v-btn icon class="write" size="x-large" :color="COLOR.HOME.MAIN">
     <v-icon>mdi-pencil</v-icon>
     <v-menu activator="parent">
-      <v-list bg-:color="COLOR.HOME.HEADER" class="mb-3">
+      <v-list bg-:color="COLOR.HOME.MAIN" class="mb-3">
         <v-list-item
           prepend-icon="mdi-message-text"
           @click="util.go('boardWrite', QUICK_BUTTONS.WRITE)"

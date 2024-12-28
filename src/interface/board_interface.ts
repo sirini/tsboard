@@ -253,7 +253,7 @@ export type BoardWriterLatestComment = WriterLatestCommon & {
 
 // 글 작성자의 최근 글 타입 정의
 export type BoardWriterLatestPost = WriterLatestCommon & {
-  reply: number
+  comment: number
   title: string
 }
 

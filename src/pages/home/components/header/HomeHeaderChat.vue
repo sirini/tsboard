@@ -12,7 +12,7 @@
           @click="chat.openDialog(item.sender)"
         >
           <template v-slot:append>
-            <v-chip :color="COLOR.HOME.HEADER" class="ml-3" size="small">{{
+            <v-chip :color="COLOR.HOME.MAIN" class="ml-3" size="small">{{
               util.date(item.timestamp)
             }}</v-chip>
           </template>

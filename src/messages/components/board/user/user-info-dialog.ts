@@ -7,7 +7,7 @@
 export const TEXT = [
   /* LANG.KO */ {
     TITLE: "사용자 정보",
-    INFO: "사용자의 기본 정보를 확인합니다.",
+    INFO: "사용자의 기본 정보를 확인합니다",
     NAME: "이름",
     BLOCKED_USER: "차단된 사용자",
     ADMIN: "관리자",

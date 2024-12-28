@@ -9,6 +9,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               @keyup="permission.updateBoardManagerSuggestion"
               append-inner-icon="mdi-chevron-down"
             >
@@ -34,7 +35,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              :color="COLOR.HOME.HEADER"
+              :color="COLOR.ADMIN.MAIN"
               :prepend-avatar="
                 TSBOARD.PREFIX + (permission.board.admin.profile || '/no-profile.svg')
               "
@@ -96,7 +97,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { ADMIN_ACTION } from "../../../interface/admin_interface"
 import { useAdminBoardPermissionStore } from "../../../store/admin/board/permission"
 import { useAdminStore } from "../../../store/admin/common"

@@ -13,7 +13,7 @@
     <v-list-item-title class="pointer ml-2 mr-2" @click="util.go('boardView', list.id, post.uid)">
       <v-icon
         size="x-small"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         class="mr-2"
         v-if="post.status === STATUS.NOTICE"
         >mdi-bullhorn-variant-outline</v-icon
@@ -22,18 +22,18 @@
       <span v-if="post.status === STATUS.SECRET">
         <v-icon
           size="x-small"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           class="mr-2"
           v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
           >mdi-lock-open-outline</v-icon
         >
-        <v-icon size="small" :color="COLOR.HOME.HEADER" class="mr-2" v-else>mdi-lock</v-icon>
+        <v-icon size="small" :color="COLOR.HOME.MAIN" class="mr-2" v-else>mdi-lock</v-icon>
       </span>
 
       <v-chip
         v-if="list.config.useCategory && post.status === STATUS.NORMAL"
         size="x-small"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         class="mr-2"
         @click="list.loadPostsByCategory(post.category.uid)"
         >{{ post.category.name }}</v-chip
@@ -44,7 +44,7 @@
       <span v-if="home.isMobile === false">
         <v-chip
           size="x-small"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           class="ml-2"
           prepend-icon="mdi-chat-outline"
           variant="text"
@@ -64,7 +64,7 @@
         <v-chip
           size="x-small"
           prepend-icon="mdi-heart-outline"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           variant="text"
           v-else
           >{{ util.num(post.like) }}</v-chip
@@ -83,7 +83,7 @@
 
       <v-chip
         size="x-small"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         class="ml-2"
         prepend-icon="mdi-chat-outline"
         variant="text"
@@ -103,7 +103,7 @@
       <v-chip
         size="x-small"
         prepend-icon="mdi-heart-outline"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         variant="text"
         v-if="post.liked === false"
         >{{ util.num(post.like) }}</v-chip
@@ -112,7 +112,7 @@
       <v-chip
         size="x-small"
         prepend-icon="mdi-eye-outline"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         variant="text"
         >{{ util.num(post.hit) }}</v-chip
       >
@@ -130,7 +130,7 @@
       <span class="col no text-center" v-if="home.isMobile === false">{{
         util.num(post.hit)
       }}</span>
-      <v-divider vertical v-if="home.isMobile === false"></v-divider>
+
       <span class="col date text-center" v-if="home.isMobile === false">{{
         util.date(post.submitted)
       }}</span>
@@ -158,20 +158,20 @@ const auth = useAuthStore()
   background-color: #f9f9f9;
 }
 .list-item {
-  border-bottom: 1px #ddd solid;
+  border-bottom: 1px #efefef solid;
 
   .col {
-    color: #828282;
-    font-size: 0.85em;
+    color: #717171;
+    font-size: 0.8em;
   }
   .pointer {
     cursor: pointer;
   }
   .no {
-    width: 70px;
+    width: 60px;
   }
   .date {
-    width: 80px;
+    width: 70px;
   }
 }
 </style>

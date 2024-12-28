@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title class="login_title"
               >{{ TEXT[home.lang].TITLE }}
@@ -26,6 +26,7 @@
                   prepend-inner-icon="mdi-email-outline"
                   :label="TEXT[home.lang].FILL_EMAIL"
                   @keyup.enter="auth.login"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -39,10 +40,11 @@
                   variant="outlined"
                   @click:append-inner="visible = !visible"
                   @keyup.enter="auth.login"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
 
-              <v-card class="mt-2 mb-2" variant="tonal" :color="COLOR.HOME.HEADER">
+              <v-card class="mt-2 mb-2" variant="tonal" :color="COLOR.HOME.MAIN" rounded="xl">
                 <v-card-text class="text-medium-emphasis text-caption">
                   {{ TEXT[home.lang].DESCRIPTION }}
                 </v-card-text>
@@ -103,14 +105,17 @@
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-lock-question" @click="util.go('resetpassword')">{{
-                TEXT[home.lang].RESET_PASSWORD
-              }}</v-btn>
-              <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')">{{
+              <v-btn
+                prepend-icon="mdi-lock-question"
+                @click="util.go('resetpassword')"
+                rounded="pill"
+                >{{ TEXT[home.lang].RESET_PASSWORD }}</v-btn
+              >
+              <v-btn prepend-icon="mdi-account-plus" @click="util.go('signup')" rounded="pill">{{
                 TEXT[home.lang].SIGNUP
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn append-icon="mdi-chevron-right" @click="auth.login">{{
+              <v-btn append-icon="mdi-chevron-right" @click="auth.login" rounded="pill">{{
                 TEXT[home.lang].LOGIN
               }}</v-btn>
             </v-card-actions>
@@ -140,7 +145,7 @@ const auth = useAuthStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 // OAuth 로그인하기
 function oauthLogin(service: string): void {
@@ -160,7 +165,7 @@ onMounted(() => {
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

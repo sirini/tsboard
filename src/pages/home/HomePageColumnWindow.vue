@@ -1,7 +1,7 @@
 <template>
   <v-row class="mt-6" no-gutters>
     <v-col :cols="colsBoard">
-      <v-card class="ma-1">
+      <v-card class="ma-1" rounded="xl">
         <v-list class="pa-0">
           <v-list-item
             append-icon="mdi-chevron-right"
@@ -52,7 +52,7 @@
       </v-card>
     </v-col>
     <v-col :cols="colsBoard">
-      <v-card class="ma-1">
+      <v-card class="ma-1" rounded="xl">
         <v-list class="pa-0">
           <v-list-item
             append-icon="mdi-chevron-right"
@@ -106,7 +106,7 @@
 
   <v-row no-gutters class="mt-3">
     <v-col>
-      <v-card class="ma-1">
+      <v-card class="ma-1" rounded="xl">
         <v-list class="pa-0">
           <v-list-item
             append-icon="mdi-chevron-right"
@@ -122,21 +122,15 @@
 
           <v-divider></v-divider>
 
-          <v-list-item>
+          <v-list-item class="pt-3 pb-3">
             <v-row no-gutters>
               <v-col v-for="(post, index) in gallery.items" :key="index" :cols="colsPhoto">
                 <v-card
-                  class="mt-2 mb-2"
+                  class="ma-1"
                   @click="util.go(gallery.config.type, gallery.config.id, post.uid)"
-                  variant="text"
+                  rounded="xl"
                 >
-                  <v-img
-                    cover
-                    :src="TSBOARD.PREFIX + post.cover"
-                    aspect-ratio="1/1"
-                    height="200"
-                    class="ma-1"
-                  ></v-img>
+                  <v-img cover :src="TSBOARD.PREFIX + post.cover" height="200"></v-img>
                 </v-card>
               </v-col>
             </v-row>

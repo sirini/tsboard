@@ -5,8 +5,13 @@
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
-          <v-card class="mx-auto pa-3" :max-width="list.config.width" :loading="list.loading">
-            <board-header :name="list.config.name" :info="list.config.info"></board-header>
+          <board-header :config="list.config"></board-header>
+          <v-card
+            class="mx-auto pa-3 mt-5"
+            :max-width="list.config.width"
+            :loading="list.loading"
+            rounded="xl"
+          >
             <v-card-text class="pa-0">
               <v-list class="pa-0">
                 <v-list-item v-if="list.posts.length < 1" class="text-center pa-6">
@@ -50,20 +55,13 @@ import { COLOR } from "../../../tsboard.config"
 const route = useRoute()
 const list = useBoardListStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 onMounted(() => list.initFirstList())
 
 watch(
   () => route.params?.id,
   () => list.resetBoardList(),
-)
-
-watch(
-  () => route.params?.page,
-  (nowPage, prevPage) => {
-    list.watchChangingPage(parseInt(nowPage as string), parseInt(prevPage as string))
-  },
 )
 </script>
 

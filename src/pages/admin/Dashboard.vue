@@ -2,9 +2,8 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg mt-16" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>대시보드</v-card-title>
-        <v-divider></v-divider>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
@@ -39,16 +38,12 @@ import { COLOR } from "../../../tsboard.config"
 
 const admin = useAdminStore()
 const menu = ref<"normal" | "stat">("normal")
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 admin.clearBreadcrumbs()
 </script>
 
 <style scoped>
-.admin {
-  margin-top: 100px;
-}
-
 .main {
   min-height: 300px;
   background-color: white;

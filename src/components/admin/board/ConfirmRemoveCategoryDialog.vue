@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="general.confirmRemoveCategoryDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.ADMIN.MAIN">
       <v-card-title>카테고리를 삭제할까요?</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-3">
@@ -11,11 +11,11 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" rounded="xl" @click="close"
+        <v-btn prepend-icon="mdi-close" rounded="pill" @click="close"
           >아니요, 삭제하지 않겠습니다</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="remove">삭제할께요</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="remove" rounded="pill">삭제할께요</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -25,6 +25,7 @@
 import { useRoute } from "vue-router"
 import { useHomeStore } from "../../../store/home"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
+import { COLOR } from "../../../../tsboard.config"
 
 const route = useRoute()
 const home = useHomeStore()

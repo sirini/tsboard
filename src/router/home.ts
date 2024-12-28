@@ -19,8 +19,8 @@ export const homeRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/home/About.vue"),
   },
   {
-    path: `${TSBOARD.PREFIX}/license`,
-    name: "license",
+    path: `${TSBOARD.PREFIX}/copyright`,
+    name: "copyright",
     component: () => import("@/pages/home/License.vue"),
   },
   {

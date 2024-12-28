@@ -1,6 +1,6 @@
 <template>
-  <v-footer :color="home.color.admin.footer" class="mt-16 mb-8">
-    <v-card elevation="0" class="mx-auto" :color="home.color.admin.footer">
+  <v-footer :color="COLOR.ADMIN.FOOTER" class="mt-16 mb-8">
+    <v-card elevation="0" class="mx-auto" :color="COLOR.ADMIN.FOOTER">
       <v-card-actions>
         <v-btn class="mx-3 tsboard" rounded="xl" @click="util.open('https://tsboard.dev')">
           TSBOARD ({{ TSBOARD.VERSION }})
@@ -25,7 +25,7 @@
 import { useUtilStore } from "../../../store/util"
 import { useAdminStore } from "../../../store/admin/common"
 import { useHomeStore } from "../../../store/home"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 
 const util = useUtilStore()
 const admin = useAdminStore()

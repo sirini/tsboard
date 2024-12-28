@@ -4,11 +4,13 @@
       v-model="editor.category.name"
       variant="outlined"
       hide-details
+      class="pt-3"
       readonly
-      prepend-icon="mdi-filter"
+      prepend-inner-icon="mdi-filter"
       append-inner-icon="mdi-chevron-down"
       :placeholder="TEXT[home.lang].CHOOSE_CATEGORY"
       @click="isOpenMenu = !isOpenMenu"
+      rounded="pill"
     >
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
         <v-list>

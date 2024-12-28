@@ -154,7 +154,7 @@ export const useUtilStore = defineStore("util", () => {
     return result
   }
 
-  // HTML unescape HTML 처리 (<--> Bun.escapeHTML)
+  // HTML unescape HTML 처리
   function unescape(text: string): string {
     let result = text.replaceAll("&quot;", '"')
     result = result.replaceAll("&amp;", "&")
@@ -173,6 +173,11 @@ export const useUtilStore = defineStore("util", () => {
     } else {
       return big.toString()
     }
+  }
+
+  // 문자열에서 HTML 태그 제거하고 반환
+  function stripTags(html: string) {
+    return html.replace(/<[^>]*>/g, "")
   }
 
   return {
@@ -197,5 +202,6 @@ export const useUtilStore = defineStore("util", () => {
     date,
     unescape,
     num,
+    stripTags,
   }
 })

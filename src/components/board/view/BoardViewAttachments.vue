@@ -1,23 +1,21 @@
 <template>
-  <div v-if="view.files.length > 0">
-    <v-list
-      density="compact"
-      :bg-color="view.config.type === BOARD.BLOG ? COLOR.BLOG.BACKGROUND : ''"
-    >
-      <v-list-item
-        prepend-icon="mdi-download"
-        v-for="(file, index) in view.files"
-        :key="index"
-        @click="view.download(file.uid)"
-        >{{ file.name }} ({{ util.num(file.size) }}B)</v-list-item
+  <v-list density="compact" v-if="view.files.length > 0">
+    <v-list-item
+      prepend-icon="mdi-download"
+      v-for="(file, index) in view.files"
+      :key="index"
+      @click="view.download(file.uid)"
+      rounded="pill"
+      >{{ file.name }}
+
+      <template v-slot:append>
+        <v-chip variant="text" size="small">{{ util.num(file.size) }}B</v-chip></template
       >
-    </v-list>
-  </div>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script setup lang="ts">
-import { COLOR } from "../../../../tsboard.config"
-import { BOARD } from "../../../interface/board_interface"
 import { useBoardViewStore } from "../../../store/board/view"
 import { useUtilStore } from "../../../store/util"
 

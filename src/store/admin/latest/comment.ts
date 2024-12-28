@@ -7,12 +7,13 @@ import { useUtilStore } from "../../util"
 import { useAdminStore } from "../common"
 import axios from "axios"
 import { AdminLatestComment, AdminLatestCommentResult } from "../../../interface/admin_interface"
+import { SEARCH, Search } from "../../../interface/board_interface"
 
 export const useAdminLatestCommentStore = defineStore("adminLatestComment", () => {
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
-  const option = ref<"content">("content")
+  const option = ref<Search>(SEARCH.CONTENT as Search)
   const keyword = ref<string>("")
   const page = ref<number>(1)
   const pageLength = ref<number>(5)
@@ -43,6 +44,9 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     const result = response.data.result as AdminLatestCommentResult
     pageLength.value = Math.ceil(result.maxUid / bunch.value)
     comments.value = result.comments
+    comments.value.map((comment: AdminLatestComment) => {
+      comment.content = util.stripTags(comment.content)
+    })
     admin.success(COMMENT.LOADED_COMMENT)
   }
 
@@ -77,6 +81,9 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
     const result = response.data.result as AdminLatestCommentResult
     pageLength.value = Math.ceil(result.maxUid / bunch.value)
     comments.value = result.comments
+    comments.value.map((comment: AdminLatestComment) => {
+      comment.content = util.stripTags(comment.content)
+    })
   }
   const updateLatestComments = util.debounce(_updateLatestComments, 250)
 

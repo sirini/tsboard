@@ -8,7 +8,7 @@
           <v-card
             class="mx-auto mt-12 mb-12"
             :max-width="home.staticWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title>
               404 Not Found
@@ -50,7 +50,7 @@ import { COLOR } from "../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -58,7 +58,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

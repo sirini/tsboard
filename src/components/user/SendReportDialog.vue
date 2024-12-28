@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="report.dialog" persistent>
-    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.HEADER">
+    <v-card class="mx-auto" :max-width="home.dialogWidth" :color="COLOR.HOME.MAIN">
       <v-card-title>
         <span>{{ TEXT[home.lang].TITLE }}</span>
         <span class="report ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
@@ -23,7 +23,7 @@
         <v-list-item class="pa-0">
           <v-alert
             variant="tonal"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             icon="mdi-information"
             class="text-caption"
             :text="TEXT[home.lang].BLACKLIST_INFO"

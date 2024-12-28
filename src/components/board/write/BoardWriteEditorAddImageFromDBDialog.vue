@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="image.addImageFromDBDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="lg" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="xl" :color="COLOR.HOME.MAIN">
       <v-card-title
         >{{ TEXT[home.lang].TITLE_MANAGE_IMAGE }} ({{ image.totalImageCount }} ea)</v-card-title
       >

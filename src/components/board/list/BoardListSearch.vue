@@ -1,8 +1,14 @@
 <template>
-  <v-card max-width="500">
+  <v-card max-width="500" rounded="xl">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="list.option" size="small" group :color="COLOR.HOME.HEADER">
+        <v-btn-toggle
+          v-model="list.option"
+          size="small"
+          group
+          :color="COLOR.HOME.MAIN"
+          rounded="pill"
+        >
           <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].TITLE }}</v-btn>
           <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].WRITER }}</v-btn>
@@ -21,6 +27,8 @@
           @click:prepend-inner="list.resetSearchKeyword"
           @click:append-inner="list.enterSearchKeyword"
           @keydown.enter="list.enterSearchKeyword"
+          rounded="pill"
+          hide-details
         >
           <v-menu activator="parent">
             <v-list v-show="list.keywordHistories.length > 0">

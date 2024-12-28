@@ -14,13 +14,13 @@
       <v-card-actions>
         <v-btn
           prepend-icon="mdi-close"
-          rounded="xl"
+          rounded="pill"
           color="yellow"
           @click="general.closeRemoveBoardDialog"
           >아니요, 삭제하지 않겠습니다 (권장)</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="general.removeBoard">삭제</v-btn>
+        <v-btn prepend-icon="mdi-trash-can" rounded="pill" @click="general.removeBoard">삭제</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

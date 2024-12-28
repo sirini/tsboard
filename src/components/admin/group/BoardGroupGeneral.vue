@@ -9,6 +9,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               @keyup="general.updateGroupManagerSuggestion"
               append-inner-icon="mdi-chevron-down"
             >
@@ -34,7 +35,7 @@
           </v-col>
           <v-col class="mt-1">
             <v-chip
-              :color="COLOR.HOME.HEADER"
+              :color="COLOR.HOME.MAIN"
               :prepend-avatar="
                 TSBOARD.PREFIX + (general.group.manager.profile || '/no-profile.svg')
               "
@@ -57,6 +58,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-plus-circle-outline"
               @keyup="general.updateExistBoardIds"
               @click:append-inner="general.createNewBoard"
@@ -89,7 +91,7 @@
           <v-chip
             prepend-icon="mdi-identifier"
             variant="outlined"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             @click="util.go(board.type, board.id)"
           >
             {{ board.id }}
@@ -99,7 +101,7 @@
           </v-chip>
         </template>
 
-        <v-chip variant="tonal" :color="COLOR.HOME.HEADER" class="ml-2"
+        <v-chip variant="tonal" :color="COLOR.HOME.MAIN" class="ml-2"
           ><strong>{{ util.unescape(board.name) }}</strong>
           <v-divider vertical class="ml-2 mr-2"></v-divider>
           {{ util.unescape(board.info) }}
@@ -135,7 +137,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { TSBOARD } from "../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { useAdminStore } from "../../../store/admin/common"
 import { useAdminGroupGeneralStore } from "../../../store/admin/group/general"
 import { useHomeStore } from "../../../store/home"

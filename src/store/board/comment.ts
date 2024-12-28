@@ -315,7 +315,8 @@ export const useCommentStore = defineStore("comment", () => {
     loading.value = true
 
     const fd = new FormData()
-    fd.append("replyTargetUid", param.targetUid.toString())
+    fd.append("boardUid", param.boardUid.toString())
+    fd.append("targetUid", param.targetUid.toString())
     fd.append("postUid", param.boardUid.toString())
     fd.append("content", param.content)
 
@@ -361,7 +362,7 @@ export const useCommentStore = defineStore("comment", () => {
   // 기존 댓글 수정하기
   async function modifyComment(param: CommentTargetParameter): Promise<void> {
     const fd = new FormData()
-    fd.append("modifyTargetUid", param.targetUid.toString())
+    fd.append("targetUid", param.targetUid.toString())
     fd.append("boardUid", param.boardUid.toString())
     fd.append("postUid", param.postUid.toString())
     fd.append("content", param.content)

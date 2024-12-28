@@ -4,13 +4,14 @@
       v-model="editor.tag"
       :rules="editor.textRule"
       class="mt-2"
-      prepend-icon="mdi-tag-multiple"
+      prepend-inner-icon="mdi-tag-multiple"
       :label="TEXT[home.lang].ADD_TAG"
       @keyup="editor.updateTagSuggestion"
       @keyup.space="editor.addTag(editor.tag)"
       @keyup.,="editor.addTag(editor.tag)"
       @keyup.enter="editor.addTag(editor.tag)"
       variant="outlined"
+      rounded="pill"
     >
       <v-menu activator="parent">
         <v-list v-show="editor.tag.length > 2">
@@ -25,7 +26,7 @@
             >
 
             <template v-slot:append>
-              <v-chip :color="COLOR.HOME.HEADER">{{ util.num(tag.count) }}</v-chip>
+              <v-chip :color="COLOR.HOME.MAIN">{{ util.num(tag.count) }}</v-chip>
             </template>
           </v-list-item>
           <v-list-item v-show="editor.suggestionTags.length < 1 && editor.tag.length > 2">
@@ -38,7 +39,7 @@
       <v-chip
         v-for="(tag, index) in editor.tags"
         :key="index"
-        :color="COLOR.HOME.HEADER"
+        :color="COLOR.HOME.MAIN"
         @click="editor.removeTag(tag)"
         class="mt-1 ml-1"
         prepend-icon="mdi-tag-remove-outline"

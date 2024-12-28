@@ -14,6 +14,7 @@
       prepend-icon="mdi-list-box-outline"
       @click="gallery.list"
       v-if="home.isMobile === false"
+      rounded="pill"
       >{{ TEXT[home.lang].LIST }}</v-btn
     >
 
@@ -22,7 +23,8 @@
       @click="util.go('galleryWrite', gallery.id)"
       :disabled="auth.user.uid < 1"
       variant="flat"
-      :color="COLOR.HOME.HEADER"
+      :color="COLOR.HOME.MAIN"
+      rounded="pill"
       >{{ TEXT[home.lang].UPLOAD }}</v-btn
     >
   </v-card-actions>

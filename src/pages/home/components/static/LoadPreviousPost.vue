@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    class="box-static"
-    :color="COLOR.HOME.HEADER"
-    @click="home.loadLatestPosts"
-    variant="text"
-  >
+  <v-card class="box-static" :color="COLOR.HOME.MAIN" @click="home.loadLatestPosts" variant="text">
     <v-card-text class="text-center mt-12">
       <v-icon size="150">mdi-restore</v-icon>
     </v-card-text>

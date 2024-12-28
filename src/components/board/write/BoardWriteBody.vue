@@ -1,13 +1,18 @@
 <template>
   <v-container class="wrap">
-    <v-card class="mx-auto pa-3" :max-width="editor.config.width" :loading="editor.loading">
+    <board-header :config="editor.config"></board-header>
+
+    <v-card
+      class="mx-auto pa-3 mt-5"
+      :max-width="editor.config.width"
+      :loading="editor.loading"
+      rounded="xl"
+    >
       <v-form fast-fail @submit.prevent>
-        <board-header :name="editor.config.name" :info="editor.config.info"></board-header>
         <alert-bar></alert-bar>
 
         <v-checkbox
           v-model="editor.isNotice"
-          class="ml-8"
           :label="TEXT[home.lang].SET_NOTICE"
           hide-details
           v-if="editor.isAdmin === true"
@@ -15,25 +20,24 @@
 
         <v-checkbox
           v-model="editor.isSecret"
-          class="ml-8"
           :label="TEXT[home.lang].SET_SECRET"
           hide-details
         ></v-checkbox>
 
-        <board-write-select-category v-if="editor.config.useCategory"></board-write-select-category>
         <board-write-select-attachments></board-write-select-attachments>
-
         <board-write-attachments
           v-if="editor.postUid > 0 && editor.attachedFiles.length > 0"
         ></board-write-attachments>
+        <board-write-select-category v-if="editor.config.useCategory"></board-write-select-category>
 
         <v-text-field
           v-model="editor.title"
           :rules="editor.textRule"
           class="pt-3 pb-2"
-          prepend-icon="mdi-pencil-outline"
+          prepend-inner-icon="mdi-pencil-outline"
           variant="outlined"
           :label="TEXT[home.lang].FILL_TITLE"
+          rounded="pill"
         ></v-text-field>
 
         <board-write-editor
@@ -60,16 +64,17 @@
         <v-btn
           v-if="editor.postUid < 1"
           variant="flat"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           @click="editor.write"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
+          rounded="pill"
           >{{ TEXT[home.lang].SUBMIT }}</v-btn
         >
         <v-btn
           v-else
           variant="flat"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           @click="editor.modify"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"

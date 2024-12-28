@@ -8,6 +8,7 @@
         density="compact"
         hide-details
         readonly
+        rounded="pill"
         prepend-inner-icon="mdi-format-list-numbered"
         append-inner-icon="mdi-chevron-down"
       >

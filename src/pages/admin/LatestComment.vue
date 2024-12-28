@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title>최신 댓글 톺아보기</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
@@ -34,7 +34,7 @@ const admin = useAdminStore()
 
 admin.clearBreadcrumbs()
 admin.addBreadcrumbs("최신 댓글", `${TSBOARD.PREFIX}/admin/latest/comment`)
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 </script>
 
 <style scoped>

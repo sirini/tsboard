@@ -5,10 +5,10 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            rounded="lg"
+            rounded="xl"
             class="mx-auto"
             :max-width="home.dialogWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
           >
             <v-card-title class="change_password_title">
               {{ TEXT[home.lang].TITLE }}
@@ -29,6 +29,7 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
               <v-list-item class="pa-0">
@@ -42,19 +43,24 @@
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
                   @click:append-inner="visible = !visible"
+                  rounded="pill"
                 ></v-text-field>
               </v-list-item>
             </v-list>
 
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')">{{
+              <v-btn prepend-icon="mdi-login-variant" @click="util.go('login')" rounded="pill">{{
                 TEXT[home.lang].LOGIN
               }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" append-icon="mdi-chevron-right" @click="change">{{
-                TEXT[home.lang].CHANGE_PASSWORD
-              }}</v-btn>
+              <v-btn
+                color="primary"
+                append-icon="mdi-chevron-right"
+                @click="change"
+                rounded="pill"
+                >{{ TEXT[home.lang].CHANGE_PASSWORD }}</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-container>
@@ -83,7 +89,7 @@ const password = usePasswordStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const visible = ref<boolean>(false)
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 // 비밀번호 변경하기
 function change(): void {
@@ -97,7 +103,7 @@ function change(): void {
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -6,16 +6,25 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            class="mx-auto mt-12 mb-12"
+            class="mx-auto pa-5"
             :max-width="home.staticWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
+            variant="tonal"
+            rounded="pill"
           >
-            <v-card-title>TSBOARD 라이선스 안내</v-card-title>
-            <v-divider></v-divider>
+            <strong>TSBOARD LICENSE</strong>
+          </v-card>
+
+          <v-card
+            class="mx-auto mt-5 mb-12"
+            :max-width="home.staticWidth"
+            :color="COLOR.HOME.MAIN"
+            rounded="xl"
+          >
+            <v-card-title>MIT License</v-card-title>
             <v-list class="license pa-6">
-              <h1 class="mt-6">MIT License</h1>
               <p>&nbsp;</p>
-              <p>Copyright © 2024 <strong>TSBOARD.DEV</strong></p>
+              <p>Copyright © 2024 <strong>TSBOARD.DEV</strong> (sirini@gmail.com)</p>
               <p>&nbsp;</p>
               <p>
                 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -57,11 +66,19 @@
             </v-list>
 
             <v-divider></v-divider>
+
             <v-card-actions>
               <v-btn
                 prepend-icon="mdi-link-variant"
                 @click="util.open('https://github.com/sirini/tsboard')"
-                >Github</v-btn
+                rounded="pill"
+                >TSBOARD</v-btn
+              >
+              <v-btn
+                prepend-icon="mdi-link-variant"
+                @click="util.open('https://github.com/sirini/goapi')"
+                rounded="pill"
+                >GOAPI</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -82,7 +99,7 @@ import { COLOR } from "../../../tsboard.config"
 
 const util = useUtilStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -90,7 +107,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .license {
   font-size: 1.2em;

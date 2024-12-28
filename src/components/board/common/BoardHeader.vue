@@ -1,7 +1,15 @@
 <template>
-  <v-card-title class="list-title"
-    >{{ util.unescape(name) }}
-    <span class="info ml-3 pl-3" v-if="home.isMobile === false"> {{ util.unescape(info) }}</span>
+  <v-card
+    class="mx-auto pa-5"
+    :max-width="config.width"
+    :color="COLOR.HOME.MAIN"
+    variant="tonal"
+    rounded="pill"
+  >
+    <strong>{{ util.unescape(config.name) }}</strong>
+    <span class="info ml-3 pl-3" v-if="home.isMobile === false">
+      {{ util.unescape(config.info) }}</span
+    >
     <div class="login mr-3">
       <v-btn
         v-if="auth.user.uid < 1"
@@ -16,7 +24,6 @@
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
-        size="small"
         >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
@@ -24,11 +31,10 @@
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', list.id)"
-        size="small"
         >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>
-  </v-card-title>
+  </v-card>
 
   <v-snackbar v-model="util.snackbar" :timeout="util.snackbarTimeout">
     {{ util.snackbarText }}
@@ -39,33 +45,30 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/components/board/common/board-header"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
+import { BoardConfig } from "../../../interface/board_interface"
 
 const auth = useAuthStore()
 const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
 const props = defineProps<{
-  name: string
-  info: string
+  config: BoardConfig
 }>()
 </script>
 
 <style scoped>
-.list-title {
-  border-bottom: 1px #828282 solid;
-}
 .info {
   color: #828282;
-  font-size: 0.7em;
 }
 .login {
   position: absolute;
-  top: 20px;
+  top: 13px;
   right: 0px;
 }
 </style>

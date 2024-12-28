@@ -31,7 +31,7 @@
                     icon
                     size="small"
                     variant="text"
-                    @click="util.open(`${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/rss/${list.id}`)"
+                    @click="util.open(`${TSBOARD.SITE.URL}${TSBOARD.PREFIX}/goapi/rss/${list.id}`)"
                     ><v-icon>mdi-rss</v-icon>
                     <v-tooltip activator="parent">{{ TEXT[home.lang].RSS }}</v-tooltip>
                   </v-btn>

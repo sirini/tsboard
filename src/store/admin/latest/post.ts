@@ -7,13 +7,14 @@ import { useUtilStore } from "../../util"
 import { useAdminStore } from "../common"
 import axios from "axios"
 import { AdminLatestPost, AdminLatestPostResult } from "../../../interface/admin_interface"
+import { SEARCH, Search } from "../../../interface/board_interface"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
   const admin = useAdminStore()
   const auth = useAuthStore()
   const util = useUtilStore()
   const confirmRemoveSelectedDialog = ref<boolean>(false)
-  const option = ref<"title" | "content">("title")
+  const option = ref<Search>(SEARCH.TITLE as Search)
   const keyword = ref<string>("")
   const page = ref<number>(1)
   const pageLength = ref<number>(5)

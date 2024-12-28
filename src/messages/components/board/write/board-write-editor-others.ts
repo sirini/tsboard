@@ -26,7 +26,7 @@ export const TEXT = [
     TITLE_MANAGE_IMAGE: "기존 이미지를 본문에 추가 혹은 관리",
     CHECK_BEFORE_REMOVE_IMAGE: `정말로 삭제하시겠습니까? 이전에 사용한 적이 없거나 앞으로도 사용할 계획이 없을 경우에만 삭제해 주세요! 
 만약 이전 게시글들에 이미 사용하셨다면, 해당 게시글들은 더 이상 이미지가 나타나지 않게 됩니다. 계속 진행하시겠습니까?`,
-    CANCEL_REMOVE: "아니요, 삭제하지 않겠습니다",
+    CANCEL_REMOVE: "아니요",
     CONFIRM_REMOVE: "삭제하기",
     EMPTY_IMAGE_LIST: "이 게시판에 아직 업로드하신 이미지가 없습니다.",
     LOAD_PREV_IMAGE: "이전 이미지들 가져오기",
@@ -63,7 +63,7 @@ export const TEXT = [
     CHECK_BEFORE_REMOVE_IMAGE: `Are you sure you want to delete? 
 Please delete only if you have never used this image before or have no plans to use it in the future! 
 If this image has been used in previous posts, those posts will no longer display the image. Do you wish to proceed?`,
-    CANCEL_REMOVE: "No, I will not delete",
+    CANCEL_REMOVE: "No",
     CONFIRM_REMOVE: "Delete",
     EMPTY_IMAGE_LIST: "There are no images uploaded to this board yet.",
     LOAD_PREV_IMAGE: "Load previous images",

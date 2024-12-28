@@ -6,9 +6,9 @@
 
 export const TEXT = [
   /* LANG.KO */ {
-    PHOTO_TITLE: "사진 제목",
-    CONTENT: "작품 설명",
-    PHOTOGRAPHER: "작가 이름",
+    PHOTO_TITLE: "제목",
+    CONTENT: "설명",
+    PHOTOGRAPHER: "작가명",
     TAG: "태그",
     FILL_SEARCH: "검색할 내용을 입력하세요.",
     SEARCH: "검색",

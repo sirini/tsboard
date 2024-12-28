@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar rounded="0" flat :color="COLOR.HOME.HEADER" class="appbar">
-    <v-toolbar :color="COLOR.HOME.HEADER">
+  <v-app-bar rounded="0" flat :color="COLOR.HOME.TOOLBAR">
+    <v-toolbar :color="COLOR.HOME.TOOLBAR">
       <v-app-bar-nav-icon icon="mdi-menu" @click="home.drawer = !home.drawer"></v-app-bar-nav-icon>
       <v-app-bar-title
         @click="home.coming"
@@ -41,9 +41,6 @@ const home = useHomeStore()
 </script>
 
 <style scoped type="scss">
-.appbar {
-  border-bottom: #cfd8dc 1px solid;
-}
 .toolbar {
   backdrop-filter: blur(5px);
 }

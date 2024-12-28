@@ -1,8 +1,8 @@
 <template>
-  <v-card max-width="500">
+  <v-card :max-width="home.dialogWidth" rounded="xl">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="gallery.option" size="small" group>
+        <v-btn-toggle v-model="gallery.option" size="small" group rounded="pill">
           <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].PHOTO_TITLE }}</v-btn>
           <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].PHOTOGRAPHER }}</v-btn>
@@ -21,6 +21,8 @@
           @click:prepend-inner="gallery.resetSearchKeyword"
           @click:append-inner="gallery.enterSearchKeyword"
           @keydown.enter="gallery.enterSearchKeyword"
+          hide-details
+          rounded="pill"
         >
           <v-menu activator="parent">
             <v-list v-show="gallery.keywordHistories.length > 0">

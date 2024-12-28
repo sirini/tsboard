@@ -6,12 +6,22 @@
       <v-main>
         <v-container class="wrap">
           <v-card
-            class="mx-auto mt-12 mb-12"
+            class="mx-auto pa-5"
             :max-width="home.staticWidth"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
+            variant="tonal"
+            rounded="pill"
+          >
+            <strong>POLICY</strong>
+          </v-card>
+
+          <v-card
+            class="mx-auto mt-5 mb-12"
+            :max-width="home.staticWidth"
+            :color="COLOR.HOME.MAIN"
+            rounded="xl"
           >
             <v-card-title>개인정보 처리방침</v-card-title>
-            <v-divider></v-divider>
 
             <v-list class="policy pa-6">
               <p>
@@ -130,7 +140,7 @@ import HomeFooter from "../../pages/home/HomeFooter.vue"
 import SideDrawer from "../../pages/home/SideDrawer.vue"
 
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
@@ -138,7 +148,7 @@ const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
   margin-top: 64px;
 }
 .wrap {
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 130px);
 }
 .policy {
   font-size: 1em;

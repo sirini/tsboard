@@ -10,6 +10,7 @@
               density="compact"
               readonly
               hide-details
+              rounded="pill"
               prepend-inner-icon="mdi-identifier"
               append-icon="mdi-link-variant"
               @click:append="util.go(general.board.type, general.board.id)"
@@ -30,6 +31,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-chevron-down"
             >
               <v-menu activator="parent" open-on-hover>
@@ -63,6 +65,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-content-save"
               @click:append-inner="general.updateName"
             >
@@ -87,6 +90,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-content-save"
               @click:append-inner="general.updateInfo"
             >
@@ -104,12 +108,16 @@
       <v-list-item class="mt-2 mb-2">
         <v-row>
           <v-col cols="4">
-            <v-btn-toggle v-model="general.board.type" mandatory>
+            <v-btn-toggle
+              v-model="general.board.type"
+              mandatory
+              :color="COLOR.ADMIN.MAIN"
+              rounded="pill"
+            >
               <v-btn
                 :value="BOARD.DEFAULT"
                 prepend-icon="mdi-table-large"
                 @click="general.changeType"
-                color="primary"
                 >게시판
                 <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
               </v-btn>
@@ -117,18 +125,13 @@
                 :value="BOARD.GALLERY"
                 prepend-icon="mdi-view-gallery-outline"
                 @click="general.changeType"
-                color="primary"
                 >갤러리
                 <v-tooltip activator="parent"
                   >업로드 된 사진들이 미리 보여지고, 별도의 이미지 뷰어를 사용하는 갤러리 형식으로
                   사용합니다. (글보기가 이미지 뷰어로 대체)</v-tooltip
                 >
               </v-btn>
-              <v-btn
-                :value="BOARD.BLOG"
-                prepend-icon="mdi-post-outline"
-                @click="general.changeType"
-                color="primary"
+              <v-btn :value="BOARD.BLOG" prepend-icon="mdi-post-outline" @click="general.changeType"
                 >블로그
                 <v-tooltip activator="parent">
                   게시글 목록이 블로그 형식으로 변형되어 보여집니다. (블로그 형식은 게시판 관리자만
@@ -158,6 +161,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-content-save"
               @click:append-inner="general.updateRows"
             >
@@ -182,6 +186,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              rounded="pill"
               append-inner-icon="mdi-content-save"
               @click:append-inner="general.updateWidth"
             >
@@ -203,6 +208,7 @@
               v-model="general.boardAddCategory"
               variant="outlined"
               density="compact"
+              rounded="pill"
               append-inner-icon="mdi-tag-plus"
               @click:append-inner="general.addCategory"
               hide-details
@@ -260,6 +266,7 @@ import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import { useAdminBoardGeneralStore } from "../../../store/admin/board/general"
 import { BOARD, Board } from "../../../interface/board_interface"
+import { COLOR } from "../../../../tsboard.config"
 
 const admin = useAdminStore()
 const util = useUtilStore()

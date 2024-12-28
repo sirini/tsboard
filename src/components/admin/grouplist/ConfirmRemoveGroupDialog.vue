@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="list.confirmRemoveGroupDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.HEADER">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.ADMIN.MAIN">
       <v-card-title>정말로 삭제하시겠습니까?</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="text mb-3">
@@ -14,11 +14,13 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" rounded="xl" @click="list.closeRemoveGroupDialog"
+        <v-btn prepend-icon="mdi-close" rounded="pill" @click="list.closeRemoveGroupDialog"
           >아니요, 삭제하지 않겠습니다 (권장)</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="list.removeGroup">삭제할께요 </v-btn>
+        <v-btn prepend-icon="mdi-trash-can" @click="list.removeGroup" rounded="pill"
+          >삭제할께요
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -27,6 +29,7 @@
 <script setup lang="ts">
 import { useHomeStore } from "../../../store/home"
 import { useAdminGroupListStore } from "../../../store/admin/group/list"
+import { COLOR } from "../../../../tsboard.config"
 
 const home = useHomeStore()
 const list = useAdminGroupListStore()

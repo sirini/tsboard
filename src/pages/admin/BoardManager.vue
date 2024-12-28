@@ -2,11 +2,10 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="admin.color" :max-width="admin.width">
+      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
         >
-        <v-divider></v-divider>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">
             <v-list>
@@ -67,7 +66,7 @@ const route = useRoute()
 const admin = useAdminStore()
 const general = useAdminBoardGeneralStore()
 const menu = ref<"normal" | "permission" | "point">("normal")
-const bgColor = `background-color: #${COLOR.ADMIN.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.ADMIN.BACKGROUND}`
 
 // 상단 메뉴 준비하기
 function prepareBreadcrumbs(): void {

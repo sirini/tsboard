@@ -109,7 +109,6 @@ export const useGalleryStore = defineStore("gallery", () => {
       sinceUid.value = 0
       return
     }
-
     await loadPhotoList()
   }
 

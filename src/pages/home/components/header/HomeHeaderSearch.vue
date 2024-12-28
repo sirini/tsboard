@@ -3,9 +3,9 @@
     elevation="0"
     rounded="0"
     :width="isSmallScreen ? home.width : 500"
-    :color="COLOR.HOME.HEADER"
+    :color="COLOR.HOME.MAIN"
   >
-    <v-list :bg-color="COLOR.HOME.HEADER">
+    <v-list :bg-color="COLOR.HOME.MAIN">
       <v-list-item>
         <template v-slot:prepend>
           <v-text-field
@@ -65,7 +65,7 @@
           hide-details
           variant="outlined"
           density="compact"
-          :color="COLOR.HOME.HEADER"
+          :color="COLOR.HOME.MAIN"
           :placeholder="TEXT[home.lang].PLACEHOLDER"
           prepend-inner-icon="mdi-restore"
           @click:prepend-inner="home.resetSearchKeyword"

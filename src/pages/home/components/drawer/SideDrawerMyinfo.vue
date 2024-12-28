@@ -13,7 +13,7 @@
     </v-list-item>
 
     <v-list-item class="text-center mt-2">
-      <v-chip :color="COLOR.HOME.HEADER" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
+      <v-chip :color="COLOR.HOME.MAIN" prepend-icon="mdi-alpha-l" append-icon="mdi-alpha-p">
         {{ auth.user.level }}
         <v-divider vertical class="ml-2 mr-2"></v-divider>
         {{ auth.user.point }}

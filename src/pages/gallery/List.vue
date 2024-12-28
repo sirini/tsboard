@@ -1,12 +1,13 @@
 <template>
-  <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
+  <v-app :style="bgColor" :theme="COLOR.GALLERY.THEME">
     <home-header></home-header>
     <v-layout class="layout">
       <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap" id="galleryContainer">
-          <v-card class="mx-auto pa-3" :max-width="gallery.config.width">
-            <gallery-header></gallery-header>
+          <gallery-header :config="gallery.config"></gallery-header>
+
+          <v-card class="mx-auto pa-3 mt-5" :max-width="gallery.config.width" rounded="xl">
             <v-row no-gutters>
               <v-col
                 v-for="(image, index) in gallery.images"
@@ -31,11 +32,12 @@
             <v-btn
               block
               elevation="0"
-              variant="text"
+              variant="tonal"
               class="mt-4"
-              :color="COLOR.HOME.HEADER"
+              :color="COLOR.HOME.MAIN"
               @click="gallery.loadOldPhotos"
               prepend-icon="mdi-download"
+              rounded="pill"
             >
               {{ TEXT[home.lang].LOAD_PREV_PHOTOS }} [{{ gallery.page }}/{{ gallery.pageLength }}]
             </v-btn>
@@ -77,7 +79,7 @@ const route = useRoute()
 const gallery = useGalleryStore()
 const viewer = useViewerStore()
 const home = useHomeStore()
-const bgColor = `background-color: #${COLOR.HOME.BACKGROUND}`
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 // 뷰어 띄우기
 function openViewerDialog(): void {

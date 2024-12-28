@@ -5,9 +5,15 @@
       <v-divider></v-divider>
       <v-list-item class="mt-3 mb-3">
         <template v-slot:prepend>
-          <v-btn-toggle v-model="latest.option" mandatory class="mt-1">
-            <v-btn value="title">제목</v-btn>
-            <v-btn value="content">내용</v-btn>
+          <v-btn-toggle
+            v-model="latest.option"
+            mandatory
+            class="mt-1"
+            rounded="pill"
+            :color="COLOR.ADMIN.MAIN"
+          >
+            <v-btn :value="SEARCH.TITLE">제목</v-btn>
+            <v-btn :value="SEARCH.CONTENT">내용</v-btn>
           </v-btn-toggle>
         </template>
 
@@ -18,6 +24,7 @@
           class="ml-5 mt-1 mr-1"
           prepend-inner-icon="mdi-restore"
           append-inner-icon="mdi-magnify"
+          rounded="pill"
           @keyup="latest.updateLatestPosts"
           @click:prepend-inner="latest.resetKeyword"
           @click:append-inner="latest.updateLatestPosts"
@@ -32,8 +39,9 @@
             v-model="latest.bunch"
             variant="outlined"
             hide-details
-            class="mt-1"
+            class="mt-1 ml-2"
             :items="[5, 10, 15, 20, 25, 30, 40, 50, 100]"
+            rounded="pill"
           ></v-select>
         </template>
       </v-list-item>
@@ -90,13 +98,13 @@
         <template v-slot:append>
           <v-chip
             size="small"
-            :color="COLOR.HOME.HEADER"
+            :color="COLOR.HOME.MAIN"
             prepend-icon="mdi-comment-outline"
             class="ml-2 mr-1"
             variant="text"
             >{{ post.comment }}</v-chip
           >
-          <v-chip size="small" :color="COLOR.HOME.HEADER" variant="text">{{
+          <v-chip size="small" :color="COLOR.HOME.MAIN" variant="text">{{
             util.date(post.date)
           }}</v-chip>
         </template>
@@ -128,6 +136,8 @@ import SendReportDialog from "../../user/SendReportDialog.vue"
 import UserInfoDialog from "../../user/UserInfoDialog.vue"
 import UserNametag from "../../user/UserNametag.vue"
 import Paging from "../common/AdminBottomPaging.vue"
+import { COLOR } from "../../../../tsboard.config"
+import { SEARCH } from "../../../interface/board_interface"
 
 const latest = useAdminLatestPostStore()
 const util = useUtilStore()
