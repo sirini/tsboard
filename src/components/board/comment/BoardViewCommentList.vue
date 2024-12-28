@@ -121,7 +121,7 @@ watch(
 
 // 댓글의 툴바 색상을 상황에 맞게 변경하기
 function setToolbarColor(writerUid: number, commenterUid: number): string {
-  let color = COLOR.HOME.TOOLBAR
+  let color = COLOR.COMMENT.TOOLBAR.HOME
   if (view.config.type === BOARD.BLOG) {
     color = COLOR.COMMENT.TOOLBAR.BLOG
     if (writerUid === commenterUid) {
@@ -135,7 +135,7 @@ function setToolbarColor(writerUid: number, commenterUid: number): string {
 
 // 댓글 작성자의 네임택 색상을 상황에 맞게 변경하기
 function setNametagColor(writerUid: number, commenterUid: number): string {
-  let color = COLOR.HOME.TOOLBAR
+  let color = COLOR.COMMENT.NAMETAG.HOME
   if (view.config.type === BOARD.BLOG) {
     color = COLOR.COMMENT.NAMETAG.BLOG
     if (writerUid === commenterUid) {

@@ -73,11 +73,13 @@ export const COLOR = {
   COMMENT: {
     TOOLBAR: {
       BLOG: "#1c1c1c",
+      HOME: "#f1f1f1",
       BOARD_WRITER: "#FFF3E0",
       BLOG_WRITER: "#121212",
     },
     NAMETAG: {
       BLOG: "#9E9E9E",
+      HOME: "#616161",
       BOARD_WRITER: "#EF6C00",
       BLOG_WRITER: "#525252",
     },

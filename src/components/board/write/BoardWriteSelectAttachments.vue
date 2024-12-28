@@ -16,7 +16,6 @@
         <template v-for="fileName in fileNames" :key="fileName">
           <v-chip
             size="small"
-            label
             :color="COLOR.HOME.MAIN"
             prepend-icon="mdi-upload"
             class="mt-1 mr-1 mb-1"
