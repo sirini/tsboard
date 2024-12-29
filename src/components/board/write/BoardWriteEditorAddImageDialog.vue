@@ -11,16 +11,18 @@
           variant="solo"
           prepend-inner-icon="mdi-web-plus"
           :rules="rule"
+          rounded="pill"
           @keyup.enter="add"
+          width="300"
         ></v-text-field>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addImageURLDialog = false">{{
+        <v-btn prepend-icon="mdi-close" @click="editor.addImageURLDialog = false" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+        <v-btn @click="add" append-icon="mdi-chevron-right" rounded="pill">{{
           TEXT[home.lang].ADD_TO_CONTENT
         }}</v-btn>
       </v-card-actions>

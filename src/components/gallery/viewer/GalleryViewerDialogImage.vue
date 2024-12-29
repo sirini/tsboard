@@ -20,7 +20,6 @@
         :postUid="viewer.post.uid"
         :writerUid="viewer.post.writer.uid"
         :liked="viewer.post.liked"
-        :color="viewer.mobileColor"
         v-if="home.isMobile"
       ></gallery-viewer-toolbar>
     </v-main>

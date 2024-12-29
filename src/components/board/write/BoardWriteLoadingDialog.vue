@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editor.loading" max-width="320" persistent>
-    <v-list class="py-2" :bg-color="COLOR.HOME.MAIN" elevation="12" rounded="xl">
+    <v-list class="py-2" :bg-color="COLOR.HOME.MAIN" elevation="12" rounded="pill">
       <v-list-item>
         {{ TEXT[home.lang].WAIT }}
         <template v-slot:append>

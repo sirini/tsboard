@@ -13,6 +13,8 @@
               :label="TEXT[home.lang].ROW_COUNT"
               prepend-inner-icon="mdi-table-row-height"
               :rules="cellRule"
+              rounded="pill"
+              width="120"
             ></v-text-field>
           </v-col>
           <v-col>
@@ -23,21 +25,24 @@
               :label="TEXT[home.lang].COLUMN_COUNT"
               prepend-inner-icon="mdi-table-column-width"
               :rules="cellRule"
+              rounded="pill"
+              width="120"
             ></v-text-field>
           </v-col>
         </v-row>
         <v-checkbox
           v-model="withHeaderRow"
           :label="TEXT[home.lang].CHECK_INCLUDE_HEADER"
+          hide-details
         ></v-checkbox>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addTableDialog = false">{{
+        <v-btn prepend-icon="mdi-close" @click="editor.addTableDialog = false" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+        <v-btn @click="add" append-icon="mdi-chevron-right" rounded="pill">{{
           TEXT[home.lang].ADD_TO_CONTENT
         }}</v-btn>
       </v-card-actions>

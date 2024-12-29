@@ -2,6 +2,7 @@
   <div class="pa-3">
     <v-chip
       variant="text"
+      size="small"
       prepend-icon="mdi-tag-outline"
       class="mr-2 mb-2"
       v-for="(tag, index) in tags"

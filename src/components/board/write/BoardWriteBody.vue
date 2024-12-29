@@ -52,12 +52,20 @@
 
       <v-divider class="mt-12"></v-divider>
       <v-card-actions class="mt-3 pa-0">
-        <v-btn @click="editor.openWriteCancelDialog" prepend-icon="mdi-close" size="small">{{
-          TEXT[home.lang].CANCEL
-        }}</v-btn>
-        <v-btn @click="editor.loadAutoSaved" prepend-icon="mdi-cached" size="small">{{
-          TEXT[home.lang].LOAD
-        }}</v-btn>
+        <v-btn
+          @click="editor.openWriteCancelDialog"
+          prepend-icon="mdi-close"
+          size="small"
+          rounded="pill"
+          >{{ TEXT[home.lang].CANCEL }}</v-btn
+        >
+        <v-btn
+          @click="editor.loadAutoSaved"
+          prepend-icon="mdi-cached"
+          size="small"
+          rounded="pill"
+          >{{ TEXT[home.lang].LOAD }}</v-btn
+        >
 
         <v-spacer></v-spacer>
 
@@ -78,6 +86,7 @@
           @click="editor.modify"
           append-icon="mdi-chevron-right"
           :disabled="auth.user.uid < 1 || editor.loading === true"
+          rounded="pill"
           >{{ TEXT[home.lang].MODIFY }}</v-btn
         >
       </v-card-actions>

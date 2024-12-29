@@ -1,6 +1,6 @@
 <template>
   <v-dialog id="tsboardGalleryViewer" v-model="viewer.dialog" theme="dark">
-    <v-card>
+    <v-card rounded="xl">
       <gallery-viewer-dialog-content v-if="viewer.isViewContent"></gallery-viewer-dialog-content>
       <gallery-viewer-dialog-image v-else></gallery-viewer-dialog-image>
     </v-card>

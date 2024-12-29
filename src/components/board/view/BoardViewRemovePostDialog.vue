@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="view.confirmRemovePostDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" color="red">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" color="red" rounded="xl">
       <v-card-title><v-icon>mdi-alert</v-icon> {{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
@@ -9,11 +9,11 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-cancel" @click="view.closeConfirmRemoveDialog">{{
+        <v-btn prepend-icon="mdi-cancel" @click="view.closeConfirmRemoveDialog" rounded="pill">{{
           TEXT[home.lang].NO
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-trash-can" @click="view.removePost">{{
+        <v-btn prepend-icon="mdi-trash-can" @click="view.removePost" rounded="pill">{{
           TEXT[home.lang].YES
         }}</v-btn>
       </v-card-actions>

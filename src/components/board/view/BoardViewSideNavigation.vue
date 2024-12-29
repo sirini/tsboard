@@ -1,9 +1,9 @@
 <template>
-  <v-card elevation="0" width="32" class="navigation" rounded="lg">
+  <v-card elevation="0" width="32" class="navigation" rounded="xl">
     <v-list
       density="compact"
       class="pa-0"
-      :bg-color="view.config.type != BOARD.BLOG ? '#eceff1' : ''"
+      :bg-color="view.config.type != BOARD.BLOG ? COLOR.HOME.BACKGROUND : COLOR.BLOG.BACKGROUND"
     >
       <v-list-item class="pa-0">
         <v-btn
@@ -60,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import { BOARD } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/view"
 import { useBoardViewStore } from "../../../store/board/view"

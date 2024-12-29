@@ -14,7 +14,9 @@
 
     <v-list>
       <v-list-item class="pa-0 ml-4 mr-4">
-        <v-btn block @click="viewer.close" variant="tonal">{{ TEXT[home.lang].CLOSE }}</v-btn>
+        <v-btn block @click="viewer.close" variant="tonal" rounded="xl">{{
+          TEXT[home.lang].CLOSE
+        }}</v-btn>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>

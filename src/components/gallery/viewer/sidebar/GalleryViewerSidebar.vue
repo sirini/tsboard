@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list class="pa-0">
     <gallery-viewer-sidebar-content></gallery-viewer-sidebar-content>
     <gallery-viewer-sidebar-tag></gallery-viewer-sidebar-tag>
     <gallery-viewer-sidebar-thumbnails></gallery-viewer-sidebar-thumbnails>

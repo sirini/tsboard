@@ -4,13 +4,14 @@
       prepend-icon="mdi-new-box"
       @click="comment.resetCommentMode"
       v-show="comment.modifyTarget > 0 || comment.replyTarget > 0"
+      rounded="pill"
       >{{ TEXT[home.lang].SET_NEW_COMMENT }}
       <v-tooltip activator="parent">
         {{ TEXT[home.lang].NEW_COMMENT_TOOLTIP }}
       </v-tooltip>
     </v-btn>
     <v-spacer></v-spacer>
-    <v-btn append-icon="mdi-chevron-right" @click="save">{{ comment.button }}</v-btn>
+    <v-btn append-icon="mdi-chevron-right" @click="save" rounded="pill">{{ comment.button }}</v-btn>
   </v-card-actions>
 </template>
 

@@ -13,11 +13,11 @@
             {{ TEXT[home.lang].CHECK_BEFORE_REMOVE_IMAGE }}
           </v-card-text>
           <v-card-actions>
-            <v-btn prepend-icon="mdi-check" @click="image.clearRemoveTarget">{{
+            <v-btn prepend-icon="mdi-check" @click="image.clearRemoveTarget" rounded="pill">{{
               TEXT[home.lang].CANCEL_REMOVE
             }}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn prepend-icon="mdi-trash-can" @click="remove" color="red">{{
+            <v-btn prepend-icon="mdi-trash-can" @click="remove" color="red" rounded="pill">{{
               TEXT[home.lang].CONFIRM_REMOVE
             }}</v-btn>
           </v-card-actions>
@@ -30,7 +30,13 @@
                 <div class="action">
                   <v-row no-gutters>
                     <v-col
-                      ><v-btn block @click="add(img.name)" size="small" elevation="0" rounded="0">
+                      ><v-btn
+                        block
+                        @click="add(img.name)"
+                        size="small"
+                        elevation="0"
+                        rounded="pill"
+                      >
                         <v-icon>mdi-plus</v-icon>
                       </v-btn>
                     </v-col>
@@ -40,7 +46,7 @@
                         @click="image.setRemoveTarget(img.uid, img.name)"
                         size="small"
                         elevation="0"
-                        rounded="0"
+                        rounded="pill"
                         color="red"
                       >
                         <v-icon>mdi-trash-can</v-icon>
@@ -63,6 +69,7 @@
               variant="tonal"
               block
               class="mb-3"
+              rounded="pill"
               :disabled="image.disableReloadButton"
               @click="image.loadUploadedImages(true)"
               >{{ TEXT[home.lang].LOAD_PREV_IMAGE }}</v-btn
@@ -72,9 +79,13 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn block prepend-icon="mdi-close" @click="image.addImageFromDBDialog = false">{{
-          TEXT[home.lang].CLOSE
-        }}</v-btn>
+        <v-btn
+          block
+          prepend-icon="mdi-close"
+          @click="image.addImageFromDBDialog = false"
+          rounded="pill"
+          >{{ TEXT[home.lang].CLOSE }}</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>

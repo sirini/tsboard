@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="500" rounded="xl" class="pt-1 pb-1">
+  <v-card :max-width="home.dialogWidth" rounded="xl" class="pt-1 pb-1">
     <v-list>
       <v-list-item>
         <v-btn-toggle
@@ -31,7 +31,7 @@
           hide-details
         >
           <v-menu activator="parent">
-            <v-list v-show="list.keywordHistories.length > 0">
+            <v-list v-show="list.keywordHistories.length > 0" rounded="xl">
               <v-list-item
                 v-for="(keyword, index) in list.keywordHistories"
                 :key="index"

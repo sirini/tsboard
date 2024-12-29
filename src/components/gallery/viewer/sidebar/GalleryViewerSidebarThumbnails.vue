@@ -1,6 +1,6 @@
 <template>
   <v-list-item class="pb-5">
-    <v-card elevation="0">
+    <v-card elevation="0" rounded="xl">
       <v-row no-gutters>
         <v-col v-for="(image, index) in viewer.images" :key="index" cols="3">
           <v-img

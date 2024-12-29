@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="gallery.confirmCancelDialog">
-    <v-card :max-width="home.dialogWidth" class="mx-auto">
+    <v-card :max-width="home.dialogWidth" :color="COLOR.HOME.MAIN" class="mx-auto" rounded="xl">
       <v-card-title>{{ TEXT[home.lang].TITLE }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mb-3">
@@ -12,11 +12,12 @@
         <v-btn
           prepend-icon="mdi-pencil"
           color="primary"
+          rounded="pill"
           @click="gallery.confirmCancelDialog = false"
           >{{ TEXT[home.lang].NO }}</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-check-bold" @click="confirmCancel">{{
+        <v-btn prepend-icon="mdi-check-bold" @click="confirmCancel" rounded="pill">{{
           TEXT[home.lang].YES
         }}</v-btn>
       </v-card-actions>
@@ -28,6 +29,7 @@
 import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/board/write/gallery-upload-cancel-dialog"
+import { COLOR } from "../../../../tsboard.config"
 
 const gallery = useGalleryStore()
 const home = useHomeStore()

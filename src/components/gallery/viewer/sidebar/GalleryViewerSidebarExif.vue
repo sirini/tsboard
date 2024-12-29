@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="0" class="mt-2 mb-2" variant="tonal">
+  <v-card elevation="0" class="mt-2 mb-2" variant="tonal" rounded="xl">
     <v-card-text class="pa-0">
       <v-table density="compact" class="text-caption">
         <tbody>

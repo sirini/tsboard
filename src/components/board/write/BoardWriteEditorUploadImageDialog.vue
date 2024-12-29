@@ -25,13 +25,13 @@
           prepend-icon="mdi-image-search-outline"
           multiple
           variant="solo"
+          rounded="pill"
           :label="TEXT[home.lang].SELECT_IMAGES"
         >
           <template v-slot:selection="{ fileNames }">
             <template v-for="fileName in fileNames" :key="fileName">
               <v-chip
                 size="x-small"
-                label
                 color="primary"
                 prepend-icon="mdi-image"
                 class="mt-1 mr-1 mb-1"
@@ -53,11 +53,11 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="close" :disabled="image.uploading">{{
+        <v-btn prepend-icon="mdi-close" @click="close" :disabled="image.uploading" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" :disabled="image.uploading"
+        <v-btn @click="add" :disabled="image.uploading" rounded="pill"
           >{{ TEXT[home.lang].UPLOAD_AND_INSERT }}
           <v-icon class="ml-2">mdi-chevron-right</v-icon></v-btn
         >

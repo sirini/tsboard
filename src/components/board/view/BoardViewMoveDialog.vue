@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="view.movePostDialog" persistent>
-    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.MAIN">
+    <v-card :max-width="home.dialogWidth" class="mx-auto" :color="COLOR.HOME.MAIN" rounded="xl">
       <v-card-title>{{ TEXT[home.lang].MOVE }}</v-card-title>
       <v-divider></v-divider>
       <v-list :bg-color="COLOR.HOME.MAIN">
@@ -13,11 +13,12 @@
             variant="outlined"
             class="mt-2 mb-4"
             width="300"
+            rounded="pill"
             :label="TEXT[home.lang].MOVE_TARGET"
             append-inner-icon="mdi-chevron-down"
           >
             <v-menu activator="parent">
-              <v-list :bg-color="COLOR.HOME.MAIN" density="compact">
+              <v-list :bg-color="COLOR.HOME.MAIN" density="compact" rounded="xl">
                 <v-list-item
                   v-for="(board, index) in view.boardListItems"
                   :key="index"
@@ -33,11 +34,11 @@
       </v-list>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="view.closeMoveDialog">{{
+        <v-btn prepend-icon="mdi-close" @click="view.closeMoveDialog" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn append-icon="mdi-chevron-right" @click="view.applyMovePost">{{
+        <v-btn append-icon="mdi-chevron-right" @click="view.applyMovePost" rounded="pill">{{
           TEXT[home.lang].APPLY
         }}</v-btn>
       </v-card-actions>

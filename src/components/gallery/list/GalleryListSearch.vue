@@ -1,8 +1,14 @@
 <template>
-  <v-card :max-width="home.dialogWidth" rounded="xl">
+  <v-card :max-width="home.dialogWidth" rounded="xl" class="pt-1 pb-1">
     <v-list>
       <v-list-item>
-        <v-btn-toggle v-model="gallery.option" size="small" group rounded="pill">
+        <v-btn-toggle
+          v-model="gallery.option"
+          :color="COLOR.HOME.MAIN"
+          size="small"
+          group
+          rounded="pill"
+        >
           <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].PHOTO_TITLE }}</v-btn>
           <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].PHOTOGRAPHER }}</v-btn>
@@ -25,7 +31,7 @@
           rounded="pill"
         >
           <v-menu activator="parent">
-            <v-list v-show="gallery.keywordHistories.length > 0">
+            <v-list v-show="gallery.keywordHistories.length > 0" rounded="xl">
               <v-list-item
                 v-for="(keyword, index) in gallery.keywordHistories"
                 :key="index"
@@ -46,6 +52,7 @@ import { useGalleryStore } from "../../../store/board/gallery"
 import { useHomeStore } from "../../../store/home"
 import { TEXT } from "../../../messages/components/gallery/list/gallery-list-search"
 import { SEARCH } from "../../../interface/board_interface"
+import { COLOR } from "../../../../tsboard.config"
 
 const gallery = useGalleryStore()
 const home = useHomeStore()

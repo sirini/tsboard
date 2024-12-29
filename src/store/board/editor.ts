@@ -7,8 +7,11 @@ import { TEXT } from "../../messages/store/board/editor"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
+import { useBoardViewStore } from "./view"
+import { useViewerStore } from "./gallery.viewer"
 import axios from "axios"
 import {
+  BOARD,
   BOARD_CONFIG,
   BoardAttachment,
   BoardConfig,
@@ -25,6 +28,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   const auth = useAuthStore()
   const util = useUtilStore()
   const home = useHomeStore()
+  const view = useBoardViewStore()
+  const viewer = useViewerStore()
   const confirmWriteCancelDialog = ref<boolean>(false)
   const addImageURLDialog = ref<boolean>(false)
   const addVideoURLDialog = ref<boolean>(false)
@@ -306,7 +311,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     fd.append("content", contentWithSyntax.value)
     fd.append("tags", tags.value.join(","))
     for (const file of files.value) {
-      fd.append("attachments", file)
+      fd.append("attachments[]", file)
     }
 
     try {
@@ -352,9 +357,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     fd.append("title", title.value)
     fd.append("content", contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"))
     fd.append("tags", tags.value.join(","))
-
     for (const file of files.value) {
-      fd.append("attachments", file)
+      fd.append("attachments[]", file)
     }
 
     const response = await axios.patch(`${TSBOARD.API}/editor/modify`, fd, {
@@ -374,6 +378,14 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     util.success(TEXT[home.lang].MODIFIED_POST)
     util.go(config.value.type, id.value, postUid.value)
+
+    switch (config.value.type) {
+      case BOARD.GALLERY:
+        viewer.loadPost()
+        break
+      default:
+        view.loadPostView()
+    }
 
     clearVariables()
   }

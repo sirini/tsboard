@@ -1,5 +1,5 @@
 <template>
-  <v-list :bg-color="viewer.mobileColor">
+  <v-list class="pa-0">
     <gallery-viewer-sidebar-content></gallery-viewer-sidebar-content>
     <gallery-viewer-sidebar-tag></gallery-viewer-sidebar-tag>
     <v-divider></v-divider>

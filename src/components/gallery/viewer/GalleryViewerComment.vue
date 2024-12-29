@@ -33,7 +33,7 @@
       <v-btn icon size="small">
         <v-icon>mdi-dots-vertical</v-icon>
         <v-menu activator="parent" open-on-hover>
-          <v-list>
+          <v-list rounded="xl">
             <v-list-item
               prepend-icon="mdi-reply"
               :disabled="auth.user.uid < 1"

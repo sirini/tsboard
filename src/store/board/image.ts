@@ -48,9 +48,8 @@ export const useEditorImageStore = defineStore("editorImage", () => {
 
       const fd = new FormData()
       fd.append("boardUid", boardUid.value.toString())
-
       for (const file of files.value) {
-        fd.append("images", file)
+        fd.append("images[]", file)
       }
 
       const response = await axios.post(`${TSBOARD.API}/editor/upload/images`, fd, {

@@ -14,6 +14,7 @@
               prepend-inner-icon="mdi-youtube"
               :rules="urlRule"
               @keyup.enter="add"
+              rounded="pill"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -22,29 +23,33 @@
             <v-text-field
               v-model="width"
               :label="TEXT[home.lang].VIDEO_WIDTH"
-              variant="solo"
+              variant="outlined"
               prepend-inner-icon="mdi-arrow-expand-horizontal"
               :rules="sizeRule"
+              rounded="pill"
+              width="160"
             ></v-text-field
           ></v-col>
           <v-col>
             <v-text-field
               v-model="height"
               :label="TEXT[home.lang].VIDEO_HEIGHT"
-              variant="solo"
+              variant="outlined"
               prepend-inner-icon="mdi-arrow-expand-vertical"
               :rules="sizeRule"
+              rounded="pill"
+              width="160"
             ></v-text-field>
           </v-col>
         </v-row>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn prepend-icon="mdi-close" @click="editor.addVideoURLDialog = false">{{
+        <v-btn prepend-icon="mdi-close" @click="editor.addVideoURLDialog = false" rounded="pill">{{
           TEXT[home.lang].CLOSE
         }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="add" append-icon="mdi-chevron-right">{{
+        <v-btn @click="add" append-icon="mdi-chevron-right" rounded="pill">{{
           TEXT[home.lang].ADD_TO_CONTENT
         }}</v-btn>
       </v-card-actions>

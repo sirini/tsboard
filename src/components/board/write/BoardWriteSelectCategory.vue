@@ -13,7 +13,7 @@
       rounded="pill"
     >
       <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
-        <v-list>
+        <v-list rounded="xl">
           <v-list-item
             v-for="(cat, index) in editor.categories"
             :key="index"

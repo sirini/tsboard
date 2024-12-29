@@ -56,7 +56,6 @@ export const useViewerStore = defineStore("viewer", () => {
   const nextPostUid = ref<number>(0)
   const bunch = ref<number>(100)
   const position = ref<number>(0)
-  const mobileColor = ref<string>("grey-darken-4")
   const isViewContent = ref<boolean>(false)
   const latestLimit = 5
   const textRule = [
@@ -317,7 +316,6 @@ export const useViewerStore = defineStore("viewer", () => {
     images,
     tags,
     position,
-    mobileColor,
     isViewContent,
     textRule,
     loadPost,

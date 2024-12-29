@@ -17,6 +17,7 @@
       variant="outlined"
       auto-grow
       hide-details
+      rounded="lg"
       :placeholder="TEXT[home.lang].LEAVE_COMMENT"
     ></v-textarea>
   </v-list-item>
