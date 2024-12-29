@@ -13,7 +13,7 @@
           </tr>
           <tr>
             <td>{{ TEXT[home.lang].APERTURE }}</td>
-            <td>{{ viewer.images[viewer.position].exif.aperture }}</td>
+            <td>{{ viewer.images[viewer.position].exif.aperture / EXIF.APERTURE }}</td>
           </tr>
           <tr>
             <td>{{ TEXT[home.lang].ISO }}</td>
@@ -25,7 +25,7 @@
           </tr>
           <tr>
             <td>{{ TEXT[home.lang].EXPOSURE }}</td>
-            <td>{{ viewer.images[viewer.position].exif.exposure * 1000 }} ms</td>
+            <td>{{ viewer.images[viewer.position].exif.exposure / EXIF.EXPOSURE }} ms</td>
           </tr>
           <tr>
             <td>{{ TEXT[home.lang].IMAGE_SIZE }}</td>
@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { EXIF } from "../../../../../tsboard.config"
 import { TEXT } from "../../../../messages/components/gallery/viewer/gallery-viewer"
 import { useViewerStore } from "../../../../store/board/gallery.viewer"
 import { useHomeStore } from "../../../../store/home"

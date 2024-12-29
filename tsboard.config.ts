@@ -94,6 +94,12 @@ export const SCREEN = {
   LARGE: { WIDTH: 1440, COLS: 3 },
 }
 
+// EXIF 정보 가공용 상수값들 정의 (수정 금지)
+export const EXIF = {
+  APERTURE: 100,
+  EXPOSURE: 1000000,
+}
+
 export const POLICY = {
   NAME: "sirini" /* <<< [수정 필요] 사이트 관리자 성함 */,
   EMAIL: "sirini@gmail.com" /* <<< [수정 필요] 관리자 이메일 */,
