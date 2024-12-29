@@ -97,7 +97,7 @@ export const SCREEN = {
 // EXIF 정보 가공용 상수값들 정의 (수정 금지)
 export const EXIF = {
   APERTURE: 100,
-  EXPOSURE: 1000000,
+  EXPOSURE: 1000,
 }
 
 export const POLICY = {
