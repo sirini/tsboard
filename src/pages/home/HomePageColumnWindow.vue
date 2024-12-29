@@ -22,7 +22,7 @@
             <template v-slot:prepend>
               <v-chip
                 size="small"
-                :color="post.liked ? 'red' : 'blue-grey-lighten-2'"
+                :color="post.liked ? 'red' : COLOR.HOME.MAIN"
                 :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ post.like }}</v-chip
               >
@@ -36,14 +36,14 @@
               <v-chip
                 variant="text"
                 prepend-icon="mdi-chat-outline"
-                color="blue-grey-lighten-2"
+                :color="COLOR.HOME.MAIN"
                 size="small"
                 >{{ post.comment }}</v-chip
               >
             </v-list-item-title>
 
             <template v-slot:append>
-              <v-chip size="small" variant="text" color="blue-grey-lighten-2">{{
+              <v-chip size="small" variant="text" :color="COLOR.HOME.MAIN">{{
                 util.date(post.submitted)
               }}</v-chip>
             </template>
@@ -73,7 +73,7 @@
             <template v-slot:prepend>
               <v-chip
                 size="small"
-                :color="post.liked ? 'red' : 'blue-grey-lighten-2'"
+                :color="post.liked ? 'red' : COLOR.HOME.MAIN"
                 :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
                 >{{ post.like }}</v-chip
               >
@@ -87,14 +87,14 @@
               <v-chip
                 variant="text"
                 prepend-icon="mdi-chat-outline"
-                color="blue-grey-lighten-2"
+                :color="COLOR.HOME.MAIN"
                 size="small"
                 >{{ post.comment }}</v-chip
               >
             </v-list-item-title>
 
             <template v-slot:append>
-              <v-chip size="small" variant="text" color="blue-grey-lighten-2">{{
+              <v-chip size="small" variant="text" :color="COLOR.HOME.MAIN">{{
                 util.date(post.submitted)
               }}</v-chip>
             </template>
@@ -146,7 +146,7 @@ import { ref, onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import { BOARD_HOME_POST_RESULT, BoardHomePostResult } from "../../interface/home_interface"
-import { TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()

@@ -73,7 +73,7 @@
                   size="large"
                   @click="oauthLogin('naver')"
                   class="ml-2 mr-2"
-                  v-if="OAUTH.USE.GOOGLE"
+                  v-if="OAUTH.USE.NAVER"
                 >
                   <v-img
                     :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'"
