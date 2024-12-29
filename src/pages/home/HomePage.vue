@@ -13,9 +13,9 @@
         >
           <home-title></home-title>
 
-          <v-row class="mt-3 mb-3" v-if="home.isMobile || home.isTablet">
+          <v-row class="mb-6" v-if="home.isMobile || home.isTablet">
             <v-col>
-              <v-card :color="COLOR.HOME.MAIN" class="pt-1 pb-1">
+              <v-card :color="COLOR.HOME.MAIN" class="pt-1 pb-1" rounded="pill">
                 <home-header-search :is-small-screen="true"></home-header-search>
               </v-card>
             </v-col>

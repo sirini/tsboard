@@ -23,7 +23,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-chip variant="tonal" color="blue-grey-lighten-3" v-if="home.isMobile === false" size="small"
+    <v-chip variant="tonal" :color="COLOR.HOME.MAIN" v-if="home.isMobile === false" size="small"
       >{{ list.page }} / {{ list.pageLength }}
     </v-chip>
 

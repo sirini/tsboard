@@ -10,7 +10,7 @@
       <span class="col no text-center">{{ post.uid }}</span>
     </template>
 
-    <v-list-item-title class="pointer ml-2 mr-2" @click="util.go('boardView', list.id, post.uid)">
+    <v-list-item-title class="pointer" @click="util.go('boardView', list.id, post.uid)">
       <v-icon
         size="x-small"
         :color="COLOR.HOME.MAIN"
@@ -72,15 +72,7 @@
       </span>
     </v-list-item-title>
 
-    <v-list-item-subtitle v-if="home.isMobile" class="mt-2 mb-1">
-      <user-nametag
-        :uid="post.writer.uid"
-        :name="post.writer.name"
-        :profile="post.writer.profile"
-        class="ml-1 mr-1"
-        size="x-small"
-      ></user-nametag>
-
+    <v-list-item-subtitle v-if="home.isMobile" class="mt-2 text-right">
       <v-chip
         size="x-small"
         :color="COLOR.HOME.MAIN"
@@ -116,6 +108,14 @@
         variant="text"
         >{{ util.num(post.hit) }}</v-chip
       >
+
+      <user-nametag
+        :uid="post.writer.uid"
+        :name="post.writer.name"
+        :profile="post.writer.profile"
+        class="ml-1 mr-1"
+        size="x-small"
+      ></user-nametag>
     </v-list-item-subtitle>
 
     <template v-slot:append>

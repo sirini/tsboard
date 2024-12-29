@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="500" rounded="xl">
+  <v-card max-width="500" rounded="xl" class="pt-1 pb-1">
     <v-list>
       <v-list-item>
         <v-btn-toggle
