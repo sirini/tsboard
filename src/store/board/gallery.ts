@@ -17,7 +17,7 @@ import {
   SEARCH,
   Search,
 } from "../../interface/board_interface"
-import { GalleryGridItem } from "../../interface/post_interface"
+import { GalleryGridItem, GalleryListResult } from "../../interface/post_interface"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const route = useRoute()
@@ -67,27 +67,29 @@ export const useGalleryStore = defineStore("gallery", () => {
       return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
     }
 
-    config.value = response.data.result.config
+    const result = response.data.result as GalleryListResult
+    config.value = result.config
 
     if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
       return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
     }
 
     if (sinceUid.value < 1) {
-      images.value = response.data.result.images
+      images.value = result.images
     } else {
       if (response.data.result.images.length > 0) {
-        images.value.push(...response.data.result.images)
+        const merged = [
+          ...new Map([...images.value, ...result.images].map((item) => [item.uid, item])).values(),
+        ]
+        images.value = merged
         page.value += 1
       } else {
         util.snack(TEXT[home.lang].LAST_PAGE)
       }
     }
-    pageLength.value = Math.ceil(response.data.result.totalPostCount / config.value.rowCount)
-
+    pageLength.value = Math.ceil(result.totalPostCount / config.value.rowCount)
     auth.user.admin =
-      response.data.result.config.admin.group === auth.user.uid ||
-      response.data.result.config.admin.board === auth.user.uid
+      result.config.admin.group === auth.user.uid || result.config.admin.board === auth.user.uid
   }
 
   // 갤러리 목록 초기화

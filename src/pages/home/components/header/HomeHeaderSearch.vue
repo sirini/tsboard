@@ -14,12 +14,13 @@
             variant="outlined"
             density="compact"
             class="mr-2"
+            rounded="pill"
             readonly
             append-inner-icon="mdi-chevron-down"
             width="120"
           >
             <v-menu activator="parent">
-              <v-list>
+              <v-list rounded="xl">
                 <v-list-item
                   @click="selectSearchOption(SEARCH.TITLE as Search)"
                   :class="home.option === (SEARCH.TITLE as Search) ? 'selected' : ''"
@@ -65,6 +66,7 @@
           hide-details
           variant="outlined"
           density="compact"
+          rounded="pill"
           :color="COLOR.HOME.MAIN"
           :placeholder="TEXT[home.lang].PLACEHOLDER"
           prepend-inner-icon="mdi-restore"
@@ -72,7 +74,7 @@
           append-inner-icon="mdi-magnify"
           @click:append-inner="home.enterSearchPosts"
           @keydown.enter="home.enterSearchPosts"
-          @input="home.searchPosts"
+          @keyup="home.searchPosts"
         >
           <v-tooltip activator="parent"
             >{{ TEXT[home.lang].TOOLTIP }}

@@ -20,8 +20,7 @@ import {
 import { SEARCH, Search } from "../interface/board_interface"
 import { NOTICE, NotificationItem } from "../interface/noti_interface"
 
-export const CATEGORY_WINDOW = 1
-export const LATEST_WINDOW = 2
+export const TAB = { CATEGORY: 1, COLUMN: 2, LATEST: 3 }
 
 export const useHomeStore = defineStore("home", () => {
   const route = useRoute()
@@ -49,7 +48,7 @@ export const useHomeStore = defineStore("home", () => {
   const lang = ref<HomeLang>(LANG.KO as HomeLang)
   const langName = ref<string>("한국어")
   const langIcon = ref<string>("mdi-syllabary-hangul")
-  const tab = ref<number>(CATEGORY_WINDOW)
+  const tab = ref<number>(TAB.CATEGORY)
   loadUserLanguage()
 
   // 첫화면 갱신하기
@@ -123,7 +122,6 @@ export const useHomeStore = defineStore("home", () => {
         bunch: bunch.value,
         option: option.value,
         keyword: encodeURIComponent(keyword.value),
-        accessUserUid: auth.user.uid,
       },
     })
 
@@ -132,7 +130,10 @@ export const useHomeStore = defineStore("home", () => {
       if (sinceUid.value < 1) {
         latestPosts.value = result
       } else {
-        latestPosts.value.push(...result)
+        const merged = [
+          ...new Map([...latestPosts.value, ...result].map((item) => [item.uid, item])).values(),
+        ]
+        latestPosts.value = merged
       }
       sinceUid.value = latestPosts.value.at(-1)?.uid ?? 0
     }
@@ -163,12 +164,12 @@ export const useHomeStore = defineStore("home", () => {
     if (keyword.value.length < 2) {
       return
     }
-    tab.value = LATEST_WINDOW
-    sinceUid.value = 0
+    tab.value = TAB.LATEST
     latestPosts.value = []
+    sinceUid.value = 0
     loadLatestPosts()
   }
-  const searchPosts = util.debounce(_searchPosts, 250)
+  const searchPosts = util.debounce(_searchPosts)
 
   // 검색어 입력 확정 (검색어 히스토리 추가)
   function enterSearchPosts(): void {
@@ -176,7 +177,7 @@ export const useHomeStore = defineStore("home", () => {
       resetSearchKeyword()
       return
     }
-    _searchPosts()
+    searchPosts()
     if (keywordHistories.value.includes(keyword.value) === true) {
       return
     }
@@ -189,7 +190,7 @@ export const useHomeStore = defineStore("home", () => {
   // 검색어 히스토리에서 이전 검색어 클릭 시 업데이트
   function selectKeywordFromHistory(selectedKeyword: string): void {
     keyword.value = selectedKeyword
-    _searchPosts()
+    searchPosts()
   }
 
   // 검색 옵션 초기화하기
@@ -204,7 +205,7 @@ export const useHomeStore = defineStore("home", () => {
     latestPosts.value = []
     option.value = SEARCH.TITLE as Search
     keyword.value = ""
-    tab.value = CATEGORY_WINDOW
+    tab.value = TAB.CATEGORY
   }
 
   // 알림 정보 가져오기

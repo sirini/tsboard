@@ -125,10 +125,12 @@ export const useUtilStore = defineStore("util", () => {
 
   // 디바운스 함수
   function debounce<T extends (...args: any[]) => any>(func: T, delay: number = 300) {
-    let timeout: any = null
+    let timeout: ReturnType<typeof setTimeout> | null = null
     return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
       const context = this as ThisParameterType<T>
-      clearTimeout(timeout)
+      if (timeout) {
+        clearTimeout(timeout)
+      }
       timeout = setTimeout(() => {
         func.apply(context, args)
       }, delay)

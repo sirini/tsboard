@@ -16,24 +16,18 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
+import { useUtilStore } from "../../store/util"
 import HomePageGridPost from "./components/list/HomePageGridPost.vue"
 import LoadPreviousPost from "./components/static/LoadPreviousPost.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
+const util = useUtilStore()
 
 onMounted(async () => {
   await home.loadLatestPosts()
 
-  let timer: any
-  window.onscroll = (event: Event) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      const scroll = window.innerHeight + window.scrollY + 50
-      if (scroll > document.body.offsetHeight) {
-        home.loadLatestPosts()
-      }
-    }, 250)
-  }
+  const waitLoadPosts = util.debounce(home.loadLatestPosts)
+  window.onscroll = (event: Event) => waitLoadPosts()
 })
 </script>
