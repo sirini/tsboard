@@ -6,7 +6,7 @@ const DEV_URL = `${LOCALHOST}:${VITE_PORT}`
 const PROD_URL = "https://tsboard.dev" // <<< [수정 필요] 본인 사이트의 도메인 입력
 
 export const TSBOARD = {
-  VERSION: "v1.0.0-rc",
+  VERSION: "v1.0.0",
   SITE: {
     NAME: "TSBOARD" /* <<< [수정 필요] 본인 사이트 이름 입력 */,
     URL: IS_DEV ? DEV_URL : PROD_URL,

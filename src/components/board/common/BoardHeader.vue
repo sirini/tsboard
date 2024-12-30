@@ -16,7 +16,6 @@
         prepend-icon="mdi-login-variant"
         variant="text"
         @click="util.go('login')"
-        size="small"
         >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
