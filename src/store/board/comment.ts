@@ -317,7 +317,7 @@ export const useCommentStore = defineStore("comment", () => {
     const fd = new FormData()
     fd.append("boardUid", param.boardUid.toString())
     fd.append("targetUid", param.targetUid.toString())
-    fd.append("postUid", param.boardUid.toString())
+    fd.append("postUid", param.postUid.toString())
     fd.append("content", param.content)
 
     try {
