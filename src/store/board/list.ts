@@ -34,6 +34,7 @@ export const useBoardListStore = defineStore("boardList", () => {
   const id = ref<string>("")
   const config = ref<BoardConfig>(BOARD_CONFIG)
   const isAdmin = ref<boolean>(false)
+  const notices = ref<BoardListItem[]>([])
   const posts = ref<BoardListItem[]>([])
   const categories = ref<Pair[]>([])
   const page = ref<number>(1)
@@ -95,6 +96,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         }
       })
 
+      notices.value = result.notices
       posts.value = result.posts
       let noticeCount = 0
       posts.value.map((post: BoardListItem) => {
@@ -140,13 +142,10 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 이전 페이지 가져온 후 데이터 처리 (순서 뒤집기 등)
   function rearrangePosts(): void {
-    const notices = posts.value.filter((post: BoardListItem) => {
-      return post.status === STATUS.NOTICE
-    })
     const normals = posts.value.reverse().filter((post: BoardListItem) => {
       return post.status === STATUS.NORMAL
     })
-    posts.value = [...notices, ...normals]
+    posts.value = normals
   }
 
   // 이전 페이지로 이동 준비
@@ -249,6 +248,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     id,
     config,
     isAdmin,
+    notices,
     posts,
     page,
     pageLength,

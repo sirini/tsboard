@@ -203,6 +203,7 @@ export const BOARD_LIST_ITEM: BoardListItem = {
 export type BoardListResult = {
   totalPostCount: number
   config: BoardConfig
+  notices: BoardListItem[]
   posts: BoardListItem[]
   blackList: number[]
   isAdmin: boolean

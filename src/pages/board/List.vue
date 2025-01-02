@@ -13,11 +13,12 @@
             rounded="xl"
           >
             <v-card-text class="pa-0">
-              <v-list class="pa-0">
+              <v-list class="pa-0" rounded="t-xl">
                 <v-list-item v-if="list.posts.length < 1" class="text-center pa-6">
                   <v-icon>mdi-alert-circle</v-icon> {{ TEXT[home.lang].EMPTY }}
                 </v-list-item>
 
+                <board-list-row-notice></board-list-row-notice>
                 <board-list-row></board-list-row>
               </v-list>
             </v-card-text>
@@ -40,6 +41,7 @@ import { useRoute } from "vue-router"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import BoardListRow from "../../components/board/list/BoardListRow.vue"
+import BoardListRowNotice from "../../components/board/list/BoardListRowNotice.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"

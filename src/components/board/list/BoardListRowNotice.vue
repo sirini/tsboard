@@ -1,36 +1,16 @@
 <template>
   <v-list-item
-    class="list-item pa-0"
-    v-for="(post, index) in list.posts"
+    class="list-item pa-0 notice"
+    v-for="(notice, index) in list.notices"
     :key="index"
     :lines="home.isMobile ? 'two' : 'one'"
   >
-    <template v-slot:prepend v-if="home.isMobile === false">
-      <span class="col no text-center">{{ post.uid }}</span>
-    </template>
-
-    <v-list-item-title class="pointer" @click="util.go('boardView', list.id, post.uid)">
-      <span v-if="post.status === STATUS.SECRET">
-        <v-icon
-          size="x-small"
-          :color="COLOR.HOME.MAIN"
-          class="mr-2"
-          v-if="post.writer.uid === auth.user.uid || list.isAdmin === true"
-          >mdi-lock-open-outline</v-icon
-        >
-        <v-icon size="small" :color="COLOR.HOME.MAIN" class="mr-2" v-else>mdi-lock</v-icon>
-      </span>
-
-      <v-chip
-        v-if="list.config.useCategory && post.status === STATUS.NORMAL"
-        size="x-small"
-        :color="COLOR.HOME.MAIN"
-        class="mr-2"
-        @click="list.loadPostsByCategory(post.category.uid)"
-        >{{ post.category.name }}</v-chip
+    <v-list-item-title class="pointer ml-3" @click="util.go('boardView', list.id, notice.uid)">
+      <v-icon size="x-small" :color="COLOR.HOME.MAIN" class="mr-2"
+        >mdi-bullhorn-variant-outline</v-icon
       >
 
-      {{ util.unescape(post.title) }}
+      {{ util.unescape(notice.title) }}
 
       <span v-if="home.isMobile === false">
         <v-chip
@@ -39,8 +19,8 @@
           class="ml-2"
           prepend-icon="mdi-chat-outline"
           variant="text"
-          v-if="post.comment > 0"
-          >{{ util.num(post.comment) }}</v-chip
+          v-if="notice.comment > 0"
+          >{{ util.num(notice.comment) }}</v-chip
         >
 
         <v-chip
@@ -48,8 +28,8 @@
           prepend-icon="mdi-heart"
           color="red"
           variant="text"
-          v-if="post.liked"
-          >{{ util.num(post.like) }}</v-chip
+          v-if="notice.liked"
+          >{{ util.num(notice.like) }}</v-chip
         >
 
         <v-chip
@@ -58,7 +38,7 @@
           :color="COLOR.HOME.MAIN"
           variant="text"
           v-else
-          >{{ util.num(post.like) }}</v-chip
+          >{{ util.num(notice.like) }}</v-chip
         >
       </span>
     </v-list-item-title>
@@ -70,8 +50,8 @@
         class="ml-2"
         prepend-icon="mdi-chat-outline"
         variant="text"
-        v-if="post.comment > 0"
-        >{{ util.num(post.comment) }}</v-chip
+        v-if="notice.comment > 0"
+        >{{ util.num(notice.comment) }}</v-chip
       >
 
       <v-chip
@@ -79,8 +59,8 @@
         prepend-icon="mdi-heart"
         color="red"
         variant="text"
-        v-if="post.liked"
-        >{{ util.num(post.like) }}</v-chip
+        v-if="notice.liked"
+        >{{ util.num(notice.like) }}</v-chip
       >
 
       <v-chip
@@ -88,8 +68,8 @@
         prepend-icon="mdi-heart-outline"
         :color="COLOR.HOME.MAIN"
         variant="text"
-        v-if="post.liked === false"
-        >{{ util.num(post.like) }}</v-chip
+        v-if="notice.liked === false"
+        >{{ util.num(notice.like) }}</v-chip
       >
 
       <v-chip
@@ -97,13 +77,13 @@
         prepend-icon="mdi-eye-outline"
         :color="COLOR.HOME.MAIN"
         variant="text"
-        >{{ util.num(post.hit) }}</v-chip
+        >{{ util.num(notice.hit) }}</v-chip
       >
 
       <user-nametag
-        :uid="post.writer.uid"
-        :name="post.writer.name"
-        :profile="post.writer.profile"
+        :uid="notice.writer.uid"
+        :name="notice.writer.name"
+        :profile="notice.writer.profile"
         class="ml-1 mr-1"
         size="x-small"
       ></user-nametag>
@@ -112,26 +92,18 @@
     <template v-slot:append>
       <user-nametag
         v-if="home.isMobile === false"
-        :uid="post.writer.uid"
-        :name="post.writer.name"
-        :profile="post.writer.profile"
+        :uid="notice.writer.uid"
+        :name="notice.writer.name"
+        :profile="notice.writer.profile"
         size="x-small"
+        class="mr-3"
       ></user-nametag>
-
-      <span class="col no text-center" v-if="home.isMobile === false">{{
-        util.num(post.hit)
-      }}</span>
-
-      <span class="col date text-center" v-if="home.isMobile === false">{{
-        util.date(post.submitted)
-      }}</span>
     </template>
   </v-list-item>
 </template>
 
 <script setup lang="ts">
 import { COLOR } from "../../../../tsboard.config"
-import { STATUS } from "../../../interface/board_interface"
 import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
@@ -145,6 +117,9 @@ const auth = useAuthStore()
 </script>
 
 <style scoped>
+.notice {
+  background-color: #f9f9f9;
+}
 .list-item {
   border-bottom: 1px #efefef solid;
 

@@ -21,6 +21,7 @@ import {
   BoardWriterLatestPost,
   CONVERT_BOARD_TYPE,
   Pair,
+  STATUS,
 } from "../../interface/board_interface"
 import axios from "axios"
 import { READ_POST_KEY } from "../../interface/post_interface"
@@ -103,6 +104,7 @@ export const useBoardViewStore = defineStore("boardView", () => {
       if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
         return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
       }
+
       post.value = result.post
       tags.value = result.tags
       files.value = result.files
@@ -111,6 +113,14 @@ export const useBoardViewStore = defineStore("boardView", () => {
       nextPostUid.value = result.nextPostUid
       writerPosts.value = result.writerPosts
       writerComments.value = result.writerComments
+
+      if (
+        post.value.status === STATUS.SECRET &&
+        !auth.user.admin &&
+        auth.user.uid != post.value.writer.uid
+      ) {
+        post.value.content = TEXT[home.lang].SECRET_POST
+      }
 
       auth.user.admin =
         result.config.admin.group === auth.user.uid || result.config.admin.board === auth.user.uid
