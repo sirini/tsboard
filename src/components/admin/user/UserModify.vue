@@ -7,7 +7,7 @@
       {{ userModify.user.name }} 님의 정보 수정하기
     </v-card-title>
     <v-divider></v-divider>
-    <alert-bar></alert-bar>
+    <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
     <v-row no-gutters>
       <v-col>

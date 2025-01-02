@@ -9,8 +9,8 @@
     >
       <v-card-title>{{ TEXT[home.lang].TITLE_INSERT_IMAGE_UPLOAD }}</v-card-title>
       <v-divider></v-divider>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
-      <alert-bar></alert-bar>
       <v-card-text>
         <v-card variant="tonal" class="mt-2 mb-5">
           <v-card-text class="pa-3"> {{ TEXT[home.lang].INFO_INSERT_IMAGE_UPLOAD }}</v-card-text>

@@ -6,10 +6,10 @@
         <span class="note ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
       </v-card-title>
       <v-divider></v-divider>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
       <v-card-text class="wrap pa-0" id="tsboardChatHistory">
         <v-list>
-          <alert-bar></alert-bar>
           <v-list-subheader>{{ TEXT[home.lang].RECEIVER }}</v-list-subheader>
           <v-divider></v-divider>
           <v-list-item

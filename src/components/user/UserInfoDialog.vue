@@ -6,10 +6,9 @@
         <span class="info ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
       </v-card-title>
       <v-divider></v-divider>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
       <v-list>
-        <alert-bar></alert-bar>
-
         <v-list-item class="text-center mt-5 mb-5">
           <v-avatar :size="SIZE.PROFILE">
             <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>

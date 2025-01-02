@@ -15,8 +15,7 @@
               <span class="info ml-3">{{ TEXT[home.lang].INFO }}</span>
             </v-card-title>
             <v-divider></v-divider>
-
-            <alert-bar></alert-bar>
+            <v-list class="pl-2 pr-2" :bg-color="COLOR.HOME.MAIN"><alert-bar></alert-bar></v-list>
 
             <div class="text-center mt-9 mb-9">
               <v-otp-input

@@ -3,8 +3,8 @@
     <v-card :max-width="home.dialogWidth" class="mx-auto" rounded="xl" :color="COLOR.HOME.MAIN">
       <v-card-title>{{ TEXT[home.lang].TITLE_YOUTUBE }}</v-card-title>
       <v-divider></v-divider>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
-      <alert-bar></alert-bar>
       <v-card-text>
         <v-row no-gutters>
           <v-col>

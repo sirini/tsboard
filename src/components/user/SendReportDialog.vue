@@ -6,9 +6,9 @@
         <span class="report ml-3 pl-3">{{ TEXT[home.lang].INFO }}</span>
       </v-card-title>
       <v-divider></v-divider>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
       <v-list>
-        <alert-bar></alert-bar>
         <v-list-subheader>{{ TEXT[home.lang].TARGET }}</v-list-subheader>
         <v-divider></v-divider>
         <v-list-item

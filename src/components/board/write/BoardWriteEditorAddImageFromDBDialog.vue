@@ -5,7 +5,7 @@
         >{{ TEXT[home.lang].TITLE_MANAGE_IMAGE }} ({{ image.totalImageCount }} ea)</v-card-title
       >
       <v-divider></v-divider>
-      <alert-bar></alert-bar>
+      <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
       <v-card-text>
         <v-card v-show="image.showRemoveImageInfo" elevation="0" class="mt-2 mb-5" variant="tonal">

@@ -9,7 +9,7 @@
       rounded="xl"
     >
       <v-form fast-fail @submit.prevent>
-        <alert-bar></alert-bar>
+        <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
 
         <v-checkbox
           v-model="editor.isNotice"

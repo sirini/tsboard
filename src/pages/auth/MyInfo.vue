@@ -16,7 +16,7 @@
             </v-card-title>
             <v-divider></v-divider>
 
-            <v-list class="pa-0"><alert-bar></alert-bar></v-list>
+            <v-list class="pl-2 pr-2"><alert-bar></alert-bar></v-list>
             <v-list class="pl-6 pr-6">
               <v-list-item class="pa-0 text-center">
                 <v-chip
