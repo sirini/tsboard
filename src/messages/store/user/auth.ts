@@ -26,6 +26,7 @@ export const TEXT = [
     SENT_RESET_PASSWORD: "비밀번호 초기화 메일을 발송하였습니다.",
     SENT_VERIFICATION:
       "(으)로 메일을 보내드렸습니다. 인증 메일을 확인해 주시고, 가입 절차를 완료해 보세요!",
+    UNABLE_CHANGE_PASSWORD: "비밀번호를 변경할 수 없었습니다.",
     VERIFY_EMPTY_EMAIL: "이메일 주소가 기입되어 있지 않습니다. 가입 화면으로 이동합니다.",
     VERIFY_EMPTY_NAME: "이름이 작성되지 않습니다. 가입 화면으로 이동합니다.",
     VERIFY_EMPTY_PASSWORD: "비밀번호가 작성되지 않습니다. 가입 화면으로 이동합니다.",
@@ -60,6 +61,7 @@ export const TEXT = [
     SENT_RESET_PASSWORD: "A password reset email has been sent.",
     SENT_VERIFICATION:
       "A verification email has been sent to you. Please check your email and complete the registration process.",
+    UNABLE_CHANGE_PASSWORD: "Unable to change the password.",
     VERIFY_EMPTY_EMAIL:
       "No email address has been entered. Redirecting to the registration screen.",
     VERIFY_EMPTY_NAME: "No name has been entered. Redirecting to the registration screen.",
@@ -93,6 +95,7 @@ export const TEXT = [
     SUCCESS_CHANGE_PASSWORD: "密码成功更改。正在重定向到登录页面。",
     SENT_RESET_PASSWORD: "已发送密码重置电子邮件。",
     SENT_VERIFICATION: "已向您发送验证电子邮件。请检查您的电子邮件并完成注册过程。",
+    UNABLE_CHANGE_PASSWORD: "无法更改密码。",
     VERIFY_EMPTY_EMAIL: "未输入电子邮箱地址。正在重定向到注册屏幕。",
     VERIFY_EMPTY_NAME: "未输入名称。正在重定向到注册屏幕。",
     VERIFY_EMPTY_PASSWORD: "未输入密码。正在重定向到注册屏幕。",
