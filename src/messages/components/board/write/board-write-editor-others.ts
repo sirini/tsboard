@@ -3,6 +3,8 @@ export const TEXT = [
   {
     ADD_TAG: "태그를 입력해 보세요! (space/enter 혹은 , 로 추가)",
     ADD_TAG_TOOLTIP: "이 태그를 추가합니다: ",
+    ADD_TO_CONTENT: "본문에 추가하기",
+    CANCEL_REMOVE: "아니요",
     CHECK_BEFORE_REMOVE:
       "본문 작성란 내부에서 이미 업로드하신 이미지들을 제외하고 나머지 입력 항목들은 모두 초기화됩니다. 계속 진행하시겠습니까?",
     CHECK_BEFORE_REMOVE_IMAGE:
@@ -38,6 +40,8 @@ export const TEXT = [
   {
     ADD_TAG: "Try entering a tag! (Add with space/enter or ,)",
     ADD_TAG_TOOLTIP: "Add this tag: ",
+    ADD_TO_CONTENT: "Add to content",
+    CANCEL_REMOVE: "No",
     CHECK_BEFORE_REMOVE:
       "Except for the images you've already uploaded within the content editor, all other inputs will be reset. Do you wish to proceed?",
     CHECK_BEFORE_REMOVE_IMAGE:
@@ -73,6 +77,8 @@ export const TEXT = [
   {
     ADD_TAG: "尝试输入标签！（使用空格/回车或, 添加）",
     ADD_TAG_TOOLTIP: "添加此标签：",
+    ADD_TO_CONTENT: "添加到内容",
+    CANCEL_REMOVE: "不",
     CHECK_BEFORE_REMOVE:
       "除了您已在内容编辑器中上传的图片外，所有其他输入都将被重置。您是否要继续？",
     CHECK_BEFORE_REMOVE_IMAGE:
