@@ -7,7 +7,7 @@ import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import { useBoardViewStore } from "./view"
-import { PhotoItem, Position } from "../../interface/post_interface"
+import { GalleryPhotoResult, PhotoItem, Position } from "../../interface/post_interface"
 import {
   BOARD_ACTION,
   BOARD_CONFIG,
@@ -23,6 +23,8 @@ import {
 import { CommentListResult, CommentResult } from "../../interface/comment_interface"
 import axios from "axios"
 import { TSBOARD } from "../../../tsboard.config"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useViewerStore = defineStore("viewer", () => {
   const route = useRoute()
@@ -61,7 +63,7 @@ export const useViewerStore = defineStore("viewer", () => {
   const textRule = [
     (value: any) => {
       if (value.length > 2) return true
-      return "3글자 이상 입력해 주세요"
+      return "it should be over than 3 characters"
     },
   ]
 
@@ -91,29 +93,26 @@ export const useViewerStore = defineStore("viewer", () => {
         latestLimit,
       },
     })
-
-    if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
-      return close()
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<BoardViewResult>
+    if (!data || data.success === false) {
       config.value = response.data.result.config
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${data.error})`)
       return close()
     }
-
     config.value = response.data.result.config
 
     if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
       return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
     }
 
-    const result = response.data.result as BoardViewResult
-    post.value = result.post
-    tags.value = result.tags
+    post.value = data.result.post
+    tags.value = data.result.tags
     position.value = 0
-    prevPostUid.value = result.prevPostUid
-    nextPostUid.value = result.nextPostUid
+    prevPostUid.value = data.result.prevPostUid
+    nextPostUid.value = data.result.nextPostUid
   }
 
   // 사진들 불러오기
@@ -132,18 +131,13 @@ export const useViewerStore = defineStore("viewer", () => {
         no: postUid.value,
       },
     })
-
-    if (!response.data) {
-      util.snack(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<GalleryPhotoResult>
+    if (!data || data.success === false) {
+      config.value = data.result.config
+      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${data.error})`)
       return close()
     }
-    if (response.data.success === false) {
-      config.value = response.data.result.config
-      util.snack(`${TEXT[home.lang].FAILED_LOAD_PHOTO} (${response.data.error})`)
-      return close()
-    }
-
-    images.value = response.data.result.images
+    images.value = data.result.images
   }
 
   // 댓글 불러오기
@@ -161,15 +155,11 @@ export const useViewerStore = defineStore("viewer", () => {
         sinceUid: sinceUid.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(COMMENT.TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<CommentListResult>
+    if (!data || data.success === false) {
+      return util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.snack(`${COMMENT.TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
-    }
-    const result = response.data.result as CommentListResult
-    comments.value = result.comments
+    comments.value = data.result.comments
   }
 
   // 사진에 좋아요 추가 (혹은 취소) 하기
@@ -184,8 +174,8 @@ export const useViewerStore = defineStore("viewer", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (response.data && response.data.success === true) {
+    const data = response.data as ResponseData<null>
+    if (data && data.success === true) {
       post.value.liked = isLike
       if (isLike) {
         post.value.like += 1
@@ -272,10 +262,10 @@ export const useViewerStore = defineStore("viewer", () => {
   // 이전 사진 보기
   function prev(): void {
     if (images.value.length === 1) {
-      return util.snack("사진이 한 장만 있습니다")
+      return util.snack(TEXT[home.lang].ONLY_ONE)
     }
     if (position.value === 0) {
-      return util.snack("첫번째 사진입니다")
+      return util.snack(TEXT[home.lang].FIRST_ONE)
     }
     position.value -= 1
   }
@@ -283,10 +273,10 @@ export const useViewerStore = defineStore("viewer", () => {
   // 다음 사진 보기
   function next(): void {
     if (images.value.length === 1) {
-      return util.snack("사진이 한 장만 있습니다")
+      return util.snack(TEXT[home.lang].ONLY_ONE)
     }
     if (position.value + 1 === images.value.length) {
-      return util.snack("마지막 사진입니다")
+      return util.snack(TEXT[home.lang].LAST_ONE)
     }
     position.value += 1
   }

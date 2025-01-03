@@ -1,9 +1,3 @@
-/**
- * messages/mail/welcome
- *
- * 인증 완료하고 회원가입 성공 시 환영 메일 내용
- */
-
 import { TSBOARD } from "../../../tsboard.config"
 
 export const TEXT = [

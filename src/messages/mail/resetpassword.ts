@@ -1,9 +1,3 @@
-/**
- * messages/mail/resetpassword
- *
- * 비밀번호 초기화 메일 내용
- */
-
 import { TSBOARD } from "../../../tsboard.config"
 
 export const TEXT = [

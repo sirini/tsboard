@@ -16,7 +16,7 @@
         variant="text"
         @click="util.go('login')"
         v-if="auth.user.uid < 1"
-        size="small"
+        rounded="pill"
         >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
@@ -24,6 +24,7 @@
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
+        rounded="pill"
         >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
@@ -31,6 +32,7 @@
         variant="text"
         @click="util.go('adminBoardManager', gallery.id)"
         v-if="auth.user.admin"
+        rounded="pill"
         >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>

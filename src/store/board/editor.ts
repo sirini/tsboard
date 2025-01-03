@@ -22,6 +22,8 @@ import {
   STATUS,
 } from "../../interface/board_interface"
 import { AUTO_SAVE_KEY, AutoSaved } from "../../interface/post_interface"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useBoardEditorStore = defineStore("boardEditor", () => {
   const route = useRoute()
@@ -76,19 +78,17 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         id: id.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<EditorConfigResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_CONFIG} (${response.data.error})`)
-    }
-
-    const result = response.data.result as EditorConfigResult
-    config.value = result.config
-    categories.value = result.categories
+    config.value = data.result.config
+    categories.value = data.result.categories
     category.value = categories.value[0]
-    isAdmin.value = result.isAdmin
+    isAdmin.value = data.result.isAdmin
   }
 
   // 게시글 임시 보관하기
@@ -138,23 +138,19 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         postUid: postUid.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
+    const data = response.data as ResponseData<EditorLoadPostResult>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${data.error})`)
     }
 
-    const result = response.data.result as EditorLoadPostResult
-    category.value = result.post.category
-    attachedFiles.value = result.files
-    title.value = util.unescape(result.post.title)
-    contentWithSyntax.value = result.post.content
-    content.value = result.post.content.replaceAll("<br />", "")
-    tags.value = result.tags.map((tag: Pair) => tag.name)
-    isNotice.value = result.post.status === STATUS.NOTICE
-    isSecret.value = result.post.status === STATUS.SECRET
+    category.value = data.result.post.category
+    attachedFiles.value = data.result.files
+    title.value = util.unescape(data.result.post.title)
+    contentWithSyntax.value = data.result.post.content.replaceAll("<br />", "")
+    content.value = data.result.post.content.replaceAll("<br />", "")
+    tags.value = data.result.tags.map((tag: Pair) => tag.name)
+    isNotice.value = data.result.post.status === STATUS.NOTICE
+    isSecret.value = data.result.post.status === STATUS.SECRET
 
     util.snack(TEXT[home.lang].LOADED_ORIGINAL_POST)
   }
@@ -179,14 +175,11 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<EditorTagItem[]>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_TAGS} (${response.data.error})`)
-    }
-    suggestionTags.value = response.data.result as EditorTagItem[]
+    suggestionTags.value = data.result
   }
   const updateTagSuggestion = util.debounce(_updateTagSuggestion, 250)
 
@@ -321,19 +314,14 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
           Authorization: `Bearer ${auth.user.token}`,
         },
       })
-
-      if (!response.data) {
-        util.error(TEXT[home.lang].NO_RESPONSE)
-        return
-      }
-      if (response.data.success === false) {
-        util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${response.data.error})`)
+      const data = response.data as ResponseData<number>
+      if (!data || data.success === false) {
+        util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${data.error})`)
         return
       }
 
-      const postUid = response.data.result as number
       util.success(TEXT[home.lang].WRITTEN_NEW_POST)
-      await util.go(config.value.type, id.value, postUid)
+      await util.go(config.value.type, id.value, data.result)
     } finally {
       clearVariables()
     }
@@ -366,13 +354,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      util.error(TEXT[home.lang].NO_RESPONSE)
-      return clearVariables()
-    }
-    if (response.data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${data.error})`)
       return clearVariables()
     }
 
@@ -406,12 +390,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
         fileUid,
       },
     })
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_REMOVE_FILE} (${data.error})`)
     }
     attachedFiles.value = attachedFiles.value.filter(
       (file: BoardAttachment) => file.uid !== fileUid,

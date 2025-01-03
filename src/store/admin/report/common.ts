@@ -8,6 +8,8 @@ import { TSBOARD } from "../../../../tsboard.config"
 import { AdminReportItem, AdminReportResult } from "../../../interface/admin_interface"
 import axios from "axios"
 import { SEARCH, Search } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminReportStore = defineStore("adminReport", () => {
   const admin = useAdminStore()
@@ -33,17 +35,16 @@ export const useAdminReportStore = defineStore("adminReport", () => {
         isSolved: isSolved.value ? 1 : 0,
       },
     })
-
-    if (!response.data) {
-      return admin.error(COMMON.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminReportResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${COMMON.FAILED_LOAD} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
-    }
 
-    const result = response.data.result as AdminReportResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    reports.value = result.reports
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    reports.value = data.result.reports
     admin.success(COMMON.LOADED_REPORT)
   }
 
@@ -71,14 +72,13 @@ export const useAdminReportStore = defineStore("adminReport", () => {
         isSolved: isSolved.value ? 1 : 0,
       },
     })
-
-    if (!response.data) {
+    const data = response.data as ResponseData<AdminReportResult>
+    if (!data || data.success === false) {
       return admin.error(COMMON.NO_RESPONSE)
     }
 
-    const result = response.data.result as AdminReportResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    reports.value = result.reports
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    reports.value = data.result.reports
   }
   const updateReports = util.debounce(_updateReports, 250)
 

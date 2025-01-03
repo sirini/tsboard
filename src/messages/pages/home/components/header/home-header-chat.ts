@@ -1,9 +1,3 @@
-/**
- * messages/pages/home/components/header/home-header-chat
- *
- * language pack
- */
-
 export const TEXT = [
   /* LANG.KO */ {
     EMPTY: "아직 생성된 채팅방이 없습니다.",

@@ -16,6 +16,7 @@
         prepend-icon="mdi-login-variant"
         variant="text"
         @click="util.go('login')"
+        rounded="pill"
         >{{ TEXT[home.lang].LOGIN }}</v-btn
       >
       <v-btn
@@ -23,6 +24,7 @@
         prepend-icon="mdi-badge-account-outline"
         variant="text"
         @click="util.go('myinfo')"
+        rounded="pill"
         >{{ TEXT[home.lang].MYINFO }}</v-btn
       >
       <v-btn
@@ -30,6 +32,7 @@
         prepend-icon="mdi-cog-outline"
         variant="text"
         @click="util.go('adminBoardManager', list.id)"
+        rounded="pill"
         >{{ TEXT[home.lang].MANAGE }}</v-btn
       >
     </div>

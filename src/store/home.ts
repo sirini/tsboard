@@ -19,6 +19,7 @@ import {
 } from "../interface/home_interface"
 import { SEARCH, Search } from "../interface/board_interface"
 import { NOTICE, NotificationItem } from "../interface/noti_interface"
+import { ResponseData } from "../interface/util_interface"
 
 export const TAB = { CATEGORY: 1, COLUMN: 2, LATEST: 3 }
 
@@ -124,14 +125,15 @@ export const useHomeStore = defineStore("home", () => {
         keyword: encodeURIComponent(keyword.value),
       },
     })
-
-    if (response.data && response.data.success === true) {
-      const result = response.data.result as BoardHomePostItem[]
+    const data = response.data as ResponseData<BoardHomePostItem[]>
+    if (data && data.success === true) {
       if (sinceUid.value < 1) {
-        latestPosts.value = result
+        latestPosts.value = data.result
       } else {
         const merged = [
-          ...new Map([...latestPosts.value, ...result].map((item) => [item.uid, item])).values(),
+          ...new Map(
+            [...latestPosts.value, ...data.result].map((item) => [item.uid, item]),
+          ).values(),
         ]
         latestPosts.value = merged
       }
@@ -152,9 +154,9 @@ export const useHomeStore = defineStore("home", () => {
         accessUserUid: auth.user.uid,
       },
     })
-
-    if (response.data && response.data.success === true) {
-      return response.data.result as BoardHomePostResult
+    const data = response.data as ResponseData<BoardHomePostResult>
+    if (data && data.success === true) {
+      return data.result
     }
     return BOARD_HOME_POST_RESULT
   }
@@ -219,9 +221,9 @@ export const useHomeStore = defineStore("home", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-    if (response.data && response.data.success === true && response.data.result.length > 0) {
-      const result = response.data.result as NotificationItem[]
-      notifications.value = result
+    const data = response.data as ResponseData<NotificationItem[]>
+    if (data && data.success === true && data.result.length > 0) {
+      notifications.value = data.result
       notifications.value.map((noti) => {
         if (noti.checked === false) {
           haveNewNotification.value = true
@@ -237,7 +239,7 @@ export const useHomeStore = defineStore("home", () => {
       return
     }
 
-    const response = await axios.patch(
+    await axios.patch(
       `${TSBOARD.API}/noti/checked`,
       {},
       {
@@ -273,8 +275,9 @@ export const useHomeStore = defineStore("home", () => {
   // 사이드바 링크들 가져오기
   async function loadSidebarLinks(): Promise<void> {
     const response = await axios.get(`${TSBOARD.API}/home/sidebar/links`)
-    if (response.data && response.data.success === true) {
-      sidebarLinks.value = response.data.result as HomeSidebarGroupResult[]
+    const data = response.data as ResponseData<HomeSidebarGroupResult[]>
+    if (data && data.success === true) {
+      sidebarLinks.value = data.result
     }
   }
 

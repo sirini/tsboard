@@ -9,6 +9,7 @@ import { TEXT } from "../../messages/store/user/auth"
 import { TSBOARD } from "../../../tsboard.config"
 import axios from "axios"
 import { SignupResult } from "../../interface/auth_interface"
+import { ResponseData } from "../../interface/util_interface"
 
 export const useSignupStore = defineStore("signup", () => {
   const router = useRouter()
@@ -28,12 +29,9 @@ export const useSignupStore = defineStore("signup", () => {
     fd.append("email", auth.user.id.trim())
 
     const response = await axios.post(`${TSBOARD.API}/auth/checkemail`, fd)
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      util.error(TEXT[home.lang].EXIST_EMAIL)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      util.error(`${TEXT[home.lang].EXIST_EMAIL} (${data.error})`)
       auth.user.id = ""
       return
     }
@@ -50,12 +48,10 @@ export const useSignupStore = defineStore("signup", () => {
     fd.append("name", auth.user.name.trim())
 
     const response = await axios.post(`${TSBOARD.API}/auth/checkname`, fd)
+    const data = response.data as ResponseData<null>
 
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      util.error(TEXT[home.lang].EXIST_NAME)
+    if (!data || data.success === false) {
+      util.error(`${TEXT[home.lang].EXIST_NAME} (${data.error})`)
       auth.user.name = ""
       return
     }
@@ -85,29 +81,25 @@ export const useSignupStore = defineStore("signup", () => {
     fd.append("name", auth.user.name.trim())
     fd.append("lang", home.lang.toString())
 
-    const response = await axios.post(`${TSBOARD.API}/auth/signup`, fd)
+    try {
+      const response = await axios.post(`${TSBOARD.API}/auth/signup`, fd)
+      const data = response.data as ResponseData<SignupResult>
+      if (!data || data.success === false) {
+        util.error(`${TEXT[home.lang].FAILED_ADD_USER} (${data.error})`)
+        return
+      }
 
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      util.error(TEXT[home.lang].FAILED_ADD_USER)
+      if (data.result.sendmail === false) {
+        util.success(TEXT[home.lang].SIGNUP_COMPLETE)
+        util.go("login")
+        return
+      }
+
+      util.success(`${auth.user.id} ${TEXT[home.lang].SENT_VERIFICATION}`)
+      router.push({ name: "verify", params: { target: data.result.target } })
+    } finally {
       loading.value = false
-      return
     }
-
-    const result = response.data.result as SignupResult
-
-    if (result.sendmail === false) {
-      util.success(TEXT[home.lang].SIGNUP_COMPLETE)
-      util.go("login")
-      loading.value = false
-      return
-    }
-
-    util.success(`${auth.user.id} ${TEXT[home.lang].SENT_VERIFICATION}`)
-    router.push({ name: "verify", params: { target: result.target } })
-    loading.value = false
   }
 
   // 인증 완료하기
@@ -143,12 +135,10 @@ export const useSignupStore = defineStore("signup", () => {
     fd.append("lang", home.lang.toString())
 
     const response = await axios.post(`${TSBOARD.API}/auth/verify`, fd)
+    const data = response.data as ResponseData<null>
 
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(TEXT[home.lang].WRONG_VERIFICATION_CODE)
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].WRONG_VERIFICATION_CODE} (${data.error})`)
     }
     util.success(TEXT[home.lang].SIGNUP_COMPLETE)
     util.go("login")

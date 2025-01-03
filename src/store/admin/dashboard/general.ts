@@ -7,9 +7,13 @@ import { useAdminStore } from "../common"
 import axios from "axios"
 import { BoardWriter, Pair } from "../../../interface/board_interface"
 import {
+  AdminDashboardItem,
+  AdminDashboardLatest,
   AdminDashboardLatestContent,
   AdminDashboardStatisticResult,
 } from "../../../interface/admin_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 type Today = {
   year: string
@@ -56,22 +60,21 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         limit: 7 /* days */,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminDashboardStatisticResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${response.data.error})`)
-    }
 
-    const result = response.data.result as AdminDashboardStatisticResult
     const items = [
-      { target: member.value, data: result.member },
-      { target: post.value, data: result.post },
-      { target: reply.value, data: result.reply },
-      { target: file.value, data: result.file },
-      { target: image.value, data: result.image },
-      { target: visit.value, data: result.visit },
+      { target: member.value, data: data.result.member },
+      { target: post.value, data: data.result.post },
+      { target: reply.value, data: data.result.reply },
+      { target: file.value, data: data.result.file },
+      { target: image.value, data: data.result.image },
+      { target: visit.value, data: data.result.visit },
     ]
 
     for (const item of items) {
@@ -99,14 +102,14 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminDashboardLatest>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${data.error})`)
     }
 
-    posts.value = response.data.result.posts as AdminDashboardLatestContent[]
-    comments.value = response.data.result.comments as AdminDashboardLatestContent[]
-    reports.value = response.data.result.reports as AdminDashboardLatestContent[]
+    posts.value = data.result.posts
+    comments.value = data.result.comments
+    reports.value = data.result.reports
   }
 
   // 그룹/게시판/회원 최신 목록 가져오기
@@ -119,13 +122,13 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminDashboardItem>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${data.error})`)
     }
-    groups.value = response.data.result.groups as Pair[]
-    boards.value = response.data.result.boards as Pair[]
-    members.value = response.data.result.members as BoardWriter[]
+    groups.value = data.result.groups
+    boards.value = data.result.boards
+    members.value = data.result.members
   }
 
   return {

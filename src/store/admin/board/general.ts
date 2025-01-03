@@ -9,6 +9,8 @@ import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { BOARD, BOARD_CONFIG, Board, BoardConfig, Pair } from "../../../interface/board_interface"
 import { AdminBoardResult } from "../../../interface/admin_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => {
   const route = useRoute()
@@ -36,16 +38,16 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       },
     })
 
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${response.data.error})`)
+    const data = response.data as ResponseData<AdminBoardResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${GENERAL.UNABLE_LOAD_CONFIG} (${data.error})`)
     }
 
-    const result = response.data.result as AdminBoardResult
-    groups.value = result.groups
-    board.value = result.config
+    groups.value = data.result.groups
+    board.value = data.result.config
 
     board.value.name = util.unescape(board.value.name)
     board.value.info = util.unescape(board.value.info)
@@ -57,11 +59,8 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
 
   // 그룹 이름 업데이트하기
   function updateGroupName(): void {
-    groups.value.map((group: Pair) => {
-      if (group.uid === board.value.groupUid) {
-        boardGroupName.value = group.name
-      }
-    })
+    const matchedGroup = groups.value.find((group: Pair) => group.uid === board.value.groupUid)
+    boardGroupName.value = matchedGroup ? matchedGroup.name : ""
   }
 
   // 그룹 변경하기
@@ -75,15 +74,11 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_UPDATE_GROUP} (${data.error})`)
     }
     board.value.groupUid = group.uid
-
     admin.success(
       `${board.value.id} ${GENERAL.CHANGED_GROUP1} ${group.name} ${GENERAL.CHANGED_GROUP2}`,
     )
@@ -105,14 +100,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_NAME} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_NAME} (${response.data.error})`)
-    }
-
     admin.success(`${GENERAL.CHANGED_NAME1} ${newName} ${GENERAL.CHANGED_NAME2}`)
   }
 
@@ -132,14 +123,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_INFO} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_UPDATE_BOARD_INFO} (${response.data.error})`)
-    }
-
     admin.success(GENERAL.UPDATED_INFO)
   }
 
@@ -154,12 +141,9 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_CHANGE_TYPE} (${data.error})`)
     }
 
     let typeName = "게시판 (board)"
@@ -170,7 +154,6 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     } else if (board.value.type === (BOARD.SHOP as Board)) {
       typeName = "쇼핑몰 (shop)"
     }
-
     admin.success(`${GENERAL.CHANGED_TYPE1} ${typeName} ${GENERAL.CHANGED_TYPE2}`)
   }
 
@@ -192,14 +175,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_UPDATE_ROWS} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_UPDATE_ROWS} (${response.data.error})`)
-    }
-
     admin.success(`${newRows} ${GENERAL.UPDATED_ROWS}`)
   }
 
@@ -221,14 +200,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_UPDATE_WIDTH} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_UPDATE_WIDTH} (${response.data.error})`)
-    }
-
     admin.success(`${GENERAL.CHANGED_WIDTH1} ${newWidth} ${GENERAL.CHANGED_WIDTH2}`)
   }
 
@@ -249,19 +224,15 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_ADD_CATEGORY} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_ADD_CATEGORY} (${data.error})`)
     }
 
     board.value.category.push({
       uid: response.data.result as number,
       name: newCategory,
     })
-
     admin.success(`${newCategory} ${GENERAL.ADDED_CATEGORY}`)
   }
 
@@ -290,18 +261,14 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         categoryUid: boardRemoveCategory.value.uid,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_REMOVE_CATEGORY} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_REMOVE_CATEGORY} (${data.error})`)
     }
 
     board.value.category = board.value.category.filter((cat: Pair) => {
       return cat.uid !== boardRemoveCategory.value.uid
     })
-
     admin.success(GENERAL.REMOVED_CATEGORY)
   }
 
@@ -316,14 +283,10 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.FAILED_CHANGE_USE_CATEGORY} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.FAILED_CHANGE_USE_CATEGORY} (${response.data.error})`)
-    }
-
     admin.success(GENERAL.CHANGED_USE_CATEGORY)
   }
 

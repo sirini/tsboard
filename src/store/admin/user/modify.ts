@@ -8,6 +8,8 @@ import { SHA256 } from "crypto-js"
 import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { ADMIN_USER_INFO, AdminUserInfo } from "../../../interface/admin_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () => {
   const admin = useAdminStore()
@@ -18,6 +20,28 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
   const user = ref<AdminUserInfo>(ADMIN_USER_INFO)
   const newProfile = ref<File | undefined>(undefined)
   const newProfilePreview = ref<string>("")
+
+  // 기존 회원 정보를 가져와 업데이트하기
+  async function loadUserInfo(userUid: number): Promise<void> {
+    const response = await axios.get(`${TSBOARD.API}/admin/user/load`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        userUid,
+      },
+    })
+    const data = response.data as ResponseData<AdminUserInfo>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${MODIFY.FAILED_LOAD} (${data.error})`)
+    }
+
+    user.value = data.result
+    admin.success(MODIFY.LOADED_USER)
+  }
 
   // 이름 중복 체크하기
   async function checkName(): Promise<void> {
@@ -31,36 +55,12 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
     fd.append("userUid", user.value.uid.toString())
 
     const response = await axios.post(`${TSBOARD.API}/auth/checkname`, fd)
+    const data = response.data as ResponseData<null>
 
-    if (!response.data) {
-      return util.error(MODIFY.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    if (!data || data.success === false) {
       return util.error(`${user.value.name} ${MODIFY.DUPLICATED_NAME}`)
     }
     util.success(`${user.value.name} ${MODIFY.VALID_NAME}`)
-  }
-
-  // 기존 회원 정보를 가져와 업데이트하기
-  async function loadUserInfo(userUid: number): Promise<void> {
-    const response = await axios.get(`${TSBOARD.API}/admin/user/load`, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-      params: {
-        userUid,
-      },
-    })
-
-    if (!response.data) {
-      return admin.error(MODIFY.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${MODIFY.FAILED_LOAD} (${response.data.error})`)
-    }
-
-    user.value = response.data.result.user as AdminUserInfo
-    admin.success(MODIFY.LOADED_USER)
   }
 
   // 변경할 프로필 사진 받기
@@ -102,12 +102,9 @@ export const useAdminUserModifyStore = defineStore("adminUserModifyStore", () =>
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(MODIFY.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${MODIFY.FAILED_UPDATE} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${MODIFY.FAILED_UPDATE} (${data.error})`)
     }
 
     password.value = ""

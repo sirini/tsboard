@@ -10,10 +10,14 @@ import axios from "axios"
 import {
   ADMIN_GROUP_BOARD_STATUS,
   ADMIN_GROUP_CONFIG,
+  AdminCreateBoardResult,
   AdminGroupBoardItem,
   AdminGroupConfig,
+  AdminGroupListResult,
 } from "../../../interface/admin_interface"
-import { Board, BoardWriter, Pair, Triple } from "../../../interface/board_interface"
+import { BoardWriter, Pair, Triple } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => {
   const route = useRoute()
@@ -39,18 +43,18 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         id: route.params.id as string,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminGroupListResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_LOAD_GROUP_INFO} (${response.data.error})`)
-    }
 
-    group.value = response.data.result.config as AdminGroupConfig
+    group.value = data.result.config
     group.value.id = route.params.id as string
 
-    boards.value = response.data.result.boards as AdminGroupBoardItem[]
+    boards.value = data.result.boards
     admin.success(GENERAL.LOADED_CONFIG)
   }
 
@@ -69,18 +73,15 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<BoardWriter[]>
+    if (!data || data.success === false) {
       return
     }
-    if (response.data.result.length < 1) {
+    if (data.result.length < 1) {
       suggestions.value = [{ uid: 0, name: GENERAL.EMPTY_CANDIDATES, profile: "", signature: "" }]
       return
     }
-    suggestions.value = response.data.result as BoardWriter[]
+    suggestions.value = data.result
   }
   const updateGroupManagerSuggestion = util.debounce(_updateGroupManagerSuggestion, 250)
 
@@ -99,18 +100,15 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<Triple[]>
+    if (!data || data.success === false) {
       return
     }
-    if (response.data.result.length < 1) {
+    if (data.result.length < 1) {
       existBoardIds.value = [{ uid: 0, id: "", name: GENERAL.NO_DUPLICATE_ID }]
       return
     }
-    existBoardIds.value = response.data.result as Triple[]
+    existBoardIds.value = data.result
   }
   const updateExistBoardIds = util.debounce(_updateExistBoardIds, 250)
 
@@ -135,23 +133,20 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${response.data.error})`)
+    const data = response.data as ResponseData<AdminCreateBoardResult>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.FAILED_CREATE_BOARD} (${data.error})`)
     }
 
     boards.value.push({
-      uid: response.data.result.uid as number,
+      uid: data.result.uid,
       id: newId,
-      type: response.data.result.type as Board,
-      name: response.data.result.name as string,
-      info: response.data.result.info as string,
+      type: data.result.type,
+      name: data.result.name,
+      info: data.result.info,
       manager: {
-        uid: response.data.result.manager.uid as number,
-        name: response.data.result.manager.name as string,
+        uid: data.result.manager.uid,
+        name: data.result.manager.name,
         profile: "",
         signature: "",
       },
@@ -173,12 +168,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.UNABLE_CHANGE_ADMIN} (${data.error})`)
     }
 
     group.value.manager.uid = user.uid
@@ -215,12 +207,9 @@ export const useAdminGroupGeneralStore = defineStore("adminGroupGeneral", () => 
         userUid: auth.user.uid,
       },
     })
-
-    if (!response.data) {
-      return admin.error(GENERAL.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${GENERAL.FAILED_REMOVE_BOARD} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${GENERAL.FAILED_REMOVE_BOARD} (${data.error})`)
     }
 
     boards.value = boards.value.filter((board) => {

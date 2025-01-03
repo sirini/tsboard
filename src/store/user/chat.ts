@@ -8,6 +8,8 @@ import { useAuthStore } from "./auth"
 import axios from "axios"
 import { ChatHistory, ChatItem } from "../../interface/chat_interface"
 import { USER_BASIC_INFO, UserBasicInfo } from "../../interface/user_interface"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useChatStore = defineStore("chat", () => {
   const auth = useAuthStore()
@@ -33,9 +35,13 @@ export const useChatStore = defineStore("chat", () => {
         limit: 10,
       },
     })
-
-    if (response.data && response.data.success === true) {
-      list.value = response.data.result
+    const data = response.data as ResponseData<ChatItem[]>
+    if (data && data.success === true) {
+      list.value = data.result
+    } else {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
     }
   }
 
@@ -68,15 +74,12 @@ export const useChatStore = defineStore("chat", () => {
         targetUserUid: targetUser.value.uid,
       },
     })
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_LOAD_HISTORY} (${response.data.error})`)
+    const data = response.data as ResponseData<ChatHistory[]>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_HISTORY} (${data.error})`)
     }
 
-    history.value = response.data.result.reverse()
+    history.value = data.result.reverse()
     util.success(TEXT[home.lang].LOADED_HISTORY)
   }
 
@@ -90,29 +93,22 @@ export const useChatStore = defineStore("chat", () => {
     fd.append("targetUserUid", targetUser.value.uid.toString())
     fd.append("message", message.value)
 
-    const response = await axios.post(
-      `${TSBOARD.API}/chat/save`, fd,
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
+    const response = await axios.post(`${TSBOARD.API}/chat/save`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-    )
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_ADD_CHAT} (${response.data.error})`)
+    })
+    const data = response.data as ResponseData<number>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_ADD_CHAT} (${data.error})`)
     }
 
     history.value.push({
-      uid: response.data.result,
+      uid: data.result,
       userUid: auth.user.uid,
       message: message.value,
       timestamp: Date.now(),
     })
-
     message.value = ""
   }
   const send = util.debounce(_send, 250)

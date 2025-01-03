@@ -7,6 +7,7 @@ import { TEXT } from "../../messages/store/user/auth"
 import { TSBOARD } from "../../../tsboard.config"
 import axios from "axios"
 import { MY_INFO_RESULT, MyInfoResult, USER_INFO_KEY } from "../../interface/user_interface"
+import { ResponseData } from "../../interface/util_interface"
 
 export const useAuthStore = defineStore("auth", () => {
   const util = useUtilStore()
@@ -60,16 +61,14 @@ export const useAuthStore = defineStore("auth", () => {
         },
       })
 
-      if (!response.data) {
-        return util.error(TEXT[home.lang].NO_RESPONSE)
-      }
-      if (response.data.success === false) {
-        return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+      const data = response.data as ResponseData<MyInfoResult>
+      if (!data || data.success === false) {
+        return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${data.error})`)
       }
 
       const accessToken = user.value.token
       const refreshToken = user.value.refresh
-      user.value = response.data.result as MyInfoResult
+      user.value = data.result
       user.value.signature = util.unescape(user.value.signature)
       user.value.token = accessToken
       user.value.refresh = refreshToken
@@ -92,15 +91,12 @@ export const useAuthStore = defineStore("auth", () => {
     fd.append("password", SHA256(password.value).toString())
 
     const response = await axios.post(`${TSBOARD.API}/auth/signin`, fd)
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<MyInfoResult>
+    if (!data || data.success === false) {
       return util.error(TEXT[home.lang].INVALID_ID_PW)
     }
 
-    user.value = response.data.result as MyInfoResult
+    user.value = data.result
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
@@ -111,15 +107,12 @@ export const useAuthStore = defineStore("auth", () => {
   // OAuth 로그인 이후 결과 받아오기
   async function loadOAuthUserInfo(): Promise<void> {
     const response = await axios.get(`${TSBOARD.API}/auth/oauth/userinfo`)
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].FAILED_LOAD_MYINFO)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${response.data.error})`)
+    const data = response.data as ResponseData<MyInfoResult>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_MYINFO} (${data.error})`)
     }
 
-    user.value = response.data.result as MyInfoResult
+    user.value = data.result
     if (user.value) {
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user.value))
     }
@@ -145,6 +138,23 @@ export const useAuthStore = defineStore("auth", () => {
     user.value.point = 0
     window.localStorage.removeItem(USER_INFO_KEY)
     util.success(TEXT[home.lang].GOODBYE_USER)
+  }
+
+  // 액세스 토큰 만료 시 리프레시 토큰으로 다시 발급 받기
+  async function updateAccessToken(): Promise<boolean> {
+    const fd = new FormData()
+    fd.append("userUid", user.value.uid.toString())
+    fd.append("refresh", user.value.refresh)
+
+    const response = await axios.post(`${TSBOARD.API}/auth/refresh`, fd)
+    const data = response.data as ResponseData<string>
+
+    if (!data || data.success === false) {
+      util.error(`${TEXT[home.lang].FAILED_UPDATE_ACCESS_TOKEN} (${data.error})`)
+      return false
+    }
+    updateUserToken(data.result)
+    return data.result.length > 0
   }
 
   // 사용자 토큰 업데이트 하기
@@ -192,12 +202,9 @@ export const useAuthStore = defineStore("auth", () => {
         Authorization: `Bearer ${user.value.token}`,
       },
     })
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_UPDATE_MYINFO} (${data.error})`)
     }
 
     await loadUserInfo()
@@ -218,6 +225,7 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     updateMyInfo,
     selectProfileImage,
+    updateAccessToken,
     updateUserToken,
   }
 })

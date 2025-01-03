@@ -1,41 +1,38 @@
-/**
- * messages/components/gallery/list/gallery-list-search
- *
- * language pack
- */
-
 export const TEXT = [
-  /* LANG.KO */ {
-    PHOTO_TITLE: "제목",
+  /* LANG.KO */
+  {
     CONTENT: "설명",
-    PHOTOGRAPHER: "작가명",
-    TAG: "태그",
     FILL_SEARCH: "검색할 내용을 입력하세요.",
-    SEARCH: "검색",
-    PREV: "이전글",
     LIST: "목록",
+    PHOTO_TITLE: "제목",
+    PHOTOGRAPHER: "작가명",
+    PREV: "이전글",
+    SEARCH: "검색",
+    TAG: "태그",
     UPLOAD: "업로드",
   },
-  /* LANG.EN */ {
-    PHOTO_TITLE: "Title",
+  /* LANG.EN */
+  {
     CONTENT: "Desc.",
-    PHOTOGRAPHER: "Owner",
-    TAG: "Tag",
     FILL_SEARCH: "Please enter a search term.",
-    SEARCH: "Search",
-    PREV: "Prev",
     LIST: "List",
+    PHOTO_TITLE: "Title",
+    PHOTOGRAPHER: "Owner",
+    PREV: "Prev",
+    SEARCH: "Search",
+    TAG: "Tag",
     UPLOAD: "Upload",
   },
-  /* LANG.CN */ {
-    PHOTO_TITLE: "标题",
+  /* LANG.CN */
+  {
     CONTENT: "描述",
-    PHOTOGRAPHER: "所有者",
-    TAG: "标签",
     FILL_SEARCH: "请输入搜索词",
-    SEARCH: "搜索",
-    PREV: "上一页",
     LIST: "列表",
+    PHOTO_TITLE: "标题",
+    PHOTOGRAPHER: "所有者",
+    PREV: "上一页",
+    SEARCH: "搜索",
+    TAG: "标签",
     UPLOAD: "上传",
   },
 ]

@@ -23,6 +23,8 @@ import {
 } from "../../interface/board_interface"
 import axios from "axios"
 import { TSBOARD } from "../../../tsboard.config"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useBoardListStore = defineStore("boardList", () => {
   const route = useRoute()
@@ -67,25 +69,24 @@ export const useBoardListStore = defineStore("boardList", () => {
           keyword: encodeURIComponent(keyword.value),
         },
       })
-
-      if (!response.data) {
-        return util.snack(TEXT[home.lang].NO_RESPONSE)
+      const data = response.data as ResponseData<BoardListResult>
+      if (!data || data.success === false) {
+        config.value = data.result.config
+        if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+          util.error(ADMIN.NEED_REFRESH)
+        }
+        return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${data.error})`)
       }
-      if (response.data.success === false) {
-        config.value = response.data.result.config
-        return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
-      }
 
-      const result = response.data.result as BoardListResult
-      config.value = result.config
-      isAdmin.value = result.isAdmin
+      config.value = data.result.config
+      isAdmin.value = data.result.isAdmin
 
       if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type as number].path) === false) {
         return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
       }
 
-      result.posts.map((post: BoardListItem): void => {
-        if (result.blackList.includes(post.writer.uid) === true) {
+      data.result.posts.map((post: BoardListItem): void => {
+        if (data.result.blackList.includes(post.writer.uid) === true) {
           post.uid = 0
           post.writer.uid = 0
           post.writer.name = "X"
@@ -96,8 +97,8 @@ export const useBoardListStore = defineStore("boardList", () => {
         }
       })
 
-      notices.value = result.notices
-      posts.value = result.posts
+      notices.value = data.result.notices
+      posts.value = data.result.posts
       let noticeCount = 0
       posts.value.map((post: BoardListItem) => {
         if (post.status === STATUS.NOTICE) {
@@ -105,7 +106,7 @@ export const useBoardListStore = defineStore("boardList", () => {
         }
       })
       pageLength.value = Math.ceil(
-        response.data.result.totalPostCount / (config.value.rowCount - noticeCount),
+        data.result.totalPostCount / (config.value.rowCount - noticeCount),
       )
 
       if (pagingDirection.value === (PAGE.PREV as Paging)) {

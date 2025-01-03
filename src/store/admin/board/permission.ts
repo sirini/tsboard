@@ -9,6 +9,8 @@ import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { ADMIN_BOARD_LEVEL_POLICY, AdminBoardLevelPolicy } from "../../../interface/admin_interface"
 import { BoardWriter, Pair } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", () => {
   const route = useRoute()
@@ -30,15 +32,15 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         userUid: auth.user.uid,
       },
     })
-
-    if (!response.data) {
-      return admin.error(PERMISSION.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminBoardLevelPolicy>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${PERMISSION.UNABLE_LOAD_PERMISSION} (${response.data.error})`)
-    }
 
-    board.value = response.data.result as AdminBoardLevelPolicy
+    board.value = data.result
     admin.success(PERMISSION.LOADED_PERMISSION)
   }
 
@@ -53,20 +55,17 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(PERMISSION.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<BoardWriter[]>
+    if (!data || data.success === false) {
       return
     }
-    if (response.data.result.length < 1) {
+    if (data.result.length < 1) {
       suggestions.value = [
         { uid: 0, name: PERMISSION.EMPTY_CANDIDATES, profile: "", signature: "" },
       ]
       return
     }
-    suggestions.value = response.data.result as BoardWriter[]
+    suggestions.value = data.result
   }
   const updateBoardManagerSuggestion = util.debounce(_updateBoardManagerSuggestion, 250)
 
@@ -81,12 +80,9 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(PERMISSION.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${PERMISSION.UNABLE_CHANGE_ADMIN} (${data.error})`)
     }
 
     board.value.admin = {
@@ -153,13 +149,9 @@ export const useAdminBoardPermissionStore = defineStore("adminBoardPermission", 
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      admin.error(PERMISSION.NO_RESPONSE)
-      return false
-    }
-    if (response.data.success === false) {
-      admin.error(`${PERMISSION.UNABLE_UPDATE_LEVEL} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      admin.error(`${PERMISSION.UNABLE_UPDATE_LEVEL} (${data.error})`)
       return false
     }
 

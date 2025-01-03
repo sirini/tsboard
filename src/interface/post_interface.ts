@@ -37,6 +37,12 @@ export type GalleryListResult = {
   totalPostCount: number
 }
 
+// 갤러리 사진 보기 반환 타입 정의
+export type GalleryPhotoResult = {
+  config: BoardConfig
+  images: BoardAttachedImage[]
+}
+
 // 갤러리용 좌표 타입 정의
 export interface Position {
   x: number

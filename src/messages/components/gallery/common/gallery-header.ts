@@ -1,24 +1,18 @@
-/**
- * messages/components/gallery/common/gallery-header
- *
- * language pack
- */
-
 export const TEXT = [
   /* LANG.KO */ {
     LOGIN: "로그인",
-    MYINFO: "내정보",
     MANAGE: "관리",
+    MYINFO: "내정보",
   },
   /* LANG.EN */ {
     LOGIN: "Login",
-    MYINFO: "My info",
     MANAGE: "Manage",
+    MYINFO: "My info",
   },
   /* LANG.CN */ {
     LOGIN: "登录",
-    MYINFO: "我的信息",
     MANAGE: "管理",
+    MYINFO: "我的信息",
   },
 ]
 Object.freeze(TEXT)

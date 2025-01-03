@@ -12,6 +12,8 @@ import {
 } from "../../interface/user_interface"
 import axios from "axios"
 import { TSBOARD } from "../../../tsboard.config"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useManageUserStore = defineStore("manageuser", () => {
   const auth = useAuthStore()
@@ -44,14 +46,14 @@ export const useManageUserStore = defineStore("manageuser", () => {
         targetUserUid: targetUser.value.uid,
       },
     })
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<UserPermissionReportResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_PERMISSION} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_LOAD_PERMISSION} (${response.data.error})`)
-    }
-    permission.value = response.data.result as UserPermissionReportResult
+    permission.value = data.result
     util.success(TEXT[home.lang].LOADED_PERMISSION)
   }
 
@@ -69,20 +71,14 @@ export const useManageUserStore = defineStore("manageuser", () => {
     fd.append("sendReport", permission.value.sendReport ? "1" : "0")
     fd.append("response", permission.value.response)
 
-    const response = await axios.post(
-      `${TSBOARD.API}/user/manage/user`, fd,
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
+    const response = await axios.post(`${TSBOARD.API}/user/manage/user`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-    )
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${response.data.error})`)
+    })
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_MANAGE_USER} (${data.error})`)
     }
 
     util.success(TEXT[home.lang].ACTION_TAKEN)

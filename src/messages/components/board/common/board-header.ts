@@ -1,9 +1,3 @@
-/**
- * messages/components/board/common/board-header
- *
- * language pack
- */
-
 export const TEXT = [
   /* LANG.KO */ {
     LOGIN: "로그인",

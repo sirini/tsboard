@@ -15,6 +15,8 @@ import {
 import { PAGE, Paging } from "../../interface/board_interface"
 import axios from "axios"
 import { TSBOARD } from "../../../tsboard.config"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useCommentStore = defineStore("comment", () => {
   const route = useRoute()
@@ -57,20 +59,19 @@ export const useCommentStore = defineStore("comment", () => {
         sinceUid: sinceUid.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<CommentListResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
       comments.value = []
       pageLength.value = 1
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${response.data.error})`)
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_COMMENT} (${data.error})`)
     }
 
-    const result = response.data.result as CommentListResult
-    boardUid.value = result.boardUid
-    comments.value = result.comments
-    pageLength.value = Math.ceil(result.totalCommentCount / bunch.value)
+    boardUid.value = data.result.boardUid
+    comments.value = data.result.comments
+    pageLength.value = Math.ceil(data.result.totalCommentCount / bunch.value)
   }
 
   // 댓글에 답글달기 시 대상 지정
@@ -114,8 +115,8 @@ export const useCommentStore = defineStore("comment", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (response.data && response.data.success === true) {
+    const data = response.data as ResponseData<null>
+    if (data && data.success === true) {
       comments.value.map((comment: CommentResult) => {
         if (comment.uid === commentUid) {
           comment.liked = isLike
@@ -235,26 +236,17 @@ export const useCommentStore = defineStore("comment", () => {
         removeTargetUid: removeTarget.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_COMMENT} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_COMMENT} (${data.error})`)
     }
 
-    if (response.data.result.isChangeStatus === true) {
-      comments.value = comments.value.filter((comment: CommentResult) => {
-        return removeTarget.value !== comment.uid
-      })
-    } else {
-      comments.value.map((comment: CommentResult) => {
-        if (removeTarget.value === comment.uid) {
-          comment.content = TEXT[home.lang].NOTE_REMOVED_COMMENT
-          return
-        }
-      })
-    }
+    comments.value.map((comment: CommentResult) => {
+      if (removeTarget.value === comment.uid) {
+        comment.content = TEXT[home.lang].NOTE_REMOVED_COMMENT
+        return
+      }
+    })
 
     util.snack(TEXT[home.lang].REMOVED_COMMENT)
     closeRemoveCommentDialog()
@@ -276,18 +268,14 @@ export const useCommentStore = defineStore("comment", () => {
           Authorization: `Bearer ${auth.user.token}`,
         },
       })
-
-      if (!response.data) {
-        util.snack(TEXT[home.lang].NO_RESPONSE)
-        return result
-      }
-      if (response.data.success === false) {
-        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+      const data = response.data as ResponseData<number>
+      if (!data || data.success === false) {
+        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${data.error})`)
         return result
       }
 
       result = {
-        uid: response.data.result,
+        uid: data.result,
         writer: {
           uid: auth.user.uid,
           name: auth.user.name,
@@ -326,18 +314,14 @@ export const useCommentStore = defineStore("comment", () => {
           Authorization: `Bearer ${auth.user.token}`,
         },
       })
-
-      if (!response.data) {
-        util.snack(TEXT[home.lang].NO_RESPONSE)
-        return result
-      }
-      if (response.data.success === false) {
-        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${response.data.error})`)
+      const data = response.data as ResponseData<number>
+      if (!data || data.success === false) {
+        util.snack(`${TEXT[home.lang].FAILED_SAVE_COMMENT} (${data.error})`)
         return result
       }
 
       result = {
-        uid: response.data.result,
+        uid: data.result,
         writer: {
           uid: auth.user.uid,
           name: auth.user.name,
@@ -372,14 +356,10 @@ export const useCommentStore = defineStore("comment", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_MODIFY_COMMENT} (${response.data.error})`)
-    }
-
     util.snack(TEXT[home.lang].MODIFIED_COMMENT)
   }
 

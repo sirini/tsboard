@@ -18,6 +18,8 @@ import {
   Search,
 } from "../../interface/board_interface"
 import { GalleryGridItem, GalleryListResult } from "../../interface/post_interface"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useGalleryStore = defineStore("gallery", () => {
   const route = useRoute()
@@ -58,28 +60,28 @@ export const useGalleryStore = defineStore("gallery", () => {
         keyword: encodeURIComponent(keyword.value),
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<GalleryListResult>
+    if (!data || data.success === false) {
       config.value = response.data.result.config
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${response.data.error})`)
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_LIST} (${data.error})`)
     }
-
-    const result = response.data.result as GalleryListResult
-    config.value = result.config
+    config.value = data.result.config
 
     if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
       return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
     }
 
     if (sinceUid.value < 1) {
-      images.value = result.images
+      images.value = data.result.images
     } else {
       if (response.data.result.images.length > 0) {
         const merged = [
-          ...new Map([...images.value, ...result.images].map((item) => [item.uid, item])).values(),
+          ...new Map(
+            [...images.value, ...data.result.images].map((item) => [item.uid, item]),
+          ).values(),
         ]
         images.value = merged
         page.value += 1
@@ -87,9 +89,10 @@ export const useGalleryStore = defineStore("gallery", () => {
         util.snack(TEXT[home.lang].LAST_PAGE)
       }
     }
-    pageLength.value = Math.ceil(result.totalPostCount / config.value.rowCount)
+    pageLength.value = Math.ceil(data.result.totalPostCount / config.value.rowCount)
     auth.user.admin =
-      result.config.admin.group === auth.user.uid || result.config.admin.board === auth.user.uid
+      data.result.config.admin.group === auth.user.uid ||
+      data.result.config.admin.board === auth.user.uid
   }
 
   // 갤러리 목록 초기화

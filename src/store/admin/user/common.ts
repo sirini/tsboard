@@ -7,6 +7,8 @@ import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { AdminUserItem, AdminUserItemResult } from "../../../interface/admin_interface"
 import { Pair, SEARCH, Search } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminUserStore = defineStore("adminUser", () => {
   const admin = useAdminStore()
@@ -34,17 +36,16 @@ export const useAdminUserStore = defineStore("adminUser", () => {
         keyword: encodeURIComponent(keyword.value),
       },
     })
-
-    if (!response.data) {
-      return admin.error(COMMON.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminUserItemResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${COMMON.FAILED_LOAD} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${COMMON.FAILED_LOAD} (${response.data.error})`)
-    }
 
-    const result = response.data.result as AdminUserItemResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    users.value = result.user
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    users.value = data.result.user
     admin.success(COMMON.LOADED_USER)
   }
 

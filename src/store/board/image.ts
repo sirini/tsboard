@@ -8,6 +8,8 @@ import { useUtilStore } from "../util"
 import { useBoardEditorStore } from "./editor"
 import axios from "axios"
 import { EditorInsertImageResult, Pair } from "../../interface/board_interface"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useEditorImageStore = defineStore("editorImage", () => {
   const auth = useAuthStore()
@@ -40,6 +42,46 @@ export const useEditorImageStore = defineStore("editorImage", () => {
     },
   ]
 
+  // 기존에 업로드한 이미지들 가져오기
+  async function loadUploadedImages(isAppend: boolean): Promise<void> {
+    const response = await axios.get(`${TSBOARD.API}/editor/load/images`, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+      params: {
+        boardUid: boardUid.value,
+        lastUid: isAppend ? lastImageUid.value : 0,
+        bunch: bunch.value,
+      },
+    })
+    const data = response.data as ResponseData<EditorInsertImageResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        util.error(ADMIN.NEED_REFRESH)
+      }
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${data.error})`)
+    }
+
+    if (data.result.images.length < 1) {
+      util.snack(TEXT[home.lang].EMPTY_IMAGES)
+      disableReloadButton.value = true
+      return
+    }
+    if (isAppend) {
+      loadImages.value.push(...data.result.images)
+    } else {
+      loadImages.value = data.result.images
+    }
+
+    totalImageCount.value = data.result.totalImageCount
+    lastImageUid.value = data.result.maxImageUid
+    loadImages.value.map((image: Pair) => {
+      if (lastImageUid.value > image.uid) {
+        lastImageUid.value = image.uid
+      }
+    })
+  }
+
   // 본문에 삽입할 이미지들 선택 및 업로드
   async function uploadImageFiles(event: MouseEvent): Promise<void> {
     uploading.value = true
@@ -57,59 +99,15 @@ export const useEditorImageStore = defineStore("editorImage", () => {
           Authorization: `Bearer ${auth.user.token}`,
         },
       })
-
-      if (!response.data) {
-        return util.snack(TEXT[home.lang].NO_RESPONSE)
-      }
-      if (response.data.success === false) {
-        return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${response.data.error})`)
+      const data = response.data as ResponseData<string[]>
+      if (!data || data.success === false) {
+        return util.snack(`${TEXT[home.lang].FAILED_UPLOAD_IMAGE} (${data.error})`)
       }
 
-      uploadedImages.value = response.data.result as string[]
+      uploadedImages.value = data.result
     } finally {
       uploading.value = false
     }
-  }
-
-  // 기존에 업로드한 이미지들 가져오기
-  async function loadUploadedImages(isAppend: boolean): Promise<void> {
-    const response = await axios.get(`${TSBOARD.API}/editor/load/images`, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-      params: {
-        boardUid: boardUid.value,
-        lastUid: isAppend ? lastImageUid.value : 0,
-        bunch: bunch.value,
-      },
-    })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_IMAGE} (${response.data.error})`)
-    }
-
-    const result = response.data.result as EditorInsertImageResult
-    if (result.images.length < 1) {
-      util.snack(TEXT[home.lang].EMPTY_IMAGES)
-      disableReloadButton.value = true
-      return
-    }
-    if (isAppend) {
-      loadImages.value.push(...result.images)
-    } else {
-      loadImages.value = result.images
-    }
-
-    totalImageCount.value = result.totalImageCount
-    lastImageUid.value = result.maxImageUid
-    loadImages.value.map((image: Pair) => {
-      if (lastImageUid.value > image.uid) {
-        lastImageUid.value = image.uid
-      }
-    })
   }
 
   // 이미지 삭제하기 준비
@@ -134,14 +132,10 @@ export const useEditorImageStore = defineStore("editorImage", () => {
         imageUid,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_IMAGE} (${response.data.error})`)
-    }
-
     util.snack(TEXT[home.lang].REMOVED_IMAGE)
   }
 

@@ -11,6 +11,7 @@ import {
   UserBasicInfo,
   UserInfoResult,
 } from "../../interface/user_interface"
+import { ResponseData } from "../../interface/util_interface"
 
 export const useUserStore = defineStore("user", () => {
   const util = useUtilStore()
@@ -39,15 +40,11 @@ export const useUserStore = defineStore("user", () => {
         targetUserUid: targetUser.value.uid,
       },
     })
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
+    const data = response.data as ResponseData<UserInfoResult>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_LOAD_INFO} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_LOAD_INFO} (${response.data.error})`)
-    }
-
-    info.value = response.data.result as UserInfoResult
+    info.value = data.result
   }
 
   return {

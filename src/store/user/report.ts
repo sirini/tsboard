@@ -7,6 +7,7 @@ import { TEXT } from "../../messages/store/user/user"
 import { TSBOARD } from "../../../tsboard.config"
 import { USER_BASIC_INFO, UserBasicInfo } from "../../interface/user_interface"
 import axios from "axios"
+import { ResponseData } from "../../interface/util_interface"
 
 export const useReportStore = defineStore("report", () => {
   const auth = useAuthStore()
@@ -44,20 +45,14 @@ export const useReportStore = defineStore("report", () => {
     fd.append("content", content.value)
     fd.append("checkedBlackList", checkedBlackList.value ? "1" : "0")
 
-    const response = await axios.post(
-      `${TSBOARD.API}/user/report`, fd,
-      {
-        headers: {
-          Authorization: `Bearer ${auth.user.token}`,
-        },
+    const response = await axios.post(`${TSBOARD.API}/user/report`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
       },
-    )
-
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.error(`${TEXT[home.lang].FAILED_REPORT} (${response.data.error})`)
+    })
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].FAILED_REPORT} (${data.error})`)
     }
 
     util.success(TEXT[home.lang].REPORTED_USER)

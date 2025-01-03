@@ -8,6 +8,8 @@ import { useAdminStore } from "../common"
 import axios from "axios"
 import { AdminLatestPost, AdminLatestPostResult } from "../../../interface/admin_interface"
 import { SEARCH, Search } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
   const admin = useAdminStore()
@@ -34,17 +36,16 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
         bunch: bunch.value,
       },
     })
-
-    if (!response.data) {
-      return admin.error(POST.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<AdminLatestPostResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
       return admin.error(POST.FAILED_LOAD)
     }
 
-    const result = response.data.result as AdminLatestPostResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    posts.value = result.posts
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    posts.value = data.result.posts
     admin.success(POST.LOADED_POST)
   }
 
@@ -71,14 +72,13 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
         bunch: bunch.value,
       },
     })
-
-    if (!response.data) {
+    const data = response.data as ResponseData<AdminLatestPostResult>
+    if (!data || data.success === false) {
       return admin.error(POST.NO_RESPONSE)
     }
 
-    const result = response.data.result as AdminLatestPostResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    posts.value = result.posts
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    posts.value = data.result.posts
   }
   const updateLatestPosts = util.debounce(_updateLatestPosts, 250)
 
@@ -109,13 +109,9 @@ export const useAdminLatestPostStore = defineStore("adminLatestPost", () => {
         targets,
       },
     })
-
-    if (!response.data) {
-      return admin.error(POST.NO_RESPONSE)
-    }
-
-    if (response.data.success === false) {
-      return admin.error(`${POST.FAILED_REMOVE} ${response.data.error}`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${POST.FAILED_REMOVE} ${data.error}`)
     }
 
     admin.success(POST.REMOVED_POST)

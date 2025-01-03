@@ -8,6 +8,8 @@ import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { AdminGroupConfig } from "../../../interface/admin_interface"
 import { BoardWriter, Pair } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminGroupListStore = defineStore("adminGroupList", () => {
   const admin = useAdminStore()
@@ -29,15 +31,14 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(LIST.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminGroupConfig[]>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${LIST.UNABLE_LOAD_LIST} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${LIST.UNABLE_LOAD_LIST} (${response.data.error})`)
-    }
-
-    groups.value = response.data.result as AdminGroupConfig[]
+    groups.value = data.result
   }
 
   // 새 그룹 생성을 위해 아이디를 입력할 때 기존 그룹 아이디를 보여주기
@@ -55,18 +56,15 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         limit: 5,
       },
     })
-
-    if (!response.data) {
-      return admin.error(LIST.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<Pair[]>
+    if (!data || data.success === false) {
       return
     }
-    if (response.data.result.length < 1) {
+    if (data.result.length < 1) {
       existGroupIds.value = [{ uid: 0, name: LIST.NO_DUPLICATE_ID }]
       return
     }
-    existGroupIds.value = response.data.result as Pair[]
+    existGroupIds.value = data.result
   }
   const updateExistGroupIds = util.debounce(_updateExistGroupIds, 250)
 
@@ -91,12 +89,9 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(LIST.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${LIST.FAILED_CREATE_GROUP} (${response.data.error})`)
+    const data = response.data as ResponseData<AdminGroupConfig>
+    if (!data || data.success === false) {
+      return admin.error(`${LIST.FAILED_CREATE_GROUP} (${data.error})`)
     }
 
     groups.value.push({
@@ -139,12 +134,9 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         groupUid: removeGroupTarget.value.uid,
       },
     })
-
-    if (!response.data) {
-      return admin.error(LIST.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${LIST.FAILED_REMOVE_GROUP} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${LIST.FAILED_REMOVE_GROUP} (${data.error})`)
     }
 
     groups.value = groups.value.filter((group: AdminGroupConfig) => {
@@ -180,12 +172,9 @@ export const useAdminGroupListStore = defineStore("adminGroupList", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return admin.error(LIST.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return admin.error(`${LIST.FAILED_UPDATE_GROUP_ID} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${LIST.FAILED_UPDATE_GROUP_ID} (${data.error})`)
     }
 
     await loadGroupList()

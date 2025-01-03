@@ -1,9 +1,3 @@
-/**
- * messages/pages/home/about
- *
- * language pack
- */
-
 export const TEXT = [
   /* LANG.KO */ {
     TITLE: "사이트 소개",

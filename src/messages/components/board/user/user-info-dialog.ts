@@ -1,48 +1,45 @@
-/**
- * messages/components/board/user/user-info-dialog
- *
- * language pack
- */
-
 export const TEXT = [
-  /* LANG.KO */ {
-    TITLE: "사용자 정보",
-    INFO: "사용자의 기본 정보를 확인합니다",
-    NAME: "이름",
-    BLOCKED_USER: "차단된 사용자",
+  /* LANG.KO */
+  {
     ADMIN: "관리자",
-    LEVEL: "레벨",
-    SIGNATURE: "서명",
-    NO_SIGNATURE: "작성된 서명이 없습니다.",
-    SIGNUP_DATE: "가입일",
-    SIGNIN_DATE: "마지막 로그인",
+    BLOCKED_USER: "차단된 사용자",
     CLOSE: "닫기",
+    INFO: "사용자의 기본 정보를 확인합니다",
+    LEVEL: "레벨",
+    NAME: "이름",
+    NO_SIGNATURE: "작성된 서명이 없습니다.",
+    SIGNATURE: "서명",
+    SIGNIN_DATE: "마지막 로그인",
+    SIGNUP_DATE: "가입일",
+    TITLE: "사용자 정보",
   },
-  /* LANG.EN */ {
-    TITLE: "User Information",
-    INFO: "View basic information about the user.",
-    NAME: "Name",
-    BLOCKED_USER: "Blocked User",
+  /* LANG.EN */
+  {
     ADMIN: "Administrator",
-    LEVEL: "Level",
-    SIGNATURE: "Signature",
-    NO_SIGNATURE: "No signature provided.",
-    SIGNUP_DATE: "Sign-up Date",
-    SIGNIN_DATE: "Last Login",
+    BLOCKED_USER: "Blocked User",
     CLOSE: "Close",
+    INFO: "View basic information about the user.",
+    LEVEL: "Level",
+    NAME: "Name",
+    NO_SIGNATURE: "No signature provided.",
+    SIGNATURE: "Signature",
+    SIGNIN_DATE: "Last Login",
+    SIGNUP_DATE: "Sign-up Date",
+    TITLE: "User Information",
   },
-  /* LANG.CN */ {
-    TITLE: "用户信息",
-    INFO: "查看用户的基本信息。",
-    NAME: "姓名",
-    BLOCKED_USER: "已屏蔽用户",
+  /* LANG.CN */
+  {
     ADMIN: "管理员",
-    LEVEL: "级别",
-    SIGNATURE: "个性签名",
-    NO_SIGNATURE: "未提供个性签名。",
-    SIGNUP_DATE: "注册日期",
-    SIGNIN_DATE: "上次登录",
+    BLOCKED_USER: "已屏蔽用户",
     CLOSE: "关闭",
+    INFO: "查看用户的基本信息。",
+    LEVEL: "级别",
+    NAME: "姓名",
+    NO_SIGNATURE: "未提供个性签名。",
+    SIGNATURE: "个性签名",
+    SIGNIN_DATE: "上次登录",
+    SIGNUP_DATE: "注册日期",
+    TITLE: "用户信息",
   },
 ]
 Object.freeze(TEXT)

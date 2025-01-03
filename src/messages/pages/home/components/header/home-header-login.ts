@@ -1,9 +1,3 @@
-/**
- * messages/pages/home/components/header/home-header-login
- *
- * language pack
- */
-
 export const TEXT = [
   /* LANG.KO */ {
     LOGIN_TOOLTIP: "로그인 페이지로 이동합니다.",

@@ -7,6 +7,8 @@ import { useHomeStore } from "../home"
 import { useUtilStore } from "../util"
 import { useAuthStore } from "./auth"
 import axios from "axios"
+import { ResponseData } from "../../interface/util_interface"
+import { ResetPasswordResult } from "../../interface/auth_interface"
 
 export const usePasswordStore = defineStore("password", () => {
   const auth = useAuthStore()
@@ -25,23 +27,22 @@ export const usePasswordStore = defineStore("password", () => {
     fd.append("email", auth.user.id)
     fd.append("lang", home.lang.toString())
 
-    const response = await axios.post(`${TSBOARD.API}/auth/reset/password`, fd)
+    try {
+      const response = await axios.post(`${TSBOARD.API}/auth/reset/password`, fd)
+      const data = response.data as ResponseData<ResetPasswordResult>
 
-    if (!response.data) {
-      return util.error(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      util.error(TEXT[home.lang].INVALID_EMAIL)
+      if (!data || data.success === false) {
+        util.error(`${TEXT[home.lang].INVALID_EMAIL} (${data.error})`)
+        return
+      }
+      if (data.result.sendmail === false) {
+        util.success(TEXT[home.lang].ASKED_RESET_PASSWORD)
+        return
+      }
+      util.success(TEXT[home.lang].SENT_RESET_PASSWORD)
+    } finally {
       loading.value = false
-      return
     }
-    if (response.data.result.sendmail === false) {
-      util.success(TEXT[home.lang].ASKED_RESET_PASSWORD)
-      loading.value = false
-      return
-    }
-    util.success(TEXT[home.lang].SENT_RESET_PASSWORD)
-    loading.value = false
   }
 
   // 비밀번호 변경하기
@@ -59,9 +60,10 @@ export const usePasswordStore = defineStore("password", () => {
     fd.append("password", SHA256(auth.password).toString())
 
     const response = await axios.post(`${TSBOARD.API}/user/change/password`, fd)
+    const data = response.data as ResponseData<null>
 
-    if (response.data!.success === false) {
-      return util.error(TEXT[home.lang].UNABLE_CHANGE_PASSWORD)
+    if (!data || data.success === false) {
+      return util.error(`${TEXT[home.lang].UNABLE_CHANGE_PASSWORD} (${data.error})`)
     }
     util.success(TEXT[home.lang].SUCCESS_CHANGE_PASSWORD)
     util.go("login")

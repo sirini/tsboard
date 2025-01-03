@@ -25,6 +25,8 @@ import {
 } from "../../interface/board_interface"
 import axios from "axios"
 import { READ_POST_KEY } from "../../interface/post_interface"
+import { CODE, ResponseData } from "../../interface/util_interface"
+import { ADMIN } from "../../messages/store/admin/admin"
 
 export const useBoardViewStore = defineStore("boardView", () => {
   const route = useRoute()
@@ -82,12 +84,9 @@ export const useBoardViewStore = defineStore("boardView", () => {
           latestLimit,
         },
       })
-
-      if (!response.data) {
-        return util.snack(TEXT[home.lang].NO_RESPONSE)
-      }
-      if (response.data.success === false) {
-        config.value = response.data.result.config
+      const data = response.data as ResponseData<BoardViewResult>
+      if (!data || data.success === false) {
+        config.value = data.result.config
         post.value = BOARD_LIST_ITEM
         post.value.title = TEXT[home.lang].FAILED_TITLE
         post.value.content = TEXT[home.lang].FAILED_CONTENT
@@ -95,24 +94,26 @@ export const useBoardViewStore = defineStore("boardView", () => {
         images.value = [] as BoardAttachedImage[]
         prevPostUid.value = 0
         nextPostUid.value = 0
-        return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${response.data.error})`)
-      }
 
-      const result = response.data.result as BoardViewResult
-      config.value = result.config
+        if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+          util.error(ADMIN.NEED_REFRESH)
+        }
+        return util.snack(`${TEXT[home.lang].FAILED_LOAD_POST} (${data.error})`)
+      }
+      config.value = data.result.config
 
       if (route.path.includes(CONVERT_BOARD_TYPE[config.value.type].path) === false) {
         return util.go(CONVERT_BOARD_TYPE[config.value.type].name)
       }
 
-      post.value = result.post
-      tags.value = result.tags
-      files.value = result.files
-      images.value = result.images
-      prevPostUid.value = result.prevPostUid
-      nextPostUid.value = result.nextPostUid
-      writerPosts.value = result.writerPosts
-      writerComments.value = result.writerComments
+      post.value = data.result.post
+      tags.value = data.result.tags
+      files.value = data.result.files
+      images.value = data.result.images
+      prevPostUid.value = data.result.prevPostUid
+      nextPostUid.value = data.result.nextPostUid
+      writerPosts.value = data.result.writerPosts
+      writerComments.value = data.result.writerComments
 
       if (
         post.value.status === STATUS.SECRET &&
@@ -123,7 +124,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
       }
 
       auth.user.admin =
-        result.config.admin.group === auth.user.uid || result.config.admin.board === auth.user.uid
+        data.result.config.admin.group === auth.user.uid ||
+        data.result.config.admin.board === auth.user.uid
     } finally {
       loading.value = false
     }
@@ -141,8 +143,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (response.data && response.data.success === true) {
+    const data = response.data as ResponseData<null>
+    if (data && data.success === true) {
       post.value.liked = isLike
       if (isLike) {
         post.value.like += 1
@@ -163,18 +165,14 @@ export const useBoardViewStore = defineStore("boardView", () => {
         fileUid,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${response.data.error})`)
+    const data = response.data as ResponseData<BoardViewDownloadResult>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_DOWNLOAD} (${data.error})`)
     }
 
-    const result = response.data.result as BoardViewDownloadResult
     const link = document.createElement("a")
-    link.href = `${TSBOARD.SITE.URL}/${result.path}`
-    link.download = result.name
+    link.href = `${TSBOARD.SITE.URL}/${data.result.path}`
+    link.download = data.result.name
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -214,15 +212,12 @@ export const useBoardViewStore = defineStore("boardView", () => {
         boardUid: config.value.uid,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_LOAD_BOARD_LISTS} (${response.data.error})`)
+    const data = response.data as ResponseData<BoardItem[]>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_LOAD_BOARD_LISTS} (${data.error})`)
     }
 
-    boardListItems.value = response.data.result as BoardItem[]
+    boardListItems.value = data.result
     movePostDialog.value = true
   }
 
@@ -246,12 +241,9 @@ export const useBoardViewStore = defineStore("boardView", () => {
         postUid: postUid.value,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_REMOVE_POST} (${data.error})`)
     }
 
     util.snack(TEXT[home.lang].REMOVED_POST)
@@ -298,12 +290,9 @@ export const useBoardViewStore = defineStore("boardView", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      return util.snack(TEXT[home.lang].NO_RESPONSE)
-    }
-    if (response.data.success === false) {
-      return util.snack(`${TEXT[home.lang].FAILED_MOVE_POST} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return util.snack(`${TEXT[home.lang].FAILED_MOVE_POST} (${data.error})`)
     }
 
     util.snack(TEXT[home.lang].MOVE_DONE)

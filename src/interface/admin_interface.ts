@@ -61,6 +61,15 @@ export const ADMIN_BOARD_POINT_POLICY: AdminBoardPointPolicy = {
   uid: 0,
 }
 
+// 게시판 생성하기 시 반환값 정의
+export type AdminCreateBoardResult = {
+  uid: number
+  type: Board
+  name: string
+  info: string
+  manager: Pair
+}
+
 // 대시보드 아이템(그룹, 게시판, 회원 최신순 목록) 반환값 정의
 export type AdminDashboardItem = {
   groups: Pair[]

@@ -1,9 +1,3 @@
-/**
- * messages/mail/verification
- *
- * 인증 코드 6자리 입력 요청 메일 내용
- */
-
 import { TSBOARD } from "../../../tsboard.config"
 
 export const TEXT = [

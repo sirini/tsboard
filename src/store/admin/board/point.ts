@@ -7,6 +7,8 @@ import { POINT } from "../../../messages/store/admin/board/point"
 import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
 import { ADMIN_BOARD_POINT_POLICY, AdminBoardPointPolicy } from "../../../interface/admin_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
   const route = useRoute()
@@ -34,21 +36,20 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
         id: route.params.id as string,
       },
     })
-
-    if (!response.data) {
-      return admin.error(POINT.NO_RESPONSE)
+    const data = response.data as ResponseData<AdminBoardPointPolicy>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
+      return admin.error(`${POINT.UNABLE_LOAD_POINT} (${data.error})`)
     }
-    if (response.data.success === false) {
-      return admin.error(`${POINT.UNABLE_LOAD_POINT} (${response.data.error})`)
-    }
 
-    const point = response.data.result as AdminBoardPointPolicy
     board.value = {
-      uid: point.uid,
-      view: point.view,
-      write: point.write,
-      comment: point.comment,
-      download: point.download,
+      uid: data.result.uid,
+      view: data.result.view,
+      write: data.result.write,
+      comment: data.result.comment,
+      download: data.result.download,
     }
 
     payment.value.view = board.value.view < 0
@@ -134,13 +135,9 @@ export const useAdminBoardPointStore = defineStore("adminBoardPoint", () => {
         Authorization: `Bearer ${auth.user.token}`,
       },
     })
-
-    if (!response.data) {
-      admin.error(POINT.NO_RESPONSE)
-      return false
-    }
-    if (response.data.success === false) {
-      admin.error(`${POINT.UNABLE_UPDATE_POINT} (${response.data.error})`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      admin.error(`${POINT.UNABLE_UPDATE_POINT} (${data.error})`)
       return false
     }
 

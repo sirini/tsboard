@@ -8,6 +8,8 @@ import { useAdminStore } from "../common"
 import axios from "axios"
 import { AdminLatestComment, AdminLatestCommentResult } from "../../../interface/admin_interface"
 import { SEARCH, Search } from "../../../interface/board_interface"
+import { CODE, ResponseData } from "../../../interface/util_interface"
+import { ADMIN } from "../../../messages/store/admin/admin"
 
 export const useAdminLatestCommentStore = defineStore("adminLatestComment", () => {
   const admin = useAdminStore()
@@ -33,17 +35,16 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
         bunch: bunch.value,
       },
     })
-
-    if (!response.data) {
-      return admin.error(COMMENT.NO_RESPONSE)
-    }
-    if (response.data.success === false) {
+    const data = response.data as ResponseData<AdminLatestCommentResult>
+    if (!data || data.success === false) {
+      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+        return admin.error(ADMIN.NEED_REFRESH)
+      }
       return admin.error(COMMENT.FAILED_LOAD)
     }
 
-    const result = response.data.result as AdminLatestCommentResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    comments.value = result.comments
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    comments.value = data.result.comments
     comments.value.map((comment: AdminLatestComment) => {
       comment.content = util.stripTags(comment.content)
     })
@@ -73,14 +74,13 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
         bunch: bunch.value,
       },
     })
-
-    if (!response.data) {
+    const data = response.data as ResponseData<AdminLatestCommentResult>
+    if (!data || data.success === false) {
       return admin.error(COMMENT.NO_RESPONSE)
     }
 
-    const result = response.data.result as AdminLatestCommentResult
-    pageLength.value = Math.ceil(result.maxUid / bunch.value)
-    comments.value = result.comments
+    pageLength.value = Math.ceil(data.result.maxUid / bunch.value)
+    comments.value = data.result.comments
     comments.value.map((comment: AdminLatestComment) => {
       comment.content = util.stripTags(comment.content)
     })
@@ -114,13 +114,9 @@ export const useAdminLatestCommentStore = defineStore("adminLatestComment", () =
         targets,
       },
     })
-
-    if (!response.data) {
-      return admin.error(COMMENT.NO_RESPONSE)
-    }
-
-    if (response.data.success === false) {
-      return admin.error(`${COMMENT.FAILED_REMOVE} ${response.data.error}`)
+    const data = response.data as ResponseData<null>
+    if (!data || data.success === false) {
+      return admin.error(`${COMMENT.FAILED_REMOVE} ${data.error}`)
     }
 
     admin.success(COMMENT.REMOVED_COMMENT)
