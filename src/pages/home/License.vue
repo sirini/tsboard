@@ -85,6 +85,7 @@
         </v-container>
         <home-footer></home-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
   </v-app>
 </template>
@@ -95,6 +96,7 @@ import { useHomeStore } from "../../store/home"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
+import SideNotificationDrawer from "./SideNotificationDrawer.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const util = useUtilStore()

@@ -35,6 +35,7 @@
         </v-container>
         <home-footer></home-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
   </v-app>
 </template>
@@ -45,6 +46,7 @@ import { useUtilStore } from "../../store/util"
 import HomeHeader from "./HomeHeader.vue"
 import HomeFooter from "./HomeFooter.vue"
 import SideDrawer from "./SideDrawer.vue"
+import SideNotificationDrawer from "./SideNotificationDrawer.vue"
 import { TEXT } from "../../messages/pages/home/not-found"
 import { COLOR } from "../../../tsboard.config"
 

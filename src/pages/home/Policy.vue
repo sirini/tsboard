@@ -128,6 +128,7 @@
         </v-container>
         <home-footer></home-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
   </v-app>
 </template>
@@ -138,6 +139,7 @@ import { TSBOARD, POLICY, COLOR } from "../../../tsboard.config"
 import HomeHeader from "../../pages/home/HomeHeader.vue"
 import HomeFooter from "../../pages/home/HomeFooter.vue"
 import SideDrawer from "../../pages/home/SideDrawer.vue"
+import SideNotificationDrawer from "./SideNotificationDrawer.vue"
 
 const home = useHomeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`

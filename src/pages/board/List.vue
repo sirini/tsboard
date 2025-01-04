@@ -28,6 +28,7 @@
         <home-footer></home-footer>
         <quick-button v-if="home.isMobile"></quick-button>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
     <user-info-dialog></user-info-dialog>
     <send-report-dialog></send-report-dialog>
@@ -51,6 +52,7 @@ import { useHomeStore } from "../../store/home"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 import QuickButton from "../home/components/mobile/QuickButton.vue"
 import { COLOR } from "../../../tsboard.config"
 

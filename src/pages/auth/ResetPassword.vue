@@ -2,6 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.HOME.THEME">
     <home-header></home-header>
     <v-layout class="layout">
+      <side-drawer></side-drawer>
       <v-main>
         <v-container class="wrap">
           <v-card
@@ -54,6 +55,7 @@
         </v-container>
         <home-footer></home-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
   </v-app>
 </template>
@@ -68,6 +70,8 @@ import HomeFooter from "../home/HomeFooter.vue"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/reset-password"
 import { COLOR } from "../../../tsboard.config"
+import SideDrawer from "../home/SideDrawer.vue"
+import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 
 const auth = useAuthStore()
 const password = usePasswordStore()

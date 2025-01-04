@@ -41,6 +41,7 @@
         </v-container>
         <home-footer></home-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
 
     <board-view-remove-post-dialog></board-view-remove-post-dialog>
@@ -78,6 +79,7 @@ import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
+import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()

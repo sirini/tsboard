@@ -85,6 +85,7 @@
         </v-container>
         <blog-footer></blog-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
     <user-info-dialog></user-info-dialog>
     <send-report-dialog></send-report-dialog>
@@ -112,6 +113,7 @@ import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import { useBoardViewStore } from "../../store/board/view"
 import { useUtilStore } from "../../store/util"
 import SideDrawer from "../home/SideDrawer.vue"
+import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 
 const route = useRoute()
 const view = useBoardViewStore()

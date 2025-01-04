@@ -57,6 +57,7 @@
         </v-container>
         <blog-footer></blog-footer>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
     <user-info-dialog></user-info-dialog>
     <send-report-dialog></send-report-dialog>
@@ -72,6 +73,7 @@ import { useAuthStore } from "../../store/user/auth"
 import { useUserStore } from "../../store/user/user"
 import { useUtilStore } from "../../store/util"
 import SideDrawer from "../home/SideDrawer.vue"
+import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 import BlogHeader from "../../components/blog/BlogHeader.vue"
 import BlogFooter from "../../components/blog/BlogFooter.vue"
 import BlogPostItem from "../../components/blog/BlogPostItem.vue"
