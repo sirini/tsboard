@@ -254,6 +254,8 @@ export const useHomeStore = defineStore("home", () => {
         },
       },
     )
+    haveNewNotification.value = false
+    notiDrawer.value = false
   }
 
   // 알림 내용 해석하기
