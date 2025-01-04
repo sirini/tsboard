@@ -44,6 +44,7 @@
 
         <quick-button v-if="home.isMobile"></quick-button>
       </v-main>
+      <side-notification-drawer></side-notification-drawer>
     </v-layout>
   </v-app>
 </template>
@@ -59,6 +60,7 @@ import HomePageColumnWindow from "./HomePageColumnWindow.vue"
 import HomePageCategoryWindow from "./HomePageCategoryWindow.vue"
 import HomePageLatestWindow from "./HomePageLatestWindow.vue"
 import SideDrawer from "./SideDrawer.vue"
+import SideNotificationDrawer from "./SideNotificationDrawer.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()

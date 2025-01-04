@@ -1,10 +1,11 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { NavigationFailure, useRoute } from "vue-router"
 import { SCREEN, TSBOARD } from "../../tsboard.config"
 import { TEXT } from "../messages/store/home"
 import { useAuthStore } from "./user/auth"
 import { useUtilStore } from "./util"
+import { useChatStore } from "./user/chat"
 import axios from "axios"
 import {
   BOARD_HOME_POST_RESULT,
@@ -26,12 +27,14 @@ export const TAB = { CATEGORY: 1, COLUMN: 2, LATEST: 3 }
 export const useHomeStore = defineStore("home", () => {
   const route = useRoute()
   const auth = useAuthStore()
+  const chat = useChatStore()
   const util = useUtilStore()
   const drawer = ref<boolean>(false)
+  const notiDrawer = ref<boolean>(false)
   const notifications = ref<NotificationItem[]>([])
   const haveNewNotification = ref<boolean>(false)
   const sidebarLinks = ref<HomeSidebarGroupResult[]>([])
-  const sidebarWidth = ref<number>(250)
+  const sidebarWidth = ref<number>(300)
   const width = ref<number>(SCREEN.PC.WIDTH)
   const staticWidth = ref<number>(SCREEN.TABLET.WIDTH)
   const dialogWidth = ref<number>(500)
@@ -220,11 +223,14 @@ export const useHomeStore = defineStore("home", () => {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,
       },
+      params: {
+        limit: 10,
+      },
     })
     const data = response.data as ResponseData<NotificationItem[]>
     if (data && data.success === true && data.result.length > 0) {
       notifications.value = data.result
-      notifications.value.map((noti) => {
+      notifications.value.map((noti: NotificationItem) => {
         if (noti.checked === false) {
           haveNewNotification.value = true
           return
@@ -309,8 +315,22 @@ export const useHomeStore = defineStore("home", () => {
     updateLanguageInfo()
   }
 
+  // 노티 클릭 시 행동 지정하기
+  async function actionForNoti(
+    noti: NotificationItem,
+  ): Promise<NavigationFailure | void | undefined> {
+    if (noti.type === NOTICE.CHAT_MESSAGE) {
+      return chat.openDialog(noti.fromUser)
+    }
+
+    if (noti.id.length > 0) {
+      return util.go(noti.boardType, noti.id, noti.postUid)
+    }
+  }
+
   return {
     drawer,
+    notiDrawer,
     notifications,
     haveNewNotification,
     width,
@@ -347,5 +367,6 @@ export const useHomeStore = defineStore("home", () => {
     loadSidebarLinks,
     changeUserLanguage,
     loadUserLanguage,
+    actionForNoti,
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="home.drawer" :width="home.sidebarWidth" temporary>
+  <v-navigation-drawer v-model="home.drawer" :width="home.sidebarWidth" temporary location="left">
     <side-drawer-language></side-drawer-language>
     <side-drawer-login v-if="auth.user.uid < 1"></side-drawer-login>
     <side-drawer-myinfo v-else></side-drawer-myinfo>

@@ -41,9 +41,6 @@ const home = useHomeStore()
 </script>
 
 <style scoped type="scss">
-.toolbar {
-  backdrop-filter: blur(5px);
-}
 .title {
   cursor: pointer;
   font-family: "Protest Strike", sans-serif;
