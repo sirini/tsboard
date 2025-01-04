@@ -95,6 +95,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/write"
 import { useBoardEditorStore } from "../../../store/board/editor"
@@ -111,6 +112,10 @@ import BoardHeader from "../common/BoardHeader.vue"
 const editor = useBoardEditorStore()
 const auth = useAuthStore()
 const home = useHomeStore()
+
+onMounted(() => {
+  window.setInterval(editor.autoSave, 10_000)
+})
 </script>
 
 <style scoped>

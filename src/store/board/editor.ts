@@ -114,6 +114,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const loaded = JSON.parse(saved) as AutoSaved
     title.value = loaded.title
+    content.value = loaded.contentWithSyntax
     contentWithSyntax.value = loaded.contentWithSyntax
 
     if (loaded.tags.includes(",") === true) {
@@ -252,6 +253,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     files.value = []
     attachedFiles.value = []
     title.value = ""
+    content.value = ""
     contentWithSyntax.value = ""
     tag.value = ""
     tags.value = []
