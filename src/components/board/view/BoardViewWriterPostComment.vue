@@ -15,7 +15,7 @@
             @click="util.go(post.board.type, post.board.id, post.postUid)"
           >
             <template v-slot:prepend>
-              <v-chip size="x-small" :color="COLOR.HOME.MAIN" label>{{
+              <v-chip size="x-small" :color="COLOR.HOME.MAIN">{{
                 util.unescape(post.board.name)
               }}</v-chip>
             </template>

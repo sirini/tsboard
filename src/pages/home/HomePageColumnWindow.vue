@@ -1,24 +1,24 @@
 <template>
   <v-row class="mt-6" no-gutters>
-    <v-col :cols="colsBoard">
+    <v-col :cols="colsBoard" v-for="(board, index) in boards">
       <v-card class="ma-1" rounded="xl">
         <v-list class="pa-0">
           <v-list-item
             append-icon="mdi-chevron-right"
-            @click="util.go(free.config.type, free.config.id)"
+            @click="util.go(board.config.type, board.config.id)"
           >
             <v-list-item-title>
-              <strong>{{ free.config.name }}</strong>
+              <strong>{{ board.config.name }}</strong>
             </v-list-item-title>
 
             <v-tooltip activator="parent" location="bottom">
-              {{ free.config.info }}
+              {{ board.config.info }}
             </v-tooltip>
           </v-list-item>
 
           <v-divider></v-divider>
 
-          <v-list-item v-for="(post, index) in free.items" :key="index">
+          <v-list-item v-for="(post, index) in board.items" :key="index">
             <template v-slot:prepend>
               <v-chip
                 size="small"
@@ -30,58 +30,7 @@
 
             <v-list-item-title
               class="ml-2 link"
-              @click="util.go(free.config.type, free.config.id, post.uid)"
-            >
-              {{ post.title }}
-              <v-chip
-                variant="text"
-                prepend-icon="mdi-chat-outline"
-                :color="COLOR.HOME.MAIN"
-                size="small"
-                >{{ post.comment }}</v-chip
-              >
-            </v-list-item-title>
-
-            <template v-slot:append>
-              <v-chip size="small" variant="text" :color="COLOR.HOME.MAIN">{{
-                util.date(post.submitted)
-              }}</v-chip>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-col>
-    <v-col :cols="colsBoard">
-      <v-card class="ma-1" rounded="xl">
-        <v-list class="pa-0">
-          <v-list-item
-            append-icon="mdi-chevron-right"
-            @click="util.go(blog.config.type, blog.config.id)"
-          >
-            <v-list-item-title>
-              <strong>{{ blog.config.name }}</strong>
-            </v-list-item-title>
-
-            <v-tooltip activator="parent" location="bottom">
-              {{ blog.config.info }}
-            </v-tooltip>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-item v-for="(post, index) in blog.items" :key="index">
-            <template v-slot:prepend>
-              <v-chip
-                size="small"
-                :color="post.liked ? 'red' : COLOR.HOME.MAIN"
-                :prepend-icon="post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
-                >{{ post.like }}</v-chip
-              >
-            </template>
-
-            <v-list-item-title
-              class="ml-2 link"
-              @click="util.go(blog.config.type, blog.config.id, post.uid)"
+              @click="util.go(board.config.type, board.config.id, post.uid)"
             >
               {{ post.title }}
               <v-chip
@@ -104,7 +53,7 @@
     </v-col>
   </v-row>
 
-  <v-row no-gutters class="mt-3">
+  <v-row no-gutters class="mt-3" v-if="gallery.config.uid > 0">
     <v-col>
       <v-card class="ma-1" rounded="xl">
         <v-list class="pa-0">
@@ -152,11 +101,9 @@ const home = useHomeStore()
 const util = useUtilStore()
 const colsBoard = ref<number>(6)
 const colsPhoto = ref<number>(2)
-
-// 아래 부분 [수정 필요]
-const free = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
-const blog = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
+const boards = ref<BoardHomePostResult[]>([])
 const gallery = ref<BoardHomePostResult>(BOARD_HOME_POST_RESULT)
+const columns = TSBOARD.SITE.HOME.COLUMNS
 
 onMounted(async () => {
   home.setGridLayout()
@@ -164,17 +111,20 @@ onMounted(async () => {
     colsBoard.value = 12
     colsPhoto.value = 6
   } else if (home.isTablet) {
-    colsBoard.value = 6
+    colsBoard.value = columns.COLS
     colsPhoto.value = 3
   } else {
-    colsBoard.value = 6
+    colsBoard.value = columns.COLS
     colsPhoto.value = 2
   }
 
-  /*** 아래 변수들은 사이트에 맞게 수정 필요 ***/
-  free.value = await home.getBoardLatestPosts("free", 10)
-  blog.value = await home.getBoardLatestPosts("sirini", 10)
-  gallery.value = await home.getBoardLatestPosts("photo", 6)
+  columns.BOARDS.map(async (board) => {
+    boards.value.push(await home.getBoardLatestPosts(board.id, board.limit))
+  })
+
+  if (columns.GALLERY.id.length > 0) {
+    gallery.value = await home.getBoardLatestPosts(columns.GALLERY.id, columns.GALLERY.limit)
+  }
 })
 </script>
 

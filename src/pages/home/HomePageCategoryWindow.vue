@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(result, index) in results" :key="index">
+  <v-card v-for="(result, index) in results" :key="index" variant="text">
     <v-chip
       :prepend-icon="ICONS[result.config.type]"
       size="large"
@@ -22,7 +22,7 @@
         ></home-page-board-latest-grid>
       </v-col>
     </v-row>
-  </div>
+  </v-card>
 </template>
 
 <script setup lang="ts">
@@ -31,23 +31,17 @@ import { BoardHomePostResult } from "../../interface/home_interface"
 import { useHomeStore } from "../../store/home"
 import { useUtilStore } from "../../store/util"
 import HomePageBoardLatestGrid from "./components/list/HomePageBoardLatestGrid.vue"
-import { COLOR } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 
 const home = useHomeStore()
 const util = useUtilStore()
 
 const results = ref<BoardHomePostResult[]>([])
-/*** 아래 TARGETS는 사이트에 맞게 수정 필요 ***/
-const TARGETS = [
-  { id: "free", limit: 8 },
-  { id: "sirini", limit: 8 },
-  { id: "photo", limit: 4 },
-]
 const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] // BOARD, GALLERY, BLOG, SHOP
 
 onMounted(async () => {
   home.setGridLayout()
-  for (const target of TARGETS) {
+  for (const target of TSBOARD.SITE.HOME.CATEGORIES) {
     results.value.push(await home.getBoardLatestPosts(target.id, target.limit))
   }
 })

@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/vue-3"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { SIZE, TSBOARD } from "../../../tsboard.config"
+import { TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/store/board/editor"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
@@ -99,7 +99,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     }
     const saved: AutoSaved = {
       title: title.value,
-      content: content.value,
       contentWithSyntax: contentWithSyntax.value,
       tags: hashtags,
     }
@@ -115,7 +114,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
 
     const loaded = JSON.parse(saved) as AutoSaved
     title.value = loaded.title
-    content.value = loaded.content
     contentWithSyntax.value = loaded.contentWithSyntax
 
     if (loaded.tags.includes(",") === true) {
@@ -146,8 +144,8 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     category.value = data.result.post.category
     attachedFiles.value = data.result.files
     title.value = util.unescape(data.result.post.title)
-    contentWithSyntax.value = data.result.post.content.replaceAll("<br />", "")
-    content.value = data.result.post.content.replaceAll("<br />", "")
+    content.value = data.result.post.content.replaceAll("<p><br></p>", "<p>&nbsp;</p>")
+    contentWithSyntax.value = data.result.post.content.replaceAll("<p><br></p>", "<p>&nbsp;</p>")
     tags.value = data.result.tags.map((tag: Pair) => tag.name)
     isNotice.value = data.result.post.status === STATUS.NOTICE
     isSecret.value = data.result.post.status === STATUS.SECRET
@@ -233,7 +231,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       const arr = Array.from(targets)
       for (const f of arr) {
         totalSize += f.size
-        if (totalSize > SIZE.MAX_FILE) {
+        if (totalSize > TSBOARD.MAX_UPLOAD_SIZE) {
           util.info(TEXT[home.lang].EXCEED_FILESIZE_LIMIT)
           break
         }
@@ -254,7 +252,6 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     files.value = []
     attachedFiles.value = []
     title.value = ""
-    content.value = ""
     contentWithSyntax.value = ""
     tag.value = ""
     tags.value = []
@@ -268,7 +265,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       util.error(TEXT[home.lang].TOO_SHORT_TITLE)
       return false
     }
-    if (content.value.length < 3) {
+    if (contentWithSyntax.value.length < 3) {
       util.error(TEXT[home.lang].TOO_SHORT_CONTENT)
       return false
     }
@@ -278,8 +275,10 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       files.value.map((file) => {
         totalSize += file.size
       })
-      if (SIZE.MAX_FILE < totalSize) {
-        util.error(`${TEXT[home.lang].EXCEED_FILESIZE_LIMIT} (limit: ${util.num(SIZE.MAX_FILE)})`)
+      if (TSBOARD.MAX_UPLOAD_SIZE < totalSize) {
+        util.error(
+          `${TEXT[home.lang].EXCEED_FILESIZE_LIMIT} (limit: ${util.num(TSBOARD.MAX_UPLOAD_SIZE)})`,
+        )
         return false
       }
     }

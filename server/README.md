@@ -6,13 +6,13 @@
     <img src="https://img.shields.io/badge/ElysiaJS-B087FB.svg?&style=for-the-badge&&logoColor=white"/>
 </p>
 
-## TSBOARD 백엔드가 교체됩니다 (v1.0.0 이후)
+## TSBOARD 백엔드가 교체되었습니다 (v1.0.0 이후)
 
 - TSBOARD는 v1.0.0 이전까지 TS/JS 런타임인 `Bun`과 `ElysiaJS` 기반으로 백엔드가 작성되었습니다.
 - 그러나, 보다 확장성있는 고성능 백엔드를 개발하여 이 `server/` 이하 경로는 v1.0.0부터 사용하지 않습니다.
   - 새로 작성된 백엔드는 `Go` 언어와 `Fiber` 웹프레임워크 기반으로 완전히 새롭게 작성되었습니다.
   - `tsboard.git` 폴더 최상단 경로에 `.env` 파일이 위치한 곳을 보시면 아래의 실행 파일들이 있습니다.
-    - `goapi-linux` : 리눅스에서 실행 가능한 바이너리 파일입니다.
+    - `goapi-linux-x64` : 리눅스에서 실행 가능한 바이너리 파일입니다. (x64 아키텍쳐용이 기본 제공됩니다)
     - `goapi-mac` : 맥에서 실행 가능한 바이너리 파일입니다. (Apple Silicon 기준)
   - 위 실행 파일 중 본인의 서버 OS에 맞는 것을 실행하시면 됩니다.
     - 서버에 터미널로 원격 접속하시는 경우 `tmux`와 같은 터미널 세션 관리 프로그램으로 실행하시는 걸 권장합니다.
@@ -22,7 +22,7 @@
   - 새로운 백엔드 코드 수정을 위해서는 `Go` 언어 툴체인/컴파일러가 설치되어 있어야 합니다.
   - `Go` 언어에 대해 더 알고 싶으신 분들은 이 곳을 방문해 보세요: <https://go.dev>
 
-## 서버에 미리 설치해둬야 할 것들
+## 서버에 미리 설치해주세요 : libvips
 
 - TSBOARD의 새로운 백엔드는 바이너리 파일만 있으면 바로 실행이 가능합니다.
 - 그러나, TSBOARD에서 이미지 리사이즈, 파일 형식 변환 등을 사용하기 위해 `libvips`가 필요합니다.
@@ -40,3 +40,4 @@
 1. Go언어로 갑니다! (Goodbye, Bun!) <https://tsboard.dev/blog/sirini/38>
 2. Go vs Bun, Go 언어는 정말 JS 런타임보다 빠를까? <https://tsboard.dev/blog/sirini/41>
 3. TSBOARD README.md <https://github.com/sirini/tsboard?tab=readme-ov-file#tsboard>
+4. 오픈소스 커뮤니티 빌더 TSBOARD의 새로운 백엔드: GOAPI <https://news.hada.io/topic?id=18505>

@@ -14,7 +14,6 @@ export const READ_POST_KEY = "tsboardReadPosts"
 // 자동 저장 타입 정의
 export type AutoSaved = {
   title: string
-  content: string
   contentWithSyntax: string
   tags: string
 }

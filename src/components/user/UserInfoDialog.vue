@@ -10,7 +10,7 @@
 
       <v-list>
         <v-list-item class="text-center mt-5 mb-5">
-          <v-avatar :size="SIZE.PROFILE">
+          <v-avatar :size="256">
             <v-img :src="TSBOARD.PREFIX + (user.info.profile || '/no-profile.svg')"></v-img>
           </v-avatar>
         </v-list-item>
@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { COLOR, SIZE, TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/components/board/user/user-info-dialog"
 import { useHomeStore } from "../../store/home"
 import { useUserStore } from "../../store/user/user"

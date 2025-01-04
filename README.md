@@ -75,21 +75,25 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `goapi-linux` 파일이 존재합니다.
 - TSBOARD가 의존하는 패키지들을 내려받습니다.
   - 권장 설치 경로에 설치하셨다면, `/var/www/tsboard.git/` 폴더 위치에서 **의존성 패키지들을 설치**합니다.
-  - `npm install` 로 설치하실 수 있습니다.
-- 사용하시는 서버의 OS에 맞춰 `goapi-linux` 처럼 백엔드 바이너리 파일을 실행합니다. (실행 권한을 주셔야 할 수도 있습니다)
+  - `npm install` 로 설치하실 수 있습니다. (서버에 Node.js v22 이상 설치 권장)
+- 사용하시는 서버의 OS에 맞춰 `goapi-linux-x64` 처럼 백엔드 바이너리 파일을 실행합니다. (실행 권한을 주셔야 할 수도 있습니다)
   - 처음 실행할 경우, 설치 안내가 나타나며 몇가지 정보를 요청드립니다.
   - 이 때 MySQL(Mariadb)의 접속 정보 및 관리자 아이디와 비밀번호를 입력하게 됩니다.
   - 접속 정보가 올바르고 DB 생성 (및 테이블 생성) 권한이 있다면, 문제없이 DB/Table들이 생성됩니다.
   - 설치가 완료되면, `.env` 파일이 새로 생성되며 해당 파일에 주요 설정값들이 저장됩니다.
+  - 본인의 서버가 ARM CPU 및 Mac등 다른 종류의 아키텍쳐를 사용할 경우, 백엔드 프로젝트를 직접 내려받아서 컴파일 하실 수 있습니다.
+    - `git clone https://github.com/sirini/goapi goapi.git` 실행하여 Go로 작성된 백엔드를 받습니다.
+    - 서버에서 Go 언어 툴체인/컴파일러를 설치합니다. (<https://go.dev> 사이트 참조)
+    - `go mod tidy` 실행하여 백엔드에서 의존하는 라이브러리들을 내려 받습니다.
+    - `go build -o dist/goapi-linux cmd/main.go` 실행하여 바이너리 파일을 빌드합니다.
+    - 빌드 된 바이너리 파일을 `tsboard.git` 폴더 안으로 이동 후 실행합니다. (`tmux` 같은 터미널 세션 관리 프로그램을 사용하세요)
 - TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
   - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 설정들이 들어 있습니다.
-  - `<<< [수정 필요]` 라고 적힌 부분은 본인의 사이트에 맞게 수정하셔야 하는 부분입니다.
     - `PROD_URL` : 본인의 웹사이트 도메인으로 변경
     - `TSBOARD.SITE.NAME` : 본인의 웹사이트 이름으로 변경
     - `TSBOARD.PREFIX` : TSBOARD가 특정 폴더 하위로 접근이 필요할 경우 앞쪽 폴더명 추가 (대부분은 빈 칸)
-    - `QUICK_BUTTONS.WRITE` : 모바일에서 새 글 작성 버튼 클릭 시 이동할 게시판 ID로 수정
-    - `QUICK_BUTTONS.UPLOAD` : 모바일에서 새 사진 업로드 버튼 클릭 시 이동할 갤러리 ID로 수정
-    - `OAUTH.IS_READY` : 소셜 로그인을 사용할 경우 true 설정 (`.env` 파일에서 각 소셜 로그인 별 API 정보 기입 필요)
+    - `TSBOARD.SITE.MOBILE.WRITE` : 모바일에서 새 글 작성 버튼 클릭 시 이동할 게시판 ID로 수정
+    - `TSBOARD.SITE.MOBILE.PHOTO` : 모바일에서 새 사진 업로드 버튼 클릭 시 이동할 갤러리 ID로 수정
     - `POLICY.NAME` : 사이트 관리자 이름으로 변경 필요
     - `POLICY.EMAIL` : 사이트 관리자의 이메일 주소로 변경 필요
 - 새로 생성된 `.env` 파일을 마찬가지로 `vi`등으로 열어서 `tsboard.config.ts` 설정과 맞춰 수정해 줍니다.
@@ -232,7 +236,7 @@ server {
 
   server_name tsboard.dev; # 사용하시는 도메인 이름으로 변경 필요
 
-  # 최대 업로드 허용 크기, tsboard.config.ts 파일의 SIZE.MAX_FILE 주석 참조
+  # 최대 업로드 허용 크기, tsboard.config.ts 파일의 TSBOARD.MAX_UPLOAD_SIZE 주석 참조
   client_max_body_size 20M;
 
   location /upload {

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { SIZE, TSBOARD } from "../../../tsboard.config"
+import { TSBOARD } from "../../../tsboard.config"
 import { TEXT } from "../../messages/store/board/editor"
 import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
@@ -30,7 +30,7 @@ export const useEditorImageStore = defineStore("editorImage", () => {
   const lastImageUid = ref<number>(0)
   const totalImageCount = ref<number>(0)
   const bunch = ref<number>(20)
-  const limit = ref<number>(SIZE.MAX_FILE)
+  const limit = ref<number>(TSBOARD.MAX_UPLOAD_SIZE)
   const uploadRule = [
     (value: any) => {
       return (

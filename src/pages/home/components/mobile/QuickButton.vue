@@ -5,12 +5,12 @@
       <v-list bg-:color="COLOR.HOME.MAIN" class="mb-3">
         <v-list-item
           prepend-icon="mdi-message-text"
-          @click="util.go('boardWrite', QUICK_BUTTONS.WRITE)"
+          @click="util.go('boardWrite', TSBOARD.SITE.MOBILE.WRITE)"
           >{{ TEXT[home.lang].WRITE }}</v-list-item
         >
         <v-list-item
           prepend-icon="mdi-upload"
-          @click="util.go('galleryWrite', QUICK_BUTTONS.UPLOAD)"
+          @click="util.go('galleryWrite', TSBOARD.SITE.MOBILE.PHOTO)"
           >{{ TEXT[home.lang].UPLOAD }}</v-list-item
         >
       </v-list>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { COLOR, QUICK_BUTTONS } from "../../../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../../../tsboard.config"
 import { TEXT } from "../../../../messages/pages/home/components/mobile/quick-button"
 import { useHomeStore } from "../../../../store/home"
 import { useUtilStore } from "../../../../store/util"

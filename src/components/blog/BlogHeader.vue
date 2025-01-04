@@ -40,8 +40,8 @@ const props = defineProps<{ name: string; info: string; id: string }>()
 <style scoped>
 .title {
   font-size: 1.15em;
-  font-weight: bold;
   cursor: pointer;
+  font-family: "Protest Strike", sans-serif;
 }
 .info {
   margin-left: 20px;

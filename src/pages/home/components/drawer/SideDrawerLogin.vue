@@ -49,18 +49,25 @@
       </v-card>
     </v-list-item>
 
-    <v-list-item v-if="OAUTH.IS_READY" class="text-center">
-      <v-avatar @click="oauthLogin('google')" class="mr-2 pointer" v-if="OAUTH.USE.GOOGLE">
+    <v-list-item
+      v-if="TSBOARD.SITE.OAUTH.GOOGLE || TSBOARD.SITE.OAUTH.NAVER || TSBOARD.SITE.OAUTH.KAKAO"
+      class="text-center"
+    >
+      <v-avatar @click="oauthLogin('google')" class="mr-2 pointer" v-if="TSBOARD.SITE.OAUTH.GOOGLE">
         <v-img :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'" width="48" height="48"></v-img>
         <v-tooltip activator="parent">{{ TEXT[home.lang].GOOGLE_LOGIN_TOOLTIP }}</v-tooltip>
       </v-avatar>
 
-      <v-avatar @click="oauthLogin('naver')" class="ml-2 mr-2 pointer" v-if="OAUTH.USE.GOOGLE">
+      <v-avatar
+        @click="oauthLogin('naver')"
+        class="ml-2 mr-2 pointer"
+        v-if="TSBOARD.SITE.OAUTH.GOOGLE"
+      >
         <v-img :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'" width="48" height="48"></v-img>
         <v-tooltip activator="parent">{{ TEXT[home.lang].NAVER_LOGIN_TOOLTIP }}</v-tooltip>
       </v-avatar>
 
-      <v-avatar @click="oauthLogin('kakao')" class="ml-2 pointer" v-if="OAUTH.USE.KAKAO">
+      <v-avatar @click="oauthLogin('kakao')" class="ml-2 pointer" v-if="TSBOARD.SITE.OAUTH.KAKAO">
         <v-img :src="TSBOARD.PREFIX + '/kakao/btn-kakao-login.webp'" width="48" height="48"></v-img>
         <v-tooltip activator="parent">{{ TEXT[home.lang].KAKAO_LOGIN_TOOLTIP }}</v-tooltip>
       </v-avatar>
@@ -70,7 +77,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { OAUTH, TSBOARD } from "../../../../../tsboard.config"
+import { TSBOARD } from "../../../../../tsboard.config"
 import AlertBar from "../../../../components/util/AlertBar.vue"
 import { TEXT } from "../../../../messages/pages/home/components/drawer/side-drawer-login"
 import { useHomeStore } from "../../../../store/home"

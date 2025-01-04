@@ -1,46 +1,48 @@
-export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
-export const VITE_PORT = 3000
-export const API_PORT = 3003
-export const LOCALHOST = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
-const DEV_URL = `${LOCALHOST}:${VITE_PORT}`
-const PROD_URL = "https://tsboard.dev" // <<< [수정 필요] 본인 사이트의 도메인 입력
+export const IS_DEV = true // 프로덕션에서는 false, 개발 단계에서만 true
+export const VITE_PORT = 3000 // (개발용) Vite 개발용 서버 포트
+export const DEV_DOMAIN = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
+const dev_url = `${DEV_DOMAIN}:${VITE_PORT}` // (개발용) 개발용 페이지 접속 주소 지정
+const production_url = "https://tsboard.dev" // 본인 사이트의 도메인 입력
 
+// TSBOARD 기본 설정값, ✔︎ 표기된 부분은 필요 시 수정하셔야 하는 곳입니다
 export const TSBOARD = {
-  VERSION: "v1.0.2",
+  API: (IS_DEV ? dev_url : production_url) + "/goapi",
+  API_PORT: 3003 /* ✔︎ (.env GOAPI_PORT와 동일) */,
+  MAX_UPLOAD_SIZE: 1024 * 1024 * 100 /* ✔︎ */,
+  PREFIX: "" /* ✔︎ (기본: 빈 문자열) */,
   SITE: {
-    NAME: "TSBOARD" /* <<< [수정 필요] 본인 사이트 이름 입력 */,
-    URL: IS_DEV ? DEV_URL : PROD_URL,
+    HOME: {
+      CATEGORIES: [
+        { id: "free", limit: 8 } /* ✔︎ */,
+        { id: "sirini", limit: 8 } /* ✔︎ */,
+        { id: "photo", limit: 4 } /* ✔︎ */,
+      ],
+      COLUMNS: {
+        COLS: 6 /* ✔︎ */,
+        BOARDS: [
+          { id: "free", limit: 10 } /* ✔︎ */,
+          { id: "sirini", limit: 10 } /* ✔︎ */,
+        ],
+        GALLERY: { id: "photo", limit: 6 } /* ✔︎ */,
+      },
+    },
+    MOBILE: {
+      WRITE: "free" /* ✔︎ */,
+      PHOTO: "photo" /* ✔︎ */,
+    },
+    NAME: "TSBOARD" /* ✔︎ */,
+    OAUTH: {
+      GOOGLE: true /* ✔︎ (true 시 .env OAUTH_GOOGLE_... 부분 입력 필요) */,
+      NAVER: true /* ✔︎ (true 시 .env OAUTH_NAVER_... 부분 입력 필요) */,
+      KAKAO: true /* ✔︎ (true 시 .env OAUTH_KAKAO_... 부분 입력 필요) */,
+    },
+    URL: IS_DEV ? dev_url : production_url,
   },
-  PREFIX: "" /* <<< [수정 필요] 설치 경로가 root 가 아닐 시 수정, 예: "/tsboard" */,
-  API: (IS_DEV ? DEV_URL : PROD_URL) + "/goapi",
+  VERSION: "v1.0.2",
 }
 
-export const QUICK_BUTTONS = {
-  WRITE: "free" /* <<< [수정 필요] (모바일) 글쓰기 버튼 클릭 시 이동할 게시판 아이디 */,
-  UPLOAD: "photo" /* <<< [수정 필요] (모바일) 사진 업로드 버튼 클릭 시 이동할 갤러리 아이디 */,
-}
-
-// .env 파일과 동일하게 설정되어야 함
-export const SIZE = {
-  PROFILE: 256 /* px */,
-  CONTENT_INSERT: 640 /* px */,
-  THUMBNAIL: 512 /* px */,
-  FULL: 2400 /* px, for gallery */,
-  MAX_FILE:
-    1024 * 1024 * 100 /* bytes, nginx 웹서버의 경우 client_max_body_size 값과 같거나 작아야 함 */,
-}
-
-// <<< [수정 필요] 소셜 로그인 중 어떤 걸 사용할지 지정, .env 파일에서 각 소셜 로그인 별 클라이언트 ID, Secret 설정 필요
-export const OAUTH = {
-  IS_READY: true,
-  USE: {
-    GOOGLE: true,
-    NAVER: true,
-    KAKAO: true,
-  },
-}
-
-// 사이트의 기본 컬러셋 지정
+// 사이트의 기본 컬러셋 지정 (필요 시 수정)
+// 참고: https://vuetifyjs.com/en/styles/colors/#material-colors
 export const COLOR = {
   HOME: {
     THEME: "light",
@@ -86,7 +88,7 @@ export const COLOR = {
   },
 }
 
-// 브라우저 크기 별 사이즈 정의
+// 브라우저 크기 별 사이즈 정의 (대부분 수정 불필요)
 export const SCREEN = {
   MOBILE: { WIDTH: 480, COLS: 12 },
   TABLET: { WIDTH: 768, COLS: 6 },
@@ -100,14 +102,13 @@ export const EXIF = {
   EXPOSURE: 1000,
 }
 
+// 사이트 관리자/책임자 명시 (반드시 수정 필요)
 export const POLICY = {
-  NAME: "sirini" /* <<< [수정 필요] 사이트 관리자 성함 */,
-  EMAIL: "sirini@gmail.com" /* <<< [수정 필요] 관리자 이메일 */,
+  NAME: "sirini",
+  EMAIL: "sirini@gmail.com",
 }
 
 Object.freeze(TSBOARD)
-Object.freeze(QUICK_BUTTONS)
-Object.freeze(SIZE)
-Object.freeze(OAUTH)
+Object.freeze(COLOR)
 Object.freeze(SCREEN)
 Object.freeze(POLICY)

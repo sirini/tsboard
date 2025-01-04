@@ -51,13 +51,17 @@
               </v-card>
             </v-list>
 
-            <v-list v-if="OAUTH.IS_READY">
+            <v-list
+              v-if="
+                TSBOARD.SITE.OAUTH.GOOGLE || TSBOARD.SITE.OAUTH.NAVER || TSBOARD.SITE.OAUTH.KAKAO
+              "
+            >
               <v-list-item class="text-center mb-4">
                 <v-avatar
                   size="large"
                   @click="oauthLogin('google')"
                   class="mr-2"
-                  v-if="OAUTH.USE.GOOGLE"
+                  v-if="TSBOARD.SITE.OAUTH.GOOGLE"
                 >
                   <v-img
                     :src="TSBOARD.PREFIX + '/google/web_light_rd_na.svg'"
@@ -73,7 +77,7 @@
                   size="large"
                   @click="oauthLogin('naver')"
                   class="ml-2 mr-2"
-                  v-if="OAUTH.USE.NAVER"
+                  v-if="TSBOARD.SITE.OAUTH.NAVER"
                 >
                   <v-img
                     :src="TSBOARD.PREFIX + '/naver/btnG_icon_circle.png'"
@@ -89,7 +93,7 @@
                   size="large"
                   @click="oauthLogin('kakao')"
                   class="ml-2"
-                  v-if="OAUTH.USE.KAKAO"
+                  v-if="TSBOARD.SITE.OAUTH.KAKAO"
                 >
                   <v-img
                     :src="TSBOARD.PREFIX + '/kakao/btn-kakao-login.webp'"
@@ -131,7 +135,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
-import { COLOR, OAUTH, TSBOARD } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 import AlertBar from "../../components/util/AlertBar.vue"
 import { TEXT } from "../../messages/pages/auth/login"
 import { useHomeStore } from "../../store/home"

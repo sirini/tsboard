@@ -257,9 +257,7 @@ const editor = useEditor({
     Typography,
   ],
   onUpdate: () => {
-    let html = editor.value?.getHTML() || ""
     const e = document.querySelector(".tiptap") as HTMLDivElement
-    emits("update:modelValue", html)
     emits("updateRealHtml", e.innerHTML)
     writeEditor.autoSave()
   },
