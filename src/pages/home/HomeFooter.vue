@@ -3,16 +3,16 @@
     <v-card elevation="0" rounded="0" class="mx-auto" :color="COLOR.HOME.FOOTER">
       <v-card-actions class="pa-0">
         <v-spacer></v-spacer>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="home.coming">{{
+        <v-btn class="mx-2" rounded="pill" @click="home.coming" :color="COLOR.HOME.MAIN">{{
           TEXT[home.lang].HOME
         }}</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('about')">{{
+        <v-btn class="mx-2" rounded="pill" @click="util.go('about')" :color="COLOR.HOME.MAIN">{{
           TEXT[home.lang].ABOUT
         }}</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('copyright')">{{
+        <v-btn class="mx-2" rounded="pill" @click="util.go('copyright')" :color="COLOR.HOME.MAIN">{{
           TEXT[home.lang].LICENSE
         }}</v-btn>
-        <v-btn color="grey" class="mx-2" rounded="xl" @click="util.go('policy')">{{
+        <v-btn class="mx-2" rounded="pill" @click="util.go('policy')" :color="COLOR.HOME.MAIN">{{
           TEXT[home.lang].POLICY
         }}</v-btn>
         <v-spacer></v-spacer>

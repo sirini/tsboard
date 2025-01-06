@@ -5,6 +5,7 @@
       prepend-icon="mdi-view-list"
       @click="util.go(util.routerName(type, BOARD_ACTION.LIST), view.id)"
       rounded="pill"
+      :color="COLOR.HOME.MAIN"
       >{{ TEXT[home.lang].LIST }}</v-btn
     >
 

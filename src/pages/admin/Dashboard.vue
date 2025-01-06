@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg mt-16" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
+      <v-card class="mx-auto mt-16" :color="COLOR.ADMIN.MAIN" :max-width="admin.width" rounded="xl">
         <v-card-title>대시보드</v-card-title>
         <v-layout>
           <v-navigation-drawer permanent location="left" :width="admin.sidebarWidth">

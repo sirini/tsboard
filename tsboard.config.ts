@@ -38,7 +38,7 @@ export const TSBOARD = {
     },
     URL: IS_DEV ? dev_url : production_url,
   },
-  VERSION: "v1.0.2",
+  VERSION: "v1.0.3",
 }
 
 // 사이트의 기본 컬러셋 지정 (필요 시 수정)
@@ -48,8 +48,8 @@ export const COLOR = {
     THEME: "light",
     MAIN: "#424242",
     TOOLBAR: "#424242",
-    FOOTER: "#FAFAFA",
-    BACKGROUND: "#FAFAFA",
+    FOOTER: "#F5F5F5",
+    BACKGROUND: "#F5F5F5",
   },
   ADMIN: {
     THEME: "light",

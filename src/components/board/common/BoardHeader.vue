@@ -7,9 +7,10 @@
     rounded="pill"
   >
     <strong>{{ util.unescape(config.name) }}</strong>
-    <span class="info ml-3 pl-3" v-if="home.isMobile === false">
+    <span class="ml-3 pl-3" v-if="home.isMobile === false">
       {{ util.unescape(config.info) }}</span
     >
+
     <div class="login mr-3">
       <v-btn
         v-if="auth.user.uid < 1"
@@ -65,9 +66,6 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.info {
-  color: #828282;
-}
 .login {
   position: absolute;
   top: 13px;

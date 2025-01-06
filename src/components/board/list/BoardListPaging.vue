@@ -1,13 +1,13 @@
 <template>
   <v-card-actions class="mt-6 pa-0">
-    <v-btn icon size="small">
+    <v-btn icon size="small" :color="COLOR.HOME.MAIN">
       <v-icon>mdi-magnify</v-icon>
       <v-menu activator="parent" :close-on-content-click="false">
         <board-list-search></board-list-search>
       </v-menu>
       <v-tooltip activator="parent">{{ TEXT[home.lang].SEARCH }}</v-tooltip>
     </v-btn>
-    <v-btn icon :disabled="list.page < 2 || list.loading" @click="list.movePrevPage" size="small">
+    <v-btn icon :disabled="list.page < 2 || list.loading" @click="list.movePrevPage" size="small" :color="COLOR.HOME.MAIN">
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].PREV }}</v-tooltip>
     </v-btn>
@@ -16,6 +16,7 @@
       :disabled="list.page >= list.pageLength || list.loading"
       @click="list.moveNextPage"
       size="small"
+      :color="COLOR.HOME.MAIN"
     >
       <v-icon>mdi-chevron-right</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].NEXT }}</v-tooltip>
@@ -34,6 +35,7 @@
       @click="list.init"
       v-if="home.isMobile === false"
       rounded="pill"
+      :color="COLOR.HOME.MAIN"
       >{{ TEXT[home.lang].LIST }}</v-btn
     >
 

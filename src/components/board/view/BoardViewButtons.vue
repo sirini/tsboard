@@ -7,7 +7,7 @@
           class="mr-2"
           :disabled="auth.user.uid < 1"
           :prepend-icon="view.post.liked ? 'mdi-heart' : 'mdi-heart-outline'"
-          :color="view.post.liked ? 'red' : ''"
+          :color="view.post.liked ? 'red' : COLOR.HOME.MAIN"
           @click="view.like(!view.post.liked)"
         >
           {{ util.num(view.post.like) }}
@@ -23,7 +23,7 @@
       </template>
 
       <template v-slot:append>
-        <v-btn append-icon="mdi-chevron-down" variant="outlined" rounded="pill" size="small"
+        <v-btn append-icon="mdi-chevron-down" variant="outlined" rounded="pill" size="small" :color="COLOR.HOME.MAIN"
           >{{ TEXT[home.lang].WORK }}
 
           <v-menu activator="parent">
@@ -70,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import { COLOR } from "../../../../tsboard.config"
 import UserNametag from "../../../components/user/UserNametag.vue"
 import { Board, BOARD_ACTION } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/view"

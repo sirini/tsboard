@@ -2,7 +2,7 @@
   <v-app :style="bgColor" :theme="COLOR.ADMIN.THEME">
     <admin-header></admin-header>
     <v-container>
-      <v-card class="mx-auto rounded-lg admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width">
+      <v-card class="mx-auto admin" :color="COLOR.ADMIN.MAIN" :max-width="admin.width" rounded="xl">
         <v-card-title
           ><strong>{{ general.board.id }}</strong> 게시판 관리</v-card-title
         >
