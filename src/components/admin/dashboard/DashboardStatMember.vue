@@ -12,7 +12,7 @@
       <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-multiple-plus-outline">
         <strong>오늘 {{ dashboard.member.values.at(-1) || 0 }}명 가입함</strong>
         <v-divider vertical class="ml-3 mr-3"></v-divider>
-        최고 {{ Math.max(...dashboard.visit.values) }}명 가입함
+        최고 {{ Math.max(...dashboard.member.values) }}명 가입함
       </v-chip>
     </template>
 

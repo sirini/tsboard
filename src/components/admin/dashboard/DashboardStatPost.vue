@@ -12,7 +12,7 @@
       <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-note-plus-outline">
         <strong>오늘 {{ dashboard.post.values.at(-1) || 0 }}개 작성됨</strong>
         <v-divider vertical class="ml-3 mr-3"></v-divider>
-        최고 {{ Math.max(...dashboard.visit.values) }}개 작성됨
+        최고 {{ Math.max(...dashboard.post.values) }}개 작성됨
       </v-chip>
     </template>
 

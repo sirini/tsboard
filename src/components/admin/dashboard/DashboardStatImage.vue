@@ -12,7 +12,7 @@
       <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-image-plus-outline">
         <strong>오늘 {{ dashboard.image.values.at(-1) || 0 }}개 이미지 추가됨</strong>
         <v-divider vertical class="ml-3 mr-3"></v-divider>
-        최고 {{ Math.max(...dashboard.visit.values) }}개 이미지 추가됨
+        최고 {{ Math.max(...dashboard.image.values) }}개 이미지 추가됨
       </v-chip>
     </template>
 
