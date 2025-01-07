@@ -10,7 +10,9 @@
     >
     <template v-slot:append>
       <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-arrow-right-outline">
-        오늘 {{ dashboard.visit.values.at(-1) || 0 }}명 방문
+        <strong>오늘 {{ dashboard.visit.values.at(-1) || 0 }}명 방문</strong>
+        <v-divider vertical class="ml-3 mr-3"></v-divider>
+        최고 {{ Math.max(...dashboard.visit.values) }}명 방문
       </v-chip>
     </template>
 
@@ -18,7 +20,7 @@
 
     <v-sheet class="mx-auto">
       <v-sparkline
-        v-if="dashboard.visit.values.length < 31"
+        v-if="dashboard.visit.values.length < 20"
         :model-value="dashboard.visit.values"
         :color="COLOR.ADMIN.MAIN"
         :line-width="1"

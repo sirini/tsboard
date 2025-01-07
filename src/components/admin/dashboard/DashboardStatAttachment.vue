@@ -9,8 +9,10 @@
       </v-chip></template
     >
     <template v-slot:append>
-      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-arrow-right-outline">
-        오늘 {{ dashboard.file.values.at(-1) || 0 }}개 업로드됨
+      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-content-save-plus-outline">
+        <strong>오늘 {{ dashboard.file.values.at(-1) || 0 }}개 업로드됨</strong>
+        <v-divider vertical class="ml-3 mr-3"></v-divider>
+        최고 {{ Math.max(...dashboard.visit.values) }}개 업로드됨
       </v-chip>
     </template>
 
@@ -18,7 +20,7 @@
 
     <v-sheet class="mx-auto">
       <v-sparkline
-        v-if="dashboard.file.values.length < 31"
+        v-if="dashboard.file.values.length < 20"
         :model-value="dashboard.file.values"
         :color="COLOR.ADMIN.MAIN"
         :line-width="1"
@@ -53,11 +55,11 @@
     <v-divider></v-divider>
 
     <v-card-actions class="pa-0 ml-3 mr-3">
-      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-arrow-right-outline">
+      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-content-save-plus-outline">
         어제 {{ dashboard.file.values.at(-2) || 0 }} 개 업로드됨
       </v-chip>
       <v-spacer></v-spacer>
-      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-group-outline">
+      <v-chip :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-content-save-all">
         총 {{ util.num(dashboard.file.total) }} 개 업로드됨
       </v-chip>
     </v-card-actions>
