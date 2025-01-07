@@ -1,5 +1,5 @@
 <template>
-  <v-footer :color="COLOR.ADMIN.FOOTER" class="mt-16 mb-8">
+  <v-footer :color="COLOR.ADMIN.FOOTER" class="mt-6 mb-3">
     <v-card elevation="0" class="mx-auto" :color="COLOR.ADMIN.FOOTER">
       <v-card-actions>
         <v-btn class="mx-3 tsboard" rounded="pill" @click="util.open('https://tsboard.dev')">

@@ -30,7 +30,6 @@
 
 <script setup lang="ts">
 import { useAdminDashboardStore } from "../../../store/admin/dashboard/general"
-import { useUtilStore } from "../../../store/util"
 import DashboardStatisticVisit from "./statistic/DashboardStatisticVisit.vue"
 import DashboardStatisticMember from "./statistic/DashboardStatisticMember.vue"
 import DashboardStatisticPost from "./statistic/DashboardStatisticPost.vue"
@@ -39,5 +38,4 @@ import DashboardStatisticAttachment from "./statistic/DashboardStatisticAttachme
 import DashboardStatisticInsertedImage from "./statistic/DashboardStatisticInsertedImage.vue"
 
 const dashboard = useAdminDashboardStore()
-const util = useUtilStore()
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-3 title" rounded="xl">
+  <v-card class="mt-3" rounded="xl">
     <template v-slot:title>방문자수</template>
     <template v-slot:append>
       <v-chip size="small" :color="COLOR.ADMIN.MAIN" prepend-icon="mdi-account-arrow-right-outline"

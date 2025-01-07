@@ -29,13 +29,14 @@ import DashboardGeneralItem from "./DashboardGeneralItem.vue"
 const admin = useAdminStore()
 const general = useAdminDashboardStore()
 const auth = useAuthStore()
-onMounted(() => {
+onMounted(async () => {
   if (auth.user.uid !== 1) {
     admin.error(`그룹 관리자 이상만 사용 가능합니다.`, 10_000)
     return
   }
-  general.loadStatistics()
-  general.loadLatests()
-  general.loadItems()
+  general.days = 7
+  await general.loadStatistics()
+  await general.loadLatests()
+  await general.loadItems()
 })
 </script>

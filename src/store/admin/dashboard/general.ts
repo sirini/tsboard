@@ -36,6 +36,17 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
   const groups = ref<Pair[]>([])
   const boards = ref<Pair[]>([])
   const members = ref<BoardWriter[]>([])
+  const days = ref<number>(7)
+  const height = ref<number>(80)
+  const loading = ref<boolean>(false)
+
+  // 통계 데이터 초기화
+  function clearStatistics(): void {
+    const targets = [visit, member, post, reply, file, image]
+    targets.map((target) => {
+      target.value = { total: 0, labels: [] as string[], values: [] as number[] }
+    })
+  }
 
   // 현재 연월일 반환
   function today(): Today {
@@ -52,43 +63,48 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
 
   // 간단 통계 데이터 가져오기
   async function loadStatistics(): Promise<void> {
-    const response = await axios.get(`${TSBOARD.API}/admin/dashboard/general/load/statistic`, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-      params: {
-        limit: 7 /* days */,
-      },
-    })
-    const data = response.data as ResponseData<AdminDashboardStatisticResult>
-    if (!data || data.success === false) {
-      if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
-        return admin.error(ADMIN.NEED_REFRESH)
+    loading.value = true
+    try {
+      const response = await axios.get(`${TSBOARD.API}/admin/dashboard/general/load/statistic`, {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+        params: {
+          limit: days.value,
+        },
+      })
+      const data = response.data as ResponseData<AdminDashboardStatisticResult>
+      if (!data || data.success === false) {
+        if (data.code === CODE.INVALID_TOKEN && (await auth.updateAccessToken()) === true) {
+          return admin.error(ADMIN.NEED_REFRESH)
+        }
+        return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${data.error})`)
       }
-      return admin.error(`${GENERAL.FAILED_LOAD_DASHBOARD} (${data.error})`)
-    }
 
-    const items = [
-      { target: member.value, data: data.result.member },
-      { target: post.value, data: data.result.post },
-      { target: reply.value, data: data.result.reply },
-      { target: file.value, data: data.result.file },
-      { target: image.value, data: data.result.image },
-      { target: visit.value, data: data.result.visit },
-    ]
+      const items = [
+        { target: member.value, data: data.result.member },
+        { target: post.value, data: data.result.post },
+        { target: reply.value, data: data.result.reply },
+        { target: file.value, data: data.result.file },
+        { target: image.value, data: data.result.image },
+        { target: visit.value, data: data.result.visit },
+      ]
 
-    for (const item of items) {
-      item.target.labels = []
-      item.target.values = []
-      item.target.total = item.data.total
+      for (const item of items) {
+        item.target.labels = []
+        item.target.values = []
+        item.target.total = item.data.total
 
-      for (const history of item.data.history.reverse()) {
-        const d = new Date(history.date)
-        const month = (d.getMonth() + 1).toString().padStart(2, "0")
-        const day = d.getDate().toString().padStart(2, "0")
-        item.target.labels.push(`${month}/${day}`)
-        item.target.values.push(history.visit)
+        for (const history of item.data.history.reverse()) {
+          const d = new Date(history.date)
+          const month = (d.getMonth() + 1).toString().padStart(2, "0")
+          const day = d.getDate().toString().padStart(2, "0")
+          item.target.labels.push(`${month}/${day}`)
+          item.target.values.push(history.visit)
+        }
       }
+    } finally {
+      loading.value = false
     }
   }
 
@@ -144,6 +160,10 @@ export const useAdminDashboardStore = defineStore("adminDashboard", () => {
     groups,
     boards,
     members,
+    days,
+    height,
+    loading,
+    clearStatistics,
     today,
     loadStatistics,
     loadLatests,
