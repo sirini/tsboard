@@ -8,7 +8,8 @@ export const BOARD = {
   DEFAULT: 0,
   GALLERY: 1,
   BLOG: 2,
-  SHOP: 3,
+  WEBZINE: 3,
+  SHOP: 4,
 }
 
 // 게시판 내 활동 기본값 정의
@@ -25,6 +26,7 @@ export const CONVERT_BOARD_TYPE = [
   { path: "/board/", name: "boardList" },
   { path: "/gallery/", name: "galleryList" },
   { path: "/blog/", name: "blogList" },
+  { path: "/webzine/", name: "webzineList" },
   { path: "/shop/", name: "shopList" },
 ]
 

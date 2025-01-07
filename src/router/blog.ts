@@ -1,9 +1,3 @@
-/**
- * router/blog
- *
- * 블로그 관련 라우팅(경로 지정) 설정
- */
-
 import { RouteRecordRaw } from "vue-router"
 import { TSBOARD } from "../../tsboard.config"
 

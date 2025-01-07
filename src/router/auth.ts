@@ -1,9 +1,3 @@
-/**
- * router/auth
- *
- * 로그인, 인증 등 회원 정보 관련 라우팅(경로 지정) 설정
- */
-
 import { RouteRecordRaw } from "vue-router"
 import { TSBOARD } from "../../tsboard.config"
 

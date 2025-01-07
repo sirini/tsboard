@@ -81,6 +81,8 @@ export const useUtilStore = defineStore("util", () => {
         return `blog${actionName}`
       case BOARD.SHOP:
         return `shop${actionName}`
+      case BOARD.WEBZINE:
+        return `webzine${actionName}`
       default:
         return `board${actionName}`
     }

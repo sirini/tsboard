@@ -1,13 +1,8 @@
-/**
- * router/index
- *
- * 라우팅(경로 지정) 설정
- */
-
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router"
 import { boardRoutes } from "./board"
 import { blogRoutes } from "./blog"
 import { galleryRoutes } from "./gallery"
+import { webzineRoutes } from "./webzine"
 import { authRoutes } from "./auth"
 import { homeRoutes } from "./home"
 import { adminRoutes } from "./admin"
@@ -20,6 +15,7 @@ const routes: Array<RouteRecordRaw> = [
   ...boardRoutes,
   ...blogRoutes,
   ...galleryRoutes,
+  ...webzineRoutes,
   ...notFoundRoute,
 ]
 

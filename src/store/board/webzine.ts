@@ -25,7 +25,7 @@ import { TSBOARD } from "../../../tsboard.config"
 import { CODE, ResponseData } from "../../interface/util_interface"
 import { ADMIN } from "../../messages/store/admin/admin"
 
-export const useBoardListStore = defineStore("boardList", () => {
+export const useWebzineListStore = defineStore("webzineList", () => {
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
@@ -46,8 +46,8 @@ export const useBoardListStore = defineStore("boardList", () => {
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
 
-  // 게시글 목록 가져오기
-  async function loadPostList(): Promise<NavigationFailure | void | undefined> {
+  // 웹진 목록 가져오기
+  async function loadWebzineList(): Promise<NavigationFailure | void | undefined> {
     loading.value = true
     try {
       id.value = route.params.id as string
@@ -113,11 +113,11 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 게시판 목록 마운트 시점에 호출
   function initFirstList(): void {
-    const name = util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING)
+    const name = util.routerName(BOARD.WEBZINE as Board, BOARD_ACTION.PAGING)
     const pageStr = page.value.toString()
 
     if (page.value > 1 && sinceUid.value > 0) {
-      loadPostList()
+      loadWebzineList()
       router.replace({ name, params: { id: id.value, page: pageStr } })
     } else {
       resetBoardList()
@@ -131,7 +131,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     page.value = 1
     pagingDirection.value = PAGE.NEXT as Paging
 
-    await loadPostList()
+    await loadWebzineList()
     home.setGridLayout()
   }
 
@@ -170,7 +170,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       name: util.routerName(config.value.type, BOARD_ACTION.PAGING),
       params: { id: id.value, page: page.value },
     })
-    loadPostList()
+    loadWebzineList()
   }
 
   // 다음 페이지 이동하기
@@ -180,7 +180,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       name: util.routerName(config.value.type, BOARD_ACTION.PAGING),
       params: { id: id.value, page: page.value },
     })
-    loadPostList()
+    loadWebzineList()
   }
 
   // 검색 옵션 초기화하기
@@ -201,7 +201,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     clearVariables()
     option.value = SEARCH.CATEGORY as Search
     keyword.value = categoryUid.toString()
-    loadPostList()
+    loadWebzineList()
   }
 
   // 검색어 확정하고 검색어 히스토리에 추가
@@ -210,7 +210,7 @@ export const useBoardListStore = defineStore("boardList", () => {
       return
     }
     clearVariables()
-    loadPostList()
+    loadWebzineList()
     keywordHistories.value.push(keyword.value)
     if (keywordHistories.value.length > 10) {
       keywordHistories.value.splice(0, 1)
@@ -224,7 +224,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
     keyword.value = selectedKeyword
     clearVariables()
-    loadPostList()
+    loadWebzineList()
   }
 
   // 게시판 목록보기 초기화
@@ -249,7 +249,7 @@ export const useBoardListStore = defineStore("boardList", () => {
     option,
     keyword,
     keywordHistories,
-    loadPostList,
+    loadWebzineList,
     initFirstList,
     resetBoardList,
     movePrevPage,

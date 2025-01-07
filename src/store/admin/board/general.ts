@@ -7,7 +7,7 @@ import { useUtilStore } from "../../util"
 import { GENERAL } from "../../../messages/store/admin/board/general"
 import { TSBOARD } from "../../../../tsboard.config"
 import axios from "axios"
-import { BOARD, BOARD_CONFIG, Board, BoardConfig, Pair } from "../../../interface/board_interface"
+import { BOARD, BOARD_CONFIG, BoardConfig, Pair } from "../../../interface/board_interface"
 import { AdminBoardResult } from "../../../interface/admin_interface"
 import { CODE, ResponseData } from "../../../interface/util_interface"
 import { ADMIN } from "../../../messages/store/admin/admin"
@@ -147,11 +147,13 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
     }
 
     let typeName = "게시판 (board)"
-    if (board.value.type === (BOARD.GALLERY as Board)) {
+    if (board.value.type === BOARD.GALLERY) {
       typeName = "갤러리 (gallery)"
-    } else if (board.value.type === (BOARD.BLOG as Board)) {
+    } else if (board.value.type === BOARD.BLOG) {
       typeName = "블로그 (blog)"
-    } else if (board.value.type === (BOARD.SHOP as Board)) {
+    } else if (board.value.type === BOARD.WEBZINE) {
+      typeName = "웹진 (webzine)"
+    } else if (board.value.type === BOARD.SHOP) {
       typeName = "쇼핑몰 (shop)"
     }
     admin.success(`${GENERAL.CHANGED_TYPE1} ${typeName} ${GENERAL.CHANGED_TYPE2}`)

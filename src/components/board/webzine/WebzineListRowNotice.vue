@@ -5,7 +5,7 @@
     :key="index"
     :lines="home.isMobile ? 'two' : 'one'"
   >
-    <v-list-item-title class="pointer ml-3" @click="util.go('boardView', list.id, notice.uid)">
+    <v-list-item-title class="pointer ml-3" @click="util.go('webzineView', list.id, notice.uid)">
       <v-icon size="x-small" :color="COLOR.HOME.MAIN" class="mr-2"
         >mdi-bullhorn-variant-outline</v-icon
       >
@@ -104,12 +104,12 @@
 
 <script setup lang="ts">
 import { COLOR } from "../../../../tsboard.config"
-import { useBoardListStore } from "../../../store/board/list"
+import { useWebzineListStore } from "../../../store/board/webzine"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
 import UserNametag from "../../user/UserNametag.vue"
 
-const list = useBoardListStore()
+const list = useWebzineListStore()
 const home = useHomeStore()
 const util = useUtilStore()
 </script>

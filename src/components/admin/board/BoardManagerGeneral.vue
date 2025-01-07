@@ -107,7 +107,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="4">
+          <v-col cols="5">
             <v-btn-toggle
               v-model="general.board.type"
               mandatory
@@ -118,6 +118,7 @@
                 :value="BOARD.DEFAULT"
                 prepend-icon="mdi-table-large"
                 @click="general.changeType"
+                size="small"
                 >게시판
                 <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
               </v-btn>
@@ -125,30 +126,38 @@
                 :value="BOARD.GALLERY"
                 prepend-icon="mdi-view-gallery-outline"
                 @click="general.changeType"
+                size="small"
                 >갤러리
                 <v-tooltip activator="parent"
                   >업로드 된 사진들이 미리 보여지고, 별도의 이미지 뷰어를 사용하는 갤러리 형식으로
                   사용합니다. (글보기가 이미지 뷰어로 대체)</v-tooltip
                 >
               </v-btn>
-              <v-btn :value="BOARD.BLOG" prepend-icon="mdi-post-outline" @click="general.changeType"
+              <v-btn
+                :value="BOARD.BLOG"
+                prepend-icon="mdi-post-outline"
+                @click="general.changeType"
+                size="small"
                 >블로그
                 <v-tooltip activator="parent">
                   게시글 목록이 블로그 형식으로 변형되어 보여집니다. (블로그 형식은 게시판 관리자만
                   글작성이 가능합니다)
                 </v-tooltip>
               </v-btn>
+              <v-btn
+                :value="BOARD.WEBZINE"
+                prepend-icon="mdi-newspaper-variant"
+                @click="general.changeType"
+                size="small"
+                >웹진
+                <v-tooltip activator="parent">
+                  목록을 뉴스 게시글 목록 형식으로 변형해서 보여여줍니다. 첨부된 사진이 하나 이상
+                  있을 때 효과적으로 보여집니다.
+                </v-tooltip>
+              </v-btn>
             </v-btn-toggle>
           </v-col>
-          <v-col class="mt-2">
-            <span v-show="general.board.type === BOARD.BLOG"
-              >블로그 형식은 권한 탭에서 지정된 <strong>게시판 관리자만 글을 작성</strong>할 수
-              있습니다.</span
-            >
-            <span v-show="general.board.type !== BOARD.BLOG"
-              >페이지 형태를 일반적인 게시판, 갤러리 혹은 블로그로 지정할 수 있습니다.</span
-            ></v-col
-          >
+          <v-col class="mt-2"> 블로그의 경우 게시판 관리자만 글작성이 가능합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
