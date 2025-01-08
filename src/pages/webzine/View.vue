@@ -19,10 +19,10 @@
               max-height="700"
               aspect-ratio="1"
             >
-              <h3 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h3>
+              <h3 class="view-title pl-5 pr-5 pb-3">{{ util.unescape(view.post.title) }}</h3>
             </v-img>
             <v-sheet v-else :color="COLOR.HOME.BACKGROUND">
-              <h3 class="pa-3">{{ util.unescape(view.post.title) }}</h3>
+              <h3 class="pa-5">{{ util.unescape(view.post.title) }}</h3>
             </v-sheet>
 
             <board-view-statistics></board-view-statistics>
