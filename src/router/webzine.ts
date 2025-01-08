@@ -10,7 +10,7 @@ export const webzineRoutes: Array<RouteRecordRaw> = [
   {
     path: `${TSBOARD.PREFIX}/webzine/:id/:no(\\d+)`,
     name: "webzineView",
-    component: () => import("@/pages/board/View.vue"),
+    component: () => import("@/pages/webzine/View.vue"),
   },
   {
     path: `${TSBOARD.PREFIX}/webzine/:id/write`,

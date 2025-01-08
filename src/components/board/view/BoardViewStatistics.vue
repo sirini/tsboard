@@ -2,10 +2,15 @@
   <v-list>
     <v-list-item class="underline">
       <template v-slot:prepend>
-        <span class="mr-2 text-caption" v-if="view.config.useCategory"
-          ><v-icon size="small" class="mr-2">mdi-filter-outline</v-icon>
-          {{ view.post.category.name }}</span
+        <v-chip
+          class="mr-2"
+          variant="text"
+          size="small"
+          v-if="view.config.useCategory"
+          prepend-icon="mdi-filter-outline"
+          >{{ view.post.category.name }}</v-chip
         >
+
         <span class="mr-2 text-caption" v-if="home.isMobile === false"
           >{{ TEXT[home.lang].SUBMITTED }}: {{ util.date(view.post.submitted, true, true) }}</span
         >

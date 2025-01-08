@@ -10,17 +10,19 @@
   >
     <v-list-item class="pa-0">
       <template v-slot:prepend>
-        <v-card :width="home.isMobile ? 90 : 180" elevation="0" rounded="0" class="pa-0">
+        <v-card :width="home.isMobile ? 100 : 180" elevation="0" rounded="0" class="pa-0">
           <v-img
             cover
-            :height="home.isMobile ? 67 : 135"
-            :src="TSBOARD.PREFIX + (post.cover || '/image-not-found.svg')"
+            height="160"
+            :src="TSBOARD.PREFIX + post.cover"
+            v-if="post.cover.length > 0"
           ></v-img>
+          <v-sheet height="160" :color="COLOR.HOME.BACKGROUND" v-else></v-sheet>
         </v-card>
       </template>
 
       <v-card elevation="0" rounded="0">
-        <v-card-title>
+        <v-card-title :class="home.isMobile ? 'title-mobile' : ''">
           <span v-if="post.status === STATUS.SECRET">
             <v-icon
               size="x-small"
@@ -44,8 +46,8 @@
           {{ util.unescape(post.title) }}
         </v-card-title>
 
-        <v-card-text>
-          {{ util.stripTags(post.content).slice(0, 300) }}
+        <v-card-text :class="home.isMobile ? 'text-caption' : ''">
+          {{ util.stripTags(post.content).slice(0, home.isMobile ? 70 : 160) }}
         </v-card-text>
 
         <v-card-actions>
@@ -101,13 +103,20 @@
 <script setup lang="ts">
 import { COLOR, TSBOARD } from "../../../../tsboard.config"
 import { STATUS } from "../../../interface/board_interface"
-import { useWebzineListStore } from "../../../store/board/webzine"
+import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 
-const list = useWebzineListStore()
+const list = useBoardListStore()
 const home = useHomeStore()
 const util = useUtilStore()
 const auth = useAuthStore()
 </script>
+
+<style lang="css" scoped>
+.title-mobile {
+  font-size: 1em;
+  font-weight: bold;
+}
+</style>

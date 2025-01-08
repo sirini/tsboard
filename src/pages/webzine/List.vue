@@ -47,7 +47,7 @@ import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"
 import { TEXT } from "../../messages/pages/board/list"
-import { useWebzineListStore } from "../../store/board/webzine"
+import { useBoardListStore } from "../../store/board/list"
 import { useHomeStore } from "../../store/home"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
@@ -57,7 +57,7 @@ import QuickButton from "../home/components/mobile/QuickButton.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const route = useRoute()
-const list = useWebzineListStore()
+const list = useBoardListStore()
 const home = useHomeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 

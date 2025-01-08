@@ -7,16 +7,26 @@
         <v-container class="wrap">
           <board-header :config="view.config"></board-header>
           <v-card
-            class="mx-auto mt-5 pa-3"
+            class="mx-auto mt-5"
             :max-width="view.config.width"
             :loading="view.loading"
             rounded="xl"
           >
-            <h2 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h2>
+            <v-img
+              :src="TSBOARD.PREFIX + view.images[0].thumbnail.large"
+              v-if="view.images.length > 0"
+              cover
+              max-height="700"
+              aspect-ratio="1"
+            >
+              <h3 class="view-title pa-3">{{ util.unescape(view.post.title) }}</h3>
+            </v-img>
+            <v-sheet v-else :color="COLOR.HOME.BACKGROUND">
+              <h3 class="pa-3">{{ util.unescape(view.post.title) }}</h3>
+            </v-sheet>
 
             <board-view-statistics></board-view-statistics>
-            <board-view-attachments></board-view-attachments>
-            <board-view-attachment-thumbnail></board-view-attachment-thumbnail>
+            <board-view-attachments class="ml-3 mr-3"></board-view-attachments>
 
             <div class="tsboard">
               <v-card v-html="view.post.content" elevation="0" rounded="0"></v-card>
@@ -27,15 +37,17 @@
               {{ util.unescape(view.post.writer.signature) }}
             </v-card-text>
             <board-view-writer-post-comment></board-view-writer-post-comment>
-            <board-view-buttons></board-view-buttons>
-            <board-view-comment-write
-              v-if="view.post.uid > 0"
-              :type="view.config.type"
-              :board-uid="view.config.uid"
-              :post-uid="view.postUid"
-            ></board-view-comment-write>
-            <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
-            <board-view-bottom-buttons></board-view-bottom-buttons>
+            <v-card elevation="0" rounded="0" class="ml-3 mr-3">
+              <board-view-buttons></board-view-buttons>
+              <board-view-comment-write
+                v-if="view.post.uid > 0"
+                :type="view.config.type"
+                :board-uid="view.config.uid"
+                :post-uid="view.postUid"
+              ></board-view-comment-write>
+              <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
+              <board-view-bottom-buttons></board-view-bottom-buttons>
+            </v-card>
           </v-card>
           <board-view-side-navigation></board-view-side-navigation>
         </v-container>
@@ -61,7 +73,6 @@ import BoardViewCommentList from "../../components/board/comment/BoardViewCommen
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import BoardViewAttachments from "../../components/board/view/BoardViewAttachments.vue"
-import BoardViewAttachmentThumbnail from "../../components/board/view/BoardViewAttachmentThumbnail.vue"
 import BoardViewAttachmentThumbnailViewDialog from "../../components/board/view/BoardViewAttachmentThumbnailViewDialog.vue"
 import BoardViewBottomButtons from "../../components/board/view/BoardViewBottomButtons.vue"
 import BoardViewButtons from "../../components/board/view/BoardViewButtons.vue"
@@ -80,7 +91,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import SideDrawer from "../home/SideDrawer.vue"
 import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
-import { COLOR } from "../../../tsboard.config"
+import { COLOR, TSBOARD } from "../../../tsboard.config"
 
 const route = useRoute()
 const view = useBoardViewStore()
@@ -106,8 +117,12 @@ onUnmounted(() => {
 }
 .view-title {
   font-weight: bold;
-  font-size: 1.2em;
-  line-height: 1.6em;
+  font-size: 1.4em;
+  line-height: 1.8em;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  position: absolute;
+  bottom: 0px;
 }
 
 .signature {

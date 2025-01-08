@@ -6,10 +6,8 @@ import { useHomeStore } from "../home"
 import { useAuthStore } from "../user/auth"
 import { useUtilStore } from "../util"
 import {
-  BOARD,
   BOARD_ACTION,
   BOARD_CONFIG,
-  Board,
   BoardConfig,
   BoardListItem,
   BoardListResult,
@@ -113,7 +111,7 @@ export const useBoardListStore = defineStore("boardList", () => {
 
   // 게시판 목록 마운트 시점에 호출
   function initFirstList(): void {
-    const name = util.routerName(BOARD.DEFAULT as Board, BOARD_ACTION.PAGING)
+    const name = util.routerName(config.value.type, BOARD_ACTION.PAGING)
     const pageStr = page.value.toString()
 
     if (page.value > 1 && sinceUid.value > 0) {

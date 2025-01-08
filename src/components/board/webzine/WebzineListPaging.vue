@@ -61,14 +61,14 @@
 import { COLOR } from "../../../../tsboard.config"
 import { BOARD_ACTION } from "../../../interface/board_interface"
 import { TEXT } from "../../../messages/pages/board/list"
-import { useWebzineListStore } from "../../../store/board/webzine"
+import { useBoardListStore } from "../../../store/board/list"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
 import { useUtilStore } from "../../../store/util"
 import BoardListSearch from "../list/BoardListSearch.vue"
 
 const auth = useAuthStore()
-const list = useWebzineListStore()
+const list = useBoardListStore()
 const util = useUtilStore()
 const home = useHomeStore()
 </script>
