@@ -47,7 +47,7 @@
         </v-card-title>
 
         <v-card-text :class="home.isMobile ? 'text-caption' : ''">
-          {{ util.stripTags(post.content).slice(0, home.isMobile ? 70 : 160) }}
+          {{ util.stripTags(post.content).slice(0, home.isMobile ? 60 : 140) }}
         </v-card-text>
 
         <v-card-actions>
