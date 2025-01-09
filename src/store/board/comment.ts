@@ -187,7 +187,8 @@ export const useCommentStore = defineStore("comment", () => {
 
   // 댓글 작성하기
   async function saveComment(): Promise<void> {
-    if (content.value.length < 2) {
+    const txt = util.stripTags(contentWithSyntax.value).trim()
+    if (txt.length < 2) {
       util.snack(TEXT[home.lang].TOO_SHORT_COMMENT)
       return
     }

@@ -120,7 +120,7 @@ onUnmounted(() => {
   font-size: 1.4em;
   line-height: 1.8em;
   color: white;
-  text-shadow: 1px 1px 1px black;
+  text-shadow: 0px 0px 3px black;
   position: absolute;
   bottom: 0px;
 }

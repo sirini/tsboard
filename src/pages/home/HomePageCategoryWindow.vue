@@ -37,7 +37,13 @@ const home = useHomeStore()
 const util = useUtilStore()
 
 const results = ref<BoardHomePostResult[]>([])
-const ICONS = ["mdi-forum", "mdi-image-multiple", "mdi-post", "mdi-shopping"] // BOARD, GALLERY, BLOG, SHOP
+const ICONS = [
+  "mdi-forum",
+  "mdi-image-multiple",
+  "mdi-post",
+  "mdi-newspaper-variant-outline",
+  "mdi-shopping",
+]
 
 onMounted(async () => {
   home.setGridLayout()
