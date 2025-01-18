@@ -14,7 +14,7 @@
               append-inner-icon="mdi-chevron-down"
             >
               <v-menu activator="parent" open-on-hover>
-                <v-list>
+                <v-list rounded="xl">
                   <v-list-item
                     v-for="(user, index) in general.suggestions"
                     :key="index"
@@ -64,7 +64,7 @@
               @click:append-inner="general.createNewBoard"
             >
               <v-menu activator="parent">
-                <v-list>
+                <v-list rounded="xl">
                   <v-list-item v-for="(board, index) in general.existBoardIds" :key="index">
                     {{ board.name }}
                   </v-list-item>

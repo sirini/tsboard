@@ -74,8 +74,8 @@ const emits = defineEmits<{
   addVideoURL: [video: VideoURL]
 }>()
 const link = ref<string>("https://")
-const width = ref<number>(640)
-const height = ref<number>(480)
+const width = ref<number>(800)
+const height = ref<number>(450)
 const urlRule = [
   (value: string) => {
     return util.filters.youtube.test(value) === true || "올바른 YouTube URL 형식이 아닙니다."

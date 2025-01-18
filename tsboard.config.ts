@@ -38,7 +38,7 @@ export const TSBOARD = {
     },
     URL: IS_DEV ? dev_url : production_url,
   },
-  VERSION: "v1.0.3",
+  VERSION: "v1.0.4",
 }
 
 // 사이트의 기본 컬러셋 지정 (필요 시 수정)

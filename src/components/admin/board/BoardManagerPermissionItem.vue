@@ -13,7 +13,7 @@
         append-inner-icon="mdi-chevron-down"
       >
         <v-menu activator="parent" open-on-hover>
-          <v-list>
+          <v-list rounded="xl">
             <v-list-item
               v-for="(_, lv) in 10"
               :key="lv"
