@@ -107,7 +107,7 @@
 
       <v-list-item class="mt-2 mb-2">
         <v-row>
-          <v-col cols="5">
+          <v-col>
             <v-btn-toggle
               v-model="general.board.type"
               mandatory
@@ -118,7 +118,6 @@
                 :value="BOARD.DEFAULT"
                 prepend-icon="mdi-table-large"
                 @click="general.changeType"
-                size="small"
                 >게시판
                 <v-tooltip activator="parent">일반적인 게시판 형식으로 사용합니다.</v-tooltip>
               </v-btn>
@@ -126,18 +125,13 @@
                 :value="BOARD.GALLERY"
                 prepend-icon="mdi-view-gallery-outline"
                 @click="general.changeType"
-                size="small"
                 >갤러리
                 <v-tooltip activator="parent"
                   >업로드 된 사진들이 미리 보여지고, 별도의 이미지 뷰어를 사용하는 갤러리 형식으로
                   사용합니다. (글보기가 이미지 뷰어로 대체)</v-tooltip
                 >
               </v-btn>
-              <v-btn
-                :value="BOARD.BLOG"
-                prepend-icon="mdi-post-outline"
-                @click="general.changeType"
-                size="small"
+              <v-btn :value="BOARD.BLOG" prepend-icon="mdi-post-outline" @click="general.changeType"
                 >블로그
                 <v-tooltip activator="parent">
                   게시글 목록이 블로그 형식으로 변형되어 보여집니다. (블로그 형식은 게시판 관리자만
@@ -148,16 +142,25 @@
                 :value="BOARD.WEBZINE"
                 prepend-icon="mdi-newspaper-variant"
                 @click="general.changeType"
-                size="small"
                 >웹진
                 <v-tooltip activator="parent">
                   목록을 뉴스 게시글 목록 형식으로 변형해서 보여여줍니다. 첨부된 사진이 하나 이상
                   있을 때 효과적으로 보여집니다.
                 </v-tooltip>
               </v-btn>
+              <v-btn
+                :value="BOARD.TRADE"
+                prepend-icon="mdi-cart-outline"
+                @click="general.changeType"
+              >
+                거래
+                <v-tooltip activator="parent">
+                  사용자간에 물품을 거래 할 수 있는 형식으로 보여줍니다. 가격, 거래 지역 등을 포함한
+                  추가 데이터를 사용 할 수 있습니다.
+                </v-tooltip>
+              </v-btn>
             </v-btn-toggle>
           </v-col>
-          <v-col class="mt-2"> 블로그의 경우 게시판 관리자만 글작성이 가능합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>

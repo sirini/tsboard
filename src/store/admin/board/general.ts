@@ -153,8 +153,8 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
       typeName = "블로그 (blog)"
     } else if (board.value.type === BOARD.WEBZINE) {
       typeName = "웹진 (webzine)"
-    } else if (board.value.type === BOARD.SHOP) {
-      typeName = "쇼핑몰 (shop)"
+    } else if (board.value.type === BOARD.TRADE) {
+      typeName = "거래 (trade)"
     }
     admin.success(`${GENERAL.CHANGED_TYPE1} ${typeName} ${GENERAL.CHANGED_TYPE2}`)
   }

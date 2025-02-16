@@ -1,0 +1,1 @@
+<template>trade view</template>

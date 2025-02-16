@@ -3,6 +3,7 @@ import { boardRoutes } from "./board"
 import { blogRoutes } from "./blog"
 import { galleryRoutes } from "./gallery"
 import { webzineRoutes } from "./webzine"
+import { tradeRoutes } from "./trade"
 import { authRoutes } from "./auth"
 import { homeRoutes } from "./home"
 import { adminRoutes } from "./admin"
@@ -16,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
   ...blogRoutes,
   ...galleryRoutes,
   ...webzineRoutes,
+  ...tradeRoutes,
   ...notFoundRoute,
 ]
 

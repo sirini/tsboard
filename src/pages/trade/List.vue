@@ -1,0 +1,1 @@
+<template>trade list</template>

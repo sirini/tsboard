@@ -9,7 +9,7 @@ export const BOARD = {
   GALLERY: 1,
   BLOG: 2,
   WEBZINE: 3,
-  SHOP: 4,
+  TRADE: 4,
 }
 
 // 게시판 내 활동 기본값 정의
