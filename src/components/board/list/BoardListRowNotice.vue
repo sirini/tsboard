@@ -1,11 +1,12 @@
 <template>
   <v-list-item
     class="list-item pa-0 notice"
+    :style="bgColor"
     v-for="(notice, index) in list.notices"
     :key="index"
     :lines="home.isMobile ? 'two' : 'one'"
   >
-    <v-list-item-title class="pointer ml-3" @click="util.go('boardView', list.id, notice.uid)">
+    <v-list-item-title class="pointer ml-3" @click="util.go(list.config.type, list.id, notice.uid)">
       <v-icon size="x-small" :color="COLOR.HOME.MAIN" class="mr-2"
         >mdi-bullhorn-variant-outline</v-icon
       >
@@ -112,19 +113,13 @@ import UserNametag from "../../user/UserNametag.vue"
 const list = useBoardListStore()
 const home = useHomeStore()
 const util = useUtilStore()
+const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 </script>
 
 <style scoped>
-.notice {
-  background-color: #f9f9f9;
-}
 .list-item {
   border-bottom: 1px #efefef solid;
 
-  .col {
-    color: #717171;
-    font-size: 0.8em;
-  }
   .pointer {
     cursor: pointer;
   }

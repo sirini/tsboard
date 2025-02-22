@@ -7,7 +7,13 @@
       </v-menu>
       <v-tooltip activator="parent">{{ TEXT[home.lang].SEARCH }}</v-tooltip>
     </v-btn>
-    <v-btn icon :disabled="list.page < 2 || list.loading" @click="list.movePrevPage" size="small" :color="COLOR.HOME.MAIN">
+    <v-btn
+      icon
+      :disabled="list.page < 2 || list.loading"
+      @click="list.movePrevPage"
+      size="small"
+      :color="COLOR.HOME.MAIN"
+    >
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent">{{ TEXT[home.lang].PREV }}</v-tooltip>
     </v-btn>

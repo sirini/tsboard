@@ -1,12 +1,11 @@
 <template>
   <v-text-field
-    v-model="editor.category.name"
+    v-model="categoryName"
     variant="outlined"
     hide-details
     readonly
-    prepend-inner-icon="mdi-filter"
+    prepend-inner-icon="mdi-monitor-cellphone"
     append-inner-icon="mdi-chevron-down"
-    :placeholder="TEXT[home.lang].CHOOSE_CATEGORY"
     @click="isOpenMenu = !isOpenMenu"
     rounded="pill"
     :min-width="150"
@@ -14,11 +13,11 @@
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
         <v-list-item
-          v-for="(cat, index) in editor.categories"
+          v-for="(cat, index) in PRODUCT_CATEGORIES[home.lang]"
           :key="index"
-          @click="editor.selectCategory(cat)"
+          @click="selectCategory(cat, index)"
         >
-          {{ cat.name }}
+          {{ cat }}
         </v-list-item>
       </v-list>
     </v-menu>
@@ -27,11 +26,18 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useBoardEditorStore } from "../../../store/board/editor"
+import { useTradeStore } from "../../../store/board/trade"
 import { useHomeStore } from "../../../store/home"
-import { TEXT } from "../../../messages/components/board/write/board-write-editor-others"
+import { PRODUCT_CATEGORIES } from "../../../interface/trade_interface"
 
-const editor = useBoardEditorStore()
+const trade = useTradeStore()
 const home = useHomeStore()
+const categoryName = ref<string>(PRODUCT_CATEGORIES[home.lang][0])
 const isOpenMenu = ref<boolean>(false)
+
+// 물품 분류명 선택
+function selectCategory(cat: string, index: number): void {
+  categoryName.value = cat
+  trade.category = index
+}
 </script>

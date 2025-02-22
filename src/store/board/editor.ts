@@ -20,6 +20,7 @@ import {
   EditorTagItem,
   Pair,
   STATUS,
+  WRITE_RESULT_FAIL,
 } from "../../interface/board_interface"
 import { AUTO_SAVE_KEY, AutoSaved } from "../../interface/post_interface"
 import { CODE, ResponseData } from "../../interface/util_interface"
@@ -288,9 +289,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
   }
 
   // 작성된 글 저장하기
-  async function write(): Promise<void> {
+  async function write(): Promise<number> {
     if (checkBeforeSend() === false) {
-      return
+      return WRITE_RESULT_FAIL
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -318,20 +319,20 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       const data = response.data as ResponseData<number>
       if (!data || data.success === false) {
         util.error(`${TEXT[home.lang].FAILED_WRITE_POST} (${data.error})`)
-        return
+        return WRITE_RESULT_FAIL
       }
 
       util.success(TEXT[home.lang].WRITTEN_NEW_POST)
-      await util.go(config.value.type, id.value, data.result)
+      return data.result
     } finally {
       clearVariables()
     }
   }
 
   // 글 수정하기
-  async function modify(): Promise<void> {
+  async function modify(): Promise<number> {
     if (checkBeforeSend() === false) {
-      return
+      return WRITE_RESULT_FAIL
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -350,29 +351,32 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       fd.append("attachments[]", file)
     }
 
-    const response = await axios.patch(`${TSBOARD.API}/editor/modify`, fd, {
-      headers: {
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    })
-    const data = response.data as ResponseData<null>
-    if (!data || data.success === false) {
-      util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${data.error})`)
-      return clearVariables()
+    try {
+      const response = await axios.patch(`${TSBOARD.API}/editor/modify`, fd, {
+        headers: {
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      })
+      const data = response.data as ResponseData<null>
+      if (!data || data.success === false) {
+        util.error(`${TEXT[home.lang].FAILED_MODIFY_POST} (${data.error})`)
+        return WRITE_RESULT_FAIL
+      }
+
+      util.success(TEXT[home.lang].MODIFIED_POST)
+
+      switch (config.value.type) {
+        case BOARD.GALLERY:
+          viewer.loadPost()
+          break
+        default:
+          view.loadPostView()
+      }
+
+      return postUid.value
+    } finally {
+      clearVariables()
     }
-
-    util.success(TEXT[home.lang].MODIFIED_POST)
-    util.go(config.value.type, id.value, postUid.value)
-
-    switch (config.value.type) {
-      case BOARD.GALLERY:
-        viewer.loadPost()
-        break
-      default:
-        view.loadPostView()
-    }
-
-    clearVariables()
   }
 
   // 첨부되어 있던 파일 삭제하기

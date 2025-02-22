@@ -18,11 +18,11 @@
                   <v-icon>mdi-alert-circle</v-icon> {{ TEXT[home.lang].EMPTY }}
                 </v-list-item>
 
-                <webzine-list-row-notice></webzine-list-row-notice>
+                <board-list-row-notice></board-list-row-notice>
                 <webzine-list-row></webzine-list-row>
               </v-list>
             </v-card-text>
-            <webzine-list-paging></webzine-list-paging>
+            <board-list-paging></board-list-paging>
           </v-card>
         </v-container>
         <home-footer></home-footer>
@@ -40,9 +40,9 @@
 import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
-import WebzineListPaging from "../../components/board/webzine/WebzineListPaging.vue"
+import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import WebzineListRow from "../../components/board/webzine/WebzineListRow.vue"
-import WebzineListRowNotice from "../../components/board/webzine/WebzineListRowNotice.vue"
+import BoardListRowNotice from "../../components/board/list/BoardListRowNotice.vue"
 import ManageUserDialog from "../../components/user/ManageUserDialog.vue"
 import SendReportDialog from "../../components/user/SendReportDialog.vue"
 import UserInfoDialog from "../../components/user/UserInfoDialog.vue"

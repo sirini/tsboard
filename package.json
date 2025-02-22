@@ -53,7 +53,7 @@
     "test": "^3.3.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.7.6"
+    "vuetify": "^3.7.13"
   },
   "devDependencies": {
     "@babel/types": "^7.25.7",

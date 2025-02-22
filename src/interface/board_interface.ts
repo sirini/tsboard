@@ -1,5 +1,8 @@
 import { UserBasicInfo } from "./user_interface"
 
+// 게시글 작성/수정 실패 리턴값 정의
+export const WRITE_RESULT_FAIL = -1
+
 // 게시판 타입 재정의
 export type Board = 0 | 1 | 2 | 3
 
@@ -27,7 +30,7 @@ export const CONVERT_BOARD_TYPE = [
   { path: "/gallery/", name: "galleryList" },
   { path: "/blog/", name: "blogList" },
   { path: "/webzine/", name: "webzineList" },
-  { path: "/shop/", name: "shopList" },
+  { path: "/trade/", name: "tradeList" },
 ]
 
 // 게시글 작성자 기본값 정의
