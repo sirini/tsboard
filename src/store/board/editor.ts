@@ -62,6 +62,12 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
       return TEXT[home.lang].TOO_SHORT_TEXT
     },
   ]
+  const numberRule = [
+    (value: any) => {
+      if (Number.isFinite(value)) return true
+      return TEXT[home.lang].NOT_VALID_NUMBER
+    },
+  ]
 
   // 게시판 설정 가져오기
   async function loadBoardConfig(): Promise<void> {
@@ -435,6 +441,7 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     tag,
     tags,
     textRule,
+    numberRule,
     suggestionTags,
     loadBoardConfig,
     loadOriginalPost,

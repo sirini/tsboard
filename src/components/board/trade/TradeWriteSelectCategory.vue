@@ -18,6 +18,10 @@
           @click="selectCategory(cat, index)"
         >
           {{ cat }}
+
+          <template v-slot:append v-if="cat == categoryName">
+            <v-icon size="small">mdi-check-circle</v-icon>
+          </template>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -28,7 +32,7 @@
 import { ref } from "vue"
 import { useTradeStore } from "../../../store/board/trade"
 import { useHomeStore } from "../../../store/home"
-import { PRODUCT_CATEGORIES } from "../../../interface/trade_interface"
+import { PRODUCT_CATEGORIES } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()

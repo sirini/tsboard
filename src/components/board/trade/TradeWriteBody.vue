@@ -50,7 +50,7 @@
           ></v-text-field>
         </v-list-item>
 
-        <v-list-item class="pa-0 pb-3">
+        <v-list-item class="pa-0">
           <template v-slot:prepend>
             <trade-write-select-category class="pt-3 mr-2"></trade-write-select-category>
           </template>
@@ -66,6 +66,44 @@
             rounded="pill"
           ></v-text-field>
         </v-list-item>
+
+        <v-list-item class="pa-0">
+          <template v-slot:prepend>
+            <trade-write-select-product-condition
+              class="pt-3 mr-2"
+            ></trade-write-select-product-condition>
+          </template>
+
+          <v-text-field
+            v-model="trade.price"
+            :rules="editor.numberRule"
+            class="pt-3"
+            :prepend-inner-icon="'mdi-' + CURRENCY_ICON[home.lang]"
+            hide-details
+            variant="outlined"
+            :label="TXT_TRADE[home.lang].FORM_PRICE"
+            rounded="pill"
+          ></v-text-field>
+        </v-list-item>
+
+        <v-list-item class="pa-0">
+          <template v-slot:prepend>
+            <trade-write-select-shipping-type class="pt-3 mr-2"></trade-write-select-shipping-type>
+          </template>
+
+          <v-text-field
+            v-model="trade.location"
+            :rules="editor.textRule"
+            class="pt-3"
+            prepend-inner-icon="mdi-map-marker"
+            hide-details
+            variant="outlined"
+            :label="TXT_TRADE[home.lang].FORM_LOCATION"
+            rounded="pill"
+          ></v-text-field>
+        </v-list-item>
+
+        <v-list-item></v-list-item>
 
         <board-write-editor
           v-model="editor.content"
@@ -125,7 +163,7 @@
 import { onMounted } from "vue"
 import { COLOR } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/write"
-import { TEXT as TXT_TRADE } from "../../../messages/pages/board/trade"
+import { CURRENCY_ICON, TEXT as TXT_TRADE } from "../../../messages/pages/board/trade"
 import { useBoardEditorStore } from "../../../store/board/editor"
 import { useHomeStore } from "../../../store/home"
 import { useAuthStore } from "../../../store/user/auth"
@@ -135,6 +173,8 @@ import BoardWriteEditor from "../../board/write/BoardWriteEditor.vue"
 import BoardWriteSelectAttachments from "../../board/write/BoardWriteSelectAttachments.vue"
 import BoardWriteSelectCategory from "../../board/write/BoardWriteSelectCategory.vue"
 import TradeWriteSelectCategory from "./TradeWriteSelectCategory.vue"
+import TradeWriteSelectProductCondition from "./TradeWriteSelectProductCondition.vue"
+import TradeWriteSelectShippingType from "./TradeWriteSelectShippingType.vue"
 import AlertBar from "../../util/AlertBar.vue"
 import BoardHeader from "../common/BoardHeader.vue"
 import { useUtilStore } from "../../../store/util"

@@ -36,4 +36,90 @@ export const TEXT = [
     FORM_LOCATION: "请输入您希望交易的地点或社区名称。",
   },
 ]
+
+// 물품 상태 기본값을 언어별로 정의
+export const PRODUCT_CONDITION_NAME = [
+  ["미개봉", "최상급", "사용감", "동작함", "부서짐"],
+  ["Unopened", "Excellent", "Signs of use", "Functional", "Broken"],
+  ["未开封", "极佳", "有使用痕迹", "可正常使用", "损坏"],
+]
+
+// 물품 카테고리명을 언어별로 정의 (인덱스가 곧 값)
+export const PRODUCT_CATEGORIES = [
+  /* LANG.KO */
+  [
+    "전자기기",
+    "가구/인테리어",
+    "유아용품",
+    "여성패션",
+    "남성패션",
+    "생활가전",
+    "주방용품",
+    "스포츠",
+    "게임",
+    "취미",
+    "음반",
+    "화장품",
+    "식물",
+    "가공식품",
+    "반려동물 용품",
+    "티켓/교환권",
+    "도서",
+  ],
+  /* LANG.EN */
+  [
+    "Electronics",
+    "Furniture/Interior",
+    "Baby Products",
+    "Women's Fashion",
+    "Men's Fashion",
+    "Home Appliances",
+    "Kitchen Supplies",
+    "Sports",
+    "Games",
+    "Hobbies",
+    "Music Albums",
+    "Cosmetics",
+    "Plants",
+    "Processed Foods",
+    "Pet Supplies",
+    "Tickets/Vouchers",
+    "Books",
+  ],
+  /* LANG.CN */
+  [
+    "电子产品",
+    "家具/室内装饰",
+    "婴儿用品",
+    "女士时尚",
+    "男士时尚",
+    "家用电器",
+    "厨房用品",
+    "运动",
+    "游戏",
+    "爱好",
+    "音乐专辑",
+    "化妆品",
+    "植物",
+    "加工食品",
+    "宠物用品",
+    "票券/兑换券",
+    "图书",
+  ],
+]
+
+// 배송 타입 기본값을 언어별로 정의
+export const SHIPPING_TYPE_NAME = [
+  ["택배", "직거래"],
+  ["Shipping", "Face-to-Face"],
+  ["快递", "当面交易"],
+]
+
+// 선택한 언어에 따른 금액 아이콘
+export const CURRENCY_ICON = ["currency-krw", "currency-usd", "currency-cny"]
+
 Object.freeze(TEXT)
+Object.freeze(PRODUCT_CONDITION_NAME)
+Object.freeze(PRODUCT_CATEGORIES)
+Object.freeze(SHIPPING_TYPE_NAME)
+Object.freeze(CURRENCY_ICON)
