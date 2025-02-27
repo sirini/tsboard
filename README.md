@@ -39,7 +39,6 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 ## TSBOARD 설치에 적합한 서버 환경
 
 - 프론트엔드는 Vue3 + Vuetify 기반이며, `vite`로 컴파일을 진행합니다. (**Node.js 설치** 필요)
-  - v1.0.0 이전 버전에 요구되었던 JS/TS 런타임 `Bun`은 더 이상 필요하지 않습니다.
   - Node.js는 `npm` 사용을 위해 설치가 필요하며, v22 버전 이상 최신 버전을 권장합니다.
   - 주로 사용하는 `npm` 명령어는 아래와 같습니다.
     - `npm install` : TSBOARD 프로젝트를 내려받은 후 필요한 라이브러리를 서버에 내려 받는데 사용합니다.
@@ -47,11 +46,10 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
     - `npm run build` : TSBOARD의 프론트엔드를 `vite`로 컴파일 하기 위해 사용합니다.
 - 백엔드는 사전에 컴파일된 바이너리 파일이 제공되며, 서버에 `libvips` 라이브러리가 설치되어 있어야 합니다.
   - `libvips`는 이미지 파일의 크기를 줄이거나, 포맷을 변경하는 등의 작업에 사용됩니다.
-  - TSBOARD가 자체적으로 제공하는 `goapi-linux` 와 같은 바이너리는 `libvips` 라이브러리가 필요합니다.
+  - TSBOARD가 자체적으로 제공하는 `goapi-linux-x64` 와 같은 바이너리는 `libvips` 라이브러리가 필요합니다.
   - 만약 서버를 직접 운영중이시라면, 쉽게 설치 하실 수 있습니다. 호스팅 사용자는 `libvips` 설치를 요청해보세요.
     - Ubuntu linux : `sudo apt install libvips-dev`
     - Mac : `brew install vips`
-    - Windows : `choco install vips`
 - 추천하는 운영 환경은 아래와 같습니다.
   - OS : Ubuntu linux (혹은 linux server), 22.04 이후
   - CPU : 2 core 이상, core수가 많을수록 TSBOARD가 이제 더 잘 활용합니다.
@@ -72,7 +70,7 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 - TSBOARD는 별도의 설치 파일들을 제공하지 않으며, **Git을 통해 설치 및 업데이트를 제공**합니다.
   - 먼저, `git clone https://github.com/sirini/tsboard tsboard.git` 을 실행합니다.
   - 권장하는 설치 경로는 `/var/www/` 하위 경로입니다. `/root/` 는 추천하지 않습니다.
-  - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `goapi-linux` 파일이 존재합니다.
+  - 권장 설치 경로에 설치 시 `/var/www/tsboard.git/` 폴더 안에 `goapi-linux-x64` 파일이 존재합니다.
 - TSBOARD가 의존하는 패키지들을 내려받습니다.
   - 권장 설치 경로에 설치하셨다면, `/var/www/tsboard.git/` 폴더 위치에서 **의존성 패키지들을 설치**합니다.
   - `npm install` 로 설치하실 수 있습니다. (서버에 Node.js v22 이상 설치 권장)
@@ -139,7 +137,7 @@ GMAIL_APP_PASSWORD=passwordfromgoog
   - 이미 해당 정보들을 가지고 계신 분들은 `.env` 파일에서 ID, Secret 정보를 입력하시면 사용 가능합니다.
   - 추가로, `tsboard.config.ts` 파일에서 `OAUTH` 항목을 통해 사용할 소셜 로그인을 개별적으로 선택하실 수 있습니다. (사용을 원치 않으시면 `IS_READY` 항목을 `false` 로 변경 후 저장하시면 됩니다.)
     - `tsboard.config.ts` 파일을 수정하신 경우 `npm run build` 를 통해 프로젝트를 `build` 해주세요!
-    - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `goapi-linux`로 백엔드를 실행해 주세요.
+    - 그 후 TSBOARD 설치 경로 (예: `/var/www/tsboard.git/`)에서 `goapi-linux-x64`로 백엔드를 실행해 주세요.
 
 ```
 # .env
@@ -181,10 +179,7 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
   - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
   - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEV` 항목을 `true` 로 수정합니다.
   - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
-  - 다른 터미널을 열고 `goapi-linux`를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
-    - Linux가 아닌 다른 운영체제를 사용하실 경우, 예를 들어 Mac일 경우 `goapi-mac`을 실행해 주세요.
-    - 경우에 따라서, 백엔드 바이너리 파일을 실행하기 위한 실행 권한 부여를 하셔야 할 수 있습니다.
-      - `chmod +x ./goapi-linux`
+  - 다른 터미널을 열고 `goapi-linux-x64`를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
   - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
 
 ### TSBOARD 업데이트
@@ -201,13 +196,15 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
   - 빌드 하기 전에 `tsboard.config.ts` 파일이나 `index.html` 혹은 `public/robots.txt` 가 제대로 수정되었는지 확인해 보세요!
   - `src/pages/home/HomePage.vue` 파일에 반영하신 작업들이 있을 경우 마찬가지로 다시 확인해 보세요.
   - 이 밖에 수정하신 파일들이 `git pull` 이후에도 제대로 변경사항을 유지하고 있는지 확인이 필요합니다.
+- 때때로 DB 테이블 변경 등을 위한 업데이트 작업이 필요합니다.
+  - 이 때는 백엔드를 실행하실 때 `./goapi-linux-x64 update` 처럼 update 인자를 추가로 전달하면서 실행해 보세요!
 
 ### TSBOARD 백엔드 실행하기
 
 - 사용하시는 서버의 운영체제에 맞춰서 미리 컴파일된 바이너리 파일을 실행하시면 됩니다.
-- `goapi-linux` 처럼 실행하시면 되며, 가급적 `tmux` 나 `screen` 과 같은 별도의 세션 관리 프로그램을 통해서 실행을 권장합니다.
+- `goapi-linux-x64` 처럼 실행하시면 되며, 가급적 `tmux` 나 `screen` 과 같은 별도의 세션 관리 프로그램을 통해서 실행을 권장합니다.
   - 그냥 실행하시면, 터미널을 닫으실 경우 TSBOARD의 백엔드 서버도 바로 종료됩니다!
-- 경우에 따라, 바이너리 파일에 실행 권한을 부여해 주셔야 할 수도 있습니다: `chmod +x ./goapi-linux` 처럼요!
+- 경우에 따라, 바이너리 파일에 실행 권한을 부여해 주셔야 할 수도 있습니다: `chmod +x ./goapi-linux-x64` 처럼요!
 
 ## 설치 후 서버 설정
 
@@ -215,7 +212,7 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 
 > Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
 
-- 축하합니다! 여러분은 `git clone` → `npm install` → `./goapi-linux` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
+- 축하합니다! 여러분은 `git clone` → `npm install` → `./goapi-linux-x64` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
 - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
 - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
 - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
@@ -294,9 +291,8 @@ server {
 
 ### 문의하러가기
 
-- 설치 과정에서의 어려움을 이겨내고자 하는 여러분들을 응웝합니다!
 - 어려움을 함께 논의해보고 싶다면 <https://tsboard.dev> 사이트에 와주세요.
-- 민감한 내용은 비밀글 기능을 이용하여 글을 남겨주세요!
+- 민감한 내용은 sirini@gmail.com 으로 메일을 보내주세요!
 
 ---
 
@@ -365,19 +361,6 @@ server {
 
 > 결과적으로 검색 엔진 크롤러는 위의 `main.html` 페이지를 통해 검색에 필요한 데이터들을 얻고, 사용자는 검색 엔진이 수집한 `main.html` 페이지를 통해 다시 기존의 CSR 페이지로 유입되는 셈입니다.
 
-### 백엔드 : Go, Fiber v3, go-mysql-driver, bimg
-
-- TSBOARD는 v1.0부터 `Go` 언어로 작성된 `goapi` 백엔드를 사용합니다.
-  - 이를 통해, 백엔드에서 Bun과 같은 JS/TS 런타임에 대한 의존성을 줄이고, 어디서나 동작 가능하도록 지원하고자 합니다.
-  - 또한 더 효율적으로 서버 자원을 활용할 수 있도록 개선하고, 안정성을 개선하고자 합니다.
-  - 현재까지의 자체 벤치마크 결과는 아래와 같습니다.
-    - 기존 `Bun` 런타임 기반 백엔드를 100%로 놓고 볼 때, **동작 속도는 90% ~ 95% 수준**입니다. 대부분의 작업이 DB 입출력과 관계가 있어서 속도 측면에서는 오히려 기존 `Bun` 런타임이 우세합니다. 성능 향상을 위한 추가적인 튜닝은 v1.0 출시 후 진행 예정입니다.
-    - CPU 사용량은 동시 접속 100명 이상 기준으로 약 300%~500% 가까이 나옵니다.
-    - 메모리는 위 경우 약 60% ~ 70% 수준이며, 고부하 조건이 아닐 때는 메모리 점유일이 20% ~ 30% 수준까지 떨어집니다.
-
-> Go언어로 재작성된 백엔드는 https://github.com/sirini/goapi 에서 전체 코드를 확인해 보실 수 있습니다.
-> 이미지 처리에 사용되는 `bimg`가 `libvips` 라이브러리를 사용합니다. 이로 인해, 서버에 `libvips` 라이브러리를 사전에 설치해 두셔야 합니다.
-
 ## DB 테이블
 
 - TSBOARD는 기본적으로 정규화된 테이블 구조를 지향하지만, `SELECT` 쿼리의 횟수를 줄이기 위해서나 혹은 데이터 관리를 보다 편하게 하기 위해 일부 중복된 데이터를 가지도록 구성되어 있습니다.
@@ -393,7 +376,7 @@ server {
 # 전체 테이블 목록은 아래와 같습니다. (`tsb_` 부분은 설치 단계에서 변경 가능)
 
 +-----------------------+
-| TSBOARD Table list    |
+| Tables_in_tsboard     |
 +-----------------------+
 | tsb_board             |
 | tsb_board_category    |
@@ -413,6 +396,9 @@ server {
 | tsb_post_hashtag      |
 | tsb_post_like         |
 | tsb_report            |
+| tsb_trade_favorite    | (v1.0.4)
+| tsb_trade_product     | (v1.0.4)
+| tsb_trade_review      | (v1.0.4)
 | tsb_user              |
 | tsb_user_access_log   |
 | tsb_user_black_list   |
@@ -422,16 +408,7 @@ server {
 +-----------------------+
 ```
 
-> `v0.8.40` 이상 버전부터 TSBOARD의 테이블 간 의존 관계를 명확히 하도록 외래 키(FOREIGN KEY) 설정이 적용되었습니다.
-
 ## 커스텀 가이드
-
-### TSBOARD는 스킨이 없나요?
-
-- 보통 게시판 하면 떠오르는 스킨 혹은 테마는, 동일한 기능을 하면서도 서로 다른 디자인을 제공하고자 할 때 필요합니다. TSBOARD도 처음에 스킨 시스템을 구현하려고 했었으나, 아래와 같은 이유로 스킨 시스템은 포기하고 커스텀 가이드를 제공하기로 하였습니다.
-  - 스킨이나 테마는 사용자의 규모가 어느 정도 되면서, 동시에 디자이너분이 해당 플랫폼에 대해 어느 정도 수정이 가능할 때 의미가 있습니다. TSBOARD는 아쉽게도 둘 다 해당되지 않습니다.
-  - 애초에 개발할 때부터 디자인은 `Vuetify` 에 의존하기로 결정했기 때문에 무리하게 스킨 시스템을 넣지 않기로 하였습니다. 사실 고려해야 할 사항들이 많아서이기도 합니다.
-  - 스킨 시스템이 없더라도 직접 디자인을 수정하여 사용하는 건 비교적 쉽습니다. 아래에 이어지는 내용들을 참조해 주세요!
 
 ### 커스텀 원칙 - 새로운 디자인은 새로운 파일에서
 
@@ -450,12 +427,6 @@ server {
   - 참고로, `List.vue`, `View.vue`, `Write.vue` 파일들은 모두 `src/components/board/` 경로 아래에 있는 여러 Vue 컴포넌트들을 참조하고 있습니다.
   - 만약 참조하는 컴포넌트들까지 모두 커스텀하고 싶다면, `src/pages/custom_board/components` 경로에 커스텀할 폴더와 파일들을 복사한 다음, 수정하고 `List.vue` 처럼 해당 컴포넌트들을 `import` 하는 파일들의 경로도 수정해주시면 됩니다.
 
-### 새로운 커스텀을 TSBOARD에 반영하기
-
-- TSBOARD 프로젝트는 여러분들의 참여를 기다리고 있습니다! 새로 만드신 커스텀 게시판 혹은 갤러리가 있다면 언제든지 `Pull Request` 를 통해 알려주시고 공유해주세요!
-- 또한 TSBOARD 활용에 필요한 커스텀들이 있을 경우, <https://tsboard.dev> 사이트에서 언제든지 제안 부탁드립니다.
-- 마지막으로, 운영중이신 사이트에 딱 필요한 커스텀이 있으신 경우 **정당한 대가를 지불하고 개발자의 시간을 사는 것도 방법**입니다.
-
 ---
 
 # TSBOARD 개발 계획
@@ -470,12 +441,13 @@ server {
 - `v0.9.z`
   - 블로그 기능 추가 및 개선 작업이 반영됩니다.
   - CSR 방식 기반에서 SEO를 좀 더 개선하기 위한 추가 작업들이 반영됩니다.
-- `v1.0.0` (**현재**)
+- `v1.0.0`
   - 백엔드를 `Bun` 런타임에서 `Go` 언어로 재작성한 자체 바이너리 파일로 대체합니다.
-- `v1.0.z`
+- `v1.0.z` (현재)
   - 백엔드 서버의 안정성 및 속도 개선을 위한 튜닝을 진행합니다.
+  - 중고 물품 거래용 게시판 기능이 추가됩니다.
 - `v1.1.0`
-  - 더 다양한 게시판/블로그/갤러리 테마를 제공합니다.
+  - TSBOARD 기반 커뮤니티 사이트용 안드로이드 앱을 출시할 예정입니다.
 - `1.2.0`
   - 쇼핑몰 테마를 제공합니다. 기본적인 재고 현황/관리 등도 추가됩니다.
   - 토스, 네이버페이와 연동합니다.
