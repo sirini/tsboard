@@ -4,7 +4,6 @@
     variant="outlined"
     hide-details
     readonly
-    prepend-inner-icon="mdi-monitor-cellphone"
     append-inner-icon="mdi-chevron-down"
     @click="isOpenMenu = !isOpenMenu"
     rounded="pill"

@@ -10,6 +10,8 @@ export const TEXT = [
     FORM_BRAND: "제조사 이름을 입력해 주세요. (예: 애플)",
     FORM_PRICE: "생각하시는 판매 가격을 숫자로 입력해 주세요.",
     FORM_LOCATION: "거래를 희망하는 장소나 동네 이름을 입력해 주세요.",
+    WARNING:
+      "정직한 거래를 위해 허위 매물 및 가품 판매를 금지합니다. 물품의 상태를 상세히 알 수 있도록 스크래치 등을 자세히 촬영해서 사진으로 첨부해 주세요. 회원 간에 안전하고 즐거운 물품 거래가 될 수 있도록 도와주시고, 거래가 완료되면 거래 상태를 완료로 변경 부탁드립니다.",
   },
   /* LANG.EN */
   {
@@ -23,6 +25,8 @@ export const TEXT = [
     FORM_BRAND: "Please enter the brand name of the product. (e.g., Apple)",
     FORM_PRICE: "Please enter the selling price as a number.",
     FORM_LOCATION: "Please enter the location or neighborhood where you wish to transact.",
+    WARNING:
+      "For an honest transaction, the posting of fraudulent listings and counterfeit items is prohibited. Please attach photos that clearly show any scratches or imperfections to accurately represent the item's condition. Help ensure a safe and enjoyable transaction between members, and kindly update the transaction status to 'Completed' once the deal is finished.",
   },
   /* LANG.CN */
   {
@@ -34,6 +38,8 @@ export const TEXT = [
     FORM_BRAND: "请填写您要销售的产品品牌名称。（例如：苹果）",
     FORM_PRICE: "请以数字形式输入您期望的销售价格。",
     FORM_LOCATION: "请输入您希望交易的地点或社区名称。",
+    WARNING:
+      "为了诚实交易，禁止发布虚假商品信息和销售假货。请附上能够清晰展示划痕等瑕疵的照片，以准确呈现物品状况。请帮助确保会员之间的安全愉快交易，并在交易完成后将交易状态更改为‘已完成’。",
   },
 ]
 
@@ -115,11 +121,7 @@ export const SHIPPING_TYPE_NAME = [
   ["快递", "当面交易"],
 ]
 
-// 선택한 언어에 따른 금액 아이콘
-export const CURRENCY_ICON = ["currency-krw", "currency-usd", "currency-cny"]
-
 Object.freeze(TEXT)
 Object.freeze(PRODUCT_CONDITION_NAME)
 Object.freeze(PRODUCT_CATEGORIES)
 Object.freeze(SHIPPING_TYPE_NAME)
-Object.freeze(CURRENCY_ICON)

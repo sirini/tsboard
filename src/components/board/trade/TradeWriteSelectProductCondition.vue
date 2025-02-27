@@ -4,7 +4,6 @@
     variant="outlined"
     hide-details
     readonly
-    prepend-inner-icon="mdi-package-variant-closed"
     append-inner-icon="mdi-chevron-down"
     @click=""
     rounded="pill"
