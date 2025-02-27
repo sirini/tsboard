@@ -109,20 +109,6 @@ export const useBoardListStore = defineStore("boardList", () => {
     }
   }
 
-  // 게시판 목록 마운트 시점에 호출
-  function initFirstList(): void {
-    const name = util.routerName(config.value.type, BOARD_ACTION.PAGING)
-    const pageStr = page.value.toString()
-
-    if (page.value > 1 && sinceUid.value > 0) {
-      loadPostList()
-      router.replace({ name, params: { id: id.value, page: pageStr } })
-    } else {
-      resetBoardList()
-      router.replace({ name, params: { id: id.value, page: "1" } })
-    }
-  }
-
   // 게시판 목록 초기화
   async function resetBoardList(): Promise<void> {
     sinceUid.value = 0
@@ -241,14 +227,15 @@ export const useBoardListStore = defineStore("boardList", () => {
     isAdmin,
     notices,
     posts,
+    sinceUid,
     page,
+    pagingDirection,
     pageLength,
     categories,
     option,
     keyword,
     keywordHistories,
     loadPostList,
-    initFirstList,
     resetBoardList,
     movePrevPage,
     moveNextPage,

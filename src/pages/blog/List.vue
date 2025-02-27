@@ -94,6 +94,7 @@ const util = useUtilStore()
 onMounted(async () => {
   home.setGridLayout()
   await list.loadPostList()
+
   user.targetUser.uid = list.config.admin.board
   await user.loadUserInfo()
 })

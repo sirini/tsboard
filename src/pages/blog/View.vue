@@ -79,7 +79,7 @@
               :post-uid="view.postUid"
             ></board-view-comment-write>
             <board-view-comment-list v-if="view.post.uid > 0"></board-view-comment-list>
-            <board-view-bottom-buttons :type="view.config.type"></board-view-bottom-buttons>
+            <board-view-bottom-buttons></board-view-bottom-buttons>
           </v-card>
           <board-view-side-navigation></board-view-side-navigation>
         </v-container>

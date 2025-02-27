@@ -59,7 +59,7 @@ const list = useBoardListStore()
 const home = useHomeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
-onMounted(() => list.initFirstList())
+onMounted(() => list.loadPostList())
 
 watch(
   () => route.params?.id,
