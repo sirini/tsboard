@@ -12,6 +12,8 @@ export const TEXT = [
     FORM_LOCATION: "거래를 희망하는 장소나 동네 이름을 입력해 주세요.",
     WARNING:
       "정직한 거래를 위해 허위 매물 및 가품 판매를 금지합니다. 물품의 상태를 상세히 알 수 있도록 스크래치 등을 자세히 촬영해서 사진으로 첨부해 주세요. 회원 간에 안전하고 즐거운 물품 거래가 될 수 있도록 도와주시고, 거래가 완료되면 거래 상태를 완료로 변경 부탁드립니다.",
+    CHANGE_STATUS:
+      "판매자님은 여기서 현재 거래 상태를 변경 하실 수 있습니다. 예약중이거나, 거래가 완료되었을 때는 여기 메뉴에서 상태를 변경해주세요!",
   },
   /* LANG.EN */
   {
@@ -27,6 +29,8 @@ export const TEXT = [
     FORM_LOCATION: "Please enter the location or neighborhood where you wish to transact.",
     WARNING:
       "For an honest transaction, the posting of fraudulent listings and counterfeit items is prohibited. Please attach photos that clearly show any scratches or imperfections to accurately represent the item's condition. Help ensure a safe and enjoyable transaction between members, and kindly update the transaction status to 'Completed' once the deal is finished.",
+    CHANGE_STATUS:
+      "Seller, you can change the current transaction status here. If the item is reserved or the transaction is completed, please update the status from this menu!",
   },
   /* LANG.CN */
   {
@@ -40,11 +44,13 @@ export const TEXT = [
     FORM_LOCATION: "请输入您希望交易的地点或社区名称。",
     WARNING:
       "为了诚实交易，禁止发布虚假商品信息和销售假货。请附上能够清晰展示划痕等瑕疵的照片，以准确呈现物品状况。请帮助确保会员之间的安全愉快交易，并在交易完成后将交易状态更改为‘已完成’。",
+    CHANGE_STATUS:
+      "卖家，您可以在这里更改当前交易状态。如果物品已预订或交易已完成，请在此菜单中更新状态！",
   },
 ]
 
 // 물품 상태 기본값을 언어별로 정의
-export const PRODUCT_CONDITION_NAME = [
+export const PRODUCT_CONDITIONS = [
   ["미개봉", "최상급", "사용감", "동작함", "부서짐"],
   ["Unopened", "Excellent", "Signs of use", "Functional", "Broken"],
   ["未开封", "极佳", "有使用痕迹", "可正常使用", "损坏"],
@@ -114,14 +120,43 @@ export const PRODUCT_CATEGORIES = [
   ],
 ]
 
+export const PRODUCT_CATEGORY_ICONS = [
+  "monitor-cellphone",
+  "desk",
+  "baby-bottle-outline",
+  "face-woman",
+  "face-man",
+  "fridge-outline",
+  "pot-steam-outline",
+  "badminton",
+  "nintendo-game-boy",
+  "keyboard",
+  "music",
+  "face-woman-shimmer",
+  "flower",
+  "food-turkey",
+  "paw",
+  "ticket-percent",
+  "book-open-variant-outline",
+]
+
 // 배송 타입 기본값을 언어별로 정의
-export const SHIPPING_TYPE_NAME = [
+export const SHIPPING_TYPES = [
   ["택배", "직거래"],
   ["Shipping", "Face-to-Face"],
   ["快递", "当面交易"],
 ]
 
+// 거래 상태 정의
+export const DEAL_STATUS = [
+  ["거래가능", "예약중", "거래완료", "거래불가"],
+  ["Available", "Reserved", "Completed", "Unavailable"],
+  ["可交易", "已预订", "交易完成", "不可交易"],
+]
+
 Object.freeze(TEXT)
-Object.freeze(PRODUCT_CONDITION_NAME)
+Object.freeze(PRODUCT_CONDITIONS)
 Object.freeze(PRODUCT_CATEGORIES)
-Object.freeze(SHIPPING_TYPE_NAME)
+Object.freeze(PRODUCT_CATEGORY_ICONS)
+Object.freeze(SHIPPING_TYPES)
+Object.freeze(DEAL_STATUS)

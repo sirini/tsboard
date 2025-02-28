@@ -12,7 +12,7 @@
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
         <v-list-item
-          v-for="(condition, index) in PRODUCT_CONDITION_NAME[home.lang]"
+          v-for="(condition, index) in PRODUCT_CONDITIONS[home.lang]"
           :key="index"
           @click="selectCondition(condition, index)"
         >
@@ -32,11 +32,11 @@ import { ref } from "vue"
 import { useHomeStore } from "../../../store/home"
 import { ProductCondition } from "../../../interface/trade_interface"
 import { useTradeStore } from "../../../store/board/trade"
-import { PRODUCT_CONDITION_NAME } from "../../../messages/pages/board/trade"
+import { PRODUCT_CONDITIONS } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()
-const conditionName = ref<string>(PRODUCT_CONDITION_NAME[home.lang][0])
+const conditionName = ref<string>(PRODUCT_CONDITIONS[home.lang][0])
 const isOpenMenu = ref<boolean>(false)
 
 // 물품 상태 선택

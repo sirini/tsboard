@@ -324,8 +324,8 @@ export const useBoardViewStore = defineStore("boardView", () => {
   }
 
   // 글보기 준비
-  function prepareViewPost(): void {
-    loadPostView()
+  async function prepareViewPost(): Promise<void> {
+    await loadPostView()
     home.setGridLayout()
     window.addEventListener("scroll", updateScrollY)
     window.scrollTo({

@@ -12,7 +12,7 @@
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
         <v-list-item
-          v-for="(shippingType, index) in SHIPPING_TYPE_NAME[home.lang]"
+          v-for="(shippingType, index) in SHIPPING_TYPES[home.lang]"
           :key="index"
           @click="selectShippingType(shippingType, index)"
         >
@@ -32,11 +32,11 @@ import { ref } from "vue"
 import { useHomeStore } from "../../../store/home"
 import { ShippingType } from "../../../interface/trade_interface"
 import { useTradeStore } from "../../../store/board/trade"
-import { SHIPPING_TYPE_NAME } from "../../../messages/pages/board/trade"
+import { SHIPPING_TYPES } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()
-const shippingName = ref<string>(SHIPPING_TYPE_NAME[home.lang][0])
+const shippingName = ref<string>(SHIPPING_TYPES[home.lang][0])
 const isOpenMenu = ref<boolean>(false)
 
 // 물품 상태 선택

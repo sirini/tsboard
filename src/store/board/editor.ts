@@ -294,6 +294,18 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     return true
   }
 
+  // 폼 데이터 생성해서 반환
+  function getFormData(): FormData {
+    const fd = new FormData()
+    fd.append("boardUid", config.value.uid.toString())
+    fd.append("isNotice", isNotice.value ? "1" : "0")
+    fd.append("isSecret", isSecret.value ? "1" : "0")
+    fd.append("categoryUid", category.value.uid.toString())
+    fd.append("title", title.value)
+    fd.append("tags", tags.value.join(","))
+    return fd
+  }
+
   // 작성된 글 저장하기
   async function write(): Promise<number> {
     if (checkBeforeSend() === false) {
@@ -303,14 +315,9 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const fd = new FormData()
-    fd.append("boardUid", config.value.uid.toString())
-    fd.append("isNotice", isNotice.value ? "1" : "0")
-    fd.append("isSecret", isSecret.value ? "1" : "0")
-    fd.append("categoryUid", category.value.uid.toString())
-    fd.append("title", title.value)
+    const fd = getFormData()
     fd.append("content", contentWithSyntax.value)
-    fd.append("tags", tags.value.join(","))
+
     for (const file of files.value) {
       fd.append("attachments[]", file)
     }
@@ -344,15 +351,10 @@ export const useBoardEditorStore = defineStore("boardEditor", () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     loading.value = true
 
-    const fd = new FormData()
+    const fd = getFormData()
     fd.append("postUid", postUid.value.toString())
-    fd.append("boardUid", config.value.uid.toString())
-    fd.append("isNotice", isNotice.value ? "1" : "0")
-    fd.append("isSecret", isSecret.value ? "1" : "0")
-    fd.append("categoryUid", category.value.uid.toString())
-    fd.append("title", title.value)
     fd.append("content", contentWithSyntax.value.replaceAll("<p></p>", "<p><br /></p>"))
-    fd.append("tags", tags.value.join(","))
+
     for (const file of files.value) {
       fd.append("attachments[]", file)
     }

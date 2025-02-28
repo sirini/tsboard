@@ -61,7 +61,7 @@
               v-model="trade.brand"
               :rules="editor.textRule"
               class="pt-3"
-              prepend-inner-icon="mdi-tag-text-outline"
+              prepend-inner-icon="mdi-barcode"
               hide-details
               variant="outlined"
               :label="TXT_TRADE[home.lang].FORM_BRAND"
@@ -80,7 +80,7 @@
               v-model="trade.price"
               :rules="editor.numberRule"
               class="pt-3"
-              prepend-inner-icon="mdi-cash-multiple"
+              :prepend-inner-icon="'mdi-currency-' + CURRENCY"
               hide-details
               variant="outlined"
               :label="TXT_TRADE[home.lang].FORM_PRICE"
@@ -165,7 +165,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { COLOR } from "../../../../tsboard.config"
+import { COLOR, CURRENCY } from "../../../../tsboard.config"
 import { TEXT } from "../../../messages/pages/board/write"
 import { TEXT as TXT_TRADE } from "../../../messages/pages/board/trade"
 import { useBoardEditorStore } from "../../../store/board/editor"

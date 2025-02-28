@@ -108,6 +108,9 @@ export const POLICY = {
   EMAIL: "sirini@gmail.com",
 }
 
+// 기본 화폐 단위 (기본: 원화)
+export const CURRENCY = "krw" // usb, cny, jpy, eur ...
+
 Object.freeze(TSBOARD)
 Object.freeze(COLOR)
 Object.freeze(SCREEN)

@@ -34,7 +34,7 @@ export const TRADE_STATUS = {
 export type Trade = {
   uid: number
   brand: string
-  category: number
+  productCategory: number
   price: number
   productCondition: ProductCondition
   location: string
@@ -45,11 +45,19 @@ export type Trade = {
   favorited: boolean
 }
 
+// 거래 관련 전체 내용 정의
+export type TradeItem = Trade & {
+  categoryStr: string
+  conditionStr: string
+  shippingStr: string
+  statusStr: string
+}
+
 // 거래 내용 기본값 정의
-export const TRADE: Trade = {
+export const TRADE_ITEM: TradeItem = {
   uid: 0,
   brand: "",
-  category: 0,
+  productCategory: 0,
   price: 0,
   productCondition: PRODUCT_CONDITION.NEVER_USED as ProductCondition,
   location: "",
@@ -58,4 +66,8 @@ export const TRADE: Trade = {
   completed: 0,
   favorites: 0,
   favorited: false,
+  categoryStr: "",
+  conditionStr: "",
+  shippingStr: "",
+  statusStr: "",
 }

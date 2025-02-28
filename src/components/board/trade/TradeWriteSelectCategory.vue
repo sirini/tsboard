@@ -41,6 +41,6 @@ const isOpenMenu = ref<boolean>(false)
 // 물품 분류명 선택
 function selectCategory(cat: string, index: number): void {
   categoryName.value = cat
-  trade.category = index
+  trade.productCategory = index
 }
 </script>
