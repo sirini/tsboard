@@ -40,6 +40,7 @@ import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useBoardListStore } from "../../store/board/list"
 import { useHomeStore } from "../../store/home"
+import { useTradeStore } from "../../store/board/trade"
 import BoardListRowNotice from "../../components/board/list/BoardListRowNotice.vue"
 import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
 import TradeListRow from "../../components/board/trade/TradeListRow.vue"
@@ -57,9 +58,16 @@ import { COLOR } from "../../../tsboard.config"
 const route = useRoute()
 const list = useBoardListStore()
 const home = useHomeStore()
+const trade = useTradeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
-onMounted(() => list.loadPostList())
+onMounted(async () => {
+  await list.loadPostList()
+
+  const postUids: number[] = []
+  list.posts.map((post) => postUids.push(post.uid))
+  await trade.loadTradeList(postUids)
+})
 
 watch(
   () => route.params?.id,

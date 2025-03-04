@@ -9,7 +9,7 @@
       <span class="col no text-center">{{ post.uid }}</span>
     </template>
 
-    <v-list-item-title class="pointer" @click="util.go('boardView', list.id, post.uid)">
+    <v-list-item-title class="pointer" @click="util.go(list.config.type, list.id, post.uid)">
       <span v-if="post.status === STATUS.SECRET">
         <v-icon
           size="x-small"

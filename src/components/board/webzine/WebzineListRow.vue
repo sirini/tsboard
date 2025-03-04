@@ -4,7 +4,7 @@
     class="mt-3"
     v-for="(post, index) in list.posts"
     :key="index"
-    @click="util.go('webzineView', list.id, post.uid)"
+    @click="util.go(list.config.type, list.id, post.uid)"
     :color="COLOR.HOME.BACKGROUND"
     variant="outlined"
   >

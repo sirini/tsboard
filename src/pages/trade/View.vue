@@ -18,14 +18,19 @@
               <v-list-item>
                 <template v-slot:prepend>
                   <v-chip
-                    prepend-icon="mdi-thumb-up-outline"
+                    prepend-icon="mdi-thumb-up"
                     class="mr-3"
                     color="red"
                     v-if="trade.item.favorited"
                   >
                     {{ trade.item.favorites }}
                   </v-chip>
-                  <v-chip prepend-icon="mdi-thumb-up" class="mr-3" :color="COLOR.HOME.MAIN" v-else>
+                  <v-chip
+                    prepend-icon="mdi-thumb-up-outline"
+                    class="mr-3"
+                    :color="COLOR.HOME.MAIN"
+                    v-else
+                  >
                     {{ trade.item.favorites }}</v-chip
                   >
                 </template>
