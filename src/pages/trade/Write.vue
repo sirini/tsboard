@@ -26,10 +26,12 @@ import { useUtilStore } from "../../store/util"
 import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import { COLOR } from "../../../tsboard.config"
+import { useTradeStore } from "../../store/board/trade"
 
 const route = useRoute()
 const util = useUtilStore()
 const editor = useBoardEditorStore()
+const trade = useTradeStore()
 const home = useHomeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
@@ -38,12 +40,13 @@ onMounted(async () => {
   if (route.params.no) {
     editor.postUid = parseInt(route.params.no as string)
     await editor.loadOriginalPost()
+    await trade.loadTradeInfo(editor.postUid)
   }
   home.setGridLayout()
 })
 
 watch(
-  () => [editor.title, editor.tags],
+  () => [editor.title, editor.tags, editor.content],
   () => editor.autoSave(),
 )
 </script>

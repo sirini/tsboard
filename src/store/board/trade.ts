@@ -1,16 +1,6 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import {
-  PRODUCT_CONDITION,
-  ProductCondition,
-  SHIPPING_TYPE,
-  ShippingType,
-  TRADE_ITEM,
-  Trade,
-  TRADE_STATUS,
-  TradeItem,
-  TradeStatus,
-} from "../../interface/trade_interface"
+import { TRADE_ITEM, Trade, TRADE_STATUS, TradeItem } from "../../interface/trade_interface"
 import axios from "axios"
 import { useAuthStore } from "../user/auth"
 import { TSBOARD } from "../../../tsboard.config"
@@ -31,24 +21,17 @@ export const useTradeStore = defineStore("trade", () => {
   const home = useHomeStore()
   const items = ref<TradeItem[]>([])
   const item = ref<TradeItem>(TRADE_ITEM)
-  const brand = ref<string>("")
-  const productCategory = ref<number>(0)
-  const price = ref<number>(0)
-  const productCondition = ref<ProductCondition>(PRODUCT_CONDITION.NEVER_USED as ProductCondition)
-  const location = ref<string>("")
-  const shippingType = ref<ShippingType>(SHIPPING_TYPE.F2F as ShippingType)
-  const status = ref<TradeStatus>(TRADE_STATUS.OPEN as TradeStatus)
 
   // 폼 데이터 생성해서 반환
   function getFormData(postUid: number): FormData {
     const fd = new FormData()
     fd.append("postUid", postUid.toString())
-    fd.append("brand", brand.value)
-    fd.append("productCategory", productCategory.value.toString())
-    fd.append("price", price.value.toString())
-    fd.append("productCondition", productCondition.value.toString())
-    fd.append("location", location.value)
-    fd.append("shippingType", shippingType.value.toString())
+    fd.append("brand", item.value.brand)
+    fd.append("productCategory", item.value.productCategory.toString())
+    fd.append("price", item.value.price.toString())
+    fd.append("productCondition", item.value.productCondition.toString())
+    fd.append("location", item.value.location)
+    fd.append("shippingType", item.value.shippingType.toString())
     fd.append("status", TRADE_STATUS.OPEN.toString())
     return fd
   }
@@ -105,13 +88,13 @@ export const useTradeStore = defineStore("trade", () => {
 
   // 게시글 수정 시점에 거래 관련 내용들도 수정
   async function modify(postUid: number): Promise<void> {
-    if (brand.value.length < 2) {
+    if (item.value.brand.length < 2) {
       return util.error(TEXT[home.lang].NEED_BRAND)
     }
-    if (price.value < 0) {
+    if (item.value.price < 0) {
       return util.error(TEXT[home.lang].WRONG_PRICE)
     }
-    if (location.value.length < 2) {
+    if (item.value.location.length < 2) {
       return util.error(TEXT[home.lang].NEED_LOCATION)
     }
 
@@ -129,13 +112,13 @@ export const useTradeStore = defineStore("trade", () => {
 
   // 게시글 작성 시점에 거래 관련 내용들도 저장
   async function write(postUid: number): Promise<void> {
-    if (brand.value.length < 2) {
+    if (item.value.brand.length < 2) {
       return util.error(TEXT[home.lang].NEED_BRAND)
     }
-    if (price.value < 0) {
+    if (item.value.price < 0) {
       return util.error(TEXT[home.lang].WRONG_PRICE)
     }
-    if (location.value.length < 2) {
+    if (item.value.location.length < 2) {
       return util.error(TEXT[home.lang].NEED_LOCATION)
     }
 
@@ -154,13 +137,6 @@ export const useTradeStore = defineStore("trade", () => {
   return {
     items,
     item,
-    brand,
-    productCategory,
-    price,
-    productCondition,
-    location,
-    shippingType,
-    status,
     loadTradeList,
     loadTradeInfo,
     write,

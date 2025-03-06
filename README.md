@@ -396,9 +396,7 @@ server {
 | tsb_post_hashtag      |
 | tsb_post_like         |
 | tsb_report            |
-| tsb_trade_favorite    | (v1.0.4)
-| tsb_trade_product     | (v1.0.4)
-| tsb_trade_review      | (v1.0.4)
+| tsb_trade_product     |
 | tsb_user              |
 | tsb_user_access_log   |
 | tsb_user_black_list   |

@@ -10,10 +10,10 @@
   >
     <v-list-item class="pa-0">
       <template v-slot:prepend>
-        <v-card :width="home.isMobile ? 70 : 120" elevation="0" rounded="0" class="pa-0">
+        <v-card :width="90" elevation="0" rounded="0" class="pa-0">
           <v-img
             cover
-            height="120"
+            :height="90"
             :src="TSBOARD.PREFIX + post.cover"
             v-if="post.cover.length > 0"
           ></v-img>
@@ -22,33 +22,24 @@
       </template>
 
       <v-card elevation="0" rounded="0">
-        <v-card-title :class="home.isMobile ? 'title-mobile' : ''" class="pa-0 pl-3 pr-3">
+        <v-card-title :class="home.isMobile ? 'title-mobile' : 'title'" class="pa-0 pl-3 pr-3">
           <v-chip
-            v-if="trade.items.length > 0 && post.status === STATUS.NORMAL"
-            size="x-small"
+            v-if="list.config.useCategory && post.status === STATUS.NORMAL"
+            size="small"
             :color="COLOR.HOME.MAIN"
             class="mr-2"
-            >{{ trade.items[index].categoryStr }}</v-chip
+            >{{ post.category.name }}</v-chip
           >
-
           {{ util.unescape(post.title) }}
         </v-card-title>
 
-        <v-card-text :class="home.isMobile ? 'text-caption' : ''" class="pt-2 pl-3 pr-3 pb-2">
-          {{ util.stripTags(post.content).slice(0, home.isMobile ? 60 : 140) }}
-        </v-card-text>
+        <v-card-actions class="pa-0 pl-3 pr-3">
+          <trade-view-info-line
+            :item="trade.items[index]"
+            v-if="trade.items.length > 0 && !home.isMobile"
+          ></trade-view-info-line>
 
-        <v-card-actions>
           <v-spacer></v-spacer>
-          <v-chip
-            size="small"
-            :color="COLOR.HOME.MAIN"
-            class="ml-2"
-            prepend-icon="mdi-chat-outline"
-            variant="text"
-            v-if="post.comment > 0"
-            >{{ util.num(post.comment) }}</v-chip
-          >
 
           <v-chip
             size="small"
@@ -64,8 +55,16 @@
             prepend-icon="mdi-heart-outline"
             :color="COLOR.HOME.MAIN"
             variant="text"
-            v-if="post.liked === false"
+            v-else
             >{{ util.num(post.like) }}</v-chip
+          >
+
+          <v-chip
+            size="small"
+            :color="COLOR.HOME.MAIN"
+            prepend-icon="mdi-chat-outline"
+            variant="text"
+            >{{ util.num(post.comment) }}</v-chip
           >
 
           <v-chip
@@ -85,22 +84,16 @@
         </v-card-actions>
       </v-card>
 
-      <template v-slot:append v-if="trade.items.length > 0">
-        <v-list no-gutters class="pa-0">
-          <v-list-item class="text-center pa-0">
-            <v-chip prepend-icon="mdi-thumb-up" color="red" v-if="trade.items[index].favorited">
-              {{ util.num(trade.items[index].favorites) }}
-            </v-chip>
-            <v-chip prepend-icon="mdi-thumb-up-outline" :color="COLOR.HOME.MAIN" v-else>
-              {{ trade.items[index].favorites }}</v-chip
-            >
-          </v-list-item>
-          <v-list-item class="text-center">
-            <v-chip :prepend-icon="'mdi-currency-' + CURRENCY" variant="text"
-              ><strong>{{ trade.items[index].price.toLocaleString() }}</strong></v-chip
-            >
-          </v-list-item>
-        </v-list>
+      <template v-slot:append v-if="trade.items.length > 0 && !home.isMobile">
+        <v-card elevation="0" rounded="0" min-width="120" class="text-center">
+          <v-chip
+            :prepend-icon="'mdi-currency-' + CURRENCY"
+            variant="text"
+            :disabled="trade.items[index].status != TRADE_STATUS.OPEN"
+          >
+            <strong>{{ trade.items[index].price.toLocaleString() }}</strong></v-chip
+          >
+        </v-card>
       </template>
     </v-list-item>
   </v-card>
@@ -109,10 +102,12 @@
 <script setup lang="ts">
 import { COLOR, CURRENCY, TSBOARD } from "../../../../tsboard.config"
 import { STATUS } from "../../../interface/board_interface"
+import { TRADE_STATUS } from "../../../interface/trade_interface"
 import { useBoardListStore } from "../../../store/board/list"
 import { useTradeStore } from "../../../store/board/trade"
 import { useHomeStore } from "../../../store/home"
 import { useUtilStore } from "../../../store/util"
+import TradeViewInfoLine from "./TradeViewInfoLine.vue"
 
 const list = useBoardListStore()
 const home = useHomeStore()
@@ -121,6 +116,9 @@ const trade = useTradeStore()
 </script>
 
 <style lang="css" scoped>
+.title {
+  font-size: 1.2em;
+}
 .title-mobile {
   font-size: 1em;
   font-weight: bold;

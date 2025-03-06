@@ -13,7 +13,7 @@
         variant="tonal"
         rounded="0"
         class="text-caption"
-        icon="mdi-check"
+        icon="mdi-alert"
       ></v-alert>
 
       <v-card class="pa-3" elevation="0">
@@ -58,7 +58,7 @@
             </template>
 
             <v-text-field
-              v-model="trade.brand"
+              v-model="trade.item.brand"
               :rules="editor.textRule"
               class="pt-3"
               prepend-inner-icon="mdi-barcode"
@@ -77,7 +77,7 @@
             </template>
 
             <v-text-field
-              v-model="trade.price"
+              v-model="trade.item.price"
               :rules="editor.numberRule"
               class="pt-3"
               :prepend-inner-icon="'mdi-currency-' + CURRENCY"
@@ -96,7 +96,7 @@
             </template>
 
             <v-text-field
-              v-model="trade.location"
+              v-model="trade.item.location"
               :rules="editor.textRule"
               class="pt-3"
               prepend-inner-icon="mdi-map-marker"

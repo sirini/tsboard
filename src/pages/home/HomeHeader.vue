@@ -43,12 +43,9 @@ const home = useHomeStore()
 <style scoped type="scss">
 .title {
   cursor: pointer;
-  font-family: "Protest Strike", sans-serif;
+  font-family: "Pretendard", sans-serif;
   font-size: 1.6em;
-
-  span {
-    opacity: 0.3;
-  }
+  font-weight: 900;
 }
 .mobile-title {
   position: absolute;

@@ -11,7 +11,7 @@ home.visit()
 
 <style>
 .v-application {
-  font-family: "IBM Plex Sans KR", sans-serif;
+  font-family: "Pretendard", sans-serif;
   font-weight: 400;
 }
 

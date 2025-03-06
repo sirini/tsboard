@@ -41,8 +41,6 @@ export type Trade = {
   shippingType: ShippingType
   status: TradeStatus
   completed: number
-  favorites: number
-  favorited: boolean
 }
 
 // 거래 관련 전체 내용 정의
@@ -64,8 +62,6 @@ export const TRADE_ITEM: TradeItem = {
   shippingType: SHIPPING_TYPE.F2F as ShippingType,
   status: TRADE_STATUS.OPEN as TradeStatus,
   completed: 0,
-  favorites: 0,
-  favorited: false,
   categoryStr: "",
   conditionStr: "",
   shippingStr: "",

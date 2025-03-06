@@ -67,6 +67,7 @@ onMounted(async () => {
   const postUids: number[] = []
   list.posts.map((post) => postUids.push(post.uid))
   await trade.loadTradeList(postUids)
+  await home.setGridLayout()
 })
 
 watch(

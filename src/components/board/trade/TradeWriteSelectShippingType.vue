@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="shippingName"
+    v-model="trade.item.shippingStr"
     variant="outlined"
     hide-details
     readonly
@@ -8,6 +8,7 @@
     @click=""
     rounded="pill"
     :min-width="150"
+    :prepend-inner-icon="'mdi-' + shippingTypeIcons[trade.item.shippingType]"
   >
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
@@ -15,10 +16,11 @@
           v-for="(shippingType, index) in SHIPPING_TYPES[home.lang]"
           :key="index"
           @click="selectShippingType(shippingType, index)"
+          :prepend-icon="'mdi-' + shippingTypeIcons[index]"
         >
           {{ shippingType }}
 
-          <template v-slot:append v-if="shippingType == shippingName">
+          <template v-slot:append v-if="index == trade.item.shippingType">
             <v-icon size="small">mdi-check-circle</v-icon>
           </template>
         </v-list-item>
@@ -36,12 +38,12 @@ import { SHIPPING_TYPES } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()
-const shippingName = ref<string>(SHIPPING_TYPES[home.lang][0])
 const isOpenMenu = ref<boolean>(false)
+const shippingTypeIcons = ["truck", "handshake-outline"]
 
 // 물품 상태 선택
 function selectShippingType(type: string, index: number): void {
-  shippingName.value = type
-  trade.shippingType = index as ShippingType
+  trade.item.shippingStr = type
+  trade.item.shippingType = index as ShippingType
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="conditionName"
+    v-model="trade.item.conditionStr"
     variant="outlined"
     hide-details
     readonly
@@ -8,6 +8,7 @@
     @click=""
     rounded="pill"
     :min-width="150"
+    :prepend-inner-icon="'mdi-numeric-' + (5 - trade.item.productCondition) + '-circle'"
   >
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
@@ -15,10 +16,11 @@
           v-for="(condition, index) in PRODUCT_CONDITIONS[home.lang]"
           :key="index"
           @click="selectCondition(condition, index)"
+          :prepend-icon="'mdi-numeric-' + (5 - index) + '-circle'"
         >
           {{ condition }}
 
-          <template v-slot:append v-if="condition == conditionName">
+          <template v-slot:append v-if="index == trade.item.productCondition">
             <v-icon size="small">mdi-check-circle</v-icon>
           </template>
         </v-list-item>
@@ -36,12 +38,11 @@ import { PRODUCT_CONDITIONS } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()
-const conditionName = ref<string>(PRODUCT_CONDITIONS[home.lang][0])
 const isOpenMenu = ref<boolean>(false)
 
 // 물품 상태 선택
 function selectCondition(condition: string, index: number): void {
-  conditionName.value = condition
-  trade.productCondition = index as ProductCondition
+  trade.item.conditionStr = condition
+  trade.item.productCondition = index as ProductCondition
 }
 </script>

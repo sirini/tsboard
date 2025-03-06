@@ -16,37 +16,21 @@
 
             <v-list :bg-color="COLOR.HOME.BACKGROUND">
               <v-list-item>
-                <template v-slot:prepend>
-                  <v-chip
-                    prepend-icon="mdi-thumb-up"
-                    class="mr-3"
-                    color="red"
-                    v-if="trade.item.favorited"
-                  >
-                    {{ trade.item.favorites }}
-                  </v-chip>
-                  <v-chip
-                    prepend-icon="mdi-thumb-up-outline"
-                    class="mr-3"
-                    :color="COLOR.HOME.MAIN"
-                    v-else
-                  >
-                    {{ trade.item.favorites }}</v-chip
-                  >
-                </template>
-
                 <v-list-item-title
                   ><h3>{{ util.unescape(view.post.title) }}</h3></v-list-item-title
                 >
 
                 <template v-slot:append>
-                  <v-chip variant="outlined" :prepend-icon="'mdi-currency-' + CURRENCY"
+                  <v-chip
+                    variant="outlined"
+                    :prepend-icon="'mdi-currency-' + CURRENCY"
+                    :disabled="trade.item.status != TRADE_STATUS.OPEN"
                     ><strong>{{ trade.item.price.toLocaleString() }}</strong></v-chip
                   >
                 </template>
               </v-list-item>
               <v-list-item>
-                <trade-view-info-line></trade-view-info-line>
+                <trade-view-info-line :item="trade.item"></trade-view-info-line>
 
                 <template v-slot:append>
                   <trade-view-select-status></trade-view-select-status>
@@ -127,6 +111,7 @@ import SideDrawer from "../home/SideDrawer.vue"
 import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 import { COLOR, CURRENCY } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
+import { TRADE_STATUS } from "../../interface/trade_interface"
 
 const route = useRoute()
 const view = useBoardViewStore()

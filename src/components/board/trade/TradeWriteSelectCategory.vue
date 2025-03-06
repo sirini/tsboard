@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="categoryName"
+    v-model="trade.item.categoryStr"
     variant="outlined"
     hide-details
     readonly
@@ -8,17 +8,19 @@
     @click="isOpenMenu = !isOpenMenu"
     rounded="pill"
     :min-width="150"
+    :prepend-inner-icon="'mdi-' + PRODUCT_CATEGORY_ICONS[categoryIndex]"
   >
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
         <v-list-item
           v-for="(cat, index) in PRODUCT_CATEGORIES[home.lang]"
           :key="index"
+          :prepend-icon="'mdi-' + PRODUCT_CATEGORY_ICONS[index]"
           @click="selectCategory(cat, index)"
         >
           {{ cat }}
 
-          <template v-slot:append v-if="cat == categoryName">
+          <template v-slot:append v-if="index == trade.item.productCategory">
             <v-icon size="small">mdi-check-circle</v-icon>
           </template>
         </v-list-item>
@@ -31,16 +33,17 @@
 import { ref } from "vue"
 import { useTradeStore } from "../../../store/board/trade"
 import { useHomeStore } from "../../../store/home"
-import { PRODUCT_CATEGORIES } from "../../../messages/pages/board/trade"
+import { PRODUCT_CATEGORIES, PRODUCT_CATEGORY_ICONS } from "../../../messages/pages/board/trade"
 
 const trade = useTradeStore()
 const home = useHomeStore()
-const categoryName = ref<string>(PRODUCT_CATEGORIES[home.lang][0])
+const categoryIndex = ref<number>(0)
 const isOpenMenu = ref<boolean>(false)
 
 // 물품 분류명 선택
 function selectCategory(cat: string, index: number): void {
-  categoryName.value = cat
-  trade.productCategory = index
+  trade.item.categoryStr = cat
+  categoryIndex.value = index
+  trade.item.productCategory = index
 }
 </script>
