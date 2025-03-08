@@ -16,12 +16,8 @@
 
 ## TSBOARD란 무엇인가요?
 
-TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제작할 수 있는 엔진입니다.
-
-## TSBOARD만의 장점은 무엇인가요?
-
-- 프론트엔드는 `Vue` 와 `Vuetify` 로 제작되어 있어 유려하면서도 빠른 UI 개발이 가능합니다.
-- Go언어로 완전히 새롭게 재작성된 `GOAPI` 백엔드로 보다 안정적인 서비스와 고가용성을 보장합니다.
+TSBOARD는 **Type Safety BOARD**로 커뮤니티 사이트를 제작할 수 있는 웹사이트 빌더입니다.
+서버의 부담을 줄이고, 풍부한 사용 경험을 제공하기 위해 노력하고 있습니다.
 
 > TSBOARD는 사용자분들을 위한 자체 커뮤니티를 <https://tsboard.dev/> 사이트에서 운영하고 있습니다.
 > 사용하시면서 궁금한 점, 어려운 점들은 위 사이트에서 편하게 문의해 주시면 됩니다.
@@ -34,7 +30,6 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 2. 미리 알아두어야 할 사항들
 3. 설치 진행 안내
 4. 설치 후 서버 설정
-5. 설치가 어려운 분들께
 
 ## TSBOARD 설치에 적합한 서버 환경
 
@@ -56,13 +51,6 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - RAM : 2GB 이상, 동시접속자가 많을 경우 `goapi`가 ~300MB까지 필요로 할 수 있습니다.
   - DBMS : `MySQL` 혹은 `Mariadb` 최신 버전
 
-## 미리 알아두어야 할 사항들
-
-- MySQL(Mariadb) 계정이 데이터베이스 생성 권한을 가지고 있거나, 혹은 미리 생성해두어야 합니다.
-  - TSBOARD는 설치 과정에서 새로운 데이터베이스 (기본 `tsboard`)를 생성합니다.
-  - 설치 과정에서 데이터베이스 이름은 변경 가능합니다. 단, 미리 생성해 두셨거나, 사용자 계정이 생성 권한을 가지고 있어야 합니다.
-- `libvips` 라이브러리가 설치되어 있지 않은 서버에서는 TSBOARD 백엔드가 동작하지 않습니다.
-
 ## 설치 진행 안내
 
 ### TSBOARD 설치
@@ -82,9 +70,9 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
   - 본인의 서버가 ARM CPU 및 Mac등 다른 종류의 아키텍쳐를 사용할 경우, 백엔드 프로젝트를 직접 내려받아서 컴파일 하실 수 있습니다.
     - `git clone https://github.com/sirini/goapi goapi.git` 실행하여 Go로 작성된 백엔드를 받습니다.
     - 서버에서 Go 언어 툴체인/컴파일러를 설치합니다. (<https://go.dev> 사이트 참조)
-    - `go mod tidy` 실행하여 백엔드에서 의존하는 라이브러리들을 내려 받습니다.
     - `go build -o dist/goapi-linux cmd/main.go` 실행하여 바이너리 파일을 빌드합니다.
-    - 빌드 된 바이너리 파일을 `tsboard.git` 폴더 안으로 이동 후 실행합니다. (`tmux` 같은 터미널 세션 관리 프로그램을 사용하세요)
+    - 빌드 된 바이너리 파일을 `tsboard.git` 폴더 안으로 이동 후 실행합니다.
+      (`tmux` 같은 터미널 세션 관리 프로그램을 사용하세요)
 - TSBOARD 설정 파일을 수정합니다. `tsboard.config.ts` 파일을 `vi` 같은 에디터로 열어주세요.
   - `tsboard.config.ts` 에는 TSBOARD 운영에 필요한 설정들이 들어 있습니다.
     - `PROD_URL` : 본인의 웹사이트 도메인으로 변경
@@ -103,12 +91,6 @@ TSBOARD는 Type Safety BOARD로, 중소 규모의 커뮤니티 사이트를 제�
 - 검색 엔진들의 색인 작업을 돕기 위해 `public/robots.txt` 파일을 에디터로 열어 사이트 주소를 수정해 주세요.
   - `robots.txt` 파일에는 기본으로 TSBOARD 공홈 주소가 적혀 있습니다. 반드시 여러분의 주소로 변경해 주세요!
 - `src/pages/home/HomePage.vue` 파일을 에디터로 열어 본인 사이트에 맞게 미리 수정해 주세요.
-
-```typescript
-// HomeTitle 부분을 본인의 사이트에 맞게 수정하셔야 합니다
-import HomeTitle from "./components/static/TsboardHomeTitle.vue"
-```
-
 - 이제 수정해야 할 것들을 모두 완료하였습니다. TSBOARD를 `build` 합니다!
   - 여러분이 받으신 TSBOARD는 이제 `vite` 를 통해 `build` 가 가능합니다.
   - `npm run build` 를 실행합니다. 빌드가 정상적으로 완료되면, tsboard 폴더 안에 `dist/` 폴더가 생성됩니다.
@@ -169,19 +151,6 @@ OAUTH_KAKAO_SECRET=your_kakao_client_secret_from_https://developers.kakao.com
 OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 ```
 
-### 개발 모드로 실행하기
-
-> 이 안내는 Visual Studio Code (vscode)를 이미 사용해 보신 분들을 대상으로 합니다.
-> Go 언어로 작성된 백엔드도 직접 수정을 원하실 경우 <https://github.com/sirini/goapi> 프로젝트를 clone 하셔서 수정하시면 됩니다.
-> 이 때 Go 언어 툴체인/컴파일러가 사용하시는 기기에 미리 설치되어 있어야 합니다.
-
-- TSBOARD를 본인의 Linux PC or Mac 에 먼저 설치하여 개발 모드로 사용해 보실 수도 있습니다.
-  - `vscode` 를 실행 후 TSBOARD 폴더를 여신 다음, 터미널을 2개 띄웁니다.
-  - 먼저 TSBOARD 폴더 내 `tsboard.config.ts` 파일을 열고, `IS_DEV` 항목을 `true` 로 수정합니다.
-  - 터미널을 열고 `npm run dev` 를 실행하여 `vite` 가 TSBOARD의 프론트엔드를 보여줄 수 있도록 합니다.
-  - 다른 터미널을 열고 `goapi-linux-x64`를 실행하여 TSBOARD의 백엔드를 실행하도록 합니다.
-  - 브라우저에서 `http://localhost:3000` 주소로 접속하면 TSBOARD 첫화면을 보실 수 있습니다.
-
 ### TSBOARD 업데이트
 
 > 업데이트 전에 기존 TSBOARD는 늘 다른 경로에 백업하는 걸 권장합니다. DB의 경우에도 `mysqldump` 프로그램을 통해 백업하시고 작업을 진행하세요!
@@ -212,7 +181,6 @@ OPENAI_API_KEY=your_openai_api_key_from_https://openai.com/index/openai-api/
 
 > Ubuntu 22.04에서 Nginx 암호화하기 <https://velog.io/@mero/ubuntu-22.04%EC%97%90%EC%84%9C-Nginx-%EC%95%94%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0> 혹은 무료 SSL 인증서인 letsencrypt 설치 방법을 검색하신 후 운영하시는 서버에 적용해 보세요.
 
-- 축하합니다! 여러분은 `git clone` → `npm install` → `./goapi-linux-x64` 과정까지 무사히 마쳤습니다. 이제 다음 단계로 넘어가 봅시다!
 - 아래 단계에서는 Ubuntu server 에 `Nginx` 가 설치되어 있는 것으로 가정합니다. (만약 `apache2` 가 설치되어 있더라도, 예를 들어 `/etc/apache2/sites-enabled/000-default` 파일을 수정하시면 됩니다.)
 - `Nginx` 의 설정 파일 내용을 일부 수정해야 합니다. `vi /etc/nginx/sites-enabled/default` 를 실행합니다.
 - `server { ... }` 사이의 내용들을 수정해야 합니다. **TSBOARD가 권장 설치 경로에 설치된 걸로 가정**합니다.
@@ -286,13 +254,6 @@ server {
   ProxyPassReverse /goapi http://127.0.0.1:3003/goapi
 </VirtualHost>
 ```
-
-## 설치가 어려운 분들께
-
-### 문의하러가기
-
-- 어려움을 함께 논의해보고 싶다면 <https://tsboard.dev> 사이트에 와주세요.
-- 민감한 내용은 sirini@gmail.com 으로 메일을 보내주세요!
 
 ---
 
@@ -396,7 +357,7 @@ server {
 | tsb_post_hashtag      |
 | tsb_post_like         |
 | tsb_report            |
-| tsb_trade_product     |
+| tsb_trade             |
 | tsb_user              |
 | tsb_user_access_log   |
 | tsb_user_black_list   |
@@ -409,9 +370,6 @@ server {
 ## 커스텀 가이드
 
 ### 커스텀 원칙 - 새로운 디자인은 새로운 파일에서
-
-> 커스텀 작업을 하려면 내 Linux PC or Mac 에서 개발 모드로 작업하시는 게 편합니다.
-> 위에서 **개발모드로 실행하기** 부분을 참조하세요!
 
 - 앞선 글에서 `src/pages/board/List.vue` 를 `src/pages/something_new_board/AwesomeList.vue` 로 바꿔서 보여주는 걸 설명드렸었는데, 여기서 핵심은 기존의 `src/pages/board/List.vue` 파일을 수정하지 않고, 해당 파일을 `src/pages/something_new_board/AwesomeList.vue` 위치로 복사한 다음 수정하고 Vue Router 경로를 바꿔주는 것입니다.
 - 그냥 `src/pages/board/List.vue` 파일을 수정해서 쓰면 안될까요? Vue Router 를 수정할 필요도 없으니 더 간편해 보입니다. 하지만 아래의 이유들로 인해 커스텀을 하실 때는 반드시 기존 파일을 먼저 복사한 후에 진행하시는 걸 권장합니다.
