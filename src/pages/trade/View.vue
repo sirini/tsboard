@@ -134,7 +134,11 @@ const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 watch(
   () => route.params?.no,
-  () => view.prepareViewPost(),
+  async () => {
+    const postUid = parseInt(route.params?.no as string)
+    await view.prepareViewPost()
+    await trade.loadTradeInfo(postUid)
+  }
 )
 onMounted(async () => {
   await view.prepareViewPost()

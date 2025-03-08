@@ -24,7 +24,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   const boardRows = ref<string>("20")
   const boardWidth = ref<string>("1000")
   const boardAddCategory = ref<string>("")
-  const boardUseCategory = ref<boolean>(true)
+  const boardUseCategory = ref<boolean>(false)
   const boardRemoveCategory = ref<Pair>({ uid: 0, name: "" })
 
   // 게시판 일반 설정 불러오기
@@ -278,7 +278,7 @@ export const useAdminBoardGeneralStore = defineStore("adminBoardGeneral", () => 
   async function useCategory(): Promise<void> {
     const fd = new FormData()
     fd.append("boardUid", board.value.uid.toString())
-    fd.append("useCategory", boardUseCategory.value ? "1" : "0")
+    fd.append("useCategory", boardUseCategory.value ? "0" : "1")
 
     const response = await axios.patch(`${TSBOARD.API}/admin/board/general/use/category`, fd, {
       headers: {

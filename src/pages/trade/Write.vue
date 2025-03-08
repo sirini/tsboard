@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue"
+import { onMounted } from "vue"
 import { useRoute } from "vue-router"
 import TradeWriteBody from "../../components/board/trade/TradeWriteBody.vue"
 import BoardWriteCancelDialog from "../../components/board/write/BoardWriteCancelDialog.vue"
@@ -27,6 +27,7 @@ import HomeFooter from "../home/HomeFooter.vue"
 import HomeHeader from "../home/HomeHeader.vue"
 import { COLOR } from "../../../tsboard.config"
 import { useTradeStore } from "../../store/board/trade"
+import { TRADE_ITEM } from "../../interface/trade_interface"
 
 const route = useRoute()
 const util = useUtilStore()
@@ -37,18 +38,16 @@ const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 onMounted(async () => {
   await editor.loadBoardConfig()
-  if (route.params.no) {
-    editor.postUid = parseInt(route.params.no as string)
+  trade.item = TRADE_ITEM
+  const no = route.params?.no as string
+  
+  if (no?.length > 0) {
+    editor.postUid = parseInt(no)
     await editor.loadOriginalPost()
     await trade.loadTradeInfo(editor.postUid)
   }
   home.setGridLayout()
 })
-
-watch(
-  () => [editor.title, editor.tags, editor.content],
-  () => editor.autoSave(),
-)
 </script>
 
 <style scoped>

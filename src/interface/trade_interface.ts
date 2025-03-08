@@ -1,3 +1,5 @@
+import { DEAL_STATUS, PRODUCT_CATEGORIES, PRODUCT_CONDITIONS, SHIPPING_TYPES } from "../messages/pages/board/trade"
+
 // 물품 상태 정의
 export type ProductCondition = 0 | 1 | 2 | 3 | 4
 
@@ -59,11 +61,11 @@ export const TRADE_ITEM: TradeItem = {
   price: 0,
   productCondition: PRODUCT_CONDITION.NEVER_USED as ProductCondition,
   location: "",
-  shippingType: SHIPPING_TYPE.F2F as ShippingType,
+  shippingType: SHIPPING_TYPE.PARCEL as ShippingType,
   status: TRADE_STATUS.OPEN as TradeStatus,
   completed: 0,
-  categoryStr: "",
-  conditionStr: "",
-  shippingStr: "",
-  statusStr: "",
+  categoryStr: PRODUCT_CATEGORIES[0][0],
+  conditionStr: PRODUCT_CONDITIONS[0][0],
+  shippingStr: SHIPPING_TYPES[0][0],
+  statusStr: DEAL_STATUS[0][0],
 }

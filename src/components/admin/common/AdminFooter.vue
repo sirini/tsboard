@@ -2,7 +2,12 @@
   <v-footer :color="COLOR.ADMIN.FOOTER" class="mt-6 mb-3">
     <v-card elevation="0" class="mx-auto" :color="COLOR.ADMIN.FOOTER">
       <v-card-actions>
-        <v-btn class="mx-3 tsboard" rounded="pill" @click="util.open('https://tsboard.dev')">
+        <v-btn
+          class="mx-3 tsboard"
+          rounded="pill"
+          @click="util.open('https://tsboard.dev')"
+          :color="COLOR.ADMIN.MAIN"
+        >
           TSBOARD ({{ TSBOARD.VERSION }})
           <v-tooltip activator="parent" location="top">
             클릭하시면 TSBOARD 공식 사이트로 이동합니다! 이곳에서 궁금하신 내용을 물어보거나, 다른
@@ -32,7 +37,6 @@ const admin = useAdminStore()
 
 <style scoped>
 .tsboard {
-  font-family: "Protest Strike", sans-serif;
-  opacity: 0.1;
+  opacity: 0.3;
 }
 </style>

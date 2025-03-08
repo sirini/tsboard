@@ -17,7 +17,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> {{ typeName }} 아이디는 생성 후 변경이 불가능 합니다. </v-col>
+          <v-col class="mt-2"> 게시판 아이디는 생성 후 변경이 불가능 합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -51,7 +51,7 @@
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
-            {{ typeName }}은(는) 하나의 그룹에만 소속됩니다. 그룹 관리자도 이 게시판의 관리자입니다.
+            게시판은 하나의 그룹에만 소속됩니다. 그룹 관리자도 이 게시판의 관리자입니다.
           </v-col>
         </v-row>
       </v-list-item>
@@ -76,7 +76,7 @@
             </v-text-field>
           </v-col>
           <v-col class="mt-2">
-            {{ typeName }} 이름입니다. 이 {{ typeName }}을(를) 대표할만한 이름으로 작성해 보세요.
+            게시판 이름입니다. 이 게시판을 대표하는 이름으로 작성해 보세요.
           </v-col>
         </v-row>
       </v-list-item>
@@ -100,7 +100,7 @@
               </v-tooltip>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> {{ typeName }} 설명을 작성해 보세요. </v-col>
+          <v-col class="mt-2"> 게시판 설명을 작성해 보세요. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -203,12 +203,12 @@
               @click:append-inner="general.updateWidth"
             >
               <v-tooltip activator="parent">
-                {{ typeName }}의 최대 너비를 입력하고 우측의
+                게시판의 최대 너비를 입력하고 우측의
                 <v-icon>mdi-content-save</v-icon> 아이콘을 클릭하시면 저장됩니다.
               </v-tooltip>
             </v-text-field>
           </v-col>
-          <v-col class="mt-2"> {{ typeName }}의 최대 너비를 지정합니다. </v-col>
+          <v-col class="mt-2"> 게시판의 최대 너비를 지정합니다. </v-col>
         </v-row>
       </v-list-item>
       <v-divider></v-divider>
@@ -226,7 +226,7 @@
               hide-details
             >
               <v-menu activator="parent" open-on-hover>
-                <v-list>
+                <v-list rounded="xl">
                   <v-list-item
                     v-for="(category, index) in general.board.category"
                     :key="index"
@@ -284,7 +284,6 @@ const admin = useAdminStore()
 const util = useUtilStore()
 const auth = useAuthStore()
 const general = useAdminBoardGeneralStore()
-const typeName = ref<string>("게시판")
 
 onMounted(() => {
   if (auth.user.uid !== 1) {
@@ -293,19 +292,6 @@ onMounted(() => {
   }
   general.loadGeneralConfig()
 })
-
-watch(
-  () => general.board.type,
-  (value) => {
-    if (value === (BOARD.GALLERY as Board)) {
-      typeName.value = "갤러리"
-    } else if (value === (BOARD.BLOG as Board)) {
-      typeName.value = "블로그"
-    } else {
-      typeName.value = "게시판"
-    }
-  },
-)
 </script>
 
 <style scoped>
