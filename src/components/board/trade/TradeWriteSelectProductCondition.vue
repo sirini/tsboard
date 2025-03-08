@@ -8,7 +8,7 @@
     @click=""
     rounded="pill"
     :min-width="150"
-    :prepend-inner-icon="'mdi-numeric-' + (5 - trade.item.productCondition) + '-circle'"
+    :prepend-inner-icon="'mdi-numeric-' + (5 - trade.item.productCondition) + '-circle-outline'"
   >
     <v-menu v-model="isOpenMenu" activator="parent" open-on-hover>
       <v-list rounded="xl">
@@ -16,7 +16,7 @@
           v-for="(condition, index) in PRODUCT_CONDITIONS[home.lang]"
           :key="index"
           @click="selectCondition(condition, index)"
-          :prepend-icon="'mdi-numeric-' + (5 - index) + '-circle'"
+          :prepend-icon="'mdi-numeric-' + (5 - index) + '-circle-outline'"
         >
           {{ condition }}
 

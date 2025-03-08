@@ -140,7 +140,7 @@
               </v-btn>
               <v-btn
                 :value="BOARD.WEBZINE"
-                prepend-icon="mdi-newspaper-variant"
+                prepend-icon="mdi-newspaper-variant-outline"
                 @click="general.changeType"
                 >웹진
                 <v-tooltip activator="parent">

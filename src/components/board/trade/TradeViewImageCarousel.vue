@@ -1,6 +1,5 @@
 <template>
   <v-carousel
-    :max-height="700"
     hide-delimiter-background
     show-arrows
     delimiter-icon="mdi-circle-small"

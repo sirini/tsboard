@@ -11,7 +11,12 @@
     item.brand
   }}</v-chip>
 
-  <v-chip size="small" variant="text" :color="COLOR.HOME.MAIN" prepend-icon="mdi-broom">
+  <v-chip
+    size="small"
+    variant="text"
+    :color="COLOR.HOME.MAIN"
+    :prepend-icon="'mdi-numeric-' + (5 - item.productCondition) + '-circle-outline'"
+  >
     {{ item.conditionStr }}
   </v-chip>
 

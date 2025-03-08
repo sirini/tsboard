@@ -38,11 +38,11 @@ const util = useUtilStore()
 
 const results = ref<BoardHomePostResult[]>([])
 const ICONS = [
-  "mdi-forum",
-  "mdi-image-multiple",
-  "mdi-post",
+  "mdi-table-large",
+  "mdi-view-gallery-outline",
+  "mdi-post-outline",
   "mdi-newspaper-variant-outline",
-  "mdi-shopping",
+  "mdi-cart-outline",
 ]
 
 onMounted(async () => {

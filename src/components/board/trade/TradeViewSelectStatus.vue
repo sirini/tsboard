@@ -7,9 +7,11 @@
     :append-icon="view.post.writer.uid === auth.user.uid ? 'mdi-chevron-down' : ''"
     >{{ trade.item.statusStr }}
 
-    <v-menu activator="parent" v-if="view.post.writer.uid === auth.user.uid" open-on-hover>
+    <v-menu activator="parent" v-if="view.post.writer.uid === auth.user.uid">
       <v-list rounded="xl">
-        <v-list-item>
+        <v-list-item
+          @click="trade.changeTradeStatus(view.postUid, TRADE_STATUS.OPEN as TradeStatus)"
+        >
           <template v-slot:prepend>
             <v-icon size="small">mdi-package-variant</v-icon>
           </template>
@@ -21,7 +23,9 @@
           </template>
         </v-list-item>
 
-        <v-list-item>
+        <v-list-item
+          @click="trade.changeTradeStatus(view.postUid, TRADE_STATUS.IN_PROGRESS as TradeStatus)"
+        >
           <template v-slot:prepend>
             <v-icon size="small">mdi-package-variant-closed</v-icon>
           </template>
@@ -33,7 +37,9 @@
           </template>
         </v-list-item>
 
-        <v-list-item>
+        <v-list-item
+          @click="trade.changeTradeStatus(view.postUid, TRADE_STATUS.DONE as TradeStatus)"
+        >
           <template v-slot:prepend>
             <v-icon size="small">mdi-package-variant-closed-check</v-icon>
           </template>
@@ -45,7 +51,9 @@
           </template>
         </v-list-item>
 
-        <v-list-item>
+        <v-list-item
+          @click="trade.changeTradeStatus(view.postUid, TRADE_STATUS.NOT_AVAILABLE as TradeStatus)"
+        >
           <template v-slot:prepend>
             <v-icon size="small">mdi-package-variant-remove</v-icon>
           </template>
@@ -67,7 +75,7 @@
 
 <script setup lang="ts">
 import { COLOR } from "../../../../tsboard.config"
-import { TRADE_STATUS } from "../../../interface/trade_interface"
+import { TRADE_STATUS, TradeStatus } from "../../../interface/trade_interface"
 import { DEAL_STATUS, TEXT } from "../../../messages/pages/board/trade"
 import { useTradeStore } from "../../../store/board/trade"
 import { useBoardViewStore } from "../../../store/board/view"

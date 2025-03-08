@@ -22,7 +22,7 @@
       </template>
 
       <v-card elevation="0" rounded="0">
-        <v-card-title :class="home.isMobile ? 'title-mobile' : 'title'" class="pa-0 pl-3 pr-3">
+        <v-card-title :class="home.isMobile ? 'title-mobile' : 'title'" class="pa-0 pt-2 pl-4 pr-4">
           <v-chip
             v-if="list.config.useCategory && post.status === STATUS.NORMAL"
             size="small"
@@ -33,7 +33,17 @@
           {{ util.unescape(post.title) }}
         </v-card-title>
 
-        <v-card-actions class="pa-0 pl-3 pr-3">
+        <v-card-actions class="pa-0 pl-4 pr-4">
+          <v-chip
+            :prepend-icon="'mdi-currency-' + CURRENCY"
+            variant="outlined"
+            size="small"
+            :disabled="trade.items[index].status != TRADE_STATUS.OPEN"
+            v-if="trade.items.length > 0"
+          >
+            <strong>{{ trade.items[index].price.toLocaleString() }}</strong></v-chip
+          >
+
           <trade-view-info-line
             :item="trade.items[index]"
             v-if="trade.items.length > 0 && !home.isMobile"
@@ -64,6 +74,7 @@
             :color="COLOR.HOME.MAIN"
             prepend-icon="mdi-chat-outline"
             variant="text"
+            v-if="!home.isMobile"
             >{{ util.num(post.comment) }}</v-chip
           >
 
@@ -72,6 +83,7 @@
             prepend-icon="mdi-eye-outline"
             :color="COLOR.HOME.MAIN"
             variant="text"
+            v-if="!home.isMobile"
             >{{ util.num(post.hit) }}</v-chip
           >
 
@@ -83,18 +95,6 @@
           >
         </v-card-actions>
       </v-card>
-
-      <template v-slot:append v-if="trade.items.length > 0 && !home.isMobile">
-        <v-card elevation="0" rounded="0" min-width="120" class="text-center">
-          <v-chip
-            :prepend-icon="'mdi-currency-' + CURRENCY"
-            variant="text"
-            :disabled="trade.items[index].status != TRADE_STATUS.OPEN"
-          >
-            <strong>{{ trade.items[index].price.toLocaleString() }}</strong></v-chip
-          >
-        </v-card>
-      </template>
     </v-list-item>
   </v-card>
 </template>

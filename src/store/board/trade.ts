@@ -1,6 +1,12 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { TRADE_ITEM, Trade, TRADE_STATUS, TradeItem } from "../../interface/trade_interface"
+import {
+  TRADE_ITEM,
+  Trade,
+  TRADE_STATUS,
+  TradeItem,
+  TradeStatus,
+} from "../../interface/trade_interface"
 import axios from "axios"
 import { useAuthStore } from "../user/auth"
 import { TSBOARD } from "../../../tsboard.config"
@@ -21,6 +27,30 @@ export const useTradeStore = defineStore("trade", () => {
   const home = useHomeStore()
   const items = ref<TradeItem[]>([])
   const item = ref<TradeItem>(TRADE_ITEM)
+
+  // 판매자가 거래 상태 변경하기
+  async function changeTradeStatus(postUid: number, newStatus: TradeStatus): Promise<void> {
+    if (item.value.status === newStatus) {
+      return
+    }
+
+    const fd = new FormData()
+    fd.append("postUid", postUid.toString())
+    fd.append("newStatus", newStatus.toString())
+
+    const response = await axios.patch(`${TSBOARD.API}/trade/update/status`, fd, {
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    })
+    const data = response.data as ResponseData<Trade[]>
+    if (!data || data.success === false) {
+      util.snack(`${TEXT[home.lang].FAILED_CHANGE_STATUS} (${data.error})`)
+      return
+    }
+    item.value.status = newStatus
+    item.value.statusStr = DEAL_STATUS[home.lang][newStatus]
+  }
 
   // 폼 데이터 생성해서 반환
   function getFormData(postUid: number): FormData {
@@ -137,6 +167,7 @@ export const useTradeStore = defineStore("trade", () => {
   return {
     items,
     item,
+    changeTradeStatus,
     loadTradeList,
     loadTradeInfo,
     write,

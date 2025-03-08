@@ -14,27 +14,33 @@
           >
             <trade-view-image-carousel></trade-view-image-carousel>
 
-            <v-list :bg-color="COLOR.HOME.BACKGROUND">
-              <v-list-item>
-                <v-list-item-title
-                  ><h3>{{ util.unescape(view.post.title) }}</h3></v-list-item-title
+            <v-list :bg-color="COLOR.HOME.BACKGROUND" class="pa-0">
+              <v-list-item class="pa-0 pt-2 pl-4 pr-4">
+                <v-list-item-title>
+                  <h3>
+                    <v-chip
+                      variant="outlined"
+                      :prepend-icon="'mdi-currency-' + CURRENCY"
+                      :disabled="trade.item.status != TRADE_STATUS.OPEN"
+                      size="small"
+                      class="mr-2"
+                      ><strong>{{ trade.item.price.toLocaleString() }}</strong></v-chip
+                    >
+                    {{ util.unescape(view.post.title) }}
+                  </h3></v-list-item-title
                 >
-
-                <template v-slot:append>
-                  <v-chip
-                    variant="outlined"
-                    :prepend-icon="'mdi-currency-' + CURRENCY"
-                    :disabled="trade.item.status != TRADE_STATUS.OPEN"
-                    ><strong>{{ trade.item.price.toLocaleString() }}</strong></v-chip
-                  >
-                </template>
               </v-list-item>
               <v-list-item>
+                <trade-view-select-status></trade-view-select-status>
                 <trade-view-info-line :item="trade.item"></trade-view-info-line>
-
-                <template v-slot:append>
-                  <trade-view-select-status></trade-view-select-status>
-                </template>
+                <v-chip
+                  size="small"
+                  variant="text"
+                  prepend-icon="mdi-send"
+                  @click="chat.openDialog(view.post.writer)"
+                  v-if="auth.user.uid > 0 && auth.user.uid !== view.post.writer.uid"
+                  >{{ TEXT[home.lang].SEND_CHAT }}</v-chip
+                >
               </v-list-item>
             </v-list>
 
@@ -86,6 +92,9 @@ import { useRoute } from "vue-router"
 import { useBoardViewStore } from "../../store/board/view"
 import { useUtilStore } from "../../store/util"
 import { useTradeStore } from "../../store/board/trade"
+import { useChatStore } from "../../store/user/chat"
+import { useAuthStore } from "../../store/user/auth"
+import { useHomeStore } from "../../store/home"
 import BoardViewCommentList from "../../components/board/comment/BoardViewCommentList.vue"
 import BoardViewCommentWrite from "../../components/board/comment/BoardViewCommentWrite.vue"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
@@ -112,11 +121,15 @@ import SideNotificationDrawer from "../home/SideNotificationDrawer.vue"
 import { COLOR, CURRENCY } from "../../../tsboard.config"
 import "../../assets/board/editor.scss"
 import { TRADE_STATUS } from "../../interface/trade_interface"
+import { TEXT } from "../../messages/components/board/user/user-nametag"
 
 const route = useRoute()
 const view = useBoardViewStore()
 const util = useUtilStore()
 const trade = useTradeStore()
+const chat = useChatStore()
+const auth = useAuthStore()
+const home = useHomeStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 watch(
