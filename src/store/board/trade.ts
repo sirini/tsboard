@@ -20,6 +20,7 @@ import {
 } from "../../messages/pages/board/trade"
 import { useUtilStore } from "../util"
 import { useHomeStore } from "../home"
+import { BoardListItem } from "../../interface/board_interface"
 
 export const useTradeStore = defineStore("trade", () => {
   const auth = useAuthStore()
@@ -67,7 +68,10 @@ export const useTradeStore = defineStore("trade", () => {
   }
 
   // 게시글 목록에 대한 거래 관련 내용 가져오기
-  async function loadTradeList(postUids: number[]): Promise<void> {
+  async function loadTradeList(posts: BoardListItem[]): Promise<void> {
+    const postUids: number[] = []
+    posts.map((post) => postUids.push(post.uid))
+
     const response = await axios.get(`${TSBOARD.API}/trade/list`, {
       headers: {
         Authorization: `Bearer ${auth.user.token}`,

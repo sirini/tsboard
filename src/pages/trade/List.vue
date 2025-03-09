@@ -22,7 +22,7 @@
                 <trade-list-row></trade-list-row>
               </v-list>
             </v-card-text>
-            <board-list-paging></board-list-paging>
+            <trade-list-paging></trade-list-paging>
           </v-card>
         </v-container>
         <home-footer></home-footer>
@@ -42,7 +42,7 @@ import { useBoardListStore } from "../../store/board/list"
 import { useHomeStore } from "../../store/home"
 import { useTradeStore } from "../../store/board/trade"
 import BoardListRowNotice from "../../components/board/list/BoardListRowNotice.vue"
-import BoardListPaging from "../../components/board/list/BoardListPaging.vue"
+import TradeListPaging from "../../components/board/trade/TradeListPaging.vue"
 import TradeListRow from "../../components/board/trade/TradeListRow.vue"
 import BoardHeader from "../../components/board/common/BoardHeader.vue"
 import HomeHeader from "../home/HomeHeader.vue"
@@ -63,10 +63,7 @@ const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
 
 onMounted(async () => {
   await list.loadPostList()
-
-  const postUids: number[] = []
-  list.posts.map((post) => postUids.push(post.uid))
-  await trade.loadTradeList(postUids)
+  await trade.loadTradeList(list.posts)
   await home.setGridLayout()
 })
 

@@ -148,23 +148,23 @@ export const useBoardListStore = defineStore("boardList", () => {
   }
 
   // 이전 페이지 이동하기
-  function movePrevPage(): void {
+  async function movePrevPage(): Promise<void> {
     setPrevPosts()
     router.push({
       name: util.routerName(config.value.type, BOARD_ACTION.PAGING),
       params: { id: id.value, page: page.value },
     })
-    loadPostList()
+    await loadPostList()
   }
 
   // 다음 페이지 이동하기
-  function moveNextPage(): void {
+  async function moveNextPage(): Promise<void> {
     setNextPosts()
     router.push({
       name: util.routerName(config.value.type, BOARD_ACTION.PAGING),
       params: { id: id.value, page: page.value },
     })
-    loadPostList()
+    await loadPostList()
   }
 
   // 검색 옵션 초기화하기
