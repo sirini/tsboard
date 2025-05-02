@@ -50,7 +50,9 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue"
 import { useHomeStore } from "../../store/home"
+import { useAuthStore } from "../../store/user/auth"
 import HomeHeaderSearch from "./components/header/HomeHeaderSearch.vue"
 import QuickButton from "./components/mobile/QuickButton.vue"
 import HomeTitle from "./components/static/HomeTitle.vue"
@@ -64,7 +66,14 @@ import SideNotificationDrawer from "./SideNotificationDrawer.vue"
 import { COLOR } from "../../../tsboard.config"
 
 const home = useHomeStore()
+const auth = useAuthStore()
 const bgColor = `background-color: ${COLOR.HOME.BACKGROUND}`
+
+onMounted(()=>{
+  if (auth.user.uid > 0 && auth.user.refresh.length > 0) {
+    auth.updateAccessToken()
+  }
+})
 </script>
 
 <style scoped>
