@@ -8,6 +8,7 @@ export const TEXT = [
     TITLE: "제목",
     TOOLTIP: "검색어를 초기화하려면 오른쪽과 동일한 모양의 버튼을 클릭하세요: ",
     WRITER: "작성자",
+    IMAGEDESC: "이미지",
   },
   /* LANG.EN */
   {
@@ -18,6 +19,7 @@ export const TEXT = [
     TITLE: "Title",
     TOOLTIP: "To reset the search term, click the button that looks like this on the right: ",
     WRITER: "Writer",
+    IMAGEDESC: "Image",
   },
   /* LANG.CN */
   {
@@ -28,6 +30,7 @@ export const TEXT = [
     TITLE: "标题",
     TOOLTIP: "要重置搜索词，请点击右侧这样的按钮：",
     WRITER: "作者",
+    IMAGEDESC: "图片",
   },
 ]
 Object.freeze(TEXT)

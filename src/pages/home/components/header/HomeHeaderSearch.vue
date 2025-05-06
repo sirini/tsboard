@@ -56,6 +56,15 @@
                     <v-icon>mdi-check</v-icon>
                   </template>
                 </v-list-item>
+
+                <v-list-item
+                  @click="selectSearchOption(SEARCH.IMAGEDESC as Search)"
+                  :class="home.option === (SEARCH.IMAGEDESC as Search) ? 'selected' : ''"
+                  >{{ TEXT[home.lang].IMAGEDESC }}
+                  <template v-slot:append v-if="home.option === (SEARCH.IMAGEDESC as Search)">
+                    <v-icon>mdi-check</v-icon>
+                  </template>
+                </v-list-item>
               </v-list>
             </v-menu>
           </v-text-field>
@@ -121,6 +130,8 @@ function selectSearchOption(option: Search): void {
     optionTitle.value = TEXT[home.lang].CONTENT
   } else if (option === (SEARCH.WRITER as Search)) {
     optionTitle.value = TEXT[home.lang].WRITER
+  } else if (option === (SEARCH.IMAGEDESC as Search)) {
+    optionTitle.value = TEXT[home.lang].IMAGEDESC
   } else {
     optionTitle.value = TEXT[home.lang].TAG
   }

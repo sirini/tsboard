@@ -310,7 +310,7 @@ export type Triple = Pair & {
 }
 
 // 검색 옵션 타입 정의
-export type Search = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+export type Search = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13
 
 // 검색 옵션 기본값
 export const SEARCH = {
@@ -330,5 +330,6 @@ export const SEARCH = {
     ID: 10,
     LEVEL: 11,
   },
-  NONE: 12,
+  IMAGEDESC: 12,
+  NONE: 13,
 }
