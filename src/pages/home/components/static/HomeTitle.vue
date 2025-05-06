@@ -12,7 +12,7 @@
         <v-btn
           :color="COLOR.HOME.MAIN"
           append-icon="mdi-vuetify"
-          size="large"
+          size="x-large"
           elevation="0"
           class="mt-3"
           rounded="pill"
@@ -26,8 +26,8 @@
           :color="COLOR.HOME.MAIN"
           variant="outlined"
           append-icon="mdi-language-go"
-          size="large"
-          class="mt-3 ml-3"
+          size="x-large"
+          class="mt-3 ml-2"
           rounded="pill"
           @click="util.open('https://github.com/sirini/goapi')"
           >GOAPI
@@ -39,8 +39,8 @@
           :color="COLOR.HOME.MAIN"
           variant="outlined"
           append-icon="mdi-android"
-          size="large"
-          class="mt-3 ml-3"
+          size="x-large"
+          class="mt-3 ml-2"
           rounded="pill"
           @click="util.open('https://github.com/sirini/sensta')"
           >SENSTA
