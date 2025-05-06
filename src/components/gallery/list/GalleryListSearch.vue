@@ -9,6 +9,7 @@
           group
           rounded="pill"
         >
+          <v-btn :value="SEARCH.IMAGEDESC">{{ TEXT[home.lang].IMAGE_DESC }}</v-btn>
           <v-btn :value="SEARCH.TITLE">{{ TEXT[home.lang].PHOTO_TITLE }}</v-btn>
           <v-btn :value="SEARCH.CONTENT">{{ TEXT[home.lang].CONTENT }}</v-btn>
           <v-btn :value="SEARCH.WRITER">{{ TEXT[home.lang].PHOTOGRAPHER }}</v-btn>

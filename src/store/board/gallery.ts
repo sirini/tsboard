@@ -35,7 +35,7 @@ export const useGalleryStore = defineStore("gallery", () => {
   const pageLength = ref<number>(1)
   const sinceUid = ref<number>(0)
   const pagingDirection = ref<Paging>(PAGE.NEXT as Paging)
-  const option = ref<Search>(SEARCH.TITLE as Search)
+  const option = ref<Search>(SEARCH.IMAGEDESC as Search)
   const keyword = ref<string>("")
   const keywordHistories = ref<string[]>([])
 

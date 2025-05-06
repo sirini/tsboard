@@ -10,6 +10,7 @@ export const TEXT = [
     SEARCH: "검색",
     TAG: "태그",
     UPLOAD: "업로드",
+    IMAGE_DESC: "이미지",
   },
   /* LANG.EN */
   {
@@ -22,6 +23,7 @@ export const TEXT = [
     SEARCH: "Search",
     TAG: "Tag",
     UPLOAD: "Upload",
+    IMAGE_DESC: "Image",
   },
   /* LANG.CN */
   {
@@ -34,6 +36,7 @@ export const TEXT = [
     SEARCH: "搜索",
     TAG: "标签",
     UPLOAD: "上传",
+    IMAGE_DESC: "图片",
   },
 ]
 Object.freeze(TEXT)
