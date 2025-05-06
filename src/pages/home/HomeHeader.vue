@@ -43,9 +43,8 @@ const home = useHomeStore()
 <style scoped type="scss">
 .title {
   cursor: pointer;
-  font-family: "Pretendard", sans-serif;
+  font-family: "Cal Sans", sans-serif;
   font-size: 1.6em;
-  font-weight: 900;
 }
 .mobile-title {
   position: absolute;

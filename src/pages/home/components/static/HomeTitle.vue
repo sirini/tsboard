@@ -11,24 +11,43 @@
       <div class="mt-16">
         <v-btn
           :color="COLOR.HOME.MAIN"
-          append-icon="mdi-open-in-new"
-          size="x-large"
+          append-icon="mdi-vuetify"
+          size="large"
           elevation="0"
           class="mt-3"
           rounded="pill"
           @click="util.open('https://github.com/sirini/tsboard')"
-          >TSBOARD</v-btn
-        >
+          >TSBOARD
+          <v-tooltip activator="parent">
+            {{ TEXT[home.lang].TSBOARD }}
+          </v-tooltip>
+        </v-btn>
         <v-btn
           :color="COLOR.HOME.MAIN"
           variant="outlined"
-          append-icon="mdi-open-in-new"
-          size="x-large"
+          append-icon="mdi-language-go"
+          size="large"
           class="mt-3 ml-3"
           rounded="pill"
           @click="util.open('https://github.com/sirini/goapi')"
-          >GOAPI</v-btn
-        >
+          >GOAPI
+          <v-tooltip activator="parent">
+            {{ TEXT[home.lang].GOAPI }}
+          </v-tooltip>
+        </v-btn>
+        <v-btn
+          :color="COLOR.HOME.MAIN"
+          variant="outlined"
+          append-icon="mdi-android"
+          size="large"
+          class="mt-3 ml-3"
+          rounded="pill"
+          @click="util.open('https://github.com/sirini/sensta')"
+          >SENSTA
+          <v-tooltip activator="parent">
+            {{ TEXT[home.lang].SENSTA }}
+          </v-tooltip>
+        </v-btn>
       </div>
     </v-col>
   </v-row>

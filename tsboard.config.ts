@@ -1,4 +1,4 @@
-export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
+export const IS_DEV = true // 프로덕션에서는 false, 개발 단계에서만 true
 export const VITE_PORT = 3000 // (개발용) Vite 개발용 서버 포트
 export const DEV_DOMAIN = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
 const dev_url = `${DEV_DOMAIN}:${VITE_PORT}` // (개발용) 개발용 페이지 접속 주소 지정
@@ -26,10 +26,7 @@ export const TSBOARD = {
         GALLERY: { id: "photo", limit: 6 } /* ✔︎ */,
       },
     },
-    MOBILE: {
-      WRITE: "free" /* ✔︎ */,
-      PHOTO: "photo" /* ✔︎ */,
-    },
+    MOBILE: { WRITE: "free" /* ✔︎ */, PHOTO: "photo" /* ✔︎ */ },
     NAME: "TSBOARD" /* ✔︎ */,
     OAUTH: {
       GOOGLE: true /* ✔︎ (true 시 .env OAUTH_GOOGLE_... 부분 입력 필요) */,
@@ -38,7 +35,7 @@ export const TSBOARD = {
     },
     URL: IS_DEV ? dev_url : production_url,
   },
-  VERSION: "v1.0.4",
+  VERSION: "v1.0.5",
 }
 
 // 사이트의 기본 컬러셋 지정 (필요 시 수정)
@@ -73,18 +70,8 @@ export const COLOR = {
     BACKGROUND: "#121212",
   },
   COMMENT: {
-    TOOLBAR: {
-      BLOG: "#1c1c1c",
-      HOME: "#f1f1f1",
-      BOARD_WRITER: "#FFF3E0",
-      BLOG_WRITER: "#121212",
-    },
-    NAMETAG: {
-      BLOG: "#9E9E9E",
-      HOME: "#616161",
-      BOARD_WRITER: "#EF6C00",
-      BLOG_WRITER: "#525252",
-    },
+    TOOLBAR: { BLOG: "#1c1c1c", HOME: "#f1f1f1", BOARD_WRITER: "#FFF3E0", BLOG_WRITER: "#121212" },
+    NAMETAG: { BLOG: "#9E9E9E", HOME: "#616161", BOARD_WRITER: "#EF6C00", BLOG_WRITER: "#525252" },
   },
 }
 
@@ -97,16 +84,10 @@ export const SCREEN = {
 }
 
 // EXIF 정보 가공용 상수값들 정의 (수정 금지)
-export const EXIF = {
-  APERTURE: 100,
-  EXPOSURE: 1000,
-}
+export const EXIF = { APERTURE: 100, EXPOSURE: 1000 }
 
 // 사이트 관리자/책임자 명시 (반드시 수정 필요)
-export const POLICY = {
-  NAME: "sirini",
-  EMAIL: "sirini@gmail.com",
-}
+export const POLICY = { NAME: "sirini", EMAIL: "sirini@gmail.com" }
 
 // 기본 화폐 단위 (기본: 원화)
 export const CURRENCY = "krw" // usb, cny, jpy, eur ...
