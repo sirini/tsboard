@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRouter } from "vue-router"
-import { BOARD, Board, BOARD_ACTION } from "../interface/board_interface"
+import { BOARD, Board, BOARD_ACTION, BOARD_ACTION_NAME } from "../interface/board_interface"
 
 export const useUtilStore = defineStore("util", () => {
   const router = useRouter()
@@ -57,18 +57,7 @@ export const useUtilStore = defineStore("util", () => {
 
   // 액션에 따른 라우터 이름 변환
   function nameByAction(action: number): string {
-    switch (action) {
-      case BOARD_ACTION.LIST:
-        return "List"
-      case BOARD_ACTION.PAGING:
-        return "Paging"
-      case BOARD_ACTION.WRITE:
-        return "Write"
-      case BOARD_ACTION.MODIFY:
-        return "Modify"
-      default:
-        return "View"
-    }
+    return BOARD_ACTION_NAME[action] ?? "List"
   }
 
   // 게시판 형태에 따른 라우터 이름 반환

@@ -24,6 +24,15 @@ export const BOARD_ACTION = {
   MODIFY: 4,
 }
 
+// 게시판 내 활동 타입을 문자열로 변환할 때 사용하는 상수
+export const BOARD_ACTION_NAME = {
+  [BOARD_ACTION.LIST]: "List",
+  [BOARD_ACTION.PAGING]: "Paging",
+  [BOARD_ACTION.VIEW]: "View",
+  [BOARD_ACTION.WRITE]: "Write",
+  [BOARD_ACTION.MODIFY]: "Modify",
+} as const;
+
 // 게시판 타입 매칭용 배열 정의
 export const CONVERT_BOARD_TYPE = [
   { path: "/board/", name: "boardList" },

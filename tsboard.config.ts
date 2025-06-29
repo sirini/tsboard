@@ -1,41 +1,41 @@
 export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
-export const VITE_PORT = 3000 // (개발용) Vite 개발용 서버 포트
-export const DEV_DOMAIN = "http://localhost" // (개발용) localhost 혹은 개발중인 머신의 (IP)주소
-const dev_url = `${DEV_DOMAIN}:${VITE_PORT}` // (개발용) 개발용 페이지 접속 주소 지정
-const production_url = "https://tsboard.dev" // 본인 사이트의 도메인 입력
+export const VITE_PORT = 3000
+export const DEV_DOMAIN = "http://localhost"
+const dev_url = `${DEV_DOMAIN}:${VITE_PORT}`
+const production_url = "https://tsboard.dev"
 
-// TSBOARD 기본 설정값, ✔︎ 표기된 부분은 필요 시 수정하셔야 하는 곳입니다
+// TSBOARD 기본 설정값 : 필요 시 수정하셔야 하는 곳입니다
 export const TSBOARD = {
   API: (IS_DEV ? dev_url : production_url) + "/goapi",
-  API_PORT: 3003 /* ✔︎ (.env GOAPI_PORT와 동일) */,
-  MAX_UPLOAD_SIZE: 1024 * 1024 * 100 /* ✔︎ */,
-  PREFIX: "" /* ✔︎ (기본: 빈 문자열) */,
+  API_PORT: 3003,
+  MAX_UPLOAD_SIZE: 1024 * 1024 * 100,
+  PREFIX: "",
   SITE: {
     HOME: {
       CATEGORIES: [
-        { id: "free", limit: 8 } /* ✔︎ */,
-        { id: "sirini", limit: 8 } /* ✔︎ */,
-        { id: "photo", limit: 4 } /* ✔︎ */,
+        { id: "free", limit: 8 },
+        { id: "sirini", limit: 8 },
+        { id: "photo", limit: 4 },
       ],
       COLUMNS: {
-        COLS: 6 /* ✔︎ */,
+        COLS: 6,
         BOARDS: [
-          { id: "free", limit: 10 } /* ✔︎ */,
-          { id: "sirini", limit: 10 } /* ✔︎ */,
+          { id: "free", limit: 10 },
+          { id: "sirini", limit: 10 },
         ],
-        GALLERY: { id: "photo", limit: 6 } /* ✔︎ */,
+        GALLERY: { id: "photo", limit: 6 },
       },
     },
-    MOBILE: { WRITE: "free" /* ✔︎ */, PHOTO: "photo" /* ✔︎ */ },
-    NAME: "TSBOARD" /* ✔︎ */,
+    MOBILE: { WRITE: "free", PHOTO: "photo" },
+    NAME: "TSBOARD",
     OAUTH: {
-      GOOGLE: true /* ✔︎ (true 시 .env OAUTH_GOOGLE_... 부분 입력 필요) */,
-      NAVER: true /* ✔︎ (true 시 .env OAUTH_NAVER_... 부분 입력 필요) */,
-      KAKAO: true /* ✔︎ (true 시 .env OAUTH_KAKAO_... 부분 입력 필요) */,
+      GOOGLE: true,
+      NAVER: true,
+      KAKAO: true,
     },
     URL: IS_DEV ? dev_url : production_url,
   },
-  VERSION: "v1.0.5",
+  VERSION: "v1.0.6",
 }
 
 // 사이트의 기본 컬러셋 지정 (필요 시 수정)
