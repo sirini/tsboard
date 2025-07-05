@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { NavigationFailure, useRouter } from "vue-router"
-import { BOARD, Board, BOARD_ACTION, BOARD_ACTION_NAME } from "../interface/board_interface"
+import { BOARD, Board, BOARD_ACTION, BOARD_ACTION_NAME, BOARD_PREFIX } from "../interface/board_interface"
 
 export const useUtilStore = defineStore("util", () => {
   const router = useRouter()
@@ -63,18 +63,8 @@ export const useUtilStore = defineStore("util", () => {
   // 게시판 형태에 따른 라우터 이름 반환
   function routerName(type: Board, action: number): string {
     const actionName = nameByAction(action)
-    switch (type) {
-      case BOARD.GALLERY:
-        return `gallery${actionName}`
-      case BOARD.BLOG:
-        return `blog${actionName}`
-      case BOARD.TRADE:
-        return `trade${actionName}`
-      case BOARD.WEBZINE:
-        return `webzine${actionName}`
-      default:
-        return `board${actionName}`
-    }
+    const prefix = BOARD_PREFIX[type] ?? "board"
+    return `${prefix}${actionName}`
   }
 
   // 페이지 이동하기
