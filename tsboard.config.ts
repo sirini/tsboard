@@ -1,4 +1,4 @@
-export const IS_DEV = true // 프로덕션에서는 false, 개발 단계에서만 true
+export const IS_DEV = false // 프로덕션에서는 false, 개발 단계에서만 true
 export const VITE_PORT = 3000
 export const DEV_DOMAIN = "http://localhost"
 const dev_url = `${DEV_DOMAIN}:${VITE_PORT}`
