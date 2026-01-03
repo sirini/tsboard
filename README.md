@@ -1,3 +1,21 @@
+# NUBO에서 만나요
+
+- TSBOARD 프로젝트의 빠른 속도를 계승하면서도, **스킨 UI 시스템** 과 **SEO에 최적화** 된 [NUBO](https://github.com/sirini/nubo) 프로젝트를 만나보세요.
+- 기존 TSBOARD 사용자들은 별도의 DB 스키마 변경같은 작업 없이 `NUBO` 프로젝트로 업그레이드 하실 수 있습니다. (기존 TSBOARD 폴더의 upload 폴더에 대한 심볼릭 링크 생성 및 .env 파일 수정 필요)
+- NUBO는 TSBOARD에서 아래의 사항들이 개선되었습니다
+  - 사이트 렌더링: `SSR`(Server Side Rendering), SEO에 최적화된 렌더링을 지원합니다
+  - UI 프레임워크: `Shadcn-vue`, 더 자유로운 표현력과 커스터마이즈가 가능합니다
+  - 스킨 시스템: 제로보드4/그누보드5 시절의 스킨 시스템이 그리우셨다면? NUBO의 강력하고도 쉬운 `스킨 시스템`을 누려보세요
+- NUBO는 TSBOARD의 장점을 그대로 계승합니다
+  - Go언어로 작성된 고성능 백엔드 엔진 `GOAPI`는 한층 더 업그레이드 되어 이제 `NUBO`와 함께합니다
+  - Vue3, Pinia는 여전히 NUBO에서도 계속됩니다
+
+> NUBO 프로젝트 홈페이지는 <https://nubohub.org> 로 접속 가능합니다. 기존에 <https://tsboard.dev> 도메인으로 제공하던 사이트 그대로입니다.
+
+아래 TSBOARD 소개 페이지는 히스토리 보존 차원에서 그대로 두겠습니다 😊
+
+---
+
 # TSBOARD
 
 <p align="center">
@@ -427,3 +445,7 @@ server {
 - 언젠가 TSBOARD로 만들어진 멋진 커뮤니티를 만나는 그 날을 꿈꿔봅니다!
 
 > 궁금하신 점이 있으시다면 언제든지 <https://tsboard.dev> 사이트에 와주세요!
+
+---
+
+✅ 앞으로는 NUBO 프로젝트에서 만나요! <https://nubohub.org> 에 오시면 됩니다!
