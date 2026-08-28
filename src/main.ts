@@ -15,9 +15,11 @@ app.use(i18n)
 app.use(router)
 
 setSessionExpiredHandler(async () => {
-  useAuthStore().expire()
+  const auth = useAuthStore()
+  const wasLoggedIn = auth.isLoggedIn
+  auth.expire()
   const route = router.currentRoute.value
-  if (route.name === "login") return
+  if (!wasLoggedIn || route.name === "login") return
   await router.push({ name: "login", query: { redirect: route.fullPath, expired: "1" } })
 })
 

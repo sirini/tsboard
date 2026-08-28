@@ -115,6 +115,10 @@ const movePost = async () => {
 
 const download = async (fileUid: number) => {
   if (!view.value) return
+  if (!auth.isLoggedIn) {
+    await router.push({ name: "login", query: { redirect: route.fullPath } })
+    return
+  }
   const response = await boardApi.download(view.value.config.uid, fileUid)
   if (!response.success) return toast.error(response.error)
   window.location.assign(apiResourceUrl(response.result.path))

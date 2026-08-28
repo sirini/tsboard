@@ -12,7 +12,7 @@ import type {
 } from "@/types/user"
 
 export const authApi = {
-  load: () => api<Resp<CurrentUser>>("/auth/load", { retry: false }),
+  load: () => api<Resp<CurrentUser>>("/auth/load"),
   user: (targetUserUid: number) =>
     api<Resp<UserInfo>>("/auth/user/info", { query: { targetUserUid } }),
   signin: (id: string, password: string) =>

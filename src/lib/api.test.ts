@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { authApi } from "@/api/auth"
 import { api, apiResourceUrl, ApiHttpError, setSessionExpiredHandler } from "./api"
 
 const json = (body: unknown, status = 200) =>
@@ -21,12 +22,7 @@ describe("API client", () => {
       .mockResolvedValueOnce(json({ success: true, result: { uid: 7 } }))
     vi.stubGlobal("fetch", fetchMock)
 
-    await expect(api<{ success: boolean; result: { uid: number } }>("/auth/load")).resolves.toEqual(
-      {
-        success: true,
-        result: { uid: 7 },
-      },
-    )
+    await expect(authApi.load()).resolves.toEqual({ success: true, result: { uid: 7 } })
     expect(fetchMock).toHaveBeenCalledTimes(3)
     expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/goapi/auth/refresh")
   })
