@@ -1,71 +1,37 @@
-// Plugins
+import tailwindcss from "@tailwindcss/vite"
 import vue from "@vitejs/plugin-vue"
-import ViteFonts from "unplugin-fonts/vite"
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
-
-// Utilities
 import { fileURLToPath, URL } from "node:url"
-import * as sass from "sass"
 import { defineConfig } from "vite"
 
-// TSBOARD Configuration
-import { IS_DEV, DEV_DOMAIN, VITE_PORT, TSBOARD } from "./tsboard.config"
+import { DEV_SERVER, TSBOARD } from "./tsboard.config"
+
+const apiTarget =
+  process.env.TSBOARD_API_TARGET ?? `http://${DEV_SERVER.apiHost}:${DEV_SERVER.apiPort}`
 
 export default defineConfig({
-  plugins: [
-    vue({
-      template: { transformAssetUrls },
-    }),
-    vuetify({
-      autoImport: true,
-      styles: {
-        configFile: "src/styles/settings.scss",
-      },
-    }),
-    ViteFonts({
-      google: {
-        families: [
-          {
-            name: "Roboto",
-            styles: "wght@100;300;400;500;700;900",
-          },
-        ],
-      },
-    }),
-  ],
-  base: IS_DEV ? "" : TSBOARD.PREFIX.length > 0 ? TSBOARD.PREFIX : "/",
-  define: {
-    "process.env": {},
-  },
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
-    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
-  },
+  plugins: [vue(), tailwindcss()],
+  base: TSBOARD.basePath,
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   server: {
-    port: VITE_PORT,
+    port: DEV_SERVER.frontendPort,
     proxy: {
-      /* 쿠키가 정상적으로 동작하려면, 반드시 proxy 설정으로 API 호출 필요 */
-      "/goapi": {
-        target: `${DEV_DOMAIN}:${TSBOARD.API_PORT}`,
+      [TSBOARD.apiBase]: {
+        target: apiTarget,
         changeOrigin: true,
       },
     },
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: "modern",
-        importers: [new sass.NodePackageImporter()],
-      },
-      sass: {
-        api: "modern",
-        importers: [new sass.NodePackageImporter()],
+  build: {
+    target: "es2022",
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("/@tiptap/") || id.includes("/prosemirror-")) return "editor"
+          if (id.includes("/reka-ui/") || id.includes("/lucide-vue-next/")) return "ui"
+          return undefined
+        },
       },
     },
-  },
-  build: {
-    chunkSizeWarningLimit: 1500,
   },
 })

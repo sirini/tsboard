@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
-    "types": ["node"]
+    "types": ["node"],
+    "skipLibCheck": true
   },
-  "include": ["vite.config.ts"],
-  "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+  "include": ["vite.config.ts", "vitest.config.ts"]
 }

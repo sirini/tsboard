@@ -1,0 +1,91 @@
+<script setup lang="ts">
+import {
+  ArrowLeft,
+  LayoutDashboard,
+  Mail,
+  Menu,
+  MessageSquareWarning,
+  Moon,
+  PanelsTopLeft,
+  Sun,
+  Users,
+  X,
+} from "lucide-vue-next"
+import { ref } from "vue"
+import { useRoute } from "vue-router"
+import { Button } from "@/components/ui/button"
+import { useTheme } from "@/composables/useTheme"
+
+const route = useRoute()
+const mobileOpen = ref(false)
+const { isDark, toggleTheme } = useTheme()
+const items = [
+  { to: "/admin", label: "Overview", icon: LayoutDashboard },
+  { to: "/admin/boards", label: "Communities", icon: PanelsTopLeft },
+  { to: "/admin/users", label: "Users", icon: Users },
+  { to: "/admin/moderation", label: "Moderation", icon: MessageSquareWarning },
+  { to: "/admin/mail", label: "Mail", icon: Mail },
+]
+const active = (path: string) =>
+  path === "/admin" ? route.path === path : route.path.startsWith(path)
+</script>
+
+<template>
+  <div class="min-h-screen bg-muted/30">
+    <aside
+      :class="[
+        'fixed inset-y-0 left-0 z-50 w-64 border-r bg-sidebar p-4 transition-transform lg:translate-x-0',
+        mobileOpen ? 'translate-x-0' : '-translate-x-full',
+      ]"
+    >
+      <div class="mb-7 flex items-center justify-between">
+        <RouterLink to="/admin" class="flex items-center gap-2 font-black"
+          ><span
+            class="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"
+            >T</span
+          >{{ $t("app.name") }} Admin</RouterLink
+        ><Button variant="ghost" size="icon" class="lg:hidden" @click="mobileOpen = false"
+          ><X
+        /></Button>
+      </div>
+      <nav class="space-y-1">
+        <RouterLink
+          v-for="item in items"
+          :key="item.to"
+          :to="item.to"
+          :class="[
+            'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition hover:bg-accent',
+            active(item.to) && 'bg-accent text-primary',
+          ]"
+          @click="mobileOpen = false"
+          ><component :is="item.icon" class="size-4" />{{ item.label }}</RouterLink
+        >
+      </nav>
+      <div class="absolute inset-x-4 bottom-4">
+        <Button as-child variant="outline" class="w-full"
+          ><RouterLink to="/"><ArrowLeft />Back to site</RouterLink></Button
+        >
+      </div>
+    </aside>
+    <div class="lg:pl-64">
+      <header
+        class="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/90 px-4 backdrop-blur"
+      >
+        <Button variant="ghost" size="icon" class="lg:hidden" @click="mobileOpen = true"
+          ><Menu
+        /></Button>
+        <p class="hidden text-sm text-muted-foreground sm:block">Community operations dashboard</p>
+        <Button variant="ghost" size="icon" @click="toggleTheme"
+          ><Sun v-if="isDark" /><Moon v-else
+        /></Button>
+      </header>
+      <main class="mx-auto max-w-7xl p-4 sm:p-6"><RouterView /></main>
+    </div>
+    <button
+      v-if="mobileOpen"
+      class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+      aria-label="Close navigation"
+      @click="mobileOpen = false"
+    />
+  </div>
+</template>

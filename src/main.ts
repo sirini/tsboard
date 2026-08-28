@@ -1,13 +1,24 @@
-/**
- * main.ts
- *
- * registerPlugins 에서 Vuetify, Pinia, Vue Router 플러그인 가져옴
- */
-
-import App from "./App.vue"
+import { createPinia } from "pinia"
 import { createApp } from "vue"
-import { registerPlugins } from "./plugins"
+import App from "./App.vue"
+import router from "./router"
+import { i18n } from "./i18n"
+import { setSessionExpiredHandler } from "./lib/api"
+import { useAuthStore } from "./stores/auth"
+import "./styles/app.css"
+import "vue-sonner/style.css"
 
 const app = createApp(App)
-registerPlugins(app)
+const pinia = createPinia()
+app.use(pinia)
+app.use(i18n)
+app.use(router)
+
+setSessionExpiredHandler(async () => {
+  useAuthStore().expire()
+  const route = router.currentRoute.value
+  if (route.name === "login") return
+  await router.push({ name: "login", query: { redirect: route.fullPath, expired: "1" } })
+})
+
 app.mount("#app")

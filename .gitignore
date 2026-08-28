@@ -3,6 +3,7 @@ node_modules
 /dist
 bun.lockb
 /upload
+/goapi-runtime
 test.ts
 
 # local env files
