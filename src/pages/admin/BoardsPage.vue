@@ -114,18 +114,22 @@ onMounted(() => loadGroups())
 
 <template>
   <PageHeader
-    eyebrow="Administration"
-    title="Communities"
-    description="Organize groups, boards, permissions, categories, and point policies."
+    :eyebrow="$t('admin.eyebrow')"
+    :title="$t('admin.communities')"
+    :description="$t('admin.boardsDescription')"
     ><div class="flex gap-2">
-      <Button variant="outline" @click="openGroupDialog('create')"><Plus />New group</Button
-      ><Button @click="openBoard()"><Plus />New community</Button>
+      <Button variant="outline" @click="openGroupDialog('create')"
+        ><Plus />{{ $t("admin.newGroup") }}</Button
+      ><Button @click="openBoard()"><Plus />{{ $t("admin.newCommunity") }}</Button>
     </div></PageHeader
   >
-  <div v-if="loading" class="py-20 text-center"><Spinner label="Loading communities" /></div>
+  <div v-if="loading" class="py-20 text-center">
+    <Spinner :label="$t('admin.loadingCommunities')" />
+  </div>
   <div v-else class="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)]">
     <Card
-      ><CardHeader><CardTitle class="text-sm">Groups</CardTitle></CardHeader
+      ><CardHeader
+        ><CardTitle class="text-sm">{{ $t("admin.groups") }}</CardTitle></CardHeader
       ><CardContent class="space-y-1"
         ><button
           v-for="group in groups"
@@ -145,23 +149,27 @@ onMounted(() => loadGroups())
       <Card
         ><CardContent class="flex flex-wrap items-center justify-between gap-4 p-5"
           ><div>
-            <p class="text-xs uppercase text-muted-foreground">Group</p>
+            <p class="font-label text-xs uppercase text-muted-foreground">
+              {{ $t("admin.group") }}
+            </p>
             <h2 class="text-xl font-bold">{{ detail.config.id }}</h2>
             <div class="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-              <Avatar :src="detail.config.manager.profile" class="size-6" />Managed by
-              {{ detail.config.manager.name }}
+              <Avatar :src="detail.config.manager.profile" class="size-6" />{{
+                $t("admin.managedBy", { name: detail.config.manager.name })
+              }}
             </div>
           </div>
           <div class="flex gap-2">
             <Button variant="outline" size="sm" @click="openGroupDialog('manager')"
-              ><Shield />Manager</Button
+              ><Shield />{{ $t("admin.manager") }}</Button
             ><Button variant="outline" size="sm" @click="openGroupDialog('rename')"
-              ><Edit />Rename</Button
+              ><Edit />{{ $t("admin.rename") }}</Button
             ><Button variant="destructive" size="sm" @click="removeGroupOpen = true"
               ><Trash2
             /></Button></div></CardContent></Card
       ><Card
-        ><CardHeader><CardTitle>Boards in this group</CardTitle></CardHeader
+        ><CardHeader
+          ><CardTitle>{{ $t("admin.boardsInGroup") }}</CardTitle></CardHeader
         ><CardContent class="space-y-2"
           ><div
             v-for="board in detail.boards"
@@ -175,12 +183,18 @@ onMounted(() => loadGroups())
               </div>
               <p class="mt-1 text-sm text-muted-foreground">{{ board.info }}</p>
               <p class="mt-2 text-xs text-muted-foreground">
-                {{ board.total.post }} posts · {{ board.total.comment }} comments ·
-                {{ board.total.image }} images
+                {{
+                  $t("admin.totals", {
+                    posts: board.total.post,
+                    comments: board.total.comment,
+                    images: board.total.image,
+                  })
+                }}
               </p>
             </div>
             <div class="flex gap-2">
-              <Button variant="outline" size="sm" @click="openBoard(board.id)"><Edit />Edit</Button
+              <Button variant="outline" size="sm" @click="openBoard(board.id)"
+                ><Edit />{{ $t("common.edit") }}</Button
               ><Button
                 variant="ghost"
                 size="icon-sm"
@@ -190,9 +204,7 @@ onMounted(() => loadGroups())
               /></Button>
             </div>
           </div>
-          <EmptyState
-            v-if="!detail.boards.length"
-            title="No communities in this group" /></CardContent
+          <EmptyState v-if="!detail.boards.length" :title="$t('admin.emptyGroup')" /></CardContent
       ></Card>
     </div>
   </div>
@@ -206,23 +218,23 @@ onMounted(() => loadGroups())
     v-model="groupDialog"
     :title="
       groupMode === 'create'
-        ? 'Create group'
+        ? $t('admin.createGroup')
         : groupMode === 'rename'
-          ? 'Rename group'
-          : 'Change group manager'
+          ? $t('admin.renameGroup')
+          : $t('admin.changeGroupManager')
     "
     width="sm"
     ><div v-if="groupMode !== 'manager'" class="space-y-2">
-      <Label for="group-value">Group ID</Label
+      <Label for="group-value">{{ $t("admin.groupId") }}</Label
       ><Input id="group-value" v-model="groupValue" pattern="[a-z0-9_]+" />
     </div>
     <div v-else class="space-y-3">
       <div class="flex gap-2">
         <Input
           v-model="groupValue"
-          placeholder="Search member name"
+          :placeholder="$t('admin.searchMember')"
           @keydown.enter.prevent="searchManagers"
-        /><Button variant="secondary" @click="searchManagers">Search</Button>
+        /><Button variant="secondary" @click="searchManagers">{{ $t("common.search") }}</Button>
       </div>
       <button
         v-for="candidate in managerCandidates"
@@ -237,32 +249,36 @@ onMounted(() => loadGroups())
       </button>
     </div>
     <template #footer
-      ><Button variant="ghost" @click="groupDialog = false">Cancel</Button
+      ><Button variant="ghost" @click="groupDialog = false">{{ $t("common.cancel") }}</Button
       ><Button
         :disabled="groupMode === 'manager' ? !selectedManager : !groupValue.trim()"
         @click="saveGroup"
-        >Save</Button
+        >{{ $t("common.save") }}</Button
       ></template
     ></Dialog
   >
   <Dialog
     v-model="removeBoardOpen"
-    title="Remove community?"
-    description="Posts and comments connected to this board will no longer be available."
+    :title="$t('admin.removeCommunityTitle')"
+    :description="$t('admin.removeCommunityDescription')"
     width="sm"
     ><template #footer
-      ><Button variant="ghost" @click="removeBoardOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="removeBoard">Remove</Button></template
+      ><Button variant="ghost" @click="removeBoardOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="removeBoard">{{
+        $t("common.remove")
+      }}</Button></template
     ></Dialog
   >
   <Dialog
     v-model="removeGroupOpen"
-    title="Remove group?"
-    description="A group can only be removed when no boards depend on it."
+    :title="$t('admin.removeGroupTitle')"
+    :description="$t('admin.removeGroupDescription')"
     width="sm"
     ><template #footer
-      ><Button variant="ghost" @click="removeGroupOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="removeGroup">Remove</Button></template
+      ><Button variant="ghost" @click="removeGroupOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="removeGroup">{{
+        $t("common.remove")
+      }}</Button></template
     ></Dialog
   >
 </template>

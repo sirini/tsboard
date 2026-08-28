@@ -108,44 +108,44 @@ watch(() => route.fullPath, load, { immediate: true })
 <template>
   <div class="space-y-4">
     <PageHeader
-      :eyebrow="isSearch ? 'Search' : 'Front page'"
-      :title="isSearch ? `Results for “${keyword}”` : 'Today on TSBOARD'"
-      :description="
-        isSearch
-          ? 'Posts matching your query across every community.'
-          : 'Fresh conversations, photos, stories, and finds from the community.'
-      "
+      :eyebrow="isSearch ? $t('common.search') : $t('home.frontPage')"
+      :title="isSearch ? $t('home.results', { keyword }) : $t('home.today')"
+      :description="isSearch ? $t('home.searchDescription') : $t('home.intro')"
     >
       <Button v-if="auth.isLoggedIn && firstBoardId" as-child
-        ><RouterLink :to="`/board/${firstBoardId}/write`"><Plus />Create post</RouterLink></Button
+        ><RouterLink :to="`/board/${firstBoardId}/write`"
+          ><Plus />{{ $t("home.createPost") }}</RouterLink
+        ></Button
       >
     </PageHeader>
     <Card
       ><CardContent class="flex items-center gap-2 p-2"
-        ><Button variant="secondary" size="sm"><Flame />Latest</Button
-        ><Button variant="ghost" size="sm" @click="load"><RefreshCw />Refresh</Button>
+        ><Button variant="secondary" size="sm"><Flame />{{ $t("home.latest") }}</Button
+        ><Button variant="ghost" size="sm" @click="load"
+          ><RefreshCw />{{ $t("common.refresh") }}</Button
+        >
         <div v-if="isSearch" class="ml-auto flex items-center gap-2">
           <Search class="size-4 text-muted-foreground" /><SelectField
             v-model="searchOption"
             class="w-32"
-            aria-label="Search field"
+            :aria-label="$t('common.search')"
             @change="changeSearchOption"
-            ><option :value="SEARCH.TITLE">Title</option>
-            <option :value="SEARCH.CONTENT">Content</option>
-            <option :value="SEARCH.WRITER">Author</option>
-            <option :value="SEARCH.TAG">Tag</option></SelectField
+            ><option :value="SEARCH.TITLE">{{ $t("search.title") }}</option>
+            <option :value="SEARCH.CONTENT">{{ $t("search.content") }}</option>
+            <option :value="SEARCH.WRITER">{{ $t("search.author") }}</option>
+            <option :value="SEARCH.TAG">{{ $t("search.tag") }}</option></SelectField
           >
         </div></CardContent
       ></Card
     >
     <PageLoading v-if="loading" />
-    <EmptyState v-else-if="error" title="The feed could not be loaded" :message="error"
-      ><Button variant="outline" @click="load">Try again</Button></EmptyState
+    <EmptyState v-else-if="error" :title="$t('home.feedError')" :message="error"
+      ><Button variant="outline" @click="load">{{ $t("common.tryAgain") }}</Button></EmptyState
     >
     <EmptyState
       v-else-if="!posts.length"
-      title="No posts found"
-      message="Try another search, or start the first conversation."
+      :title="$t('home.noPosts')"
+      :message="$t('home.noPostsDescription')"
     />
     <div v-else class="space-y-3">
       <PostFeedCard
@@ -159,7 +159,7 @@ watch(() => route.fullPath, load, { immediate: true })
       />
       <div class="py-3 text-center">
         <Button variant="outline" :disabled="loadingMore" @click="loadMore">{{
-          loadingMore ? "Loading…" : "Load more"
+          loadingMore ? $t("common.loading") : $t("home.loadMore")
         }}</Button>
       </div>
     </div>

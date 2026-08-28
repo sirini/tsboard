@@ -24,6 +24,7 @@ import Typography from "@tiptap/extension-typography"
 import StarterKit from "@tiptap/starter-kit"
 import { EditorContent, useEditor } from "@tiptap/vue-3"
 import { onBeforeUnmount, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { Button } from "@/components/ui/button"
 import { Dialog } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -33,6 +34,7 @@ const props = defineProps<{
   uploadImages?: (files: File[]) => Promise<string[]>
 }>()
 const emit = defineEmits<{ "update:modelValue": [value: string] }>()
+const { t } = useI18n()
 const linkOpen = ref(false)
 const linkUrl = ref("https://")
 
@@ -42,7 +44,7 @@ const editor = useEditor({
     StarterKit.configure({ link: false }),
     LinkExtension.configure({ openOnClick: false, autolink: true }),
     Image.configure({ allowBase64: false }),
-    Placeholder.configure({ placeholder: "Share something with the community…" }),
+    Placeholder.configure({ placeholder: () => t("editor.placeholder") }),
     Typography,
     Table.configure({ resizable: true }),
     TableRow,
@@ -118,7 +120,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('bold') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Bold"
+        :aria-label="$t('editor.toolbar.bold')"
         @click="editor.chain().focus().toggleBold().run()"
         ><Bold
       /></Button>
@@ -126,7 +128,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('italic') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Italic"
+        :aria-label="$t('editor.toolbar.italic')"
         @click="editor.chain().focus().toggleItalic().run()"
         ><Italic
       /></Button>
@@ -134,7 +136,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('strike') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Strike"
+        :aria-label="$t('editor.toolbar.strike')"
         @click="editor.chain().focus().toggleStrike().run()"
         ><Strikethrough
       /></Button>
@@ -142,7 +144,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('heading', { level: 2 }) ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Heading"
+        :aria-label="$t('editor.toolbar.heading')"
         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
         ><Heading2
       /></Button>
@@ -150,7 +152,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('bulletList') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Bullet list"
+        :aria-label="$t('editor.toolbar.bulletList')"
         @click="editor.chain().focus().toggleBulletList().run()"
         ><List
       /></Button>
@@ -158,7 +160,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('orderedList') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Ordered list"
+        :aria-label="$t('editor.toolbar.orderedList')"
         @click="editor.chain().focus().toggleOrderedList().run()"
         ><ListOrdered
       /></Button>
@@ -166,7 +168,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('blockquote') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Quote"
+        :aria-label="$t('editor.toolbar.quote')"
         @click="editor.chain().focus().toggleBlockquote().run()"
         ><Quote
       /></Button>
@@ -174,17 +176,22 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         :variant="editor.isActive('codeBlock') ? 'secondary' : 'ghost'"
         size="icon-sm"
-        aria-label="Code block"
+        :aria-label="$t('editor.toolbar.code')"
         @click="editor.chain().focus().toggleCodeBlock().run()"
         ><Code
       /></Button>
-      <Button type="button" variant="ghost" size="icon-sm" aria-label="Link" @click="setLink"
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        :aria-label="$t('editor.toolbar.link')"
+        @click="setLink"
         ><Link
       /></Button>
       <label
         v-if="uploadImages"
         class="inline-flex size-8 items-center justify-center rounded-md hover:bg-accent"
-        aria-label="Upload images"
+        :aria-label="$t('editor.toolbar.upload')"
         ><ImagePlus class="size-4" /><input
           type="file"
           accept="image/*"
@@ -197,7 +204,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         variant="ghost"
         size="icon-sm"
-        aria-label="Undo"
+        :aria-label="$t('editor.toolbar.undo')"
         :disabled="!editor.can().undo()"
         @click="editor.chain().focus().undo().run()"
         ><Undo2
@@ -206,7 +213,7 @@ onBeforeUnmount(() => editor.value?.destroy())
         type="button"
         variant="ghost"
         size="icon-sm"
-        aria-label="Redo"
+        :aria-label="$t('editor.toolbar.redo')"
         :disabled="!editor.can().redo()"
         @click="editor.chain().focus().redo().run()"
         ><Redo2
@@ -216,8 +223,8 @@ onBeforeUnmount(() => editor.value?.destroy())
   </div>
   <Dialog
     v-model="linkOpen"
-    title="Add a link"
-    description="Paste a full web address, or leave it empty to remove the current link."
+    :title="$t('editor.linkTitle')"
+    :description="$t('editor.linkDescription')"
     width="sm"
   >
     <Input
@@ -227,8 +234,8 @@ onBeforeUnmount(() => editor.value?.destroy())
       @keydown.enter="applyLink"
     />
     <template #footer>
-      <Button variant="ghost" @click="linkOpen = false">Cancel</Button>
-      <Button @click="applyLink">Apply link</Button>
+      <Button variant="ghost" @click="linkOpen = false">{{ $t("common.cancel") }}</Button>
+      <Button @click="applyLink">{{ $t("editor.applyLink") }}</Button>
     </template>
   </Dialog>
 </template>

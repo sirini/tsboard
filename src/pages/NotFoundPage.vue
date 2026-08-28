@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button"
 </script>
 <template>
   <div class="py-16">
-    <EmptyState title="Page not found" message="The link may be old, or the page may have moved."
+    <EmptyState :title="$t('errors.notFound')" :message="$t('errors.notFoundDescription')"
       ><Button as-child
-        ><RouterLink to="/"><Home />Go home</RouterLink></Button
+        ><RouterLink to="/"><Home />{{ $t("errors.goHome") }}</RouterLink></Button
       ></EmptyState
     >
   </div>

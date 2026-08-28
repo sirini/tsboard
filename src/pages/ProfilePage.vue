@@ -11,6 +11,7 @@ import {
   Trash2,
 } from "lucide-vue-next"
 import { computed, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { toast } from "vue-sonner"
 import { authApi } from "@/api/auth"
@@ -25,13 +26,14 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog } from "@/components/ui/dialog"
-import { formatDate, recoverChars } from "@/lib/utils"
+import { formatDate, plainText, recoverChars } from "@/lib/utils"
 import type { WriterLatestComment, WriterLatestPost } from "@/types/board"
 import type { UserInfo } from "@/types/user"
 import { useAuthStore } from "@/stores/auth"
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const auth = useAuthStore()
 const profile = ref<UserInfo | null>(null)
 const posts = ref<WriterLatestPost[]>([])
@@ -84,14 +86,14 @@ const toggleBlock = async () => {
   const response = await authApi.block(profile.value.uid, next)
   if (!response.success) return toast.error(response.error)
   blockedByMe.value = next
-  toast.success(next ? "Member blocked." : "Member unblocked.")
+  toast.success(next ? t("profile.blockedMember") : t("profile.unblockedMember"))
 }
 
 const deleteAccount = async () => {
   const response = await authApi.deleteAccount()
   if (!response.success) return toast.error(response.error)
   auth.expire()
-  toast.success("Your account and connected data were deleted.")
+  toast.success(t("profile.deleted"))
   await router.push("/")
 }
 
@@ -100,7 +102,7 @@ watch(userUid, load, { immediate: true })
 
 <template>
   <PageLoading v-if="loading" />
-  <EmptyState v-else-if="error || !profile" title="Profile unavailable" :message="error" />
+  <EmptyState v-else-if="error || !profile" :title="$t('profile.unavailable')" :message="error" />
   <div v-else class="space-y-4">
     <Card class="overflow-hidden"
       ><div class="h-24 bg-gradient-to-r from-primary/75 via-primary/45 to-accent" />
@@ -115,29 +117,33 @@ watch(userUid, load, { immediate: true })
             <div class="flex items-center gap-2">
               <h1 class="text-2xl font-bold">{{ profile.name }}</h1>
               <Badge v-if="profile.admin" variant="secondary"
-                ><Shield class="mr-1 size-3" />Admin</Badge
-              ><Badge v-if="profile.blocked" variant="destructive">Blocked</Badge>
+                ><Shield class="mr-1 size-3" />{{ $t("profile.admin") }}</Badge
+              ><Badge v-if="profile.blocked" variant="destructive">{{
+                $t("profile.blocked")
+              }}</Badge>
             </div>
             <p class="mt-1 max-w-xl text-sm text-muted-foreground">
-              {{ profile.signature || "This member has not written a bio yet." }}
+              {{ profile.signature || $t("profile.noBio") }}
             </p>
             <p class="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-              <CalendarDays class="size-4" />Joined {{ formatDate(profile.signup) }} · Level
-              {{ profile.level }}
+              <CalendarDays class="size-4" />{{
+                $t("profile.joined", { date: formatDate(profile.signup), level: profile.level })
+              }}
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
             <Button v-if="isOwn" variant="outline" @click="editOpen = true"
-              ><Edit />Edit profile</Button
+              ><Edit />{{ $t("profile.edit") }}</Button
             ><template v-else-if="auth.isLoggedIn"
-              ><Button variant="outline" @click="chatOpen = true"><Mail />Message</Button
+              ><Button variant="outline" @click="chatOpen = true"
+                ><Mail />{{ $t("profile.message") }}</Button
               ><Button variant="outline" @click="toggleBlock"
-                ><Ban />{{ blockedByMe ? "Unblock" : "Block" }}</Button
+                ><Ban />{{ blockedByMe ? $t("profile.unblock") : $t("profile.block") }}</Button
               ><Button variant="outline" class="text-destructive" @click="reportOpen = true"
-                ><Flag />Report</Button
+                ><Flag />{{ $t("profile.report") }}</Button
               ></template
             ><Button v-if="isOwn" variant="destructive" size="sm" @click="deleteOpen = true"
-              ><Trash2 />Delete account</Button
+              ><Trash2 />{{ $t("profile.deleteAccount") }}</Button
             >
           </div>
         </div></CardContent
@@ -147,7 +153,7 @@ watch(userUid, load, { immediate: true })
       <Card
         ><CardHeader
           ><CardTitle class="flex items-center gap-2"
-            ><Settings class="size-4" />Recent posts</CardTitle
+            ><Settings class="size-4" />{{ $t("profile.recentPosts") }}</CardTitle
           ></CardHeader
         ><CardContent
           ><RouterLink
@@ -157,17 +163,18 @@ watch(userUid, load, { immediate: true })
             class="block border-b py-3 last:border-0 hover:text-primary"
             ><p class="truncate text-sm font-medium">{{ post.title }}</p>
             <p class="mt-1 text-xs text-muted-foreground">
-              t/{{ post.board.id }} · {{ post.comment }} comments · {{ post.like }} votes
+              t/{{ post.board.id }} · {{ $t("post.comments", { count: post.comment }) }} ·
+              {{ $t("profile.votes", { count: post.like }) }}
             </p></RouterLink
           >
           <p v-if="!posts.length" class="py-8 text-center text-sm text-muted-foreground">
-            No recent posts.
+            {{ $t("profile.noRecentPosts") }}
           </p></CardContent
         ></Card
       ><Card
         ><CardHeader
           ><CardTitle class="flex items-center gap-2"
-            ><MessageCircle class="size-4" />Recent comments</CardTitle
+            ><MessageCircle class="size-4" />{{ $t("profile.recentComments") }}</CardTitle
           ></CardHeader
         ><CardContent
           ><RouterLink
@@ -175,13 +182,13 @@ watch(userUid, load, { immediate: true })
             :key="`${comment.postUid}-${comment.submitted}`"
             :to="`/board/${comment.board.id}/${comment.postUid}`"
             class="block border-b py-3 last:border-0 hover:text-primary"
-            ><p class="line-clamp-2 text-sm">{{ comment.content }}</p>
+            ><p class="line-clamp-2 text-sm">{{ plainText(comment.content) }}</p>
             <p class="mt-1 text-xs text-muted-foreground">
-              t/{{ comment.board.id }} · {{ comment.like }} votes
+              t/{{ comment.board.id }} · {{ $t("profile.votes", { count: comment.like }) }}
             </p></RouterLink
           >
           <p v-if="!comments.length" class="py-8 text-center text-sm text-muted-foreground">
-            No recent comments.
+            {{ $t("profile.noRecentComments") }}
           </p></CardContent
         ></Card
       >
@@ -204,16 +211,17 @@ watch(userUid, load, { immediate: true })
   <ChatDialog v-if="profile" v-model="chatOpen" :user-uid="profile.uid" :user-name="profile.name" />
   <Dialog
     v-model="deleteOpen"
-    title="Permanently delete your account?"
-    description="Your account and connected content will be removed."
+    :title="$t('profile.deleteTitle')"
+    :description="$t('profile.deleteDescription')"
     width="sm"
     ><p class="text-sm text-muted-foreground">
-      This cannot be undone. Site backups may retain encrypted or archived copies until their normal
-      expiry.
+      {{ $t("profile.deleteWarning") }}
     </p>
     <template #footer
-      ><Button variant="ghost" @click="deleteOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="deleteAccount">Delete everything</Button></template
+      ><Button variant="ghost" @click="deleteOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="deleteAccount">{{
+        $t("profile.deleteEverything")
+      }}</Button></template
     ></Dialog
   >
 </template>

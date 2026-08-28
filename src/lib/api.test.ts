@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { authApi } from "@/api/auth"
-import { api, apiResourceUrl, ApiHttpError, setSessionExpiredHandler } from "./api"
+import { api, apiResourceUrl, ApiHttpError, setAccessToken, setSessionExpiredHandler } from "./api"
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -11,6 +11,7 @@ const json = (body: unknown, status = 200) =>
 
 describe("API client", () => {
   beforeEach(() => {
+    setAccessToken()
     setSessionExpiredHandler(() => undefined)
   })
 
@@ -18,13 +19,29 @@ describe("API client", () => {
     const fetchMock = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce(json({ code: 2, error: "invalid token" }, 401))
-      .mockResolvedValueOnce(json({ success: true, error: "" }))
+      .mockResolvedValueOnce(json({ success: true, error: "", result: "new-access" }))
       .mockResolvedValueOnce(json({ success: true, result: { uid: 7 } }))
     vi.stubGlobal("fetch", fetchMock)
 
     await expect(authApi.load()).resolves.toEqual({ success: true, result: { uid: 7 } })
     expect(fetchMock).toHaveBeenCalledTimes(3)
     expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/goapi/auth/refresh")
+    expect(new Headers(fetchMock.mock.calls[2]?.[1]?.headers).get("authorization")).toBe(
+      "Bearer new-access",
+    )
+  })
+
+  it("sends a signed-in access token without persisting it in browser storage", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ success: true }))
+    vi.stubGlobal("fetch", fetchMock)
+    setAccessToken("signin-access")
+
+    await api("/auth/load", { retry: false })
+
+    expect(new Headers(fetchMock.mock.calls[0]?.[1]?.headers).get("authorization")).toBe(
+      "Bearer signin-access",
+    )
+    expect(localStorage.length).toBe(0)
   })
 
   it("expires the local session when refresh fails", async () => {

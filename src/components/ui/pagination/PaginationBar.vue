@@ -7,21 +7,22 @@ const emit = defineEmits<{ change: [page: number] }>()
 const pages = computed(() => Math.max(1, Math.ceil(props.total / props.pageSize)))
 </script>
 <template>
-  <nav class="flex items-center justify-center gap-2" aria-label="Pagination">
+  <nav class="flex items-center justify-center gap-2" :aria-label="$t('common.pagination')">
     <Button
       variant="outline"
       size="icon-sm"
       :disabled="page <= 1"
-      aria-label="Previous page"
+      :aria-label="$t('common.previousPage')"
       @click="emit('change', page - 1)"
       ><ChevronLeft /></Button
-    ><span class="min-w-24 text-center text-sm text-muted-foreground"
-      >Page {{ page }} of {{ pages }}</span
+    ><span class="min-w-24 text-center text-sm text-muted-foreground">{{
+      $t("common.pageOf", { page, total: pages })
+    }}</span
     ><Button
       variant="outline"
       size="icon-sm"
       :disabled="page >= pages"
-      aria-label="Next page"
+      :aria-label="$t('common.nextPage')"
       @click="emit('change', page + 1)"
       ><ChevronRight
     /></Button>

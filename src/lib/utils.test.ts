@@ -3,6 +3,7 @@ import {
   boardPath,
   formatBytes,
   formatNumber,
+  plainText,
   recoverChars,
   relativeTime,
   stripTags,
@@ -12,6 +13,7 @@ describe("shared formatting utilities", () => {
   it("recovers escaped text and strips markup", () => {
     expect(recoverChars("A &amp; B &lt; C &gt; D")).toBe("A & B < C > D")
     expect(stripTags("<p>Hello <strong>world</strong></p>")).toBe("Hello world")
+    expect(plainText("&lt;p&gt;Hello&lt;/p&gt;")).toBe("Hello")
   })
 
   it("formats byte and compact number values", () => {

@@ -126,7 +126,9 @@ watch(() => route.fullPath, load, { immediate: true })
           <p class="mt-1 text-sm text-muted-foreground">t/{{ config.id }} · {{ config.info }}</p>
         </div>
         <Button v-if="auth.isLoggedIn" as-child
-          ><RouterLink :to="`/board/${config.id}/write`"><Plus />Create post</RouterLink></Button
+          ><RouterLink :to="`/board/${config.id}/write`"
+            ><Plus />{{ $t("home.createPost") }}</RouterLink
+          ></Button
         >
       </div>
     </section>
@@ -134,37 +136,43 @@ watch(() => route.fullPath, load, { immediate: true })
       ><CardContent class="flex flex-col gap-2 p-2 sm:flex-row"
         ><form class="flex flex-1 gap-2" @submit.prevent="search">
           <SelectField v-model="option" class="w-32"
-            ><option :value="SEARCH.TITLE">Title</option>
-            <option :value="SEARCH.CONTENT">Content</option>
-            <option :value="SEARCH.WRITER">Author</option>
-            <option :value="SEARCH.TAG">Tag</option>
-            <option :value="SEARCH.CATEGORY">Category</option></SelectField
+            ><option :value="SEARCH.TITLE">{{ $t("search.title") }}</option>
+            <option :value="SEARCH.CONTENT">{{ $t("search.content") }}</option>
+            <option :value="SEARCH.WRITER">{{ $t("search.author") }}</option>
+            <option :value="SEARCH.TAG">{{ $t("search.tag") }}</option>
+            <option :value="SEARCH.CATEGORY">{{ $t("search.category") }}</option></SelectField
           >
           <div class="relative flex-1">
             <Search
               class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            /><Input v-model="keyword" class="pl-9" placeholder="Search this community" />
+            /><Input
+              v-model="keyword"
+              class="pl-9"
+              :placeholder="$t('search.communityPlaceholder')"
+            />
           </div>
-          <Button type="submit" variant="secondary">Search</Button>
+          <Button type="submit" variant="secondary">{{ $t("common.search") }}</Button>
         </form></CardContent
       ></Card
     >
     <div v-if="route.params.keyword" class="flex items-center gap-2 text-sm">
       <Badge variant="secondary"><Hash class="mr-1 size-3" />{{ route.params.keyword }}</Badge
       ><Button variant="link" size="sm" as-child
-        ><RouterLink :to="`/board/${id}`">Clear search</RouterLink></Button
+        ><RouterLink :to="`/board/${id}`">{{ $t("search.clear") }}</RouterLink></Button
       >
     </div>
     <PageLoading v-if="loading" />
-    <EmptyState v-else-if="error" title="Community unavailable" :message="error"
-      ><Button variant="outline" @click="load">Try again</Button></EmptyState
+    <EmptyState v-else-if="error" :title="$t('board.unavailable')" :message="error"
+      ><Button variant="outline" @click="load">{{ $t("common.tryAgain") }}</Button></EmptyState
     >
     <EmptyState
       v-else-if="!entries.length"
-      title="Nothing here yet"
-      message="Be the first person to start a thread in this community."
+      :title="$t('board.empty')"
+      :message="$t('board.emptyDescription')"
       ><Button v-if="auth.isLoggedIn && config" as-child
-        ><RouterLink :to="`/board/${config.id}/write`">Create post</RouterLink></Button
+        ><RouterLink :to="`/board/${config.id}/write`">{{
+          $t("home.createPost")
+        }}</RouterLink></Button
       ></EmptyState
     >
     <div v-else class="space-y-3">

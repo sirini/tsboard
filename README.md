@@ -26,7 +26,8 @@ SSR, SEO와 스킨 생태계를 포함한 완성형 커뮤니티 빌더라면, T
 - 프로필, 사용자 차단·신고, 알림과 1:1 메시지
 - 사용자·게시판·권한·신고·콘텐츠·Resend 단체 메일을 관리하는 대시보드
 - 반응형 모바일 UI와 light/dark 테마
-- 영어 메시지 카탈로그를 사용하는 국제화 기반. v1.3.0 제공 언어는 영어 한 가지입니다.
+- 한국어를 기본으로 제공하며 헤더에서 한국어/영어를 즉시 전환하는 국제화 UI
+- 한국어 Pretendard Variable, 영문 Google Sans Flex와 강조용 Oswald를 자체 호스팅
 
 TSBOARD는 의도적으로 다음 기능을 제공하지 않습니다.
 
@@ -57,8 +58,9 @@ TSBOARD는 의도적으로 다음 기능을 제공하지 않습니다.
 | GOAPI | `127.0.0.1:3003` | DB, 인증, 게시물, 메일과 파일 처리 |
 | MySQL/MariaDB | `3306` | 영속 데이터 |
 
-브라우저는 항상 같은 origin의 `/goapi`를 호출합니다. 액세스 토큰과 갱신 토큰은 GOAPI가 설정한 HttpOnly
-쿠키에 보관되며 `localStorage`에 인증 토큰을 저장하지 않습니다.
+브라우저는 항상 같은 origin의 `/goapi`를 호출합니다. GOAPI 보호 API는 `Authorization` 헤더를 읽으므로
+SPA는 로그인 또는 세션 갱신 응답의 액세스 토큰을 메모리에만 보관해 요청에 주입합니다. 새로고침 뒤에는
+HttpOnly 갱신 쿠키로 액세스 토큰을 다시 발급받습니다. 인증 토큰은 `localStorage`에 저장하지 않습니다.
 
 ## 요구 사항
 
@@ -244,7 +246,7 @@ npm run format:check && npm run lint && npm test && npm run build
 src/
 ├── api/          # GOAPI contract 1 클라이언트
 ├── components/   # shadcn-vue 스타일 UI와 기능 컴포넌트
-├── i18n/         # 영어 메시지 카탈로그
+├── i18n/         # 한국어·영어 메시지 카탈로그
 ├── layouts/      # SPA와 관리자 레이아웃
 ├── lib/          # API 세션, HTML 정화, 포매팅과 테스트
 ├── pages/        # 홈, 인증, 게시판, 프로필과 관리자 화면
@@ -257,9 +259,13 @@ src/
 shadcn-vue는 완성된 런타임 패키지가 아니라 프로젝트가 소유하는 컴포넌트 코드 방식으로 사용합니다.
 `src/components/ui`를 수정하면 TSBOARD의 고정 UI가 바뀌며 별도 스킨 레이어는 없습니다.
 
+본문 글꼴은 현재 언어에 따라 Pretendard Variable 또는 Google Sans Flex를 사용합니다. 로고와 작은 대문자
+레이블에는 Oswald를 적용하며, 모든 woff2를 `src/assets/fonts`에서 제공해 Google Fonts에 런타임 요청을
+보내지 않습니다.
+
 ## 보안과 데이터
 
-- API 요청은 `credentials: same-origin`으로만 인증 쿠키를 전송합니다.
+- API 요청은 `credentials: same-origin`으로 갱신 쿠키를 전송하고 메모리의 액세스 토큰을 Bearer 헤더에 넣습니다.
 - 401 응답은 한 번의 공유 refresh 요청으로 병합하며, 실패하면 로그인 화면으로 이동합니다.
 - 게시물과 댓글 HTML은 DOMPurify로 정화한 뒤 렌더링합니다.
 - 외부 링크에는 `noopener noreferrer`를 적용합니다.
@@ -278,4 +284,6 @@ shadcn-vue는 완성된 런타임 패키지가 아니라 프로젝트가 소유�
 
 ## 라이선스
 
-[MIT License](./LICENSE)
+애플리케이션 코드는 [MIT License](./LICENSE)를 따릅니다. 포함된 글꼴의 라이선스는
+`src/assets/fonts/LICENSE-Pretendard.txt`, `OFL-GoogleSansFlex.txt`, `OFL-Oswald.txt`에서 각각 확인할 수
+있습니다.

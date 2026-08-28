@@ -45,10 +45,10 @@ watch(open, (value) => {
 <template>
   <Dialog
     v-model="open"
-    :title="`Message ${userName}`"
-    description="Private messages stay between participants and site operators."
+    :title="$t('profile.messageTitle', { name: userName })"
+    :description="$t('profile.messageDescription')"
     ><div ref="list" class="max-h-96 space-y-3 overflow-y-auto rounded-lg bg-muted/35 p-3">
-      <div v-if="loading" class="py-10 text-center"><Spinner label="Loading messages" /></div>
+      <div v-if="loading" class="py-10 text-center"><Spinner :label="$t('inbox.loading')" /></div>
       <div
         v-for="item in messages"
         :key="item.uid"
@@ -70,15 +70,14 @@ watch(open, (value) => {
         v-if="!loading && !messages.length"
         class="py-10 text-center text-sm text-muted-foreground"
       >
-        No messages yet.
+        {{ $t("profile.noMessages") }}
       </p>
     </div>
     <form class="mt-3 flex gap-2" @submit.prevent="send">
-      <Input v-model="message" autocomplete="off" placeholder="Write a message" /><Button
-        type="submit"
-        size="icon"
-        aria-label="Send"
-        ><Send
-      /></Button></form
+      <Input
+        v-model="message"
+        autocomplete="off"
+        :placeholder="$t('profile.writeMessage')"
+      /><Button type="submit" size="icon" :aria-label="$t('common.send')"><Send /></Button></form
   ></Dialog>
 </template>

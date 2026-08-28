@@ -21,6 +21,11 @@ export class ApiHttpError extends Error {
 
 let refreshPromise: Promise<void> | null = null
 let onSessionExpired: (() => void | Promise<void>) | null = null
+let accessToken = ""
+
+export const setAccessToken = (token = "") => {
+  accessToken = token
+}
 
 export const setSessionExpiredHandler = (handler: () => void | Promise<void>) => {
   onSessionExpired = handler
@@ -41,6 +46,7 @@ export const apiResourceUrl = (path: string) =>
 
 const createRequest = (options: ApiOptions): RequestInit => {
   const headers = new Headers({ Accept: "application/json" })
+  if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`)
   let body = options.body as BodyInit | null | undefined
   if (
     body &&
@@ -70,11 +76,15 @@ const parseResponse = async <T>(response: Response): Promise<T> => {
 
 const refreshSession = async () => {
   const response = await fetch(createUrl("/auth/refresh"), createRequest({ method: "POST" }))
-  const data = await parseResponse<{ success: boolean; error: string }>(response)
-  if (!data.success) throw new ApiHttpError(401, data.error || "Session refresh failed", data)
+  const data = await parseResponse<{ success: boolean; error: string; result?: unknown }>(response)
+  if (!data.success || typeof data.result !== "string" || !data.result) {
+    throw new ApiHttpError(401, data.error || "Session refresh failed", data)
+  }
+  setAccessToken(data.result)
 }
 
 const expireSession = async () => {
+  setAccessToken()
   if (onSessionExpired) await onSessionExpired()
 }
 

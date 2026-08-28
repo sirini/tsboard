@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { userAdminApi } from "@/api/admin"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import type { AdminUserInput } from "@/types/admin"
 
 const props = defineProps<{ userUid?: number }>()
+const { t } = useI18n()
 const emit = defineEmits<{ saved: [] }>()
 const open = defineModel<boolean>({ required: true })
 const loading = ref(false)
@@ -73,7 +75,7 @@ const submit = async () => {
       ? await userAdminApi.modify({ ...input, userUid: props.userUid })
       : await userAdminApi.create(input)
     if (!response.success) return toast.error(response.error)
-    toast.success(props.userUid ? "User updated." : "User created.")
+    toast.success(props.userUid ? t("admin.userUpdated") : t("admin.userCreated"))
     open.value = false
     emit("saved")
   } finally {
@@ -87,11 +89,11 @@ watch(open, (value) => {
 <template>
   <Dialog
     v-model="open"
-    :title="userUid ? 'Edit user' : 'Create user'"
-    description="Administrative account changes take effect immediately."
+    :title="userUid ? $t('admin.editUser') : $t('admin.createUser')"
+    :description="$t('admin.userChangeDescription')"
     ><form class="grid gap-4 sm:grid-cols-2" @submit.prevent="submit">
       <div class="space-y-2 sm:col-span-2">
-        <Label for="user-email">Email</Label
+        <Label for="user-email">{{ $t("common.email") }}</Label
         ><Input
           id="user-email"
           v-model="form.id"
@@ -101,11 +103,13 @@ watch(open, (value) => {
         />
       </div>
       <div class="space-y-2">
-        <Label for="user-name">Display name</Label
+        <Label for="user-name">{{ $t("auth.displayName") }}</Label
         ><Input id="user-name" v-model="form.name" required minlength="2" />
       </div>
       <div class="space-y-2">
-        <Label for="user-password">{{ userUid ? "New password (optional)" : "Password" }}</Label
+        <Label for="user-password">{{
+          userUid ? `${$t("auth.newPassword")} (${$t("profile.optional")})` : $t("common.password")
+        }}</Label
         ><Input
           id="user-password"
           v-model="form.password"
@@ -115,26 +119,26 @@ watch(open, (value) => {
         />
       </div>
       <div class="space-y-2">
-        <Label for="user-level">Level</Label
+        <Label for="user-level">{{ $t("admin.level") }}</Label
         ><Input id="user-level" v-model="form.level" type="number" min="1" max="10" />
       </div>
       <div class="space-y-2">
-        <Label for="user-points">Points</Label
+        <Label for="user-points">{{ $t("admin.points") }}</Label
         ><Input id="user-points" v-model="form.point" type="number" />
       </div>
       <div class="space-y-2 sm:col-span-2">
-        <Label for="user-signature">Bio</Label
+        <Label for="user-signature">{{ $t("admin.bio") }}</Label
         ><Textarea id="user-signature" v-model="form.signature" />
       </div>
       <div class="space-y-2 sm:col-span-2">
-        <Label for="user-profile">Profile photo</Label
+        <Label for="user-profile">{{ $t("profile.photo") }}</Label
         ><Input id="user-profile" type="file" accept="image/*" @change="choose" />
       </div>
     </form>
     <template #footer
-      ><Button variant="ghost" @click="open = false">Cancel</Button
+      ><Button variant="ghost" @click="open = false">{{ $t("common.cancel") }}</Button
       ><Button :disabled="loading" @click="submit">{{
-        loading ? "Saving…" : "Save user"
+        loading ? $t("auth.saving") : $t("admin.saveUser")
       }}</Button></template
     ></Dialog
   >

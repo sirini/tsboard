@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { authApi } from "@/api/auth"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
 const props = defineProps<{ userUid: number; userName: string }>()
+const { t } = useI18n()
 const emit = defineEmits<{ reported: [blocked: boolean] }>()
 const open = defineModel<boolean>({ required: true })
 const content = ref("")
@@ -24,7 +26,7 @@ const load = async () => {
 const submit = async () => {
   const response = await authApi.report(props.userUid, content.value.trim(), blocked.value)
   if (!response.success) return toast.error(response.error)
-  toast.success("Report sent to the moderation team.")
+  toast.success(t("profile.reportSent"))
   emit("reported", blocked.value)
   open.value = false
 }
@@ -35,29 +37,29 @@ watch(open, (value) => {
 <template>
   <Dialog
     v-model="open"
-    :title="`Report ${userName}`"
-    description="Reports are reviewed by site administrators."
+    :title="$t('profile.reportTitle', { name: userName })"
+    :description="$t('profile.reportDescription')"
     width="sm"
     ><div v-if="alreadyReported" class="mb-4 rounded-md bg-muted p-3 text-sm text-muted-foreground">
-      You have already reported this member. You may update your block preference separately.
+      {{ $t("profile.alreadyReported") }}
     </div>
     <div class="space-y-4">
       <div class="space-y-2">
-        <Label for="report-reason">What happened?</Label
+        <Label for="report-reason">{{ $t("profile.whatHappened") }}</Label
         ><Textarea
           id="report-reason"
           v-model="content"
           required
-          placeholder="Provide enough context for a moderator."
+          :placeholder="$t('profile.reportPlaceholder')"
         />
       </div>
-      <CheckboxField v-model="blocked" :label="`Also hide content from ${userName}`" />
+      <CheckboxField v-model="blocked" :label="$t('profile.alsoBlock', { name: userName })" />
     </div>
     <template #footer
-      ><Button variant="ghost" @click="open = false">Cancel</Button
-      ><Button variant="destructive" :disabled="!content.trim()" @click="submit"
-        >Send report</Button
-      ></template
+      ><Button variant="ghost" @click="open = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" :disabled="!content.trim()" @click="submit">{{
+        $t("profile.sendReport")
+      }}</Button></template
     ></Dialog
   >
 </template>

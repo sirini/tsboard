@@ -48,10 +48,10 @@ const submit = () => {
           class="font-medium text-foreground hover:underline"
           >{{ item.writer.name }}</RouterLink
         ><span>· {{ relativeTime(item.submitted) }}</span
-        ><span v-if="item.modified">· edited</span>
+        ><span v-if="item.modified">· {{ $t("comment.edited") }}</span>
       </div>
       <p v-if="item.status < 0" class="my-3 text-sm italic text-muted-foreground">
-        [comment removed]
+        [{{ $t("comment.removed") }}]
       </p>
       <HtmlContent v-else :html="item.content" class="my-2 text-sm" />
       <div v-if="item.status >= 0" class="flex flex-wrap items-center gap-1">
@@ -61,30 +61,39 @@ const submit = () => {
           :disabled="!currentUserUid"
           horizontal
           @toggle="emit('vote', item)"
-        /><Button variant="ghost" size="sm" @click="begin('reply')"><MessageCircle />Reply</Button
+        /><Button variant="ghost" size="sm" @click="begin('reply')"
+          ><MessageCircle />{{ $t("comment.reply") }}</Button
         ><Button
           v-if="currentUserUid === item.writer.uid"
           variant="ghost"
           size="sm"
           @click="begin('edit')"
-          ><Pencil />Edit</Button
+          ><Pencil />{{ $t("common.edit") }}</Button
         ><Button
           v-if="currentUserUid === item.writer.uid || isAdmin"
           variant="ghost"
           size="sm"
           class="text-destructive"
           @click="emit('remove', item.uid)"
-          ><Trash2 />Remove</Button
+          ><Trash2 />{{ $t("common.remove") }}</Button
         ><MoreHorizontal class="size-4 text-muted-foreground" />
       </div>
       <form v-if="mode" class="mt-3 space-y-2" @submit.prevent="submit">
         <Textarea
           v-model="text"
-          :placeholder="mode === 'reply' ? `Reply to ${item.writer.name}` : 'Edit your comment'"
+          :placeholder="
+            mode === 'reply'
+              ? $t('comment.replyTo', { name: item.writer.name })
+              : $t('comment.editPlaceholder')
+          "
         />
         <div class="flex justify-end gap-2">
-          <Button type="button" variant="ghost" size="sm" @click="mode = null">Cancel</Button
-          ><Button type="submit" size="sm">{{ mode === "reply" ? "Reply" : "Save" }}</Button>
+          <Button type="button" variant="ghost" size="sm" @click="mode = null">{{
+            $t("common.cancel")
+          }}</Button
+          ><Button type="submit" size="sm">{{
+            mode === "reply" ? $t("comment.reply") : $t("common.save")
+          }}</Button>
         </div>
       </form>
     </div>

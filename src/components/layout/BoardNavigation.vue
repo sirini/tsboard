@@ -20,9 +20,11 @@ const activeId = computed(() => String(route.params.id ?? ""))
 </script>
 
 <template>
-  <nav class="space-y-5 text-sm" aria-label="Communities">
+  <nav class="space-y-5 text-sm" :aria-label="$t('navigation.communities')">
     <div v-for="group in home.groups" :key="group.group">
-      <h2 class="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <h2
+        class="font-label mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+      >
         {{ group.group }}
       </h2>
       <RouterLink
@@ -45,7 +47,7 @@ const activeId = computed(() => String(route.params.id ?? ""))
       </RouterLink>
     </div>
     <p v-if="!home.menuLoading && !home.groups.length" class="px-3 text-sm text-muted-foreground">
-      No communities are available yet.
+      {{ $t("community.none") }}
     </p>
   </nav>
 </template>

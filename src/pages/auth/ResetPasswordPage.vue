@@ -27,21 +27,19 @@ const submit = async () => {
   <div class="mx-auto max-w-md py-10 sm:py-16">
     <Card
       ><CardHeader
-        ><CardTitle>Reset your password</CardTitle
-        ><CardDescription
-          >We will send a secure reset link to your registered email.</CardDescription
-        ></CardHeader
+        ><CardTitle>{{ $t("auth.resetTitle") }}</CardTitle
+        ><CardDescription>{{ $t("auth.resetDescription") }}</CardDescription></CardHeader
       ><CardContent
-        ><Alert v-if="sent" variant="success" title="Check your inbox"
-          >If the address is registered, a password reset message is on its way.</Alert
-        >
+        ><Alert v-if="sent" variant="success" :title="$t('auth.checkInbox')">{{
+          $t("auth.resetSent")
+        }}</Alert>
         <form v-else class="space-y-4" @submit.prevent="submit">
           <div class="space-y-2">
-            <Label for="reset-email">Email</Label
+            <Label for="reset-email">{{ $t("common.email") }}</Label
             ><Input id="reset-email" v-model="email" type="email" autocomplete="email" required />
           </div>
           <Button type="submit" class="w-full" :disabled="loading"
-            ><Mail />{{ loading ? "Sending…" : "Send reset link" }}</Button
+            ><Mail />{{ loading ? $t("auth.sending") : $t("auth.sendReset") }}</Button
           >
         </form></CardContent
       ></Card

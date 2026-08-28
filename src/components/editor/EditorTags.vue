@@ -29,16 +29,18 @@ const add = (value = tagText.value) => {
 
 <template>
   <div class="space-y-2">
-    <Label for="tags">Tags</Label>
+    <Label for="tags">{{ $t("editor.tags") }}</Label>
     <div class="flex gap-2">
       <Input
         id="tags"
         v-model="tagText"
-        placeholder="Add a tag"
+        :placeholder="$t('editor.tagPlaceholder')"
         @input="search"
         @keydown.enter.prevent="add()"
       />
-      <Button type="button" variant="secondary" @click="add()"><Hash />Add</Button>
+      <Button type="button" variant="secondary" @click="add()"
+        ><Hash />{{ $t("editor.add") }}</Button
+      >
     </div>
     <div v-if="suggestions.length" class="flex flex-wrap gap-2">
       <button v-for="suggestion in suggestions" :key="suggestion.uid" @click="add(suggestion.name)">
@@ -48,7 +50,7 @@ const add = (value = tagText.value) => {
     <div class="flex flex-wrap gap-2">
       <Badge v-for="(tag, index) in tags" :key="tag" variant="secondary">
         #{{ tag }}
-        <button class="ml-1" aria-label="Remove tag" @click="tags.splice(index, 1)">
+        <button class="ml-1" :aria-label="$t('editor.removeTag')" @click="tags.splice(index, 1)">
           <X class="size-3" />
         </button>
       </Badge>

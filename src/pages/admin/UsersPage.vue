@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Edit, KeyRound, Plus, Search, Trash2 } from "lucide-vue-next"
 import { onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { userAdminApi } from "@/api/admin"
 import AdminPermissionDialog from "@/components/admin/AdminPermissionDialog.vue"
@@ -30,6 +31,7 @@ import { SEARCH, type Search as SearchType } from "@/types/common"
 import type { AdminUser } from "@/types/admin"
 
 const users = ref<AdminUser[]>([])
+const { t } = useI18n()
 const total = ref(0)
 const page = ref(1)
 const limit = 20
@@ -85,7 +87,7 @@ const remove = async () => {
   const response = await userAdminApi.remove(selected.value.uid)
   if (!response.success) return toast.error(response.error)
   removeOpen.value = false
-  toast.success("User removed.")
+  toast.success(t("admin.userRemoved"))
   await load()
 }
 const changePage = (value: number) => {
@@ -97,41 +99,45 @@ onMounted(load)
 
 <template>
   <PageHeader
-    eyebrow="Administration"
-    title="Users"
-    description="Create accounts, update profiles, and apply precise capability restrictions."
-    ><Button @click="createUser"><Plus />Create user</Button></PageHeader
+    :eyebrow="$t('admin.eyebrow')"
+    :title="$t('admin.users')"
+    :description="$t('admin.usersDescription')"
+    ><Button @click="createUser"><Plus />{{ $t("admin.createUser") }}</Button></PageHeader
   >
   <Card class="mb-5"
     ><CardContent class="p-3"
       ><form class="flex flex-col gap-2 sm:flex-row" @submit.prevent="search">
         <SelectField v-model="option" class="sm:w-36"
-          ><option :value="SEARCH.USER_NAME">Name</option>
-          <option :value="SEARCH.USER_ID">Email</option>
-          <option :value="SEARCH.USER_LEVEL">Level</option></SelectField
+          ><option :value="SEARCH.USER_NAME">{{ $t("common.name") }}</option>
+          <option :value="SEARCH.USER_ID">{{ $t("common.email") }}</option>
+          <option :value="SEARCH.USER_LEVEL">{{ $t("admin.level") }}</option></SelectField
         >
         <div class="relative flex-1">
           <Search
             class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-          /><Input v-model="keyword" class="pl-9" placeholder="Search users" />
+          /><Input v-model="keyword" class="pl-9" :placeholder="$t('admin.searchUsers')" />
         </div>
-        <CheckboxField v-model="isBlocked" class="self-center" label="Blocked only" /><Button
-          type="submit"
-          variant="secondary"
-          >Search</Button
-        >
+        <CheckboxField
+          v-model="isBlocked"
+          class="self-center"
+          :label="$t('admin.blockedOnly')"
+        /><Button type="submit" variant="secondary">{{ $t("common.search") }}</Button>
       </form></CardContent
     ></Card
   >
   <Card
     ><CardContent class="p-0"
-      ><div v-if="loading" class="py-20 text-center"><Spinner label="Loading users" /></div>
+      ><div v-if="loading" class="py-20 text-center">
+        <Spinner :label="$t('admin.loadingUsers')" />
+      </div>
       <Table v-else
         ><TableHeader
           ><TableRow
-            ><TableHead>User</TableHead><TableHead>Level</TableHead><TableHead>Points</TableHead
-            ><TableHead>Joined</TableHead
-            ><TableHead class="text-right">Actions</TableHead></TableRow
+            ><TableHead>{{ $t("admin.users") }}</TableHead
+            ><TableHead>{{ $t("admin.level") }}</TableHead
+            ><TableHead>{{ $t("admin.points") }}</TableHead
+            ><TableHead>{{ $t("admin.joined") }}</TableHead
+            ><TableHead class="text-right">{{ $t("admin.actions") }}</TableHead></TableRow
           ></TableHeader
         ><TableBody
           ><TableRow v-for="user in users" :key="user.uid"
@@ -158,26 +164,26 @@ onMounted(load)
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Permissions"
+                  :aria-label="$t('admin.permissions')"
                   @click="permissions(user)"
                   ><KeyRound /></Button
                 ><Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Edit user"
+                  :aria-label="$t('admin.editUser')"
                   @click="editUser(user)"
                   ><Edit /></Button
                 ><Button
                   variant="ghost"
                   size="icon-sm"
                   class="text-destructive"
-                  aria-label="Remove user"
+                  :aria-label="$t('admin.removeUser')"
                   @click="askRemove(user)"
                   ><Trash2
                 /></Button></div></TableCell></TableRow></TableBody
       ></Table>
       <div v-if="!loading && !users.length" class="py-14 text-center text-sm text-muted-foreground">
-        No users match this filter.
+        {{ $t("admin.noUsers") }}
       </div>
       <div class="border-t p-4">
         <PaginationBar
@@ -197,12 +203,12 @@ onMounted(load)
   />
   <Dialog
     v-model="removeOpen"
-    :title="`Remove ${selected?.name ?? 'user'}?`"
-    description="The account and connected data will be permanently removed."
+    :title="$t('admin.removeUserTitle', { name: selected?.name ?? $t('admin.users') })"
+    :description="$t('admin.removeUserDescription')"
     width="sm"
     ><template #footer
-      ><Button variant="ghost" @click="removeOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="remove">Remove user</Button></template
+      ><Button variant="ghost" @click="removeOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="remove">{{ $t("admin.removeUser") }}</Button></template
     ></Dialog
   >
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { authApi } from "@/api/auth"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import type { UserPermissionManage } from "@/types/user"
 
 const props = defineProps<{ userUid: number; userName: string }>()
+const { t } = useI18n()
 const open = defineModel<boolean>({ required: true })
 const loading = ref(false)
 const permission = ref<UserPermissionManage>({
@@ -34,7 +36,7 @@ const load = async () => {
 const submit = async () => {
   const response = await authApi.updatePermission({ ...permission.value, userUid: props.userUid })
   if (!response.success) return toast.error(response.error)
-  toast.success("Permissions updated.")
+  toast.success(t("admin.permissionsUpdated"))
   open.value = false
 }
 watch(open, (value) => {
@@ -44,28 +46,33 @@ watch(open, (value) => {
 <template>
   <Dialog
     v-model="open"
-    :title="`Permissions for ${userName}`"
-    description="Turn off only the capabilities required by the moderation decision."
+    :title="$t('admin.permissionTitle', { name: userName })"
+    :description="$t('admin.permissionDescription')"
     ><div class="grid gap-4 sm:grid-cols-2">
-      <CheckboxField v-model="permission.login" label="Can sign in" /><CheckboxField
+      <CheckboxField v-model="permission.login" :label="$t('admin.canSignIn')" /><CheckboxField
         v-model="permission.writePost"
-        label="Can write posts"
-      /><CheckboxField v-model="permission.writeComment" label="Can write comments" /><CheckboxField
+        :label="$t('admin.canWritePosts')"
+      /><CheckboxField
+        v-model="permission.writeComment"
+        :label="$t('admin.canWriteComments')"
+      /><CheckboxField
         v-model="permission.sendChatMessage"
-        label="Can send messages"
-      /><CheckboxField v-model="permission.sendReport" label="Can send reports" />
+        :label="$t('admin.canSendMessages')"
+      /><CheckboxField v-model="permission.sendReport" :label="$t('admin.canSendReports')" />
     </div>
     <div class="mt-5 space-y-2">
-      <Label for="permission-response">Moderator note</Label
+      <Label for="permission-response">{{ $t("admin.moderatorNote") }}</Label
       ><Textarea
         id="permission-response"
         v-model="permission.response"
-        placeholder="Explain the action for the audit trail."
+        :placeholder="$t('admin.moderatorNotePlaceholder')"
       />
     </div>
     <template #footer
-      ><Button variant="ghost" @click="open = false">Cancel</Button
-      ><Button :disabled="loading" @click="submit">Save permissions</Button></template
+      ><Button variant="ghost" @click="open = false">{{ $t("common.cancel") }}</Button
+      ><Button :disabled="loading" @click="submit">{{
+        $t("admin.savePermissions")
+      }}</Button></template
     ></Dialog
   >
 </template>

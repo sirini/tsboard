@@ -41,23 +41,26 @@ const submit = async () => {
 }
 </script>
 <template>
-  <Dialog v-model="open" title="Edit profile" description="Update how other members see you."
+  <Dialog v-model="open" :title="$t('profile.edit')" :description="$t('profile.editDescription')"
     ><form class="space-y-4" @submit.prevent="submit">
       <div class="space-y-2">
-        <Label for="profile-name">Display name</Label
+        <Label for="profile-name">{{ $t("auth.displayName") }}</Label
         ><Input id="profile-name" v-model="displayName" required minlength="2" />
       </div>
       <div class="space-y-2">
-        <Label for="profile-signature">About</Label
+        <Label for="profile-signature">{{ $t("profile.signature") }}</Label
         ><Textarea id="profile-signature" v-model="about" maxlength="500" />
       </div>
       <div class="space-y-2">
-        <Label for="profile-photo">Profile photo</Label
+        <Label for="profile-photo">{{ $t("profile.photo") }}</Label
         ><Input id="profile-photo" type="file" accept="image/*" @change="choose" />
       </div>
       <div class="space-y-2">
         <Label for="profile-password"
-          >New password <span class="font-normal text-muted-foreground">(optional)</span></Label
+          >{{ $t("auth.newPassword") }}
+          <span class="font-normal text-muted-foreground"
+            >({{ $t("profile.optional") }})</span
+          ></Label
         ><Input
           id="profile-password"
           v-model="password"
@@ -67,9 +70,9 @@ const submit = async () => {
       </div>
     </form>
     <template #footer
-      ><Button variant="ghost" @click="open = false">Cancel</Button
+      ><Button variant="ghost" @click="open = false">{{ $t("common.cancel") }}</Button
       ><Button :disabled="auth.loading" @click="submit">{{
-        auth.loading ? "Saving…" : "Save profile"
+        auth.loading ? $t("auth.saving") : $t("profile.saveProfile")
       }}</Button></template
     ></Dialog
   >

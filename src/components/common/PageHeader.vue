@@ -3,7 +3,10 @@ defineProps<{ eyebrow?: string; title: string; description?: string }>()
 </script>
 <template>
   <div class="mb-5">
-    <p v-if="eyebrow" class="mb-1 text-xs font-semibold uppercase tracking-widest text-primary">
+    <p
+      v-if="eyebrow"
+      class="font-label mb-1 text-xs font-semibold uppercase tracking-widest text-primary"
+    >
       {{ eyebrow }}
     </p>
     <div class="flex flex-wrap items-start justify-between gap-3">

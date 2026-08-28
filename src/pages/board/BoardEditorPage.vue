@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { File, Paperclip, Save, Trash2 } from "lucide-vue-next"
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
 import { toast } from "vue-sonner"
 import { editorApi, tradeApi, type EditorInput } from "@/api/editor"
@@ -9,11 +10,12 @@ import PageHeader from "@/components/common/PageHeader.vue"
 import PageLoading from "@/components/common/PageLoading.vue"
 import PostOptions from "@/components/editor/PostOptions.vue"
 import EditorTags from "@/components/editor/EditorTags.vue"
+import EditorRecoveryDialogs from "@/components/editor/EditorRecoveryDialogs.vue"
 import TiptapEditor from "@/components/editor/TiptapEditor.vue"
 import TradeFields from "@/components/editor/TradeFields.vue"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Dialog } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { BoardAttachment, BoardConfig, BoardDraft, TradeForm } from "@/types/board"
@@ -24,6 +26,7 @@ import { TSBOARD } from "../../../tsboard.config"
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const id = computed(() => String(route.params.id))
 const postUid = computed(() => Number(route.params.postUid ?? 0))
 const isEditing = computed(() => postUid.value > 0)
@@ -113,7 +116,7 @@ const loadExisting = async () => {
 const uploadInlineImages = async (targets: File[]) => {
   if (!config.value || uploading.value) return []
   if (targets.reduce((sum, file) => sum + file.size, 0) > TSBOARD.uploadLimit) {
-    toast.error("Those images exceed the upload limit.")
+    toast.error(t("editor.imageLimit"))
     return []
   }
   uploading.value = true
@@ -132,7 +135,7 @@ const uploadInlineImages = async (targets: File[]) => {
 const chooseFiles = (event: Event) => {
   const selected = Array.from((event.target as HTMLInputElement).files ?? [])
   const size = selected.reduce((sum, file) => sum + file.size, 0)
-  if (size > TSBOARD.uploadLimit) toast.error("Attachments exceed the upload limit.")
+  if (size > TSBOARD.uploadLimit) toast.error(t("editor.attachmentLimit"))
   else files.value = [...files.value, ...selected]
   ;(event.target as HTMLInputElement).value = ""
 }
@@ -181,7 +184,7 @@ const submit = async () => {
     title.value.trim().length < 2 ||
     stripTags(content.value).trim().length < 2
   ) {
-    toast.error("Add a title and some content before publishing.")
+    toast.error(t("editor.publishGuide"))
     return
   }
   submitting.value = true
@@ -201,7 +204,7 @@ const submit = async () => {
         ? response.result
         : (response.result as { postUid?: number } | null)?.postUid
     localStorage.removeItem(draftKey.value)
-    toast.success(isEditing.value ? "Post updated." : "Post published.")
+    toast.success(isEditing.value ? t("editor.updated") : t("editor.published"))
     await router.push(`/board/${id.value}/${isEditing.value ? postUid.value : created}`)
   } finally {
     submitting.value = false
@@ -265,26 +268,30 @@ onBeforeUnmount(() => {
 
 <template>
   <PageLoading v-if="loading" />
-  <EmptyState v-else-if="error || !config" title="Editor unavailable" :message="error"
+  <EmptyState v-else-if="error || !config" :title="$t('editor.unavailable')" :message="error"
     ><Button variant="outline" as-child
-      ><RouterLink :to="`/board/${id}`">Back to community</RouterLink></Button
+      ><RouterLink :to="`/board/${id}`">{{ $t("board.back") }}</RouterLink></Button
     ></EmptyState
   >
   <div v-else>
     <PageHeader
-      eyebrow="Create"
-      :title="isEditing ? `Edit post in ${config.name}` : `Post to ${config.name}`"
+      :eyebrow="$t('editor.eyebrow')"
+      :title="
+        isEditing
+          ? $t('editor.editTitle', { name: config.name })
+          : $t('editor.createTitle', { name: config.name })
+      "
       :description="`t/${config.id} · ${config.info}`"
     />
     <Card
       ><CardContent class="space-y-5 p-4 sm:p-6"
         ><div class="space-y-2">
-          <Label for="post-title">Title</Label
+          <Label for="post-title">{{ $t("editor.title") }}</Label
           ><Input
             id="post-title"
             v-model="title"
             maxlength="200"
-            placeholder="An interesting title"
+            :placeholder="$t('editor.titlePlaceholder')"
           />
           <div v-if="titleSuggestions.length" class="rounded-md border bg-popover p-1 text-sm">
             <button
@@ -298,8 +305,11 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="space-y-2">
-          <Label>Body</Label><TiptapEditor v-model="content" :upload-images="uploadInlineImages" />
-          <p v-if="uploading" class="text-xs text-muted-foreground">Uploading images…</p>
+          <Label>{{ $t("editor.body") }}</Label
+          ><TiptapEditor v-model="content" :upload-images="uploadInlineImages" />
+          <p v-if="uploading" class="text-xs text-muted-foreground">
+            {{ $t("editor.uploadingImages") }}
+          </p>
         </div>
         <TradeFields v-if="config.type === BOARD.TRADE" v-model="trade" /><PostOptions
           v-model:category="categoryUid"
@@ -310,14 +320,11 @@ onBeforeUnmount(() => {
         />
         <EditorTags v-model="tags" />
         <div class="space-y-2">
-          <Label>Attachments</Label
+          <Label>{{ $t("editor.attachments") }}</Label
           ><label
             class="flex min-h-24 items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/25 text-sm text-muted-foreground hover:bg-muted/50"
-            ><Paperclip class="size-4" />Choose files<input
-              type="file"
-              multiple
-              class="sr-only"
-              @change="chooseFiles"
+            ><Paperclip class="size-4" />{{ $t("editor.chooseFiles")
+            }}<input type="file" multiple class="sr-only" @change="chooseFiles"
           /></label>
           <div class="divide-y rounded-lg border">
             <div
@@ -337,7 +344,7 @@ onBeforeUnmount(() => {
               class="flex items-center gap-2 p-3 text-sm"
             >
               <File class="size-4" /><span class="min-w-0 flex-1 truncate">{{ file.name }}</span
-              ><Badge variant="outline">Uploaded</Badge
+              ><Badge variant="outline">{{ $t("editor.uploaded") }}</Badge
               ><Button
                 type="button"
                 variant="ghost"
@@ -350,40 +357,27 @@ onBeforeUnmount(() => {
         </div>
         <div class="flex justify-end gap-2 border-t pt-5">
           <Button variant="ghost" as-child
-            ><RouterLink :to="isEditing ? `/board/${id}/${postUid}` : `/board/${id}`"
-              >Cancel</RouterLink
-            ></Button
+            ><RouterLink :to="isEditing ? `/board/${id}/${postUid}` : `/board/${id}`">{{
+              $t("common.cancel")
+            }}</RouterLink></Button
           ><Button :disabled="submitting" @click="submit"
-            ><Save />{{ submitting ? "Saving…" : isEditing ? "Save changes" : "Publish" }}</Button
+            ><Save />{{
+              submitting
+                ? $t("auth.saving")
+                : isEditing
+                  ? $t("editor.saveChanges")
+                  : $t("editor.publish")
+            }}</Button
           >
         </div></CardContent
       ></Card
     >
   </div>
-  <Dialog
-    v-model="draftOpen"
-    title="Restore your draft?"
-    description="TSBOARD saved an unfinished post in this browser."
-    width="sm"
-    ><p class="text-sm text-muted-foreground">
-      Continue where you left off, or discard the local draft and start fresh.
-    </p>
-    <template #footer
-      ><Button variant="ghost" @click="discardDraft">Discard</Button
-      ><Button @click="restoreDraft">Restore draft</Button></template
-    ></Dialog
-  >
-  <Dialog
-    v-model="attachmentRemoveOpen"
-    title="Remove this attachment?"
-    description="The uploaded file will be detached from this post immediately."
-    width="sm"
-  >
-    <template #footer>
-      <Button variant="ghost" @click="attachmentRemoveOpen = false">Cancel</Button>
-      <Button variant="destructive" @click="removeExisting(attachmentRemoveUid)"
-        >Remove attachment</Button
-      >
-    </template>
-  </Dialog>
+  <EditorRecoveryDialogs
+    v-model:draft-open="draftOpen"
+    v-model:attachment-open="attachmentRemoveOpen"
+    @discard="discardDraft"
+    @restore="restoreDraft"
+    @remove-attachment="removeExisting(attachmentRemoveUid)"
+  />
 </template>

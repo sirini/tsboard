@@ -7,6 +7,7 @@ import { Dialog } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import BoardNavigation from "./BoardNavigation.vue"
 import NotificationList from "./NotificationList.vue"
+import LanguageSwitcher from "./LanguageSwitcher.vue"
 import { SEARCH } from "@/types/common"
 import { useAuthStore } from "@/stores/auth"
 import { useHomeStore } from "@/stores/home"
@@ -48,32 +49,37 @@ watch(
 
 <template>
   <header class="sticky top-0 z-40 border-b bg-background/92 backdrop-blur-xl">
-    <div class="mx-auto flex h-14 max-w-[1480px] items-center gap-2 px-3">
+    <div
+      class="mx-auto flex h-auto max-w-[1480px] flex-wrap items-center gap-2 px-3 py-2 sm:h-14 sm:flex-nowrap sm:py-0"
+    >
       <Button
         variant="ghost"
         size="icon"
         class="lg:hidden"
-        aria-label="Open communities"
+        :aria-label="$t('header.openCommunities')"
         @click="mobileOpen = true"
         ><Menu
       /></Button>
-      <RouterLink to="/" class="mr-2 flex shrink-0 items-center gap-2 font-black tracking-tight">
-        <span
-          class="grid size-8 place-items-center rounded-full bg-primary text-sm text-primary-foreground"
-          >T</span
-        >
-        <span class="hidden sm:inline">{{ $t("app.name") }}</span>
+      <RouterLink
+        to="/"
+        class="font-brand mr-1 flex shrink-0 items-center text-base tracking-tight sm:mr-2 sm:text-lg"
+      >
+        <span>{{ $t("app.name") }}</span>
       </RouterLink>
 
-      <form class="mx-auto flex w-full max-w-xl" role="search" @submit.prevent="search">
+      <form
+        class="order-last mx-auto flex w-full max-w-xl sm:order-none"
+        role="search"
+        @submit.prevent="search"
+      >
         <div class="relative w-full">
           <Search
             class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
           /><Input
             v-model="keyword"
             class="rounded-full bg-muted/65 pl-9"
-            aria-label="Search posts"
-            placeholder="Search TSBOARD"
+            :aria-label="$t('header.searchAria')"
+            :placeholder="$t('header.searchPlaceholder')"
           />
         </div>
       </form>
@@ -81,16 +87,18 @@ watch(
       <Button
         variant="ghost"
         size="icon"
-        :aria-label="isDark ? 'Use light theme' : 'Use dark theme'"
+        class="ml-auto sm:ml-0"
+        :aria-label="isDark ? $t('header.lightTheme') : $t('header.darkTheme')"
         @click="toggleTheme"
         ><Sun v-if="isDark" /><Moon v-else
       /></Button>
+      <LanguageSwitcher />
       <Button
         v-if="auth.isLoggedIn"
         variant="ghost"
         size="icon"
         class="relative"
-        aria-label="Notifications"
+        :aria-label="$t('navigation.notifications')"
         @click="showNotifications"
         ><Bell /><span
           v-if="home.unreadCount"
@@ -145,14 +153,14 @@ watch(
   <Dialog
     v-model="mobileOpen"
     :title="$t('navigation.communities')"
-    description="Browse every board."
+    :description="$t('header.communitiesDescription')"
     width="sm"
     ><BoardNavigation @navigate="mobileOpen = false"
   /></Dialog>
   <Dialog
     v-model="notificationsOpen"
     :title="$t('navigation.notifications')"
-    description="Replies, votes, and messages."
+    :description="$t('header.notificationsDescription')"
     width="md"
     ><NotificationList @close="notificationsOpen = false"
   /></Dialog>

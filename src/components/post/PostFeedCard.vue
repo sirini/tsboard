@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Eye, Image as ImageIcon, MessageCircle, Pin, ShoppingBag } from "lucide-vue-next"
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import type { BoardListItem, BoardType, TradeInfo } from "@/types/board"
 import { BOARD, STATUS } from "@/types/board"
 import { Badge } from "@/components/ui/badge"
@@ -17,10 +18,16 @@ const props = defineProps<{
   trade?: TradeInfo
   compact?: boolean
 }>()
+const { locale } = useI18n()
 defineEmits<{ vote: [post: BoardListItem] }>()
 const path = computed(() => `/board/${props.boardId}/${props.post.uid}`)
 const excerpt = computed(() => stripTags(props.post.content).slice(0, 260))
 const isGallery = computed(() => props.boardType === BOARD.GALLERY)
+const formatPrice = (trade: TradeInfo) =>
+  new Intl.NumberFormat(locale.value === "ko" ? "ko-KR" : "en-US", {
+    style: "currency",
+    currency: trade.currency || "USD",
+  }).format(trade.price)
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const isGallery = computed(() => props.boardType === BOARD.GALLERY)
       <div class="min-w-0 flex-1 p-3 sm:p-4">
         <div class="mb-2 flex flex-wrap items-center gap-2">
           <Badge v-if="post.status === STATUS.NOTICE" variant="secondary"
-            ><Pin class="mr-1 size-3" />Pinned</Badge
+            ><Pin class="mr-1 size-3" />{{ $t("post.pinned") }}</Badge
           >
           <RouterLink
             v-if="boardName"
@@ -73,14 +80,9 @@ const isGallery = computed(() => props.boardType === BOARD.GALLERY)
         /></RouterLink>
         <div v-if="trade" class="mt-3 flex flex-wrap gap-2 text-sm">
           <Badge variant="outline"
-            ><ShoppingBag class="mr-1 size-3" />{{ trade.brand || "Item" }}</Badge
+            ><ShoppingBag class="mr-1 size-3" />{{ trade.brand || $t("post.item") }}</Badge
           ><Badge variant="secondary">{{
-            trade.priceType === 2
-              ? "Free"
-              : new Intl.NumberFormat("en", {
-                  style: "currency",
-                  currency: trade.currency || "USD",
-                }).format(trade.price)
+            trade.priceType === 2 ? $t("post.free") : formatPrice(trade)
           }}</Badge>
         </div>
         <div class="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
@@ -95,11 +97,13 @@ const isGallery = computed(() => props.boardType === BOARD.GALLERY)
           <RouterLink
             :to="path"
             class="inline-flex items-center gap-1 rounded-md px-2 py-1.5 font-medium hover:bg-accent"
-            ><MessageCircle class="size-4" />{{ formatNumber(post.comment) }} comments</RouterLink
+            ><MessageCircle class="size-4" />{{
+              $t("post.comments", { count: formatNumber(post.comment) })
+            }}</RouterLink
           ><span class="inline-flex items-center gap-1 px-2 py-1.5"
             ><Eye class="size-4" />{{ formatNumber(post.hit) }}</span
           ><span v-if="post.cover" class="inline-flex items-center gap-1 px-2 py-1.5"
-            ><ImageIcon class="size-4" />Media</span
+            ><ImageIcon class="size-4" />{{ $t("post.media") }}</span
           >
         </div>
       </div>

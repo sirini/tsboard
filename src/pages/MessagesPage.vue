@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Mail, MessageCircle } from "lucide-vue-next"
 import { onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { chatApi } from "@/api/chat"
 import EmptyState from "@/components/common/EmptyState.vue"
@@ -14,6 +15,7 @@ import { recoverChars, relativeTime } from "@/lib/utils"
 import type { ChatItem } from "@/types/content"
 
 const conversations = ref<ChatItem[]>([])
+const { t } = useI18n()
 const loading = ref(true)
 const chatOpen = ref(false)
 const selected = ref<ChatItem | null>(null)
@@ -25,7 +27,7 @@ const load = async () => {
     if (!response.success) return toast.error(response.error)
     conversations.value = response.result
   } catch (error) {
-    toast.error(`Messages could not be loaded: ${String(error)}`)
+    toast.error(t("inbox.loadFailed", { error: String(error) }))
   } finally {
     loading.value = false
   }
@@ -41,13 +43,13 @@ onMounted(load)
 
 <template>
   <PageHeader
-    eyebrow="Inbox"
-    title="Messages"
-    description="Continue private conversations with community members."
+    :eyebrow="$t('inbox.eyebrow')"
+    :title="$t('inbox.title')"
+    :description="$t('inbox.description')"
   />
   <Card>
     <CardContent class="p-0">
-      <div v-if="loading" class="py-20 text-center"><Spinner label="Loading messages" /></div>
+      <div v-if="loading" class="py-20 text-center"><Spinner :label="$t('inbox.loading')" /></div>
       <div v-else-if="conversations.length" class="divide-y">
         <button
           v-for="item in conversations"
@@ -73,11 +75,11 @@ onMounted(load)
       <EmptyState
         v-else
         class="border-0"
-        title="Your inbox is empty"
-        message="Open a member profile to start a private conversation."
+        :title="$t('inbox.empty')"
+        :message="$t('inbox.emptyDescription')"
       >
         <Button as-child variant="outline"
-          ><RouterLink to="/"><Mail />Browse posts</RouterLink></Button
+          ><RouterLink to="/"><Mail />{{ $t("inbox.browse") }}</RouterLink></Button
         >
       </EmptyState>
     </CardContent>

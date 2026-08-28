@@ -42,7 +42,7 @@ const widths = { sm: "sm:max-w-sm", md: "sm:max-w-lg", lg: "sm:max-w-2xl", xl: "
         </div>
         <DialogClose
           class="absolute right-4 top-4 rounded-sm p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-          aria-label="Close dialog"
+          :aria-label="$t('common.close')"
           ><X class="size-4"
         /></DialogClose>
       </DialogContent>

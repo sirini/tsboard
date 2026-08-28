@@ -53,47 +53,61 @@ onMounted(load)
 
 <template>
   <PageHeader
-    eyebrow="Administration"
-    title="Overview"
-    description="A live view of community activity and system compatibility."
+    :eyebrow="$t('admin.eyebrow')"
+    :title="$t('admin.overview')"
+    :description="$t('admin.dashboardDescription')"
   />
-  <div v-if="loading" class="py-20 text-center"><Spinner label="Loading dashboard" /></div>
-  <Alert v-else-if="error" variant="destructive" title="Dashboard unavailable">{{ error }}</Alert>
+  <div v-if="loading" class="py-20 text-center">
+    <Spinner :label="$t('admin.loadingDashboard')" />
+  </div>
+  <Alert v-else-if="error" variant="destructive" :title="$t('admin.dashboardUnavailable')">{{
+    error
+  }}</Alert>
   <div v-else-if="stats" class="space-y-5">
     <Alert
       v-if="
         goapi && (goapi.version !== TSBOARD.version || goapi.apiContract !== TSBOARD.apiContract)
       "
       variant="destructive"
-      title="Frontend and backend do not match"
-      >TSBOARD {{ TSBOARD.version }} expects GOAPI {{ TSBOARD.version }} contract
-      {{ TSBOARD.apiContract }}, but this server reports {{ goapi.version }} contract
-      {{ goapi.apiContract }}.</Alert
+      :title="$t('admin.versionMismatch')"
+      >{{
+        $t("admin.versionMismatchDescription", {
+          frontend: TSBOARD.version,
+          expected: TSBOARD.version,
+          contract: TSBOARD.apiContract,
+          backend: goapi.version,
+          backendContract: goapi.apiContract,
+        })
+      }}</Alert
     >
     <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-      <DashboardMetric label="Visits" :series="stats.visit" :icon="Users" /><DashboardMetric
-        label="Members"
+      <DashboardMetric
+        :label="$t('admin.visits')"
+        :series="stats.visit"
+        :icon="Users"
+      /><DashboardMetric
+        :label="$t('admin.members')"
         :series="stats.member"
         :icon="UserPlus"
       /><DashboardMetric
-        label="Posts"
+        :label="$t('admin.posts')"
         :series="stats.post"
         :icon="MessagesSquare"
       /><DashboardMetric
-        label="Comments"
+        :label="$t('admin.comments')"
         :series="stats.reply"
         :icon="MessageCircle"
-      /><DashboardMetric label="Files" :series="stats.file" :icon="Files" /><DashboardMetric
-        label="Images"
-        :series="stats.image"
-        :icon="FileImage"
-      />
+      /><DashboardMetric
+        :label="$t('admin.files')"
+        :series="stats.file"
+        :icon="Files"
+      /><DashboardMetric :label="$t('admin.images')" :series="stats.image" :icon="FileImage" />
     </div>
     <div class="grid gap-4 lg:grid-cols-3">
       <Card
         ><CardHeader
           ><CardTitle class="flex items-center gap-2"
-            ><Server class="size-4" />Runtime</CardTitle
+            ><Server class="size-4" />{{ $t("admin.runtime") }}</CardTitle
           ></CardHeader
         ><CardContent class="space-y-3 text-sm"
           ><div class="flex justify-between">
@@ -103,20 +117,21 @@ onMounted(load)
           <div class="flex justify-between">
             <span class="text-muted-foreground">GOAPI</span
             ><Badge :variant="goapi?.version === TSBOARD.version ? 'secondary' : 'destructive'">{{
-              goapi?.version ?? "Unavailable"
+              goapi?.version ?? $t("admin.unavailable")
             }}</Badge>
           </div>
           <div class="flex justify-between">
-            <span class="text-muted-foreground">API contract</span
+            <span class="text-muted-foreground">{{ $t("admin.apiContract") }}</span
             ><Badge variant="outline">{{ goapi?.apiContract ?? "—" }}</Badge>
           </div>
           <div class="flex justify-between">
-            <span class="text-muted-foreground">Uploads</span
+            <span class="text-muted-foreground">{{ $t("admin.uploads") }}</span
             ><strong>{{ formatBytes(usage) }}</strong>
           </div></CardContent
         ></Card
       ><Card
-        ><CardHeader><CardTitle>Newest groups</CardTitle></CardHeader
+        ><CardHeader
+          ><CardTitle>{{ $t("admin.newestGroups") }}</CardTitle></CardHeader
         ><CardContent
           ><RouterLink
             v-for="group in items?.groups"
@@ -128,7 +143,8 @@ onMounted(load)
           ></CardContent
         ></Card
       ><Card
-        ><CardHeader><CardTitle>Newest members</CardTitle></CardHeader
+        ><CardHeader
+          ><CardTitle>{{ $t("admin.newestMembers") }}</CardTitle></CardHeader
         ><CardContent
           ><RouterLink
             v-for="member in items?.members"

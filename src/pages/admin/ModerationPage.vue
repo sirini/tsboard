@@ -127,9 +127,9 @@ onMounted(load)
 
 <template>
   <PageHeader
-    eyebrow="Administration"
-    title="Moderation"
-    description="Review recent content, remove abuse, and resolve member reports."
+    :eyebrow="$t('admin.eyebrow')"
+    :title="$t('admin.moderation')"
+    :description="$t('admin.moderationDescription')"
   />
   <Card
     ><CardContent class="p-3"
@@ -157,29 +157,29 @@ onMounted(load)
       <form class="flex flex-col gap-2 sm:flex-row" @submit.prevent="search">
         <SelectField v-model="option" class="sm:w-40"
           ><template v-if="tab === 'posts'"
-            ><option :value="SEARCH.TITLE">Title</option>
-            <option :value="SEARCH.WRITER">Author</option></template
+            ><option :value="SEARCH.TITLE">{{ $t("search.title") }}</option>
+            <option :value="SEARCH.WRITER">{{ $t("search.author") }}</option></template
           ><template v-else-if="tab === 'comments'"
-            ><option :value="SEARCH.CONTENT">Content</option>
-            <option :value="SEARCH.WRITER">Author</option></template
+            ><option :value="SEARCH.CONTENT">{{ $t("search.content") }}</option>
+            <option :value="SEARCH.WRITER">{{ $t("search.author") }}</option></template
           ><template v-else
-            ><option :value="SEARCH.REPORT_TO">Reported user</option>
-            <option :value="SEARCH.REPORT_FROM">Reporter</option>
-            <option :value="SEARCH.REPORT_REQUEST">Request</option>
-            <option :value="SEARCH.REPORT_RESPONSE">Response</option></template
+            ><option :value="SEARCH.REPORT_TO">{{ $t("admin.reportedUser") }}</option>
+            <option :value="SEARCH.REPORT_FROM">{{ $t("admin.reporter") }}</option>
+            <option :value="SEARCH.REPORT_REQUEST">{{ $t("admin.request") }}</option>
+            <option :value="SEARCH.REPORT_RESPONSE">{{ $t("admin.response") }}</option></template
           ></SelectField
         >
         <div class="relative flex-1">
           <Search
             class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-          /><Input v-model="keyword" class="pl-9" placeholder="Search moderation records" />
+          /><Input v-model="keyword" class="pl-9" :placeholder="$t('admin.searchRecords')" />
         </div>
         <CheckboxField
           v-if="tab === 'reports'"
           v-model="solved"
           class="self-center"
           label="Resolved"
-        /><Button type="submit">Search</Button>
+        /><Button type="submit">{{ $t("common.search") }}</Button>
       </form></CardContent
     ></Card
   >
@@ -191,8 +191,10 @@ onMounted(load)
       <Table v-else-if="tab !== 'reports' && rows.length"
         ><TableHeader
           ><TableRow
-            ><TableHead class="w-10" /><TableHead>Content</TableHead><TableHead>Community</TableHead
-            ><TableHead>Author</TableHead><TableHead>Date</TableHead></TableRow
+            ><TableHead class="w-10" /><TableHead>{{ $t("admin.content") }}</TableHead
+            ><TableHead>{{ $t("admin.community") }}</TableHead
+            ><TableHead>{{ $t("admin.author") }}</TableHead
+            ><TableHead>{{ $t("admin.date") }}</TableHead></TableRow
           ></TableHeader
         ><TableBody
           ><TableRow v-for="item in rows" :key="item.uid"
@@ -229,8 +231,10 @@ onMounted(load)
       ><Table v-else-if="tab === 'reports' && reports.length"
         ><TableHeader
           ><TableRow
-            ><TableHead>Reported</TableHead><TableHead>Reporter</TableHead
-            ><TableHead>Request</TableHead><TableHead>Date</TableHead
+            ><TableHead>{{ $t("admin.reportedUser") }}</TableHead
+            ><TableHead>{{ $t("admin.reporter") }}</TableHead
+            ><TableHead>{{ $t("admin.request") }}</TableHead
+            ><TableHead>{{ $t("admin.date") }}</TableHead
             ><TableHead /></TableRow></TableHeader
         ><TableBody
           ><TableRow v-for="report in reports" :key="report.uid"
@@ -251,51 +255,56 @@ onMounted(load)
         ></Table
       ><EmptyState
         v-else
-        title="Queue is clear"
+        :title="$t('admin.queueClear')"
         message="No items match the current moderation filter."
       />
       <div v-if="tab === 'reports'" class="border-t p-4">
         <PaginationBar :page="page" :total="reportTotal" :page-size="limit" @change="changePage" />
       </div>
       <div v-else-if="rows.length" class="flex justify-center gap-2 border-t p-4">
-        <Button variant="outline" :disabled="page <= 1" @click="changePage(page - 1)"
-          >Previous</Button
-        ><Badge variant="outline" class="px-4">Page {{ page }}</Badge
-        ><Button variant="outline" :disabled="rows.length < limit" @click="changePage(page + 1)"
-          >Next</Button
-        >
+        <Button variant="outline" :disabled="page <= 1" @click="changePage(page - 1)">{{
+          $t("common.previous")
+        }}</Button
+        ><Badge variant="outline" class="px-4">{{ $t("admin.page", { page }) }}</Badge
+        ><Button variant="outline" :disabled="rows.length < limit" @click="changePage(page + 1)">{{
+          $t("common.next")
+        }}</Button>
       </div></CardContent
     ></Card
   >
   <Dialog
     v-model="removeOpen"
-    title="Remove selected content?"
-    :description="`${selected.length} items will be hidden from the community.`"
+    :title="$t('admin.removeSelectedTitle')"
+    :description="$t('admin.removeSelectedDescription', { count: selected.length })"
     width="sm"
     ><template #footer
-      ><Button variant="ghost" @click="removeOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="removeSelected">Remove items</Button></template
+      ><Button variant="ghost" @click="removeOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="removeSelected">{{
+        $t("admin.removeItems")
+      }}</Button></template
     ></Dialog
   >
   <Dialog
     v-model="resolveOpen"
-    :title="`Resolve report #${selectedReport?.uid ?? ''}`"
-    description="Record the moderation decision for the reporter and audit trail."
+    :title="$t('admin.resolveTitle', { uid: selectedReport?.uid ?? '' })"
+    :description="$t('admin.resolveDescription')"
     ><div class="space-y-4">
       <div class="rounded-lg bg-muted p-3 text-sm">
-        <p class="text-xs font-medium uppercase text-muted-foreground">Request</p>
+        <p class="font-label text-xs font-medium uppercase text-muted-foreground">
+          {{ $t("admin.request") }}
+        </p>
         <p class="mt-1">{{ selectedReport?.request }}</p>
       </div>
       <div class="space-y-2">
-        <Label for="report-response">Response</Label
+        <Label for="report-response">{{ $t("admin.response") }}</Label
         ><Textarea id="report-response" v-model="response" required />
       </div>
     </div>
     <template #footer
-      ><Button variant="ghost" @click="resolveOpen = false">Cancel</Button
-      ><Button :disabled="response.trim().length < 2" @click="resolve"
-        >Save resolution</Button
-      ></template
+      ><Button variant="ghost" @click="resolveOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button :disabled="response.trim().length < 2" @click="resolve">{{
+        $t("admin.saveResolution")
+      }}</Button></template
     ></Dialog
   >
 </template>

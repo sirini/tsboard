@@ -141,31 +141,43 @@ onMounted(load)
 
 <template>
   <PageHeader
-    eyebrow="Administration"
-    title="Mail"
-    description="Review delivery health and run deliberate, auditable member campaigns."
-    ><Button variant="outline" @click="load"><RefreshCw />Refresh</Button></PageHeader
+    :eyebrow="$t('admin.eyebrow')"
+    :title="$t('admin.mail')"
+    :description="$t('admin.mailDescription')"
+    ><Button variant="outline" @click="load"
+      ><RefreshCw />{{ $t("common.refresh") }}</Button
+    ></PageHeader
   >
-  <div v-if="loading" class="py-20 text-center"><Spinner label="Loading mail console" /></div>
+  <div v-if="loading" class="py-20 text-center">
+    <Spinner :label="$t('admin.loadingMail')" />
+  </div>
   <div v-else class="space-y-4">
-    <Alert v-if="!status?.configured" variant="destructive" title="Mail is not configured"
-      >Set the Resend credentials and verified sender domain in the GOAPI environment before sending
-      mail.</Alert
+    <Alert
+      v-if="!status?.configured"
+      variant="destructive"
+      :title="$t('admin.mailNotConfigured')"
+      >{{ $t("admin.mailSetupHelp") }}</Alert
     >
     <div v-else class="grid gap-3 sm:grid-cols-3">
       <Card
         ><CardContent class="p-4"
-          ><p class="text-xs uppercase text-muted-foreground">Provider</p>
+          ><p class="font-label text-xs uppercase text-muted-foreground">
+            {{ $t("admin.provider") }}
+          </p>
           <p class="mt-1 font-semibold capitalize">{{ status.provider }}</p></CardContent
         ></Card
       ><Card
         ><CardContent class="p-4"
-          ><p class="text-xs uppercase text-muted-foreground">Sender</p>
+          ><p class="font-label text-xs uppercase text-muted-foreground">
+            {{ $t("admin.sender") }}
+          </p>
           <p class="mt-1 truncate font-semibold">{{ status.from }}</p></CardContent
         ></Card
       ><Card
         ><CardContent class="p-4"
-          ><p class="text-xs uppercase text-muted-foreground">Domain</p>
+          ><p class="font-label text-xs uppercase text-muted-foreground">
+            {{ $t("admin.domain") }}
+          </p>
           <Badge
             class="mt-1"
             :variant="status.domainStatus === 'verified' ? 'secondary' : 'destructive'"
@@ -176,9 +188,9 @@ onMounted(load)
     </div>
     <div class="flex gap-2">
       <Button :variant="tab === 'campaigns' ? 'secondary' : 'ghost'" @click="setTab('campaigns')"
-        ><Mail />Campaigns</Button
+        ><Mail />{{ $t("admin.campaigns") }}</Button
       ><Button :variant="tab === 'deliveries' ? 'secondary' : 'ghost'" @click="setTab('deliveries')"
-        ><Send />Delivery log</Button
+        ><Send />{{ $t("admin.deliveryLog") }}</Button
       >
     </div>
     <div v-if="tab === 'campaigns'" class="grid gap-4 xl:grid-cols-[300px_minmax(0,1fr)]">
@@ -186,7 +198,8 @@ onMounted(load)
         ><CardHeader
           ><div class="flex items-center justify-between">
             <div>
-              <CardTitle>Campaigns</CardTitle><CardDescription>Drafts and sends</CardDescription>
+              <CardTitle>{{ $t("admin.campaigns") }}</CardTitle
+              ><CardDescription>{{ $t("admin.draftsAndSends") }}</CardDescription>
             </div>
             <Button size="icon-sm" @click="createCampaign"><Plus /></Button></div></CardHeader
         ><CardContent class="space-y-2"
@@ -202,24 +215,26 @@ onMounted(load)
             <p class="truncate text-sm font-medium">{{ campaign.subject }}</p>
             <div class="mt-2 flex items-center justify-between">
               <Badge variant="outline">{{ campaign.status }}</Badge
-              ><span class="text-xs text-muted-foreground"
-                >{{ campaign.recipientCount }} recipients</span
-              >
+              ><span class="text-xs text-muted-foreground">{{
+                $t("admin.recipients", { count: campaign.recipientCount })
+              }}</span>
             </div></button
-          ><EmptyState v-if="!campaigns.length" title="No campaigns" /></CardContent></Card
+          ><EmptyState
+            v-if="!campaigns.length"
+            :title="$t('admin.noCampaigns')" /></CardContent></Card
       ><Card
         ><CardHeader
-          ><CardTitle>{{ selected ? `Campaign #${selected.uid}` : "New campaign" }}</CardTitle
-          ><CardDescription
-            >Markdown is rendered and sanitized by GOAPI before delivery.</CardDescription
-          ></CardHeader
+          ><CardTitle>{{
+            selected ? $t("admin.campaignNumber", { uid: selected.uid }) : $t("admin.newCampaign")
+          }}</CardTitle
+          ><CardDescription>{{ $t("admin.markdownHelp") }}</CardDescription></CardHeader
         ><CardContent class="space-y-4"
           ><div class="space-y-2">
-            <Label for="mail-subject">Subject</Label
+            <Label for="mail-subject">{{ $t("admin.subject") }}</Label
             ><Input id="mail-subject" v-model="subject" maxlength="200" />
           </div>
           <div class="space-y-2">
-            <Label for="mail-body">Message</Label
+            <Label for="mail-body">{{ $t("admin.message") }}</Label
             ><Textarea
               id="mail-body"
               v-model="markdown"
@@ -228,48 +243,51 @@ onMounted(load)
             />
           </div>
           <div class="flex flex-wrap gap-2">
-            <Button :disabled="busy" @click="save"><Save />Save</Button
+            <Button :disabled="busy" @click="save"><Save />{{ $t("common.save") }}</Button
             ><Button
               variant="outline"
               :disabled="!subject.trim() || !markdown.trim()"
               @click="preview"
-              ><Eye />Preview</Button
+              ><Eye />{{ $t("admin.preview") }}</Button
             ><Button v-if="selected" variant="outline" :disabled="!status?.configured" @click="test"
-              ><TestTube2 />Send test</Button
+              ><TestTube2 />{{ $t("admin.sendTest") }}</Button
             ><Button
               v-if="selected && ['draft', 'failed'].includes(selected.status)"
               variant="outline"
               :disabled="busy"
               @click="prepare"
-              ><Play />Prepare recipients</Button
+              ><Play />{{ $t("admin.prepareRecipients") }}</Button
             ><Button
               v-if="selected?.status === 'ready'"
               variant="destructive"
               :disabled="busy"
               @click="sendOpen = true"
-              ><Send />Send to {{ selected.recipientCount }}</Button
+              ><Send />{{ $t("admin.sendTo", { count: selected.recipientCount }) }}</Button
             >
           </div>
-          <Alert v-if="selected?.lastError" variant="destructive" title="Last provider error">{{
-            selected.lastError
-          }}</Alert>
+          <Alert
+            v-if="selected?.lastError"
+            variant="destructive"
+            :title="$t('admin.lastProviderError')"
+            >{{ selected.lastError }}</Alert
+          >
           <div v-if="previewHtml" class="rounded-lg border bg-white p-5 text-black">
             <HtmlContent :html="previewHtml" /></div></CardContent
       ></Card>
     </div>
     <Card v-else
       ><CardHeader
-        ><CardTitle>Delivery log</CardTitle
-        ><CardDescription
-          >Accepted and failed transactional or campaign messages.</CardDescription
-        ></CardHeader
+        ><CardTitle>{{ $t("admin.deliveryLog") }}</CardTitle
+        ><CardDescription>{{ $t("admin.deliveryDescription") }}</CardDescription></CardHeader
       ><CardContent class="p-0"
         ><Table v-if="delivery?.items.length"
           ><TableHeader
             ><TableRow
-              ><TableHead>Recipient</TableHead><TableHead>Type</TableHead
-              ><TableHead>Subject</TableHead><TableHead>Status</TableHead
-              ><TableHead>Created</TableHead></TableRow
+              ><TableHead>{{ $t("admin.recipient") }}</TableHead
+              ><TableHead>{{ $t("admin.type") }}</TableHead
+              ><TableHead>{{ $t("admin.subject") }}</TableHead
+              ><TableHead>{{ $t("admin.status") }}</TableHead
+              ><TableHead>{{ $t("admin.created") }}</TableHead></TableRow
             ></TableHeader
           ><TableBody
             ><TableRow v-for="item in delivery.items" :key="item.uid"
@@ -290,7 +308,7 @@ onMounted(load)
               }}</TableCell></TableRow
             ></TableBody
           ></Table
-        ><EmptyState v-else title="No delivery records" />
+        ><EmptyState v-else :title="$t('admin.noDelivery')" />
         <div v-if="delivery" class="border-t p-4">
           <PaginationBar
             :page="delivery.page"
@@ -302,16 +320,17 @@ onMounted(load)
   </div>
   <Dialog
     v-model="sendOpen"
-    title="Send this campaign?"
-    :description="`This will deliver to ${selected?.recipientCount ?? 0} prepared recipients.`"
+    :title="$t('admin.sendCampaignTitle')"
+    :description="$t('admin.sendCampaignDescription', { count: selected?.recipientCount ?? 0 })"
     width="sm"
     ><p class="text-sm text-muted-foreground">
-      Review the preview and send a test first. A prepared recipient snapshot is used so the
-      audience cannot change mid-send.
+      {{ $t("admin.sendCampaignHelp") }}
     </p>
     <template #footer
-      ><Button variant="ghost" @click="sendOpen = false">Cancel</Button
-      ><Button variant="destructive" :disabled="busy" @click="send">Start sending</Button></template
+      ><Button variant="ghost" @click="sendOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" :disabled="busy" @click="send">{{
+        $t("admin.startSending")
+      }}</Button></template
     ></Dialog
   >
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { CheckCheck, MessageCircle, MessageSquare, ThumbsUp } from "lucide-vue-next"
 import { useRouter } from "vue-router"
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { relativeTime } from "@/lib/utils"
@@ -10,13 +12,8 @@ import type { NotificationItem } from "@/types/content"
 const emit = defineEmits<{ close: [] }>()
 const home = useHomeStore()
 const router = useRouter()
-const labels = [
-  "voted on your post",
-  "voted on your comment",
-  "commented on your post",
-  "replied to you",
-  "sent you a message",
-]
+const { tm } = useI18n()
+const labels = computed(() => tm("header.notificationLabels") as string[])
 const icons = [ThumbsUp, ThumbsUp, MessageCircle, MessageSquare, MessageSquare]
 
 const openItem = async (item: NotificationItem) => {
@@ -31,11 +28,11 @@ const openItem = async (item: NotificationItem) => {
   <div class="space-y-3">
     <div class="flex justify-end">
       <Button v-if="home.unreadCount" variant="ghost" size="sm" @click="home.markAllRead"
-        ><CheckCheck />Mark all read</Button
+        ><CheckCheck />{{ $t("header.markAllRead") }}</Button
       >
     </div>
     <div v-if="home.notificationLoading" class="py-10 text-center">
-      <Spinner label="Loading notifications" />
+      <Spinner :label="$t('header.loadingNotifications')" />
     </div>
     <button
       v-for="item in home.notifications"
@@ -58,7 +55,7 @@ const openItem = async (item: NotificationItem) => {
       v-if="!home.notificationLoading && !home.notifications.length"
       class="py-10 text-center text-sm text-muted-foreground"
     >
-      All quiet here.
+      {{ $t("header.notificationsEmpty") }}
     </p>
   </div>
 </template>

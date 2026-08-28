@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 import { TSBOARD } from "../../tsboard.config"
 import { useAuthStore } from "@/stores/auth"
+import { i18n } from "@/i18n"
 
 const routes: RouteRecordRaw[] = [
   { path: "/", name: "home", component: () => import("@/pages/HomePage.vue") },
@@ -110,8 +111,9 @@ router.beforeEach(async (to) => {
 })
 
 router.afterEach((to) => {
-  const label = typeof to.meta.title === "string" ? `${to.meta.title} · ` : ""
-  document.title = `${label}${TSBOARD.siteName} · Community, without the weight`
+  const localizedTitle = to.name === "messages" ? i18n.global.t("inbox.title") : to.meta.title
+  const label = typeof localizedTitle === "string" ? `${localizedTitle} · ` : ""
+  document.title = `${label}${i18n.global.t("app.documentTitle")}`
 })
 
 export default router

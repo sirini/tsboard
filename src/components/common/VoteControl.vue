@@ -12,7 +12,7 @@ defineEmits<{ toggle: [] }>()
       size="icon-sm"
       :disabled="disabled"
       :class="liked && 'text-primary'"
-      :aria-label="liked ? 'Remove upvote' : 'Upvote'"
+      :aria-label="liked ? $t('common.removeUpvote') : $t('common.upvote')"
       @click.stop="$emit('toggle')"
       ><ArrowBigUp :class="liked && 'fill-current'" /></Button
     ><span class="min-w-6 text-center text-xs font-semibold">{{ formatNumber(score) }}</span>

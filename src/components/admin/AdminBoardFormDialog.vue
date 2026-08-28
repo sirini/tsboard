@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Search } from "lucide-vue-next"
-import { reactive, ref, watch } from "vue"
+import { computed, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { boardAdminApi } from "@/api/admin"
 import { Button } from "@/components/ui/button"
@@ -16,12 +17,14 @@ import { BOARD, type BoardType } from "@/types/board"
 import type { BoardWriter } from "@/types/board"
 
 const props = defineProps<{ boardId?: string; groups: AdminGroup[] }>()
+const { t, tm } = useI18n()
 const emit = defineEmits<{ saved: [] }>()
 const open = defineModel<boolean>({ required: true })
 const loading = ref(false)
 const candidateName = ref("")
 const candidates = ref<BoardWriter[]>([])
 const boardUid = ref(0)
+const boardTypes = computed(() => tm("admin.boardTypes") as string[])
 const form = reactive<AdminBoardInput>({
   adminUid: 1,
   categories: "",
@@ -141,7 +144,7 @@ const submit = async () => {
       ? await boardAdminApi.modify({ ...input, boardUid: boardUid.value })
       : await boardAdminApi.create(input)
     if (!response.success) return toast.error(response.error)
-    toast.success(boardUid.value ? "Community updated." : "Community created.")
+    toast.success(boardUid.value ? t("admin.communityUpdated") : t("admin.communityCreated"))
     open.value = false
     emit("saved")
   } finally {
@@ -157,14 +160,14 @@ watch(open, (value) => {
 <template>
   <Dialog
     v-model="open"
-    :title="boardUid ? 'Edit community' : 'Create community'"
-    description="TSBOARD uses one fixed interface; board type controls content behavior."
+    :title="boardUid ? $t('admin.editCommunity') : $t('admin.createCommunity')"
+    :description="$t('admin.communityFormDescription')"
     width="xl"
   >
     <form class="space-y-6" @submit.prevent="submit">
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="space-y-2">
-          <Label>Group</Label
+          <Label>{{ $t("admin.group") }}</Label
           ><SelectField v-model="form.groupUid"
             ><option v-for="group in groups" :key="group.uid" :value="group.uid">
               {{ group.id }}
@@ -172,13 +175,15 @@ watch(open, (value) => {
           >
         </div>
         <div class="space-y-2">
-          <Label>Type</Label
+          <Label>{{ $t("admin.type") }}</Label
           ><SelectField v-model="form.type"
-            ><option :value="BOARD.DEFAULT">Board</option>
-            <option :value="BOARD.GALLERY">Gallery</option>
-            <option :value="BOARD.BLOG">Blog</option>
-            <option :value="BOARD.WEBZINE">Webzine</option>
-            <option :value="BOARD.TRADE">Marketplace</option></SelectField
+            ><option
+              v-for="(label, index) in boardTypes"
+              :key="label"
+              :value="[BOARD.DEFAULT, BOARD.GALLERY, BOARD.BLOG, BOARD.WEBZINE, BOARD.TRADE][index]"
+            >
+              {{ label }}
+            </option></SelectField
           >
         </div>
         <div class="space-y-2">
@@ -193,35 +198,35 @@ watch(open, (value) => {
           />
         </div>
         <div class="space-y-2">
-          <Label for="board-name">Name</Label
+          <Label for="board-name">{{ $t("common.name") }}</Label
           ><Input id="board-name" v-model="form.name" required placeholder="Photography" />
         </div>
         <div class="space-y-2 sm:col-span-2">
-          <Label for="board-info">Description</Label
+          <Label for="board-info">{{ $t("admin.description") }}</Label
           ><Textarea
             id="board-info"
             v-model="form.info"
-            placeholder="What belongs in this community?"
+            :placeholder="$t('admin.descriptionPlaceholder')"
           />
         </div>
         <div class="space-y-2">
-          <Label for="rows">Posts per page</Label
+          <Label for="rows">{{ $t("admin.postsPerPage") }}</Label
           ><Input id="rows" v-model="form.rowCount" type="number" min="1" max="100" />
         </div>
         <div class="space-y-2">
-          <Label for="width">Content width</Label
+          <Label for="width">{{ $t("admin.contentWidth") }}</Label
           ><Input id="width" v-model="form.width" type="number" min="640" max="2000" />
         </div>
       </div>
       <div class="space-y-3">
-        <Label>Community administrator</Label>
+        <Label>{{ $t("admin.communityAdmin") }}</Label>
         <div class="flex gap-2">
           <Input
             v-model="candidateName"
-            placeholder="Search display name"
+            :placeholder="$t('admin.searchMember')"
             @keydown.enter.prevent="searchCandidates"
           /><Button type="button" variant="secondary" @click="searchCandidates"
-            ><Search />Search</Button
+            ><Search />{{ $t("common.search") }}</Button
           >
         </div>
         <div v-if="candidates.length" class="flex flex-wrap gap-2">
@@ -235,21 +240,23 @@ watch(open, (value) => {
             >{{ candidate.name }} · #{{ candidate.uid }}</Button
           >
         </div>
-        <p class="text-xs text-muted-foreground">Selected user UID: {{ form.adminUid }}</p>
+        <p class="text-xs text-muted-foreground">
+          {{ $t("admin.selectedUid", { uid: form.adminUid }) }}
+        </p>
       </div>
       <div class="space-y-3">
-        <CheckboxField v-model="form.useCategory" label="Use categories" />
+        <CheckboxField v-model="form.useCategory" :label="$t('admin.useCategories')" />
         <div v-if="form.useCategory" class="space-y-2">
-          <Label for="categories">Categories</Label
+          <Label for="categories">{{ $t("admin.categories") }}</Label
           ><Input id="categories" v-model="form.categories" placeholder="General,Question,Guide" />
-          <p class="text-xs text-muted-foreground">Separate category names with commas.</p>
+          <p class="text-xs text-muted-foreground">{{ $t("admin.categoriesHelp") }}</p>
         </div>
       </div>
       <Separator />
       <div>
-        <h3 class="font-semibold">Level requirements</h3>
+        <h3 class="font-semibold">{{ $t("admin.levelRequirements") }}</h3>
         <p class="mb-4 text-sm text-muted-foreground">
-          Level 0 allows guests. Writing and comments should normally require level 1.
+          {{ $t("admin.levelHelp") }}
         </p>
         <div class="grid gap-4 sm:grid-cols-5">
           <div
@@ -263,16 +270,16 @@ watch(open, (value) => {
             :key="field"
             class="space-y-2"
           >
-            <Label>{{ field.replace("level", "") }}</Label
+            <Label>{{ $t(`admin.policyFields.${field.replace("level", "")}`) }}</Label
             ><Input v-model="form[field]" type="number" min="0" max="10" />
           </div>
         </div>
       </div>
       <Separator />
       <div>
-        <h3 class="font-semibold">Point policy</h3>
+        <h3 class="font-semibold">{{ $t("admin.pointPolicy") }}</h3>
         <p class="mb-4 text-sm text-muted-foreground">
-          Negative values charge points; positive values award them.
+          {{ $t("admin.pointHelp") }}
         </p>
         <div class="grid gap-4 sm:grid-cols-4">
           <div
@@ -280,16 +287,20 @@ watch(open, (value) => {
             :key="field"
             class="space-y-2"
           >
-            <Label>{{ field.replace("point", "") }}</Label
+            <Label>{{ $t(`admin.policyFields.${field.replace("point", "")}`) }}</Label
             ><Input v-model="form[field]" type="number" />
           </div>
         </div>
       </div>
     </form>
     <template #footer
-      ><Button variant="ghost" @click="open = false">Cancel</Button
+      ><Button variant="ghost" @click="open = false">{{ $t("common.cancel") }}</Button
       ><Button :disabled="loading" @click="submit">{{
-        loading ? "Saving…" : boardUid ? "Save changes" : "Create community"
+        loading
+          ? $t("auth.saving")
+          : boardUid
+            ? $t("editor.saveChanges")
+            : $t("admin.createCommunity")
       }}</Button></template
     >
   </Dialog>

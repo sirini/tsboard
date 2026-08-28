@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Download, File, List, Move, Pencil, Trash2 } from "lucide-vue-next"
 import { computed, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { toast } from "vue-sonner"
 import { boardApi } from "@/api/board"
@@ -19,11 +20,12 @@ import { SelectField } from "@/components/ui/select"
 import type { BoardItem, BoardViewResult, TradeInfo, TradeViewResult } from "@/types/board"
 import { STATUS } from "@/types/board"
 import { apiResourceUrl } from "@/lib/api"
-import { formatBytes, formatNumber, recoverChars } from "@/lib/utils"
+import { formatBytes, formatNumber, plainText, recoverChars } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth"
 
 const route = useRoute()
 const router = useRouter()
+const { locale, t, tm } = useI18n()
 const auth = useAuthStore()
 const view = ref<BoardViewResult | null>(null)
 const trade = ref<TradeInfo | null>(null)
@@ -41,6 +43,14 @@ const postUid = computed(() => Number(route.params.postUid))
 const canManage = computed(() =>
   Boolean(view.value && (view.value.isAdmin || view.value.post.writer.uid === auth.user.uid)),
 )
+const conditionLabels = computed(() => tm("thread.conditions") as string[])
+const statusLabels = computed(() => tm("thread.statuses") as string[])
+
+const formatPrice = (price: number, currency: string) =>
+  new Intl.NumberFormat(locale.value === "ko" ? "ko-KR" : "en-US", {
+    style: "currency",
+    currency: currency || "USD",
+  }).format(price)
 
 const markKey = computed(() => `tsboard-read-${id.value}-${postUid.value}`)
 const load = async () => {
@@ -87,7 +97,7 @@ const removePost = async () => {
   if (!view.value) return
   const response = await boardApi.remove(view.value.config.uid, view.value.post.uid)
   if (!response.success) return toast.error(response.error)
-  toast.success("Post removed.")
+  toast.success(t("thread.removed"))
   await router.push(`/board/${id.value}`)
 }
 
@@ -109,7 +119,7 @@ const movePost = async () => {
     view.value.post.uid,
   )
   if (!response.success) return toast.error(response.error)
-  toast.success("Post moved.")
+  toast.success(t("thread.moved"))
   await router.push(`/board/${target?.id ?? id.value}/${view.value.post.uid}`)
 }
 
@@ -139,7 +149,7 @@ const updateTradeStatus = async (status: number) => {
     const response = await tradeApi.status(view.value.config.uid, view.value.post.uid, status)
     if (!response.success) return toast.error(response.error)
     trade.value.status = status as TradeInfo["status"]
-    toast.success("Listing status updated.")
+    toast.success(t("thread.statusUpdated"))
   } finally {
     tradeStatusSaving.value = false
   }
@@ -152,10 +162,10 @@ watch(() => route.fullPath, load, { immediate: true })
   <PageLoading v-if="loading" />
   <EmptyState
     v-else-if="error || !view"
-    title="Post unavailable"
-    :message="error || 'This post does not exist.'"
+    :title="$t('thread.unavailable')"
+    :message="error || $t('thread.missing')"
     ><Button as-child variant="outline"
-      ><RouterLink :to="`/board/${id}`"><List />Back to community</RouterLink></Button
+      ><RouterLink :to="`/board/${id}`"><List />{{ $t("board.back") }}</RouterLink></Button
     ></EmptyState
   >
   <div v-else class="space-y-4">
@@ -166,7 +176,9 @@ watch(() => route.fullPath, load, { immediate: true })
         </aside>
         <div class="min-w-0 flex-1 p-4 sm:p-6">
           <div class="mb-3 flex flex-wrap items-center gap-2">
-            <Badge v-if="view.post.status === STATUS.NOTICE" variant="secondary">Pinned</Badge
+            <Badge v-if="view.post.status === STATUS.NOTICE" variant="secondary">{{
+              $t("post.pinned")
+            }}</Badge
             ><RouterLink
               :to="`/board/${view.config.id}`"
               class="text-xs font-semibold hover:underline"
@@ -187,37 +199,31 @@ watch(() => route.fullPath, load, { immediate: true })
             class="mt-4 grid gap-2 rounded-lg border bg-muted/35 p-4 text-sm sm:grid-cols-4"
           >
             <p>
-              <span class="block text-xs text-muted-foreground">Price</span
+              <span class="block text-xs text-muted-foreground">{{ $t("thread.price") }}</span
               ><strong>{{
-                trade.priceType === 2
-                  ? "Free"
-                  : new Intl.NumberFormat("en", {
-                      style: "currency",
-                      currency: trade.currency || "USD",
-                    }).format(trade.price)
+                trade.priceType === 2 ? $t("post.free") : formatPrice(trade.price, trade.currency)
               }}</strong>
             </p>
             <p>
-              <span class="block text-xs text-muted-foreground">Brand / condition</span
+              <span class="block text-xs text-muted-foreground">{{
+                $t("thread.brandCondition")
+              }}</span
               ><strong
-                >{{ trade.brand || "—" }} ·
-                {{
-                  ["Unopened", "Like new", "Used", "Worn", "Damaged"][trade.productCondition]
-                }}</strong
+                >{{ trade.brand || "—" }} · {{ conditionLabels[trade.productCondition] }}</strong
               >
             </p>
             <p>
-              <span class="block text-xs text-muted-foreground">Location</span
-              ><strong>{{ trade.location || "Not specified" }}</strong>
+              <span class="block text-xs text-muted-foreground">{{ $t("thread.location") }}</span
+              ><strong>{{ trade.location || $t("thread.notSpecified") }}</strong>
             </p>
             <p>
-              <span class="block text-xs text-muted-foreground">Status</span>
-              <strong>{{ ["Available", "Reserved", "Sold", "Withdrawn"][trade.status] }}</strong>
+              <span class="block text-xs text-muted-foreground">{{ $t("thread.status") }}</span>
+              <strong>{{ statusLabels[trade.status] }}</strong>
             </p>
           </div>
           <div v-if="trade && canManage" class="mt-3 flex flex-wrap gap-2">
             <Button
-              v-for="(label, status) in ['Available', 'Reserved', 'Sold', 'Withdrawn']"
+              v-for="(label, status) in statusLabels"
               :key="label"
               size="sm"
               :variant="trade.status === status ? 'default' : 'outline'"
@@ -277,11 +283,13 @@ watch(() => route.fullPath, load, { immediate: true })
           </div>
           <div v-if="canManage" class="mt-4 flex flex-wrap gap-2">
             <Button as-child variant="outline" size="sm"
-              ><RouterLink :to="`/board/${id}/${postUid}/edit`"><Pencil />Edit</RouterLink></Button
+              ><RouterLink :to="`/board/${id}/${postUid}/edit`"
+                ><Pencil />{{ $t("common.edit") }}</RouterLink
+              ></Button
             ><Button v-if="view.isAdmin" variant="outline" size="sm" @click="prepareMove"
-              ><Move />Move</Button
+              ><Move />{{ $t("thread.move") }}</Button
             ><Button variant="destructive" size="sm" @click="deleteOpen = true"
-              ><Trash2 />Remove</Button
+              ><Trash2 />{{ $t("common.remove") }}</Button
             >
           </div>
         </div>
@@ -290,10 +298,11 @@ watch(() => route.fullPath, load, { immediate: true })
     <div class="flex justify-between">
       <Button v-if="view.prevPostUid" as-child variant="ghost"
         ><RouterLink :to="`/board/${id}/${view.prevPostUid}`"
-          ><ArrowLeft />Previous</RouterLink
+          ><ArrowLeft />{{ $t("thread.previous") }}</RouterLink
         ></Button
       ><span v-else /><Button v-if="view.nextPostUid" as-child variant="ghost"
-        ><RouterLink :to="`/board/${id}/${view.nextPostUid}`">Next<ArrowRight /></RouterLink
+        ><RouterLink :to="`/board/${id}/${view.nextPostUid}`"
+          >{{ $t("thread.next") }}<ArrowRight /></RouterLink
       ></Button>
     </div>
     <CommentSection
@@ -303,10 +312,14 @@ watch(() => route.fullPath, load, { immediate: true })
     />
     <Card v-if="view.writerPosts.length || view.writerComments.length"
       ><CardHeader
-        ><CardTitle>More from {{ view.post.writer.name }}</CardTitle></CardHeader
+        ><CardTitle>{{
+          $t("thread.moreFrom", { name: view.post.writer.name })
+        }}</CardTitle></CardHeader
       ><CardContent class="grid gap-4 sm:grid-cols-2"
         ><div>
-          <h3 class="mb-2 text-xs font-semibold uppercase text-muted-foreground">Recent posts</h3>
+          <h3 class="font-label mb-2 text-xs font-semibold uppercase text-muted-foreground">
+            {{ $t("thread.recentPosts") }}
+          </h3>
           <RouterLink
             v-for="post in view.writerPosts"
             :key="post.postUid"
@@ -319,15 +332,15 @@ watch(() => route.fullPath, load, { immediate: true })
           >
         </div>
         <div>
-          <h3 class="mb-2 text-xs font-semibold uppercase text-muted-foreground">
-            Recent comments
+          <h3 class="font-label mb-2 text-xs font-semibold uppercase text-muted-foreground">
+            {{ $t("thread.recentComments") }}
           </h3>
           <RouterLink
             v-for="comment in view.writerComments"
             :key="`${comment.postUid}-${comment.submitted}`"
             :to="`/board/${comment.board.id}/${comment.postUid}`"
             class="block truncate py-1.5 text-sm hover:text-primary"
-            >{{ comment.content }}</RouterLink
+            >{{ plainText(comment.content) }}</RouterLink
           >
         </div></CardContent
       ></Card
@@ -336,37 +349,41 @@ watch(() => route.fullPath, load, { immediate: true })
 
   <Dialog
     v-model="deleteOpen"
-    title="Remove this post?"
-    description="The post will no longer be visible to community members."
+    :title="$t('thread.removeTitle')"
+    :description="$t('thread.removeDescription')"
     width="sm"
     ><p class="text-sm text-muted-foreground">
-      This action cannot be undone from the TSBOARD interface.
+      {{ $t("thread.removeWarning") }}
     </p>
     <template #footer
-      ><Button variant="ghost" @click="deleteOpen = false">Cancel</Button
-      ><Button variant="destructive" @click="removePost">Remove post</Button></template
+      ><Button variant="ghost" @click="deleteOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button variant="destructive" @click="removePost">{{
+        $t("thread.removePost")
+      }}</Button></template
     ></Dialog
   >
   <Dialog
     v-model="moveOpen"
-    title="Move post"
-    description="Choose another community for this thread."
+    :title="$t('thread.moveTitle')"
+    :description="$t('thread.moveDescription')"
     width="sm"
     ><SelectField v-model="targetBoardUid"
       ><option v-for="target in moveTargets" :key="target.uid" :value="target.uid">
         {{ target.name }} (t/{{ target.id }})
       </option></SelectField
     ><template #footer
-      ><Button variant="ghost" @click="moveOpen = false">Cancel</Button
-      ><Button :disabled="!targetBoardUid" @click="movePost">Move</Button></template
+      ><Button variant="ghost" @click="moveOpen = false">{{ $t("common.cancel") }}</Button
+      ><Button :disabled="!targetBoardUid" @click="movePost">{{
+        $t("thread.move")
+      }}</Button></template
     ></Dialog
   >
-  <Dialog v-model="imageOpen" title="Original image" width="xl"
+  <Dialog v-model="imageOpen" :title="$t('thread.originalImage')" width="xl"
     ><div class="rounded-lg bg-black p-1">
       <img
         v-if="originalImage"
         :src="originalImage"
-        alt="Original attachment"
+        :alt="$t('thread.originalAttachment')"
         class="mx-auto max-h-[78vh] max-w-full object-contain"
       /></div
   ></Dialog>

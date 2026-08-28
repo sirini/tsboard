@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Copy, Plus, Trash2 } from "lucide-vue-next"
 import { onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { toast } from "vue-sonner"
 import { authApi, inviteApi } from "@/api/auth"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +13,7 @@ import { formatDate } from "@/lib/utils"
 import type { SignupInvite, SignupStatus } from "@/types/user"
 
 const status = ref<SignupStatus | null>(null)
+const { t } = useI18n()
 const invites = ref<SignupInvite[]>([])
 const email = ref("")
 const expiresDays = ref(7)
@@ -32,7 +34,7 @@ const create = async () => {
     if (!response.success) return toast.error(response.error)
     createdUrl.value = response.result.url
     email.value = ""
-    toast.success("One-time invitation created. Copy the URL now.")
+    toast.success(t("admin.inviteCreated"))
     await load()
   } finally {
     busy.value = false
@@ -41,38 +43,38 @@ const create = async () => {
 const revoke = async (uid: number) => {
   const response = await inviteApi.revoke(uid)
   if (!response.success) return toast.error(response.error)
-  toast.success("Invitation revoked.")
+  toast.success(t("admin.inviteRevoked"))
   await load()
 }
 const copy = async () => {
   await navigator.clipboard.writeText(createdUrl.value)
-  toast.success("Invitation URL copied.")
+  toast.success(t("admin.inviteCopied"))
 }
 onMounted(load)
 </script>
 <template>
   <Card
     ><CardHeader
-      ><CardTitle>Signup invitations</CardTitle
+      ><CardTitle>{{ $t("admin.signupInvitations") }}</CardTitle
       ><CardDescription
-        >Current policy:
+        >{{ $t("admin.currentPolicy") }}:
         <Badge variant="outline">{{ status?.mode ?? "loading" }}</Badge></CardDescription
       ></CardHeader
     ><CardContent
       ><p v-if="status?.mode !== 'invite_only'" class="text-sm text-muted-foreground">
-        Invitation management appears when GOAPI uses <code>invite_only</code> signup mode.
+        {{ $t("admin.inviteOnlyHelp") }}
       </p>
       <div v-else class="space-y-5">
         <form class="grid gap-3 sm:grid-cols-[1fr_110px_auto]" @submit.prevent="create">
           <div class="space-y-2">
-            <Label for="invite-email">Email</Label
+            <Label for="invite-email">{{ $t("common.email") }}</Label
             ><Input id="invite-email" v-model="email" type="email" required />
           </div>
           <div class="space-y-2">
-            <Label for="invite-days">Valid days</Label
+            <Label for="invite-days">{{ $t("admin.validDays") }}</Label
             ><Input id="invite-days" v-model="expiresDays" type="number" min="1" max="90" />
           </div>
-          <Button class="self-end" :disabled="busy"><Plus />Create</Button>
+          <Button class="self-end" :disabled="busy"><Plus />{{ $t("admin.create") }}</Button>
         </form>
         <div
           v-if="createdUrl"
@@ -94,13 +96,23 @@ onMounted(load)
             <div class="min-w-0 flex-1">
               <p class="truncate font-medium">{{ invite.email }}</p>
               <p class="text-xs text-muted-foreground">
-                Created {{ formatDate(invite.created, true) }} · expires
-                {{ formatDate(invite.expires, true) }}
+                {{
+                  $t("admin.createdExpires", {
+                    created: formatDate(invite.created, true),
+                    expires: formatDate(invite.expires, true),
+                  })
+                }}
               </p>
             </div>
             <Badge
               :variant="invite.revoked ? 'destructive' : invite.used ? 'secondary' : 'outline'"
-              >{{ invite.revoked ? "Revoked" : invite.used ? "Used" : "Active" }}</Badge
+              >{{
+                invite.revoked
+                  ? $t("admin.revoked")
+                  : invite.used
+                    ? $t("admin.used")
+                    : $t("admin.active")
+              }}</Badge
             ><Button
               v-if="!invite.revoked && !invite.used"
               variant="ghost"
@@ -111,7 +123,7 @@ onMounted(load)
             /></Button>
           </div>
           <p v-if="!invites.length" class="p-6 text-center text-sm text-muted-foreground">
-            No invitations yet.
+            {{ $t("admin.noInvitations") }}
           </p>
         </div>
       </div></CardContent

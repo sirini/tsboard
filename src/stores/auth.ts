@@ -2,9 +2,18 @@ import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { toast } from "vue-sonner"
 import { authApi, updateProfile } from "@/api/auth"
-import { ApiHttpError } from "@/lib/api"
+import { ApiHttpError, setAccessToken } from "@/lib/api"
 import { recoverChars } from "@/lib/utils"
+import { i18n } from "@/i18n"
 import { EMPTY_USER, type CurrentUser } from "@/types/user"
+
+const normalizeUser = (value: CurrentUser): CurrentUser => ({
+  ...value,
+  name: recoverChars(value.name),
+  signature: recoverChars(value.signature),
+  token: "",
+  refresh: "",
+})
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<CurrentUser>({ ...EMPTY_USER })
@@ -13,17 +22,11 @@ export const useAuthStore = defineStore("auth", () => {
   const isLoggedIn = computed(() => user.value.uid > 0)
   const isAdmin = computed(() => user.value.admin || user.value.uid === 1)
 
-  const normalize = (value: CurrentUser) => ({
-    ...value,
-    name: recoverChars(value.name),
-    signature: recoverChars(value.signature),
-  })
-
   const initialize = async () => {
     if (initialized.value) return
     try {
       const response = await authApi.load()
-      if (response.success) user.value = normalize(response.result)
+      if (response.success) user.value = normalizeUser(response.result)
     } catch (error) {
       if (!(error instanceof ApiHttpError) || error.status !== 401) console.error(error)
     } finally {
@@ -36,14 +39,15 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const response = await authApi.signin(id, password)
       if (!response.success) {
-        toast.error(response.error || "Email or password is incorrect.")
+        toast.error(response.error || i18n.global.t("auth.invalidCredentials"))
         return false
       }
-      user.value = normalize(response.result)
-      toast.success(`Welcome back, ${user.value.name}.`)
+      setAccessToken(response.result.token)
+      user.value = normalizeUser(response.result)
+      toast.success(i18n.global.t("auth.signedIn", { name: user.value.name }))
       return true
     } catch (error) {
-      toast.error(`Sign in failed: ${String(error)}`)
+      toast.error(i18n.global.t("auth.signInFailed", { error: String(error) }))
       return false
     } finally {
       loading.value = false
@@ -54,18 +58,20 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       await authApi.logout()
     } finally {
+      setAccessToken()
       user.value = { ...EMPTY_USER }
-      toast.success("You are signed out.")
+      toast.success(i18n.global.t("auth.signedOut"))
     }
   }
 
   const expire = () => {
+    setAccessToken()
     user.value = { ...EMPTY_USER }
   }
 
   const refreshProfile = async () => {
     const response = await authApi.load()
-    if (response.success) user.value = normalize(response.result)
+    if (response.success) user.value = normalizeUser(response.result)
   }
 
   const saveProfile = async (input: {
@@ -82,7 +88,7 @@ export const useAuthStore = defineStore("auth", () => {
         return false
       }
       await refreshProfile()
-      toast.success("Profile updated.")
+      toast.success(i18n.global.t("profile.updated"))
       return true
     } finally {
       loading.value = false

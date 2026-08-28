@@ -11,19 +11,19 @@ const notice = defineModel<boolean>("notice", { default: false })
 <template>
   <div class="grid gap-4 rounded-lg border p-4 sm:grid-cols-2">
     <div v-if="categories.length" class="space-y-2">
-      <Label>Category</Label
+      <Label>{{ $t("editor.category") }}</Label
       ><SelectField v-model="category"
-        ><option :value="0">No category</option>
+        ><option :value="0">{{ $t("editor.noCategory") }}</option>
         <option v-for="item in categories" :key="item.uid" :value="item.uid">
           {{ item.name }}
         </option></SelectField
       >
     </div>
     <div class="flex flex-wrap items-end gap-5 pb-2">
-      <CheckboxField v-model="secret" label="Secret post" /><CheckboxField
+      <CheckboxField v-model="secret" :label="$t('editor.secret')" /><CheckboxField
         v-if="isAdmin"
         v-model="notice"
-        label="Pin as notice"
+        :label="$t('editor.notice')"
       />
     </div>
   </div>

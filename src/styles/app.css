@@ -1,6 +1,30 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "Google Sans Flex";
+  src: url("../assets/fonts/GoogleSansFlex-Latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("../assets/fonts/PretendardVariable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("../assets/fonts/Oswald-Latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -91,7 +115,10 @@
   }
   body {
     @apply min-h-screen bg-background text-foreground antialiased;
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-family: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
+  }
+  html[lang="ko"] body {
+    font-family: "Pretendard Variable", "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
   }
   button:not(:disabled),
   a[href],
@@ -111,6 +138,13 @@
 }
 
 @layer components {
+  .font-brand,
+  .font-label {
+    font-family: "Oswald", "Pretendard Variable", "Google Sans Flex", sans-serif;
+  }
+  .font-brand {
+    font-weight: 700;
+  }
   .content-body {
     @apply text-[0.95rem] leading-7 break-words;
   }

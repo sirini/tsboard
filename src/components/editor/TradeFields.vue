@@ -1,56 +1,64 @@
 <script setup lang="ts">
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import type { TradeForm } from "@/types/board"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SelectField } from "@/components/ui/select"
 const model = defineModel<TradeForm>({ required: true })
+const { tm } = useI18n()
+const conditions = computed(() => tm("thread.conditions") as string[])
+const priceTypes = computed(() => tm("editor.priceTypes") as string[])
+const deliveryTypes = computed(() => tm("editor.deliveryTypes") as string[])
 </script>
 <template>
   <fieldset class="grid gap-4 rounded-lg border p-4 sm:grid-cols-2">
-    <legend class="px-2 text-sm font-semibold">Marketplace details</legend>
+    <legend class="px-2 text-sm font-semibold">{{ $t("editor.tradeDetails") }}</legend>
     <div class="space-y-2">
-      <Label for="brand">Brand</Label
-      ><Input id="brand" v-model="model.brand" placeholder="Brand or maker" />
+      <Label for="brand">{{ $t("editor.brand") }}</Label
+      ><Input id="brand" v-model="model.brand" :placeholder="$t('editor.brandPlaceholder')" />
     </div>
     <div class="space-y-2">
-      <Label for="price">Price</Label>
+      <Label for="price">{{ $t("editor.price") }}</Label>
       <div class="flex gap-2">
         <Input id="price" v-model="model.price" type="number" min="0" /><Input
           v-model="model.currency"
           class="w-24 uppercase"
           maxlength="3"
-          aria-label="Currency"
+          :aria-label="$t('editor.currency')"
         />
       </div>
     </div>
     <div class="space-y-2">
-      <Label>Price type</Label
+      <Label>{{ $t("editor.priceType") }}</Label
       ><SelectField v-model="model.priceType"
-        ><option :value="0">Fixed</option>
-        <option :value="1">Negotiable</option>
-        <option :value="2">Free</option></SelectField
+        ><option v-for="(label, value) in priceTypes" :key="label" :value="value">
+          {{ label }}
+        </option></SelectField
       >
     </div>
     <div class="space-y-2">
-      <Label>Condition</Label
+      <Label>{{ $t("editor.condition") }}</Label
       ><SelectField v-model="model.productCondition"
-        ><option :value="0">Unopened</option>
-        <option :value="1">Like new</option>
-        <option :value="2">Used</option>
-        <option :value="3">Worn</option>
-        <option :value="4">Damaged</option></SelectField
+        ><option v-for="(label, value) in conditions" :key="label" :value="value">
+          {{ label }}
+        </option></SelectField
       >
     </div>
     <div class="space-y-2">
-      <Label for="location">Location</Label
-      ><Input id="location" v-model="model.location" placeholder="City or region" />
+      <Label for="location">{{ $t("editor.location") }}</Label
+      ><Input
+        id="location"
+        v-model="model.location"
+        :placeholder="$t('editor.locationPlaceholder')"
+      />
     </div>
     <div class="space-y-2">
-      <Label>Delivery</Label
+      <Label>{{ $t("editor.delivery") }}</Label
       ><SelectField v-model="model.shippingType"
-        ><option :value="0">Shipping</option>
-        <option :value="1">Local meetup</option>
-        <option :value="2">Either</option></SelectField
+        ><option v-for="(label, value) in deliveryTypes" :key="label" :value="value">
+          {{ label }}
+        </option></SelectField
       >
     </div>
   </fieldset>

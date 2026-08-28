@@ -7,13 +7,17 @@ export const recoverChars = (text = "") =>
   text.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")
 
 export const stripTags = (html = "") => html.replace(/<[^>]*>?/gm, "")
+export const plainText = (html = "") => stripTags(recoverChars(html))
+
+export const getIntlLocale = () =>
+  typeof document !== "undefined" && document.documentElement.lang === "ko" ? "ko-KR" : "en-US"
 
 export const formatDate = (timestamp: number, includeTime = false) => {
   if (!timestamp) return "—"
   const options: Intl.DateTimeFormatOptions = includeTime
     ? { dateStyle: "medium", timeStyle: "short" }
     : { dateStyle: "medium" }
-  return new Intl.DateTimeFormat("en", options).format(new Date(timestamp))
+  return new Intl.DateTimeFormat(getIntlLocale(), options).format(new Date(timestamp))
 }
 
 export const relativeTime = (timestamp: number) => {
@@ -25,7 +29,7 @@ export const relativeTime = (timestamp: number) => {
     ["hour", 3_600],
     ["minute", 60],
   ]
-  const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" })
+  const formatter = new Intl.RelativeTimeFormat(getIntlLocale(), { numeric: "auto" })
   for (const [unit, size] of units) {
     if (Math.abs(seconds) >= size) return formatter.format(Math.round(seconds / size), unit)
   }
@@ -33,7 +37,9 @@ export const relativeTime = (timestamp: number) => {
 }
 
 export const formatNumber = (value: number) =>
-  new Intl.NumberFormat("en", { notation: value > 999 ? "compact" : "standard" }).format(value)
+  new Intl.NumberFormat(getIntlLocale(), {
+    notation: value > 999 ? "compact" : "standard",
+  }).format(value)
 
 export const formatBytes = (value: number) => {
   if (value < 1024) return `${value} B`
