@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { buildCommentTree } from "./comments"
 import type { CommentItem } from "@/types/content"
 
-const comment = (uid: number, replyUid = 0): CommentItem => ({
+const comment = (uid: number, replyUid = uid): CommentItem => ({
   uid,
   replyUid,
   postUid: 10,
@@ -16,7 +16,7 @@ const comment = (uid: number, replyUid = 0): CommentItem => ({
 })
 
 describe("buildCommentTree", () => {
-  it("nests replies at any depth without changing source records", () => {
+  it("treats GOAPI self-referencing comments as roots and nests their replies", () => {
     const source = [comment(1), comment(2, 1), comment(3, 2), comment(4)]
     const tree = buildCommentTree(source)
 

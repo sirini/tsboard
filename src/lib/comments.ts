@@ -8,7 +8,8 @@ export const buildCommentTree = (comments: CommentItem[]) => {
 
   const roots: CommentTreeItem[] = []
   nodes.forEach((item) => {
-    const parent = item.replyUid ? nodes.get(item.replyUid) : undefined
+    const parent =
+      item.replyUid && item.replyUid !== item.uid ? nodes.get(item.replyUid) : undefined
     if (parent) parent.children.push(item)
     else roots.push(item)
   })
