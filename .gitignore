@@ -4,6 +4,10 @@ node_modules
 bun.lockb
 /upload
 /goapi-runtime
+/bin
+/lib
+/licenses/sharp-libvips
+/.tsboard
 test.ts
 
 # local env files

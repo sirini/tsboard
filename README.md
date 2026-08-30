@@ -65,6 +65,7 @@ HttpOnly 갱신 쿠키로 액세스 토큰을 다시 발급받습니다. 인증 
 ## 요구 사항
 
 - Node.js 22.13 이상과 npm
+- 공식 런타임 다운로드를 사용할 경우 Ubuntu 22.04 이상 x86-64 Linux
 - GOAPI 1.3.0, API contract 1
 - MySQL 8 또는 MariaDB
 - 운영 환경의 Nginx와 TLS 인증서
@@ -85,19 +86,27 @@ cp env.sample .env
 
 `.env`의 DB, 관리자와 비밀키 값을 먼저 설정합니다. 실제 운영 DB를 개발 환경에서 사용하지 마세요.
 
-Ubuntu 22.04 호환 GOAPI 런타임은 형제 저장소에서 만듭니다. 아래 구조를 지키면 바이너리에 기록된
-`$ORIGIN/../lib` 경로가 번들 libvips를 찾습니다.
+TSBOARD 1.3.0과 계약이 맞는 공식 GOAPI·libvips 런타임을 먼저 검증한 뒤 내려받습니다. 이 명령은
+NUBO 1.3.0 Linux amd64 릴리스에 고정되어 있으며 `bin/goapi`, `lib`,
+`licenses/sharp-libvips`를 NUBO와 같은 구조로 준비합니다.
 
 ```bash
-cd ../goapi
-./scripts/build-ubuntu22.sh \
-  ../tsboard/goapi-runtime/bin/goapi \
-  ../tsboard/goapi-runtime/lib \
-  ../tsboard/goapi-runtime/licenses/sharp-libvips
-cd ../tsboard
-./goapi-runtime/bin/goapi install
-./goapi-runtime/bin/goapi
+npm run runtime:download -- --dry-run
+npm run runtime:download
+./bin/goapi install
+./bin/goapi
 ```
+
+다운로더는 [runtime-sources.json](./runtime-sources.json)에 기록된 릴리스 크기와 SHA-256, 내부 manifest와
+파일별 checksum, Linux amd64 ELF 형식을 모두 확인합니다. 다운로드 캐시와 설치 영수증은 `.tsboard`에
+두며, 영수증 없이 이미 존재하거나 설치 뒤 수정된 런타임은 자동으로 덮어쓰지 않습니다. 이전 개발 구조인
+`goapi-runtime`도 삭제하거나 변경하지 않습니다. DB migration, SPA 빌드와 프로세스 재시작은 별도
+작업입니다.
+
+공식 바이너리 대신 GOAPI 소스에서 직접 만들 때도 반드시 GOAPI 저장소의
+`./scripts/build-ubuntu22.sh`를 사용하고 출력 경로를 각각 `../tsboard/bin/goapi`, `../tsboard/lib`,
+`../tsboard/licenses/sharp-libvips`로 지정합니다. 임의의 호스트 `go build` 결과를 공식 런타임으로
+사용하지 마세요.
 
 다른 터미널에서 SPA를 시작합니다.
 
@@ -209,7 +218,7 @@ GOAPI 런타임과 업로드, `.env`를 교체 가능한 `dist` 밖에 둡니다
 ```bash
 cd /var/www/tsboard
 NUBO_ENV_FILE=/var/www/tsboard/.env \
-  pm2 start ./goapi-runtime/bin/goapi --name tsboard-goapi --cwd /var/www/tsboard
+  pm2 start ./bin/goapi --name tsboard-goapi --cwd /var/www/tsboard
 pm2 save
 ```
 
@@ -217,7 +226,7 @@ pm2 save
 가능한 migration을 먼저 적용한 뒤 프로세스를 전환합니다.
 
 ```bash
-NUBO_ENV_FILE="$PWD/.env" ./goapi-runtime/bin/goapi install
+NUBO_ENV_FILE="$PWD/.env" ./bin/goapi install
 pm2 restart tsboard-goapi --update-env
 npm run contract:check -- https://example.com/goapi
 ```
@@ -227,11 +236,15 @@ npm run contract:check -- https://example.com/goapi
 ```bash
 git pull --ff-only
 npm ci
-npm run format:check && npm run lint && npm test && npm run build
+npm run runtime:download -- --dry-run
+npm run format:check
+npm run lint
+npm test
+npm run build
 ```
 
 1. 현재 DB, 업로드와 `.env`를 별도 위치에 백업합니다.
-2. 후보 GOAPI 런타임을 공식 스크립트로 빌드하고 checksum을 기록합니다.
+2. `npm run runtime:download`로 고정된 후보 GOAPI 런타임을 설치합니다.
 3. 후보 바이너리의 `install`을 실행해 재실행 가능한 migration을 적용합니다.
 4. PM2의 GOAPI 실행 경로를 후보로 바꾸고 readiness를 확인합니다.
 5. `dist`를 교체하고 `contract:check`와 주요 화면을 확인합니다.
@@ -243,6 +256,10 @@ npm run format:check && npm run lint && npm test && npm run build
 ## 프로젝트 구조
 
 ```text
+bin/goapi          # 고정 릴리스에서 검증한 GOAPI 실행 파일(로컬 생성)
+lib/               # GOAPI가 사용하는 libvips 라이브러리(로컬 생성)
+runtime-sources.json # TSBOARD 버전에 고정된 공식 런타임 출처와 checksum
+scripts/           # 계약 검사와 런타임 다운로드·검증 도구
 src/
 ├── api/          # GOAPI contract 1 클라이언트
 ├── components/   # shadcn-vue 스타일 UI와 기능 컴포넌트
